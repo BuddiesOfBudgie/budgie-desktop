@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[budgie-10.budgie-desktop-pot]
+[budgie-10.budgie-desktoppot]
 file_filter = po/<lang>.po
 minimum_perc = 0
 source_file = po/budgie-desktop.pot

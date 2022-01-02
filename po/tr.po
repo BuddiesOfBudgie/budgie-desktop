@@ -1,25 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Demiray Muhterem <mdemiray@msn.com>, 2015-2017
-# Egemen Metin Turan <emturan@gmail.com>, 2016
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-03-20 15:26+0000\n"
-"Last-Translator: Abdulkadir Furkan Şanlı <abdulkadirfsanli@protonmail.com>\n"
-"Language-Team: Turkish <http://translate.getsol.us/projects/budgie-desktop/"
-"translations/tr/>\n"
-"Language: tr\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Turkish (https://www.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Weblate 3.8\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -64,7 +64,8 @@ msgstr "Paneli kaldırmayı onayla"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Bu paneli gerçekten kaldırmak istiyor musunuz? Bu eylem geri alınamaz."
+msgstr ""
+"Bu paneli gerçekten kaldırmak istiyor musunuz? Bu eylem geri alınamaz."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -79,8 +80,10 @@ msgid "Confirm applet removal"
 msgstr "Uygulama kaldırmayı onayla"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Bu uygulamayı gerçekten kaldırmak istiyor musunuz? Bu eylem geri alınamaz."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Bu uygulamayı gerçekten kaldırmak istiyor musunuz? Bu eylem geri alınamaz."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -124,8 +127,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Kalıcı diyalogları pencerelere bağla"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Kalıcı diyaloglar üst pencereye bağlanacak ve sürüklendiğinde birlikte hareket edecektir."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Kalıcı diyaloglar üst pencereye bağlanacak ve sürüklendiğinde birlikte "
+"hareket edecektir."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -148,15 +155,21 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "Pencereler tam ekran olunca Gece Lambası modunu devre dışı bırak"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Bir pencere tam ekran olunca Gece Lambası modunu devre dışı bırakır. Tam ekrandan çıkınca tekrar etkinleştirir."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Bir pencere tam ekran olunca Gece Lambası modunu devre dışı bırakır. Tam "
+"ekrandan çıkınca tekrar etkinleştirir."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
 msgstr "Pencereler tam ekran olunca bildirimleri durdur"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Bir pencere tam ekran olunca bildirimlerin görünmesini engeller. Tam "
 "ekrandan çıkınca tekrar başlatır."
@@ -166,32 +179,48 @@ msgid "Automatic tiling"
 msgstr "Otomatik döşeme"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Pencereler ekranın üstüne veya uzak köşelerine sürüklendiğinde otomatik olarak döşenecektir."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Pencereler ekranın üstüne veya uzak köşelerine sürüklendiğinde otomatik "
+"olarak döşenecektir."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "Fare giriş ve çıkışında pencere odak değişimini etkinleştir"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Fare pencereye girince pencere odağının uygulanmasını ve çıkınca odağın kaldırılmasına izin verir."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Fare pencereye girince pencere odağının uygulanmasını ve çıkınca odağın "
+"kaldırılmasına izin verir."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Pencere tekrar yönlendirmemelerini (unredirection) devre dışı bırak"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Bu ayar ileri gelişmiş kullanıcılar içindir. Özel GPU'lar ile grafiksel veya performans sorunları yaşıyorsanız bunu kullanın."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Bu ayar ileri gelişmiş kullanıcılar içindir. Özel GPU'lar ile grafiksel veya"
+" performans sorunları yaşıyorsanız bunu kullanın."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Sekme değiştiricide tüm pencereleri göster"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "Kullanılan çalışma alanına bakılmaksızın tüm sekmeler sekme değiştiricide görüntülenecektir."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Kullanılan çalışma alanına bakılmaksızın tüm sekmeler sekme değiştiricide "
+"görüntülenecektir."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -247,8 +276,11 @@ msgid "Built-in theme"
 msgstr "Yerleşik tema"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Etkinleştirildiğinde, içe inşalı stil masaüstü bileşeni stilini geçersiz kılar"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Etkinleştirildiğinde, içe inşalı stil masaüstü bileşeni stilini geçersiz "
+"kılar"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -256,7 +288,8 @@ msgstr "Animasyonlar"
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Control whether windows and controls use animations"
-msgstr "Pencerelerin ve denetimlerin animasyon kullanıp kullanmadığını kontrol et"
+msgstr ""
+"Pencerelerin ve denetimlerin animasyon kullanıp kullanmadığını kontrol et"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
@@ -279,24 +312,34 @@ msgid "Set Raven position"
 msgstr "Raven konumunu belirle"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Raven'ın ekranın hangi tarafında görüneceğini belirle. Otomatiğe ayarlanırsa, Raven ana panelinin tarafında açılır."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Raven'ın ekranın hangi tarafında görüneceğini belirle. Otomatiğe "
+"ayarlanırsa, Raven ana panelinin tarafında açılır."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Ses düzeyini %100'den fazla yükseltmeye izin ver"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Ses Ayarları'ndan ve Raven'daki Ses Çıktı Widget'ından ses düzeyinin %150'ye kadar çıkarılmasına izin verir."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Ses Ayarları'ndan ve Raven'daki Ses Çıktı Widget'ından ses düzeyinin %150'ye"
+" kadar çıkarılmasına izin verir."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Takvimde hafta numaralarının gösterimini etkinleştir"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Bu ayar Takvim Widget'ında hafta sayılarının görünümünü etkinleştirir."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Bu ayar Takvim Widget'ında hafta sayılarının görünümünü etkinleştirir."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -304,7 +347,8 @@ msgstr "Takvim Widget'ını göster"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Raven'ın Uygulamalar bölümündeki Takvim Widgetı'nı gösterir veya saklar."
+msgstr ""
+"Raven'ın Uygulamalar bölümündeki Takvim Widgetı'nı gösterir veya saklar."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -312,7 +356,8 @@ msgstr "Ses Çıktı Widget'ını göster"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Raven'ın Uygulamalar bölümündeki Ses Çıktı Widgetı'nı gösterir veya saklar."
+msgstr ""
+"Raven'ın Uygulamalar bölümündeki Ses Çıktı Widgetı'nı gösterir veya saklar."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -320,15 +365,21 @@ msgstr "Mikrofon Girdi Widget'ını göster"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Raven'ın Uygulamalar bölümündeki Mikrofon Girdi Widgetı'nı gösterir veya saklar."
+msgstr ""
+"Raven'ın Uygulamalar bölümündeki Mikrofon Girdi Widgetı'nı gösterir veya "
+"saklar."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Medya Yürütme Kontrolleri Widget'ını göster"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Raven'ın Uygulamalar bölümündeki Medya Yürütme Kontrolleri (MPRIS) Widget'ını gösterir veya saklar."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Raven'ın Uygulamalar bölümündeki Medya Yürütme Kontrolleri (MPRIS) "
+"Widget'ını gösterir veya saklar."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -362,7 +413,8 @@ msgstr "Masaüstü"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -372,7 +424,8 @@ msgstr "Masaüstü Simgeleri"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Masaüstünde ikonlara izin verilmesini kontrol edin."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -401,7 +454,8 @@ msgstr "Çöp"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Masaüstüne Çöp kısayolu ekle."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -417,7 +471,8 @@ msgid "Number of virtual desktops"
 msgstr "Sanal masaüstü sayısı"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr "Başlangıçta oluşturulacak sanal masaüstü / çalışma alanı sayısı."
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -434,7 +489,8 @@ msgid "Click Policy"
 msgstr "Tıklama İlkesi"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr "Tıklama İlkesi öğelerin tek tık veya çift tıkla açılmasını belirler."
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -556,7 +612,9 @@ msgstr "Boyut"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Bu panelin boyutunu (genişliğini veya yüksekliğini, hizalamaya bağlı olarak) ayarlayın"
+msgstr ""
+"Bu panelin boyutunu (genişliğini veya yüksekliğini, hizalamaya bağlı olarak)"
+" ayarlayın"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -564,7 +622,9 @@ msgstr "Otomatik olarak gizle"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Ayarlandığında, bu panel ekran alanını en üst düzeye çıkarmak için görünümden gizlenir"
+msgstr ""
+"Ayarlandığında, bu panel ekran alanını en üst düzeye çıkarmak için "
+"görünümden gizlenir"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -587,16 +647,24 @@ msgid "Stylize regions"
 msgstr "Bölgeleri stille"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Panele bir ayrıklık ekleyerek üç ana alanının her birinin farklı temalı olabilmesini sağlar."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Panele bir ayrıklık ekleyerek üç ana alanının her birinin farklı temalı "
+"olabilmesini sağlar."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Dock modu"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Dock modundayken, panel mümkün olan en az alanı kullanır, ekran alanı boşaltır"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Dock modundayken, panel mümkün olan en az alanı kullanır, ekran alanı "
+"boşaltır"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -687,7 +755,8 @@ msgstr "Arayüz"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls."
-msgstr "Uygulama kontrolleri tarafından kullanılan birincil yazı tipini ayarla."
+msgstr ""
+"Uygulama kontrolleri tarafından kullanılan birincil yazı tipini ayarla."
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -695,7 +764,9 @@ msgstr "Tek aralıklı"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Yazı ağırlıklı uygulamalar tarafından kullanılan sabit genişlikli yazı tipini ayarla."
+msgstr ""
+"Yazı ağırlıklı uygulamalar tarafından kullanılan sabit genişlikli yazı "
+"tipini ayarla."
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -1141,7 +1212,8 @@ msgstr "Favorilerden Çıkar"
 msgid "Favorite"
 msgstr "Favorilere Ekle"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1329,8 +1401,12 @@ msgid "Budgie Panel"
 msgstr "Budgie Paneli"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Başka uygulamaları başlat ve pencereleri yönetmek, saati göstermek, vs. için araçlar sağla."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Başka uygulamaları başlat ve pencereleri yönetmek, saati göstermek, vs. için"
+" araçlar sağla."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
