@@ -61,7 +61,7 @@ namespace Budgie {
 			add(grid);
 
 			if (use_desktop_type == DesktopType.BUDGIE) { // Budgie native implementation
-				budgie_desktop_view_settings = new Settings("us.getsol.budgie-desktop-view"); // Get the settings for Budgie Desktop View
+				budgie_desktop_view_settings = new Settings("org.buddiesofbudgie.budgie-desktop-view"); // Get the settings for Budgie Desktop View
 				budgie_desktop_view_settings.changed.connect(update_switches); // Update our switches on change
 			} else if (use_desktop_type == DesktopType.DESKTOPFOLDER) { // Desktop Folder
 				desktop_folder_settings = new Settings("com.github.spheras.desktopfolder"); // Get the settings for DesktopType
@@ -154,7 +154,7 @@ namespace Budgie {
 		public string get_exec_for_type(int t) {
 			switch (t) {
 				case DesktopType.BUDGIE:
-					return "us.getsol.budgie-desktop-view";
+					return "org.buddiesofbudgie.budgie-desktop-view";
 				case DesktopType.DESKTOPFOLDER:
 					return "com.github.spheras.desktopfolder";
 				case DesktopType.NEMO:
