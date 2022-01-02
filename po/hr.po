@@ -1,0 +1,1399 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the budgie-desktop package.
+#
+# Translators:
+# Filip Matić <filip_matic@hotmail.com>, 2017
+# Ivica  Kolić <ikoli@yahoo.com>, 2016-2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Budgie Desktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-28 19:37+0200\n"
+"PO-Revision-Date: 2021-03-22 11:05+0000\n"
+"Last-Translator: Ivica Kukuruzovic <ivicakuk@gmail.com>\n"
+"Language-Team: Croatian <http://translate.getsol.us/projects/budgie-desktop/"
+"translations/hr/>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
+
+#: src/polkit/polkitdialog.vala:126
+msgid "Authentication failed"
+msgstr "Autentifikacija nije uspjela"
+
+#: src/polkit/polkitdialog.vala:215
+msgid "Group:"
+msgstr "Grupiraj:"
+
+#: src/panel/settings/settings_panel_applets.vala:19
+msgid "Configure applet"
+msgstr "Podešavanje programčića"
+
+#: src/panel/settings/settings_panel_applets.vala:233
+#: src/panel/settings/settings_applet_chooser.vala:80
+msgid "Add applet"
+msgstr "Dodaj programčić"
+
+#: src/panel/settings/settings_panel_applets.vala:234
+msgid "Choose a new applet to add to this panel"
+msgstr "Izaberi novi programčić koji se postavlja na panel"
+
+#: src/panel/settings/settings_panel_applets.vala:248
+msgid "No settings available"
+msgstr "Nije dostupno podešavanje"
+
+#: src/panel/settings/settings_panel_applets.vala:401
+msgid "Start"
+msgstr "Početak"
+
+#: src/panel/settings/settings_panel_applets.vala:404
+msgid "Center"
+msgstr "Sredina"
+
+#: src/panel/settings/settings_panel_applets.vala:407
+msgid "End"
+msgstr "Kraj"
+
+#: src/panel/settings/settings_panel_dialogs.vala:24
+msgid "Confirm panel removal"
+msgstr "Potvrdi uklanjanje panela"
+
+#: src/panel/settings/settings_panel_dialogs.vala:31
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr "Da li stvarno želite ukloniti panel? Ova radnja se ne može poništiti."
+
+#: src/panel/settings/settings_panel_dialogs.vala:42
+msgid "Remove panel"
+msgstr "Ukloni panel"
+
+#: src/panel/settings/settings_panel_dialogs.vala:43
+msgid "Keep panel"
+msgstr "Zadrži panel"
+
+#: src/panel/settings/settings_panel_dialogs.vala:67
+msgid "Confirm applet removal"
+msgstr "Potvrdite uklanjanje programčića"
+
+#: src/panel/settings/settings_panel_dialogs.vala:74
+msgid "Do you really want to remove this applet? This action cannot be undone."
+msgstr "Želite li zaista ukloniti ovaj programčić? Ova se radnja ne može poništiti.."
+
+#: src/panel/settings/settings_panel_dialogs.vala:89
+msgid "Don't ask me again"
+msgstr "Ne pitaj me ponovo"
+
+#: src/panel/settings/settings_panel_dialogs.vala:98
+msgid "Remove applet"
+msgstr "Ukloni programčić"
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid "Keep applet"
+msgstr "Zadrži programčić"
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Izgled"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Paneli"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sesija"
+
+#: src/panel/settings/settings_main.vala:68 src/daemon/menus.vala:46
+#: src/panel/budgie-desktop-settings.desktop.in.h:1
+msgid "Budgie Desktop Settings"
+msgstr "Postavke Budgie radne površine"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Stvori novi panel"
+
+#: src/panel/settings/settings_wm.vala:31
+msgid "Windows"
+msgstr "Prozori"
+
+#: src/panel/settings/settings_wm.vala:40
+msgid "Attach modal dialogs to windows"
+msgstr "Pričvrsti modifikacijske dijaloge na prozore"
+
+#: src/panel/settings/settings_wm.vala:41
+msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgstr "Modifikacijski dijalozi biti će pričvršćeni na osnovni prozor i pomicati se zajedno s njim."
+
+#: src/panel/settings/settings_wm.vala:46
+msgid "Button layout"
+msgstr "Raspored tipki"
+
+#: src/panel/settings/settings_wm.vala:47
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Promijenite raspored tipki na naslovnim trakama programa."
+
+#: src/panel/settings/settings_wm.vala:52
+msgid "Center new windows on screen"
+msgstr "Centrirajte nove prozore na zaslonu"
+
+#: src/panel/settings/settings_wm.vala:53
+msgid "Center newly launched windows on the current screen."
+msgstr "Centrirajte nedavno pokrenute prozore na trenutnom zaslonu."
+
+#: src/panel/settings/settings_wm.vala:58
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "Onemogućite način noćnog svjetla kada su prozori preko cijelog zaslona"
+
+#: src/panel/settings/settings_wm.vala:59
+msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgstr "Onemogućuje način noćnog svjetla kada je prozor preko cijelog zaslona. Ponovno omogućuje kad napustite cijeli zaslon."
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Pauzirajte obavijesti kada su prozori preko cijelog zaslona"
+
+#: src/panel/settings/settings_wm.vala:65
+msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgstr ""
+"Onemogućuje obavijesti kada je prozor preko cijelog zaslona. Ponovno "
+"omogućuje kad napustite cijeli zaslon."
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Automatic tiling"
+msgstr "Automatsko popločavanje prozora"
+
+#: src/panel/settings/settings_wm.vala:71
+msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgstr "Prozori će se automatski popločiti kad se povuku na vrh zaslona ili u daljnje kutove."
+
+#: src/panel/settings/settings_wm.vala:76
+msgid "Enable window focus change on mouse enter and leave"
+msgstr "Omogućite promjenu fokusa prozora na ulazu i izlasku miša"
+
+#: src/panel/settings/settings_wm.vala:77
+msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgstr "Omogućuje primjenu fokusa prozora kada miš uđe u prozor i suprotno kad miš napusti prozor."
+
+#: src/panel/settings/settings_wm.vala:83
+msgid "Disable unredirection of windows"
+msgstr "Onemogući preusmjeravnje prozora"
+
+#: src/panel/settings/settings_wm.vala:84
+msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgstr "Ova opcija je za napredne korisnike. Koristite samo ako imate problema sa prikazom ili performansama sa odabranim GPU-om."
+
+#: src/panel/settings/settings_wm.vala:89
+msgid "Show all windows in tab switcher"
+msgstr "Prikaži sve prozore u prebacivaču kartica"
+
+#: src/panel/settings/settings_wm.vala:90
+msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgstr "Sve će se kartice prikazati u prebacivaču kartica, bez obzira na radni prostor koji se koristi."
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Right (standard)"
+msgstr "Desno (standardno)"
+
+#: src/panel/settings/settings_wm.vala:99
+#: src/panel/settings/settings_panel.vala:181 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Lijevo"
+
+#: src/panel/settings/settings_style.vala:32
+msgid "Style"
+msgstr "Izgled"
+
+#: src/panel/settings/settings_style.vala:46
+msgid "Widgets"
+msgstr "Widgeti"
+
+#: src/panel/settings/settings_style.vala:47
+msgid "Set the appearance of window decorations and controls"
+msgstr "Postavi izgled za dekoraciju i kontrolu prozora"
+
+#: src/panel/settings/settings_style.vala:51
+msgid "Icons"
+msgstr "Ikone"
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Set the globally used icon theme"
+msgstr "Postavi globalnu temu za ikone"
+
+#: src/panel/settings/settings_style.vala:56
+msgid "Cursors"
+msgstr "Pokazivač"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Set the globally used mouse cursor theme"
+msgstr "Postavi globalnu temu za pokazivač miša"
+
+#: src/panel/settings/settings_style.vala:61
+msgid "Notification Position"
+msgstr "Pozicija obavijesti"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Set the location for notification popups"
+msgstr "Postavite mjesto za skočne prozore s obavijestima"
+
+#: src/panel/settings/settings_style.vala:71
+msgid "Dark theme"
+msgstr "Tamna tema"
+
+#: src/panel/settings/settings_style.vala:78
+msgid "Built-in theme"
+msgstr "Ugrađena tema"
+
+#: src/panel/settings/settings_style.vala:79
+msgid "When enabled, the built-in theme will override the desktop component styling"
+msgstr "Kad je omogućeno, ugrađena tema promijeniti će stil komponenata radne površine"
+
+#: src/panel/settings/settings_style.vala:86
+msgid "Animations"
+msgstr "Animacije"
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Control whether windows and controls use animations"
+msgstr "Kontrolirajte upotrebu animacija na prozorima i kontrolama"
+
+#: src/panel/settings/settings_style.vala:204
+msgid "Top Left"
+msgstr "Gore lijevo"
+
+#: src/panel/settings/settings_style.vala:206
+msgid "Bottom Left"
+msgstr "Dolje lijevo"
+
+#: src/panel/settings/settings_style.vala:208
+msgid "Bottom Right"
+msgstr "Dolje desno"
+
+#: src/panel/settings/settings_style.vala:211
+msgid "Top Right"
+msgstr "Gore desno"
+
+#: src/panel/settings/settings_raven.vala:61
+msgid "Set Raven position"
+msgstr "Postavite poziciju Ravena"
+
+#: src/panel/settings/settings_raven.vala:62
+msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgstr "Postavite na kojoj će se strani zaslona Raven otvoriti. Ako je postavljeno na Automatsko, Raven će se otvoriti tamo gdje mu je nadređeni panel."
+
+#: src/panel/settings/settings_raven.vala:67
+msgid "Allow raising volume above 100%"
+msgstr "Omogućite povećanje glasnoće iznad 100%"
+
+#: src/panel/settings/settings_raven.vala:68
+msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
+msgstr "Omogućuje povećanje glasnoće putem postavki zvuka, kao i widgeta za izlaz zvuka u Ravenu, do 150%."
+
+#: src/panel/settings/settings_raven.vala:72
+msgid "Enable display of week numbers in Calendar"
+msgstr "Omogućite prikaz brojeva tjedna u Kalendaru"
+
+#: src/panel/settings/settings_raven.vala:73
+msgid "This setting enables the display of week numbers in the Calendar widget."
+msgstr "Ova postavka omogućuje prikaz brojeva tjedna u widgetu Kalendar."
+
+#: src/panel/settings/settings_raven.vala:78
+msgid "Show Calendar Widget"
+msgstr "Prikaži widget Kalendar"
+
+#: src/panel/settings/settings_raven.vala:79
+msgid "Shows or hides the Calendar Widget in Raven's Applets section."
+msgstr "Prikazuje ili skriva widget Kalendar u odjeljku za Raven programčiće."
+
+#: src/panel/settings/settings_raven.vala:84
+msgid "Show Sound Output Widget"
+msgstr "Prikaži widget Izlaz zvuka"
+
+#: src/panel/settings/settings_raven.vala:85
+msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
+msgstr "Prikazuje ili skriva widget Izlaz zvuka u odjeljku za Raven programčiće."
+
+#: src/panel/settings/settings_raven.vala:90
+msgid "Show Microphone Input Widget"
+msgstr "Prikaži widget Ulaz mikrofona"
+
+#: src/panel/settings/settings_raven.vala:91
+msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
+msgstr "Prikazuje ili skriva widget Ulaz mikrofona u odjeljku za Raven programčiće."
+
+#: src/panel/settings/settings_raven.vala:96
+msgid "Show Media Playback Controls Widget"
+msgstr "Prikaži widget Kontrola reprodukcije medija"
+
+#: src/panel/settings/settings_raven.vala:97
+msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgstr "Prikazuje ili skriva widget Kontrola reprodukcije medija u odjeljku za Raven programčiće."
+
+#: src/panel/settings/settings_raven.vala:102
+msgid "Show Power Strip"
+msgstr "Pokaži Traku napajanja"
+
+#: src/panel/settings/settings_raven.vala:103
+msgid "Shows or hides the Power Strip in the bottom of Raven."
+msgstr "Prikazuje ili skriva Traku napajanja na dnu Ravena."
+
+#: src/panel/settings/settings_applet_chooser.vala:74
+msgid "Choose an applet"
+msgstr "Izaberi programčić"
+
+#: src/panel/settings/settings_applet_chooser.vala:79
+#: src/panel/settings/settings_autostart.vala:194
+#: src/panel/settings/settings_autostart.vala:359
+#: src/applets/budgie-menu/IconChooser.vala:52 src/polkit/dialog.ui.h:4
+#: src/daemon/endsession.ui.h:3
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: src/panel/settings/settings_desktop.vala:52
+msgid "Desktop"
+msgstr "Radna površina"
+
+#. Budgie native implementation
+#. Get the settings for Budgie Desktop View
+#. Update our switches on change
+#. Desktop Folder
+#. Get the settings for DesktopType
+#. Update our switches on change
+#. Nemo
+#. Update our switches on change
+#. Using some desktop type, set up some universal options then implementation-specific
+#. Universal show
+#: src/panel/settings/settings_desktop.vala:77
+msgid "Desktop Icons"
+msgstr "Ikone radne površine"
+
+#: src/panel/settings/settings_desktop.vala:78
+msgid "Control whether to allow icons on the desktop."
+msgstr "Kontrolirajte želite li dopustiti ikone na radnoj površini."
+
+#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopType is the only one that doesn't support showing mounts
+#. Switcher to show or hide active mounts
+#: src/panel/settings/settings_desktop.vala:87
+msgid "Active Mounts"
+msgstr "Aktivna montiranja"
+
+#: src/panel/settings/settings_desktop.vala:88
+msgid "Show all active mounts on the desktop."
+msgstr "Prikaži sva aktivna montiranja na radnoj površini."
+
+#. Switcher to show or hide our Home folder
+#: src/panel/settings/settings_desktop.vala:95
+msgid "Home directory"
+msgstr "Osobna mapa"
+
+#: src/panel/settings/settings_desktop.vala:96
+msgid "Add a shortcut to your home directory on the desktop."
+msgstr "Dodajte prečac Osobna mapa na radnu površinu."
+
+#. Switcher to show or hide a shortcut to Trash
+#: src/panel/settings/settings_desktop.vala:103
+msgid "Trash"
+msgstr "Smeće"
+
+#: src/panel/settings/settings_desktop.vala:104
+msgid "Add a shortcut to the Trash directory on the desktop."
+msgstr "Dodajte prečac mapa Smeće na radnu površinu."
+
+#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. Click Policy combo box
+#. Icon Size combo box
+#: src/panel/settings/settings_desktop.vala:116
+msgid "Icon Size"
+msgstr "Veličina ikone"
+
+#: src/panel/settings/settings_desktop.vala:117
+msgid "Set the desired size of icons on the desktop."
+msgstr "Postavite željenu veličinu ikona na radnoj površini."
+
+#: src/panel/settings/settings_desktop.vala:148
+msgid "Number of virtual desktops"
+msgstr "Broj virtualnih radnih površina"
+
+#: src/panel/settings/settings_desktop.vala:149
+msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgstr "Broj virtualnih radnih površina koje će se automatski stvoriti prilikom pokretanja."
+
+#: src/panel/settings/settings_desktop.vala:217
+msgid "Single"
+msgstr "Jednostruki"
+
+#. If the click policy is to double click
+#: src/panel/settings/settings_desktop.vala:221
+msgid "Double"
+msgstr "Dvostruki"
+
+#: src/panel/settings/settings_desktop.vala:236
+msgid "Click Policy"
+msgstr "Klik pravilo"
+
+#: src/panel/settings/settings_desktop.vala:237
+msgid "Click Policy determines if we should open items on a single or double click."
+msgstr "Klik pravilo određuje trebamo li otvoriti stavke jednostrukim ili dvostrukim klikom."
+
+#: src/panel/settings/settings_desktop.vala:289
+msgid "Normal"
+msgstr "Normalan"
+
+#. Small
+#: src/panel/settings/settings_desktop.vala:292
+msgid "Small"
+msgstr "Mali"
+
+#. Large
+#: src/panel/settings/settings_desktop.vala:294
+msgid "Large"
+msgstr "Veliki"
+
+#. Massive
+#: src/panel/settings/settings_desktop.vala:296
+msgid "Massive"
+msgstr "Masivan"
+
+#: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
+msgid "Applets"
+msgstr "Programčići"
+
+#: src/panel/settings/settings_panel.vala:83
+msgid "Settings"
+msgstr "Postavke"
+
+#: src/panel/settings/settings_panel.vala:85
+msgid "Remove Panel"
+msgstr "Uklonite Panel"
+
+#: src/panel/settings/settings_panel.vala:86
+msgid "Remove this panel from the screen"
+msgstr "Uklonite ovaj panel sa ekrana"
+
+#: src/panel/settings/settings_panel.vala:123
+msgid "Top Dock"
+msgstr "Dock na vrhu"
+
+#: src/panel/settings/settings_panel.vala:125
+msgid "Right Dock"
+msgstr "Dock desno"
+
+#: src/panel/settings/settings_panel.vala:127
+msgid "Left Dock"
+msgstr "Dock lijevo"
+
+#: src/panel/settings/settings_panel.vala:129
+msgid "Bottom Dock"
+msgstr "Dock na dnu"
+
+#: src/panel/settings/settings_panel.vala:134
+msgid "Top Panel"
+msgstr "Gornji panel"
+
+#: src/panel/settings/settings_panel.vala:136
+msgid "Right Panel"
+msgstr "Desni panel"
+
+#: src/panel/settings/settings_panel.vala:138
+msgid "Left Panel"
+msgstr "Lijevi panel"
+
+#: src/panel/settings/settings_panel.vala:140
+msgid "Bottom Panel"
+msgstr "Donji panel"
+
+#: src/panel/settings/settings_panel.vala:177
+msgid "Top"
+msgstr "Gore"
+
+#: src/panel/settings/settings_panel.vala:179 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Desno"
+
+#: src/panel/settings/settings_panel.vala:183
+msgid "Bottom"
+msgstr "Dolje"
+
+#: src/panel/settings/settings_panel.vala:193
+msgid "Always"
+msgstr "Uvijek"
+
+#: src/panel/settings/settings_panel.vala:195
+msgid "Dynamic"
+msgstr "Dinamički"
+
+#: src/panel/settings/settings_panel.vala:198
+#: src/panel/settings/settings_fonts.vala:84
+#: src/panel/settings/settings_fonts.vala:110
+msgid "None"
+msgstr "Nijedan"
+
+#: src/panel/settings/settings_panel.vala:208 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Automatski"
+
+#: src/panel/settings/settings_panel.vala:210
+msgid "Intelligent"
+msgstr "Inteligentno"
+
+#: src/panel/settings/settings_panel.vala:213
+msgid "Never"
+msgstr "Nikad"
+
+#: src/panel/settings/settings_panel.vala:228
+msgid "Position"
+msgstr "Pozicija"
+
+#: src/panel/settings/settings_panel.vala:229
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Postavite rub na ekranu na kojem će ostati ovaj panel"
+
+#: src/panel/settings/settings_panel.vala:237
+msgid "Size"
+msgstr "Veličina"
+
+#: src/panel/settings/settings_panel.vala:238
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr "Postavi veličinu (širina ili visina, ovisno o orijentaciji) ovog panela"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Automatically hide"
+msgstr "Automatski sakrij"
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr "Kad se postavi, ovaj će se panel sakriti kako bi se povećao pogled zaslona"
+
+#: src/panel/settings/settings_panel.vala:253
+msgid "Transparency"
+msgstr "Prozirnost"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Control when this panel should have a solid background"
+msgstr "Kontrolirajte kada ovaj panel treba imati solidnu pozadinu"
+
+#: src/panel/settings/settings_panel.vala:259
+msgid "Shadow"
+msgstr "Sjena"
+
+#: src/panel/settings/settings_panel.vala:260
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "Dodaje dekorativnu sjenu, idealno za neprozirne panele"
+
+#: src/panel/settings/settings_panel.vala:266
+msgid "Stylize regions"
+msgstr "Stilizirati regije"
+
+#: src/panel/settings/settings_panel.vala:267
+msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgstr "Dodaje nagovještaj na panel tako da svaki od tri glavna područja na panelu mogu imati drugačije teme."
+
+#: src/panel/settings/settings_panel.vala:274
+msgid "Dock mode"
+msgstr "Izgled docka"
+
+#: src/panel/settings/settings_panel.vala:275
+msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgstr "Kada je u dock modu, panel će upotrijebiti minimalno prostora, oslobađajući vrijedno područje ekrana"
+
+#: src/panel/settings/settings_autostart.vala:134
+msgid "Untitled"
+msgstr "Bez naslova"
+
+#: src/panel/settings/settings_autostart.vala:141
+msgid "No description"
+msgstr "Bez opisa"
+
+#: src/panel/settings/settings_autostart.vala:164
+msgid "running"
+msgstr "pokrenuto"
+
+#: src/panel/settings/settings_autostart.vala:185
+msgid "Applications"
+msgstr "Aplikacije"
+
+#: src/panel/settings/settings_autostart.vala:195
+#: src/panel/settings/settings_autostart.vala:360
+msgid "Add"
+msgstr "Dodaj"
+
+#: src/panel/settings/settings_autostart.vala:354
+#: src/panel/settings/settings_autostart.vala:387
+msgid "Command"
+msgstr "Naredba"
+
+#: src/panel/settings/settings_autostart.vala:370
+msgid "An entry with that title already exists"
+msgstr "Unos s tim naslovom već postoji"
+
+#: src/panel/settings/settings_autostart.vala:373
+msgid "Title"
+msgstr "Naziv"
+
+#: src/panel/settings/settings_autostart.vala:377
+#: src/panel/settings/settings_autostart.vala:391
+msgid "Required"
+msgstr "Potreban"
+
+#: src/panel/settings/settings_autostart.vala:380
+msgid "Description"
+msgstr "Opis"
+
+#: src/panel/settings/settings_autostart.vala:384
+msgid "Optional"
+msgstr "Dodatno"
+
+#: src/panel/settings/settings_autostart.vala:446
+msgid "Autostart"
+msgstr "Automatski pokreni"
+
+#: src/panel/settings/settings_autostart.vala:464
+msgid "Autostart apps"
+msgstr "Automatsko pokretanje aplikacija"
+
+#: src/panel/settings/settings_autostart.vala:506
+msgid "Add Application"
+msgstr "Dodaj aplikaciju"
+
+#: src/panel/settings/settings_autostart.vala:508
+msgid "Add Command"
+msgstr "Dodaj naredbu"
+
+#: src/panel/settings/settings_fonts.vala:32
+msgid "Fonts"
+msgstr "Fontovi"
+
+#: src/panel/settings/settings_fonts.vala:43
+msgid "Window Titles"
+msgstr "Naslovi prozora"
+
+#: src/panel/settings/settings_fonts.vala:44
+msgid "Set the font used in the titlebars of applications."
+msgstr "Postavite font koji se koristi na naslovnim trakama aplikacija."
+
+#: src/panel/settings/settings_fonts.vala:50
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: src/panel/settings/settings_fonts.vala:51
+msgid "Set the display font used by for documents."
+msgstr "Postavite font zaslona koji se koristi za dokumente."
+
+#: src/panel/settings/settings_fonts.vala:57
+msgid "Interface"
+msgstr "Sučelje"
+
+#: src/panel/settings/settings_fonts.vala:58
+msgid "Set the primary font used by application controls."
+msgstr "Postavite primarni font koji koriste kontrole aplikacija."
+
+#: src/panel/settings/settings_fonts.vala:64
+msgid "Monospace"
+msgstr "Monospace"
+
+#: src/panel/settings/settings_fonts.vala:65
+msgid "Set the fixed-width font used by text dominant applications."
+msgstr "Postavi fiksnu širinu fonta za tekstualno dominantne aplikacije."
+
+#: src/panel/settings/settings_fonts.vala:71
+msgid "Text scaling"
+msgstr "Skaliranje teksta"
+
+#: src/panel/settings/settings_fonts.vala:72
+msgid "Set the text scaling factor."
+msgstr "Postavite faktor skaliranja teksta."
+
+#: src/panel/settings/settings_fonts.vala:81
+msgid "Full"
+msgstr "Pun"
+
+#: src/panel/settings/settings_fonts.vala:82
+msgid "Medium"
+msgstr "Srednje"
+
+#: src/panel/settings/settings_fonts.vala:83
+msgid "Slight"
+msgstr "Slabo"
+
+#: src/panel/settings/settings_fonts.vala:100
+msgid "Hinting"
+msgstr "Nagovještaj"
+
+#: src/panel/settings/settings_fonts.vala:101
+msgid "Set the type of hinting to use."
+msgstr "Postavite vrstu nagovještaja koji će se koristiti."
+
+#: src/panel/settings/settings_fonts.vala:108
+msgid "Subpixel (for LCD screens)"
+msgstr "Subpixel (za LCD zaslone)"
+
+#: src/panel/settings/settings_fonts.vala:109
+msgid "Standard (grayscale)"
+msgstr "Standardno (sive boje)"
+
+#: src/panel/settings/settings_fonts.vala:125
+msgid "Antialiasing"
+msgstr "Zaglađivanje"
+
+#: src/panel/settings/settings_fonts.vala:126
+msgid "Set the type of antialiasing to use."
+msgstr "Postavite vrstu zaglađivanja."
+
+#: src/raven/start_listening.vala:20
+msgid "No apps are currently playing audio."
+msgstr "Trenutno nijedna aplikacija ne reproducira zvuk."
+
+#: src/raven/start_listening.vala:28
+msgid "Play some music"
+msgstr "Pusti malo glazbe"
+
+#: src/raven/notifications_view.vala:101
+msgid "Nothing to see here"
+msgstr "Ovdje nema nista za vidjeti"
+
+#: src/raven/notifications_view.vala:654
+#: src/applets/notifications/NotificationsApplet.vala:106
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u nepročitanih obavijesti"
+
+#: src/raven/notifications_view.vala:656
+#: src/applets/notifications/NotificationsApplet.vala:108
+msgid "1 unread notification"
+msgstr "1 nepročitana obavijest"
+
+#: src/raven/notifications_view.vala:658
+#: src/applets/notifications/NotificationsApplet.vala:110
+msgid "No unread notifications"
+msgstr "Nema nepročitanih obavijesti"
+
+#: src/raven/notifications_view.vala:889
+msgid "No new notifications"
+msgstr "Nema novih obavijesti"
+
+#. 125ms
+#: src/raven/sound.vala:158
+msgid "Apps"
+msgstr "Aplikacije"
+
+#: src/raven/sound.vala:159
+msgid "Devices"
+msgstr "Uređaji"
+
+#: src/raven/main_view.vala:60
+#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Notifications"
+msgstr "Obavijesti"
+
+#. Caffeine Notification
+#. Prepare label widget
+#: src/raven/notifications_group.vala:47
+#: src/applets/caffeine/CaffeineWindow.vala:37
+msgid "Caffeine Mode"
+msgstr "Caffeine Mod"
+
+#: src/daemon/menus.vala:51
+msgid "System Settings"
+msgstr "Postavke sustava"
+
+#: src/daemon/endsession.vala:157
+msgid "Log out"
+msgstr "Odjava"
+
+#: src/daemon/endsession.vala:161
+msgid "Restart device"
+msgstr "Ponovno pokreni uređaj"
+
+#: src/daemon/endsession.vala:173 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Isključi"
+
+#. Should show a notification
+#: src/daemon/settings.vala:341
+msgid "Turned on Caffeine Boost"
+msgstr "Uključeno Caffeine Boost"
+
+#: src/daemon/settings.vala:341
+msgid "Turned off Caffeine Boost"
+msgstr "Isključeno  Caffeine Boost"
+
+#: src/daemon/settings.vala:346
+msgid "Will turn off in a minute"
+msgstr "Isključit će se za minutu"
+
+#. use plural
+#: src/daemon/settings.vala:349
+#, c-format
+msgid "Will turn off in %d minutes"
+msgstr "Isključit će se za %d minuta"
+
+#. User Menu Creation
+#: src/applets/user-indicator/UserIndicatorWindow.vala:99
+msgid "User"
+msgstr "Korisnik"
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/applets/user-indicator/UserIndicatorWindow.vala:105
+msgid "Lock"
+msgstr "Zaključaj"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:106
+msgid "Suspend"
+msgstr "Suspendiraj"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:107
+msgid "Hibernate"
+msgstr "Hiberniraj"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:108
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "Ponovno pokreni"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:109
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Isključi"
+
+#: src/applets/user-indicator/UserIndicatorWindow.vala:208
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "Odjava"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:55
+msgid "Caps lock is active"
+msgstr "Caps lock je aktivan"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:58
+msgid "Caps lock is not active"
+msgstr "Caps lock nije aktivan"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:67
+msgid "Num lock is active"
+msgstr "Num lock je aktivan"
+
+#: src/applets/lock-keys/LockKeysApplet.vala:70
+msgid "Num lock is not active"
+msgstr "Num lock nije aktivan"
+
+#: src/applets/places-indicator/MountItem.vala:23
+#: src/applets/places-indicator/VolumeItem.vala:25
+msgid "Removable devices"
+msgstr "Uklonjivi uređaji"
+
+#: src/applets/places-indicator/MountItem.vala:25
+#: src/applets/places-indicator/VolumeItem.vala:27
+msgid "Local volumes"
+msgstr "Lokalne particije"
+
+#: src/applets/places-indicator/MountItem.vala:29
+#: src/applets/places-indicator/VolumeItem.vala:31
+msgid "Network folders"
+msgstr "Mrežne mape"
+
+#: src/applets/places-indicator/MountItem.vala:32
+#: src/applets/places-indicator/VolumeItem.vala:34
+msgid "Other"
+msgstr "Ostalo"
+
+#: src/applets/places-indicator/MountItem.vala:58
+#: src/applets/places-indicator/VolumeItem.vala:55
+msgid "Eject"
+msgstr "Izbaci"
+
+#: src/applets/places-indicator/MountItem.vala:60
+msgid "Unmount"
+msgstr "Demontirati"
+
+#: src/applets/places-indicator/MountItem.vala:63
+#: src/applets/places-indicator/PlaceItem.vala:36
+#, c-format
+msgid "Open \"%s\""
+msgstr "Otvori \"%s\""
+
+#: src/applets/places-indicator/MountItem.vala:75
+#: src/applets/places-indicator/VolumeItem.vala:83
+msgid "You can now safely remove"
+msgstr "Sada možete sigurno ukloniti"
+
+#: src/applets/places-indicator/MountItem.vala:76
+msgid "Unknown Device"
+msgstr "Nepoznati uređaj"
+
+#: src/applets/places-indicator/MountItem.vala:84
+msgid "Error while ejecting device"
+msgstr "Pogreška prilikom uklanjanja uređaja"
+
+#: src/applets/places-indicator/MountItem.vala:100
+msgid "Error while unmounting volume"
+msgstr "Pogreška prilikom demontiranja particije"
+
+#: src/applets/places-indicator/VolumeItem.vala:41
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr "Montiraj i otvori \"%s\""
+
+#: src/applets/places-indicator/VolumeItem.vala:73
+#: src/applets/places-indicator/VolumeItem.vala:114
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr "Unesite zaporku da biste otključali  particiju"
+
+#: src/applets/places-indicator/VolumeItem.vala:112
+msgid "The password you entered is incorrect"
+msgstr "Lozinka koju ste utipkali nije točna"
+
+#: src/applets/places-indicator/VolumeItem.vala:116
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr "Dogodila se nepoznata greška prilikom montiranja particije"
+
+#: src/applets/places-indicator/MountHelper.vala:35
+msgid "Volume is in use by other processes"
+msgstr "Particija se koristi u drugim procesima"
+
+#: src/applets/places-indicator/MountHelper.vala:40
+msgid "Operation aborted"
+msgstr "Postupak obustavljen"
+
+#: src/applets/places-indicator/MountHelper.vala:51
+msgid "Type your password"
+msgstr "Upišite svoju lozinku"
+
+#: src/applets/places-indicator/PlacesIndicator.vala:80
+#: src/applets/places-indicator/PlacesSection.vala:22
+#: src/applets/places-indicator/PlacesSection.vala:44
+#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Places"
+msgstr "Mjesta"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "Trenutno nema ničega za prikaz"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "Montirajte neke diskove"
+
+#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Omogući više odjeljaka"
+
+#. Settings button
+#: src/applets/status/BluetoothIndicator.vala:53
+msgid "Bluetooth Settings"
+msgstr "Bluetooth postavke"
+
+#. Send files button
+#: src/applets/status/BluetoothIndicator.vala:60
+msgid "Send Files"
+msgstr "Pošaljite datoteke"
+
+#. Airplane mode
+#: src/applets/status/BluetoothIndicator.vala:70
+msgid "Bluetooth Airplane Mode"
+msgstr "Bluetooth zrakoplovni način rada"
+
+#: src/applets/status/BluetoothIndicator.vala:173
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth je onemogućen"
+
+#: src/applets/status/BluetoothIndicator.vala:177
+msgid "Bluetooth is active"
+msgstr "Bluetooth je aktivan"
+
+#: src/applets/status/BluetoothIndicator.vala:182
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] "Spojen na %d uređaj"
+msgstr[1] "Spojen na %d uređaja"
+msgstr[2] "Spojen na %d uređaja"
+
+#: src/applets/status/PowerIndicator.vala:93
+msgid "Battery fully charged."
+msgstr "Baterija potpuno napunjena."
+
+#: src/applets/status/PowerIndicator.vala:96
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#. Set inner charging duration to hours:minutes
+#: src/applets/status/PowerIndicator.vala:105
+msgid "Battery charging"
+msgstr "Punjenje baterije"
+
+#: src/applets/status/PowerIndicator.vala:110
+msgid "Battery remaining"
+msgstr "Baterije preostalo"
+
+#: src/applets/status/PowerIndicator.vala:161
+msgid "Show battery percentage"
+msgstr "Pokaži postotak baterije"
+
+#: src/applets/status/PowerIndicator.vala:169
+msgid "Power settings"
+msgstr "Postavke energije"
+
+#: src/applets/workspaces/WorkspaceItem.vala:69
+msgid "Rename"
+msgstr "Preimenuj"
+
+#: src/applets/workspaces/WorkspaceItem.vala:77
+msgid "Remove"
+msgstr "Ukloni"
+
+#: src/applets/caffeine/CaffeineWindow.vala:39
+msgid "Timer (minutes)"
+msgstr "Brojač (minute)"
+
+#. there's already an active tray, create an informative icon with a popover
+#: src/applets/tray/TrayApplet.vala:114
+msgid "Only one instance of the System Tray can be active at a time."
+msgstr "Istodobno može biti aktivan samo jedan primjerak sistemske trake."
+
+#: src/applets/tray/TrayApplet.vala:140
+msgid "The System Tray failed to initialize."
+msgstr "Sistemska traka se nije uspjela pokrenuti."
+
+#: src/applets/show-desktop/ShowDesktopApplet.vala:30
+msgid "Toggle the desktop"
+msgstr "Preklopi radnu površinu"
+
+#. Special case, "All"
+#: src/applets/budgie-menu/BudgieMenuButtons.vala:25
+msgid "All"
+msgstr "Sve"
+
+#: src/applets/budgie-menu/IconChooser.vala:24
+msgid "Set menu icon from file"
+msgstr "Postavite ikonu izbornika iz datoteke"
+
+#: src/applets/budgie-menu/IconChooser.vala:34
+msgid "Image files"
+msgstr "Slikovne datoteke"
+
+#: src/applets/budgie-menu/IconChooser.vala:40
+msgid "Any file"
+msgstr "Bilo koja datoteka"
+
+#: src/applets/budgie-menu/IconChooser.vala:53
+msgid "Set icon"
+msgstr "Postavi ikonu"
+
+#. placeholder in case of no results
+#: src/applets/budgie-menu/BudgieMenuWindow.vala:123
+msgid "Sorry, no items found"
+msgstr "Nažalost, nije pronađena nijedna stavka"
+
+#: src/applets/clock/ClockApplet.vala:143
+msgid "Time and date settings"
+msgstr "Postavke vremena i datuma"
+
+#: src/applets/clock/ClockApplet.vala:144
+msgid "Calendar"
+msgstr "Kalendar"
+
+#. pack page2
+#: src/applets/clock/ClockApplet.vala:151
+#: src/applets/clock/ClockApplet.vala:182
+msgid "Preferences"
+msgstr "Postavke"
+
+#: src/applets/clock/ClockApplet.vala:161
+msgid "Show date"
+msgstr "Prikaži datum"
+
+#: src/applets/clock/ClockApplet.vala:166
+msgid "Show seconds"
+msgstr "Prikaži sekunde"
+
+#: src/applets/clock/ClockApplet.vala:172
+msgid "Use 24 hour time"
+msgstr "Koristite 24-satno vrijeme"
+
+#: src/applets/icon-tasklist/IconPopover.vala:106
+msgid "Launch New Instance"
+msgstr "Pokreni Novu Instancu"
+
+#: src/applets/icon-tasklist/IconPopover.vala:109
+msgid "Close All Windows"
+msgstr "Zatvorite sve prozore"
+
+#: src/applets/icon-tasklist/IconPopover.vala:117
+msgid "Always On Top"
+msgstr "Uvijek na vrh"
+
+#: src/applets/icon-tasklist/IconPopover.vala:119
+#: src/applets/icon-tasklist/IconPopover.vala:545
+msgid "Maximize"
+msgstr "Povećajte"
+
+#: src/applets/icon-tasklist/IconPopover.vala:120
+msgid "Minimize"
+msgstr "Smanjite"
+
+#: src/applets/icon-tasklist/IconPopover.vala:433
+msgid "Unfavorite"
+msgstr "Neomiljeni"
+
+#: src/applets/icon-tasklist/IconPopover.vala:433
+msgid "Favorite"
+msgstr "Omiljeni"
+
+#. If our current amount of workspaces is different than how many we have added
+#. We have items to add
+#. For workspaces we need to add
+#: src/applets/icon-tasklist/IconPopover.vala:445
+#, c-format
+msgid "Move To Workspace %i"
+msgstr "Premjesti u radni prostor %i"
+
+#. Update our always on top button
+#: src/applets/icon-tasklist/IconPopover.vala:545
+msgid "Unmaximize"
+msgstr "Smanjivanje"
+
+#: src/applets/icon-tasklist/IconPopover.vala:604
+msgid "Close Window"
+msgstr "Zatvori prozor"
+
+#: src/applets/icon-tasklist/IconPopover.vala:606
+msgid "Show Window Controls"
+msgstr "Prikaži kontrolu prozora"
+
+#: src/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr "Obavezna autentifikacija"
+
+#: src/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr "Lozinka:"
+
+#: src/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr "Autentifikacija je potrebna"
+
+#: src/polkit/dialog.ui.h:5
+msgid "Authenticate"
+msgstr "Autentičnost"
+
+#: src/daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Jeste li sigurni da želite završiti svoju sesiju?"
+
+#: src/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr "Prikaži oznaku"
+
+#: src/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr "Prikaži mjesta"
+
+#: src/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr "Pokaži mrežne mape"
+
+#: src/applets/places-indicator/settings.ui.h:4
+msgid "Show removable drives"
+msgstr "Pokaži uklonjive diskove"
+
+#: src/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr "Uvijek proširi mjesta"
+
+#: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
+msgid "Icon Spacing"
+msgstr "Razmak ikona"
+
+#: src/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Veličina razmaknice"
+
+#: src/applets/workspaces/settings.ui.h:1
+msgid "\"Add\" button visibility"
+msgstr "Vidljivost gumba \"Dodaj\""
+
+#: src/applets/workspaces/settings.ui.h:2
+msgid "Don't show"
+msgstr "Ne prikazuj"
+
+#: src/applets/workspaces/settings.ui.h:3
+msgid "Show on mouseover"
+msgstr "Prikaži prelaskom miša"
+
+#: src/applets/workspaces/settings.ui.h:4
+msgid "Always show"
+msgstr "Uvijek pokaži"
+
+#: src/applets/caffeine/settings.ui.h:1
+msgid "Enable notification"
+msgstr "Omogućiti obavijest"
+
+#: src/applets/caffeine/settings.ui.h:2
+msgid "Maximize brightness"
+msgstr "Povećajte svjetlinu"
+
+#: src/applets/caffeine/settings.ui.h:3
+msgid "Brightness Level"
+msgstr "Razina svjetline"
+
+#: src/applets/night-light/indicator_window.ui.h:1
+#: src/applets/night-light/NightLight.plugin.in.h:1
+msgid "Night Light"
+msgstr "Noćno svjetlo"
+
+#: src/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: src/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr "Raspored"
+
+#: src/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr "Zalazak sunca do izlaska sunca"
+
+#: src/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr "Ručno"
+
+#: src/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr "Postavke zaslona"
+
+#: src/applets/budgie-menu/settings.ui.h:1
+msgid "Show Menu Label"
+msgstr "Prikaži oznaku izbornika"
+
+#: src/applets/budgie-menu/settings.ui.h:2
+msgid "Compact Mode"
+msgstr "Kompaktni način"
+
+#: src/applets/budgie-menu/settings.ui.h:3
+msgid "Show Headers"
+msgstr "Prikaži zaglavlja"
+
+#: src/applets/budgie-menu/settings.ui.h:4
+msgid "Menu Label"
+msgstr "Oznaka izbornika"
+
+#: src/applets/budgie-menu/settings.ui.h:5
+msgid "Roll-over mouse"
+msgstr "Pomicanje mišem"
+
+#: src/applets/budgie-menu/settings.ui.h:6
+msgid "Menu Icon"
+msgstr "Ikona izbornika"
+
+#: src/applets/icon-tasklist/settings.ui.h:1
+msgid "Show all windows on click"
+msgstr "Prikaži sve prozore odjednom"
+
+#: src/applets/icon-tasklist/settings.ui.h:2
+msgid "Only show favorited"
+msgstr "Pokaži samo omiljeno"
+
+#: src/applets/icon-tasklist/settings.ui.h:3
+msgid "Lock icons"
+msgstr "Zaključaj ikone"
+
+#: src/applets/icon-tasklist/settings.ui.h:4
+msgid "Restrict to Workspace"
+msgstr "Ograniči na radni prostor"
+
+#: src/applets/icon-tasklist/settings.ui.h:5
+msgid "Window grouping"
+msgstr "Grupiranje prozora"
+
+#: src/applets/icon-tasklist/settings.ui.h:6
+msgid "Middle click to launch new window"
+msgstr "Srednji klik da biste pokrenuli novi prozor"
+
+#: src/applets/icon-tasklist/settings.ui.h:7
+msgid "Require a double-click to launch new window"
+msgstr "Zahtjevajte dvostruki klik za pokretanje novog prozora"
+
+#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Budgie radna površina"
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Ova sesija vas prijavljuje u Budgie radnu površinu"
+
+#: src/panel/budgie-panel.desktop.in.h:1
+msgid "Budgie Panel"
+msgstr "Budgie panel"
+
+#: src/panel/budgie-panel.desktop.in.h:2
+msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgstr "Pokreće ostale aplikacije i prikazuje razne alate za upravljanje prozorima, prikazuje vrijeme, itd."
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behavior"
+msgstr "Promjeni izgled i ponašanje radne površine"
+
+#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "User Indicator"
+msgstr "Korisnički indikator"
+
+#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Lock Keys Indicator"
+msgstr "Indikator zaključaj tipke"
+
+#: src/applets/status/StatusApplet.plugin.in.h:1
+msgid "Status Indicator"
+msgstr "Pokazatelj statusa"
+
+#: src/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Spacer"
+msgstr "Razmak"
+
+#: src/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Separator"
+msgstr "Razdjelnik"
+
+#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Workspace Switcher"
+msgstr "Prebacite radnu površinu"
+
+#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Keyboard Layout Indicator"
+msgstr "Pokazatelj rasporeda tipkovnice"
+
+#: src/applets/caffeine/CaffeineApplet.plugin.in.h:1
+msgid "Caffeine"
+msgstr "Caffeine"
+
+#: src/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System Tray"
+msgstr "Ladica sustava"
+
+#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Raven Sidebar Control"
+msgstr "Raven-Kontrola bočne trake"
+
+#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "Show Desktop Button"
+msgstr "Prikaži tipku radne površine"
+
+#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Budgie Menu"
+msgstr "Budgie izbornik"
+
+#: src/applets/clock/ClockApplet.plugin.in.h:1
+msgid "Clock"
+msgstr "Sat"
+
+#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "Task List"
+msgstr "Lista zadataka"
+
+#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "Icon Task List"
+msgstr "Ikona liste zadataka"
