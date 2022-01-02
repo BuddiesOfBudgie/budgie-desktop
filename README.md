@@ -3,7 +3,7 @@
 # Budgie Desktop
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/BuddiesOfBudgie/budgie-desktop)
-[![Translate into your language!](https://img.shields.io/badge/help%20translate-Transifex-4AB)](https://www.transifex.com/buddiesofbudgie/budgie-desktop)
+[![Translate into your language!](https://img.shields.io/badge/help%20translate-Transifex-4AB)](https://www.transifex.com/buddiesofbudgie/budgie-10)
 
 The Budgie Desktop is a feature-rich, modern desktop designed to keep out the way of the user.
 
