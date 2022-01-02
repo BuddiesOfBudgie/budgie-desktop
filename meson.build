@@ -84,7 +84,7 @@ libdir = join_paths(prefix, get_option('libdir'))
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
-podir = join_paths(meson.source_root(), 'subprojects', 'translations')
+podir = join_paths(meson.source_root(), 'po')
 
 # Handle i18n on the .desktop file
 # Originally stolem from TingPing:
@@ -145,7 +145,7 @@ gvc = subproject('gvc',
 )
 
 # Prep translations prior to build
-translations = subproject('translations')
+subdir('po')
 
 # Now build Budgie proper
 subdir('src')

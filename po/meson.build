@@ -1,9 +1,3 @@
-project(
-    'budgie-desktop',
-    version: '10.5',
-    license: 'GPL-2.0-only',
-)
-
 i18n = import('i18n')
 
 # for i in *.po; do echo "    '$i'," | sed 's/\.po//'; done
