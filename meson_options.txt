@@ -2,3 +2,4 @@ option('with-stateless', type: 'boolean', value: false, description: 'Enable sta
 option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
 option('with-gtk-doc', type: 'boolean', value: true, description: 'Build gtk-doc documentation')
 option('xdg-appdir', type: 'string', description: 'XDG autostart path')
+option('with-gnome-screensaver', type: 'boolean', value: false, description: 'Build using gnome-screensaver as a dependency')
