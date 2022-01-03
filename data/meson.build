@@ -51,3 +51,10 @@ install_data(
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'status'),
 )
 
+install_man('budgie-desktop.1')
+install_man('budgie-panel.1')
+install_man('budgie-run-dialog.1')
+install_man('budgie-daemon.1')
+install_man('budgie-desktop-settings.1')
+install_man('budgie-polkit-dialog.1')
+install_man('budgie-wm.1')
