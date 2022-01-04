@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
- namespace Budgie {
+namespace Budgie {
 	public const string MUTTER_EDGE_TILING = "edge-tiling";
 	public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 	public const string MUTTER_BUTTON_LAYOUT = "button-layout";
