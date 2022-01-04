@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-namespace Budgie {
+ namespace Budgie {
 	public const string MUTTER_EDGE_TILING = "edge-tiling";
 	public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 	public const string MUTTER_BUTTON_LAYOUT = "button-layout";
@@ -119,6 +119,11 @@ namespace Budgie {
 		}
 	}
 
+	public enum Layout {
+		FLOATING, // The default, traditional layout.
+		TILING_HORIZ, // tiling with a master window on the left and N stack windows divided equally on the right
+	}
+
 	public class BudgieWM : Meta.Plugin {
 		static Meta.PluginInfo info;
 
@@ -142,6 +147,7 @@ namespace Budgie {
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		Layout layout = Layout.FLOATING;
 
 		Settings? iface_settings = null;
 
@@ -343,6 +349,17 @@ namespace Budgie {
 			}
 		}
 
+		/* Binding for toggle-layout activated */
+		void on_layout_toggle(Meta.Display display,
+			Meta.Window? window, Clutter.KeyEvent? event,
+			Meta.KeyBinding binding) {
+			if (layout == Layout.FLOATING) {
+				layout = Layout.TILING_HORIZ;
+			} else {
+				layout = Layout.FLOATING;
+			}
+		}
+
 		/* Set up the proxy when raven appears */
 		void has_raven() {
 			if (raven_proxy == null) {
@@ -460,6 +477,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("toggle-layout", settings, Meta.KeyBindingFlags.NONE, on_layout_toggle);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -756,6 +774,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(map_done);
 			state_map.insert(actor, AnimationState.MAP);
 			actor.restore_easing_state();
+			if (layout != Layout.FLOATING) tile_windows();
 		}
 
 		void minimize_done(Clutter.Actor? actor) {
@@ -915,6 +934,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(destroy_done);
 			state_map.insert(actor, AnimationState.DESTROY);
 			actor.restore_easing_state();
+			if (layout != Layout.FLOATING) tile_windows();
 		}
 
 		private ScreenTilePreview? tile_preview = null;
@@ -1127,6 +1147,46 @@ namespace Budgie {
 			}
 			uint32 curr_xid = (uint32)win.get_xwindow();
 			switcher_proxy.ShowSwitcher.begin(curr_xid);
+		}
+
+		private void tile_windows() { // horizontally
+			var workspace = get_display().get_workspace_manager().get_active_workspace();
+			if (workspace == null) return;
+			var win_list = workspace.list_windows();
+			var screen = Gdk.Screen.get_default();
+			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
+			if (mon == null) return;
+			Gdk.Rectangle rect = mon.get_geometry();
+			int irrev_len = 0;
+			int strut_top = 0, strut_bottom = 0, strut_left = 0, strut_right = 0;
+			foreach (var window in win_list) {
+				if (window == null) continue;
+				if (window.get_window_type() == Meta.WindowType.DOCK) {
+					var geom = window.get_frame_rect();
+					assert(geom.y >= 0);
+					if (geom.y == 0) {
+						strut_top = geom.height;
+					} else {
+						strut_bottom = geom.height;
+					}
+				}
+				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+					++irrev_len;
+					continue;
+				}
+			}
+			uint win_i = 0;
+			foreach (var window in win_list) {
+				if (window == null) return;
+				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+					continue;
+				}
+				window.move_resize_frame(false, 0, 
+					((int)((rect.height)/ (int)(win_list.length() - irrev_len))*(int)win_i), rect.width, 
+					(int)((rect.height) / (int)(win_list.length() - irrev_len)) - (win_i ==0 ? strut_top : 0)
+					- (win_i ==( win_list.length() - irrev_len - 1) ? strut_bottom:0));
+				++win_i;
+			}
 		}
 
 		/* Return sorted list of user open tabs */
