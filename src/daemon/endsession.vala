@@ -136,6 +136,8 @@ namespace Budgie {
 				this.cancel_clicked();
 				return Gdk.EVENT_STOP;
 			});
+
+			type_hint = Gdk.WindowTypeHint.DIALOG;
 		}
 
 		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {

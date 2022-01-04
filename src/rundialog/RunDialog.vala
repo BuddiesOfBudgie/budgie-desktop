@@ -157,6 +157,8 @@ namespace Budgie {
 			});
 
 			setup_dbus.begin();
+
+			type_hint = Gdk.WindowTypeHint.DIALOG;
 		}
 
 		/**
