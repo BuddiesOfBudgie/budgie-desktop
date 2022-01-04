@@ -1158,15 +1158,15 @@ namespace Budgie {
 			if (mon == null) return;
 			Gdk.Rectangle rect = mon.get_geometry();
 			int irrev_len = 0;
-			int strut_top = 0, strut_bottom = 0, strut_left = 0, strut_right = 0;
+			int strut_top = 0, strut_bottom = 0;
 			foreach (var window in win_list) {
 				if (window == null) continue;
 				if (window.get_window_type() == Meta.WindowType.DOCK) {
 					var geom = window.get_frame_rect();
 					assert(geom.y >= 0);
-					if (geom.y == 0) {
+					if (geom.y == 0 && geom.width > geom.height) {
 						strut_top = geom.height;
-					} else {
+					} else if (geom.y > 0 && geom.height > geom.width) { // fairly reasonable checks
 						strut_bottom = geom.height;
 					}
 				}
