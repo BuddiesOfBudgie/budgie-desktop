@@ -441,7 +441,7 @@ namespace Budgie {
 		* User requested we delete this applet. Make sure they meant it!
 		*/
 		void remove_applet() {
-			if (current_info == null) {
+			if (this.current_info == null) {
 				return;
 			}
 
@@ -450,6 +450,12 @@ namespace Budgie {
 			dlg.destroy();
 			if (del) {
 				this.toplevel.remove_applet(this.current_info);
+
+				// Reset selection and disable controls
+				this.current_info = null;
+				this.button_remove_applet.set_sensitive(false);
+				this.button_move_applet_up.set_sensitive(false);
+				this.button_move_applet_down.set_sensitive(false);
 			}
 		}
 
