@@ -43,8 +43,8 @@ am_cflags = [
 add_global_arguments(am_cflags, language: 'c')
 meson.add_install_script('scripts/mesonPostInstall.sh')
 
-# Budgie needs a minimum 41 GNOME stack with GTK 3.24+
-gnome_minimum_version = '>= 41.alpha'
+# Budgie needs a minimum GNOME 40 stack with GTK 3.24+
+gnome_minimum_version = '>= 40.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: '>= 3.24.0')
 dep_glib = dependency('glib-2.0', version: '>= 2.64.0')

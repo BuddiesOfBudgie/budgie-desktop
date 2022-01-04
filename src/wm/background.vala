@@ -222,15 +222,23 @@ namespace Budgie {
 			shading_direction = (GDesktop.BackgroundShading)settings.get_enum(COLOR_SHADING_TYPE_KEY);
 			var color_str = settings.get_string(PRIMARY_COLOR_KEY);
 			if (color_str != null && color_str != "") {
+	#if !HAVE_MUTTER_9
+				Clutter.Color.from_string(out primary_color, color_str);
+	#else
 				primary_color = Clutter.Color();
 				primary_color.from_string(color_str);
+	#endif
 				color_str = null;
 			}
 
 			color_str = settings.get_string(SECONDARY_COLOR_KEY);
 			if (color_str != null && color_str != "") {
+	#if !HAVE_MUTTER_9
+				Clutter.Color.from_string(out secondary_color, color_str);
+	#else
 				secondary_color = Clutter.Color();
 				secondary_color.from_string(color_str);
+	#endif
 				color_str = null;
 			}
 
