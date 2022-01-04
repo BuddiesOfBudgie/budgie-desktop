@@ -1170,9 +1170,13 @@ namespace Budgie {
 						strut_bottom = geom.height;
 					}
 				}
-				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+				if ((window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) || window.minimized) {
 					++irrev_len;
 					continue;
+				}
+				if (window.maximized_horizontally || window.maximized_vertically) {
+					window.unmaximize(Meta.MaximizeFlags.HORIZONTAL);
+					window.unmaximize(Meta.MaximizeFlags.VERTICAL);
 				}
 			}
 			uint win_i = 0;
