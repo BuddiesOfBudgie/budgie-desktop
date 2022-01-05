@@ -119,9 +119,10 @@ namespace Budgie {
 		}
 	}
 
-	public enum Layout {
+	private enum Layout {
 		FLOATING, // The default, traditional layout.
-		TILING_HORIZ, // tiling with a master window on the left and N stack windows divided equally on the right
+		TILING_HORIZ, // tiling with windows having 100% width and screen size / clients height
+		TILING_VERT, // the opposite of the TILING_HORIZ layout.
 	}
 
 	public class BudgieWM : Meta.Plugin {
@@ -353,8 +354,11 @@ namespace Budgie {
 		void on_layout_toggle(Meta.Display display,
 			Meta.Window? window, Clutter.KeyEvent? event,
 			Meta.KeyBinding binding) {
+			// Cycle through all available options. The list is [Floating, Horizontal Tiling, Vertical Tiling]
 			if (layout == Layout.FLOATING) {
 				layout = Layout.TILING_HORIZ;
+			} else if (layout == Layout.TILING_HORIZ) {
+				layout = Layout.TILING_VERT;
 			} else {
 				layout = Layout.FLOATING;
 			}
@@ -1158,11 +1162,12 @@ namespace Budgie {
 			if (mon == null) return;
 			Gdk.Rectangle rect = mon.get_geometry();
 			switch (layout) {
-				case Layout.FLOATING: return;
+				case Layout.FLOATING: return; // called incorrectly
 				case Layout.TILING_HORIZ: tile_windows_horiz(rect, win_list); break;
-				// case Layout.TILING_VERT: tile_windows_vert();
+				case Layout.TILING_VERT: tile_windows_vert(rect, win_list); break;
 			}
 		}
+		
 		private void tile_windows_horiz(Gdk.Rectangle screen_size, List<weak Meta.Window> win_list) {
 			int irrev_len = 0;
 			int strut_top = 0, strut_bottom = 0;
@@ -1173,7 +1178,7 @@ namespace Budgie {
 					assert(geom.y >= 0);
 					if (geom.y == 0 && geom.width > geom.height) {
 						strut_top = geom.height;
-					} else if (geom.y > 0 && geom.height > geom.width) { // fairly reasonable checks
+					} else if (geom.y > 0 && geom.width > geom.height) { // fairly reasonable checks
 						strut_bottom = geom.height;
 					}
 				}
@@ -1196,6 +1201,42 @@ namespace Budgie {
 					((int)((screen_size.height)/ (int)(win_list.length() - irrev_len))*(int)win_i), screen_size.width, 
 					(int)((screen_size.height) / (int)(win_list.length() - irrev_len)) - (win_i == 0 ? strut_top : 0)
 					- (win_i == (win_list.length() - irrev_len - 1) ? strut_bottom : 0));
+				++win_i;
+			}
+		}
+		
+		private void tile_windows_vert(Gdk.Rectangle screen_size, List<weak Meta.Window> win_list) {
+			int irrev_len = 0;
+			int strut_left = 0, strut_right = 0;
+			foreach (var window in win_list) {
+				if (window == null) continue;
+				if (window.get_window_type() == Meta.WindowType.DOCK) {
+					var geom = window.get_frame_rect();
+					assert(geom.y >= 0);
+					if (geom.x == 0 && geom.height > geom.width) {
+						strut_left = geom.width;
+					} else if (geom.x > 0 && geom.height > geom.width) { // fairly reasonable checks
+						strut_right = geom.width;
+					}
+				}
+				if ((window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) || window.minimized) {
+					++irrev_len;
+					continue;
+				}
+				if (window.maximized_horizontally || window.maximized_vertically) {
+					window.unmaximize(Meta.MaximizeFlags.HORIZONTAL);
+					window.unmaximize(Meta.MaximizeFlags.VERTICAL);
+				}
+			}
+			uint win_i = 0;
+			foreach (var window in win_list) {
+				if (window == null) return;
+				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+					continue;
+				}
+				window.move_resize_frame(false, (int)(screen_size.width)/ (int)(win_list.length() - irrev_len) * (int) win_i,
+					0, (int)(screen_size.width)/ (int)(win_list.length() - irrev_len) - (win_i == 0 ? strut_left : 0) - (win_i == (win_list.length() - irrev_len - 1) ? strut_right : 0), 
+					screen_size.height);
 				++win_i;
 			}
 		}
