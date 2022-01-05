@@ -1149,7 +1149,7 @@ namespace Budgie {
 			switcher_proxy.ShowSwitcher.begin(curr_xid);
 		}
 
-		private void tile_windows() { // horizontally
+		private void tile_windows() {
 			var workspace = get_display().get_workspace_manager().get_active_workspace();
 			if (workspace == null) return;
 			var win_list = workspace.list_windows();
@@ -1157,6 +1157,13 @@ namespace Budgie {
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
 			if (mon == null) return;
 			Gdk.Rectangle rect = mon.get_geometry();
+			switch (layout) {
+				case Layout.FLOATING: return;
+				case Layout.TILING_HORIZ: tile_windows_horiz(rect, win_list); break;
+				// case Layout.TILING_VERT: tile_windows_vert();
+			}
+		}
+		private void tile_windows_horiz(Gdk.Rectangle screen_size, List<weak Meta.Window> win_list) {
 			int irrev_len = 0;
 			int strut_top = 0, strut_bottom = 0;
 			foreach (var window in win_list) {
@@ -1186,9 +1193,9 @@ namespace Budgie {
 					continue;
 				}
 				window.move_resize_frame(false, 0, 
-					((int)((rect.height)/ (int)(win_list.length() - irrev_len))*(int)win_i), rect.width, 
-					(int)((rect.height) / (int)(win_list.length() - irrev_len)) - (win_i ==0 ? strut_top : 0)
-					- (win_i ==( win_list.length() - irrev_len - 1) ? strut_bottom:0));
+					((int)((screen_size.height)/ (int)(win_list.length() - irrev_len))*(int)win_i), screen_size.width, 
+					(int)((screen_size.height) / (int)(win_list.length() - irrev_len)) - (win_i == 0 ? strut_top : 0)
+					- (win_i == (win_list.length() - irrev_len - 1) ? strut_bottom : 0));
 				++win_i;
 			}
 		}
