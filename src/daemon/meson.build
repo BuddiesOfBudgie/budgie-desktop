@@ -17,6 +17,7 @@ daemon_resources = gnome.compile_resources(
 
 daemon_sources = [
     'endsession.vala',
+    'notifications.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
