@@ -27,17 +27,34 @@
 		UNDEFINED = 4
 	}
 
+    /**
+     * Enumeration of where notification popups will be shown.
+     */
+    public enum Position {
+		TOP_LEFT = 1,
+		TOP_RIGHT = 2,
+		BOTTOM_LEFT = 3,
+		BOTTOM_RIGHT = 4
+	}
+
 	/**
 	 * This is our implementation of the FreeDesktop Notification spec.
 	 */
 	[DBus (name="org.freedesktop.Notifications")]
 	public class Server : Object {
+        private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
 		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications/application";
+
+        /** Spacing between notification popups */
+        private const int BUFFER_ZONE = 10;
+        /** Spacing between the first notification and the edge of the screen */
+	    private const int INITIAL_BUFFER_ZONE = 45;
 
 		private uint32 notif_id = 0;
 
 		private HashTable<uint32, Notifications.Popup> popups;
+        private Settings settings { private get; private set; default = null; }
 
 		construct {
 			Bus.own_name(
@@ -48,6 +65,7 @@
 			);
 
 			this.popups = new HashTable<uint32, Notifications.Popup>(int_hash, int_equal);
+            this.settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -151,20 +169,22 @@
 				if (this.popups.contains(id) && this.popups[id] != null) {
 					this.popups[id].replace(notification);
 				} else {
-					this.popups[id] = new Notifications.Popup(this, notification);
-					this.popups[id].show_all();
+					var popup = new Popup(this, notification);
+                    this.configure_window(popup);
+					popup.show_all();
+                    popup.begin_decay(expire_timeout);
 
-					this.popups[id].ActionInvoked.connect((action_key) => {
+					popup.ActionInvoked.connect((action_key) => {
 						this.ActionInvoked(id, action_key);
 					});
 
-					this.popups[id].Closed.connect((reason) => {
+					popup.Closed.connect((reason) => {
 						this.popups.remove(id);
 						this.NotificationClosed(id, reason);
 					});
-				}
 
-				// TODO: Show the popup
+                    this.popups[id] = popup;
+				}
 			}
 
 			// TODO: Propogate
@@ -187,6 +207,92 @@
 			}
 
 			throw new DBusError.FAILED("");
+		}
+
+        /**
+         * Configures the location of a notification popup.
+         */
+        private void configure_window(Popup? popup) {
+			int x;
+			int y;
+
+			var screen = Gdk.Screen.get_default();
+
+			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
+			Gdk.Rectangle rect = mon.get_geometry();
+
+			/* Set the x, y position of the notification */
+			calculate_position(popup, rect, out x, out y);
+			popup.move(x, y);
+		}
+
+		/**
+		* Calculate the (x, y) position of a notification popup based on the setting for where on
+		* the screen notifications should appear.
+		*/
+		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
+			var pos = (Position) this.settings.get_enum("notification-position");
+            var latest = this.popups[this.notif_id - 1];
+
+			switch (pos) {
+				case Position.TOP_LEFT:
+					if (latest != null) { // If a notification is already being displayed
+						int nx;
+						int ny;
+						latest.get_position(out nx, out ny);
+						x = nx;
+						y = ny + latest.get_child().get_allocated_height() + BUFFER_ZONE;
+					} else { // This is the first nofication on the screen
+						x = rect.x + BUFFER_ZONE;
+						y = rect.y + INITIAL_BUFFER_ZONE;
+					}
+					break;
+				case Position.BOTTOM_LEFT:
+					if (latest != null) { // If a notification is already being displayed
+						int nx;
+						int ny;
+						latest.get_position(out nx, out ny);
+						x = nx;
+						y = ny - latest.get_child().get_allocated_height() - BUFFER_ZONE;
+					} else { // This is the first nofication on the screen
+						x = rect.x + BUFFER_ZONE;
+
+						int height;
+						window.get_size(null, out height); // Get the estimated height of the notification
+						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+					}
+					break;
+				case Position.BOTTOM_RIGHT:
+					if (latest != null) { // If a notification is already being displayed
+						int nx;
+						int ny;
+						latest.get_position(out nx, out ny);
+						x = nx;
+						y = ny - latest.get_child().get_allocated_height() - BUFFER_ZONE;
+					} else { // This is the first nofication on the screen
+						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+						x -= BUFFER_ZONE; // Don't touch edge of the screen
+
+						int height;
+						window.get_size(null, out height); // Get the estimated height of the notification
+						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+					}
+					break;
+				case Position.TOP_RIGHT: // Top right should also be the default case
+				default:
+					if (latest != null) { // If a notification is already being displayed
+						int nx;
+						int ny;
+						latest.get_position(out nx, out ny);
+						x = nx;
+						y = ny + latest.get_child().get_allocated_height() + BUFFER_ZONE;
+					} else { // This is the first nofication on the screen
+						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+						x -= BUFFER_ZONE; // Don't touch edge of the screen
+						y = rect.y + INITIAL_BUFFER_ZONE;
+					}
+					break;
+			}
 		}
 	}
  }
