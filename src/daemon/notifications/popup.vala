@@ -10,12 +10,12 @@
  */
 
 namespace Budgie.Notifications{
+    public const int NOTIFICATION_SIZE = 400;
+
     /**
 	 * This class is a notification popup with no content in it.
 	 */
 	public class PopupBase : Gtk.Window {
-		private const int NOTIFICATION_SIZE = 400;
-		
 		protected Gtk.Box content_box;
 		
 		private uint expire_id { get; private set; }
