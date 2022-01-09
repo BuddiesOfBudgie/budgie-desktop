@@ -35,14 +35,4 @@
     }
 
     #{$separator} { #{$color}: transparentize($fg_color, 0.85) }
-
-    // End Section needs to be fancy
-    @if $variant == 'default' {
-        .end-region {
-            background-color: rgba(0,0,0,0.2);
-
-            &:dir(ltr) { border-left: 1px solid rgba(0,0,0,0.2); }
-            &:dir(rtl) { border-right: 1px solid rgba(0,0,0,0.2); }
-        }
-    }
 }
