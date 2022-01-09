@@ -1,19 +1,19 @@
 %widgets {
-
     * {
         @extend %reset_style;
 
         padding: 0;
-        outline-color: transparentize($fg_color, 0.7);
-        outline-style: dashed;
-        outline-offset: -3px;
-        outline-width: 1px;
     }
 
     .dim-label { opacity: 0.55; }
 
     // used to indicate unread notifications
     .alert { color: $alert_color; }
+}
+
+.end-region > widget > widget > * {
+    min-width: 18px;
+    border-left: 2px solid transparent;
 }
 
 .drop-shadow {
