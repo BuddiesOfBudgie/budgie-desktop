@@ -14,6 +14,8 @@ namespace Budgie {
 	* Alternative to a separator, gives a shadow effect
 	*/
 	public class ShadowBlock : Gtk.EventBox {
+		public const int SIZE = 5;
+
 		private PanelPosition pos;
 		private bool horizontal = false;
 		int rm = 0;
@@ -65,8 +67,8 @@ namespace Budgie {
 
 		public override void get_preferred_height(out int min, out int nat) {
 			if (horizontal) {
-				min = 5;
-				nat = 5;
+				min = SIZE;
+				nat = SIZE;
 				return;
 			};
 			min = nat = rm;
@@ -74,8 +76,8 @@ namespace Budgie {
 
 		public override void get_preferred_height_for_width(int width, out int min, out int nat) {
 			if (horizontal) {
-				min = 5;
-				nat = 5;
+				min = SIZE;
+				nat = SIZE;
 				return;
 			}
 			min = nat = rm;
@@ -86,7 +88,7 @@ namespace Budgie {
 				min = nat = rm;
 				return;
 			}
-			min = nat = 5;
+			min = nat = SIZE;
 		}
 
 		public override void get_preferred_width_for_height(int height, out int min, out int nat) {
@@ -94,7 +96,7 @@ namespace Budgie {
 				min = nat = rm;
 				return;
 			}
-			min = nat = 5;
+			min = nat = SIZE;
 		}
 	}
 }
