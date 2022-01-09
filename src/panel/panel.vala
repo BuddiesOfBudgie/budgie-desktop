@@ -394,7 +394,7 @@ namespace Budgie {
 			unowned Budgie.AppletInfo? info = null;
 
 			for (int i = 1; i < icon_sizes.length; i++) {
-				if (icon_sizes[i] > intended_size - 5) {
+				if (icon_sizes[i] > intended_size) {
 					break;
 				}
 				size = icon_sizes[i];
@@ -969,7 +969,7 @@ namespace Budgie {
 					}
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+					x = (orig_scr.x + orig_scr.width) - alloc.width - Budgie.ShadowBlock.SIZE;
 					y = (orig_scr.y / 2) + (((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2));
 					if (y < orig_scr.y) {
 						y = orig_scr.y;
@@ -978,7 +978,7 @@ namespace Budgie {
 				case Budgie.PanelPosition.BOTTOM:
 				default:
 					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2) - (alloc.width / 2));
-					y = orig_scr.y + (orig_scr.height - intended_size);
+					y = orig_scr.y + (orig_scr.height - alloc.height - Budgie.ShadowBlock.SIZE);
 					if (x < orig_scr.x) {
 						x = orig_scr.x;
 					}
@@ -995,13 +995,13 @@ namespace Budgie {
 					y = orig_scr.y;
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+					x = (orig_scr.x + orig_scr.width) - alloc.width;
 					y = orig_scr.y;
 					break;
 				case Budgie.PanelPosition.BOTTOM:
 				default:
 					x = orig_scr.x;
-					y = orig_scr.y + (orig_scr.height - intended_size);
+					y = orig_scr.y + (orig_scr.height - alloc.height);
 					break;
 				}
 			}
@@ -1028,7 +1028,7 @@ namespace Budgie {
 			if (this.autohide != AutohidePolicy.NONE) {
 				Budgie.unset_struts(this);
 			} else {
-				Budgie.set_struts(this, position, (intended_size - 5));
+				Budgie.set_struts(this, position, intended_size);
 			}
 		}
 
@@ -1047,7 +1047,7 @@ namespace Budgie {
 					x = orig_scr.x;
 					y = orig_scr.y;
 					width = orig_scr.width;
-					height = intended_size - 5;
+					height = intended_size;
 					shadow_position = 1;
 					horizontal = true;
 					break;
@@ -1059,7 +1059,7 @@ namespace Budgie {
 					shadow_position = 1;
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - intended_size - 5;
+					x = (orig_scr.x + orig_scr.width) - alloc.width;
 					y = orig_scr.y;
 					width = intended_size;
 					height = orig_scr.height;
@@ -1068,9 +1068,9 @@ namespace Budgie {
 				case Budgie.PanelPosition.BOTTOM:
 				default:
 					x = orig_scr.x;
-					y = orig_scr.y + (orig_scr.height - intended_size - 5);
+					y = orig_scr.y + (orig_scr.height - alloc.height);
 					width = orig_scr.width;
-					height = intended_size - 5;
+					height = intended_size;
 					shadow_position = 0;
 					horizontal = true;
 					break;
