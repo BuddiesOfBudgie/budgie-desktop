@@ -38,6 +38,15 @@
 	}
 
 	/**
+	 * Enumeration of notification priorities.
+	 */
+	public enum Urgency {
+		LOW = 0,
+		NORMAL = 1,
+		CRITICAL = 2
+	}
+
+	/**
 	 * This is our implementation of the FreeDesktop Notification spec.
 	 */
 	[DBus (name="org.freedesktop.Notifications")]
@@ -54,7 +63,8 @@
 		private uint32 notif_id = 0;
 
 		private HashTable<uint32, Notifications.Popup> popups;
-        private Settings settings { private get; private set; default = null; }
+		private Settings notification_settings { private get; private set; default = null; }
+        private Settings panel_settings { private get; private set; default = null; }
 
 		construct {
 			Bus.own_name(
@@ -65,7 +75,8 @@
 			);
 
 			this.popups = new HashTable<uint32, Notifications.Popup>(int_hash, int_equal);
-            this.settings = new Settings(BUDGIE_PANEL_SCHEMA);
+			this.notification_settings = new Settings(NOTIFICATION_SCHEMA);
+            this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -142,48 +153,50 @@
 			var id = (replaces_id != 0 ? replaces_id : ++notif_id);
 			var notification = new Notification(app_name, app_icon, summary, body, actions, hints, expire_timeout);
 
-			// TODO: Check for DoNotDisturb
-
-			//Settings app_notification_settings = null;
-			string settings_app_name = app_name;
-			bool should_show = true; // Default to showing notification
-
-			// If this notification has a desktop entry in the hints,
-			// set the app name to get the settings for to it.
-			if ("desktop-entry" in hints) {
-				settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
-			}
-
-			// Get the application settings
-			var app_notification_settings = new Settings.full(
-				SettingsSchemaSource.get_default().lookup(NOTIFICATION_SCHEMA, true),
-				null,
-				"%s/%s/".printf(NOTIFICATION_PREFIX, settings_app_name)
-			);
-
-			should_show = app_notification_settings.get_boolean("enable"); // Will only be false if set
-
-			// Add a new notification popup if we should show one
-			if (should_show) {
-				// If there is already a popup with this ID, replace it
-				if (this.popups.contains(id) && this.popups[id] != null) {
-					this.popups[id].replace(notification);
-				} else {
-					var popup = new Popup(this, notification);
-                    this.configure_window(popup);
-					popup.show_all();
-                    popup.begin_decay(expire_timeout);
-
-					popup.ActionInvoked.connect((action_key) => {
-						this.ActionInvoked(id, action_key);
-					});
-
-					popup.Closed.connect((reason) => {
-						this.popups.remove(id);
-						this.NotificationClosed(id, reason);
-					});
-
-                    this.popups[id] = popup;
+			// Check for DoNotDisturb
+			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == Urgency.CRITICAL;
+			if (should_notify) {
+				//Settings app_notification_settings = null;
+				string settings_app_name = app_name;
+				bool should_show = true; // Default to showing notification
+	
+				// If this notification has a desktop entry in the hints,
+				// set the app name to get the settings for to it.
+				if ("desktop-entry" in hints) {
+					settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
+				}
+	
+				// Get the application settings
+				var app_notification_settings = new Settings.full(
+					SettingsSchemaSource.get_default().lookup(NOTIFICATION_SCHEMA, true),
+					null,
+					"%s/%s/".printf(NOTIFICATION_PREFIX, settings_app_name)
+				);
+	
+				should_show = app_notification_settings.get_boolean("enable") && app_notification_settings.get_boolean("show-banners");
+	
+				// Add a new notification popup if we should show one
+				if (should_show) {
+					// If there is already a popup with this ID, replace it
+					if (this.popups.contains(id) && this.popups[id] != null) {
+						this.popups[id].replace(notification);
+					} else {
+						var popup = new Popup(this, notification);
+						this.configure_window(popup);
+						popup.show_all();
+						popup.begin_decay(expire_timeout);
+	
+						popup.ActionInvoked.connect((action_key) => {
+							this.ActionInvoked(id, action_key);
+						});
+	
+						popup.Closed.connect((reason) => {
+							this.popups.remove(id);
+							this.NotificationClosed(id, reason);
+						});
+	
+						this.popups[id] = popup;
+					}
 				}
 			}
 
@@ -231,7 +244,7 @@
 		* the screen notifications should appear.
 		*/
 		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
-			var pos = (Position) this.settings.get_enum("notification-position");
+			var pos = (Position) this.panel_settings.get_enum("notification-position");
             var latest = this.popups[this.notif_id - 1];
 
 			switch (pos) {
