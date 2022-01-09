@@ -16,6 +16,7 @@
 	public class Notification : Object {
 		public DesktopAppInfo? app_info { get; private set; default = null; }
 		public string app_id { get; private set; }
+		public Urgency urgency { get; private set; default = Urgency.NORMAL; }
 		
 		/* Notification information */
 		public string app_name { get; construct; }
@@ -66,6 +67,12 @@
 		construct {
 			unowned Variant? variant = null;
 
+			// Set the priority
+			if ((variant = hints.lookup("urgency")) != null && variant.is_of_type(VariantType.BYTE)) {
+				this.urgency = (Urgency) variant.get_byte();
+			}
+
+			// Set the application ID and app info
 			if ((variant = hints.lookup("desktop-entry")) != null && variant.is_of_type(VariantType.STRING)) {
 				this.app_id = variant.get_string();
 				app_id.replace(".desktop", "");
