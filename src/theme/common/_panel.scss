@@ -35,4 +35,8 @@
     }
 
     #{$separator} { #{$color}: transparentize($fg_color, 0.85) }
+
+    .budgie-clock-applet label {
+        padding: 0 3px;
+    }
 }

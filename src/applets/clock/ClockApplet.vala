@@ -59,8 +59,12 @@ public class ClockApplet : Budgie.Applet {
 	public override void panel_position_changed(Budgie.PanelPosition position) {
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
 			this.orient = Gtk.Orientation.VERTICAL;
+			clock_label.set_line_wrap(true);
+			clock_label.set_max_width_chars(1);
 		} else {
 			this.orient = Gtk.Orientation.HORIZONTAL;
+			clock_label.set_line_wrap(false);
+			clock_label.set_max_width_chars(-1);
 		}
 		this.seconds_label.set_text("");
 		this.layout.set_orientation(this.orient);
@@ -81,6 +85,8 @@ public class ClockApplet : Budgie.Applet {
 		widget.add(layout);
 
 		clock_label = new Gtk.Label("");
+		clock_label.set_line_wrap(true);
+		clock_label.justify = Gtk.Justification.CENTER;
 		layout.pack_start(clock_label, false, false, 0);
 		layout.margin = 0;
 		layout.border_width = 0;
@@ -312,7 +318,7 @@ public class ClockApplet : Budgie.Applet {
 	 */
 	protected bool update_clock() {
 		this.time = new DateTime.now(this.clock_timezone);
-		
+
 		string format;
 		if (!this.clock_use_custom_format) {
 			format = (this.clock_use_24_hour_time) ? "%H:%M" : "%l:%M";
@@ -328,24 +334,26 @@ public class ClockApplet : Budgie.Applet {
 			format = this.clock_custom_format;
 		}
 
-		string ftime;
-		if (this.orient == Gtk.Orientation.HORIZONTAL) {
-			ftime = " %s ".printf(format);
-		} else {
-			ftime = " <small>%s</small> ".printf(format);
-		}
-
 		this.update_date();
 		this.update_seconds();
 
 		// Prevent unnecessary redraws
 		var old = this.clock_label.get_label();
-		var ctime = this.time.format(ftime);
-		if (old == ctime) {
+		var ctime = this.time.format(format).strip();
+
+		string ftime;
+		if (this.orient == Gtk.Orientation.HORIZONTAL) {
+			ftime = "%s";
+		} else {
+			ftime = "<small>%s</small>";
+		}
+
+		var formatted = ftime.printf(ctime);
+		if (old == formatted) {
 			return true;
 		}
 
-		this.clock_label.set_markup(ctime);
+		this.clock_label.set_markup(formatted);
 		this.queue_draw();
 
 		return true;
@@ -378,7 +386,7 @@ public class ClockSettings : Gtk.Grid {
 
 	[GtkChild]
 	private Gtk.Entry? custom_format;
-	
+
 	[GtkChild]
 	private Gtk.Switch? use_custom_timezone;
 

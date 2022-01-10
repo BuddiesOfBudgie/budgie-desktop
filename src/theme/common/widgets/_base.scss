@@ -11,9 +11,16 @@
     .alert { color: $alert_color; }
 }
 
-.end-region > widget > widget > * {
-    min-width: 18px;
-    border-left: 2px solid transparent;
+.end-region {
+    &.horizontal > widget > widget > * {
+        min-width: 18px;
+        border-left: 2px solid transparent;
+    }
+
+    &.vertical > widget > widget > * {
+        min-height: 18px;
+        border-top: 2px solid transparent;
+    }
 }
 
 .drop-shadow {
