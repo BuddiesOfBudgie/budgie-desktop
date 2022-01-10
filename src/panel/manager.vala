@@ -511,7 +511,7 @@ namespace Budgie {
 				raven_screen.height -= (top.intended_size - 5);
 			}
 			if (bottom != null) {
-				raven_screen.height -= bottom.intended_size - 5;
+				raven_screen.height -= bottom.intended_size;
 			}
 
 
@@ -596,7 +596,7 @@ namespace Budgie {
 					update_screen();
 				}
 			});
-			
+
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
 			raven = new Budgie.Raven(this);
@@ -1089,7 +1089,7 @@ namespace Budgie {
 						geom.height -= top.intended_size - 5;
 					}
 					if (this.is_panel_huggable(bottom)) {
-						geom.height -= bottom.intended_size - 5;
+						geom.height -= bottom.intended_size;
 					}
 					val2.update_geometry(geom, val2.position, val2.intended_size);
 					break;
@@ -1106,7 +1106,7 @@ namespace Budgie {
 			}
 
 			if (bottom != null && !bottom.dock_mode && bottom.autohide == AutohidePolicy.NONE) {
-				raven_screen.height -= bottom.intended_size - 5;
+				raven_screen.height -= bottom.intended_size;
 			}
 
 			// Set which side of the screen Raven should appear on
