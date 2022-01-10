@@ -81,29 +81,42 @@ public class BatteryIcon : Gtk.Box {
 		// round to nearest 10
 		int rounded = (int) Math.round(battery.percentage / 10) * 10;
 
+		// in case the stepped icon doesn't exist
+		string image_fallback;
+		if (battery.percentage <= 10) {
+			image_fallback = "battery-empty";
+		} else if (battery.percentage <= 35) {
+			image_fallback = "battery-low";
+		} else if (battery.percentage <= 75) {
+			image_fallback = "battery-good";
+		} else {
+			image_fallback = "battery-full";
+		}
+
 		image_name = "battery-level-%d".printf(rounded);
 
 		// Fully charged OR charging
 		if (battery.state == 4) {
-				image_name = "battery-full-charged-symbolic";
-				tip = _("Battery fully charged."); // Imply the battery is charged
+			image_name = "battery-full-charged-symbolic";
+			tip = _("Battery fully charged."); // Imply the battery is charged
 		} else if (battery.state == 1) {
-				image_name += "-charging-symbolic";
-				string time_to_full_str = _("Unknown"); // Default time_to_full_str to Unknown
-				int time_to_full = (int)battery.time_to_full; // Seconds for battery time_to_full
+			image_name += "-charging-symbolic";
+			image_fallback += "-charging-symbolic";
+			string time_to_full_str = _("Unknown"); // Default time_to_full_str to Unknown
+			int time_to_full = (int)battery.time_to_full; // Seconds for battery time_to_full
 
-				if (time_to_full > 0) { // If TimeToFull is known
-						int hours = time_to_full / (60 * 60);
-						int minutes = time_to_full / 60 - hours * 60;
-						time_to_full_str = "%d:%02d".printf(hours, minutes); // Set inner charging duration to hours:minutes
-				}
+			if (time_to_full > 0) { // If TimeToFull is known
+				int hours = time_to_full / (60 * 60);
+				int minutes = time_to_full / 60 - hours * 60;
+				time_to_full_str = "%d:%02d".printf(hours, minutes); // Set inner charging duration to hours:minutes
+			}
 
-				tip = _("Battery charging") + ": %d%% (%s)".printf((int)battery.percentage, time_to_full_str); // Set to charging: % (Unknown/Time)
+			tip = _("Battery charging") + ": %d%% (%s)".printf((int)battery.percentage, time_to_full_str); // Set to charging: % (Unknown/Time)
 		} else {
-				image_name += "-symbolic";
-				int hours = (int)battery.time_to_empty / (60 * 60);
-				int minutes = (int)battery.time_to_empty / 60 - hours * 60;
-				tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
+			image_name += "-symbolic";
+			int hours = (int)battery.time_to_empty / (60 * 60);
+			int minutes = (int)battery.time_to_empty / 60 - hours * 60;
+			tip = _("Battery remaining") + ": %d%% (%d:%02d)".printf((int)battery.percentage, hours, minutes);
 		}
 
 		// Set the percentage label text if it's changed
@@ -115,7 +128,16 @@ public class BatteryIcon : Gtk.Box {
 
 		// Set a handy tooltip until we gain a menu in StatusApplet
 		set_tooltip_text(tip);
-		this.image.set_from_icon_name(image_name, Gtk.IconSize.MENU);
+
+		Gtk.IconTheme theme = Gtk.IconTheme.get_default();
+		Gtk.IconInfo? result = theme.lookup_icon(image_name, Gtk.IconSize.MENU, 0);
+
+		if (result == null) {
+			this.image.set_from_icon_name(image_fallback, Gtk.IconSize.MENU);
+		} else {
+			this.image.set_from_icon_name(image_name, Gtk.IconSize.MENU);
+		}
+
 		this.queue_draw();
 	}
 }
