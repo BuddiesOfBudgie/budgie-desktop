@@ -22,7 +22,6 @@
 .budgie-menu {
     @include budgie-menu('icon-effect', 'entry.search', 'image', 'disabled',
                          'label', 'undershoot', 'overshoot');
-    button:not(.category-button) { padding-top: 5px; padding-bottom: 5px; }
 }
 
 // Menu Button

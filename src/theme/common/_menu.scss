@@ -6,10 +6,11 @@
     #{$search} {
         @extend %reset_style;
 
-        padding: 12px 5px;
+        padding-top: 12px;
+        padding-bottom: 4px;
+
         border-bottom: 1px solid #{"@borders"};
         border-radius: 0;
-        font-size: 120%;
 
         #{$image} {
             color: currentColor;
