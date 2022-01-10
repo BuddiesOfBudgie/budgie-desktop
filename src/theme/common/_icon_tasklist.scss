@@ -20,7 +20,7 @@ $budgie_tasklist_indicator_color_attention: #D84E4E;
     #{$launcher_type}.launcher {
         &:hover,
         &:active, &:checked {
-            background-color: transparentize(black, 0.8);
+            background-color: transparentize(white, 0.9);
         }
     }
 }

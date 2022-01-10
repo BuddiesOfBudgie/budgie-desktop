@@ -12,13 +12,6 @@
         color: $entry_fg;
         background-color: $entry_bg;
         border-color: if($variant == 'default', $button_border, $selected_bg_color);
-
-        @if $variant == 'default' {
-            box-shadow: inset 1px 0 $selected_bg_color,
-                        inset -1px 0 $selected_bg_color,
-                        inset 0 1px $selected_bg_color,
-                        inset 0 -1px $selected_bg_color;
-        }
     }
 
     &:#{$insensitive} {
@@ -38,7 +31,6 @@
 // Buttons
 @mixin button-normal($fg:$button_fg, $bg:$button_bg, $border:$button_border) {
     color: $fg;
-    outline-color: transparentize($fg, 0.7);
     background-color: $bg;
     border-color: $border;
 }
