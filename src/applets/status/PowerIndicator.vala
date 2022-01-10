@@ -77,15 +77,11 @@ public class BatteryIcon : Gtk.Box {
 
 		// Determine the icon to use for this battery
 		string image_name;
-		if (battery.percentage <= 10) {
-			image_name = "battery-empty";
-		} else if (battery.percentage <= 35) {
-			image_name = "battery-low";
-		} else if (battery.percentage <= 75) {
-			image_name = "battery-good";
-		} else {
-			image_name = "battery-full";
-		}
+
+		// round to nearest 10
+		int rounded = (int) Math.round(battery.percentage / 10) * 10;
+
+		image_name = "battery-level-%d".printf(rounded);
 
 		// Fully charged OR charging
 		if (battery.state == 4) {
