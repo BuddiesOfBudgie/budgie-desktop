@@ -28,8 +28,6 @@
 		public uint expire_timeout { get; construct; }
 
 		/* Icon stuff */
-		public GLib.Icon? primary_icon { get; set; default = null; }
-		public GLib.Icon? badge_icon { get; set; default = null; }
 		public Gtk.Image? image { get; set; default = null; }
 
 		private static Regex entity_regex;
@@ -83,8 +81,8 @@
 
 			// Per the Freedesktop Notification spec, first check if there is image data
 			if (
-				(variant = hints.lookup ("image-data")) != null ||
-				(variant = hints.lookup ("image_data")) != null
+				(variant = hints.lookup("image-data")) != null ||
+				(variant = hints.lookup("image_data")) != null
 			) {
 				var pixbuf = decode_image(variant);
 				if (pixbuf != null) {
@@ -94,29 +92,49 @@
 			}
 			
 			// If there was no image data, check if we have a path to the image to use.
-			if (
-				!image_found &&
-				((variant = hints.lookup ("image-path")) != null ||
-				(variant = hints.lookup ("image_path")) != null)
-			) {
-				var path = variant.get_string();
-
-				if (Gtk.IconTheme.get_default().has_icon(path) && path != this.app_icon) {
-					this.badge_icon = new ThemedIcon(path);
-					image_found = true;
-				} else if (path.has_prefix("/") || path.has_prefix("file://")) {
-					try {
-						var pixbuf = new Gdk.Pixbuf.from_file(path);
-						this.image = new Gtk.Image.from_pixbuf(pixbuf);
+			if (!image_found) {
+				if (
+					(variant = hints.lookup("image-path")) != null ||
+					(variant = hints.lookup("image_path")) != null
+				) {
+					var path = variant.get_string();
+	
+					if (Gtk.IconTheme.get_default().has_icon(path) && path != this.app_icon) {
+						var icon = new ThemedIcon(path);
+						this.image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
 						image_found = true;
-					} catch (Error e) {
-						critical("Unable to get pixbuf from path: %s", e.message);
+					} else if (path.has_prefix("/") || path.has_prefix("file://")) {
+						try {
+							var pixbuf = new Gdk.Pixbuf.from_file(path);
+							this.image = new Gtk.Image.from_pixbuf(pixbuf);
+							image_found = true;
+						} catch (Error e) {
+							critical("Unable to get pixbuf from path: %s", e.message);
+						}
+					}
+				}
+			}
+
+			// If no image path, try the app_icon parameter.
+			if (!image_found) {
+				if (app_icon != "" && !app_icon.contains("/")) { // Use the app icon directly
+					this.image = new Gtk.Image.from_icon_name(app_icon, Gtk.IconSize.DIALOG);
+					image_found = true;
+				} else if (app_icon == "" && app_info != null) { // Try to get icon from application info
+					this.image = new Gtk.Image.from_gicon(app_info.get_icon(), Gtk.IconSize.DIALOG);
+					image_found = true;
+				} else if (app_icon.contains("/")) { // Try to get icon from file
+					var file = File.new_for_uri(app_icon);
+					if (file.query_exists()) {
+						var icon = new FileIcon(file);
+						this.image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+						image_found = true;
 					}
 				}
 			}
 
 			// Lastly, for compatibility, check if we have icon_data if no other image was found
-			if (!image_found && (variant = hints.lookup ("icon_data")) != null) {
+			if (!image_found && (variant = hints.lookup("icon_data")) != null) {
 				var pixbuf = decode_image(variant);
 				if (pixbuf != null) {
 					image = new Gtk.Image.from_pixbuf(pixbuf);
@@ -126,7 +144,7 @@
 
 			// If we still don't have a valid image to use, show a generic icon
 			if (!image_found) {
-				this.primary_icon = new ThemedIcon("mail-unread-symbolic");
+				this.image = new Gtk.Image.from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
 			}
 			
 			// GLib.Notification only requires summary, so make sure we have a title
