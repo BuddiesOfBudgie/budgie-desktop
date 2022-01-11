@@ -11,6 +11,16 @@
 
 namespace Budgie {
 	/**
+     * Enumeration of where notification popups will be shown.
+     */
+    public enum NotificationPosition {
+		TOP_LEFT = 1,
+		TOP_RIGHT = 2,
+		BOTTOM_LEFT = 3,
+		BOTTOM_RIGHT = 4
+	}
+
+	/**
 	* StylePage simply provides a bunch of theme controls
 	*/
 	public class StylePage : Budgie.SettingsPage {
