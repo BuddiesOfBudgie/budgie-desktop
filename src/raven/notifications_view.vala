@@ -58,7 +58,7 @@ namespace Budgie {
 	
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public interface Dispatcher : Object {
-		public signal void Notify(
+		public signal void NotificationAdded(
 			string app_name,
 			uint32 id,
 			string app_icon,
@@ -69,7 +69,7 @@ namespace Budgie {
 			int32 expire_timeout
 		);
 
-		public signal void Closed(uint32 id, CloseReason reason);
+		public signal void NotificationClosed(uint32 id, CloseReason reason);
 	}
 
 	public class NotificationsView : Gtk.Box {
@@ -93,8 +93,8 @@ namespace Budgie {
 		private void on_dbus_get(Object? o, AsyncResult? res) {
 			try {
 				this.dispatcher = Bus.get_proxy.end(res);
-				this.dispatcher.Notify.connect(on_notification_added);
-				this.dispatcher.Closed.connect(on_notification_closed);
+				this.dispatcher.NotificationAdded.connect(on_notification_added);
+				this.dispatcher.NotificationClosed.connect(on_notification_closed);
 			} catch (Error e) {
 				critical("Unable to connect to notifications dispatcher: %s", e.message);
 			}
