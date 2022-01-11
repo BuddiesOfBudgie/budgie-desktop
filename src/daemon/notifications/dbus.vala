@@ -341,7 +341,7 @@
 						x = nx;
 						y = ny - latest.get_child().get_allocated_height() - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
-						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
 
 						int height;
@@ -358,7 +358,7 @@
 						x = nx;
 						y = ny + latest.get_child().get_allocated_height() + BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
-						x = (rect.x + rect.width) - NOTIFICATION_SIZE;
+						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
 						y = rect.y + INITIAL_BUFFER_ZONE;
 					}
