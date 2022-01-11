@@ -237,6 +237,7 @@ namespace Budgie.Notifications {
 
 			var title_label = new Gtk.Label(this.notification.summary) {
 				ellipsize = Pango.EllipsizeMode.END,
+				max_width_chars = 35,
 				margin_bottom = 8,
 				halign = Gtk.Align.START,
 				hexpand = true
@@ -248,6 +249,7 @@ namespace Budgie.Notifications {
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 35,
 				halign = Gtk.Align.START,
 				valign = Gtk.Align.START,
 				hexpand = true,
