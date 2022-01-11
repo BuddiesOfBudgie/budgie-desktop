@@ -10,7 +10,7 @@
  */
 
 namespace Budgie.Notifications {
-    public const int NOTIFICATION_SIZE = 400;
+    public const int NOTIFICATION_WIDTH = 400;
 	public const int MIN_TIMEOUT = 4000;
 	public const int MAX_TIMEOUT = 10000;
 
@@ -38,7 +38,7 @@ namespace Budgie.Notifications {
 				this.set_visual(visual);
 			}
 
-			this.set_default_size(NOTIFICATION_SIZE, -1);
+			this.set_default_size(NOTIFICATION_WIDTH, -1);
 			this.get_style_context().add_class("budgie-notification-window");
 
 			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
@@ -96,6 +96,14 @@ namespace Budgie.Notifications {
 				Source.remove(this.expire_id);
 				this.expire_id = 0;
 			}
+		}
+
+		public override void get_preferred_width(out int min, out int nat) {
+			min = nat = NOTIFICATION_WIDTH;
+		}
+
+		public override void get_preferred_width_for_height(int h, out int min, out int nat) {
+			min = nat = NOTIFICATION_WIDTH;
 		}
 	}
 
