@@ -72,7 +72,7 @@
 		 * The id might be a replacement id. It is up to the client to check for this
 		 * if they are keeping track of notifications.
 		 */
-		public signal void Notify(
+		public signal void NotificationAdded(
 			string app_name,
 			uint32 id,
 			string app_icon,
@@ -86,7 +86,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void Closed(uint32 id, CloseReason reason);
+		public signal void NotificationClosed(uint32 id, CloseReason reason);
 	}
 
 	/**
@@ -242,14 +242,14 @@
 	
 						this.popups[id].Closed.connect((reason) => {
 							this.popups.remove(id);
-							this.dispatcher.Closed(id, reason);
+							this.dispatcher.NotificationClosed(id, reason);
 							this.NotificationClosed(id, reason);
 						});
 					}
 				}
 			}
 
-			this.dispatcher.Notify(
+			this.dispatcher.NotificationAdded(
 				app_name,
 				id,
 				app_icon,
