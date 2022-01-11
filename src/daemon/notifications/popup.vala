@@ -226,37 +226,14 @@ namespace Budgie.Notifications {
 			this.valign = Gtk.Align.FILL;
 			this.get_style_context().add_class("budgie-notification");
 
-			var app_icon = new Gtk.Image() {
-				gicon = this.notification.primary_icon
-			};
-
-			var overlay = new Gtk.Overlay() {
-				margin_top = 8,
-				margin_start = 8,
-				margin_end = 8,
-				halign = Gtk.Align.FILL,
-				valign = Gtk.Align.START
-			};
-
-			if (this.notification.image != null) {
-				app_icon.pixel_size = 24;
-				app_icon.halign = Gtk.Align.END;
-				app_icon.valign = Gtk.Align.END;
-				overlay.add(this.notification.image);
-				overlay.add_overlay(app_icon);
-			} else {
-				app_icon.pixel_size = 48;
-				overlay.add(this.notification.image);
-
-				if (this.notification.badge_icon != null) {
-					var badge = new Gtk.Image.from_gicon(this.notification.badge_icon, Gtk.IconSize.LARGE_TOOLBAR) {
-						halign = Gtk.Align.END,
-						valign = Gtk.Align.END,
-						pixel_size = 24
-					};
-					overlay.add_overlay(badge);
-				}
-			}
+			var app_icon = this.notification.image;
+			app_icon.set_pixel_size(48);
+			app_icon.margin_top = 8;
+			app_icon.margin_start = 8;
+			app_icon.margin_end = 8;
+			app_icon.halign = Gtk.Align.FILL;
+			app_icon.valign = Gtk.Align.START;
+			app_icon.get_style_context().add_class("notification-icon");
 
 			var title_label = new Gtk.Label(this.notification.summary) {
 				ellipsize = Pango.EllipsizeMode.END,
@@ -287,7 +264,7 @@ namespace Budgie.Notifications {
 			});
 
 			// Attach the icon and labels to our grid
-			this.attach(overlay, 0, 0, 1, 2);
+			this.attach(app_icon, 0, 0, 1, 2);
 			this.attach(title_label, 1, 0);
 			this.attach(close_button, 2, 0);
 			this.attach(body_label, 1, 1);
