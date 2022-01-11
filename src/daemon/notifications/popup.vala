@@ -9,8 +9,10 @@
  * (at your option) any later version.
  */
 
-namespace Budgie.Notifications{
+namespace Budgie.Notifications {
     public const int NOTIFICATION_SIZE = 400;
+	public const int MIN_TIMEOUT = 4000;
+	public const int MAX_TIMEOUT = 10000;
 
     /**
 	 * This class is a notification popup with no content in it.
@@ -28,6 +30,9 @@ namespace Budgie.Notifications{
 			this.skip_taskbar_hint = true;
 			this.set_decorated(false);
 
+			this.halign = Gtk.Align.FILL;
+			this.valign = Gtk.Align.FILL;
+
 			var visual = this.screen.get_rgba_visual();
 			if (visual != null) {
 				this.set_visual(visual);
@@ -36,17 +41,15 @@ namespace Budgie.Notifications{
 			this.set_default_size(NOTIFICATION_SIZE, -1);
 			this.get_style_context().add_class("budgie-notification-window");
 
-			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
+				baseline_position = Gtk.BaselinePosition.CENTER,
+				border_width = 5,
+				halign = Gtk.Align.FILL,
+				valign = Gtk.Align.FILL,
+			};
 			this.content_box.get_style_context().add_class("drop-shadow");
 
-			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
-				halign = Gtk.Align.END,
-				valign = Gtk.Align.START
-			};
-			close_button.clicked.connect(() => {
-				this.Closed(CloseReason.DISMISSED);
-				this.dismiss();
-			});
+			this.add(this.content_box);
 		}
 
 		/**
@@ -74,8 +77,15 @@ namespace Budgie.Notifications{
 			if (this.expire_id != 0) {
 				Source.remove(this.expire_id);
 			}
+			
+			var t = timeout;
+			if (timeout < MIN_TIMEOUT) {
+				t = MIN_TIMEOUT;
+			} else if (timeout > MAX_TIMEOUT) {
+				t = MAX_TIMEOUT;
+			}
 
-			this.expire_id = Timeout.add(timeout, do_expire, Priority.HIGH);
+			this.expire_id = Timeout.add(t, do_expire, Priority.HIGH);
 		}
 
 		/**
@@ -123,11 +133,23 @@ namespace Budgie.Notifications{
 
 			// Create the content widgets for the popup
 			var contents = new Body(this.notification);
-			contents.ActionInvoked.connect((action_key) => {
-				this.ActionInvoked(action_key);
+			this.content_box.pack_start(contents, false, true, 0);
+
+			// Hook up the close button
+			contents.Closed.connect(() => {
+				this.Closed(CloseReason.DISMISSED);
 				this.dismiss();
 			});
-			this.content_box.add(contents);
+
+			// Add notification actions if any are present
+			if (this.notification.actions.length > 0) {
+				var actions = new ActionBox(this.notification.actions, this.notification.hints.contains("action-icons"));
+				actions.ActionInvoked.connect((action_key) => {
+					this.ActionInvoked(action_key);
+					this.dismiss();
+				});
+				this.content_box.pack_start(actions, false, true, 0);
+			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
 			this.enter_notify_event.connect(() => {
@@ -165,9 +187,18 @@ namespace Budgie.Notifications{
 			var new_contents = new Body(new_notif);
 			new_contents.show_all();
 
-			new_contents.ActionInvoked.connect((action_key) => {
-				this.ActionInvoked(action_key);
-				dismiss();
+			// Add notification actions if any are present
+			if (new_notif.actions.length > 0) {
+				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
+				actions.ActionInvoked.connect((action_key) => {
+					this.ActionInvoked(action_key);
+				});
+				this.content_box.pack_start(actions, false, true, 0);
+			}
+			
+			new_contents.Closed.connect(() => {
+				this.Closed(CloseReason.DISMISSED);
+				this.dismiss();
 			});
 
 			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -182,28 +213,56 @@ namespace Budgie.Notifications{
 	private class Body: Gtk.Grid {
 		public Notification notification { get; construct; }
 
-		/**
-		 * Signal emitted when an action is clicked.
-		 */
-		public signal void ActionInvoked(string action_key);
+		public signal void Closed();
 
 		public Body(Notification notification) {
 			Object(notification: notification);
 		}
 
 		construct {
+			this.orientation = Gtk.Orientation.HORIZONTAL;
+			this.margin = 3;
+			this.halign = Gtk.Align.FILL;
+			this.valign = Gtk.Align.FILL;
 			this.get_style_context().add_class("budgie-notification");
 
-			// TODO: See what more we need to do for the icon
-			var app_icon = this.notification.notif_icon;
-			if (app_icon != null) {
+			var app_icon = new Gtk.Image() {
+				gicon = this.notification.primary_icon
+			};
+
+			var overlay = new Gtk.Overlay() {
+				margin_top = 8,
+				margin_start = 8,
+				margin_end = 8,
+				halign = Gtk.Align.FILL,
+				valign = Gtk.Align.START
+			};
+
+			if (this.notification.image != null) {
+				app_icon.pixel_size = 24;
+				app_icon.halign = Gtk.Align.END;
+				app_icon.valign = Gtk.Align.END;
+				overlay.add(this.notification.image);
+				overlay.add_overlay(app_icon);
+			} else {
 				app_icon.pixel_size = 48;
+				overlay.add(this.notification.image);
+
+				if (this.notification.badge_icon != null) {
+					var badge = new Gtk.Image.from_gicon(this.notification.badge_icon, Gtk.IconSize.LARGE_TOOLBAR) {
+						halign = Gtk.Align.END,
+						valign = Gtk.Align.END,
+						pixel_size = 24
+					};
+					overlay.add_overlay(badge);
+				}
 			}
 
 			var title_label = new Gtk.Label(this.notification.summary) {
 				ellipsize = Pango.EllipsizeMode.END,
-				margin_top = 8,
-				halign = 0
+				margin_bottom = 8,
+				halign = Gtk.Align.START,
+				hexpand = true
 			};
 			title_label.get_style_context().add_class("notification-title");
 
@@ -212,56 +271,80 @@ namespace Budgie.Notifications{
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
-				halign = 0
+				halign = Gtk.Align.START,
+				valign = Gtk.Align.START,
+				hexpand = true,
+				vexpand = true
 			};
 			body_label.get_style_context().add_class("notification-body");
 
+			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
+				halign = Gtk.Align.END,
+				valign = Gtk.Align.START
+			};
+			close_button.clicked.connect(() => {
+				this.Closed();
+			});
+
 			// Attach the icon and labels to our grid
-			this.attach(app_icon, 0, 0, 1, 2);
+			this.attach(overlay, 0, 0, 1, 2);
 			this.attach(title_label, 1, 0);
+			this.attach(close_button, 2, 0);
 			this.attach(body_label, 1, 1);
+		}
+	}
 
-			// Add notification actions if any are present
-			if (this.notification.actions.length > 0) {
-				var action_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL) {
-					layout_style = Gtk.ButtonBoxStyle.CENTER,
-					margin_top = 6,
-					margin_bottom = 3
-				};
-				action_box.get_style_context().add_class("linked");
+	/**
+	 * Holds the buttons for notification action buttons.
+	 */
+	private class ActionBox : Gtk.ButtonBox {
+		public string[] actions { get; construct set; }
+		public bool has_icons { get; construct set; }
 
-				bool icons = this.notification.hints.contains("action-icons");
+		/**
+		 * Signal emitted when an action button is clicked.
+		 */
+		public signal void ActionInvoked(string action_key);
 
-				for (int i = 0; i < this.notification.actions.length; i += 2) {
-					// Only add an action if its not a default action
-					if (this.notification.actions[i] != "default") {
-						Gtk.Button? button = null;
-						var action = this.notification.actions[i].dup();
+		public ActionBox(string[] actions, bool has_icons) {
+			Object(actions: actions, has_icons: has_icons);
+		}
 
-						// If we have action icons, use those. Otherwise, just a labelled button
-						if (icons) {
-							if (!action.has_suffix("-symbolic")) {
-								button = new Gtk.Button.from_icon_name("%s-symbolic".printf(action), Gtk.IconSize.MENU);
-							} else {
-								button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
-							}
+		construct {
+			this.orientation = Gtk.Orientation.HORIZONTAL;
+			this.layout_style = Gtk.ButtonBoxStyle.CENTER;
+			this.margin_top = 6;
+			this.margin_bottom = 3;
+			this.halign = Gtk.Align.FILL;
+			this.get_style_context().add_class("linked");
+
+			for (int i = 0; i < this.actions.length; i += 2) {
+				// Only add an action if its not a default action
+				if (this.actions[i] != "default") {
+					Gtk.Button? button = null;
+					var action = this.actions[i].dup();
+
+					// If we have action icons, use those. Otherwise, just a labelled button
+					if (this.has_icons) {
+						if (!action.has_suffix("-symbolic")) {
+							button = new Gtk.Button.from_icon_name("%s-symbolic".printf(action), Gtk.IconSize.MENU);
 						} else {
-							button = new Gtk.Button.with_label(this.notification.actions[i]);
-							button.set_can_focus(false);
-							button.set_can_default(false);
+							button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
 						}
-	
-						button.clicked.connect(() => {
-							this.ActionInvoked(action);
-						});
-	
-						action_box.add(button);
 					} else {
-						i += 2;
+						button = new Gtk.Button.with_label(this.actions[i]);
+						button.set_can_focus(false);
+						button.set_can_default(false);
 					}
-				}
 
-				this.attach(action_box, 0, 2, 2);
+					button.clicked.connect(() => {
+						this.ActionInvoked(action);
+					});
+
+					this.add(button);
+				} else {
+					i += 2;
+				}
 			}
 		}
 	}

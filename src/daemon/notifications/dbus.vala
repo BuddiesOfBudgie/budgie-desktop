@@ -11,7 +11,7 @@
 
  namespace Budgie.Notifications {
     public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
-	public const string NOTIFICATION_DBUS_OBJECT_PATH = "org/budgie_desktop/Notifications";
+	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
 	/**
 	 * Enumeration of why a notification was closed.
@@ -46,14 +46,61 @@
 		CRITICAL = 2
 	}
 
+	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
+	public class Dispatcher : Object {
+		construct {
+			Bus.own_name(
+				BusType.SESSION,
+				NOTIFICATION_DBUS_NAME,
+				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+				null,
+				on_dbus_acquired
+			);
+		}
+
+		private void on_dbus_acquired(DBusConnection conn) {
+			try {
+				conn.register_object(NOTIFICATION_DBUS_OBJECT_PATH, this);
+			} catch (Error e) {
+				critical("Unable to register notification dispatcher: %s", e.message);
+			}
+		}
+
+		/**
+		 * Signal emitted when a new notification comes in.
+		 *
+		 * The id might be a replacement id. It is up to the client to check for this
+		 * if they are keeping track of notifications.
+		 */
+		public signal void Notify(
+			string app_name,
+			uint32 id,
+			string app_icon,
+			string summary,
+			string body,
+			string[] actions,
+			HashTable<string, Variant> hints,
+			int32 expire_timeout
+		);
+
+		/**
+		 * Signal emitted when a notification is closed.
+		 */
+		public signal void Closed(uint32 id, CloseReason reason);
+	}
+
 	/**
 	 * This is our implementation of the FreeDesktop Notification spec.
 	 */
 	[DBus (name="org.freedesktop.Notifications")]
 	public class Server : Object {
         private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
-		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications.application";
-		private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications/application";
+
+		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications";
+		private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications";
+		
+		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
+		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
         /** Spacing between notification popups */
         private const int BUFFER_ZONE = 10;
@@ -62,7 +109,8 @@
 
 		private uint32 notif_id = 0;
 
-		private HashTable<uint32, Notifications.Popup> popups;
+		private Dispatcher dispatcher { get; private set; default = null; }
+		private HashTable<uint32, Popup> popups;
 		private Settings notification_settings { private get; private set; default = null; }
         private Settings panel_settings { private get; private set; default = null; }
 
@@ -74,7 +122,9 @@
 				on_bus_acquired
 			);
 
-			this.popups = new HashTable<uint32, Notifications.Popup>(int_hash, int_equal);
+			this.dispatcher = new Dispatcher();
+
+			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
 			this.notification_settings = new Settings(NOTIFICATION_SCHEMA);
             this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
@@ -168,9 +218,9 @@
 	
 				// Get the application settings
 				var app_notification_settings = new Settings.full(
-					SettingsSchemaSource.get_default().lookup(NOTIFICATION_SCHEMA, true),
+					SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
 					null,
-					"%s/%s/".printf(NOTIFICATION_PREFIX, settings_app_name)
+					"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
 				);
 	
 				should_show = app_notification_settings.get_boolean("enable") && app_notification_settings.get_boolean("show-banners");
@@ -181,26 +231,34 @@
 					if (this.popups.contains(id) && this.popups[id] != null) {
 						this.popups[id].replace(notification);
 					} else {
-						var popup = new Popup(this, notification);
-						this.configure_window(popup);
-						popup.show_all();
-						popup.begin_decay(expire_timeout);
+						this.popups[id] = new Popup(this, notification);
+						this.configure_window(this.popups[id]);
+						this.popups[id].show_all();
+						this.popups[id].begin_decay(expire_timeout);
 	
-						popup.ActionInvoked.connect((action_key) => {
+						this.popups[id].ActionInvoked.connect((action_key) => {
 							this.ActionInvoked(id, action_key);
 						});
 	
-						popup.Closed.connect((reason) => {
+						this.popups[id].Closed.connect((reason) => {
 							this.popups.remove(id);
+							this.dispatcher.Closed(id, reason);
 							this.NotificationClosed(id, reason);
 						});
-	
-						this.popups[id] = popup;
 					}
 				}
 			}
 
-			// TODO: Propogate
+			this.dispatcher.Notify(
+				app_name,
+				id,
+				app_icon,
+				summary,
+				body,
+				actions,
+				hints,
+				expire_timeout
+			);
 			return id;
 		}
 

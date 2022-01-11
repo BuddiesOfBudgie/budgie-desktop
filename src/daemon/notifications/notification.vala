@@ -28,9 +28,9 @@
 		public uint expire_timeout { get; construct; }
 
 		/* Icon stuff */
-		public Gdk.Pixbuf? pixbuf { get; private set; default = null; }
-		public Gtk.Image? notif_icon { get; private set; default = null; }
-		private string? image_path { get; private set; default = null; }
+		public GLib.Icon? primary_icon { get; set; default = null; }
+		public GLib.Icon? badge_icon { get; set; default = null; }
+		public Gtk.Image? image { get; set; default = null; }
 
 		private static Regex entity_regex;
     	private static Regex tag_regex;
@@ -79,9 +79,56 @@
 				this.app_info = new DesktopAppInfo("%s.desktop".printf(app_id));
 			}
 
-			// Now for the fun that is trying to get an icon to use for the notification.
-			set_image.begin(app_icon, () => {});
+			bool image_found = false;
 
+			// Per the Freedesktop Notification spec, first check if there is image data
+			if (
+				(variant = hints.lookup ("image-data")) != null ||
+				(variant = hints.lookup ("image_data")) != null
+			) {
+				var pixbuf = decode_image(variant);
+				if (pixbuf != null) {
+					image = new Gtk.Image.from_pixbuf(pixbuf);
+					image_found = true;
+				}
+			}
+			
+			// If there was no image data, check if we have a path to the image to use.
+			if (
+				!image_found &&
+				((variant = hints.lookup ("image-path")) != null ||
+				(variant = hints.lookup ("image_path")) != null)
+			) {
+				var path = variant.get_string();
+
+				if (Gtk.IconTheme.get_default().has_icon(path) && path != this.app_icon) {
+					this.badge_icon = new ThemedIcon(path);
+					image_found = true;
+				} else if (path.has_prefix("/") || path.has_prefix("file://")) {
+					try {
+						var pixbuf = new Gdk.Pixbuf.from_file(path);
+						this.image = new Gtk.Image.from_pixbuf(pixbuf);
+						image_found = true;
+					} catch (Error e) {
+						critical("Unable to get pixbuf from path: %s", e.message);
+					}
+				}
+			}
+
+			// Lastly, for compatibility, check if we have icon_data if no other image was found
+			if (!image_found && (variant = hints.lookup ("icon_data")) != null) {
+				var pixbuf = decode_image(variant);
+				if (pixbuf != null) {
+					image = new Gtk.Image.from_pixbuf(pixbuf);
+					image_found = true;
+				}
+			}
+
+			// If we still don't have a valid image to use, show a generic icon
+			if (!image_found) {
+				this.primary_icon = new ThemedIcon("mail-unread-symbolic");
+			}
+			
 			// GLib.Notification only requires summary, so make sure we have a title
 			// when body is empty.
 			if (body == "") {
@@ -93,76 +140,7 @@
 			}
 		}
 
-		/**
-		* Follow the priority list for loading notification images
-		* specified in the DesktopNotification spec.
-		*/
-		// TODO: Surely there has got to be a better way...
-		private async bool set_image(string? app_icon) {
-			unowned Variant? variant = null;
-
-			// try the raw hints
-			if ((variant = hints.lookup("image-data")) != null || (variant = hints.lookup("image_data")) != null) {
-				var image_path = variant.get_string();
-
-				// if this fails for some reason, we can still fallback to the
-				// other elements in the priority list
-				if (yield set_image_from_data(hints.lookup(image_path))) {
-					return true;
-				}
-			}
-
-			if (yield set_from_image_path(app_icon)) {
-				return true;
-			} else if (hints.contains("icon_data")) { // compatibility
-				return yield set_image_from_data(hints.lookup("icon_data"));
-			} else {
-				return false;
-			}
-		}
-
-		private async bool set_from_image_path(string? app_icon) {
-			unowned Variant? variant = null;
-
-			/* Update the icon. */
-			string? img_path = null;
-			if ((variant = hints.lookup("image-path")) != null || (variant = hints.lookup("image_path")) != null) {
-				img_path = variant.get_string();
-			}
-
-			/* Fallback for filepath based icons */
-			if (app_icon != null && "/" in app_icon) {
-				img_path = app_icon;
-			}
-
-			/* Take the img_path */
-			if (img_path == null) {
-				return false;
-			}
-
-			/* Don't unnecessarily update the image */
-			if (img_path == this.image_path) {
-				return true;
-			}
-
-			this.image_path = img_path;
-
-			try {
-				var file = File.new_for_path(image_path);
-				var ins = yield file.read_async(Priority.DEFAULT, null);
-				this.pixbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 48, 48, true, null);
-				this.notif_icon.set_from_pixbuf(pixbuf);
-			} catch (Error e) {
-				return false;
-			}
-
-			return true;
-		}
-
-		/**
-		* Decode a raw image (iiibiiay) sent through 'hints'
-		*/
-		private async bool set_image_from_data(Variant img) {
+		private Gdk.Pixbuf? decode_image(Variant img) {
 			// Read the image fields
 			int width = img.get_child_value(0).get_int32();
 			int height = img.get_child_value(1).get_int32();
@@ -188,13 +166,7 @@
 				pixbuf = pixbuf.scale_simple(48, 48, Gdk.InterpType.BILINEAR); // Scale down (or up if it is small)
 			}
 
-			// set the image
-			if (pixbuf != null) {
-				this.notif_icon.set_from_pixbuf(pixbuf);
-				return true;
-			} else {
-				return false;
-			}
+			return pixbuf.copy();
 		}
 
 		/**
