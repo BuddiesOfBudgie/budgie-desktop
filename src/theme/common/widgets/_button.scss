@@ -38,5 +38,9 @@
     }
 
     &.text-button { padding: 4px 12px; }
-    &.image-button { padding: 4px; }
+    &.image-button, &.expander-button {
+        padding: 4px;
+        border-radius: 50%;
+        -gtk-outline-radius: 999px;
+    }
 }
