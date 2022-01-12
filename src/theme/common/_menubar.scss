@@ -16,12 +16,10 @@
 
         &.top {
             -gtk-icon-source:-gtk-icontheme("pan-up-symbolic");
-            border-bottom: 1px solid mix($fg_color, $raven_bg, 10%);
         }
 
         &.bottom {
             -gtk-icon-source:-gtk-icontheme("pan-down-symbolic");
-            border-top: 1px solid mix($fg_color, $raven_bg, 10%);
         }
     }
     #{$item} {

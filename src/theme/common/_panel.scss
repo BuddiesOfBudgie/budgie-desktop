@@ -9,29 +9,12 @@
     transition: all 150ms ease-in;
 
     #{$button} {
-      border-top-width: 0;
-      border-bottom-width: 0;
+      border: none;
       border-radius: 0;
     }
 
     &.transparent {
         background-color: transparent;
-
-        .top & {
-            border-bottom-color: transparent;
-        }
-
-        .bottom & {
-            border-top-color: transparent;
-        }
-
-        .left & {
-            border-right-color: transparent;
-        }
-
-        .right & {
-            border-left-color: transparent;
-        }
     }
 
     #{$separator} { #{$color}: transparentize($fg_color, 0.85) }

@@ -14,12 +14,12 @@
 .end-region {
     &.horizontal > widget > widget > * {
         min-width: 18px;
-        border-left: 2px solid transparent;
+        margin-left: 2px;
     }
 
     &.vertical > widget > widget > * {
         min-height: 18px;
-        border-top: 2px solid transparent;
+        margin-top: 2px;
     }
 }
 

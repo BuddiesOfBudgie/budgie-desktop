@@ -1,7 +1,6 @@
 @mixin menu_reset_style($label,$insensitive) {
     padding: 2px 2px;
-    border: solid transparent;
-    border-width: 0;
+    border: none;
 
     &:hover {
         background-color: $selected_bg_color;
@@ -10,7 +9,6 @@
 
     &:#{$insensitive} {
         color: rgba(207, 218, 231, 0.2);
-        border-color: transparent;
     }
 
     #{$label} {

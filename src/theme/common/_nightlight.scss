@@ -5,7 +5,6 @@
     .view-header {
         font-size: 14px;
         padding: 10px;
-        border-bottom: #{"1px solid mix(@theme_base_color, #000000, 0.35);"};
     }
 
     .display-settings-button {
@@ -13,6 +12,5 @@
         border-top-right-radius: 0px;
         border: none;
         padding: 3px;
-        border-top: #{"1px solid mix(@theme_base_color, #000000, 0.35);"};
     }
 }

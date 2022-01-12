@@ -1,23 +1,19 @@
 // Entries
 @mixin entry($selected,$insensitive) {
     padding: 4px 8px;
-    border: $border_width solid;
     border-radius: $roundness;
 
     color: $entry_fg;
     background-color: $entry_bg;
-    border-color: $entry_border;
 
     &:focus {
         color: $entry_fg;
         background-color: $entry_bg;
-        border-color: if($variant == 'default', $button_border, $selected_bg_color);
     }
 
     &:#{$insensitive} {
         color: transparentize($entry_fg, 0.65);
         background-color: transparentize($entry_bg, 0.3);
-        border-color: transparentize($entry_border, 0.3);
     }
 
     #{$selected},
@@ -29,31 +25,26 @@
 }
 
 // Buttons
-@mixin button-normal($fg:$button_fg, $bg:$button_bg, $border:$button_border) {
+@mixin button-normal($fg:$button_fg, $bg:$button_bg) {
     color: $fg;
     background-color: $bg;
-    border-color: $border;
 }
 
-@mixin button-hover($fg:$button_fg, $bg:$button_bg, $border:$button_border) {
+@mixin button-hover($fg:$button_fg, $bg:$button_bg) {
     color: $fg;
     background-color: opacify(lighten($bg, 15%), 0.1);
-    border-color: $border;
 }
 
-@mixin button-active($fg:$selected_fg_color, $bg:$selected_bg_color, $border:$button_border) {
+@mixin button-active($fg:$selected_fg_color, $bg:$selected_bg_color) {
     color: $fg;
     background-color: $bg;
-    border-color: $border;
 }
 
-@mixin button-insensitive($fg:$button_fg, $bg:$button_bg, $border:$button_border) {
+@mixin button-insensitive($fg:$button_fg, $bg:$button_bg) {
     color: transparentize($fg, 0.65);
     background-color: transparentize($bg, 0.1);
-    border-color: transparentize($border, 0.2);
 }
 
-@mixin button-flat($fg:$button_fg, $bg:$button_bg, $border:$button_border) {
+@mixin button-flat($fg:$button_fg, $bg:$button_bg) {
     background-color: transparentize($bg, 1); // makes transitions nicer
-    border-color: transparentize($border, 1); //
 }
