@@ -188,6 +188,9 @@ namespace Budgie.Notifications {
 					}
 				}
 
+				// Emit this signal since the notification will be closed to make sure
+				// our latest popup tracking doesn't break.
+				this.Closed(CloseReason.DISMISSED);
 				this.dismiss();
 				return Gdk.EVENT_STOP;
 			});
@@ -332,7 +335,7 @@ namespace Budgie.Notifications {
 							button = new Gtk.Button.from_icon_name(action, Gtk.IconSize.MENU);
 						}
 					} else {
-						button = new Gtk.Button.with_label(this.actions[i]);
+						button = new Gtk.Button.with_label(this.actions[i + 1]);
 						button.set_can_focus(false);
 						button.set_can_default(false);
 					}
