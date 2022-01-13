@@ -18,7 +18,7 @@ namespace Budgie.Notifications {
 	 * This class is a notification popup with no content in it.
 	 */
 	public class PopupBase : Gtk.Window {
-		protected Gtk.Box content_box;
+		protected Gtk.Stack content_stack;
 		
 		private uint expire_id { get; private set; }
 		
@@ -41,15 +41,16 @@ namespace Budgie.Notifications {
 			this.set_default_size(NOTIFICATION_WIDTH, -1);
 			this.get_style_context().add_class("budgie-notification-window");
 
-			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
-				baseline_position = Gtk.BaselinePosition.CENTER,
+			this.content_stack = new Gtk.Stack() {
+				transition_type = Gtk.StackTransitionType.SLIDE_LEFT,
 				border_width = 5,
 				halign = Gtk.Align.FILL,
 				valign = Gtk.Align.FILL,
+				vhomogeneous = false
 			};
-			this.content_box.get_style_context().add_class("drop-shadow");
+			this.content_stack.get_style_context().add_class("drop-shadow");
 
-			this.add(this.content_box);
+			this.add(this.content_stack);
 		}
 
 		/**
@@ -140,8 +141,12 @@ namespace Budgie.Notifications {
 			}
 
 			// Create the content widgets for the popup
+			var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
+				baseline_position = Gtk.BaselinePosition.CENTER
+			};
 			var contents = new Body(this.notification);
-			this.content_box.pack_start(contents, false, true, 0);
+			this.content_stack.add(content_box);
+			content_box.pack_start(contents, false, true, 0);
 
 			// Hook up the close button
 			contents.Closed.connect(() => {
@@ -156,7 +161,7 @@ namespace Budgie.Notifications {
 					this.ActionInvoked(action_key);
 					this.dismiss();
 				});
-				this.content_box.pack_start(actions, false, true, 0);
+				content_box.pack_start(actions, false, true, 0);
 			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
@@ -192,26 +197,34 @@ namespace Budgie.Notifications {
 		 * Replace the content of this notification with a new notification.
 		 */
 		public void replace(Notification new_notif) {
-			var new_contents = new Body(new_notif);
-			new_contents.show_all();
+			this.stop_decay();
+			var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
+				baseline_position = Gtk.BaselinePosition.CENTER
+			};
 
+			var new_contents = new Body(new_notif);
+			content_box.add(new_contents);
+			
+			new_contents.Closed.connect(() => {
+				this.Closed(CloseReason.DISMISSED);
+				this.dismiss();
+			});
+			
 			// Add notification actions if any are present
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
 				actions.ActionInvoked.connect((action_key) => {
 					this.ActionInvoked(action_key);
 				});
-				this.content_box.pack_start(actions, false, true, 0);
+				content_box.pack_start(actions, false, true, 0);
 			}
-			
-			new_contents.Closed.connect(() => {
-				this.Closed(CloseReason.DISMISSED);
-				this.dismiss();
-			});
 
-			this.content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			this.content_box.get_style_context().add_class("drop-shadow");
-			this.content_box.add(new_contents);
+			content_box.show_all();
+			
+			this.content_stack.add(content_box);
+			this.content_stack.visible_child = content_box;
+			this.show_all();
+			this.begin_decay(new_notif.expire_timeout);
 		}
 	}
 
