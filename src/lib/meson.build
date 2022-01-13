@@ -5,6 +5,7 @@ libbudgieprivate_sources = [
     'toplevel.vala',
     'shadow.vala',
     'manager.vala',
+    'notification.vala'
 ]
 
 libbudgieprivate = shared_library(

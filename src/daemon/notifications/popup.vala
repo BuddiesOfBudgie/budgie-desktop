@@ -22,7 +22,7 @@ namespace Budgie.Notifications {
 		
 		private uint expire_id { get; private set; }
 		
-		public signal void Closed(CloseReason reason);
+		public signal void Closed(NotificationCloseReason reason);
 
 		construct {
 			this.resizable = false;
@@ -66,7 +66,7 @@ namespace Budgie.Notifications {
 		bool do_expire() {
 			this.expire_id = 0;
 
-			this.Closed(CloseReason.EXPIRED);
+			this.Closed(NotificationCloseReason.EXPIRED);
 			this.dismiss();
 			return false;
 		}
@@ -150,7 +150,7 @@ namespace Budgie.Notifications {
 
 			// Hook up the close button
 			contents.Closed.connect(() => {
-				this.Closed(CloseReason.DISMISSED);
+				this.Closed(NotificationCloseReason.DISMISSED);
 				this.dismiss();
 			});
 
@@ -190,7 +190,7 @@ namespace Budgie.Notifications {
 
 				// Emit this signal since the notification will be closed to make sure
 				// our latest popup tracking doesn't break.
-				this.Closed(CloseReason.DISMISSED);
+				this.Closed(NotificationCloseReason.DISMISSED);
 				this.dismiss();
 				return Gdk.EVENT_STOP;
 			});
@@ -209,7 +209,7 @@ namespace Budgie.Notifications {
 			content_box.add(new_contents);
 			
 			new_contents.Closed.connect(() => {
-				this.Closed(CloseReason.DISMISSED);
+				this.Closed(NotificationCloseReason.DISMISSED);
 				this.dismiss();
 			});
 			

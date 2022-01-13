@@ -13,39 +13,6 @@
     public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
-	/**
-	 * Enumeration of why a notification was closed.
-	 */
-	public enum CloseReason {
-		/** The notification expired. */
-		EXPIRED = 1,
-		/** The notification was dismissed by the user. */
-		DISMISSED = 2,
-		/** The notification was closed by a call to CloseNotification. */
-		CLOSED = 3,
-		/** Undefined/reserved reasons. */
-		UNDEFINED = 4
-	}
-
-    /**
-     * Enumeration of where notification popups will be shown.
-     */
-    public enum Position {
-		TOP_LEFT = 1,
-		TOP_RIGHT = 2,
-		BOTTOM_LEFT = 3,
-		BOTTOM_RIGHT = 4
-	}
-
-	/**
-	 * Enumeration of notification priorities.
-	 */
-	public enum Urgency {
-		LOW = 0,
-		NORMAL = 1,
-		CRITICAL = 2
-	}
-
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
 		construct {
@@ -86,7 +53,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void NotificationClosed(uint32 id, CloseReason reason);
+		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
 	}
 
 	/**
@@ -157,7 +124,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void NotificationClosed(uint32 id, CloseReason reason);
+		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
 
 		/**
 		 * Returns the capabilities of this DBus Notification server.
@@ -206,7 +173,7 @@
 			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expire_timeout);
 
 			// Check for DoNotDisturb
-			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == Urgency.CRITICAL;
+			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == NotificationUrgency.CRITICAL;
 			if (should_notify) {
 				//Settings app_notification_settings = null;
 				string settings_app_name = app_name;
@@ -279,7 +246,7 @@
 			if (this.popups.contains(id)) {
 				this.popups[id].dismiss();
 				this.popups.remove(id);
-				this.NotificationClosed(id, CloseReason.CLOSED);
+				this.NotificationClosed(id, NotificationCloseReason.CLOSED);
 				return;
 			}
 
@@ -308,11 +275,11 @@
 		* the screen notifications should appear.
 		*/
 		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
-			var pos = (Position) this.panel_settings.get_enum("notification-position");
+			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
 
 			switch (pos) {
-				case Position.TOP_LEFT:
+				case NotificationPosition.TOP_LEFT:
 					if (latest != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
@@ -324,7 +291,7 @@
 						y = rect.y + INITIAL_BUFFER_ZONE;
 					}
 					break;
-				case Position.BOTTOM_LEFT:
+				case NotificationPosition.BOTTOM_LEFT:
 					if (latest != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
@@ -339,7 +306,7 @@
 						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
 					}
 					break;
-				case Position.BOTTOM_RIGHT:
+				case NotificationPosition.BOTTOM_RIGHT:
 					if (latest != null) { // If a notification is already being displayed
 						int nx;
 						int ny;
@@ -355,7 +322,7 @@
 						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
 					}
 					break;
-				case Position.TOP_RIGHT: // Top right should also be the default case
+				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
 				default:
 					if (latest != null) { // If a notification is already being displayed
 						int nx;

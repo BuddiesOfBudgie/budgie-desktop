@@ -18,20 +18,6 @@ namespace Budgie {
 	public const string ROOT_KEY_SPAM_CATEGORIES = "spam-categories";
 
 	/**
-	 * Enumeration of why a notification was closed.
-	 */
-	 public enum CloseReason {
-		/** The notification expired. */
-		EXPIRED = 1,
-		/** The notification was dismissed by the user. */
-		DISMISSED = 2,
-		/** The notification was closed by a call to CloseNotification. */
-		CLOSED = 3,
-		/** Undefined/reserved reasons. */
-		UNDEFINED = 4
-	}
-
-	/**
 	* Simple placeholder to use when there are no notifications
 	*/
 	public class NotificationPlaceholder : Gtk.Box {
@@ -69,7 +55,7 @@ namespace Budgie {
 			int32 expire_timeout
 		);
 
-		public signal void NotificationClosed(uint32 id, CloseReason reason);
+		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
 	}
 
 	public class NotificationsView : Gtk.Box {
@@ -112,7 +98,7 @@ namespace Budgie {
 		) {
 		}
 
-		private void on_notification_closed(uint32 id, CloseReason reason) {
+		private void on_notification_closed(uint32 id, NotificationCloseReason reason) {
 		}
 	}
 
