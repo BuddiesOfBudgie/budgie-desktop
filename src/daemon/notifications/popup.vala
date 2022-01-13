@@ -253,7 +253,6 @@ namespace Budgie.Notifications {
 			var app_icon = this.notification.image;
 			app_icon.set_pixel_size(48);
 			app_icon.margin_top = 8;
-			app_icon.margin_start = 8;
 			app_icon.margin_end = 8;
 			app_icon.halign = Gtk.Align.FILL;
 			app_icon.valign = Gtk.Align.START;
