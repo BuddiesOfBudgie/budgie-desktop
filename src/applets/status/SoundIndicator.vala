@@ -275,7 +275,7 @@ public class SoundIndicator : Gtk.Bin {
 		step_size = vol_norm / 20;
 
 		// Use rounding to ensure volume is displayed exactly as 5% steps
-		var pct = ((float)vol / (float)step_size)*100;
+		var pct = ((float)vol / (float)vol_norm)*100;
 		var ipct = (uint)Math.round(pct);
 		widget.set_tooltip_text(@"$ipct%");
 
