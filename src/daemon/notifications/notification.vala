@@ -17,6 +17,8 @@
 		public DesktopAppInfo? app_info { get; private set; default = null; }
 		public string app_id { get; private set; }
 		public Urgency urgency { get; private set; default = Urgency.NORMAL; }
+
+		public uint32 id { get; construct; }
 		
 		/* Notification information */
 		public string app_name { get; construct; }
@@ -34,6 +36,7 @@
     	private static Regex tag_regex;
 
 		public Notification(
+			uint32 id,
 			string app_name,
 			string app_icon,
 			string summary,
@@ -43,6 +46,7 @@
 			uint expire_timeout
 		) {
 			Object (
+				id: id,
 				app_name: app_name,
 				app_icon: app_icon,
 				summary: summary,

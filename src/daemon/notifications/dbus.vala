@@ -114,6 +114,8 @@
 		private Settings notification_settings { private get; private set; default = null; }
         private Settings panel_settings { private get; private set; default = null; }
 
+		private uint32 latest_popup_id { private get; private set; default = 0; }
+
 		construct {
 			Bus.own_name(
 				BusType.SESSION,
@@ -201,7 +203,7 @@
 			int32 expire_timeout
 		) throws DBusError, IOError {
 			var id = (replaces_id != 0 ? replaces_id : ++notif_id);
-			var notification = new Notification(app_name, app_icon, summary, body, actions, hints, expire_timeout);
+			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expire_timeout);
 
 			// Check for DoNotDisturb
 			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == Urgency.CRITICAL;
@@ -233,6 +235,7 @@
 					} else {
 						this.popups[id] = new Popup(this, notification);
 						this.configure_window(this.popups[id]);
+						this.latest_popup_id = id;
 						this.popups[id].show_all();
 						this.popups[id].begin_decay(expire_timeout);
 	
@@ -241,6 +244,9 @@
 						});
 	
 						this.popups[id].Closed.connect((reason) => {
+							if (this.popups.length == 1 && this.latest_popup_id == id) {
+								this.latest_popup_id = 0;
+							}
 							this.popups.remove(id);
 							this.dispatcher.NotificationClosed(id, reason);
 							this.NotificationClosed(id, reason);
@@ -303,7 +309,7 @@
 		*/
 		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
 			var pos = (Position) this.panel_settings.get_enum("notification-position");
-            var latest = this.popups[this.notif_id - 1];
+			var latest = this.popups.get(this.latest_popup_id);
 
 			switch (pos) {
 				case Position.TOP_LEFT:
