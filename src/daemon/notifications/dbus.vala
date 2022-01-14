@@ -53,7 +53,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
+		public signal void NotificationClosed(uint32 id, string app_name, NotificationCloseReason reason);
 	}
 
 	/**
@@ -215,7 +215,7 @@
 								this.latest_popup_id = 0;
 							}
 							this.popups.remove(id);
-							this.dispatcher.NotificationClosed(id, reason);
+							this.dispatcher.NotificationClosed(id, app_name, reason);
 							this.NotificationClosed(id, reason);
 						});
 					}

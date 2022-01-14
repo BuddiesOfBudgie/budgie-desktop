@@ -18,7 +18,7 @@ libraven_sources = [
     'mpris/MprisClient.vala',
     'mpris/MprisGui.vala',
     'mpris/MprisWidget.vala',
-    'notification_clone.vala',
+    'notification_widget.vala',
     'notifications_group.vala',
     'notifications_view.vala',
     'powerstrip.vala',
