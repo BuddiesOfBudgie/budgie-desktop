@@ -63,6 +63,9 @@
 		public string summary { get; construct set; }
 		public uint expire_timeout { get; construct; }
 
+		public string category { get; construct set; }
+		public int64 timestamp { get; construct set; }
+
 		/* Icon stuff */
 		public Gtk.Image? image { get; set; default = null; }
 
@@ -102,10 +105,16 @@
 
 		construct {
 			unowned Variant? variant = null;
+			this.timestamp = new DateTime.now().to_unix();
 
 			// Set the priority
 			if ((variant = hints.lookup("urgency")) != null && variant.is_of_type(VariantType.BYTE)) {
 				this.urgency = (NotificationUrgency) variant.get_byte();
+			}
+
+			// Set the category
+			if ((variant = hints.lookup("category")) != null) {
+				this.category = variant.get_string();
 			}
 
 			// Set the application ID and app info
