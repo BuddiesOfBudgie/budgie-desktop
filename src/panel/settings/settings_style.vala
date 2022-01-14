@@ -11,9 +11,9 @@
 
 namespace Budgie {
 	/**
-     * Enumeration of where notification popups will be shown.
-     */
-    public enum SettingsNotificationPosition {
+	 * Enumeration of where notification popups will be shown.
+	 */
+	public enum SettingsNotificationPosition {
 		TOP_LEFT = 1,
 		TOP_RIGHT = 2,
 		BOTTOM_LEFT = 3,

@@ -25,10 +25,10 @@
 		UNDEFINED = 4
 	}
 
-    /**
-     * Enumeration of where notification popups will be shown.
-     */
-    public enum NotificationPosition {
+	/**
+	 * Enumeration of where notification popups will be shown.
+	 */
+	public enum NotificationPosition {
 		TOP_LEFT = 1,
 		TOP_RIGHT = 2,
 		BOTTOM_LEFT = 3,
@@ -44,7 +44,7 @@
 		CRITICAL = 2
 	}
 
-     /**
+	 /**
 	 * This is our wrapper class for a FreeDesktop notification.
 	 */
 	public class Notification : Object {
@@ -70,7 +70,7 @@
 		public Gtk.Image? image { get; set; default = null; }
 
 		private static Regex entity_regex;
-    	private static Regex tag_regex;
+		private static Regex tag_regex;
 
 		public Notification(
 			uint32 id,

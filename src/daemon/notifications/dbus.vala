@@ -149,7 +149,7 @@
 		 */
 		public void GetServerInformation(out string name, out string vendor,
 			out string version, out string spec_version) throws DBusError, IOError {
-			name = "Raven"; // TODO: Should this still be Raven?
+			name = "Budgie Notification Server";
 			vendor = "Budgie Desktop Developers";
 			version = Budgie.VERSION;
 			spec_version = "1.2";
@@ -180,53 +180,78 @@
 
 			// Check for DoNotDisturb
 			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == NotificationUrgency.CRITICAL;
-			if (should_notify) {
-				string settings_app_name = app_name;
-				bool should_show = true; // Default to showing notification
-
-				// If this notification has a desktop entry in the hints,
-				// set the app name to get the settings for to it.
-				if ("desktop-entry" in hints) {
-					settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
-				}
-
-				// Get the application settings
-				var app_notification_settings = new Settings.full(
-					SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
-					null,
-					"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
+			if (!should_notify) {
+				this.dispatcher.NotificationAdded(
+					app_name,
+					id,
+					app_icon,
+					summary,
+					body,
+					actions,
+					hints,
+					expire_timeout
 				);
+				return id;
+			}
 
-				should_show = app_notification_settings.get_boolean("enable") &&
-								app_notification_settings.get_boolean("show-banners") &&
-								!this.dispatcher.notifications_paused;
+			string settings_app_name = app_name;
+			bool should_show = true; // Default to showing notification
 
-				// Add a new notification popup if we should show one
-				if (should_show) {
-					// If there is already a popup with this ID, replace it
-					if (this.popups.contains(id) && this.popups[id] != null) {
-						this.popups[id].replace(notification);
-					} else {
-						this.popups[id] = new Popup(this, notification);
-						this.configure_window(this.popups[id]);
-						this.latest_popup_id = id;
-						this.popups[id].show_all();
-						this.popups[id].begin_decay(expire_timeout);
+			// If this notification has a desktop entry in the hints,
+			// set the app name to get the settings for to it.
+			if ("desktop-entry" in hints) {
+				settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
+			}
 
-						this.popups[id].ActionInvoked.connect((action_key) => {
-							this.ActionInvoked(id, action_key);
-						});
+			// Get the application settings
+			var app_notification_settings = new Settings.full(
+				SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
+				null,
+				"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
+			);
 
-						this.popups[id].Closed.connect((reason) => {
-							if (this.popups.length == 1 && this.latest_popup_id == id) {
-								this.latest_popup_id = 0;
-							}
-							this.popups.remove(id);
-							this.dispatcher.NotificationClosed(id, app_name, reason);
-							this.NotificationClosed(id, reason);
-						});
+			should_show = app_notification_settings.get_boolean("enable") &&
+							app_notification_settings.get_boolean("show-banners") &&
+							!this.dispatcher.notifications_paused;
+
+			// Early return if we're not showing a popup
+			if (!should_show) {
+				this.dispatcher.NotificationAdded(
+					app_name,
+					id,
+					app_icon,
+					summary,
+					body,
+					actions,
+					hints,
+					expire_timeout
+				);
+				return id;
+			}
+
+			// Add a new notification popup if we should show one
+			// If there is already a popup with this ID, replace it
+			if (this.popups.contains(id) && this.popups[id] != null) {
+				this.popups[id].replace(notification);
+			} else {
+				this.popups[id] = new Popup(this, notification);
+				this.configure_window(this.popups[id]);
+				this.latest_popup_id = id;
+				this.popups[id].show_all();
+				this.popups[id].begin_decay(expire_timeout);
+
+				this.popups[id].ActionInvoked.connect((action_key) => {
+					this.ActionInvoked(id, action_key);
+				});
+
+				this.popups[id].Closed.connect((reason) => {
+					if (this.popups.length == 1 && this.latest_popup_id == id) {
+						this.latest_popup_id = 0;
 					}
-				}
+					this.popups.remove(id);
+					this.dispatcher.NotificationClosed(id, app_name, reason);
+					this.NotificationClosed(id, reason);
+				});
 			}
 
 			this.dispatcher.NotificationAdded(
@@ -264,15 +289,14 @@
 		 * Configures the location of a notification popup.
 		 */
 		private void configure_window(Popup? popup) {
-			int x;
-			int y;
-
 			var screen = Gdk.Screen.get_default();
 
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
 			Gdk.Rectangle rect = mon.get_geometry();
 
 			/* Set the x, y position of the notification */
+			int x;
+			int y;
 			calculate_position(popup, rect, out x, out y);
 			popup.move(x, y);
 		}

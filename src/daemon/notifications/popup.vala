@@ -10,11 +10,11 @@
  */
 
 namespace Budgie.Notifications {
-    public const int NOTIFICATION_WIDTH = 400;
+	public const int NOTIFICATION_WIDTH = 400;
 	public const int MIN_TIMEOUT = 4000;
 	public const int MAX_TIMEOUT = 10000;
 
-    /**
+	/**
 	 * This class is a notification popup with no content in it.
 	 */
 	public class PopupBase : Gtk.Window {

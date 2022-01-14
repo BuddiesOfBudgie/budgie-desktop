@@ -93,7 +93,7 @@ namespace Budgie {
 				remove_notification(id); // Remove the current one first
 			}
 
-            var widget = new NotificationWidget(notification);
+			var widget = new NotificationWidget(notification);
 
 			notifications.insert(id, widget);
 			list.prepend(widget); // Most recent should be at the top
