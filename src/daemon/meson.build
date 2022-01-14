@@ -17,6 +17,8 @@ daemon_resources = gnome.compile_resources(
 
 daemon_sources = [
     'endsession.vala',
+    'notifications/dbus.vala',
+    'notifications/popup.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
@@ -31,6 +33,8 @@ daemon_deps = [
     dep_gdkx11,
     dep_notify,
     dep_wnck,
+    link_libbudgieprivate,
+    libplugin_vapi,
     link_libappsys,
     link_libconfig,
     link_libtheme,

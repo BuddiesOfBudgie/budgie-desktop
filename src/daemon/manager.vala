@@ -20,6 +20,7 @@ namespace Budgie {
 
 		/* On Screen Display */
 		Budgie.OSDManager? osd;
+		Budgie.Notifications.Server? notifications;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
 
@@ -36,6 +37,7 @@ namespace Budgie {
 			});
 			osd = new Budgie.OSDManager();
 			osd.setup_dbus(replace);
+			notifications = new Budgie.Notifications.Server();
 			menus = new Budgie.MenuManager();
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();

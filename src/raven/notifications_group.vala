@@ -15,7 +15,7 @@ namespace Budgie {
 	 */
 	public class NotificationGroup : Gtk.Box {
 		public int? count = 0;
-		private HashTable<uint,NotificationClone>? notifications = null;
+		private HashTable<uint32, NotificationWidget>? notifications = null;
 		private Gtk.ListBox? list = null;
 		private Gtk.Box? header = null;
 		private Gtk.Image? app_image = null;
@@ -27,7 +27,7 @@ namespace Budgie {
 		 * Signals
 		 */
 		public signal void dismissed_group(string app_name);
-		public signal void dismissed_notification(uint id);
+		public signal void dismissed_notification(uint32 id);
 
 		public NotificationGroup(string c_app_icon, string c_app_name) {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
@@ -47,7 +47,7 @@ namespace Budgie {
 				app_name = _("Caffeine Mode");
 			}
 
-			notifications = new HashTable<uint,NotificationClone>(direct_hash, direct_equal);
+			notifications = new HashTable<uint32, NotificationWidget>(direct_hash, direct_equal);
 			list = new Gtk.ListBox();
 			list.can_focus = false; // Disable focus to prevent scroll on click
 			list.focus_on_click = false;
@@ -88,20 +88,18 @@ namespace Budgie {
 		/**
 		 * add_notification is responsible for adding a notification (if it doesn't exist) and updating our counter
 		 */
-		public void add_notification(uint id, NotificationClone notification) {
-			if (notification == null) {
-				return;
-			}
-
+		public void add_notification(uint32 id, Budgie.Notification notification) {
 			if (notifications.contains(id)) { // If this id already exists
 				remove_notification(id); // Remove the current one first
 			}
 
-			notifications.insert(id, notification);
-			list.prepend(notification); // Most recent should be at the top
+			var widget = new NotificationWidget(notification);
+
+			notifications.insert(id, widget);
+			list.prepend(widget); // Most recent should be at the top
 			update_count();
 
-			notification.closed_individually.connect(() => { // When this notification is closed
+			widget.closed_individually.connect(() => { // When this notification is closed
 				uint n_id = (uint) notification.id;
 				remove_notification(n_id);
 				dismissed_notification(n_id);
@@ -124,7 +122,7 @@ namespace Budgie {
 		/**
 		 * remove_notification is responsible for removing a notification (if it exists) and updating our counter
 		 */
-		public void remove_notification(uint id) {
+		public void remove_notification(uint32 id) {
 			var notification = notifications.lookup(id); // Get our notification
 
 			if (notification != null) { // If this notification exists

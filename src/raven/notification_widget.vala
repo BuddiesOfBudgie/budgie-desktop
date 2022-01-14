@@ -9,56 +9,62 @@
  * (at your option) any later version.
  */
 
+public class NotificationWidget : Gtk.Box {
+	public Budgie.Notification notification { get; construct; }
 
-public class NotificationClone : Gtk.Box {
-	public uint? id = null;
 	private Gtk.Box? header = null;
 	private Gtk.Button? dismiss_button = null;
 	private Gtk.Label? label_title = null;
 	private Gtk.Label? label_body = null;
 	private Gtk.Label? label_timestamp = null;
+
 	public signal void closed_individually();
 
-	public NotificationClone(Budgie.NotificationWindow? target) {
-		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
-		get_style_context().add_class("notification-clone");
+	public NotificationWidget(Budgie.Notification notification) {
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10, notification: notification);
+	}
 
-		id = target.id;
+	construct {
 		expand = false;
 		margin_bottom = 5;
+		get_style_context().add_class("notification-clone");
+
 		header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
 
 		dismiss_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
 		dismiss_button.get_style_context().add_class("flat");
 		dismiss_button.get_style_context().add_class("image-button");
 
-		label_title = new Gtk.Label("");
-		label_title.set_markup(Budgie.safe_markup_string(target.title));
-		label_title.ellipsize = Pango.EllipsizeMode.END;
-		label_title.halign = Gtk.Align.START;
-		label_title.justify = Gtk.Justification.LEFT;
+		label_title = new Gtk.Label(notification.summary) {
+			ellipsize = Pango.EllipsizeMode.END,
+			halign = Gtk.Align.START,
+			justify = Gtk.Justification.LEFT,
+			use_markup = true
+		};
 
-		if (target.body != "") { // If there is body content
-			label_body = new Gtk.Label("");
-			label_body.halign = Gtk.Align.START;
-			label_body.justify = Gtk.Justification.LEFT;
-			label_body.set_markup(Budgie.safe_markup_string(target.body));
-			label_body.width_chars = 30;
-			label_body.wrap = true;
-			label_body.wrap_mode = Pango.WrapMode.WORD_CHAR;
-			label_body.xalign = 0;
+		if (notification.body != "") { // If there is body content
+			label_body = new Gtk.Label(notification.body) {
+				halign = Gtk.Align.START,
+				justify = Gtk.Justification.LEFT,
+				use_markup = true,
+				width_chars = 30,
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				xalign = 0
+			};
 		}
 
-		var date = new DateTime.from_unix_local(target.timestamp);
+		var date = new DateTime.from_unix_local(notification.timestamp);
 
 		var gnome_settings = new Settings("org.gnome.desktop.interface");
 		string clock_format = gnome_settings.get_string("clock-format");
 		clock_format = (clock_format == "12h") ? date.format("%l:%M %p") : date.format("%H:%M");
 
-		label_timestamp = new Gtk.Label(clock_format);
+		label_timestamp = new Gtk.Label(clock_format) {
+			halign = Gtk.Align.START,
+			justify = Gtk.Justification.LEFT
+		};
 		label_timestamp.get_style_context().add_class("dim-label"); // Dim the label
-		label_timestamp.halign = Gtk.Align.START;
-		label_timestamp.justify = Gtk.Justification.LEFT;
 
 		/**
 		 * Start propagating our Notification box
