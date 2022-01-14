@@ -2,6 +2,7 @@
 @mixin raven($button) {
     @extend %widgets;
     @extend %menu;
+    @extend %reset_style;
     color: $fg_color;
     background-color: $raven_bg;
     transition: 170ms ease-out;
@@ -30,6 +31,10 @@
     .frame {
         margin: 0 8px;
     }
+}
+
+.raven-frame > border {
+    @extend %reset_style;
 }
 
 // Raven Trigger

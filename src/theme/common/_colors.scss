@@ -23,7 +23,7 @@ $raven_expander_border: if($variant == 'default', $raven_expander_bg, $raven_bor
 $raven_background_bg: if($variant == 'default', transparentize(#1A1D26, 0.6), $raven_bg);
 $raven_background_border: if($variant == 'default', $raven_background_bg, $raven_border);
 
-$mpris_overlay_bg: darken($raven_bg, 12%);
+$mpris_overlay_bg: darken(transparentize($raven_bg, 0.07), 12%);
 $mpris_overlay_fg: $fg_color;
 $mpris_overlay_border: if($variant== 'default', opacify(darken($mpris_overlay_bg, 4%), 0.05), $raven_border);
 
