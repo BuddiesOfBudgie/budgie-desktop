@@ -152,7 +152,7 @@
 						image_found = true;
 					} else if (path.has_prefix("/") || path.has_prefix("file://")) {
 						try {
-							var pixbuf = new Gdk.Pixbuf.from_file(path);
+							var pixbuf = new Gdk.Pixbuf.from_file_at_size(path, 48, 48);
 							this.image = new Gtk.Image.from_pixbuf(pixbuf);
 							image_found = true;
 						} catch (Error e) {
