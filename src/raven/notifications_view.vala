@@ -41,7 +41,7 @@ namespace Budgie {
 
 	public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
-	
+
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public interface Dispatcher : Object {
 		public abstract bool notifications_paused { get; set; default = false; }
@@ -216,34 +216,34 @@ namespace Budgie {
 				if (should_store) {
 					// Get an icon to use for this application group
 					string app_icon = ((app_name != "") && (app_name != null)) ? app_name : "applications-internet"; // Default app_icon to being the name of the app, or fallback
-	
+
 					if ((notification.image != null) && (notification.image.icon_name != null)) { // If we have an image set
 						app_icon = notification.image.icon_name; // Use the icon specified in the image
 					}
-	
+
 					app_icon = app_icon.down();
-	
+
 					if (app_icon == "image-invalid") {
 						app_icon = "applications-internet";
 					}
-	
+
 					DesktopAppInfo app_info = new DesktopAppInfo(app_name + ".desktop");
-	
+
 					if (app_info != null) {
 						if (app_info.has_key("Icon")) {
 							app_icon = app_info.get_string("Icon");
 						}
 					}
-	
+
 					// Look for an existing group. If one doesn't exist, create it
 					var group = this.notification_groups.lookup(app_name);
 					if (group == null) {
 						group = new NotificationGroup(app_icon, app_name);
 						this.listbox.add(group);
-	
+
 						group.dismissed_group.connect((app_name) => { // When we dismiss the group
 							listbox.remove(group.get_parent()); // Remove this from the listbox
-	
+
 							/**
 							* If we're not performing a clear all, steal this entry from notifications list and update our child count
 							* Performing a steal seems to affect a .foreach call, so best to avoid this.
@@ -252,18 +252,18 @@ namespace Budgie {
 								notification_groups.steal(app_name); // Remove notifications group from list
 								update_child_count();
 							}
-	
+
 							Raven.get_instance().ReadNotifications(); // Update our counter
 						});
-	
+
 						group.dismissed_notification.connect((id) => {
 							update_child_count();
 							Raven.get_instance().ReadNotifications(); // Update our counter
 						});
-	
+
 						notification_groups.insert(app_name, group);
 					}
-	
+
 					// Add the notification to the group, and notify Raven
 					group.add_notification(id, notification);
 					group.show_all();

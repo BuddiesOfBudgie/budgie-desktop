@@ -10,7 +10,7 @@
  */
 
  namespace Budgie.Notifications {
-    public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
+	public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
@@ -67,25 +67,25 @@
 	 */
 	[DBus (name="org.freedesktop.Notifications")]
 	public class Server : Object {
-        private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
+		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
 
 		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications";
 		private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications";
-		
+
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
-        /** Spacing between notification popups */
-        private const int BUFFER_ZONE = 10;
-        /** Spacing between the first notification and the edge of the screen */
-	    private const int INITIAL_BUFFER_ZONE = 45;
+		/** Spacing between notification popups */
+		private const int BUFFER_ZONE = 10;
+		/** Spacing between the first notification and the edge of the screen */
+		private const int INITIAL_BUFFER_ZONE = 45;
 
 		private uint32 notif_id = 0;
 
 		private Dispatcher dispatcher { get; private set; default = null; }
 		private HashTable<uint32, Popup> popups;
 		private Settings notification_settings { private get; private set; default = null; }
-        private Settings panel_settings { private get; private set; default = null; }
+		private Settings panel_settings { private get; private set; default = null; }
 
 		private uint32 latest_popup_id { private get; private set; default = 0; }
 
@@ -101,7 +101,7 @@
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
 			this.notification_settings = new Settings(NOTIFICATION_SCHEMA);
-            this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
+			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -114,7 +114,7 @@
 
 		/**
 		 * Signal emitted when one of the following occurs:
-		 *   - When the user performs some global "invoking" action upon a notification. 
+		 *   - When the user performs some global "invoking" action upon a notification.
 		 * 	   For instance, clicking somewhere on the notification itself.
 		 *   - The user invokes a specific action as specified in the original Notify request.
 		 *     For example, clicking on an action button.
@@ -160,10 +160,10 @@
 		 *
 		 * If replaces_id is 0, the return value is a UINT32 that represent the notification.
 		 * It is unique, and will not be reused unless a MAXINT number of notifications have been generated.
-		 * An acceptable implementation may just use an incrementing counter for the ID. The returned ID is 
+		 * An acceptable implementation may just use an incrementing counter for the ID. The returned ID is
 		 * always greater than zero. Servers must make sure not to return zero as an ID.
-		 * 
-		 * If replaces_id is not 0, the returned value is the same value as replaces_id. 
+		 *
+		 * If replaces_id is not 0, the returned value is the same value as replaces_id.
 		 */
 		public uint32 Notify(
 			string app_name,
@@ -183,24 +183,24 @@
 			if (should_notify) {
 				string settings_app_name = app_name;
 				bool should_show = true; // Default to showing notification
-	
+
 				// If this notification has a desktop entry in the hints,
 				// set the app name to get the settings for to it.
 				if ("desktop-entry" in hints) {
 					settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
 				}
-	
+
 				// Get the application settings
 				var app_notification_settings = new Settings.full(
 					SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
 					null,
 					"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
 				);
-	
+
 				should_show = app_notification_settings.get_boolean("enable") &&
 								app_notification_settings.get_boolean("show-banners") &&
 								!this.dispatcher.notifications_paused;
-	
+
 				// Add a new notification popup if we should show one
 				if (should_show) {
 					// If there is already a popup with this ID, replace it
@@ -212,11 +212,11 @@
 						this.latest_popup_id = id;
 						this.popups[id].show_all();
 						this.popups[id].begin_decay(expire_timeout);
-	
+
 						this.popups[id].ActionInvoked.connect((action_key) => {
 							this.ActionInvoked(id, action_key);
 						});
-	
+
 						this.popups[id].Closed.connect((reason) => {
 							if (this.popups.length == 1 && this.latest_popup_id == id) {
 								this.latest_popup_id = 0;
@@ -244,7 +244,7 @@
 
 		/**
 		 * Causes a notification to be forcefully closed and removed from the user's view.
-		 * It can be used, for example, in the event that what the notification pertains to is no longer relevant, 
+		 * It can be used, for example, in the event that what the notification pertains to is no longer relevant,
 		 * or to cancel a notification with no expiration time.
 		 *
 		 * Per the spec, a blank DBusError should be thrown if the notification doesn't exist when this is called.
@@ -260,10 +260,10 @@
 			throw new DBusError.FAILED("");
 		}
 
-        /**
-         * Configures the location of a notification popup.
-         */
-        private void configure_window(Popup? popup) {
+		/**
+		 * Configures the location of a notification popup.
+		 */
+		private void configure_window(Popup? popup) {
 			int x;
 			int y;
 

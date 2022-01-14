@@ -19,9 +19,9 @@ namespace Budgie.Notifications {
 	 */
 	public class PopupBase : Gtk.Window {
 		protected Gtk.Stack content_stack;
-		
+
 		private uint expire_id { get; private set; }
-		
+
 		public signal void Closed(NotificationCloseReason reason);
 
 		construct {
@@ -78,7 +78,7 @@ namespace Budgie.Notifications {
 			if (this.expire_id != 0) {
 				Source.remove(this.expire_id);
 			}
-			
+
 			var t = timeout;
 			if (timeout < MIN_TIMEOUT) {
 				t = MIN_TIMEOUT;
@@ -207,12 +207,12 @@ namespace Budgie.Notifications {
 
 			var new_contents = new Body(new_notif);
 			content_box.add(new_contents);
-			
+
 			new_contents.Closed.connect(() => {
 				this.Closed(NotificationCloseReason.DISMISSED);
 				this.dismiss();
 			});
-			
+
 			// Add notification actions if any are present
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
@@ -223,7 +223,7 @@ namespace Budgie.Notifications {
 			}
 
 			content_box.show_all();
-			
+
 			this.content_stack.add(content_box);
 			this.content_stack.visible_child = content_box;
 			this.show_all();

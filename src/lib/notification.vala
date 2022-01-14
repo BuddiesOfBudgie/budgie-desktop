@@ -53,7 +53,7 @@
 		public NotificationUrgency urgency { get; private set; default = NotificationUrgency.NORMAL; }
 
 		public uint32 id { get; construct; }
-		
+
 		/* Notification information */
 		public string app_name { get; construct; }
 		public HashTable<string, Variant> hints { get; construct; }
@@ -137,7 +137,7 @@
 					image_found = true;
 				}
 			}
-			
+
 			// If there was no image data, check if we have a path to the image to use.
 			if (!image_found) {
 				if (
@@ -145,7 +145,7 @@
 					(variant = hints.lookup("image_path")) != null
 				) {
 					var path = variant.get_string();
-	
+
 					if (Gtk.IconTheme.get_default().has_icon(path) && path != this.app_icon) {
 						var icon = new ThemedIcon(path);
 						this.image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
@@ -193,7 +193,7 @@
 			if (!image_found) {
 				this.image = new Gtk.Image.from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
 			}
-			
+
 			// GLib.Notification only requires summary, so make sure we have a title
 			// when body is empty.
 			if (body == "") {
