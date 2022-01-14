@@ -44,6 +44,8 @@ namespace Budgie {
 	
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public interface Dispatcher : Object {
+		public abstract bool notifications_paused { get; set; default = false; }
+
 		public signal void NotificationAdded(
 			string app_name,
 			uint32 id,
@@ -61,6 +63,8 @@ namespace Budgie {
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
 		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications";
+		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
+		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
 		private HeaderWidget? header = null;
 		private Gtk.Button button_mute;
@@ -168,6 +172,30 @@ namespace Budgie {
 			);
 
 			this.notifications[id] = notification;
+
+			string settings_app_name = app_name;
+
+			// If this notification has a desktop entry in the hints,
+			// set the app name to get the settings for to it.
+			if ("desktop-entry" in hints) {
+				settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
+			}
+
+			Settings application_settings = new Settings.full(
+				SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
+				null,
+				"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
+			);
+
+			// If popups aren't being shown, immediately call our close function to put
+			// the notification in Raven.
+			bool no_popup = this.dispatcher.notifications_paused ||
+							!this.notification_settings.get_boolean("show-banners") ||
+							!application_settings.get_boolean("show-banners");
+
+			if (no_popup) {
+				on_notification_closed(id, app_name, NotificationCloseReason.EXPIRED);
+			}
 		}
 
 		private void on_notification_closed(uint32 id, string app_name, NotificationCloseReason reason) {

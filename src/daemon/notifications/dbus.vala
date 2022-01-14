@@ -15,6 +15,12 @@
 
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
+		/**
+		 * Get or set whether or not notifications should be paused, e.g. when an app enters fullscreen
+		 * and Budgie is configured to not show notifications when there is a fullscreen app open.
+		 */
+		public bool notifications_paused { get; set; default = false; }
+
 		construct {
 			Bus.own_name(
 				BusType.SESSION,
@@ -175,7 +181,6 @@
 			// Check for DoNotDisturb
 			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == NotificationUrgency.CRITICAL;
 			if (should_notify) {
-				//Settings app_notification_settings = null;
 				string settings_app_name = app_name;
 				bool should_show = true; // Default to showing notification
 	
@@ -192,7 +197,9 @@
 					"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
 				);
 	
-				should_show = app_notification_settings.get_boolean("enable") && app_notification_settings.get_boolean("show-banners");
+				should_show = app_notification_settings.get_boolean("enable") &&
+								app_notification_settings.get_boolean("show-banners") &&
+								!this.dispatcher.notifications_paused;
 	
 				// Add a new notification popup if we should show one
 				if (should_show) {

@@ -9,12 +9,12 @@
  * (at your option) any later version.
  */
 
-private const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
-private const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
+private const string NOTIFICATIONS_DBUS_NAME = "org.budgie_desktop.Notifications";
+private const string NOTIFICATIONS_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
-[DBus (name="org.budgie_desktop.Raven")]
-public interface AbominationRavenRemote : GLib.Object {
-	public async abstract void SetPauseNotifications(bool paused) throws DBusError, IOError;
+[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
+public interface NotificationsRemote : GLib.Object {
+	public abstract bool notifications_paused { get; set; default = false; }
 }
 
 namespace Budgie.Abomination {
@@ -34,7 +34,7 @@ namespace Budgie.Abomination {
 		private HashTable<string?, unowned AppGroup?> running_app_groups; // running_app_groups is a list of app groups based on the group name
 
 		private Wnck.Screen screen = null;
-		private AbominationRavenRemote? raven_proxy = null;
+		private NotificationsRemote? notifications_proxy = null;
 
 		private ulong color_id = 0;
 
@@ -56,7 +56,7 @@ namespace Budgie.Abomination {
 
 			this.screen = Wnck.Screen.get_default();
 
-			Bus.get_proxy.begin<AbominationRavenRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, this.on_raven_get);
+			Bus.get_proxy.begin<NotificationsRemote>(BusType.SESSION, NOTIFICATIONS_DBUS_NAME, NOTIFICATIONS_DBUS_OBJECT_PATH, 0, null, this.on_dbus_get);
 
 			if (this.color_settings != null) { // gsd colors plugin schema defined
 				this.update_night_light_value();
@@ -89,9 +89,9 @@ namespace Budgie.Abomination {
 		}
 
 		/* Hold onto our Raven proxy ref */
-		public void on_raven_get(Object? o, AsyncResult? res) {
+		public void on_dbus_get(Object? o, AsyncResult? res) {
 			try {
-				this.raven_proxy = Bus.get_proxy.end(res);
+				this.notifications_proxy = Bus.get_proxy.end(res);
 			} catch (Error e) {
 				warning("Failed to gain Raven proxy: %s", e.message);
 			}
@@ -320,7 +320,7 @@ namespace Budgie.Abomination {
 
 		private void set_notifications_paused() {
 			if (this.should_pause_notifications_on_fullscreen) {
-				raven_proxy.SetPauseNotifications.begin(this.fullscreen_windows.size() >= 1);
+				notifications_proxy.notifications_paused = (this.fullscreen_windows.size() >= 1);
 			}
 		}
 
