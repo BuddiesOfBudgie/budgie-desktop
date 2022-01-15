@@ -10,15 +10,6 @@
  */
 
 namespace Budgie {
-	/**
-	 * Enumeration of where notification popups will be shown.
-	 */
-	public enum SettingsNotificationPosition {
-		TOP_LEFT = 1,
-		TOP_RIGHT = 2,
-		BOTTOM_LEFT = 3,
-		BOTTOM_RIGHT = 4
-	}
 
 	/**
 	* StylePage simply provides a bunch of theme controls
@@ -97,14 +88,14 @@ namespace Budgie {
 				_("Control whether windows and controls use animations")));
 
 			/* Add options for notification position */
-			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.SettingsNotificationPosition));
+			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.NotificationPosition));
 
 			Gtk.TreeIter iter;
-			const Budgie.SettingsNotificationPosition[] positions = {
-				Budgie.SettingsNotificationPosition.TOP_LEFT,
-				Budgie.SettingsNotificationPosition.TOP_RIGHT,
-				Budgie.SettingsNotificationPosition.BOTTOM_LEFT,
-				Budgie.SettingsNotificationPosition.BOTTOM_RIGHT
+			const Budgie.NotificationPosition[] positions = {
+				Budgie.NotificationPosition.TOP_LEFT,
+				Budgie.NotificationPosition.TOP_RIGHT,
+				Budgie.NotificationPosition.BOTTOM_LEFT,
+				Budgie.NotificationPosition.BOTTOM_RIGHT
 			};
 
 			foreach (var pos in positions) {
@@ -208,15 +199,15 @@ namespace Budgie {
 		/**
 		* Get a user-friendly name for each position.
 		*/
-		public string notification_position_to_display(Budgie.SettingsNotificationPosition position) {
+		public string notification_position_to_display(Budgie.NotificationPosition position) {
 			switch (position) {
-				case SettingsNotificationPosition.TOP_LEFT:
+				case NotificationPosition.TOP_LEFT:
 					return _("Top Left");
-				case SettingsNotificationPosition.BOTTOM_LEFT:
+				case NotificationPosition.BOTTOM_LEFT:
 					return _("Bottom Left");
-				case SettingsNotificationPosition.BOTTOM_RIGHT:
+				case NotificationPosition.BOTTOM_RIGHT:
 					return _("Bottom Right");
-				case SettingsNotificationPosition.TOP_RIGHT:
+				case NotificationPosition.TOP_RIGHT:
 				default:
 					return _("Top Right");
 			}
