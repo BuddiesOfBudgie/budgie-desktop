@@ -637,7 +637,6 @@ namespace Budgie {
 				return;
 			}
 
-			actor.queue_relayout(); // Fixes weird Budgie Menu graphical glitches
 			actor.remove_all_transitions();
 
 			unowned AnimationState? state = state_map.lookup(actor);
