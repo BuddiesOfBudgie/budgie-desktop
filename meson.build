@@ -109,7 +109,7 @@ cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
 cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
-cdata.set_quoted('PACKAGE_URL', 'https://budgie-desktop.org')
+cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
 
 with_stateless = get_option('with-stateless')
 if with_stateless == true

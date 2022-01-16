@@ -1,5 +1,15 @@
 # This build ships the icon files for budgie desktop
 
+# Leveraged in budgie-control-center
+version_data = configuration_data()
+version_data.set('version', meson.project_version())
+
+version_file = configure_file(
+    input: 'budgie-version.xml.in',
+    output: 'budgie-version.xml',
+    configuration: version_data
+)
+
 actions_icons = [
     join_paths('.', 'icons', 'actions', 'notification-alert-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'notification-disabled-symbolic.svg'),
@@ -34,6 +44,11 @@ status_icons = [
 install_data(
     join_paths('.', 'backgrounds', 'default.jpg'),
     install_dir: join_paths(datadir, 'backgrounds', 'budgie')
+)
+
+install_data(
+    version_file,
+    install_dir: join_paths(datadir, 'budgie')
 )
 
 install_data(
