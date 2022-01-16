@@ -155,7 +155,7 @@ namespace Budgie {
 			info = Meta.PluginInfo() {
 				name = "Budgie WM",
 				version = Budgie.VERSION,
-				author = "Solus",
+				author = "Buddies of Budgie",
 				license = "GPL-2.0-only",
 				description = "Budgie Window Manager"
 			};
