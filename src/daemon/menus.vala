@@ -82,7 +82,7 @@ namespace Budgie {
 		* Launch main settings (gnome control center)
 		*/
 		private void settings_activate() {
-			launch_desktop_name("gnome-control-center.desktop");
+			launch_desktop_name("budgie-control-center.desktop");
 		}
 
 		/**

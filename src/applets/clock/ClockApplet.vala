@@ -190,7 +190,7 @@ public class ClockApplet : Budgie.Applet {
 
 	void on_date_activate() {
 		this.popover.hide();
-		var app_info = new DesktopAppInfo("gnome-datetime-panel.desktop");
+		var app_info = new DesktopAppInfo("budgie-datetime-panel.desktop");
 
 		if (app_info == null) {
 			return;
@@ -198,7 +198,7 @@ public class ClockApplet : Budgie.Applet {
 		try {
 			app_info.launch(null, null);
 		} catch (Error e) {
-			message("Unable to launch gnome-datetime-panel.desktop: %s", e.message);
+			message("Unable to launch budgie-datetime-panel.desktop: %s", e.message);
 		}
 	}
 

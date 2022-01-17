@@ -348,10 +348,6 @@ public class IconButton : Gtk.ToggleButton {
 			return;
 		}
 
-		if (this.class_group != null) {
-			warning("Button have both a group and a window defined");
-		}
-
 		if (this.abomination.is_disallowed_window_type(window)) {
 			return;
 		}

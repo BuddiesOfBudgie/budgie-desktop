@@ -30,7 +30,6 @@ namespace Budgie.Abomination {
 		// i.e. Chrome profile launcher, android studio emulator
 		if (name == null || name == "") {
 			name = window.get_name();
-			warning("Fallback to using window name for %s", name);
 		}
 
 		if (name != null) {

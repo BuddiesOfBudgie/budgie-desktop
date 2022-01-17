@@ -196,14 +196,14 @@ public class BluetoothIndicator : Gtk.Bin {
 	void on_settings_activate() {
 		this.popover.hide();
 
-		var app_info = new DesktopAppInfo("gnome-bluetooth-panel.desktop");
+		var app_info = new DesktopAppInfo("budgie-bluetooth-panel.desktop");
 		if (app_info == null) {
 			return;
 		}
 		try {
 			app_info.launch(null, null);
 		} catch (Error e) {
-			message("Unable to launch gnome-bluetooth-panel.desktop: %s", e.message);
+			message("Unable to launch budgie-bluetooth-panel.desktop: %s", e.message);
 		}
 	}
 

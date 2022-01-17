@@ -233,7 +233,7 @@ public class PowerIndicator : Gtk.Bin {
 	void open_power_settings() {
 		popover.hide();
 
-		var app_info = new DesktopAppInfo("gnome-power-panel.desktop");
+		var app_info = new DesktopAppInfo("budgie-power-panel.desktop");
 
 		if (app_info == null) {
 			return;

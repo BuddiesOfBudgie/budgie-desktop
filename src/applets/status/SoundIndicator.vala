@@ -339,7 +339,7 @@ public class SoundIndicator : Gtk.Bin {
 	void open_sound_settings() {
 		popover.hide();
 
-		var app_info = new DesktopAppInfo("gnome-sound-panel.desktop");
+		var app_info = new DesktopAppInfo("budgie-sound-panel.desktop");
 
 		if (app_info == null) {
 			return;
@@ -348,7 +348,7 @@ public class SoundIndicator : Gtk.Bin {
 		try {
 			app_info.launch(null, null);
 		} catch (Error e) {
-			message("Unable to launch gnome-sound-panel.desktop: %s", e.message);
+			message("Unable to launch budgie-sound-panel.desktop: %s", e.message);
 		}
 	}
 }

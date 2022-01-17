@@ -54,7 +54,7 @@ namespace NightLight {
 
 		[GtkCallback]
 		private void open_settings() {
-			DesktopAppInfo app_info = new DesktopAppInfo("gnome-display-panel.desktop");
+			DesktopAppInfo app_info = new DesktopAppInfo("budgie-display-panel.desktop");
 
 			if (app_info == null) {
 				return;
@@ -64,7 +64,7 @@ namespace NightLight {
 				this.hide();
 				app_info.launch(null, null);
 			} catch (Error e) {
-				message("Unable to launch gnome-display-panel.desktop: %s", e.message);
+				message("Unable to launch budgie-display-panel.desktop: %s", e.message);
 			}
 		}
 	}

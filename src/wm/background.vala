@@ -16,7 +16,7 @@ namespace Budgie {
 	public const string SECONDARY_COLOR_KEY = "secondary-color";
 	public const string COLOR_SHADING_TYPE_KEY = "color-shading-type";
 	public const string BACKGROUND_STYLE_KEY = "picture-options";
-	public const string GNOME_COLOR_HACK = "gnome-control-center/pixmaps/noise-texture-light.png";
+	public const string GNOME_COLOR_HACK = "budgie-control-center/pixmaps/noise-texture-light.png";
 	public const string ACCOUNTS_SCHEMA = "org.freedesktop.Accounts";
 
 	public class BudgieBackground : Clutter.Actor {
