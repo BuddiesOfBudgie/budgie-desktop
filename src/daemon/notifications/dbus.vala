@@ -16,6 +16,11 @@
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
 		/**
+		 * Do Not Disturb property.
+		 */
+		private bool dnd { get; private set; default = false; }
+
+		/**
 		 * Get or set whether or not notifications should be paused, e.g. when an app enters fullscreen
 		 * and Budgie is configured to not show notifications when there is a fullscreen app open.
 		 */
@@ -40,6 +45,11 @@
 		}
 
 		/**
+		 * Signal emitted when Do Not Disturb is toggled.
+		 */
+		public signal void DoNotDisturbChanged(bool value);
+
+		/**
 		 * Signal emitted when a new notification comes in.
 		 *
 		 * The id might be a replacement id. It is up to the client to check for this
@@ -60,6 +70,21 @@
 		 * Signal emitted when a notification is closed.
 		 */
 		public signal void NotificationClosed(uint32 id, string app_name, NotificationCloseReason reason);
+
+		/**
+		 * Returns if Do Not Disturb mode is enabled or not.
+		 */
+		public bool get_do_not_disturb() throws DBusError, IOError {
+			return this.dnd;
+		}
+
+		/**
+		 * Toggles if Do Not Disturb mode is enabled or not.
+		 */
+		public void toggle_do_not_disturb() throws DBusError, IOError {
+			this.dnd = !this.dnd;
+			this.DoNotDisturbChanged(this.dnd);
+		}
 	}
 
 	/**
@@ -68,9 +93,6 @@
 	[DBus (name="org.freedesktop.Notifications")]
 	public class Server : Object {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
-
-		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications";
-		private const string NOTIFICATION_PREFIX = "/org/gnome/desktop/notifications";
 
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
@@ -84,7 +106,6 @@
 
 		private Dispatcher dispatcher { get; private set; default = null; }
 		private HashTable<uint32, Popup> popups;
-		private Settings notification_settings { private get; private set; default = null; }
 		private Settings panel_settings { private get; private set; default = null; }
 
 		private uint32 latest_popup_id { private get; private set; default = 0; }
@@ -100,7 +121,6 @@
 			this.dispatcher = new Dispatcher();
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
-			this.notification_settings = new Settings(NOTIFICATION_SCHEMA);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
@@ -179,7 +199,7 @@
 			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expire_timeout);
 
 			// Check for DoNotDisturb
-			var should_notify = this.notification_settings.get_boolean("show-banners") || notification.urgency == NotificationUrgency.CRITICAL;
+			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationUrgency.CRITICAL;
 			if (!should_notify) {
 				this.dispatcher.NotificationAdded(
 					app_name,
