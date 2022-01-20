@@ -146,8 +146,7 @@ namespace Budgie {
 				this.dispatcher.NotificationClosed.connect(on_notification_closed);
 
 				this.do_not_disturb = this.dispatcher.get_do_not_disturb();
-				var image = this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled;
-				this.button_mute.set_image(image);
+				this.button_mute.set_image(this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled);
 			} catch (Error e) {
 				critical("Unable to connect to notifications dispatcher: %s", e.message);
 			}
