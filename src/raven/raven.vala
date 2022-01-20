@@ -43,8 +43,6 @@ namespace Budgie {
 	[DBus (name="org.budgie_desktop.Raven")]
 	public class RavenIface {
 		private Raven? parent = null;
-		[DBus (visible=false)]
-		private bool dnd_enabled = false;
 
 		[DBus (visible=false)]
 		public uint notifications = 0;
@@ -141,29 +139,6 @@ namespace Budgie {
 
 		public string get_version() throws DBusError, IOError {
 			return "1";
-		}
-
-		/**
-		* Do Not Disturb Functionality
-		*/
-		public signal void DoNotDisturbChanged(bool active);
-
-		public bool GetDoNotDisturbState() throws DBusError, IOError {
-			return this.dnd_enabled;
-		}
-
-		public void SetDoNotDisturb(bool enable) throws DBusError, IOError {
-			this.dnd_enabled = enable;
-			this.DoNotDisturbChanged(this.dnd_enabled);
-		}
-
-		/**
-		* Notification pausing on fullscreen functionality
-		*/
-		public signal void PauseNotificationsChanged(bool paused);
-
-		public void SetPauseNotifications(bool paused) throws DBusError, IOError {
-			PauseNotificationsChanged(paused);
 		}
 	}
 
@@ -265,14 +240,6 @@ namespace Budgie {
 
 		public static unowned Raven? get_instance() {
 			return Raven._instance;
-		}
-
-		public void set_dnd_state(bool active) {
-			try {
-				this.iface.SetDoNotDisturb(active); // Set the active state of our RavenIFace DND
-			} catch (Error e) {
-				warning("Error in Raven | Failed to set Do Not Disturb state: %s", e.message);
-			}
 		}
 
 		public void set_notification_count(uint count) {

@@ -58,11 +58,13 @@ namespace Budgie {
 		);
 
 		public signal void NotificationClosed(uint32 id, string app_name, NotificationCloseReason reason);
+
+		public abstract bool get_do_not_disturb() throws DBusError, IOError;
+		public abstract void toggle_do_not_disturb() throws DBusError, IOError;
 	}
 
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
-		private const string NOTIFICATION_SCHEMA = "org.gnome.desktop.notifications";
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
@@ -73,17 +75,16 @@ namespace Budgie {
 		private Gtk.Image image_notifications_disabled = new Gtk.Image.from_icon_name("notification-disabled-symbolic", Gtk.IconSize.MENU);
 		private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
 
+		private bool do_not_disturb { get; private set; default = false; }
 		private bool performing_clear_all { get; private set; default = false; }
 
 		private Dispatcher dispatcher { private get; private set; default = null; }
 		private HashTable<uint32, Budgie.Notification> notifications { private get; private set; default = null; }
 		private HashTable<string, NotificationGroup> notification_groups { private get; private set; default = null; }
 		private Settings budgie_settings { private get; private set; default = null; }
-		private Settings notification_settings { private get; private set; default = null; }
 
 		construct {
 			this.budgie_settings = new Settings(BUDGIE_PANEL_SCHEMA);
-			this.notification_settings = new Settings(NOTIFICATION_SCHEMA);
 
 			this.orientation = Gtk.Orientation.VERTICAL;
 			this.spacing = 0;
@@ -95,8 +96,6 @@ namespace Budgie {
 			clear_notifications_button.get_style_context().add_class("clear-all-notifications");
 
 			button_mute = new Gtk.Button();
-			var image = notification_settings.get_boolean("show-banners") ? image_notifications_enabled : image_notifications_disabled;
-			button_mute.set_image(image);
 			button_mute.relief = Gtk.ReliefStyle.NONE;
 			button_mute.get_style_context().add_class("do-not-disturb");
 
@@ -145,6 +144,9 @@ namespace Budgie {
 				this.dispatcher = Bus.get_proxy.end(res);
 				this.dispatcher.NotificationAdded.connect(on_notification_added);
 				this.dispatcher.NotificationClosed.connect(on_notification_closed);
+
+				this.do_not_disturb = this.dispatcher.get_do_not_disturb();
+				this.button_mute.set_image(this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled);
 			} catch (Error e) {
 				critical("Unable to connect to notifications dispatcher: %s", e.message);
 			}
@@ -189,8 +191,8 @@ namespace Budgie {
 
 			// If popups aren't being shown, immediately call our close function to put
 			// the notification in Raven.
-			bool no_popup = this.dispatcher.notifications_paused ||
-							!this.notification_settings.get_boolean("show-banners") ||
+			bool no_popup = this.do_not_disturb ||
+							this.dispatcher.notifications_paused ||
 							!application_settings.get_boolean("show-banners");
 
 			if (no_popup) {
@@ -313,10 +315,14 @@ namespace Budgie {
 		}
 
 		void do_not_disturb_toggle() {
-			var current = this.notification_settings.get_boolean("show-banners");
-			this.notification_settings.set_boolean("show-banners", !current);
-			button_mute.set_image(!current ? image_notifications_enabled : image_notifications_disabled);
-			Raven.get_instance().set_dnd_state(current);
+			this.do_not_disturb = !this.do_not_disturb;
+			this.button_mute.set_image(!this.do_not_disturb ? image_notifications_enabled : image_notifications_disabled);
+
+			try {
+				this.dispatcher.toggle_do_not_disturb();
+			} catch (Error e) {
+				warning("Unable to toggle Do Not Disturb: %s", e.message);
+			}
 		}
 	}
 }
