@@ -113,7 +113,7 @@
 			}
 
 			// Set the category
-			if ((variant = hints.lookup("category")) != null) {
+			if ((variant = hints.lookup("category")) != null && variant.is_of_type(VariantType.STRING)) {
 				this.category = variant.get_string();
 			}
 

@@ -213,8 +213,9 @@ namespace Budgie {
 				string[] spam_apps = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_APPS);
 				string[] spam_categories = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
 
+				var app_id = (notification.app_id != null) ? notification.app_id : app_name;
 				bool should_store = !(notification.category != null && notification.category in spam_categories) &&
-									!(app_name != null && app_name in spam_apps);
+									!(app_id != null && app_id in spam_apps);
 				if (should_store) {
 					// Get an icon to use for this application group
 					string app_icon = ((app_name != "") && (app_name != null)) ? app_name : "applications-internet"; // Default app_icon to being the name of the app, or fallback
