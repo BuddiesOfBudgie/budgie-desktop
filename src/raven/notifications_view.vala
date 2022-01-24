@@ -230,21 +230,23 @@ namespace Budgie {
 						app_icon = "applications-internet";
 					}
 
-					DesktopAppInfo app_info = new DesktopAppInfo(app_name + ".desktop");
-
-					if (app_info != null) {
-						if (app_info.has_key("Icon")) {
-							app_icon = app_info.get_string("Icon");
+					var name = notification.app_name;
+					if (notification.app_info != null) {
+						if (notification.app_info.has_key("Icon")) {
+							app_icon = notification.app_info.get_string("Icon");
+						}
+						if (notification.app_info.has_key("Name")) {
+							name = notification.app_info.get_string("Name");
 						}
 					}
 
 					// Look for an existing group. If one doesn't exist, create it
-					var group = this.notification_groups.lookup(app_name);
+					var group = this.notification_groups.lookup(name);
 					if (group == null) {
-						group = new NotificationGroup(app_icon, app_name);
+						group = new NotificationGroup(app_icon, name);
 						this.listbox.add(group);
 
-						group.dismissed_group.connect((app_name) => { // When we dismiss the group
+						group.dismissed_group.connect((name) => { // When we dismiss the group
 							listbox.remove(group.get_parent()); // Remove this from the listbox
 
 							/**
@@ -252,7 +254,7 @@ namespace Budgie {
 							* Performing a steal seems to affect a .foreach call, so best to avoid this.
 							*/
 							if (!performing_clear_all) {
-								notification_groups.steal(app_name); // Remove notifications group from list
+								notification_groups.steal(name); // Remove notifications group from list
 								update_child_count();
 							}
 
@@ -264,7 +266,7 @@ namespace Budgie {
 							Raven.get_instance().ReadNotifications(); // Update our counter
 						});
 
-						notification_groups.insert(app_name, group);
+						notification_groups.insert(name, group);
 					}
 
 					// Add the notification to the group, and notify Raven
