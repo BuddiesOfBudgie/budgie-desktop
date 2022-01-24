@@ -17,7 +17,7 @@ To provide the exact version of your Budgie installation, run: budgie-desktop --
 
 
 ## Operating system
-<!-- Name and version number of your Operating System, e.g. Solus 3 -->
+<!-- Name and version number of your Operating System, e.g. Solus 4 -->
 
 
 ## Steps to reproduce the issue

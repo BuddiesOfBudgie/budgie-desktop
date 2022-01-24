@@ -18,4 +18,4 @@ Please describe below the end goal you are trying to achieve that has led you to
 
 
 ### References
-<!-- Are there any other GitHub issues, whether open or closed, that are related to the problem you've described above or to the suggested solution? If so, please add them bellow: -->
+<!-- Are there any other GitHub issues, whether open or closed, that are related to the problem you've described above or to the suggested solution? If so, please add them below: -->
