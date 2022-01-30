@@ -98,11 +98,16 @@ namespace Budgie.Abomination {
 		}
 
 		/**
-		 * is_allowed_window_type will check if this specified window is an allowed type
+		 * is_disallowed_window_type will check if this specified window is a disallowed type
 		 */
-		public bool is_allowed_window_type(Wnck.Window window) {
+		public bool is_disallowed_window_type(Wnck.Window window) {
 			Wnck.WindowType win_type = window.get_window_type(); // Get the window type
-			return (Wnck.WindowType.NORMAL in win_type) || (Wnck.WindowType.TOOLBAR in win_type); // Is of type normal or toolbar
+
+			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Budgie Desktop View)
+				   (win_type == Wnck.WindowType.DIALOG) || // Dialogs
+				   (win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
+				   (win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
+				   (win_type == Wnck.WindowType.UTILITY); // Utility like a control on an emulator
 		}
 
 		public RunningApp? get_app_from_window_id(ulong window_id) {
@@ -151,7 +156,7 @@ namespace Budgie.Abomination {
 		 * add_app will add a running application based on the provided window
 		 */
 		private void add_app(Wnck.Window window) {
-			if (!this.is_allowed_window_type(window)) { // Not allowed type
+			if (this.is_disallowed_window_type(window)) { // Disallowed type
 				return;
 			}
 

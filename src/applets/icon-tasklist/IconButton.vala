@@ -348,7 +348,7 @@ public class IconButton : Gtk.ToggleButton {
 			return;
 		}
 
-		if (!this.abomination.is_allowed_window_type(window)) { // Not allowed window type
+		if (this.abomination.is_disallowed_window_type(window)) {
 			return;
 		}
 
@@ -858,7 +858,7 @@ public class IconButton : Gtk.ToggleButton {
 
 		foreach (unowned Wnck.Window window in this.class_group.get_windows()) {
 			if (window != null) {
-				if (abomination.is_allowed_window_type(window)) { // Allowed window type
+				if (!abomination.is_disallowed_window_type(window)) { // Not a disallowed window type
 					if (should_add_window(window)) { // Should add this window
 						ulong xid = window.get_xid();
 						string name = window.get_name();
