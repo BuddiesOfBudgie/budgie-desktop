@@ -23,11 +23,61 @@
         }
     }
 
+    list {
+        @extend %reset_style;
+
+        padding: 3px 0 0 5px;
+
+        > row {
+            padding: 0;
+            margin: 0;
+        }
+
+        button.flat {
+            @extend %reset_style;
+
+            transition-property: background-color, color;
+            transition: 170ms ease-out;
+            margin: 2px 0;
+            padding: 4px 8px;
+            border-radius: 3px;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active {
+                color: $selected_fg_color;
+                background-color: $selected_bg_color;
+            }
+
+            box {
+                @extend %reset_style;
+
+                label, image {
+                    padding: 0;
+                }
+
+                image {
+                    padding-right: 2px;
+                }
+            }
+        }
+    }
+
+    .categories {
+        @extend %reset_style;
+
+        margin: 0;
+        padding: 0 5px 0 0;
+        border-right: 1px solid transparentize(white, 0.9);
+    }
+
     .category-button {
         @extend %reset_style;
 
-        padding: 8px;
-        border-radius: 0;
+        margin: 2px 0;
+        padding: 6px 0;
+        border-radius: 3px;
+        transition-property: background-color, color;
+        transition: 170ms ease-out;
 
         &:hover { background-color: transparentize(white, 0.9); }
         &:active, &:checked {
