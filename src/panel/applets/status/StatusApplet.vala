@@ -30,6 +30,7 @@ public class StatusSettings : Gtk.Grid {
 public class StatusApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
 	protected Gtk.Box widget;
+	protected NetworkIndicator net;
 	protected BluetoothIndicator blue;
 	protected SoundIndicator sound;
 	protected PowerIndicator power;
@@ -77,6 +78,10 @@ public class StatusApplet : Budgie.Applet {
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 
+		net = new NetworkIndicator();
+		widget.pack_start(net, false, false, 0);
+		net.show_all();
+
 		sound = new SoundIndicator();
 		widget.pack_start(sound, false, false, 0);
 		sound.show_all();
@@ -84,6 +89,7 @@ public class StatusApplet : Budgie.Applet {
 		/* Hook up the popovers */
 		this.setup_popover(power.ebox, power.popover);
 		this.setup_popover(sound.ebox, sound.popover);
+		this.setup_popover(net.ebox, net.popover);
 
 		blue = new BluetoothIndicator();
 		widget.pack_start(blue, false, false, 0);
@@ -105,6 +111,7 @@ public class StatusApplet : Budgie.Applet {
 		manager.register_popover(power.ebox, power.popover);
 		manager.register_popover(sound.ebox, sound.popover);
 		manager.register_popover(blue.ebox, blue.popover);
+		manager.register_popover(net.ebox, net.popover);
 	}
 
 	public override bool supports_settings() {

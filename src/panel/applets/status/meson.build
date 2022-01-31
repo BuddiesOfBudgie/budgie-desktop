@@ -20,6 +20,7 @@ applet_status_resources = gnome.compile_resources(
 
 applet_status_sources = [
     'BluetoothIndicator.vala',
+    'NetworkIndicator.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
     'SoundIndicator.vala',
