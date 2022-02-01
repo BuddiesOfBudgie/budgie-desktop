@@ -39,3 +39,8 @@ $scrollbar_bg: if($variant == 'default', white, black);
 $scrollbar_border: if($variant == 'default', black, white);
 
 $trough_bg: if($variant == 'default', opacify($button_bg, 0.14), lighten($button_border, 20%));
+
+// budgie-specific colors
+@define-color budgie_tasklist_indicator_color #{"" + $selected_bg_color};
+@define-color budgie_tasklist_indicator_color_active #{"" + $selected_bg_color};
+@define-color budgie_tasklist_indicator_color_active_window #{"" + saturate(lighten($selected_bg_color, 24%), 36%)};
