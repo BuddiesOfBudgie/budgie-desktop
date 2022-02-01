@@ -11,6 +11,7 @@
         @extend %reset_style;
 
         padding: 6px 0;
+        font-size: 14px;
 
         border-bottom: 2px solid transparentize($selected_bg_color, 0.5);
         border-radius: 0;
