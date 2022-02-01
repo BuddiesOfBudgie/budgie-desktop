@@ -163,7 +163,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 		this.panel_position = position;
 		bool vertical = (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT);
 		int margin = vertical ? 0 : 3;
-		img.set_margin_end(margin);
+		label.set_margin_start(margin);
 		on_settings_changed("enable-menu-label");
 	}
 
