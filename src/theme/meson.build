@@ -15,6 +15,38 @@ theme_versions = [
     '3.20',
 ]
 
+sass_depend_files = files([
+    'common/_borders.scss',
+    'common/_colors.scss',
+    'common/_dialogs.scss',
+    'common/_drawing.scss',
+    'common/_functions.scss',
+    'common/_icon_tasklist.scss',
+    'common/_imports.scss',
+    'common/_menubar.scss',
+    'common/_menu.scss',
+    'common/_nightlight.scss',
+    'common/_notifications.scss',
+    'common/_panel.scss',
+    'common/_places.scss',
+    'common/_popover.scss',
+    'common/_raven.scss',
+    'common/_resets.scss',
+    'common/_switcher.scss',
+    'common/_underscores.scss',
+    'common/_workspaces.scss',
+    'common/widgets/_base.scss',
+    'common/widgets/_button.scss',
+    'common/widgets/_calendar.scss',
+    'common/widgets/_check_radio.scss',
+    'common/widgets/_imports.scss',
+    'common/widgets/_linked.scss',
+    'common/widgets/_lists.scss',
+    'common/widgets/_menu.scss',
+    'common/widgets/_progressbar.scss',
+    'common/widgets/_scrollbar.scss',
+])
+
 foreach version : theme_versions
     foreach variant : theme_variants
         # Build the main CSS stylesheet
@@ -22,6 +54,8 @@ foreach version : theme_versions
             input: version + '/theme' + variant + '.scss',
             output: 'theme' + variant + '_' + version + '.css',
             command: [sassc, '-M', '-t', 'compressed', '@INPUT@', '@OUTPUT@'],
+            depend_files: sass_depend_files,
+            build_by_default: true,
         )
     endforeach
 endforeach
