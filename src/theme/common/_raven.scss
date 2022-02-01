@@ -3,6 +3,7 @@
     @extend %widgets;
     @extend %menu;
     @extend %reset_style;
+
     color: $fg_color;
     background-color: $raven_bg;
     transition: 170ms ease-out;
