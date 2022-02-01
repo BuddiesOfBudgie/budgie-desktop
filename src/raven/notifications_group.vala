@@ -73,6 +73,7 @@ namespace Budgie {
 			dismiss_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
 			dismiss_button.get_style_context().add_class("flat");
 			dismiss_button.get_style_context().add_class("image-button");
+			dismiss_button.valign = Gtk.Align.CENTER;
 			dismiss_button.halign = Gtk.Align.END;
 
 			dismiss_button.clicked.connect(dismiss_all);
