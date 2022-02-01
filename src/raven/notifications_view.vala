@@ -92,11 +92,13 @@ namespace Budgie {
 
 			clear_notifications_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU);
 			clear_notifications_button.relief = Gtk.ReliefStyle.NONE;
+			clear_notifications_button.valign = Gtk.Align.CENTER;
 			clear_notifications_button.no_show_all = true;
 			clear_notifications_button.get_style_context().add_class("clear-all-notifications");
 
 			button_mute = new Gtk.Button();
 			button_mute.relief = Gtk.ReliefStyle.NONE;
+			button_mute.valign = Gtk.Align.CENTER;
 			button_mute.get_style_context().add_class("do-not-disturb");
 
 			var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);

@@ -30,16 +30,14 @@ namespace Budgie {
 		public signal void dismissed_notification(uint32 id);
 
 		public NotificationGroup(string c_app_icon, string c_app_name) {
-			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10);
+			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 4);
 			can_focus = false; // Disable focus to prevent scroll on click
 			focus_on_click = false;
 
 			get_style_context().add_class("raven-notifications-group");
 
 			// Intentially omit _end because it messes with alignment of dismiss buttons
-			margin_start = 5;
-			margin_top = 5;
-			margin_bottom = 5;
+			margin = 4;
 
 			app_name = c_app_name;
 

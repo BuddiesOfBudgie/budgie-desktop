@@ -13,24 +13,60 @@
         background-color: $raven_expander_bg;
         padding: 4px 0;
     }
+
+    > .vertical > stack > *:not(.raven-notifications-view) > .frame {
+        margin: 0 8px;
+    }
+
     @if $variant=='default' {
         .expander-button { color: gtkalpha(currentColor, 0.5); }
     }
+
     .raven-background {
         color: $fg_color;
         background-color: $raven_background_bg;
 
         &.middle { border-bottom-style: none; }  // applet background between two headers
     }
+
+    .raven-notifications-view > .raven-background > .frame > list > row.activatable {
+        @extend %reset_style;
+
+        .raven-notifications-group {
+            padding: 2px 8px;
+            margin-bottom: 4px;
+
+            .raven-notifications-group-header {
+                padding: 0 4px;
+            }
+
+            // single notification
+            > list > row.activatable {
+                @extend %reset_style;
+
+                padding: 3px 6px;
+                margin-bottom: 4px;
+                border-radius: 3px;
+                background-color: transparentize(white, 0.9);
+                transition-property: background-color;
+
+                &:hover { background-color: transparentize(white, 0.8); }
+                &:active { background-color: transparentize(white, 0.7); }
+
+                // notification title
+                .notification-clone > box.horizontal > label {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
     .powerstrip #{$button} {
         padding: 10px;
     }
+
     .option-subtitle {
         font-size: smaller;
-    }
-
-    .frame {
-        margin: 0 8px;
     }
 }
 

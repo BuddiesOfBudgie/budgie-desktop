@@ -21,12 +21,12 @@ public class NotificationWidget : Gtk.Box {
 	public signal void closed_individually();
 
 	public NotificationWidget(Budgie.Notification notification) {
-		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 10, notification: notification);
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 4, notification: notification);
 	}
 
 	construct {
 		expand = false;
-		margin_bottom = 5;
+		margin_bottom = 4;
 		get_style_context().add_class("notification-clone");
 
 		header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
