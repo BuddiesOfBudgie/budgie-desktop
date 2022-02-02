@@ -47,11 +47,11 @@
                 padding: 3px 6px;
                 margin-bottom: 4px;
                 border-radius: 3px;
-                background-color: transparentize(white, 0.9);
+                background-color: transparent;
                 transition-property: background-color;
 
-                &:hover { background-color: transparentize(white, 0.8); }
-                &:active { background-color: transparentize(white, 0.7); }
+                &:hover { background-color: transparentize(white, 0.9); }
+                &:active { background-color: transparentize(white, 0.8); }
 
                 // notification title
                 .notification-clone > box.horizontal > label {
