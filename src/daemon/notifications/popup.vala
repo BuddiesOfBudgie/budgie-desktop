@@ -43,7 +43,7 @@ namespace Budgie.Notifications {
 
 			this.content_stack = new Gtk.Stack() {
 				transition_type = Gtk.StackTransitionType.SLIDE_LEFT,
-				border_width = 5,
+				border_width = 8,
 				halign = Gtk.Align.FILL,
 				valign = Gtk.Align.FILL,
 				vhomogeneous = false
@@ -245,14 +245,13 @@ namespace Budgie.Notifications {
 
 		construct {
 			this.orientation = Gtk.Orientation.HORIZONTAL;
-			this.margin = 3;
+			this.margin = 4;
 			this.halign = Gtk.Align.FILL;
 			this.valign = Gtk.Align.FILL;
 			this.get_style_context().add_class("budgie-notification");
 
 			var app_icon = this.notification.image;
 			app_icon.set_pixel_size(48);
-			app_icon.margin_top = 8;
 			app_icon.margin_end = 8;
 			app_icon.halign = Gtk.Align.FILL;
 			app_icon.valign = Gtk.Align.START;
@@ -261,7 +260,7 @@ namespace Budgie.Notifications {
 			var title_label = new Gtk.Label(this.notification.summary) {
 				ellipsize = Pango.EllipsizeMode.END,
 				max_width_chars = 35,
-				margin_bottom = 8,
+				margin_bottom = 5,
 				halign = Gtk.Align.START,
 				hexpand = true
 			};
@@ -315,7 +314,7 @@ namespace Budgie.Notifications {
 		construct {
 			this.orientation = Gtk.Orientation.HORIZONTAL;
 			this.layout_style = Gtk.ButtonBoxStyle.CENTER;
-			this.margin_top = 6;
+			this.margin_top = 5;
 			this.margin_bottom = 3;
 			this.halign = Gtk.Align.FILL;
 			this.get_style_context().add_class("linked");

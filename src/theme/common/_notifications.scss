@@ -1,13 +1,15 @@
 // Notifications
 .budgie-notification-window {
     background: none;
-    border-radius: 1px;
+
+    > stack {
+        border-radius: 8px;
+        padding: 8px;
+        margin: 0;
+    }
 }
 
 .budgie-notification {
-    &.background {
-        border-radius: 1px;
-    }
     .notification-title {
         font-size: 110%;
         color: $fg_color;
