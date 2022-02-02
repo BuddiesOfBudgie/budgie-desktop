@@ -1,4 +1,6 @@
 @mixin budgie-menu($image_effect, $search, $image, $insensitive, $label, $undershoot, $overshoot) {
+    @extend %reset_style;
+
     background-color: $panel_bg;
 
     .container {
@@ -6,6 +8,19 @@
     }
 
     .button:hover { -gtk-#{$image-effect}: none; }
+
+    label, #{$search} {
+        color: darken(white, 0.1);
+    }
+
+    scrollbar > contents > trough > slider {
+        transition: background-color 170ms ease-out;
+
+        background-color: transparentize(white, 0.7);
+
+        &:hover { background-color: transparentize(white, 0.5); }
+        &:active { background-color: transparentize(white, 0.3); }
+    }
 
     #{$search} {
         @extend %reset_style;
