@@ -18,8 +18,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">12</property>
-            <property name="row_spacing">8</property>
+            <property name="row_spacing">4</property>
             <property name="column_spacing">12</property>
+            <property name="margin_bottom">4</property>
             <child>
               <object class="GtkImage" id="image_icon">
                 <property name="visible">True</property>

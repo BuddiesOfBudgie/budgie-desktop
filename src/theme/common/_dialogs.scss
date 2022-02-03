@@ -47,10 +47,9 @@
 // PolKit Dialog
 .budgie-polkit-dialog {
     @extend .budgie-session-dialog;
-    @extend %menu;
 
     .message { color: transparentize($fg_color, 0.3); }
-    .failure { color: $alert_color; }
+    .failure { color: $error_color; }
 }
 
 // Run Dialog
