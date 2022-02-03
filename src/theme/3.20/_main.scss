@@ -56,11 +56,6 @@
     @include budgie_session_dialog(button);
 
     color: $fg_color;
-    background-color: $panel_bg;
-
-    decoration {
-        border-radius: 4px;
-    }
 }
 
 // Run Dialog
