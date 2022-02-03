@@ -45,6 +45,7 @@ sass_depend_files = files([
     'common/widgets/_menu.scss',
     'common/widgets/_progressbar.scss',
     'common/widgets/_scrollbar.scss',
+    '3.20/_main.scss',
 ])
 
 foreach version : theme_versions
