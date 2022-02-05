@@ -507,8 +507,8 @@ namespace Budgie {
 
 			raven_screen = primary.area;
 			if (top != null) {
-				raven_screen.y += (top.intended_size - 5);
-				raven_screen.height -= (top.intended_size - 5);
+				raven_screen.y += top.intended_size;
+				raven_screen.height -= top.intended_size;
 			}
 			if (bottom != null) {
 				raven_screen.height -= bottom.intended_size;
@@ -1085,8 +1085,8 @@ namespace Budgie {
 					geom.width = area.area.width;
 					geom.height = area.area.height;
 					if (this.is_panel_huggable(top)) {
-						geom.y += top.intended_size - 5;
-						geom.height -= top.intended_size - 5;
+						geom.y += top.intended_size;
+						geom.height -= top.intended_size;
 					}
 					if (this.is_panel_huggable(bottom)) {
 						geom.height -= bottom.intended_size;
@@ -1101,8 +1101,8 @@ namespace Budgie {
 
 			raven_screen = area.area;
 			if (top != null && !top.dock_mode && top.autohide == AutohidePolicy.NONE) {
-				raven_screen.y += (top.intended_size - 5);
-				raven_screen.height -= (top.intended_size - 5);
+				raven_screen.y += top.intended_size;
+				raven_screen.height -= top.intended_size;
 			}
 
 			if (bottom != null && !bottom.dock_mode && bottom.autohide == AutohidePolicy.NONE) {
