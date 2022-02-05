@@ -100,6 +100,7 @@ namespace Workspaces {
 
 			main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			main_layout.get_style_context().add_class("workspace-switcher");
+			main_layout.spacing = 4;
 			ebox.add(main_layout);
 
 			workspaces_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -113,6 +114,8 @@ namespace Workspaces {
 
 			Gtk.Button add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
 			add_button.get_style_context().add_class("workspace-add-button");
+			add_button.valign = Gtk.Align.CENTER;
+			add_button.halign = Gtk.Align.CENTER;
 			add_button_revealer.add(add_button);
 			main_layout.pack_start(add_button_revealer, false, false, 0);
 
@@ -285,6 +288,8 @@ namespace Workspaces {
 			revealer.add(item);
 			revealer.set_transition_type(show_transition);
 			revealer.set_transition_duration(200);
+			revealer.valign = Gtk.Align.CENTER;
+			revealer.halign = Gtk.Align.CENTER;
 			revealer.show_all();
 			workspaces_layout.pack_start(revealer, true, true, 0);
 			revealer.set_reveal_child(true);
