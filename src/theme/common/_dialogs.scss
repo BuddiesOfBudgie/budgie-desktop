@@ -12,6 +12,7 @@
 
     > box {
         background-color: $panel_bg;
+        border-radius: 8px;
     }
 
     .linked.horizontal > #{$button} {
