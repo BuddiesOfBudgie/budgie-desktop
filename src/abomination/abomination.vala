@@ -156,6 +156,13 @@ namespace Budgie.Abomination {
 		 * add_app will add a running application based on the provided window
 		 */
 		private void add_app(Wnck.Window window) {
+			// During some app closures, Wnck will incorrectly report a new window being added, one that has a valid xid and otherwise looks valid, but never has a proper name.
+			// Instead of returning NULL, Wnck.Window.get_name() will return "Untitled Window", whereas has_name will return if the window truly has a name.
+			// Preventing apps from being added when they have no name seems pretty reasonable and prevents false-positives like persistently buttons being added when apps like VLC close.
+			if (!window.has_name()) {
+				return;
+			}
+
 			if (this.is_disallowed_window_type(window)) { // Disallowed type
 				return;
 			}
