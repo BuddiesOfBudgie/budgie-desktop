@@ -54,23 +54,43 @@
         }
 
         @at-root .right, .left {
-            revealer:not(:last-child) > .workspace-item {
+            revealer > .workspace-item {
                 border-bottom: 1px solid transparentize($fg_color, 0.8);
             }
 
-            .workspace-layout {
-                padding: 1px 0;
+            revealer:first-child > .workspace-item {
+                border-top: 1px solid transparentize($fg_color, 0.8);
             }
         }
 
         @at-root .bottom, .top {
-            revealer:not(:last-child) > .workspace-item {
+            revealer > .workspace-item {
                 border-right: 1px solid transparentize($fg_color, 0.8);
+            }
+
+            revealer:first-child > .workspace-item {
+                border-left: 1px solid transparentize($fg_color, 0.8);
             }
 
             .workspace-layout {
                 padding: 0 3px;
             }
+        }
+    }
+
+    @at-root .transparent .workspace-switcher {
+        .workspace-item.current-workspace {
+            background-color: transparentize($fg_color, 0.85);
+            border: 1px solid transparentize($fg_color, 0.7);
+        }
+
+        revealer:not(:last-child) > .workspace-item {
+            border-color: transparentize($fg_color, 0.7);
+        }
+
+        .workspace-layout {
+            background-color: transparent;
+            padding: 0;
         }
     }
 }
