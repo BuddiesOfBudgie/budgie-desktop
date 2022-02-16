@@ -80,7 +80,7 @@ namespace Budgie.Notifications {
 			}
 
 			var t = timeout;
-			if (timeout < MIN_TIMEOUT) {
+			if (timeout < MIN_TIMEOUT && timeout != 0) {
 				t = MIN_TIMEOUT;
 			} else if (timeout > MAX_TIMEOUT) {
 				t = MAX_TIMEOUT;
