@@ -12,5 +12,5 @@ button-layout = 'appmenu:minimize,maximize,close'
 picture-uri = 'file:///usr/share/backgrounds/budgie/default.jpg'
 
 [org.gnome.desktop.wm.keybindings:Budgie]
-switch-input-source = '[\'<Alt>Shift_L\', \'<Super>space\', \'XF86Keyboard\']'
-switch-input-source-backward = '[\'<Super><Shift>space\', \'<Shift>XF86Keyboard\']'
+switch-input-source = ['<Alt>Shift_L', '<Super>space', 'XF86Keyboard']
+switch-input-source-backward = ['<Super><Shift>space', '<Shift>XF86Keyboard']
