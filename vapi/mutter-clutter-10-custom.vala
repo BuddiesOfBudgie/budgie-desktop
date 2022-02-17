@@ -1,14 +1,7 @@
 namespace Clutter {
 
 	public struct Color {
-		[CCode (cname = "clutter_color_from_hls")]
-		public Color.from_hls (float hue, float luminance, float saturation);
-		[CCode (cname = "clutter_color_from_pixel")]
-		public Color.from_pixel (uint32 pixel);
-		[CCode (cname = "clutter_color_from_string")]
-		public static bool from_string (out Clutter.Color color, string str);
 		public bool parse_string (string str);
-		public static unowned Clutter.Color? get_static (Clutter.StaticColor color);
 	}
 
 	public interface Container : GLib.Object {
