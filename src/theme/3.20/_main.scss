@@ -56,28 +56,56 @@
     @include budgie_session_dialog(button);
 
     color: $fg_color;
-    background-color: $panel_bg;
-
-    decoration {
-        border-radius: 4px;
-    }
 }
 
 // Run Dialog
 .budgie-run-dialog {
     @extend .budgie-session-dialog;
 
+    > box {
+        border-radius: 8px;
+        background-color: lighten($panel_bg, 10%);
+    }
+
     entry.search, entry.search:focus {
         @extend %budgie_run_dialog_entry;
+
+        background-color: transparent;
 
         image {
             @extend %budgie_run_dialog_image;
         }
     }
 
-    list row:selected .dim-label { opacity: 1; }
+    list row.activatable {
+        @extend %reset_style;
 
-    scrolledwindow { border-top: 1px solid darken($entry_border, 5%); }
+        background-color: transparent;
+        transition: background-color 170ms ease-out;
+
+        &:selected {
+            background-color: $selected_bg_color;
+
+            .dim-label {
+                opacity: 1;
+            }
+        }
+
+        &:hover { background-color: transparentize(white, 0.9); }
+
+        &:hover .dim-label, &:active .dim-label {
+            opacity: 1;
+        }
+    }
+
+    list row:selected .dim-label {
+        opacity: 1;
+    }
+
+    scrolledwindow {
+        background-color: $panel_bg;
+        border-top: 1px solid darken($entry_border, 5%);
+    }
 }
 
 // Alt+tab switcher in Budgie

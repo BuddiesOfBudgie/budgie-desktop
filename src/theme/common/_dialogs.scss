@@ -2,22 +2,54 @@
 @mixin budgie_session_dialog($button) {
     .dialog-title { font-size: 120%; }
 
+    background-color: transparent;
+    font-weight: normal;
+
+    > decoration {
+        box-shadow: 0 2px 4px $panel_shadow;
+        border-radius: 8px;
+    }
+
+    > box {
+        background-color: $panel_bg;
+        border-radius: 8px;
+    }
+
     .linked.horizontal > #{$button} {
+        @extend %reset_style;
+
         padding: 8px;
-        border-bottom: none;
-        border-radius: 0;
-        &:first-child { border-left: none; border-radius: 0; }
-        &:last-child { border-right: none; border-radius: 0; }
+        background-color: transparentize(white, 0.9);
+        transition: background-color 170ms ease-out;
+
+        &:hover { background-color: transparentize(white, 0.8); }
+        &:active { background-color: transparentize(white, 0.7); }
+
+        &:first-child { border-radius: 0 0 0 8px; }
+        &:last-child { border-radius: 0 0 8px 0; }
+
+        &.suggested-action {
+            background-color: $suggested_color;
+
+            &:hover { background-color: saturate(lighten($suggested_color, 10%), 15%); }
+            &:active { background-color: saturate(lighten($suggested_color, 20%), 30%); }
+        }
+
+        &.destructive-action {
+            background-color: $destructive_color;
+
+            &:hover { background-color: saturate(lighten($destructive_color, 10%), 15%); }
+            &:active { background-color: saturate(lighten($destructive_color, 20%), 30%); }
+        }
     }
 }
 
 // PolKit Dialog
 .budgie-polkit-dialog {
     @extend .budgie-session-dialog;
-    @extend %menu;
 
     .message { color: transparentize($fg_color, 0.3); }
-    .failure { color: $alert_color; }
+    .failure { color: $error_color; }
 }
 
 // Run Dialog

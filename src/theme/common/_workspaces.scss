@@ -29,18 +29,16 @@
     }
 
     .workspace-switcher {
-        .workspace-layout {
-            background: rgba(0,0,0,0.1);
+        .workspace-item {
+            transition: 170ms ease-out;
+            transition-property: background-color;
         }
 
-        .workspace-item {
-            &.current-workspace {
-                background: transparentize($fg_color, 0.90);
-            }
+        .workspace-item.current-workspace {
+            background-color: $panel_bg;
         }
 
         label.workspace-more-label {
-            border: 1px solid white;
             padding: 0;
             margin: 0;
         }
@@ -51,123 +49,48 @@
             background: transparent;
         }
 
-        .right &,
-        .left & {
-            .workspace-switcher {
-                .workspace-item {
-                    border-right: 1px solid transparent;
-                    border-left: 1px solid transparent;
-                }
+        .workspace-layout {
+            background-color: darken($panel_bg, 7%);
+        }
+
+        @at-root .right, .left {
+            revealer > .workspace-item {
+                border-bottom: 1px solid transparentize($fg_color, 0.8);
+            }
+
+            revealer:first-child > .workspace-item {
+                border-top: 1px solid transparentize($fg_color, 0.8);
             }
         }
 
-        .bottom &,
-        .top & {
-            .workspace-switcher {
-                .workspace-item {
-                    border-bottom: 1px solid transparent;
-                    border-top: 1px solid transparent;
-                }
+        @at-root .bottom, .top {
+            revealer > .workspace-item {
+                border-right: 1px solid transparentize($fg_color, 0.8);
             }
-        }
-    }
 
-    .budgie-panel.transparent {
-        .workspace-switcher {
-            border-color: rgba(0,0,0,0.2);
-            .workspace-item {
-                border-color: rgba(0,0,0,0.2);
+            revealer:first-child > .workspace-item {
+                border-left: 1px solid transparentize($fg_color, 0.8);
             }
-        }
 
-        .left & {
-            .workspace-switcher {
-                #{$button}.workspace-add-button {
-                    border-right: 1px solid rgba(0,0,0,0.2);
-                    border-left: 1px solid rgba(0,0,0,0.2);
-                    border-bottom: 1px solid rgba(0,0,0,0.2);
-                    border-top: 1px solid transparent;
-                }
-                .workspace-item {
-                    border-right: 1px solid rgba(0,0,0,0.2);
-                }
-            }
-        }
-
-        .top & {
-            .workspace-switcher {
-                #{$button}.workspace-add-button {
-                    border-right: 1px solid rgba(0,0,0,0.2);
-                    border-left: 1px solid transparent;
-                    border-bottom: 1px solid rgba(0,0,0,0.2);
-                    border-top: 1px solid rgba(0,0,0,0.2);
-                }
-                .workspace-item {
-                    border-bottom: 1px solid rgba(0,0,0,0.2);
-                }
-            }
-        }
-
-        .right & {
-            .workspace-switcher {
-                #{$button}.workspace-add-button {
-                    border-right: 1px solid rgba(0,0,0,0.2);
-                    border-left: 1px solid rgba(0,0,0,0.2);
-                    border-bottom: 1px solid rgba(0,0,0,0.2);
-                    border-top: 1px solid transparent;
-                }
-                .workspace-item {
-                    border-left: 1px solid rgba(0,0,0,0.2);
-                }
-            }
-        }
-
-        .bottom & {
-            .workspace-switcher {
-                #{$button}.workspace-add-button {
-                    border-right: 1px solid rgba(0,0,0,0.2);
-                    border-left: 1px solid transparent;
-                    border-bottom: 1px solid rgba(0,0,0,0.2);
-                    border-top: 1px solid rgba(0,0,0,0.2);
-                }
-                .workspace-item {
-                    border-top: 1px solid rgba(0,0,0,0.2);
-                }
+            .workspace-layout {
+                padding: 0 3px;
             }
         }
     }
 
-    .left .workspace-switcher,
-    .right .workspace-switcher {
-        border-top: 1px solid rgba(0,0,0,0.4);
-
-        .workspace-item {
-            border-bottom: 1px solid rgba(0,0,0,0.4);
-            transition: background 300ms linear;
+    @at-root .transparent .workspace-switcher {
+        .workspace-item.current-workspace {
+            background-color: transparentize($fg_color, 0.85);
+            border: 1px solid transparentize($fg_color, 0.7);
         }
 
-        #{$button}.workspace-add-button {
-            border-top: 1px solid $button_bg;
-            border-bottom: 1px solid rgba(0,0,0,0.2);
-            border-left: 1px solid $button_bg;
-            border-right: 1px solid $button_bg;
-        }
-    }
-
-    .top .workspace-switcher,
-    .bottom .workspace-switcher {
-        border-left: 1px solid rgba(0,0,0,0.4);
-
-        .workspace-item {
-            border-right: 1px solid rgba(0,0,0,0.4);
-            transition: background 300ms linear;
+        revealer:not(:last-child) > .workspace-item {
+            border-color: transparentize($fg_color, 0.7);
         }
 
-        #{$button}.workspace-add-button {
-            border-left: 1px solid $button_bg;
-            border-right: 1px solid rgba(0,0,0,0.2);
-            border-top: 1px solid $button_bg;
-            border-bottom: 1px solid $button_bg;
+        .workspace-layout {
+            background-color: transparent;
+            padding: 0;
         }
     }
 }
