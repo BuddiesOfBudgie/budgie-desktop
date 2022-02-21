@@ -220,9 +220,6 @@
 							!this.dispatcher.notifications_paused;
 
 			// Set to expire immediately if a popup shouldn't be shown.
-			// This prevents some applications, e.g. Firefox, from showing
-			// its own notification when Budgie notifications are paused for
-			// any reason.
 			if (!should_notify || !should_show) {
 				notification.expire_timeout = 0;
 			}
@@ -271,16 +268,17 @@
 		 * or to cancel a notification with no expiration time.
 		 *
 		 * Per the spec, a blank DBusError should be thrown if the notification doesn't exist when this is called.
+		 * However, this can break notifications from some applications, and other desktop environments don't
+		 * follow that part of the spec, either. So, return to avoid breaking things.
 		 */
 		public void CloseNotification(uint32 id) throws DBusError, IOError {
-			if (this.popups.contains(id)) {
-				this.popups[id].dismiss();
-				this.popups.remove(id);
-				this.NotificationClosed(id, NotificationCloseReason.CLOSED);
+			if (!this.popups.contains(id)) {
 				return;
 			}
 
-			throw new DBusError.FAILED("");
+			this.popups[id].dismiss();
+			this.popups.remove(id);
+			this.NotificationClosed(id, NotificationCloseReason.CLOSED);
 		}
 
 		/**
