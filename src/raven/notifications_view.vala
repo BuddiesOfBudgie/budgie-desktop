@@ -100,6 +100,7 @@ namespace Budgie {
 			button_mute.relief = Gtk.ReliefStyle.NONE;
 			button_mute.valign = Gtk.Align.CENTER;
 			button_mute.get_style_context().add_class("do-not-disturb");
+			button_mute.set_image(image_notifications_enabled); // Ensure we start with an icon
 
 			var control_buttons = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			control_buttons.pack_start(button_mute, false, false, 0);
