@@ -11,16 +11,24 @@
     .alert { color: $alert_color; }
 }
 
-.end-region {
-    &.horizontal > widget > widget > * {
-        min-width: 18px;
-        margin-left: 2px;
-    }
+.start-region, .center-region, .end-region {
+    &.horizontal > widget > widget > * { min-width: 18px; }
+    &.vertical > widget > widget > * { min-height: 18px; }
+}
 
-    &.vertical > widget > widget > * {
-        min-height: 18px;
-        margin-top: 2px;
-    }
+.start-region {
+    &.horizontal > widget > widget > * { margin-right: 2px; }
+    &.vertical > widget > widget > * { margin-bottom: 2px; }
+}
+
+.center-region {
+    &.horizontal > widget > widget > * { margin: 0 1px; }
+    &.vertical > widget > widget > * { margin: 1px 0; }
+}
+
+.end-region {
+    &.horizontal > widget > widget > * { margin-left: 2px; }
+    &.vertical > widget > widget > * { margin-top: 2px; }
 }
 
 .drop-shadow {

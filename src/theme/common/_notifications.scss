@@ -19,12 +19,18 @@
 
 // On Screen Display in Budgie
 .budgie-osd-window {
-    @extend .budgie-notification-window;
+    background: none;
+
+    > box {
+        border-radius: 8px;
+        padding: 2px;
+        margin: 0;
+    }
 }
 
 // Internal part of the OSD
 .budgie-osd {
-    @extend .budgie-notification;
+    color: $fg_color;
 }
 
 // Alt+tab switcher in Budgie
