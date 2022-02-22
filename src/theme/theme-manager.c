@@ -11,6 +11,7 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
 #include "theme-manager.h"
 #include "theme.h"
 #include <gtk/gtk.h>
@@ -23,12 +24,16 @@ struct _BudgieThemeManager {
 	GObject parent;
 	GtkCssProvider* css_provider;
 	GSettings* desktop_settings;
+	GSettings* ui_settings;
 	gboolean builtin_enabled;
 };
 
 static void budgie_theme_manager_set_theme_css(BudgieThemeManager* self, const gchar* theme_portion);
 static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GtkSettings* settings);
 static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const gchar* key, GSettings* settings);
+#ifdef GSD42
+static void budgie_theme_manager_dark_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GSettings* settings);
+#endif
 
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
@@ -74,6 +79,7 @@ static void budgie_theme_manager_init(BudgieThemeManager* self) {
 	/* TODO: Stop using .budgie-panel for desktop-wide schema ! */
 	self->desktop_settings = g_settings_new("com.solus-project.budgie-panel");
 	self->builtin_enabled = g_settings_get_boolean(self->desktop_settings, "builtin-theme");
+	self->ui_settings = g_settings_new("org.gnome.desktop.interface");
 
 	/* Update whether we can use the builtin theme or not */
 	g_signal_connect_swapped(self->desktop_settings, "changed::builtin-theme", G_CALLBACK(budgie_theme_manager_builtin_changed), self);
@@ -83,8 +89,11 @@ static void budgie_theme_manager_init(BudgieThemeManager* self) {
 
 	/* Bind the dark-theme option for the whole process */
 	g_settings_bind(self->desktop_settings, "dark-theme", settings, "gtk-application-prefer-dark-theme", G_SETTINGS_BIND_GET);
+#ifdef GSD42
+	g_signal_connect_swapped(self->desktop_settings, "changed::dark-theme", G_CALLBACK(budgie_theme_manager_dark_theme_changed), self);
 
-	/* Trigger theme changed */
+	budgie_theme_manager_dark_theme_changed(self, NULL, self->desktop_settings);
+#endif
 	budgie_theme_manager_theme_changed(self, NULL, settings);
 }
 
@@ -167,3 +176,17 @@ static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const
 	/* Update now based on whether we can use the built-in */
 	budgie_theme_manager_theme_changed(self, NULL, gtk_settings_get_default());
 }
+
+#ifdef GSD42
+static void budgie_theme_manager_dark_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GSettings* settings) {
+	gboolean dark_theme = g_settings_get_boolean(settings, "dark-theme");
+
+	if (dark_theme) {
+		g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
+	}
+	else {
+		g_settings_reset(self->ui_settings, "color-scheme");
+	}
+
+}
+#endif
