@@ -18,18 +18,16 @@ budgie_wm_sources = [
 budgie_wm_status_vala_args = []
 
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_mutter = dependency('libmutter-9', version: gnome_minimum_version, required: false)
+dep_mutter = dependency('libmutter-10', version: gnome_minimum_version, required: false)
 if dep_mutter.found()
-    budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_9']
-    message('Using libmutter-9 ABI from GNOME 41')
-    vapi_mutter = 'libmutter-9'
+    #budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_9']
+    message('Using libmutter-10 ABI from GNOME 42')
+    vapi_mutter = 'libmutter-10'
 else
-    dep_mutter = dependency('libmutter-8', version: gnome_minimum_version)
+    dep_mutter = dependency('libmutter-9', version: gnome_minimum_version)
     if dep_mutter.found()
-        # Assume mutter-7 compilation argument since no additional code changes required
-        budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_8']
-        message('Using libmutter-8 ABI from GNOME 40')
-        vapi_mutter = 'libmutter-8'
+        message('Using libmutter-9 ABI from GNOME 41')
+        vapi_mutter = 'libmutter-9'
     endif
 endif
 
