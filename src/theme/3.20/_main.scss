@@ -112,8 +112,21 @@
 .budgie-switcher-window {
     @extend .budgie-notification-window;
 
+    > decoration {
+        box-shadow: 0 2px 4px $panel_bg;
+        border-radius: 8px;
+    }
+
+    > box {
+        padding: 6px;
+        border-radius: 8px;
+    }
+
     // Flowbox
-    flowbox { color: $fg_color; }
+    flowbox {
+        color: $fg_color;
+        padding: 4px;
+    }
     flowboxchild {
         @include budgie_switcher_child(disabled, label);
     }
