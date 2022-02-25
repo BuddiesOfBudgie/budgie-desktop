@@ -461,7 +461,10 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * Our panel has changed size, record the new icon sizes
 	 */
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
-		this.desktop_helper.icon_size = small_icon;
+		// equals 24px icons on a 36px panel
+		int target_size = (int) Math.round((2.0 / 3.0) * panel);
+
+		this.desktop_helper.icon_size = target_size;
 		this.desktop_helper.panel_size = panel;
 		this.set_icons_size();
 	}
