@@ -347,7 +347,7 @@ static void budgie_popover_manager_grab(BudgiePopoverManager* self, BudgiePopove
 static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopover* popover) {
 	GdkDisplay* display = NULL;
 
-	if (!self->priv->grabbed || popover != self->priv->active_popover) {
+	if (popover == NULL || !self->priv->grabbed || popover != self->priv->active_popover) {
 		return;
 	}
 
