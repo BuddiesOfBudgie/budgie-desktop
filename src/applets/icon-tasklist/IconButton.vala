@@ -38,6 +38,7 @@ public class IconButton : Gtk.ToggleButton {
 	private Gdk.AppLaunchContext launch_context;
 	private int64 last_scroll_time = 0;
 	private bool needs_attention = false;
+	private int target_icon_size;
 
 	public unowned Budgie.Abomination.Abomination? abomination { public set; public get; default = null; }
 	public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
@@ -423,12 +424,16 @@ public class IconButton : Gtk.ToggleButton {
 		if (app_icon != null) {
 			this.icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
+			// scale pixbuf if it doesn't match the size we want
+			if (pixbuf_icon.width != target_icon_size || pixbuf_icon.height != target_icon_size) {
+				pixbuf_icon = pixbuf_icon.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
+			}
 			this.icon.set_from_pixbuf(pixbuf_icon);
 		} else {
 			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		this.icon.pixel_size = this.desktop_helper.icon_size;
+		this.icon.pixel_size = target_icon_size;
 	}
 
 	public void update() {
@@ -457,7 +462,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.update_icon();
 		this.queue_resize();
-		this.queue_draw();
 	}
 
 	private bool has_valid_windows(out int num_windows) {
@@ -802,8 +806,9 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	protected void on_size_allocate(Gtk.Allocation allocation) {
-		this.definite_allocation = allocation;
+		var should_update_icon = definite_allocation != allocation;
 
+		this.definite_allocation = allocation;
 		base.size_allocate(definite_allocation);
 
 		int x, y;
@@ -820,6 +825,18 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		} else if (this.window != null) {
 			this.window.set_icon_geometry(x, y, this.definite_allocation.width, this.definite_allocation.height);
+		}
+
+		if (should_update_icon) {
+			int max = (int) Math.fmin(definite_allocation.width, definite_allocation.height);
+
+			if (max > 36) {
+				this.target_icon_size = max - 12;
+			} else {
+				this.target_icon_size = (int) Math.round((2.0 / 3.0) * max);
+			}
+
+			update_icon();
 		}
 	}
 
