@@ -14,6 +14,10 @@ const int INDICATOR_SIZE = 2;
 const int INDICATOR_SPACING = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
+const int TARGET_ICON_PADDING = 18;
+const double TARGET_ICON_SCALE = 2.0 / 3.0;
+const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
+
 /**
  * IconButton provides the pretty IconTasklist button to house one or more
  * windows in a group, as well as selection capabilities, interaction, animations
@@ -63,8 +67,6 @@ public class IconButton : Gtk.ToggleButton {
 		this.originally_pinned = pinned;
 		this.gobject_constructors_suck();
 		this.create_popover(); // Create our popover
-
-		this.update_icon();
 
 		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
@@ -830,10 +832,10 @@ public class IconButton : Gtk.ToggleButton {
 		if (should_update_icon) {
 			int max = (int) Math.fmin(definite_allocation.width, definite_allocation.height);
 
-			if (max > 36) {
-				this.target_icon_size = max - 12;
+			if (max > FORMULA_SWAP_POINT) {
+				this.target_icon_size = max - TARGET_ICON_PADDING;
 			} else {
-				this.target_icon_size = (int) Math.round((2.0 / 3.0) * max);
+				this.target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
 			}
 
 			update_icon();
