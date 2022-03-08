@@ -77,6 +77,10 @@ namespace Budgie {
 			mpris = new MprisWidget();
 			box.pack_start(mpris, false, false, 0);
 
+			// Make sure everything is shown. Not having this can cause
+			// silent failures when switching stack pages or opening Raven.
+			scroll.show_all();
+
 			main_stack.notify["visible-child-name"].connect(on_name_change);
 			set_clean();
 			set_sound_widget_events();
