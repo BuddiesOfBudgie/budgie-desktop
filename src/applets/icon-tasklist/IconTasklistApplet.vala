@@ -453,11 +453,8 @@ public class IconTasklistApplet : Budgie.Applet {
 	private void resize_buttons() {
 		Wnck.set_default_icon_size(this.desktop_helper.panel_size);
 
-		Idle.add(() => {
-			this.buttons.foreach((id, button) => {
-				button.queue_resize();
-			});
-			return false;
+		this.buttons.foreach((id, button) => {
+			button.queue_resize();
 		});
 	}
 
