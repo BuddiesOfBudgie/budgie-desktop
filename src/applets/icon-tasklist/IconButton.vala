@@ -428,8 +428,8 @@ public class IconButton : Gtk.ToggleButton {
 		if (app_icon != null) {
 			this.icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
-			// scale pixbuf if it doesn't match the size we want
-			if (pixbuf_icon.width != target_icon_size || pixbuf_icon.height != target_icon_size) {
+			// scale pixbuf if it doesn't match the size we want AND if the size we want is valid
+			if (target_icon_size > 0 && (pixbuf_icon.width != target_icon_size || pixbuf_icon.height != target_icon_size)) {
 				pixbuf_icon = pixbuf_icon.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
 			}
 			this.icon.set_from_pixbuf(pixbuf_icon);
