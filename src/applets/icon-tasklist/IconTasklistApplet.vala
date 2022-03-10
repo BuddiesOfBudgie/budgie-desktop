@@ -438,7 +438,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.desktop_helper.panel_position = position;
 		this.desktop_helper.orientation = this.get_orientation();
 		this.main_layout.set_orientation(this.desktop_helper.orientation);
-		resize_buttons();
+		resize();
 	}
 
 	/**
@@ -447,15 +447,17 @@ public class IconTasklistApplet : Budgie.Applet {
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
 		this.desktop_helper.icon_size = small_icon;
 		this.desktop_helper.panel_size = panel;
-		resize_buttons();
+		resize();
 	}
 
-	private void resize_buttons() {
+	private void resize() {
 		Wnck.set_default_icon_size(this.desktop_helper.panel_size);
 
 		this.buttons.foreach((id, button) => {
 			button.queue_resize();
 		});
+
+		queue_resize();
 	}
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {

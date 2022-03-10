@@ -68,6 +68,8 @@ public class IconButton : Gtk.ToggleButton {
 		this.gobject_constructors_suck();
 		this.create_popover(); // Create our popover
 
+		this.target_icon_size = helper.panel_size;
+
 		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
 		}
@@ -808,7 +810,17 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	protected void on_size_allocate(Gtk.Allocation allocation) {
-		var should_update_icon = definite_allocation != allocation;
+		if (definite_allocation != allocation) {
+			int max = (int) Math.fmin(allocation.width, allocation.height);
+
+			if (max > FORMULA_SWAP_POINT) {
+				this.target_icon_size = max - TARGET_ICON_PADDING;
+			} else {
+				this.target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
+			}
+
+			update_icon();
+		}
 
 		this.definite_allocation = allocation;
 		base.size_allocate(definite_allocation);
@@ -827,18 +839,6 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		} else if (this.window != null) {
 			this.window.set_icon_geometry(x, y, this.definite_allocation.width, this.definite_allocation.height);
-		}
-
-		if (should_update_icon) {
-			int max = (int) Math.fmin(definite_allocation.width, definite_allocation.height);
-
-			if (max > FORMULA_SWAP_POINT) {
-				this.target_icon_size = max - TARGET_ICON_PADDING;
-			} else {
-				this.target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
-			}
-
-			update_icon();
 		}
 	}
 
