@@ -14,6 +14,10 @@ const int INDICATOR_SIZE = 2;
 const int INDICATOR_SPACING = 1;
 const int INACTIVE_INDICATOR_SPACING = 2;
 
+const int TARGET_ICON_PADDING = 18;
+const double TARGET_ICON_SCALE = 2.0 / 3.0;
+const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
+
 /**
  * IconButton provides the pretty IconTasklist button to house one or more
  * windows in a group, as well as selection capabilities, interaction, animations
@@ -38,6 +42,7 @@ public class IconButton : Gtk.ToggleButton {
 	private Gdk.AppLaunchContext launch_context;
 	private int64 last_scroll_time = 0;
 	private bool needs_attention = false;
+	private int target_icon_size;
 
 	public unowned Budgie.Abomination.Abomination? abomination { public set; public get; default = null; }
 	public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
@@ -63,7 +68,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.gobject_constructors_suck();
 		this.create_popover(); // Create our popover
 
-		this.update_icon();
+		this.target_icon_size = helper.panel_size;
 
 		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
@@ -423,12 +428,16 @@ public class IconButton : Gtk.ToggleButton {
 		if (app_icon != null) {
 			this.icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
+			// scale pixbuf if it doesn't match the size we want AND if the size we want is valid
+			if (target_icon_size > 0 && (pixbuf_icon.width != target_icon_size || pixbuf_icon.height != target_icon_size)) {
+				pixbuf_icon = pixbuf_icon.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
+			}
 			this.icon.set_from_pixbuf(pixbuf_icon);
 		} else {
 			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		this.icon.pixel_size = this.desktop_helper.icon_size;
+		this.icon.pixel_size = target_icon_size;
 	}
 
 	public void update() {
@@ -457,7 +466,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.update_icon();
 		this.queue_resize();
-		this.queue_draw();
 	}
 
 	private bool has_valid_windows(out int num_windows) {
@@ -802,8 +810,19 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	protected void on_size_allocate(Gtk.Allocation allocation) {
-		this.definite_allocation = allocation;
+		if (definite_allocation != allocation) {
+			int max = (int) Math.fmin(allocation.width, allocation.height);
 
+			if (max > FORMULA_SWAP_POINT) {
+				this.target_icon_size = max - TARGET_ICON_PADDING;
+			} else {
+				this.target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
+			}
+
+			update_icon();
+		}
+
+		this.definite_allocation = allocation;
 		base.size_allocate(definite_allocation);
 
 		int x, y;
