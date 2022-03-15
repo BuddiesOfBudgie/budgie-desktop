@@ -11,6 +11,7 @@ version_file = configure_file(
 )
 
 actions_icons = [
+    join_paths('.', 'icons', 'actions', 'budgie-menu-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'notification-alert-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'notification-disabled-symbolic.svg'),
     join_paths('.', 'icons', 'actions', 'pane-hide-symbolic.svg'),
