@@ -68,7 +68,7 @@ public class IconButton : Gtk.ToggleButton {
 		this.gobject_constructors_suck();
 		this.create_popover(); // Create our popover
 
-		this.target_icon_size = helper.panel_size;
+		this.target_icon_size = helper.icon_size;
 
 		if (this.has_valid_windows(null)) {
 			this.get_style_context().add_class("running");
@@ -437,7 +437,9 @@ public class IconButton : Gtk.ToggleButton {
 			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		this.icon.pixel_size = target_icon_size;
+		if (target_icon_size > 0) {
+			this.icon.pixel_size = target_icon_size;
+		}
 	}
 
 	public void update() {
