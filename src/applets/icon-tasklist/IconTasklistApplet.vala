@@ -392,7 +392,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			button.set_wnck_window(app.get_window());
 		}
 
-		button.update();
+		this.update_button(button);
 	}
 
 	private void on_app_closed(Budgie.Abomination.RunningApp app) {
