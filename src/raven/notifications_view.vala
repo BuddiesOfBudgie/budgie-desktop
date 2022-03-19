@@ -63,6 +63,11 @@ namespace Budgie {
 		public abstract void toggle_do_not_disturb() throws DBusError, IOError;
 	}
 
+	[DBus (name="org.budgie_desktop.Raven")]
+	public interface RavenInterface : Object {
+		public signal void ClearAllNotifications();
+	}
+
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
@@ -82,6 +87,8 @@ namespace Budgie {
 		private HashTable<uint32, Budgie.Notification> notifications { private get; private set; default = null; }
 		private HashTable<string, NotificationGroup> notification_groups { private get; private set; default = null; }
 		private Settings budgie_settings { private get; private set; default = null; }
+
+		private RavenInterface raven { get; private set; default = null; }
 
 		construct {
 			this.budgie_settings = new Settings(BUDGIE_PANEL_SCHEMA);
@@ -140,6 +147,15 @@ namespace Budgie {
 				null,
 				on_dbus_get
 			);
+
+			Bus.get_proxy.begin<RavenInterface>(
+				BusType.SESSION,
+				RAVEN_DBUS_NAME,
+				RAVEN_DBUS_OBJECT_PATH,
+				0,
+				null,
+				on_raven_get
+			);
 		}
 
 		private void on_dbus_get(Object? o, AsyncResult? res) {
@@ -152,6 +168,15 @@ namespace Budgie {
 				this.button_mute.set_image(this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled);
 			} catch (Error e) {
 				critical("Unable to connect to notifications dispatcher: %s", e.message);
+			}
+		}
+
+		private void on_raven_get(Object? o, AsyncResult? res) {
+			try {
+				this.raven = Bus.get_proxy.end(res);
+				this.raven.ClearAllNotifications.connect(this.clear_all);
+			} catch (Error e) {
+				critical("Unable to connect to Raven via DBUS: %s", e.message);
 			}
 		}
 
