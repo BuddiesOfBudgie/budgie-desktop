@@ -262,9 +262,12 @@ public class IconTasklistApplet : Budgie.Applet {
 			}
 		} else { // Doesn't start with file://
 			unowned IconButton? button = null;
+			string app_id_without_desktop_suffix = app_id.replace(".desktop", "");
 
 			if (this.buttons.contains(app_id)) { // If buttons contains this app_id
 				button = this.buttons.get(app_id);
+			} else {
+				button = this.buttons.get(app_id_without_desktop_suffix);
 			}
 
 			if (button != null) {
@@ -348,7 +351,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		string first_app_id = first_app.id.to_string();
 		if (app.app_info != null) { // properly group new apps with their pinned version
 			string launcher = this.get_app_launcher(app.app_info.get_filename());
-			if (this.buttons.contains(launcher) && this.buttons.get(launcher).pinned) {
+			if (this.buttons.contains(launcher)) {
 				first_app_id = launcher;
 			}
 		}
