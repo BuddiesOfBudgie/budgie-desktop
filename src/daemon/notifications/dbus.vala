@@ -303,11 +303,10 @@
 		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
 			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
-			bool latest_exists = false;
+			bool latest_exists = latest != null && !latest.destroying;
 			int existing_height = 0, existing_x = 0, existing_y = 0;
 
-			if (latest != null && !latest.destroying) {
-				latest_exists = true;
+			if (latest_exists) {
 				existing_height = latest.get_child().get_allocated_height();
 				latest.get_position(out existing_x, out existing_y);
 			}
