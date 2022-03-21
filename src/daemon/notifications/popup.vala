@@ -22,6 +22,8 @@ namespace Budgie.Notifications {
 
 		private uint expire_id { get; private set; }
 
+		public bool destroying { get; private set; default = false; }
+
 		public signal void Closed(NotificationCloseReason reason);
 
 		construct {
@@ -57,6 +59,7 @@ namespace Budgie.Notifications {
 		 * Destroy this notification popup.
 		 */
 		public void dismiss() {
+			this.destroying = true;
 			destroy();
 		}
 
