@@ -291,8 +291,7 @@
 			Gdk.Rectangle rect = mon.get_geometry();
 
 			/* Set the x, y position of the notification */
-			int x;
-			int y;
+			int x = 0, y = 0;
 			calculate_position(popup, rect, out x, out y);
 			popup.move(x, y);
 		}
@@ -304,27 +303,28 @@
 		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
 			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
+			bool latest_exists = latest != null && !latest.destroying;
+			int existing_height = 0, existing_x = 0, existing_y = 0;
+
+			if (latest_exists) {
+				existing_height = latest.get_child().get_allocated_height();
+				latest.get_position(out existing_x, out existing_y);
+			}
 
 			switch (pos) {
 				case NotificationPosition.TOP_LEFT:
-					if (latest != null) { // If a notification is already being displayed
-						int nx;
-						int ny;
-						latest.get_position(out nx, out ny);
-						x = nx;
-						y = ny + latest.get_child().get_allocated_height() + BUFFER_ZONE;
+					if (latest_exists) { // If a notification is already being displayed
+						x = existing_x;
+						y = existing_y + existing_height + BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
 						y = rect.y + INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.BOTTOM_LEFT:
-					if (latest != null) { // If a notification is already being displayed
-						int nx;
-						int ny;
-						latest.get_position(out nx, out ny);
-						x = nx;
-						y = ny - latest.get_child().get_allocated_height() - BUFFER_ZONE;
+					if (latest_exists) { // If a notification is already being displayed
+						x = existing_x;
+						y = existing_y - existing_height - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
 
@@ -334,12 +334,9 @@
 					}
 					break;
 				case NotificationPosition.BOTTOM_RIGHT:
-					if (latest != null) { // If a notification is already being displayed
-						int nx;
-						int ny;
-						latest.get_position(out nx, out ny);
-						x = nx;
-						y = ny - latest.get_child().get_allocated_height() - BUFFER_ZONE;
+					if (latest_exists) { // If a notification is already being displayed
+						x = existing_x;
+						y = existing_y - existing_height - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
@@ -351,12 +348,9 @@
 					break;
 				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
 				default:
-					if (latest != null) { // If a notification is already being displayed
-						int nx;
-						int ny;
-						latest.get_position(out nx, out ny);
-						x = nx;
-						y = ny + latest.get_child().get_allocated_height() + BUFFER_ZONE;
+					if (latest_exists) { // If a notification is already being displayed
+						x = existing_x;
+						y = existing_y + existing_height + BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
