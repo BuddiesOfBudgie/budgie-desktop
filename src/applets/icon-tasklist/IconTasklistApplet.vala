@@ -399,10 +399,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_app_closed(Budgie.Abomination.RunningApp app) {
-		if (app.get_window().is_skip_pager() || app.get_window().is_skip_tasklist()) { // window not managed in the first place
-			return;
-		}
-
 		IconButton? button = this.buttons.get(app.id.to_string());
 
 		if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
