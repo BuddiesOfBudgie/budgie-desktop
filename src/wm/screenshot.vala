@@ -14,35 +14,44 @@
 
 namespace Budgie {
 	const string EXTENSION = ".png";
+	const string DBUS_SCREENSHOT = "org.buddiesofbudgie.Screenshot";
+	const string DBUS_SCREENSHOT_PATH = "/org/buddiesofbudgie/Screenshot";
 
 	[DBus (name="org.buddiesofbudgie.Screenshot")]
-	public class Screenshot : Object {
-		static Screenshot? instance;
+	public class ScreenshotManager : Object {
+		static ScreenshotManager? instance;
 
 		[DBus (visible = false)]
-		public static unowned Screenshot init (BudgieWM wm) {
+		public static unowned ScreenshotManager init (BudgieWM wm) {
 			if (instance == null)
-				instance = new Screenshot (wm);
+				instance = new ScreenshotManager (wm);
 
 			return instance;
 		}
 
 		BudgieWM? wm = null;
 		unowned Meta.Display? display = null;
-		Settings desktop_settings;
 
-		string prev_font_regular;
-		string prev_font_document;
-		string prev_font_mono;
-		uint conceal_timeout;
-
-		construct {
-			desktop_settings = new Settings ("org.gnome.desktop.interface");
-		}
-
-		Screenshot (BudgieWM _wm) {
+		ScreenshotManager (BudgieWM _wm) {
 			wm = _wm;
 			display = wm.get_display();
+		}
+
+		[DBus (visible = false)]
+		public void setup_dbus() {
+			/* Hook up screenshot dbus */
+            Bus.own_name (BusType.SESSION, DBUS_SCREENSHOT, BusNameOwnerFlags.REPLACE,
+                on_bus_acquired,
+                () => {},
+                () => {} );
+		}
+
+		void on_bus_acquired(DBusConnection conn) {
+			try {
+				conn.register_object(DBUS_SCREENSHOT_PATH, this);
+			} catch (Error e) {
+				message("Unable to register Screenshot: %s", e.message);
+			}
 		}
 
 		public void flash_area (int x, int y, int width, int height) throws DBusError, IOError {
@@ -78,7 +87,6 @@ namespace Budgie {
 			display.get_size (out width, out height);
 
 			var image = take_screenshot (0, 0, width, height, include_cursor);
-			unconceal_text ();
 
 			if (flash) {
 				flash_area (0, 0, width, height);
@@ -91,7 +99,6 @@ namespace Budgie {
 			yield wait_stage_repaint ();
 
 			var image = take_screenshot (x, y, width, height, include_cursor);
-			unconceal_text ();
 
 			if (flash) {
 				flash_area (x, y, width, height);
@@ -106,12 +113,15 @@ namespace Budgie {
 			var window = display.get_focus_window ();
 
 			if (window == null) {
-				unconceal_text ();
 				throw new DBusError.FAILED ("Cannot find active window");
 			}
 
 			var window_actor = (Meta.WindowActor) window.get_compositor_private ();
 			unowned Meta.ShapedTexture window_texture = (Meta.ShapedTexture) window_actor.get_texture ();
+
+			if (window_texture == null) {
+				throw new DBusError.FAILED ("Cannot get window actor texture");
+			}
 
 			float actor_x, actor_y;
 			window_actor.get_position (out actor_x, out actor_y);
@@ -122,22 +132,11 @@ namespace Budgie {
                 rect = window.frame_rect_to_client_rect (rect);
             }
 
+			var image = take_screenshot (rect.x, rect.y, rect.width, rect.height, include_cursor);
 
-			Cairo.RectangleInt clip = { rect.x - (int) actor_x, rect.y - (int) actor_y, rect.width, rect.height };
-			print("rect.x %d \n", rect.x);
-			print("actor_x %d \n", (int) actor_x);
-			print("rect.y %d \n", rect.y);
-			print("actor_y %d \n", (int) actor_y);
-			print("rect.width %d \n", rect.width);
-			print("rect.height %d \n", rect.height);
-			//var image = (Cairo.ImageSurface) window_texture.get_image (clip);
-			//if (include_cursor) {
-			//	image = composite_stage_cursor (image, { rect.x, rect.y, rect.width, rect.height });
-			//}
-
-			var image = take_screenshot ((int)actor_x, (int) actor_y, rect.width, rect.height, include_cursor);
-
-			unconceal_text ();
+			if (include_cursor) {
+				image = composite_stage_cursor (image, { rect.x, rect.y, rect.width, rect.height });
+			}
 
 			if (flash) {
 				flash_area (rect.x, rect.y, rect.width, rect.height);
@@ -148,48 +147,17 @@ namespace Budgie {
 				throw new DBusError.FAILED ("Failed to save image");
 		}
 
-		private void unconceal_text () {
-			if (conceal_timeout == 0) {
-				return;
-			}
-
-			desktop_settings.set_string ("font-name", prev_font_regular);
-			desktop_settings.set_string ("monospace-font-name", prev_font_mono);
-			desktop_settings.set_string ("document-font-name", prev_font_document);
-
-			Source.remove (conceal_timeout);
-			conceal_timeout = 0;
-		}
-
-		public async void conceal_text () throws DBusError, IOError {
-			if (conceal_timeout > 0) {
-				Source.remove (conceal_timeout);
-			} else {
-				prev_font_regular = desktop_settings.get_string ("font-name");
-				prev_font_mono = desktop_settings.get_string ("monospace-font-name");
-				prev_font_document = desktop_settings.get_string ("document-font-name");
-
-				desktop_settings.set_string ("font-name", "Redacted Script Regular 9");
-				desktop_settings.set_string ("monospace-font-name", "Redacted Script Light 10");
-				desktop_settings.set_string ("document-font-name", "Redacted Script Regular 10");
-			}
-
-			conceal_timeout = Timeout.add (2000, () => {
-				unconceal_text ();
-				return Source.REMOVE;
-			});
-		}
 
 		static string find_target_path () {
 			/*
-			 * If path in gnome-screenshots exists/or can be created then use this path
+			 * If path in screenshots exists/or can be created then use this path
 			 * otherwise use the PICTURES xdg-dir path
 			 * default is the home folder as the ultimate fallback
 			 */
 			unowned string? base_path = Environment.get_user_special_dir (UserDirectory.PICTURES);
 			if (base_path != null && FileUtils.test (base_path, FileTest.EXISTS)) {
 				var path = "";
-				var settings_schema = "org.gnome.gnome-screenshot";
+				var settings_schema = "org.gnome.gnome-screenshot";  /*DM this needs changing to a budgie-desktop path*/
 				var schema = GLib.SettingsSchemaSource.get_default ().lookup (settings_schema, true);
 				if (schema != null) { // settings schema does exist
 					var settings = new Settings(settings_schema);
@@ -303,6 +271,7 @@ namespace Budgie {
 				}
 
 			}
+
 			return image;
 		}
 

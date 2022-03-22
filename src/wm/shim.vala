@@ -227,7 +227,6 @@ namespace Budgie {
 			try {
 				conn.register_object("/org/gnome/Shell", this);
 				conn.register_object("/org/gnome/SessionManager/EndSessionDialog", handler);
-				conn.register_object("/org/buddiesofbudgie/Screenshot", Screenshot.init(wm));
 			} catch (Error e) {
 				message("Unable to register ShellShim: %s", e.message);
 			}
@@ -238,12 +237,6 @@ namespace Budgie {
 			Bus.own_name(BusType.SESSION, "org.gnome.Shell",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 				on_bus_acquired, null, null);
-
-			/* Hook up settings daemon screenshot dbus */
-            Bus.own_name (BusType.SESSION, "org.buddiesofbudgie.Screenshot", BusNameOwnerFlags.REPLACE,
-                () => {},
-                () => {},
-                () => critical ("Could not acquire buddiesofbudgie screenshot") );
 		}
 
 		public uint GrabAccelerator(BusName sender, string accelerator, uint flags, Meta.KeyBindingFlags grab_flags) throws DBusError, IOError {

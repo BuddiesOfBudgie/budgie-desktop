@@ -138,6 +138,7 @@ namespace Budgie {
 		RavenRemote? raven_proxy = null;
 		ShellShim? shim = null;
 		BudgieWMDBUS? focus_interface = null;
+		ScreenshotManager? screenshot = null;
 		PanelRemote? panel_proxy = null;
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
@@ -513,6 +514,9 @@ namespace Budgie {
 			keyboard.hook_extra();
 
 			display.get_workspace_manager().override_workspace_layout(Meta.DisplayCorner.TOPLEFT, false, 1, -1);
+
+			screenshot = ScreenshotManager.init(this);
+			screenshot.setup_dbus();
 		}
 
 		/**
