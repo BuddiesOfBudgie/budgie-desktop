@@ -1,9 +1,10 @@
 [main]
 host = https://www.transifex.com
 
-[budgie-10.budgie-desktoppot]
-file_filter = po/<lang>.po
+[o:buddiesofbudgie:p:budgie-10:r:budgie-desktoppot]
+file_filter  = po/<lang>.po
 minimum_perc = 0
-source_file = po/budgie-desktop.pot
+source_file  = po/budgie-desktop.pot
 source_lang = en
-type = PO
+type         = PO
+

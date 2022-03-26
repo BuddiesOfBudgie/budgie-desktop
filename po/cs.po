@@ -1,30 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Blendcore <hackis.bell@gmail.com>, 2016
-# Lukáš Cezner <coalzombik@gmail.com>, 2017
-# Blendcore <hackis.bell@gmail.com>, 2015
-# Martin Orszulik <orszulik.m@outlook.com>, 2016
-# Michal Vlasák, 2015
-# Michal Vlasák <lahcim8@seznam.cz>, 2015-2016
-# Ondřej Pucholt <o.pucholt@windowslive.com>, 2017-2018
-# Pavel Konvička <pavel.konvicka@gmail.com>, 2017
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Tergas, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-09-28 16:21+0000\n"
-"Last-Translator: Richard Věžník <RichardVeznik@gmail.com>\n"
-"Language-Team: Czech <http://translate.getsol.us/projects/budgie-desktop/translations/cs/>\n"
-"Language: cs\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Tergas, 2022\n"
+"Language-Team: Czech (https://www.transifex.com/buddiesofbudgie/teams/129844/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-"X-Generator: Weblate 3.8\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -84,7 +80,8 @@ msgid "Confirm applet removal"
 msgstr "Potvrdit odstranění appletu"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr "Opravdu chcete odstranit tento applet? Tuto akci nelze vrátit zpět."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
@@ -129,7 +126,9 @@ msgid "Attach modal dialogs to windows"
 msgstr "Připínat modální prvky k oknům"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr "Připínat modální prvky k hlavnímu oknu a přesouvat je tak společně."
 
 #: src/panel/settings/settings_wm.vala:46
@@ -153,33 +152,45 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "Vypnout noční osvětlení při režimu celé obrazovky"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Vypnout noční osvětlení při režimu celé obrazovky. Po opuštění znovu zapnout."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Vypnout noční osvětlení při režimu celé obrazovky. Po opuštění znovu "
+"zapnout."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Vypnout noční osvětlení při režimu celé obrazovky"
+msgstr "Pozastavit upozornění při režimu celé obrazovky"
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "Vypnout noční osvětlení při režimu celé obrazovky. Po opuštění znovu zapnout."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
+"Nezobrazovat upozornění, pokud je okno v režimu celé obrazovky. Zruší se při"
+" opuštění režimu celé obrazovky."
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "Automaticky uspořádat"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Automaticky uspořádat okna jejich přetažením do rohů nebo k okrajům obrazovky."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Automaticky uspořádat okna jejich přetažením do rohů nebo k okrajům "
+"obrazovky."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "Zaměřit okno ukázáním pomocí myši"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr "Aktivovat okno po najetí myši a deaktivovat při vyjetí."
 
 #: src/panel/settings/settings_wm.vala:83
@@ -187,16 +198,20 @@ msgid "Disable unredirection of windows"
 msgstr "Povolit přesměrování oken"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Pro pokročilé uživatele. Zapněte v případě problémů s výkonem či grafikou."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Pro pokročilé uživatele. Zapněte v případě problémů s výkonem či grafikou."
 
 #: src/panel/settings/settings_wm.vala:89
-#, fuzzy
 msgid "Show all windows in tab switcher"
-msgstr "Po kliknutí zobrazit všechna okna"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -253,7 +268,8 @@ msgid "Built-in theme"
 msgstr "Výchozí motiv"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr "Vrátit motiv do výchozího nastavení"
 
 #: src/panel/settings/settings_style.vala:86
@@ -282,26 +298,35 @@ msgstr "Vpravo nahoře"
 
 #: src/panel/settings/settings_raven.vala:61
 msgid "Set Raven position"
-msgstr ""
+msgstr "Nastavit umístění panelu Raven"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
+"Nastavit, na které straně obrazovky se Raven otevře. Pokud je nastaveno na "
+"Automaticky, Raven se otevře tam, kde je jeho nadřazený panel."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Povolit zvýšení hlasitosti nad 100 %"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Umožňuje zvýšení hlasitosti až do 150 % v nastavení zvuku a také přes doplněk zvukový výstup pro Raven."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Umožňuje zvýšení hlasitosti až do 150 % v nastavení zvuku a také přes "
+"doplněk zvukový výstup pro Raven."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "V kalendáři zobrazovat čísla týdnů"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "V doplňku pro kalendář zobrazovat čísla týdnů."
 
 #: src/panel/settings/settings_raven.vala:78
@@ -318,7 +343,8 @@ msgstr "Zobrazit doplněk zvukového výstupu"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Zobrazí nebo skryje doplněk zvukového výstupu v apletové sekci Ravenu."
+msgstr ""
+"Zobrazí nebo skryje doplněk zvukového výstupu v apletové sekci Ravenu."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -326,15 +352,20 @@ msgstr "Zobrazit doplněk pro vstup mikrofonu"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Zobrazí nebo skryje doplněk pro vstup mikrofonu v apletové sekci Ravenu."
+msgstr ""
+"Zobrazí nebo skryje doplněk pro vstup mikrofonu v apletové sekci Ravenu."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Zobrazit doplněk pro přehrávání médií"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Zobrazí nebo skryje doplněk pro přehrávání médií (MPRIS) v apletové sekci Ravenu."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Zobrazí nebo skryje doplněk pro přehrávání médií (MPRIS) v apletové sekci "
+"Ravenu."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -368,18 +399,19 @@ msgstr "Plocha"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "Ikony na ploše"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "Zobrazit ikony na ploše."
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -387,9 +419,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "Zobrazit ikony na ploše."
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -409,25 +440,25 @@ msgstr "Koš"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Přidat zástupce koše na plochu."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Velikost"
+msgstr "Velikost ikon"
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "Zobrazit ikony na ploše."
+msgstr "Nastavit požadovanou velikost ikon na ploše."
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr "Počet ploch"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr "Počet ploch vytvořených po startu."
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -444,27 +475,28 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
-msgstr ""
+msgstr "Normální"
 
 #. Small
 #: src/panel/settings/settings_desktop.vala:292
 msgid "Small"
-msgstr ""
+msgstr "Malé"
 
 #. Large
 #: src/panel/settings/settings_desktop.vala:294
 msgid "Large"
-msgstr ""
+msgstr "Velké"
 
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr ""
+msgstr "Velmi velké"
 
 #: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
 msgid "Applets"
@@ -475,7 +507,6 @@ msgid "Settings"
 msgstr "Nastavení"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
 msgstr "Odstranit panel"
 
@@ -598,7 +629,9 @@ msgid "Stylize regions"
 msgstr "Stylizovat oblasti"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
 msgstr "Odlišit tři hlavní sekce panelu, aby každá mohla používat jiný motiv."
 
 #: src/panel/settings/settings_panel.vala:274
@@ -606,8 +639,12 @@ msgid "Dock mode"
 msgstr "Režim doku"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "V režimu doku zabírá panel nejméně možného místa, takže uvolní cenný prostor na obrazovce"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"V režimu doku zabírá panel nejméně možného místa, takže uvolní cenný prostor"
+" na obrazovce"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -665,14 +702,12 @@ msgid "Autostart apps"
 msgstr "Automaticky spuštěné apky"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Aplikace"
+msgstr "Přidat aplikaci"
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Příkaz"
+msgstr "Přidat příkaz"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -808,9 +843,8 @@ msgid "Caffeine Mode"
 msgstr "Kofeinový režim"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Nastavení"
+msgstr "Nastavení systému"
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -1066,11 +1100,11 @@ msgstr "Časovač (minuty)"
 #. there's already an active tray, create an informative icon with a popover
 #: src/applets/tray/TrayApplet.vala:114
 msgid "Only one instance of the System Tray can be active at a time."
-msgstr ""
+msgstr "V jednu chvíli může být aktivní pouze jedna instance systémové lišty."
 
 #: src/applets/tray/TrayApplet.vala:140
 msgid "The System Tray failed to initialize."
-msgstr ""
+msgstr "Inicializace systémové lišty se nezdařila."
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
@@ -1157,7 +1191,8 @@ msgstr "Odoblíbit"
 msgid "Favorite"
 msgstr "Oblíbit"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1220,7 +1255,7 @@ msgstr "Rozbalovat místa"
 
 #: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr ""
+msgstr "Rozestupy ikon"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
@@ -1325,11 +1360,11 @@ msgstr "Seskupovat okna"
 
 #: src/applets/icon-tasklist/settings.ui.h:6
 msgid "Middle click to launch new window"
-msgstr ""
+msgstr "Kliknutí prostředním tlačítkem otevře nové okno"
 
 #: src/applets/icon-tasklist/settings.ui.h:7
 msgid "Require a double-click to launch new window"
-msgstr ""
+msgstr "Otevřít nové okno dvojklikem"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -1345,8 +1380,12 @@ msgid "Budgie Panel"
 msgstr "Panel Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Spouští další aplikace a poskytuje nástroje pro správu oken, zobrazení času, atd."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Spouští další aplikace a poskytuje nástroje pro správu oken, zobrazení času,"
+" atd."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

@@ -1,23 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Kevin Liu <bwael@foxmail.com>, 2017
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Gavin Zhao, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-09-28 16:21+0000\n"
-"Last-Translator: Zeron Wang <wangzheng.gz@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <http://translate.getsol.us/projects/budgie-desktop/translations/zh_Hans/>\n"
-"Language: zh\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Gavin Zhao, 2022\n"
+"Language-Team: Chinese (https://www.transifex.com/buddiesofbudgie/teams/129844/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.8\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -77,7 +80,8 @@ msgid "Confirm applet removal"
 msgstr "确认小程序移除"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr "您真的想要移除该小程序吗？此操作无法撤销。"
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
@@ -122,7 +126,9 @@ msgid "Attach modal dialogs to windows"
 msgstr "将对话框附着在窗口上"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr "对话框将附着在主窗口上并在拖曳时一起移动。"
 
 #: src/panel/settings/settings_wm.vala:46
@@ -146,25 +152,29 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "当窗口处于全屏时禁用夜间模式"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重新启用。"
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "当窗口处于全屏时禁用夜间模式"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重新启用。"
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "自动平铺"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
 msgstr "将窗口拖曳到屏幕顶部或远角时会自动平铺窗口。"
 
 #: src/panel/settings/settings_wm.vala:76
@@ -172,7 +182,9 @@ msgid "Enable window focus change on mouse enter and leave"
 msgstr "启用鼠标进入和离开窗口时的焦点切换"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr "当鼠标进入窗口时激活该窗口的焦点，并在鼠标离开该窗口时撤销对该窗口的焦点激活。"
 
 #: src/panel/settings/settings_wm.vala:83
@@ -180,16 +192,19 @@ msgid "Disable unredirection of windows"
 msgstr "禁用窗口的不重定向"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
 msgstr "此选项针对高级用户。如果您在使用独立显卡时遇到图形或性能问题可使用此选项。"
 
 #: src/panel/settings/settings_wm.vala:89
-#, fuzzy
 msgid "Show all windows in tab switcher"
-msgstr "点击时显示全部窗口"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -246,7 +261,8 @@ msgid "Built-in theme"
 msgstr "内置主题"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr "开启后，内置主题将覆盖桌面组件的样式"
 
 #: src/panel/settings/settings_style.vala:86
@@ -278,7 +294,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -286,7 +304,9 @@ msgid "Allow raising volume above 100%"
 msgstr "允许音量提高超过 100％"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
 msgstr "允许通过声音设置以及 Raven 的声音输出小部件将音量额外提高到 150%。"
 
 #: src/panel/settings/settings_raven.vala:72
@@ -294,7 +314,8 @@ msgid "Enable display of week numbers in Calendar"
 msgstr "在日历中显示周数"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "该设置允许在日历小部件中显示周数。"
 
 #: src/panel/settings/settings_raven.vala:78
@@ -326,7 +347,9 @@ msgid "Show Media Playback Controls Widget"
 msgstr "显示媒体播放控制小部件"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr "在 Raven 的小程序中显示或隐藏媒体播放控制（MPRIS）小部件。"
 
 #: src/panel/settings/settings_raven.vala:102
@@ -361,18 +384,19 @@ msgstr "桌面"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "桌面图标"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "控制是否允在桌面上放置起动器和图标。"
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -380,9 +404,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "控制是否允在桌面上放置起动器和图标。"
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -402,42 +425,43 @@ msgstr "回收站"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "向桌面上添加回收站目录的快捷方式."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "大小"
+msgstr "图标大小"
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "控制是否允在桌面上放置起动器和图标。"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr "虚拟桌面的数量"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr "启动时会自动创建的虚拟桌面/工作区的数量。"
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
-msgstr ""
+msgstr "单击"
 
 #. If the click policy is to double click
 #: src/panel/settings/settings_desktop.vala:221
 msgid "Double"
-msgstr ""
+msgstr "双击"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -468,9 +492,8 @@ msgid "Settings"
 msgstr "设置"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "移除面板"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -591,7 +614,9 @@ msgid "Stylize regions"
 msgstr "区域风格化"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
 msgstr "给面板做个标记以便面板的三块主要区域可以采用不同的主题。"
 
 #: src/panel/settings/settings_panel.vala:274
@@ -599,7 +624,9 @@ msgid "Dock mode"
 msgstr "停靠模式"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
 msgstr "启用停靠模式时，面板可以尽可能地使用最少的空间从而节省宝贵的屏幕区域"
 
 #: src/panel/settings/settings_autostart.vala:134
@@ -658,14 +685,12 @@ msgid "Autostart apps"
 msgstr "自动启动应用"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "应用程序"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "命令"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -801,9 +826,8 @@ msgid "Caffeine Mode"
 msgstr "Caffeine 模式"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "设置"
+msgstr "系统设置"
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -1147,7 +1171,8 @@ msgstr "丢弃收藏"
 msgid "Favorite"
 msgstr "收藏"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1319,7 +1344,7 @@ msgstr ""
 
 #: src/applets/icon-tasklist/settings.ui.h:7
 msgid "Require a double-click to launch new window"
-msgstr ""
+msgstr "双击以打开新窗口"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -1335,7 +1360,9 @@ msgid "Budgie Panel"
 msgstr "Budgie 面板"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
 msgstr "启动其他程序并提供各种工具来管理窗口，显示时间等。"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
