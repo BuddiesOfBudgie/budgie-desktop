@@ -8,7 +8,8 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * Code has been inspired by the elementaryOS Gala developers
+ * Code has been inspired by the elementaryOS Gala ScreenshotManager.vala
+ * and the GNOME 42 shell-screenshot.c techniques.
  */
 
 
@@ -132,8 +133,10 @@ namespace Budgie {
                 rect = window.frame_rect_to_client_rect (rect);
             }
 
-			var image = take_screenshot (rect.x, rect.y, rect.width, rect.height, include_cursor);
+			//var image = take_screenshot (rect.x, rect.y, rect.width, rect.height, include_cursor);
 
+			Cairo.RectangleInt clip = { rect.x - (int) actor_x, rect.y - (int) actor_y, rect.width, rect.height };
+			var image = (Cairo.ImageSurface) window_texture.get_image (clip);
 			if (include_cursor) {
 				image = composite_stage_cursor (image, { rect.x, rect.y, rect.width, rect.height });
 			}
@@ -233,84 +236,69 @@ namespace Budgie {
 			float scale;
 
 			var stage = Meta.Compositor.get_stage_for_display(display) as Clutter.Stage;
+
 			stage.get_capture_final_size ({x, y, width, height}, out image_width, out image_height, out scale);
 
 			image = new Cairo.ImageSurface (Cairo.Format.ARGB32, image_width, image_height);
 
-			var paint_flags = Clutter.PaintFlag.NO_CURSORS;
+			var paint_flags = Clutter.PaintFlag.CLEAR;
 			if (include_cursor) {
 				paint_flags |= Clutter.PaintFlag.FORCE_CURSORS;
 			}
-
-			if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
-				try {
-					stage.paint_to_buffer (
-						{x, y, width, height},
-						scale,
-						image.get_data(),
-						image.get_stride (),
-						Cogl.PixelFormat.BGRA_8888_PRE,
-						paint_flags
-					);
-				} catch (GLib.Error e) {
-					warning("Cannot stage paint_to_buffer: %s", e.message);
-				}
-
-			} else {
-				try {
-					stage.paint_to_buffer (
-						{x, y, width, height},
-						scale,
-						image.get_data(),
-						image.get_stride (),
-						Cogl.PixelFormat.ARGB_8888_PRE,
-						paint_flags
-					);
-				} catch (GLib.Error e) {
-					warning("Cannot stage paint_to_buffer(non endian): %s", e.message);
-				}
-
+			else {
+				paint_flags |= Clutter.PaintFlag.NO_CURSORS;
 			}
 
-			return image;
-		}
+			if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
+				//gnome shell uses CLUTTER_CAIRO_FORMAT_ARGB32 - in the cairo header
+				//this is defined depending on the architecture and maps to a pixel format
+				stage.paint_to_buffer (
+					{x, y, width, height},
+					scale,
+					image.get_data(),
+					image.get_stride (),
+					Cogl.PixelFormat.BGRA_8888_PRE,
+					paint_flags
+				);
+			} else {
+				stage.paint_to_buffer (
+					{x, y, width, height},
+					scale,
+					image.get_data(),
+					image.get_stride (),
+					Cogl.PixelFormat.ARGB_8888_PRE,
+					paint_flags
+				);
+			}
 
-		Cairo.ImageSurface composite_capture_images (Clutter.Capture[] captures, int x, int y, int width, int height) {
-			var image = new Cairo.ImageSurface (captures[0].image.get_format (), width, height);
-			var cr = new Cairo.Context (image);
-
-			foreach (unowned Clutter.Capture capture in captures) {
-				// Ignore capture regions with scale other than 1 for now; mutter can't
-				// produce them yet, so there is no way to test them.
-				double capture_scale = 1.0;
-				capture.image.get_device_scale (out capture_scale, null);
-				if (capture_scale != 1.0)
-					continue;
-
-				cr.save ();
-				cr.translate (capture.rect.x - x, capture.rect.y - y);
-				cr.set_source_surface (capture.image, 0, 0);
-				cr.restore ();
+			if (include_cursor) {
+				if (include_cursor) {
+					image = composite_stage_cursor (image, { x, y, width, height });
+				}
 			}
 
 			return image;
 		}
 
 		Cairo.ImageSurface composite_stage_cursor (Cairo.ImageSurface image, Cairo.RectangleInt image_rect) {
-			unowned Meta.CursorTracker cursor_tracker = display.get_cursor_tracker();
 			Graphene.Point coords = {};
+			int xhot, yhot;
+			unowned Meta.CursorTracker cursor_tracker = display.get_cursor_tracker();
+			unowned Cogl.Texture texture = cursor_tracker.get_sprite ();
 
-			cursor_tracker.get_pointer (coords, null);
+			if (texture == null) {
+				return image;
+			}
+
 
 			var region = new Cairo.Region.rectangle (image_rect);
+			cursor_tracker.get_pointer (out coords, null);
+
 			if (!region.contains_point ((int) coords.x, (int) coords.y)) {
 				return image;
 			}
 
-			unowned Cogl.Texture texture = cursor_tracker.get_sprite ();
-			if (texture == null) {
-				return image;
-			}
+			cursor_tracker.get_hot (out xhot, out yhot);
 
 			int width = (int)texture.get_width ();
 			int height = (int)texture.get_height ();
@@ -323,11 +311,13 @@ namespace Budgie {
 
 			var cr = new Cairo.Context (target);
 			cr.set_operator (Cairo.Operator.OVER);
+			image.mark_dirty();
 			cr.set_source_surface (image, 0, 0);
 			cr.paint ();
 
 			cr.set_operator (Cairo.Operator.OVER);
-			cr.set_source_surface (cursor_image, coords.x - image_rect.x, coords.y - image_rect.y);
+			cr.set_source_surface (cursor_image, coords.x - image_rect.x - xhot,
+				coords.y - image_rect.y - yhot);
 			cr.paint ();
 
 			return (Cairo.ImageSurface)cr.get_target ();

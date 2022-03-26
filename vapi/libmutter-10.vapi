@@ -314,7 +314,7 @@ namespace Meta {
 		[CCode (has_construct_function = false)]
 		protected CursorTracker ();
 		public void get_hot (out int x, out int y);
-		public void get_pointer (Graphene.Point coords, out Clutter.ModifierType mods);
+		public void get_pointer (out Graphene.Point coords, out Clutter.ModifierType mods);
 		public bool get_pointer_visible ();
 		public float get_scale ();
 		public unowned Cogl.Texture get_sprite ();
