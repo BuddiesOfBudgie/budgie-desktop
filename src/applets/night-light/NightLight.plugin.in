@@ -1,7 +1,7 @@
 [Plugin]
 Module=nightlightapplet.so
 Name=Night Light
-_Description=Night Light
+_Description=Toggle and modify Night Light settings
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2017-2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org
