@@ -72,16 +72,7 @@ namespace Budgie.Abomination {
 			}
 
 			this.screen.window_closed.connect(this.remove_app);
-			this.screen.window_opened.connect((window) => {
-				// just make sure that "closed" is always sent before "opened" signal.
-				// Otherwise some apps (e.g. Google Chrome with profile manager)
-				// might not properly reuse the pinned icon when grouping is disabled
-				// (second window open before first is closed)
-				Timeout.add(100, () => {
-					this.add_app(window);
-					return false;
-				});
-			});
+			this.screen.window_opened.connect(this.add_app);
 
 			this.screen.get_windows().foreach((window) => { // Init all our current running windows
 				this.add_app(window);
@@ -222,6 +213,8 @@ namespace Budgie.Abomination {
 			this.track_window_fullscreen_state(window, null); // Remove from fullscreen_windows and toggle state if necessary
 			if (app != null) { // App is defined
 				this.removed_app(app.get_group_name(), app); // Notify that we called remove
+			} else {
+				debug("Cannot remove %s", window.get_name());
 			}
 		}
 
