@@ -418,6 +418,18 @@ public class IconTasklistApplet : Budgie.Applet {
 		button.update();
 
 		this.remove_button(app.id.to_string());
+
+		// Google Chrome with profile manager will not properly reuse the
+		// pinned icon when grouping is disabled (second window open before first is closed)
+		if (button.pinned && !this.grouping) { // try re-parenting app
+			Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
+			if (first_app == null) {
+				return;
+			}
+
+			this.on_app_closed(first_app);
+			this.on_app_opened(first_app);
+		}
 	}
 
 	private void on_active_window_changed() {
