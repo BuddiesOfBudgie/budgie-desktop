@@ -189,16 +189,18 @@ public class IconButton : Gtk.ToggleButton {
 					}
 				} else { // If this hasn't been pinned from the start
 					if (this.app_info != null && this.first_app != null) {
-						id = "%s|%lu".printf(this.app_info.get_id(), this.first_app.id);
+						id = this.first_app.get_real_id(true);
 					} else if (this.app_info == null && this.first_app != null) {
-						id = "%s|%lu".printf(this.first_app.get_group_name(), this.first_app.id);
+						id = this.first_app.id.to_string();
 					}
 				}
 			} else { // If this is from a group
-				if (this.app_info != null) {
+				if (this.app_info != null) { // This app has app info
 					id = this.app_info.get_id();
-				} else if (this.first_app != null) {
-					id = this.first_app.get_group_name();
+				} else if (this.first_app != null && this.first_app.app_info != null) { // First app has app into
+					id = this.first_app.app_info.get_id(); // Get
+				} else { // No app info, likely a singleton window and should use its window id
+					id = this.window.get_xid().to_string();
 				}
 			}
 
@@ -348,6 +350,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		this.window = window;
+		this.is_from_window = (window != null);
 
 		if (window == null) {
 			return;

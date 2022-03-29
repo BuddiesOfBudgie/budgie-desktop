@@ -163,7 +163,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			IconButton button = this.buttons.get(window.get_xid().to_string());
 
 			if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
-				string launcher = this.get_app_launcher(app.app_info.get_filename());
+				string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
 				button = this.buttons.get(launcher);
 			}
 
@@ -251,7 +251,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				return; // Don't allow drag & drop
 			}
 
-			string launcher = this.get_app_launcher(app_id);
+			string launcher = this.desktop_helper.get_app_launcher(app_id);
 
 			if (this.buttons.contains(launcher)) {
 				original_button = (this.buttons[launcher].get_parent() as ButtonWrapper);
@@ -264,7 +264,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			unowned IconButton? button = null;
 			string app_id_without_desktop_suffix = app_id.replace(".desktop", "");
 
-			if (this.buttons.contains(app_id)) { // If buttons contains this app_id
+			if (this.buttons.contains(app_id)) { // If buttons contains this ID for this application (can be a desktop file name or xid)
 				button = this.buttons.get(app_id);
 			} else {
 				button = this.buttons.get(app_id_without_desktop_suffix);
@@ -348,17 +348,26 @@ public class IconTasklistApplet : Budgie.Applet {
 			return;
 		}
 
+		string usable_app_id = app.get_real_id(false); // Default to an app id that doesn't account for grouping setting
 		string first_app_id = first_app.id.to_string();
+
 		if (app.app_info != null) { // properly group new apps with their pinned version
-			string launcher = this.get_app_launcher(app.app_info.get_filename());
+			string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
 			if (this.buttons.contains(launcher)) {
 				first_app_id = launcher;
+				usable_app_id = launcher;
 			}
 		}
 
+		bool from_window_with_no_info = true;
+
+		if (app.app_info != null) { // If the app has DesktopAppInfo
+			from_window_with_no_info = false;
+		}
+
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (this.buttons.contains(first_app_id) && this.grouping) {
-			IconButton first_button = this.buttons.get(first_app_id);
+		if (this.buttons.contains(usable_app_id) && this.grouping) { // Contain a button with the initial app id and we are grouping, use it. Also use it during some reparent scenarios when grouping is disabled and we are down to one last window
+			IconButton first_button = this.buttons.get(usable_app_id);
 			if (!first_button.icon.waiting && first_button.icon.get_realized()) {
 				first_button.icon.waiting = true;
 				first_button.icon.animate_wait();
@@ -374,24 +383,26 @@ public class IconTasklistApplet : Budgie.Applet {
 			}
 
 			if (button != null) {
-				this.add_button(app.id.to_string(), button); // map app to it's button so that we can update it later on
+				this.add_button(usable_app_id, button); // map app to it's button so that we can update it later on
 			}
 		}
 
 		if (button == null) { // create a new button
-			if (!this.grouping) {
+			if (!this.grouping) { // Not grouping
+				usable_app_id = app.get_real_id(true); // Include with the xid
 				button = new IconButton.from_app(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app, false);
 			} else {
 				button = new IconButton.from_group(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app.group_object, false);
 			}
-			this.add_icon_button(app.id.to_string(), button);
+
+			this.add_icon_button(usable_app_id, button);
 		}
 
 		if (this.grouping && button.get_class_group() == null) { // button was pinned without app opened, set class group in button to properly group windows
 			button.set_class_group(app.group_object);
 		}
 
-		if (!this.grouping && button.is_empty()) { // button was pinned without app opened
+		if ((!this.grouping && button.is_empty()) || from_window_with_no_info) { // button was pinned without app opened, or was launched but has no app info
 			button.set_wnck_window(app.get_window());
 		}
 
@@ -399,25 +410,35 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_app_closed(Budgie.Abomination.RunningApp app) {
-		IconButton? button = this.buttons.get(app.id.to_string());
+		IconButton? button = this.buttons.get(app.get_real_id(true));
 
 		if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
-			string launcher = this.get_app_launcher(app.app_info.get_filename());
-			button = this.buttons.get(launcher);
+			button = this.buttons.get(app.get_real_id(false));
 		}
 
 		if (button == null) { // we don't manage this button
 			return;
 		}
 
-		if (button.get_class_group() != null && button.get_class_group().get_windows().length() == 0) { // when we don't have windows in the group anymore, it's safe to remove the group
+		bool has_class_group = button.get_class_group() != null;
+		uint window_count = 0; // Default to 0 since this app is closing
+
+		if (has_class_group) { // Can even get the windows list in the first place
+			window_count = button.get_class_group().get_windows().length();
+		}
+
+		if (has_class_group && window_count == 0) { // when we don't have windows in the group anymore, it's safe to remove the group
 			button.set_class_group(null);
 		}
 
 		button.set_wnck_window(null);
 		button.update();
 
-		this.remove_button(app.id.to_string());
+		string use_id = app.get_real_id(!this.grouping && !button.pinned); // Get the real id, using the xid only if grouping is not enabled, this button isn't pinned (otherwise we get a circular removal until segfault), and more than one window (so we need to differ between them)
+
+		if (!button.pinned) {
+			this.remove_button(use_id);
+		}
 
 		// Google Chrome with profile manager will not properly reuse the
 		// pinned icon when grouping is disabled (second window open before first is closed)
@@ -566,11 +587,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		lock(this.buttons) {
 			this.buttons.remove(key);
 		}
-	}
-
-	private string get_app_launcher(string app_id) {
-		string[] parts = app_id.split("/");
-		return parts[parts.length - 1];
 	}
 }
 
