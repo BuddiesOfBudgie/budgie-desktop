@@ -28,15 +28,22 @@ lib_applet_budgiemenu_resources = static_library(
 )
 
 applet_budgiemenu_sources = [
+    'backend/Application.vala',
+    'backend/Category.vala',
+    'backend/Tracker.vala',
     'BudgieMenu.vala',
     'BudgieMenuButtons.vala',
     'BudgieMenuWindow.vala',
     'IconChooser.vala',
+    'views/ListView.vala',
+    'views/View.vala',
+    applet_budgiemenu_resources,
 ]
 
 applet_budgiemenu_deps = [
     libplugin_vapi,
     dep_gtk3,
+    dep_gee,
     dep_peas,
     link_libplugin,
     dependency('libgnome-menu-3.0', version: '>= 3.10.3'),

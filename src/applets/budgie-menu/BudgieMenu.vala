@@ -30,6 +30,9 @@ public class BudgieMenuSettings : Gtk.Grid {
 	private unowned Gtk.Switch? switch_menu_categories_hover;
 
 	[GtkChild]
+	private unowned Gtk.Switch? switch_menu_show_settings_items;
+
+	[GtkChild]
 	private unowned Gtk.Entry? entry_label;
 
 	[GtkChild]
@@ -48,6 +51,7 @@ public class BudgieMenuSettings : Gtk.Grid {
 		settings.bind("menu-categories-hover", switch_menu_categories_hover, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-label", entry_label, "text", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-icon", entry_icon_pick, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("menu-show-control-center-items", switch_menu_show_settings_items, "active", SettingsBindFlags.DEFAULT);
 
 		this.button_icon_pick.clicked.connect(on_pick_click);
 	}
@@ -78,6 +82,8 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 	public string uuid { public set ; public get; }
 
+	private Tracker app_tracker;
+
 	public override Gtk.Widget? get_settings_ui() {
 		return new BudgieMenuSettings(this.get_applet_settings(uuid));
 	}
@@ -95,6 +101,8 @@ public class BudgieMenuApplet : Budgie.Applet {
 		settings = this.get_applet_settings(uuid);
 
 		settings.changed.connect(on_settings_changed);
+
+		app_tracker = new Tracker();
 
 		widget = new Gtk.ToggleButton();
 		widget.relief = Gtk.ReliefStyle.NONE;
@@ -116,6 +124,29 @@ public class BudgieMenuApplet : Budgie.Applet {
 		st.add_class("panel-button");
 		popover = new BudgieMenuWindow(settings, widget);
 		popover.bind_property("visible", widget, "active");
+		popover.refresh(this.app_tracker, true);
+		app_tracker.changed.connect(() => {
+			/*
+			 * Refesh the view on application system change.
+			 * We don't want to update the UI when the popover
+			 * is open, because that has a jarring visual effect.
+			 * So, if the popover is open, add a 1 second timer
+			 * to check if it's still visible, and if not, refresh
+			 * the view.
+			 */
+			if (popover.get_visible()) {
+				Timeout.add_seconds(1, () => {
+					if (popover.is_visible()) {
+						return true;
+					}
+
+					popover.refresh(this.app_tracker);
+					return false;
+				}, Priority.DEFAULT_IDLE);
+			} else {
+				popover.refresh(this.app_tracker);
+			}
+		});
 
 		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
@@ -208,6 +239,9 @@ public class BudgieMenuApplet : Budgie.Applet {
 								panel_position == Budgie.PanelPosition.BOTTOM) &&
 								settings.get_boolean(key);
 				label.set_visible(visible);
+				break;
+			case "menu-show-control-center-items":
+				this.app_tracker.queue_refresh();
 				break;
 			default:
 				break;
