@@ -886,6 +886,8 @@ namespace Budgie {
 			PanelPosition position;
 			PanelTransparency transparency;
 			AutohidePolicy policy;
+			bool dock_mode;
+			bool shadow_visible;
 			int size;
 
 			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
@@ -899,16 +901,17 @@ namespace Budgie {
 			position = (PanelPosition)settings.get_enum(Budgie.PANEL_KEY_POSITION);
 			transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
 			policy = (AutohidePolicy)settings.get_enum(Budgie.PANEL_KEY_AUTOHIDE);
-
-			panel.transparency = transparency;
-			panel.autohide = policy;
+			dock_mode = settings.get_boolean(Budgie.PANEL_KEY_DOCK_MODE);
+			shadow_visible = settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
 
 			size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			panel.intended_size = (int)size;
-			this.show_panel(uuid, position, transparency);
+			this.show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
 		}
 
-		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency) {
+		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency, AutohidePolicy policy,
+						bool dock_mode, bool shadow_visible) {
+
 			Budgie.Panel? panel = panels.lookup(uuid);
 			unowned Screen? scr;
 
@@ -921,6 +924,9 @@ namespace Budgie {
 			scr.slots |= position;
 			this.set_placement(uuid, position);
 			this.set_transparency(uuid, transparency);
+			this.set_autohide(uuid, policy);
+			this.set_dock_mode(uuid, dock_mode);
+			this.set_shadow(uuid, shadow_visible);
 		}
 
 		/**
@@ -1033,6 +1039,17 @@ namespace Budgie {
 
 			// Raven needs to know about the dock mode
 			this.update_screen();
+		}
+
+		void set_shadow(string uuid, bool visible) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+
+			if (panel == null) {
+				warning("Trying to set dock mode on non-existent panel: %s", uuid);
+				return;
+			}
+
+			panel.update_shadow(visible);
 		}
 
 		/**
@@ -1243,6 +1260,9 @@ namespace Budgie {
 		void create_panel(string? name = null, KeyFile? new_defaults = null) {
 			PanelPosition position = PanelPosition.NONE;
 			PanelTransparency transparency = PanelTransparency.NONE;
+			Budgie.AutohidePolicy policy = Budgie.AutohidePolicy.NONE;
+			bool dock_mode = false;
+			bool shadow_visible = true;
 			int size = -1;
 
 			if (this.slots_available() < 1) {
@@ -1272,6 +1292,38 @@ namespace Budgie {
 					if (new_defaults.has_key(name, "Size")) {
 						size = new_defaults.get_integer(name, "Size");
 					}
+					if (new_defaults.has_key(name, "Dock")) {
+						dock_mode = new_defaults.get_boolean(name, "Dock");
+					}
+					if (new_defaults.has_key(name, "Shadow")) {
+						shadow_visible = new_defaults.get_boolean(name, "Shadow");
+					}
+					if (new_defaults.has_key(name, "Autohide")) {
+						switch(new_defaults.get_string(name, "Autohide").down()) {
+							case "automatic":
+								policy = Budgie.AutohidePolicy.AUTOMATIC;
+								break;
+							case "intelligent":
+								policy = Budgie.AutohidePolicy.INTELLIGENT;
+								break;
+							default:
+								policy = Budgie.AutohidePolicy.NONE;
+								break;
+						}
+					}
+					if (new_defaults.has_key(name, "Transparency")) {
+						switch(new_defaults.get_string(name, "Transparency").down()) {
+							case "always":
+								transparency = PanelTransparency.ALWAYS;
+								break;
+							case "dynamic":
+								transparency = PanelTransparency.DYNAMIC;
+								break;
+							default:
+								transparency = PanelTransparency.NONE;
+								break;
+						}
+					}
 				} catch (Error e) {
 					warning("create_panel(): %s", e.message);
 				}
@@ -1287,12 +1339,7 @@ namespace Budgie {
 			load_panel(uuid, false);
 
 			set_panels();
-
-			string path = this.create_panel_path(uuid);
-			var settings = new GLib.Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
-			transparency = (PanelTransparency)settings.get_enum(Budgie.PANEL_KEY_TRANSPARENCY);
-
-			show_panel(uuid, position, transparency);
+			show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
 
 			if (new_defaults == null || name == null) {
 				this.panel_added(uuid, panels.lookup(uuid));
