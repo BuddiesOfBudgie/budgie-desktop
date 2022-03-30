@@ -48,23 +48,6 @@ namespace Budgie.Abomination {
 			return this.group_object.get_name();
 		}
 
-		public string get_real_id(bool include_xid) {
-			string usable_app_id = this.id.to_string(); // Default to the xid of the app
-
-			if (this.app_info != null) { // If the app has DesktopAppInfo
-				string[] parts = this.app_info.get_filename().split("/"); // Taken from DesktopHelpers
-				string app_name = parts[parts.length - 1];
-
-				if (include_xid) { // Only include xid when we have app info since we default to the xid from the start
-					usable_app_id = "%s|%lu".printf(app_name, this.id);
-				} else { // No xid, use app_name
-					usable_app_id = app_name;
-				}
-			}
-
-			return usable_app_id;
-		}
-
 		public Wnck.Window get_window() {
 			return this.window;
 		}
