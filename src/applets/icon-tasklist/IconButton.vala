@@ -28,6 +28,7 @@ public class IconButton : Gtk.ToggleButton {
 	public Icon icon;
 	public bool pinned = false;
 	public Wnck.Window? last_active_window = null;
+	public string button_id;
 
 	private Budgie.IconPopover? popover = null;
 	private Wnck.Screen? screen = null;
@@ -37,7 +38,6 @@ public class IconButton : Gtk.ToggleButton {
 	private DesktopAppInfo? app_info = null;
 	private int window_count = 0;
 	private Gtk.Allocation definite_allocation;
-	private bool is_from_window = false;
 	private bool originally_pinned = false;
 	private Gdk.AppLaunchContext launch_context;
 	private int64 last_scroll_time = 0;
@@ -59,12 +59,13 @@ public class IconButton : Gtk.ToggleButton {
 	 * Bootstrap a button without window nor group, as it should be for pinned
 	 * buttons without any active apps.
 	 */
-	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, bool pinned) {
+	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, string button_id) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
 		this.app_info = info;
-		this.pinned = pinned;
-		this.originally_pinned = pinned;
+		this.pinned = true;
+		this.originally_pinned = true;
+		this.button_id = button_id;
 		this.gobject_constructors_suck();
 		this.create_popover(); // Create our popover
 
@@ -78,12 +79,13 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * Bootstrap our button to be ready to work with grouping DISABLED.
 	 */
-	public IconButton.from_app(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.RunningApp app, bool pinned = false) {
+	public IconButton.from_app(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.RunningApp app, string button_id) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
-		this.pinned = pinned;
-		this.originally_pinned = pinned;
+		this.pinned = false;
+		this.originally_pinned = false;
 		this.first_app = abomination.get_app_from_window_id(app.get_window().get_xid());
+		this.button_id = button_id;
 
 		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from RunningApp
 			this.app_info = this.first_app.app_info;
@@ -109,12 +111,13 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * Bootstrap our button to be ready to work with grouping ENABLED.
 	 */
-	public IconButton.from_group(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.AppGroup group, bool pinned = false) {
+	public IconButton.from_group(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.AppGroup group, string button_id) {
 		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
 		this.settings = c_settings;
-		this.pinned = pinned;
-		this.originally_pinned = pinned;
+		this.pinned = false;
+		this.originally_pinned = false;
 		this.first_app = abomination.get_first_app_of_group(group.get_name());
+		this.button_id = button_id;
 
 		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from RunningApp
 			this.app_info = this.first_app.app_info;
@@ -179,36 +182,7 @@ public class IconButton : Gtk.ToggleButton {
 		});
 
 		drag_data_get.connect((widget, context, selection_data, info, time) => {
-			string id = "";
-			if (this.is_from_window) { // If this is from a window
-				if (this.pinned && this.originally_pinned) { // Has been pinned from the start
-					if (this.app_info != null) {
-						id = this.app_info.get_id();
-					} else {
-						id = this.window.get_name();
-					}
-				} else { // If this hasn't been pinned from the start
-					if (this.app_info != null && this.first_app != null) {
-						id = this.first_app.get_real_id(true);
-					} else if (this.app_info == null && this.first_app != null) {
-						id = this.first_app.id.to_string();
-					}
-				}
-			} else { // If this is from a group
-				if (this.app_info != null) { // This app has app info
-					id = this.app_info.get_id();
-				} else if (this.first_app != null && this.first_app.app_info != null) { // First app has app into
-					id = this.first_app.app_info.get_id(); // Get
-				} else { // No app info, likely a singleton window and should use its window id
-					id = this.window.get_xid().to_string();
-				}
-			}
-
-			if (id == "" && this.window != null) { // If id isn't set
-			  id = this.window.get_name(); // Just use name
-			}
-
-			selection_data.set(selection_data.get_target(), 8, (uchar[])id.to_utf8());
+			selection_data.set(selection_data.get_target(), 8, (uchar[])this.button_id.to_utf8());
 		});
 
 		var st = get_style_context();
@@ -350,7 +324,6 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		this.window = window;
-		this.is_from_window = (window != null);
 
 		if (window == null) {
 			return;
@@ -448,7 +421,7 @@ public class IconButton : Gtk.ToggleButton {
 	public void update() {
 		if (!this.has_valid_windows(null)) {
 			this.get_style_context().remove_class("running");
-			if (!this.pinned || this.is_from_window) {
+			if (!this.pinned) {
 				return;
 			} else {
 				this.class_group = null;
