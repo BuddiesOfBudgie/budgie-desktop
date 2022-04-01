@@ -73,6 +73,12 @@ namespace Budgie {
 	/** Panel position */
 	public const string PANEL_KEY_POSITION = "location";
 
+	/** Panel whether to move to primary on monitor disconnect */
+	public const string PANEL_KEY_DISCONNECT   = "disconnect";
+
+	/** Monitor than the panel is associated with */
+	public const string PANEL_KEY_MONITOR      = "monitor";
+
 	/** Panel transparency */
 	public const string PANEL_KEY_TRANSPARENCY = "transparency";
 
@@ -371,7 +377,7 @@ namespace Budgie {
 		}
 
 		/*
-		* Decide wether or not the panel should be opaque
+		* Decide whether or not the panel should be opaque
 		* The panel should be opaque when:
 		* - Raven is open
 		* - a window fills these requirements:
@@ -491,17 +497,31 @@ namespace Budgie {
 			/* Fix all existing panels here */
 			Gdk.Rectangle raven_screen;
 
+			unowned Screen? monitor_screen;
+
 			iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(out uuid, out panel)) {
 				/* Force existing panels to update to new primary display */
-				panel.update_geometry(primary.area, panel.position);
+				monitor_screen = screens.lookup(panel.monitor);
+
+				if (monitor_screen == null) {
+					panel.is_disabled = true;
+					continue;
+				} else {
+					panel.update_geometry(monitor_screen.area, panel.position, panel.monitor);
+					panel.is_disabled = false;
+				}
+
 				if (panel.position == Budgie.PanelPosition.TOP) {
 					top = panel;
 				} else if (panel.position == Budgie.PanelPosition.BOTTOM) {
 					bottom = panel;
 				}
-				/* Re-take the position */
-				primary.slots |= panel.position;
+
+				if (panel.move_on_disconnect) {
+					/* Re-take the position */
+					monitor_screen.slots |= panel.position;
+				}
 			}
 			this.primary_monitor = mon;
 
@@ -884,6 +904,7 @@ namespace Budgie {
 
 			string path = this.create_panel_path(uuid);
 			PanelPosition position;
+			int monitor;
 			PanelTransparency transparency;
 			AutohidePolicy policy;
 			bool dock_mode;
@@ -903,13 +924,15 @@ namespace Budgie {
 			policy = (AutohidePolicy)settings.get_enum(Budgie.PANEL_KEY_AUTOHIDE);
 			dock_mode = settings.get_boolean(Budgie.PANEL_KEY_DOCK_MODE);
 			shadow_visible = settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
+			monitor = settings.get_int(Budgie.PANEL_KEY_MONITOR);
+			panel.move_on_disconnect = settings.get_boolean(Budgie.PANEL_KEY_DISCONNECT);
 
 			size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			panel.intended_size = (int)size;
-			this.show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
+			this.show_panel(uuid, position, monitor, transparency, policy, dock_mode, shadow_visible);
 		}
 
-		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency, AutohidePolicy policy,
+		void show_panel(string uuid, PanelPosition position, int monitor, PanelTransparency transparency, AutohidePolicy policy,
 						bool dock_mode, bool shadow_visible) {
 
 			Budgie.Panel? panel = panels.lookup(uuid);
@@ -920,9 +943,15 @@ namespace Budgie {
 				return;
 			}
 
-			scr = screens.lookup(this.primary_monitor);
+			scr = screens.lookup(monitor);
+
+			if (scr == null) {
+				panel.is_disabled = true;
+				return;
+			}
+
 			scr.slots |= position;
-			this.set_placement(uuid, position);
+			this.set_placement(uuid, position, monitor);
 			this.set_transparency(uuid, transparency);
 			this.set_autohide(uuid, policy);
 			this.set_dock_mode(uuid, dock_mode);
@@ -947,7 +976,7 @@ namespace Budgie {
 		/**
 		* Enforce panel placement
 		*/
-		public override void set_placement(string uuid, PanelPosition position) {
+		public override void set_placement(string uuid, PanelPosition position, int monitor) {
 			Budgie.Panel? panel = panels.lookup(uuid);
 			string? key = null;
 			Budgie.Panel? val = null;
@@ -957,19 +986,21 @@ namespace Budgie {
 				warning("Trying to move non-existent panel: %s", uuid);
 				return;
 			}
-			Screen? area = screens.lookup(primary_monitor);
+			Screen? area = screens.lookup(monitor);
+			Screen? old_area = screens.lookup(panel.monitor);
 
-			PanelPosition old = panel.position;
+			PanelPosition old_position = panel.position;
+			int old_monitor = panel.monitor;
 
-			if (old == position) {
-				warning("Attempting to move panel to the same position it's already in: %s %s %s", uuid, old.to_string(), position.to_string());
+			if (old_position == position && old_monitor == monitor) {
+				warning("Attempting to move panel to the same position it's already in: %s %s %s", uuid, old_position.to_string(), position.to_string());
 				return;
 			}
 
 			/* Attempt to find a conflicting position */
 			var iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(out key, out val)) {
-				if (val.position == position) {
+				if (val.position == position && val.monitor == monitor) {
 					conflict = val;
 					break;
 				}
@@ -978,15 +1009,15 @@ namespace Budgie {
 			panel.hide();
 			if (conflict != null) {
 				conflict.hide();
-				conflict.update_geometry(area.area, old);
+				conflict.update_geometry(old_area.area, old_position, old_monitor);
 				conflict.show();
 				panel.hide();
-				panel.update_geometry(area.area, position);
+				panel.update_geometry(area.area, position, monitor);
 				panel.show();
 			} else {
-				area.slots ^= old;
+				old_area.slots ^= old_position;
 				area.slots |= position;
-				panel.update_geometry(area.area, position);
+				panel.update_geometry(area.area, position, monitor);
 			}
 
 			/* This does mean re-configuration a couple of times that could
@@ -994,6 +1025,17 @@ namespace Budgie {
 			*/
 			this.update_screen();
 			panel.show();
+		}
+
+		public override void set_display_disconnect(string uuid, bool move_on_disconnect) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+
+			if (panel == null) {
+				warning("Trying to set disconnect on non-existent panel: %s", uuid);
+				return;
+			}
+
+			panel.move_on_disconnect = move_on_disconnect;
 		}
 
 		/**
@@ -1093,14 +1135,19 @@ namespace Budgie {
 			Budgie.Panel? val2 = null;
 
 			while (iter2.next(out key2, out val2)) {
+				if (val2.is_disabled)
+					continue;
+
+				Screen? area_proper = screens.lookup(val2.monitor);
+
 				switch (val2.position) {
 				case Budgie.PanelPosition.LEFT:
 				case Budgie.PanelPosition.RIGHT:
 					Gdk.Rectangle geom = Gdk.Rectangle();
-					geom.x = area.area.x;
-					geom.y = area.area.y;
-					geom.width = area.area.width;
-					geom.height = area.area.height;
+					geom.x = area_proper.area.x;
+					geom.y = area_proper.area.y;
+					geom.width = area_proper.area.width;
+					geom.height = area_proper.area.height;
 					if (this.is_panel_huggable(top)) {
 						geom.y += top.intended_size;
 						geom.height -= top.intended_size;
@@ -1108,10 +1155,10 @@ namespace Budgie {
 					if (this.is_panel_huggable(bottom)) {
 						geom.height -= bottom.intended_size;
 					}
-					val2.update_geometry(geom, val2.position, val2.intended_size);
+					val2.update_geometry(geom, val2.position, val2.monitor, val2.intended_size);
 					break;
 				default:
-					val2.update_geometry(area.area, val2.position, val2.intended_size);
+					val2.update_geometry(area.area, val2.position, val2.monitor, val2.intended_size);
 					break;
 				}
 			}
@@ -1259,6 +1306,7 @@ namespace Budgie {
 
 		void create_panel(string? name = null, KeyFile? new_defaults = null) {
 			PanelPosition position = PanelPosition.NONE;
+			int monitor = 0;
 			PanelTransparency transparency = PanelTransparency.NONE;
 			Budgie.AutohidePolicy policy = Budgie.AutohidePolicy.NONE;
 			bool dock_mode = false;
@@ -1339,7 +1387,9 @@ namespace Budgie {
 			load_panel(uuid, false);
 
 			set_panels();
-			show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
+
+			// TODO: Pick a safe default monitor docation
+			show_panel(uuid, position, monitor, transparency, policy, dock_mode, shadow_visible);
 
 			if (new_defaults == null || name == null) {
 				this.panel_added(uuid, panels.lookup(uuid));

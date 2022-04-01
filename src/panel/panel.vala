@@ -139,7 +139,7 @@ namespace Budgie {
 		/**
 		* Force update the geometry
 		*/
-		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int size = 0) {
+		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int monitor, int size = 0) {
 			this.orig_scr = screen;
 			string old_class = Budgie.position_class_name(this.position);
 
@@ -161,6 +161,9 @@ namespace Budgie {
 				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 				this.update_positions();
 			}
+
+			this.monitor = monitor;
+			this.settings.set_int(Budgie.PANEL_KEY_MONITOR, this.monitor);
 
 			this.shadow.position = position;
 			this.layout.queue_resize();
@@ -332,6 +335,9 @@ namespace Budgie {
 			shadow.halign = Gtk.Align.FILL;
 			shadow.show_all();
 			main_layout.pack_start(shadow, false, false, 0);
+
+			move_on_disconnect = this.settings.get_boolean(Budgie.PANEL_KEY_DISCONNECT);
+	        this.settings.bind(Budgie.PANEL_KEY_DISCONNECT, this, "move-on-disconnect", SettingsBindFlags.DEFAULT);
 
 			this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "active", SettingsBindFlags.GET);
 			this.settings.bind(Budgie.PANEL_KEY_DOCK_MODE, this, "dock-mode", SettingsBindFlags.DEFAULT);
@@ -1034,7 +1040,7 @@ namespace Budgie {
 			if (this.autohide != AutohidePolicy.NONE) {
 				Budgie.unset_struts(this);
 			} else {
-				Budgie.set_struts(this, position, intended_size);
+				Budgie.set_struts(this, position, this.monitor, intended_size);
 			}
 		}
 

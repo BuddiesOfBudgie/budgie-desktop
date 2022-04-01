@@ -46,6 +46,18 @@
       <description>Height of panel if horizontal, or the width if it is vertical</description>
     </key>
 
+    <key type="i" name="monitor">
+      <default>0</default>
+      <summary>Panel monitor</summary>
+      <description>Monitor the panel will stay on</description>
+    </key>
+
+    <key type="b" name="disconnect">
+      <default>true</default>
+      <summary>Move panel to primary</summary>
+      <description>When the display is disconnected, the associated panel is moved to the primary display</description>
+    </key>
+
     <key enum="com.solus-project.budgie-panel.Transparency" name="transparency">
       <default>'none'</default>
       <summary>Panel transparency</summary>

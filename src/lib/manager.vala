@@ -21,11 +21,12 @@ namespace Budgie {
 
 		public abstract uint slots_available();
 		public abstract uint slots_used();
-		public abstract void set_placement(string uuid, Budgie.PanelPosition position);
+		public abstract void set_placement(string uuid, Budgie.PanelPosition position, int monitor);
 		public abstract void set_transparency(string uuid, Budgie.PanelTransparency transparency);
 		public abstract void set_autohide(string uuid, Budgie.AutohidePolicy policy);
 		public abstract void set_dock_mode(string uuid, bool dock_mode);
 		public abstract void set_size(string uuid, int size);
+		public abstract void set_display_disconnect(string uuid, bool move_on_disconnect);
 
 		public abstract void create_new_panel();
 		public abstract void delete_panel(string uuid);
