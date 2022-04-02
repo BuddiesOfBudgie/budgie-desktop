@@ -18,9 +18,6 @@ public class IconTasklist : Budgie.Plugin, Peas.ExtensionBase {
 [GtkTemplate (ui="/com/solus-project/icon-tasklist/settings.ui")]
 public class IconTasklistSettings : Gtk.Grid {
 	[GtkChild]
-	private unowned Gtk.Switch? switch_grouping;
-
-	[GtkChild]
 	private unowned Gtk.Switch? switch_restrict;
 
 	[GtkChild]
@@ -42,7 +39,6 @@ public class IconTasklistSettings : Gtk.Grid {
 
 	public IconTasklistSettings(Settings? settings) {
 		this.settings = settings;
-		settings.bind("grouping", switch_grouping, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("restrict-to-workspace", switch_restrict, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("lock-icons", switch_lock_icons, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("only-pinned", switch_only_pinned, "active", SettingsBindFlags.DEFAULT);
@@ -58,7 +54,6 @@ public class IconTasklistApplet : Budgie.Applet {
 	private Settings? settings = null;
 	private Gtk.Box? main_layout = null;
 
-	private bool grouping = true;
 	private bool restrict_to_workspace = false;
 	private bool only_show_pinned = false;
 
@@ -109,7 +104,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		Gtk.drag_dest_set(this.main_layout, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.COPY);
 		this.main_layout.drag_data_received.connect(this.on_drag_data_received);
 
-		this.on_settings_changed("grouping");
+		Idle.add(() => {
+			this.rebuild_items();
+			return false;
+		});
+
 		this.on_settings_changed("restrict-to-workspace");
 		this.on_settings_changed("lock-icons");
 		this.on_settings_changed("only-pinned");
@@ -144,10 +143,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
 		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
-
-		if (!this.grouping) { // remaining logic is only needed for grouping
-			return;
-		}
 
 		this.abomination.updated_group.connect((group) => { // try to properly group icons
 			Wnck.Window window = group.get_windows().nth_data(0);
@@ -200,13 +195,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 	private void on_settings_changed(string key) {
 		switch (key) {
-			case "grouping":
-				this.grouping = this.settings.get_boolean(key);
-				Idle.add(() => {
-					this.rebuild_items();
-					return false;
-				});
-				break;
 			case "lock-icons":
 				this.desktop_helper.lock_icons = this.settings.get_boolean(key);
 				break;
@@ -217,9 +205,8 @@ public class IconTasklistApplet : Budgie.Applet {
 				this.only_show_pinned = this.settings.get_boolean(key);
 				break;
 		}
-		if (key != "grouping") {
-			this.update_buttons();
-		}
+
+		this.update_buttons();
 	}
 
 	private void update_buttons() {
@@ -358,7 +345,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (this.buttons.contains(first_app_id) && this.grouping) {
+		if (this.buttons.contains(first_app_id)) {
 			IconButton first_button = this.buttons.get(first_app_id);
 			if (!first_button.icon.waiting && first_button.icon.get_realized()) {
 				first_button.icon.waiting = true;
@@ -370,31 +357,18 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (this.buttons.contains(first_app_id)) { // try to get existing button if any
 			button = this.buttons.get(first_app_id);
 
-			if (!this.grouping && !button.is_empty()) {
-				button = null; // pinned button is already associated with a window, we'll create a new one
-			}
-
 			if (button != null) {
 				this.add_button(app.id.to_string(), button); // map app to it's button so that we can update it later on
 			}
 		}
 
 		if (button == null) { // create a new button
-			if (!this.grouping) {
-				button = new IconButton.from_app(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app, app.id.to_string());
-			} else {
-				button = new IconButton.from_group(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app.group_object, app.id.to_string());
-			}
-
+			button = new IconButton.from_group(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app.group_object, app.id.to_string());
 			this.add_icon_button(app.id.to_string(), button);
 		}
 
-		if (this.grouping && button.get_class_group() == null) { // button was pinned without app opened, set class group in button to properly group windows
+		if (button.get_class_group() == null) { // button was pinned without app opened, set class group in button to properly group windows
 			button.set_class_group(app.group_object);
-		}
-
-		if (!this.grouping && button.is_empty()) { // button was pinned without app opened
-			button.set_wnck_window(app.get_window());
 		}
 
 		this.update_button(button);
@@ -423,22 +397,9 @@ public class IconTasklistApplet : Budgie.Applet {
 			}
 		}
 
-		button.set_wnck_window(null);
 		button.update();
 
 		this.remove_button(app.id.to_string());
-
-		// Google Chrome with profile manager will not properly reuse the
-		// pinned icon when grouping is disabled (second window open before first is closed)
-		if (button.pinned && !this.grouping) { // try re-parenting app
-			Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
-			if (first_app == null) {
-				return;
-			}
-
-			this.on_app_closed(first_app);
-			this.on_app_opened(first_app);
-		}
 	}
 
 	private void on_active_window_changed() {
