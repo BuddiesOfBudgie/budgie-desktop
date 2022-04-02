@@ -523,9 +523,11 @@ public class IconTasklistApplet : Budgie.Applet {
 			string[] parts = button.first_app.app_info.get_filename().split("/");
 			string launcher = parts[parts.length - 1];
 			if (button.pinned) {
+				button.button_id = launcher;
 				this.add_button(launcher, button);
 				this.remove_button(button.first_app.id.to_string());
 			} else {
+				button.button_id = button.first_app.id.to_string();
 				this.add_button(button.first_app.id.to_string(), button);
 				this.remove_button(launcher);
 			}
