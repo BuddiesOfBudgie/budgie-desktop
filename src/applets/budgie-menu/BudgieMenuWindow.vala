@@ -65,10 +65,14 @@ public class BudgieMenuWindow : Budgie.Popover {
 		footer.get_style_context().add_class("budgie-menu-footer");
 
 		this.user_indicator = new UserButton();
-		this.power_button = new Gtk.Button.from_icon_name("system-shutdown-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-		this.power_button.get_style_context().add_class("flat");
-		this.power_button.get_style_context().remove_class("button");
-		this.power_button.set_tooltip_text(_("Power"));
+		user_indicator.valign = Gtk.Align.CENTER;
+		user_indicator.halign = Gtk.Align.START;
+
+		this.power_button = new Gtk.Button.from_icon_name("system-shutdown-symbolic");
+		power_button.relief = Gtk.ReliefStyle.NONE;
+		power_button.valign = Gtk.Align.CENTER;
+		power_button.halign = Gtk.Align.END;
+		power_button.set_tooltip_text(_("Power"));
 
 		footer.pack_start(this.user_indicator, false, false, 0);
 		footer.pack_end(this.power_button, false, false, 0);

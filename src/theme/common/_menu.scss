@@ -78,6 +78,30 @@
         }
     }
 
+    .budgie-menu-footer {
+        border-top: 1px solid transparentize(white, 0.9);
+        padding-top: 6px;
+
+        .image-button {
+            padding: 4px;
+            min-height: 24px;
+            min-width: 24px;
+            border-radius: 100%;
+            transition-property: background-color;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+
+        .user-icon-button {
+            border-radius: 3px;
+            transition-property: background-color;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+    }
+
     .budgie-menu-overlay {
         @extend %reset_style;
 
@@ -89,7 +113,7 @@
             transition: 170ms ease-out;
 
             &:hover { background-color: transparentize(white, 0.9); }
-            &:active, &:checked {
+            &:active {
                 color: $selected_fg_color;
                 background-color: $selected_bg_color;
             }
