@@ -90,7 +90,6 @@ public class Tracker : Object {
 			excluded_applications = {
 				"eog.desktop",
 				"gucharmap.desktop",
-				"org.gnome.Calculator.desktop",
 				"org.gnome.DejaDup.desktop",
 				"org.gnome.Dictionary.desktop",
 				"org.gnome.DiskUtility.desktop",
@@ -155,13 +154,9 @@ public class Tracker : Object {
 			included_categories = { "Administration", "Settings", "System" },
 			excluded_categories = { "Games", "X-GNOME-Utilities" },
 			excluded_applications = {
-				"gnome-abrt.desktop",
-				"gnome-system-log.desktop",
-				"gnome-system-monitor.desktop",
 				"onboard.desktop",
 				"onboard-settings.desktop",
 				"org.gnome.baobab.desktop",
-				"org.gnome.Terminal.desktop",
 				"org.gnome.Usage.desktop"
 			}
 		});
