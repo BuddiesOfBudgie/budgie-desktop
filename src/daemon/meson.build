@@ -25,6 +25,7 @@ daemon_sources = [
     'osd.vala',
     'settings.vala',
     'tabswitcher.vala',
+    'screenshotclient.vala',
     daemon_resources,
 ]
 

@@ -36,6 +36,10 @@ namespace Budgie {
 	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
+	public const string SCREENSHOTCLIENT_DBUS_NAME = "org.budgie_desktop.ScreenshotClient";
+	public const string SCREENSHOTCLIENT_DBUS_OBJECT_PATH = "/org/budgie_desktop/ScreenshotClient";
+
+
 	[Flags]
 	public enum PanelAction {
 		NONE = 1 << 0,
@@ -101,6 +105,14 @@ namespace Budgie {
 		public abstract async void StopSwitcher() throws Error;
 	}
 
+	/**
+	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
+	*/
+	[DBus (name="org.budgie_desktop.ScreenshotClient")]
+	public interface ScreenshotClient: GLib.Object {
+		public abstract async void ScreenshotClientArea() throws Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -139,6 +151,7 @@ namespace Budgie {
 		ShellShim? shim = null;
 		BudgieWMDBUS? focus_interface = null;
 		ScreenshotManager? screenshot = null;
+		ScreenshotClient? screenshotclient_proxy = null;
 		PanelRemote? panel_proxy = null;
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
@@ -170,6 +183,15 @@ namespace Budgie {
 
 		bool have_logind() {
 			return FileUtils.test("/run/systemd/seats", FileTest.EXISTS);
+		}
+
+		/* Hold onto our ScreenshotClient proxy ref */
+		void on_screenshotclient_get(Object? o, AsyncResult? res) {
+			try {
+				screenshotclient_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to gain ScreenshotClient proxy: %s", e.message);
+			}
 		}
 
 		/* Hold onto our Raven proxy ref */
@@ -279,10 +301,15 @@ namespace Budgie {
 
 		/* Binding for take-region-screenshot */
 		void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+			message("on take region");
 			try {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
 				if (cmd != "")
 					Process.spawn_command_line_async(cmd);
+				else {
+					screenshotclient_proxy.ScreenshotClientArea.begin();
+					message("proxy screenshot begin\n");
+				}
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -342,6 +369,17 @@ namespace Budgie {
 			} catch (Error e) {
 				warning("Unable to ToggleNotificationsView() in Raven: %s", e.message);
 			}
+		}
+
+		/* Set up the proxy when raven appears */
+		void has_screenshotclient() {
+			if (screenshotclient_proxy == null) {
+				Bus.get_proxy.begin<ScreenshotClient>(BusType.SESSION, SCREENSHOTCLIENT_DBUS_NAME, SCREENSHOTCLIENT_DBUS_OBJECT_PATH, 0, null, on_screenshotclient_get);
+			}
+		}
+
+		void lost_screenshotclient() {
+			screenshotclient_proxy = null;
 		}
 
 		/* Set up the proxy when raven appears */
@@ -478,6 +516,11 @@ namespace Budgie {
 			/* TabSwitcher */
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
+
+			/* ScreenshotClient */
+			Bus.watch_name(BusType.SESSION, SCREENSHOTCLIENT_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_screenshotclient, lost_screenshotclient);
+
 
 			/* Keep an eye out for systemd stuffs */
 			if (have_logind()) {
