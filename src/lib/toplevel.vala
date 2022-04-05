@@ -36,6 +36,11 @@ namespace Budgie {
 		*/
 		public int intended_size { public set ; public get; }
 
+		/**
+		* Our configured applet spacing
+		*/
+		public int intended_spacing { public set; public get; }
+
 		public bool shadow_visible { public set ; public get; }
 		public bool theme_regions { public set; public get; }
 		public bool dock_mode { public set; public get; default = false; }

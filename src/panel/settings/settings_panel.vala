@@ -49,6 +49,9 @@ namespace Budgie {
 		private Gtk.SpinButton? spinbutton_size;
 		private ulong size_id;
 
+		private Gtk.SpinButton? spinbutton_spacing;
+		private ulong spacing_id;
+
 		Gtk.Button button_remove_panel;
 
 		unowned Budgie.DesktopManager? manager = null;
@@ -237,6 +240,14 @@ namespace Budgie {
 				_("Size"),
 				_("Set the size (width or height, depending on orientation) of this panel")));
 
+			spinbutton_spacing = new Gtk.SpinButton.with_range(0, 64, 1);
+			spinbutton_spacing.set_numeric(true);
+			spacing_id = spinbutton_spacing.value_changed.connect(this.set_spacing);
+			group.add_widget(spinbutton_spacing);
+			ret.add_row(new SettingsRow(spinbutton_spacing,
+				_("Spacing"),
+				_("Set the spacing between applets for this panel")));
+
 			/* Autohide */
 			combobox_autohide = new Gtk.ComboBox();
 			autohide_id = combobox_autohide.changed.connect(this.set_autohide);
@@ -333,6 +344,7 @@ namespace Budgie {
 			const string[] needed_props = {
 				"position",
 				"intended-size",
+				"spacing",
 				"transparency",
 				"autohide",
 				"shadow-visible",
@@ -374,6 +386,11 @@ namespace Budgie {
 					SignalHandler.block(this.spinbutton_size, this.size_id);
 					this.spinbutton_size.set_value(this.toplevel.intended_size);
 					SignalHandler.unblock(this.spinbutton_size, this.size_id);
+					break;
+				case "spacing":
+					SignalHandler.block(this.spinbutton_spacing, this.spacing_id);
+					this.spinbutton_spacing.set_value(this.toplevel.intended_spacing);
+					SignalHandler.unblock(this.spinbutton_spacing, this.spacing_id);
 					break;
 				case "transparency":
 					SignalHandler.block(this.combobox_transparency, this.transparency_id);
@@ -477,6 +494,13 @@ namespace Budgie {
 		*/
 		private void set_size() {
 			this.manager.set_size(this.toplevel.uuid, (int)this.spinbutton_size.get_value());
+		}
+
+		/**
+		* Update the panel spacing
+		*/
+		private void set_spacing() {
+			this.manager.set_spacing(this.toplevel.uuid, (int) this.spinbutton_spacing.get_value());
 		}
 
 		/**
