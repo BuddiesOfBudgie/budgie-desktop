@@ -16,6 +16,8 @@
  * on the right.
  */
 public class ApplicationListView : ApplicationView {
+	const int HEIGHT = 510;
+
 	private Gtk.Box categories;
 	private Gtk.ListBox applications;
 	private Gtk.ScrolledWindow categories_scroll;
@@ -44,7 +46,7 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	construct {
-		this.set_size_request(300, 510);
+		this.set_size_request(300, HEIGHT);
 		this.icon_size = settings.get_int("menu-icons-size");
 
 		this.categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
@@ -57,7 +59,7 @@ public class ApplicationListView : ApplicationView {
 			shadow_type = Gtk.ShadowType.NONE, // Don't have an outline
 			hscrollbar_policy = Gtk.PolicyType.NEVER,
 			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
-			min_content_height = 510,
+			min_content_height = HEIGHT,
 			propagate_natural_height = true
 		};
 		this.categories_scroll.get_style_context().add_class("categories");
@@ -79,14 +81,17 @@ public class ApplicationListView : ApplicationView {
 		// holds all the applications
 		this.applications = new Gtk.ListBox() {
 			selection_mode = Gtk.SelectionMode.NONE,
-			valign = Gtk.Align.START
+			valign = Gtk.Align.START,
+			// Make sure that the box at least covers the whole area. This helps more themes look better
+			height_request = HEIGHT
 		};
 		this.applications.row_activated.connect(this.on_row_activate);
 
 		this.content_scroll = new Gtk.ScrolledWindow(null, null) {
 			overlay_scrolling = true,
 			hscrollbar_policy = Gtk.PolicyType.NEVER,
-			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC
+			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
+			min_content_height = HEIGHT
 		};
 		this.content_scroll.set_overlay_scrolling(true);
 		this.content_scroll.add(applications);
@@ -195,8 +200,8 @@ public class ApplicationListView : ApplicationView {
 				var app_btn = new MenuButton(app, category, icon_size);
 
 				app_btn.clicked.connect(() => {
-					hide();
 					app.launch();
+					this.app_launched();
 				});
 
 				this.application_buttons.insert(app.desktop_id, app_btn);
@@ -242,6 +247,7 @@ public class ApplicationListView : ApplicationView {
 
 		MenuButton btn = selected.get_child() as MenuButton;
 		btn.app.launch();
+		this.app_launched();
 	}
 
 	/**

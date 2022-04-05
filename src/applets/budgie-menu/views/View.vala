@@ -22,6 +22,11 @@ public abstract class ApplicationView : Gtk.Box {
 
 	private uint timeout_id = 0;
 
+	/**
+	 * Emitted when an app is launched.
+	 */
+	public signal void app_launched();
+
 	construct {
 		this.application_buttons = new HashTable<string,MenuButton?>(str_hash, str_equal);
 		this.control_center_buttons = new Gee.ArrayList<MenuButton>();

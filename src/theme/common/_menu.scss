@@ -78,6 +78,24 @@
         }
     }
 
+    .budgie-menu-overlay {
+        @extend %reset_style;
+
+        background-color: $panel_bg;
+
+        button {
+            background-color: $panel_bg;
+            transition-property: background-color, color;
+            transition: 170ms ease-out;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active, &:checked {
+                color: $selected_fg_color;
+                background-color: $selected_bg_color;
+            }
+        }
+    }
+
     .categories {
         @extend %reset_style;
 
