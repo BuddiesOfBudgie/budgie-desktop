@@ -80,4 +80,12 @@ public class DesktopHelper : GLib.Object {
 	public Wnck.Workspace get_active_workspace() {
 		return screen.get_active_workspace();
 	}
+
+	/**
+	 * get_app_launcher will return the last past of an app_id string. Useful when handling the full path to a DesktopAppInfo
+	 */
+	public string get_app_launcher(string app_id) {
+		string[] parts = app_id.split("/");
+		return parts[parts.length - 1];
+	}
 }

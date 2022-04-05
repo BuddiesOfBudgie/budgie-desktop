@@ -193,6 +193,12 @@ namespace Budgie {
 			this.update_dock_behavior();
 		}
 
+		public void update_shadow(bool visible) {
+			this.shadow_visible = visible;
+
+			this.settings.set_boolean(Budgie.PANEL_KEY_SHADOW, visible);
+		}
+
 		/**
 		* Specific for docks, regardless of transparency, and determines
 		* how our "screen blocked by thingy" policy works.

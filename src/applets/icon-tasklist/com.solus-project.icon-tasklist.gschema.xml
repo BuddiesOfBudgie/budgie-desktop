@@ -7,12 +7,6 @@
       <description>Only show windows on the current workspace.</description>
     </key>
 
-    <key type="b" name="grouping">
-      <default>true</default>
-      <summary>Group application windows under one item</summary>
-      <description>Group application windows under one item</description>
-    </key>
-
     <key type="b" name="only-pinned">
       <default>false</default>
       <summary>Only show favorited applications</summary>
