@@ -133,6 +133,8 @@ gvc = subproject('gvc',
         'c_std=c89',
         'static=false',
         'pkglibdir=@0@'.format(rpath_libdir),
+        'package_name=' + meson.project_name(),
+        'package_version=' + meson.project_version(),
         'warning_level=0',
     ],
 )
