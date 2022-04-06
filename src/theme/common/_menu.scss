@@ -83,19 +83,25 @@
         padding-top: 6px;
 
         .image-button {
+            @extend %reset_style;
+
+            transition-property: background-color;
+            transition: 170ms ease-out;
             padding: 4px;
             min-height: 24px;
             min-width: 24px;
             border-radius: 100%;
-            transition-property: background-color;
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
         }
 
         .user-icon-button {
+            @extend %reset_style;
+
+            transition-property: background-color, color;
+            transition: 170ms ease-out;
             border-radius: 3px;
-            transition-property: background-color;
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
@@ -105,18 +111,23 @@
     .budgie-menu-overlay {
         @extend %reset_style;
 
-        background-color: $panel_bg;
+        background-color: $raven_bg;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        padding: 8px;
 
         button {
-            background-color: $panel_bg;
+            @extend %reset_style;
+
             transition-property: background-color, color;
             transition: 170ms ease-out;
+            background-color: transparent;
+            margin: 2px 0;
+            padding: 4px 8px 4px 2px;
+            border-radius: 3px;
 
             &:hover { background-color: transparentize(white, 0.9); }
-            &:active {
-                color: $selected_fg_color;
-                background-color: $selected_bg_color;
-            }
+            &:active { background-color: transparentize(white, 0.8); }
         }
     }
 

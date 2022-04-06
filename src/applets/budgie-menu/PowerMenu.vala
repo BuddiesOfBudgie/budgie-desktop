@@ -17,7 +17,7 @@ public class PowerMenu : Gtk.Revealer {
 	const string LOGIND_LOGIN = "org.freedesktop.login1";
 	const string G_SESSION = "org.gnome.SessionManager";
 
-	private Gtk.ListBox? menu_items = null;
+	private Gtk.Box? menu_items = null;
 
 	private MenuItem? lock_menu = null;
 	private MenuItem? suspend_menu = null;
@@ -54,7 +54,7 @@ public class PowerMenu : Gtk.Revealer {
 		this.reboot_menu = new MenuItem(_("Restart"), "system-restart-symbolic");
 		this.shutdown_menu = new MenuItem(_("Shutdown"), "system-shutdown-symbolic");
 
-		this.menu_items = new Gtk.ListBox();
+		this.menu_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		this.menu_items.get_style_context().add_class("budgie-menu-overlay");
 
 		this.menu_items.add(lock_menu);
