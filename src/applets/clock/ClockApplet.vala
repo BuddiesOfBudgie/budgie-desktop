@@ -373,25 +373,25 @@ public class ClockApplet : Budgie.Applet {
 public class ClockSettings : Gtk.Grid {
 
 	[GtkChild]
-	private Gtk.Switch? show_date;
+	private unowned Gtk.Switch? show_date;
 
 	[GtkChild]
-	private Gtk.Switch? show_seconds;
+	private unowned Gtk.Switch? show_seconds;
 
 	[GtkChild]
-	private Gtk.Switch? use_24_hour_time;
+	private unowned Gtk.Switch? use_24_hour_time;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_format;
+	private unowned Gtk.Switch? use_custom_format;
 
 	[GtkChild]
-	private Gtk.Entry? custom_format;
+	private unowned Gtk.Entry? custom_format;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_timezone;
+	private unowned Gtk.Switch? use_custom_timezone;
 
 	[GtkChild]
-	private Gtk.Entry? custom_timezone;
+	private unowned Gtk.Entry? custom_timezone;
 
 	public ClockSettings(Settings? settings, Settings? gnome_settings) {
 		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);

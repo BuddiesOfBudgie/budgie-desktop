@@ -18,19 +18,19 @@ public class PlacesIndicator : Budgie.Plugin, Peas.ExtensionBase {
 [GtkTemplate (ui="/com/solus-project/places-indicator/settings.ui")]
 public class PlacesIndicatorSettings : Gtk.Grid {
 	[GtkChild]
-	private Gtk.Switch? switch_label;
+	private unowned Gtk.Switch? switch_label;
 
 	[GtkChild]
-	private Gtk.Switch? switch_places;
+	private unowned Gtk.Switch? switch_places;
 
 	[GtkChild]
-	private Gtk.Switch? switch_expand_places;
+	private unowned Gtk.Switch? switch_expand_places;
 
 	[GtkChild]
-	private Gtk.Switch? switch_drives;
+	private unowned Gtk.Switch? switch_drives;
 
 	[GtkChild]
-	private Gtk.Switch? switch_networks;
+	private unowned Gtk.Switch? switch_networks;
 
 	private Settings? settings;
 
