@@ -11,6 +11,7 @@ CloseDialog cheader_filename="meta/meta-close-dialog.h"
 CursorTracker cheader_filename="meta/meta-cursor-tracker.h"
 CursorTracker.get_for_display parent="Meta.Display" symbol_type="method" instance_idx=0 name="get_cursor_tracker"
 CursorTracker.get_pointer.mods out
+CursorTracker.get_pointer.coords out
 Display cheader_filename="meta/display.h"
 Dnd cheader_filename="meta/meta-dnd.h"
 IdleMonitor cheader_filename="meta/meta-idle-monitor.h"
