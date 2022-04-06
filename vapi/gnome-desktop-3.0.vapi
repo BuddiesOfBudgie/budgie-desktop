@@ -337,7 +337,7 @@ namespace Gnome {
 	[CCode (cheader_filename = "libgnome-desktop/gnome-bg-crossfade.h,libgnome-desktop/gnome-bg-slide-show.h,libgnome-desktop/gnome-bg.h,libgnome-desktop/gnome-desktop-thumbnail.h,libgnome-desktop/gnome-idle-monitor.h,libgnome-desktop/gnome-languages.h,libgnome-desktop/gnome-pnp-ids.h,libgnome-desktop/gnome-rr-config.h,libgnome-desktop/gnome-rr.h,libgnome-desktop/gnome-wall-clock.h,libgnome-desktop/gnome-xkb-info.h")]
 	public static bool desktop_thumbnail_is_valid (Gdk.Pixbuf pixbuf, string uri, long mtime);
 	[CCode (cheader_filename = "libgnome-desktop/gnome-bg-crossfade.h,libgnome-desktop/gnome-bg-slide-show.h,libgnome-desktop/gnome-bg.h,libgnome-desktop/gnome-desktop-thumbnail.h,libgnome-desktop/gnome-idle-monitor.h,libgnome-desktop/gnome-languages.h,libgnome-desktop/gnome-pnp-ids.h,libgnome-desktop/gnome-rr-config.h,libgnome-desktop/gnome-rr.h,libgnome-desktop/gnome-wall-clock.h,libgnome-desktop/gnome-xkb-info.h")]
-	[Deprecated (since = "2.22")]
+	[Version (deprecated = true, deprecated_since = "2.22")]
 	public static string desktop_thumbnail_md5 (string uri);
 	[CCode (cheader_filename = "libgnome-desktop/gnome-bg-crossfade.h,libgnome-desktop/gnome-bg-slide-show.h,libgnome-desktop/gnome-bg.h,libgnome-desktop/gnome-desktop-thumbnail.h,libgnome-desktop/gnome-idle-monitor.h,libgnome-desktop/gnome-languages.h,libgnome-desktop/gnome-pnp-ids.h,libgnome-desktop/gnome-rr-config.h,libgnome-desktop/gnome-rr.h,libgnome-desktop/gnome-wall-clock.h,libgnome-desktop/gnome-xkb-info.h")]
 	public static string desktop_thumbnail_path_for_uri (string uri, Gnome.DesktopThumbnailSize size);

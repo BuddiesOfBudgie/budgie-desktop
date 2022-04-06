@@ -247,7 +247,13 @@ public class ClockApplet : Budgie.Applet {
 				case "use-custom-timezone":
 				case "custom-timezone":
 					if (settings.get_boolean("use-custom-timezone")) {
-						this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
+						string custom_tz = settings.get_string("custom_timezone");
+						try {
+							this.clock_timezone = new TimeZone.identifier(custom_tz);
+						} catch (Error e) {
+							warning("Clock applet: Failed to set time zone from identifier %s. Using UTC instead.", custom_tz);
+							this.clock_timezone = new TimeZone.utc();
+						}
 					} else {
 						this.clock_timezone = new TimeZone.local();
 					}
