@@ -20,7 +20,7 @@ public class TraySettings : Gtk.Grid {
 	Settings? settings = null;
 
 	[GtkChild]
-	private Gtk.SpinButton? spinbutton_spacing;
+	private unowned Gtk.SpinButton? spinbutton_spacing;
 
 	public TraySettings(Settings? settings) {
 		this.settings = settings;

@@ -19,7 +19,7 @@ public class StatusSettings : Gtk.Grid {
 	Settings? settings = null;
 
 	[GtkChild]
-	private Gtk.SpinButton? spinbutton_spacing;
+	private unowned Gtk.SpinButton? spinbutton_spacing;
 
 	public StatusSettings(Settings? settings) {
 		this.settings = settings;

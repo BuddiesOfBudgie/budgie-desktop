@@ -35,19 +35,19 @@ namespace Budgie {
 		public signal void Opened();
 
 		[GtkChild]
-		private Gtk.Button? button_cancel;
+		private unowned Gtk.Button? button_cancel;
 
 		[GtkChild]
-		private Gtk.Button? button_logout;
+		private unowned Gtk.Button? button_logout;
 
 		[GtkChild]
-		private Gtk.Button? button_restart;
+		private unowned Gtk.Button? button_restart;
 
 		[GtkChild]
-		private Gtk.Button? button_shutdown;
+		private unowned Gtk.Button? button_shutdown;
 
 		[GtkChild]
-		private Gtk.Label? label_end_title;
+		private unowned Gtk.Label? label_end_title;
 
 		[GtkCallback]
 		[DBus (visible=false)]
