@@ -101,6 +101,7 @@
 
             transition-property: background-color, color;
             transition: 170ms ease-out;
+            padding: 4px 8px 4px 6px;
             border-radius: 3px;
 
             &:hover { background-color: transparentize(white, 0.9); }
