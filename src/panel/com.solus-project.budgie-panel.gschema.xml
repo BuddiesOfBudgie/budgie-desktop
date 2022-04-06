@@ -46,6 +46,12 @@
       <description>Height of panel if horizontal, or the width if it is vertical</description>
     </key>
 
+    <key type="i" name="spacing">
+      <default>2</default>
+      <summary>Applet spacing</summary>
+      <description>Space between each applet</description>
+    </key>
+
     <key enum="com.solus-project.budgie-panel.Transparency" name="transparency">
       <default>'none'</default>
       <summary>Panel transparency</summary>
