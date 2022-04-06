@@ -823,6 +823,7 @@ namespace Meta {
 		public uint user_time { get; }
 		public Meta.WindowType window_type { get; }
 		public string wm_class { get; }
+		public signal void monitor_changed (int old_monitor);
 		public signal void position_changed ();
 		public signal void raised ();
 		public signal void shown ();
