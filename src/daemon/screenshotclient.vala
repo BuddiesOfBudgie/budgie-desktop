@@ -66,5 +66,13 @@ namespace Budgie {
         public async void ScreenshotClientArea() throws DBusError, IOError {
             message("calling screenshotclientarea");
         }
+
+		public async void ScreenshotClientWindow() throws DBusError, IOError {
+            message("calling screenshotclientwindow");
+        }
+
+		public async void ScreenshotClientFullscreen() throws DBusError, IOError {
+            message("calling screenshotclientfullscreen");
+        }
 	}
 }

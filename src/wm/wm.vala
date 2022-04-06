@@ -111,6 +111,8 @@ namespace Budgie {
 	[DBus (name="org.budgie_desktop.ScreenshotClient")]
 	public interface ScreenshotClient: GLib.Object {
 		public abstract async void ScreenshotClientArea() throws Error;
+		public abstract async void ScreenshotClientWindow() throws Error;
+		public abstract async void ScreenshotClientFullscreen() throws Error;
 	}
 
 	public class MinimizeData {
@@ -294,6 +296,9 @@ namespace Budgie {
 				string cmd=this.settings.get_string("full-screenshot-cmd");
 				if (cmd != "")
 					Process.spawn_command_line_async(cmd);
+				else
+					screenshotclient_proxy.ScreenshotClientFullscreen.begin();
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -306,10 +311,9 @@ namespace Budgie {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
 				if (cmd != "")
 					Process.spawn_command_line_async(cmd);
-				else {
+				else
 					screenshotclient_proxy.ScreenshotClientArea.begin();
-					message("proxy screenshot begin\n");
-				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -321,6 +325,9 @@ namespace Budgie {
 				string cmd=this.settings.get_string("take-window-screenshot-cmd");
 				if (cmd != "")
 					Process.spawn_command_line_async(cmd);
+				else
+					screenshotclient_proxy.ScreenshotClientWindow.begin();
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
