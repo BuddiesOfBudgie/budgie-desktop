@@ -103,6 +103,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		// Enabling activation by search entry
 		this.search_entry.activate.connect(() => {
+			// Make the view (and filter) is updated before calling activate
+			var search_term = searchable_string(this.search_entry.text);
+			this.view.search_changed(search_term);
+
 			this.view.on_search_entry_activated();
 		});
 
