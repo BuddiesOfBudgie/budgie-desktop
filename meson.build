@@ -8,6 +8,7 @@ project(
     ],
     default_options: [
         'c_std=c11',
+        'warning_level=3'
     ],
 )
 
@@ -24,23 +25,6 @@ endif
 
 git = find_program('git', required: false)
 
-am_cflags = [
-    '-fstack-protector',
-    '-pedantic',
-    '-Wstrict-prototypes',
-    '-Wundef',
-    '-Werror-implicit-function-declaration',
-    '-Wformat',
-    '-Wformat-security',
-    '-Werror=format-security',
-    '-Wconversion',
-    '-Wunused-variable',
-    '-Wunreachable-code',
-    '-Wall',
-    '-W',
-]
-
-add_global_arguments(am_cflags, language: 'c')
 meson.add_install_script('scripts/mesonPostInstall.sh')
 
 # Budgie needs a minimum GNOME 40 stack with GTK 3.24+
@@ -149,6 +133,7 @@ gvc = subproject('gvc',
         'c_std=c89',
         'static=false',
         'pkglibdir=@0@'.format(rpath_libdir),
+        'warning_level=0',
     ],
 )
 
