@@ -85,6 +85,9 @@ namespace Budgie {
 	/** Panel size */
 	public const string PANEL_KEY_SIZE = "size";
 
+	/** Panel spacing */
+	public const string PANEL_KEY_SPACING = "spacing";
+
 	/** Autohide policy */
 	public const string PANEL_KEY_AUTOHIDE = "autohide";
 
@@ -888,7 +891,7 @@ namespace Budgie {
 			AutohidePolicy policy;
 			bool dock_mode;
 			bool shadow_visible;
-			int size;
+			int size, spacing;
 
 			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
 			Budgie.Panel? panel = new Budgie.Panel(this, uuid, settings);
@@ -906,11 +909,12 @@ namespace Budgie {
 
 			size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			panel.intended_size = (int)size;
-			this.show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
+			spacing = (int) settings.get_int(Budgie.PANEL_KEY_SPACING);
+			this.show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible, spacing);
 		}
 
 		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency, AutohidePolicy policy,
-						bool dock_mode, bool shadow_visible) {
+						bool dock_mode, bool shadow_visible, int spacing) {
 
 			Budgie.Panel? panel = panels.lookup(uuid);
 			unowned Screen? scr;
@@ -927,6 +931,7 @@ namespace Budgie {
 			this.set_autohide(uuid, policy);
 			this.set_dock_mode(uuid, dock_mode);
 			this.set_shadow(uuid, shadow_visible);
+			this.set_spacing(uuid, spacing);
 		}
 
 		/**
@@ -942,6 +947,21 @@ namespace Budgie {
 
 			panel.intended_size = size;
 			this.update_screen();
+		}
+
+		/**
+		* Set spacing of the given panel
+		*/
+		public override void set_spacing(string uuid, int spacing) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+
+			if (panel == null) {
+				warning("Asked to resize non-existent panel: %s", uuid);
+				return;
+			}
+
+			panel.intended_spacing = spacing;
+			panel.update_spacing();
 		}
 
 		/**
@@ -1264,6 +1284,7 @@ namespace Budgie {
 			bool dock_mode = false;
 			bool shadow_visible = true;
 			int size = -1;
+			int spacing = 2;
 
 			if (this.slots_available() < 1) {
 				warning("Asked to create panel with no slots available");
@@ -1291,6 +1312,9 @@ namespace Budgie {
 					}
 					if (new_defaults.has_key(name, "Size")) {
 						size = new_defaults.get_integer(name, "Size");
+					}
+					if (new_defaults.has_key(name, "Spacing")) {
+						spacing = new_defaults.get_integer(name, "Spacing");
 					}
 					if (new_defaults.has_key(name, "Dock")) {
 						dock_mode = new_defaults.get_boolean(name, "Dock");
@@ -1339,7 +1363,7 @@ namespace Budgie {
 			load_panel(uuid, false);
 
 			set_panels();
-			show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible);
+			show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible, spacing);
 
 			if (new_defaults == null || name == null) {
 				this.panel_added(uuid, panels.lookup(uuid));

@@ -54,24 +54,24 @@ namespace Budgie {
 		* Main text display
 		*/
 		[GtkChild]
-		private Gtk.Label label_title;
+		private unowned Gtk.Label label_title;
 
 		/**
 		* Main display image. Prefer symbolic icons!
 		*/
 		[GtkChild]
-		private Gtk.Image image_icon;
+		private unowned Gtk.Image image_icon;
 
 		/**
 		* Optional progressbar
 		*/
 		[GtkChild]
-		public Gtk.ProgressBar progressbar;
+		public unowned Gtk.ProgressBar progressbar;
 
 		/**
 		* Track the primary monitor to show on
 		*/
-		private Gdk.Monitor primary_monitor;
+		private unowned Gdk.Monitor primary_monitor;
 
 		/**
 		* Current text to display. NULL hides the widget.

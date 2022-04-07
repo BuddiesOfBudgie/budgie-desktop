@@ -278,6 +278,7 @@ namespace Budgie {
 			initial_config = new HashTable<string,Budgie.AppletInfo>(str_hash, str_equal);
 
 			intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
+			intended_spacing = settings.get_int(Budgie.PANEL_KEY_SPACING);
 			this.manager = manager;
 
 			skip_taskbar_hint = true;
@@ -351,6 +352,7 @@ namespace Budgie {
 			end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 			layout.pack_end(end_box, false, false, 0);
 			end_box.halign = Gtk.Align.END;
+			update_spacing();
 
 			this.theme_regions = this.settings.get_boolean(Budgie.PANEL_KEY_REGIONS);
 			this.notify["theme-regions"].connect(update_theme_regions);
@@ -424,6 +426,15 @@ namespace Budgie {
 			while (iter.next(out key, out info)) {
 				info.applet.panel_position_changed(this.position);
 			}
+		}
+
+		public void update_spacing() {
+			this.settings.set_int(Budgie.PANEL_KEY_SPACING, this.intended_spacing);
+
+			layout.set_spacing(this.intended_spacing);
+			start_box.set_spacing(this.intended_spacing);
+			center_box.set_spacing(this.intended_spacing);
+			end_box.set_spacing(this.intended_spacing);
 		}
 
 		public void destroy_children() {

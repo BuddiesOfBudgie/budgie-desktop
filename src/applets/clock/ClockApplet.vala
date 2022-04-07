@@ -247,7 +247,13 @@ public class ClockApplet : Budgie.Applet {
 				case "use-custom-timezone":
 				case "custom-timezone":
 					if (settings.get_boolean("use-custom-timezone")) {
-						this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
+						string custom_tz = settings.get_string("custom_timezone");
+						try {
+							this.clock_timezone = new TimeZone.identifier(custom_tz);
+						} catch (Error e) {
+							warning("Clock applet: Failed to set time zone from identifier %s. Using UTC instead.", custom_tz);
+							this.clock_timezone = new TimeZone.utc();
+						}
 					} else {
 						this.clock_timezone = new TimeZone.local();
 					}
@@ -373,25 +379,25 @@ public class ClockApplet : Budgie.Applet {
 public class ClockSettings : Gtk.Grid {
 
 	[GtkChild]
-	private Gtk.Switch? show_date;
+	private unowned Gtk.Switch? show_date;
 
 	[GtkChild]
-	private Gtk.Switch? show_seconds;
+	private unowned Gtk.Switch? show_seconds;
 
 	[GtkChild]
-	private Gtk.Switch? use_24_hour_time;
+	private unowned Gtk.Switch? use_24_hour_time;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_format;
+	private unowned Gtk.Switch? use_custom_format;
 
 	[GtkChild]
-	private Gtk.Entry? custom_format;
+	private unowned Gtk.Entry? custom_format;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_timezone;
+	private unowned Gtk.Switch? use_custom_timezone;
 
 	[GtkChild]
-	private Gtk.Entry? custom_timezone;
+	private unowned Gtk.Entry? custom_timezone;
 
 	public ClockSettings(Settings? settings, Settings? gnome_settings) {
 		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);
