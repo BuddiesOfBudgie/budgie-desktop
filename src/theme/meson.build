@@ -73,10 +73,20 @@ theme_resources = gnome.compile_resources(
     c_name: 'budgie_desktop_theme',
 )
 
+lib_theme_resources = static_library(
+    'budgietheme-resources',
+    theme_resources,
+    dependencies: [
+        dep_gtk3,
+        dep_glib,
+    ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 theme_sources = [
     'theme.c',
     'theme-manager.c',
-    theme_resources,
 ]
 
 lib_theme = shared_library(
@@ -85,6 +95,9 @@ lib_theme = shared_library(
     dependencies: [
         dep_gtk3,
         dep_glib,
+    ],
+    link_whole: [
+        lib_theme_resources,
     ],
     version: '0.0.0',
     install: true,
