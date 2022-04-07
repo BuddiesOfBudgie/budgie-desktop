@@ -19,6 +19,14 @@ applet_placesindicator_resources = gnome.compile_resources(
     c_name: 'budgie_placesindicator',
 )
 
+lib_applet_placesindicator_resources = static_library(
+    'places-applet-resources',
+    applet_placesindicator_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 applet_placesindicator_sources = [
     'PlacesIndicator.vala',
     'PlacesIndicatorWindow.vala',
@@ -29,7 +37,6 @@ applet_placesindicator_sources = [
     'MountItem.vala',
     'PlaceItem.vala',
     'MountHelper.vala',
-    applet_placesindicator_resources,
 ]
 
 applet_placesindicator_deps = [
@@ -43,6 +50,9 @@ shared_library(
     'placesindicator',
     applet_placesindicator_sources,
     dependencies: applet_placesindicator_deps,
+    link_whole: [
+        lib_applet_placesindicator_resources,
+    ],
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',

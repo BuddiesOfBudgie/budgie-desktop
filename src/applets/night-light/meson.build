@@ -19,10 +19,17 @@ applet_nightlight_resources = gnome.compile_resources(
     c_name: 'budgie_nightlight',
 )
 
+lib_applet_nightlight_resources = static_library(
+    'nightlight-applet-resources',
+    applet_nightlight_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 applet_nightlight_sources = [
     'NightLight.vala',
     'IndicatorWindow.vala',
-    applet_nightlight_resources
 ]
 
 applet_nightlight_deps = [
@@ -36,6 +43,9 @@ shared_library(
     'nightlightapplet',
     applet_nightlight_sources,
     dependencies: applet_nightlight_deps,
+    link_whole: [
+        lib_applet_nightlight_resources,
+    ],
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',

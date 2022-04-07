@@ -15,6 +15,14 @@ daemon_resources = gnome.compile_resources(
     c_name: 'budgie_polkit',
 )
 
+lib_daemon_resources = static_library(
+    'budgie-daemon-resources',
+    daemon_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 daemon_sources = [
     'endsession.vala',
     'notifications/dbus.vala',
@@ -25,7 +33,6 @@ daemon_sources = [
     'osd.vala',
     'settings.vala',
     'tabswitcher.vala',
-    daemon_resources,
 ]
 
 daemon_deps = [
@@ -56,6 +63,9 @@ endif
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
+    link_whole: [
+        lib_daemon_resources,
+    ],
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

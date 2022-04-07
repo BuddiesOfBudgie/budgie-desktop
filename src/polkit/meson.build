@@ -59,6 +59,7 @@ executable(
     ],
     c_args: [
         '-DPOLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE',
+        '-Wno-overlength-strings', # gresource generates overlength strings...
     ],
     install: true,
 )
