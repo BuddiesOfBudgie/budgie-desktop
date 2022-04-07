@@ -37,7 +37,7 @@ public class MenuItem : Gtk.Button {
 	}
 
 	public MenuItem(string label_text, string image_source) {
-		Object(can_focus: false);
+		Object(can_focus: true);
 
 		this.set_image(image_source);
 		this.set_label(label_text);
