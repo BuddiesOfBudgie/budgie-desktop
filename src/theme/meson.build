@@ -76,10 +76,7 @@ theme_resources = gnome.compile_resources(
 lib_theme_resources = static_library(
     'budgietheme-resources',
     theme_resources,
-    dependencies: [
-        dep_gtk3,
-        dep_glib,
-    ],
+    dependencies: [ dep_glib ],
     install: false,
     c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
 )
