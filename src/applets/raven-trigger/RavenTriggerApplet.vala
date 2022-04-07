@@ -39,6 +39,8 @@ public class RavenTriggerApplet : Budgie.Applet {
 	private string raven_show_icon = "pane-show-symbolic";
 	private string raven_hide_icon = "pane-hide-symbolic";
 
+	static Mutex anchor_mutex;
+
 	public RavenTriggerApplet() {
 		widget = new Gtk.Button();
 		widget.clicked.connect_after(on_button_clicked);
@@ -96,6 +98,7 @@ public class RavenTriggerApplet : Budgie.Applet {
 	 * Handle Raven expansion state changing
 	 */
 	void on_prop_changed(bool expanded) {
+		anchor_mutex.lock();
 		raven_expanded = expanded;
 
 		if (raven_expanded) {
@@ -103,9 +106,11 @@ public class RavenTriggerApplet : Budgie.Applet {
 		} else {
 			img_stack.set_visible_child_name("hidden");
 		}
+		anchor_mutex.unlock();
 	}
 
 	private void on_anchor_changed(bool left_anchor) {
+		anchor_mutex.lock();
 		if (left_anchor) {
 			this.raven_show_icon = "pane-hide-symbolic";
 			this.raven_hide_icon = "pane-show-symbolic";
@@ -116,6 +121,7 @@ public class RavenTriggerApplet : Budgie.Applet {
 
 		img_hidden.set_from_icon_name(this.raven_show_icon, Gtk.IconSize.BUTTON);
 		img_expanded.set_from_icon_name(this.raven_hide_icon, Gtk.IconSize.BUTTON);
+		anchor_mutex.unlock();
 	}
 
 	// Horrific work around to stop us getting caught up in our own dbus
@@ -129,9 +135,7 @@ public class RavenTriggerApplet : Budgie.Applet {
 			return null;
 		}
 
-		Gdk.threads_enter();
 		this.on_anchor_changed(b);
-		Gdk.threads_leave();
 		return null;
 	}
 
@@ -153,7 +157,7 @@ public class RavenTriggerApplet : Budgie.Applet {
 			});
 
 			/* Stop Vala from getting scared. */
-			unowned Thread<void*> t = Thread.create<void*>(this.update_anchors, false);
+			new Thread<void*>.try("raven-update-anchors", this.update_anchors);
 		} catch (Error e) {
 			warning("Failed to gain Raven proxy: %s", e.message);
 		}
