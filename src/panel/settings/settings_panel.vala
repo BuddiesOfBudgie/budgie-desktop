@@ -242,7 +242,7 @@ namespace Budgie {
 
 			spinbutton_spacing = new Gtk.SpinButton.with_range(0, 64, 1);
 			spinbutton_spacing.set_numeric(true);
-			spacing_id = spinbutton_spacing.value_changed.connect(this.set_spacing);
+			spacing_id = spinbutton_spacing.value_changed.connect(this.set_applet_spacing);
 			group.add_widget(spinbutton_spacing);
 			ret.add_row(new SettingsRow(spinbutton_spacing,
 				_("Spacing"),
@@ -499,7 +499,7 @@ namespace Budgie {
 		/**
 		* Update the panel spacing
 		*/
-		private void set_spacing() {
+		private void set_applet_spacing() {
 			this.manager.set_spacing(this.toplevel.uuid, (int) this.spinbutton_spacing.get_value());
 		}
 
