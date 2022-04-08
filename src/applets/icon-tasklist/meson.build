@@ -19,6 +19,14 @@ applet_icontasklist_resources = gnome.compile_resources(
     c_name: 'budgie_icontasklist',
 )
 
+lib_applet_icontasklist_resources = static_library(
+    'icontasklist-applet-resources',
+    applet_icontasklist_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 applet_icontasklist_sources = [
     'ButtonWrapper.vala',
     'DesktopHelper.vala',
@@ -27,7 +35,6 @@ applet_icontasklist_sources = [
     'IconPopover.vala',
     'Icon.vala',
     'animation.vala',
-    applet_icontasklist_resources
 ]
 
 applet_icontasklist_deps = [
@@ -46,6 +53,9 @@ shared_library(
     'icontasklistapplet',
     applet_icontasklist_sources,
     dependencies: applet_icontasklist_deps,
+    link_whole: [
+        lib_applet_icontasklist_resources,
+    ],
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',

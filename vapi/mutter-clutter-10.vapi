@@ -5301,7 +5301,6 @@ namespace Clutter {
 	[Version (since = "0.2")]
 	public class AnyEvent : Clutter.Event {
 		public Clutter.EventFlags flags;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -5444,7 +5443,6 @@ namespace Clutter {
 		public uint32 evdev_code;
 		public Clutter.EventFlags flags;
 		public Clutter.ModifierType modifier_state;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -5558,7 +5556,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public weak Clutter.Actor related;
 		public weak Clutter.EventSequence sequence;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -5596,7 +5593,6 @@ namespace Clutter {
 	public class DeviceEvent : Clutter.Event {
 		public weak Clutter.InputDevice device;
 		public Clutter.EventFlags flags;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -5794,7 +5790,9 @@ namespace Clutter {
 	[CCode (cheader_filename = "clutter/clutter.h", has_type_id = false)]
 	[Compact]
 	public class Frame {
+		public Clutter.FrameHint get_hints ();
 		public bool has_result ();
+		public void set_hint (Clutter.FrameHint hint);
 		public void set_result (Clutter.FrameResult result);
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", type_id = "clutter_frame_clock_get_type ()")]
@@ -5806,7 +5804,7 @@ namespace Clutter {
 		public float get_refresh_rate ();
 		public void inhibit ();
 		public void notify_ready ();
-		public void record_flip_time (int64 flip_time_us);
+		public void record_flip (int64 flip_time_us, Clutter.FrameHint hints);
 		public void remove_timeline (Clutter.Timeline timeline);
 		public void schedule_update ();
 		public void schedule_update_now ();
@@ -5916,7 +5914,6 @@ namespace Clutter {
 		public uint32 len;
 		public Clutter.PreeditResetMode mode;
 		public int32 offset;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public weak string text;
 		public uint32 time;
@@ -6107,7 +6104,6 @@ namespace Clutter {
 		public uint16 hardware_keycode;
 		public uint keyval;
 		public Clutter.ModifierType modifier_state;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -6189,7 +6185,6 @@ namespace Clutter {
 		public double dy_unaccel;
 		public Clutter.EventFlags flags;
 		public Clutter.ModifierType modifier_state;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public int64 time_us;
@@ -6218,7 +6213,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public uint32 group;
 		public uint32 mode;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -6233,7 +6227,6 @@ namespace Clutter {
 		public uint32 mode;
 		public uint32 ring_number;
 		public Clutter.InputDevicePadSource ring_source;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -6245,7 +6238,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public uint32 group;
 		public uint32 mode;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 strip_number;
 		public Clutter.InputDevicePadSource strip_source;
@@ -6412,7 +6404,6 @@ namespace Clutter {
 	public class ProximityEvent : Clutter.Event {
 		public weak Clutter.InputDevice device;
 		public Clutter.EventFlags flags;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -6484,7 +6475,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public Clutter.ModifierType modifier_state;
 		public Clutter.ScrollSource scroll_source;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -6628,6 +6618,7 @@ namespace Clutter {
 		public unowned Clutter.Actor get_actor_at_pos (Clutter.PickMode pick_mode, float x, float y);
 		public bool get_capture_final_size (Cairo.RectangleInt rect, out int out_width, out int out_height, out float out_scale);
 		public unowned Clutter.Actor get_device_actor (Clutter.InputDevice device, Clutter.EventSequence? sequence);
+		public unowned Clutter.Actor get_event_actor (Clutter.Event event);
 		public int64 get_frame_counter ();
 		public unowned Clutter.Actor get_grab_actor ();
 		[Version (since = "0.6")]
@@ -6636,7 +6627,7 @@ namespace Clutter {
 		public Clutter.Perspective get_perspective ();
 		[Version (since = "0.4")]
 		public unowned string get_title ();
-		public unowned Clutter.Grab grab (Clutter.Actor actor);
+		public Clutter.Grab grab (Clutter.Actor actor);
 		public bool paint_to_buffer (Cairo.RectangleInt rect, float scale, [CCode (array_length = false)] uint8[] data, int stride, Cogl.PixelFormat format, Clutter.PaintFlag paint_flags) throws GLib.Error;
 		public Clutter.Content paint_to_content (Cairo.RectangleInt rect, float scale, Clutter.PaintFlag paint_flags) throws GLib.Error;
 		public void paint_to_framebuffer (Cogl.Framebuffer framebuffer, Cairo.RectangleInt rect, float scale, Clutter.PaintFlag paint_flags);
@@ -7036,7 +7027,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public Clutter.ModifierType modifier_state;
 		public weak Clutter.EventSequence sequence;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -7056,7 +7046,6 @@ namespace Clutter {
 		public uint n_fingers;
 		public Clutter.TouchpadGesturePhase phase;
 		public float scale;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -7074,7 +7063,6 @@ namespace Clutter {
 		public Clutter.EventFlags flags;
 		public uint n_fingers;
 		public Clutter.TouchpadGesturePhase phase;
-		public weak Clutter.Actor source;
 		public weak Clutter.Stage stage;
 		public uint32 time;
 		public Clutter.EventType type;
@@ -7407,7 +7395,6 @@ namespace Clutter {
 		public uint32 time;
 		public Clutter.EventFlags flags;
 		public weak Clutter.Stage stage;
-		public weak Clutter.Actor source;
 		public Clutter.TouchpadGesturePhase phase;
 		public uint32 n_fingers;
 		public float x;
@@ -7676,6 +7663,12 @@ namespace Clutter {
 	public enum FlowOrientation {
 		HORIZONTAL,
 		VERTICAL
+	}
+	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_FRAME_HINT_", type_id = "clutter_frame_hint_get_type ()")]
+	[Flags]
+	public enum FrameHint {
+		NONE,
+		DIRECT_SCANOUT_ATTEMPTED
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_FRAME_INFO_FLAG_", type_id = "clutter_frame_info_flag_get_type ()")]
 	[Flags]
@@ -8185,13 +8178,13 @@ namespace Clutter {
 		POINTER,
 		TOUCHSCREEN
 	}
-	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_IMAGE_ERROR_INVALID_")]
+	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_IMAGE_ERROR_INVALID_", type_id = "clutter_image_error_get_type ()")]
 	[Version (since = "1.10")]
 	public errordomain ImageError {
 		DATA;
 		public static GLib.Quark quark ();
 	}
-	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_SCRIPT_ERROR_INVALID_")]
+	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_SCRIPT_ERROR_INVALID_", type_id = "clutter_script_error_get_type ()")]
 	[Version (since = "0.6")]
 	public errordomain ScriptError {
 		TYPE_FUNCTION,
@@ -8207,9 +8200,9 @@ namespace Clutter {
 	public delegate bool BindingActionFunc (GLib.Object gobject, string action_name, uint key_val, Clutter.ModifierType modifiers);
 	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 1.9)]
 	public delegate void Callback (Clutter.Actor actor);
-	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 1.9)]
+	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 2.9)]
 	[Version (since = "1.18")]
-	public delegate bool EventFilterFunc (Clutter.Event event);
+	public delegate bool EventFilterFunc (Clutter.Event event, Clutter.Actor event_actor);
 	[CCode (cheader_filename = "clutter/clutter.h", instance_pos = 1.9)]
 	[Version (since = "1.0")]
 	public delegate void PathCallback (Clutter.PathNode node);

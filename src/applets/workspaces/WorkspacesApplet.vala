@@ -26,7 +26,7 @@ namespace Workspaces {
 	[GtkTemplate (ui="/com/solus-project/workspaces/settings.ui")]
 	public class WorkspacesAppletSettings : Gtk.Grid {
 		[GtkChild]
-		private Gtk.ComboBoxText? combobox_visibility;
+		private unowned Gtk.ComboBoxText? combobox_visibility;
 
 		private Settings? settings;
 

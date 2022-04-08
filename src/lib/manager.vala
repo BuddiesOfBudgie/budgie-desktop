@@ -27,6 +27,7 @@ namespace Budgie {
 		public abstract void set_dock_mode(string uuid, bool dock_mode);
 		public abstract void set_size(string uuid, int size);
 		public abstract void set_display_disconnect(string uuid, bool move_on_disconnect);
+		public abstract void set_spacing(string uuid, int spacing);
 
 		public abstract void create_new_panel();
 		public abstract void delete_panel(string uuid);
