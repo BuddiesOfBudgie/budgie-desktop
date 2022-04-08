@@ -34,7 +34,6 @@ daemon_sources = [
     'settings.vala',
     'tabswitcher.vala',
     'screenshotclient.vala',
-    daemon_resources,
 ]
 
 daemon_deps = [
