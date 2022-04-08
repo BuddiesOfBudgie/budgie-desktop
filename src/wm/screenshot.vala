@@ -252,23 +252,34 @@ namespace Budgie {
 			if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
 				//gnome shell uses CLUTTER_CAIRO_FORMAT_ARGB32 - in the cairo header
 				//this is defined depending on the architecture and maps to a pixel format
-				stage.paint_to_buffer (
-					{x, y, width, height},
-					scale,
-					image.get_data(),
-					image.get_stride (),
-					Cogl.PixelFormat.BGRA_8888_PRE,
-					paint_flags
-				);
+				try {
+					stage.paint_to_buffer (
+						{x, y, width, height},
+						scale,
+						image.get_data(),
+						image.get_stride (),
+						Cogl.PixelFormat.BGRA_8888_PRE,
+						paint_flags
+					);
+				}
+				catch (Error e) {
+					message("Unable to paint_to_buffer (BGRA): %s", e.message);
+				}
+
 			} else {
-				stage.paint_to_buffer (
-					{x, y, width, height},
-					scale,
-					image.get_data(),
-					image.get_stride (),
-					Cogl.PixelFormat.ARGB_8888_PRE,
-					paint_flags
-				);
+				try {
+					stage.paint_to_buffer (
+						{x, y, width, height},
+						scale,
+						image.get_data(),
+						image.get_stride (),
+						Cogl.PixelFormat.ARGB_8888_PRE,
+						paint_flags
+					);
+				}
+				catch (Error e) {
+					message("Unable to paint_to_buffer (ARGB): %s", e.message);
+				}
 			}
 
 			if (include_cursor) {
