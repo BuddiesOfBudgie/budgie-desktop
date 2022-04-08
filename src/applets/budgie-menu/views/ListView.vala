@@ -315,6 +315,7 @@ public class ApplicationListView : ApplicationView {
 		// Launch this item, i.e. keyboard access
 		MenuButton btn = row.get_child() as MenuButton;
 		btn.app.launch();
+		this.app_launched();
 	}
 
 	/**
