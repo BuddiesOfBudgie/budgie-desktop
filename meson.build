@@ -40,7 +40,7 @@ dep_libuuid = dependency('uuid')
 dep_vala = dependency('vapigen', version: '>= 0.52.5')
 
 # Needed for Budgie Menu
-dep_cairo = dependency('cairo', version: '>= 1.17.0')
+dep_cairo = dependency('cairo', version: '>= 1.15.10')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
