@@ -24,6 +24,8 @@ public class Application : Object {
 	public string generic_name { get; private set; default = ""; }
 	public bool prefers_default_gpu { get; private set; default = false; }
 
+	private Switcheroo switcheroo;
+
 	/**
 	 * Create a new application from a `DesktopAppInfo`.
 	 */
@@ -47,6 +49,10 @@ public class Application : Object {
 				this.icon = desktop_icon;
 			}
 		}
+	}
+
+	construct {
+		this.switcheroo = new Switcheroo();
 	}
 
 	/**
@@ -90,7 +96,12 @@ public class Application : Object {
 				});
 			} else {
 				// No pkexec, use the DesktopAppInfo to launch the app
-				new DesktopAppInfo(this.desktop_id).launch(null, null);
+				// Create a launch context and try to apply a GPU profile
+				var context = new AppLaunchContext();
+				switcheroo.apply_gpu_profile(context, this.prefers_default_gpu);
+
+				// Launch the application
+				new DesktopAppInfo(this.desktop_id).launch(null, context);
 			}
 		} catch (Error e) {
 			warning("Failed to launch application '%s': %s", name, e.message);

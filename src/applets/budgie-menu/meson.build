@@ -30,6 +30,7 @@ lib_applet_budgiemenu_resources = static_library(
 applet_budgiemenu_sources = [
     'backend/Application.vala',
     'backend/Category.vala',
+    'backend/Switcheroo.vala',
     'backend/Tracker.vala',
     'BudgieMenu.vala',
     'BudgieMenuButtons.vala',
