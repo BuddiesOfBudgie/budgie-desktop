@@ -370,6 +370,7 @@ public class ApplicationListView : ApplicationView {
 	private bool do_filter_list(Gtk.ListBoxRow row) {
 		MenuButton child = row.get_child() as MenuButton;
 
+		// Check if there is a search going on
 		string term = this.search_term.strip();
 		if (term.length > 0) {
 			// "disable" categories while searching
@@ -379,50 +380,65 @@ public class ApplicationListView : ApplicationView {
 				return false;
 			}
 
+			// Only show this item if it matches the search term
 			return info_matches_term(child.app, term);
 		}
 
 		// "enable" categories if not searching
 		this.categories.sensitive = true;
 
-		// No more filtering, show all
+		// We are currently in the "All" category, so show this item
 		if (this.current_category == null) {
-			// Filter out control center panels if not set to show
+			// Don't show this item if it's a control center panel and
+			// we're set to not show them
 			if (child.is_control_center_panel()) {
 				if (!this.show_control_center_panels) {
 					return false;
 				}
 			}
 
-			if (this.headers_visible) { // If we are going to be showing headers
+			if (this.headers_visible) {
+				// Show all items if headers are visible
 				return true;
-			} else { // Not showing headers
+			} else {
+				// Headers aren't being shown, so only show this item if
+				// it's not a duplicate
 				return !this.is_item_dupe(child);
 			}
 		}
 
-		// If the Category isn't the same as the current filter, hide it
+		// Hide this item if we're in a different category
 		if (child.category != this.current_category) {
 			return false;
 		}
 
-		// Filter out control center panels if not set to show
+		// Don't show this item if it's a control panel and we're not set to show them
 		if (child.is_control_center_panel()) {
 			if (!this.show_control_center_panels) {
 				return false;
 			}
 		}
 
+		// If we got here, then we are in a category that this item belongs to,
+		// so show it
 		return true;
 	}
 
+	/**
+	 * Sorts two list items.
+	 *
+	 * If there is an active search, items will be sorted by how well they match the term.
+	 * Otherwise, they will be sorted alphebetically by their name.
+	 */
 	private int do_sort_list(Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
 		MenuButton child1 = row1.get_child() as MenuButton;
 		MenuButton child2 = row2.get_child() as MenuButton;
 
 		string term = this.search_term.strip();
 
+		// Check for an active search
 		if (term.length > 0) {
+			// Get the scores relative to the search term
 			int sc1 = child1.get_score(term);
 			int sc2 = child2.get_score(term);
 			/* Vala can't do this: return (sc1 > sc2) - (sc1 - sc2); */
@@ -441,6 +457,7 @@ public class ApplicationListView : ApplicationView {
 			return parentA.collate(parentB);
 		}
 
+		// Two application items, sort by name
 		string nameA = searchable_string(child1.app.name);
 		string nameB = searchable_string(child2.app.name);
 		return nameA.collate(nameB);
