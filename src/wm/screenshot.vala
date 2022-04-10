@@ -129,11 +129,6 @@ namespace Budgie {
 			}
 
 			var window_actor = (Meta.WindowActor) window.get_compositor_private ();
-			unowned Meta.ShapedTexture window_texture = (Meta.ShapedTexture) window_actor.get_texture ();
-
-			if (window_texture == null) {
-				throw new DBusError.FAILED ("Cannot get window actor texture");
-			}
 
 			float actor_x, actor_y;
 			window_actor.get_position (out actor_x, out actor_y);
@@ -145,7 +140,10 @@ namespace Budgie {
             }
 
 			Cairo.RectangleInt clip = { rect.x - (int) actor_x, rect.y - (int) actor_y, rect.width, rect.height };
-			var image = (Cairo.ImageSurface) window_texture.get_image (clip);
+			var image = (Cairo.ImageSurface) window_actor.get_image (clip);
+			if (image == null) {
+				throw new DBusError.FAILED ("Failed to get image from the focus window");
+			}
 			if (include_cursor) {
 				image = composite_stage_cursor (image, { rect.x, rect.y, rect.width, rect.height });
 			}
