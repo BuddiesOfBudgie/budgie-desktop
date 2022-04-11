@@ -9,17 +9,6 @@
  * (at your option) any later version.
  */
 
-/**
- * Return a string suitable for working on.
- * This works around the issue of GNOME Control Center and others deciding to
- * use soft hyphens in their .desktop files.
- */
-static string? searchable_string(string input) {
-	/* Force dup in vala */
-	string mod = "" + input;
-	return mod.replace("\u00AD", "").ascii_down().strip();
-}
-
 public class BudgieMenuWindow : Budgie.Popover {
 	protected Gtk.Box main_layout;
 	protected Gtk.SearchEntry search_entry;
@@ -97,14 +86,14 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		// searching functionality :)
 		this.search_entry.search_changed.connect(()=> {
-			var search_term = searchable_string(this.search_entry.text);
+			var search_term = RelevancyService.searchable_string(this.search_entry.text);
 			this.view.search_changed(search_term);
 		});
 
 		// Enabling activation by search entry
 		this.search_entry.activate.connect(() => {
 			// Make the view (and filter) is updated before calling activate
-			var search_term = searchable_string(this.search_entry.text);
+			var search_term = RelevancyService.searchable_string(this.search_entry.text);
 			this.view.search_changed(search_term);
 
 			this.view.on_search_entry_activated();

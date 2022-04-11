@@ -113,32 +113,4 @@ public class MenuButton : Gtk.Button {
 			warning("Failed to set copy data: %s", e.message);
 		}
 	}
-
-	private string? vala_has_no_strstr(string a, string b) {
-		int index = a.index_of(b);
-		if (index < 0) {
-			return null;
-		}
-		return a.substring(index);
-	}
-
-	/* Determine our score in relation to a given search term
-	 * Totally stole this from Brisk (Which I wrote anyway so woo.)
-	 */
-	public int get_score(string term) {
-		int score = 0;
-		string name = searchable_string(this.app.name);
-		if (name == term) {
-			score += 100;
-		} else if (name.has_prefix(term)) {
-			score += 50;
-		}
-
-		var found = vala_has_no_strstr(name, term);
-		if (found != null) {
-			score += 20 + found.length;
-		}
-		score += strcmp(name, term);
-		return score;
-	}
 }

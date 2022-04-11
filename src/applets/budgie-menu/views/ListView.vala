@@ -361,8 +361,6 @@ public class ApplicationListView : ApplicationView {
 		}
 	}
 
-
-
 	/**
 	 * Filter out results in the list according to whatever the current filter is,
 	 * i.e. group based or search based
@@ -380,8 +378,9 @@ public class ApplicationListView : ApplicationView {
 				return false;
 			}
 
-			// Only show this item if it matches the search term
-			return info_matches_term(child.app, term);
+			// Only show this item if its relevancy to the search term
+			// is within an arbitrary threshold
+			return this.relevancy_service.is_app_relevant(child.app);
 		}
 
 		// "enable" categories if not searching
@@ -439,27 +438,28 @@ public class ApplicationListView : ApplicationView {
 		// Check for an active search
 		if (term.length > 0) {
 			// Get the scores relative to the search term
-			int sc1 = child1.get_score(term);
-			int sc2 = child2.get_score(term);
-			/* Vala can't do this: return (sc1 > sc2) - (sc1 - sc2); */
+			int sc1 = this.relevancy_service.get_score(child1.app);
+			int sc2 = this.relevancy_service.get_score(child2.app);
+
+			// The item with the lower score should be higher in the list
 			if (sc1 < sc2) {
-				return 1;
-			} else if (sc1 > sc2) {
 				return -1;
+			} else if (sc1 > sc2) {
+				return 1;
 			}
 			return 0;
 		}
 
 		// Only perform category grouping if headers are visible
-		string parentA = searchable_string(child1.category.name);
-		string parentB = searchable_string(child2.category.name);
+		string parentA = RelevancyService.searchable_string(child1.category.name);
+		string parentB = RelevancyService.searchable_string(child2.category.name);
 		if (child1.category != child2.category && this.headers_visible) {
 			return parentA.collate(parentB);
 		}
 
 		// Two application items, sort by name
-		string nameA = searchable_string(child1.app.name);
-		string nameB = searchable_string(child2.app.name);
+		string nameA = RelevancyService.searchable_string(child1.app.name);
+		string nameB = RelevancyService.searchable_string(child2.app.name);
 		return nameA.collate(nameB);
 	}
 

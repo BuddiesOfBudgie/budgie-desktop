@@ -20,6 +20,7 @@ public abstract class ApplicationView : Gtk.Box {
 	public string search_term { get; public set; default = ""; }
 	public int icon_size { get; protected set; default = 24; }
 
+	protected RelevancyService relevancy_service;
 	private uint timeout_id = 0;
 
 	/**
@@ -30,6 +31,7 @@ public abstract class ApplicationView : Gtk.Box {
 	construct {
 		this.application_buttons = new HashTable<string,MenuButton?>(str_hash, str_equal);
 		this.control_center_buttons = new Gee.ArrayList<MenuButton>();
+		this.relevancy_service = new RelevancyService();
 	}
 
 	/**
@@ -73,49 +75,14 @@ public abstract class ApplicationView : Gtk.Box {
 	 */
 	public void search_changed(string search_term) {
 		this.search_term = search_term;
+
+		// Update the relevancy of all apps when
+		// the search term changes
+		foreach (var child in this.application_buttons.get_values()) {
+			this.relevancy_service.update_relevancy(child.app, search_term);
+		}
+
 		this.invalidate();
-	}
-
-	/* Helper ported from Brisk */
-	protected bool array_contains(string?[] array, string term) {
-		foreach (string? field in array) {
-			if (field == null) {
-				continue;
-			}
-			string ct = searchable_string(field);
-			if (term.match_string(ct, true)) {
-				return true;
-			}
-			if (term in ct) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/* Helper ported from brisk */
-	protected bool info_matches_term(Application app, string term) {
-		if (app == null) { // No valid AppInfo provided
-			return false;
-		}
-
-		string?[] fields = {
-			app.name,
-			app.generic_name,
-			app.description,
-			app.exec
-		};
-
-		if (array_contains(fields, term)) {
-			return true;
-		}
-
-		var keywords = app.keywords;
-		if (keywords == null || keywords.length < 1) {
-			return false;
-		}
-
-		return array_contains(keywords, term);
 	}
 
 	/**
