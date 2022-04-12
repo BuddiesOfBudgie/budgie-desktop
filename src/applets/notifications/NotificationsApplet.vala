@@ -151,11 +151,13 @@ public class NotificationsApplet : Budgie.Applet {
 			return Gdk.EVENT_PROPAGATE;
 		}
 
-		try {
-			raven_proxy.ToggleNotificationsView.begin();
-		} catch (Error e) {
-			message("Failed to toggle Raven: %s", e.message);
-		}
+		raven_proxy.ToggleNotificationsView.begin((obj,res) => {
+			try {
+				raven_proxy.ToggleNotificationsView.end(res);
+			} catch (Error e) {
+				message("Failed to toggle Raven: %s", e.message);
+			}
+		});
 
 		return Gdk.EVENT_STOP;
 	}

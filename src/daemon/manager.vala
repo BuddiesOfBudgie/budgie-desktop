@@ -51,9 +51,9 @@ namespace Budgie {
 		* Attempt registration with the Session Manager
 		*/
 		private async bool register_with_session() {
-			try {
-				sclient = yield LibSession.register_with_session("budgie-daemon");
-			} catch (Error e) {
+			sclient = yield LibSession.register_with_session("budgie-daemon");
+
+			if (sclient == null) {
 				return false;
 			}
 

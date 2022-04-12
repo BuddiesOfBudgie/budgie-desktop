@@ -119,7 +119,7 @@ namespace Budgie {
 				if (desktop_menu.get_visible()) {
 					desktop_menu.hide();
 				} else {
-					desktop_menu.popup(null, null, null, button, timestamp == 0 ? Gdk.CURRENT_TIME : timestamp);
+					desktop_menu.popup_at_pointer(null);
 				}
 				return false;
 			});
@@ -134,7 +134,7 @@ namespace Budgie {
 				return;
 			}
 			action_menu = new Wnck.ActionMenu(active_window);
-			action_menu.popup(null, null, null, 3, Gdk.CURRENT_TIME);
+			action_menu.popup_at_pointer(null);
 			this.xid = xid;
 		}
 	}
