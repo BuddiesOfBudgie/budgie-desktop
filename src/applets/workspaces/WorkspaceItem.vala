@@ -33,8 +33,8 @@ namespace Workspaces {
 			real_alloc.height = 0;
 
 			icon_grid = new Gtk.Grid();
-			icon_grid.set_column_spacing(0);
-			icon_grid.set_row_spacing(0);
+			icon_grid.set_column_spacing(1);
+			icon_grid.set_row_spacing(1);
 			icon_grid.set_row_homogeneous(true);
 			icon_grid.set_column_homogeneous(true);
 			icon_grid.set_border_width(2);
@@ -184,8 +184,8 @@ namespace Workspaces {
 		}
 
 		public void update_windows(List<unowned Wnck.Window> window_list) {
-			int num_columns = real_alloc.width / 18;
-			int num_rows = real_alloc.height / 18;
+			int num_columns = (real_alloc.width - 4) / 20;
+			int num_rows = (real_alloc.height - 4) / 20;
 
 			if (num_columns <= 0) {
 				num_columns = 1;
