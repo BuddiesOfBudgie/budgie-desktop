@@ -71,6 +71,8 @@ public class MenuButton : Gtk.Button {
 		base.drag_end.connect(this.drag_end);
 		base.drag_data_get.connect(this.drag_data_get);
 
+		set_can_focus(false);
+
 		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		layout.pack_start(img, false, false, 0);
 		layout.pack_start(lab, true, true, 0);
