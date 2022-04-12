@@ -426,11 +426,18 @@ public class IconTasklistApplet : Budgie.Applet {
 		button.set_wnck_window(null);
 		button.update();
 
-		this.remove_button(app.id.to_string());
+		if (this.grouping) {
+			if (button.button_id != app.id.to_string()) {
+				this.swap_button(app.id.to_string(), button.button_id);
+			} else {
+				this.remove_button(app.id.to_string());
+			}
+		} else if (button.pinned) {
+			this.remove_button(app.id.to_string());
 
-		// Google Chrome with profile manager will not properly reuse the
-		// pinned icon when grouping is disabled (second window open before first is closed)
-		if (button.pinned && !this.grouping) { // try re-parenting app
+			// Google Chrome with profile manager will not properly reuse the
+			// pinned icon when grouping is disabled (second window open before first is closed)
+			// try re-parenting app
 			Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
 			if (first_app == null) {
 				return;
@@ -582,6 +589,15 @@ public class IconTasklistApplet : Budgie.Applet {
 	private void remove_button(string key) {
 		lock(this.buttons) {
 			this.buttons.remove(key);
+		}
+	}
+
+	/**
+	 * Ensure that we don't access the resource simultaneously when swapping a button's key.
+	 */
+	private void swap_button(string old_key, string new_key) {
+		lock(this.buttons) {
+			this.buttons.insert(new_key, this.buttons.take(old_key));
 		}
 	}
 }
