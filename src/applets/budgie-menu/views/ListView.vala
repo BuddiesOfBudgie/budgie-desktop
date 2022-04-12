@@ -185,18 +185,6 @@ public class ApplicationListView : ApplicationView {
 
 			// Create a button for each app in this category
 			foreach (var app in category.apps) {
-				if (app.desktop_id == "budgie-control-center.desktop") {
-					// Check if this is a control center panel
-					var control_center = "budgie-control-center";
-					bool is_control_center_panel = (
-						control_center in app.exec &&
-						app.exec.length != control_center.length
-					);
-
-					if (is_control_center_panel) {
-
-					}
-				}
 				var app_btn = new MenuButton(app, category, icon_size);
 
 				app_btn.clicked.connect(() => {
