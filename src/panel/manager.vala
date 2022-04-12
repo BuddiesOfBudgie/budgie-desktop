@@ -200,9 +200,9 @@ namespace Budgie {
 		}
 
 		private async bool register_with_session() {
-			try {
-				sclient = yield LibSession.register_with_session("budgie-panel");
-			} catch (Error e) {
+			sclient = yield LibSession.register_with_session("budgie-panel");
+
+			if (sclient == null) {
 				return false;
 			}
 
@@ -467,7 +467,7 @@ namespace Budgie {
 		*/
 		public void on_monitors_changed() {
 			var scr = Gdk.Screen.get_default();
-			var mon = scr.get_primary_monitor();
+			var dis = scr.get_display();
 			HashTableIter<string,Budgie.Panel?> iter;
 			unowned string uuid;
 			unowned Budgie.Panel panel;
@@ -480,16 +480,20 @@ namespace Budgie {
 			/* When we eventually get monitor-specific panels we'll find the ones that
 			* were left stray and find new homes, or temporarily disable
 			* them */
-			for (int i = 0; i < scr.get_n_monitors(); i++) {
-				Gdk.Rectangle usable_area;
-				scr.get_monitor_geometry(i, out usable_area);
+			for (int i = 0; i < dis.get_n_monitors(); i++) {
+				Gdk.Monitor mon = dis.get_monitor(i);
+				Gdk.Rectangle usable_area = mon.get_geometry();
 				Budgie.Screen? screen = new Budgie.Screen();
 				screen.area = usable_area;
 				screen.slots = PanelPosition.NONE;
 				screens.insert(i, screen);
+
+				if (mon.is_primary()) {
+					primary_monitor = i;
+				}
 			}
 
-			primary = screens.lookup(mon);
+			primary = screens.lookup(primary_monitor);
 
 			/* Fix all existing panels here */
 			Gdk.Rectangle raven_screen;
@@ -506,7 +510,6 @@ namespace Budgie {
 				/* Re-take the position */
 				primary.slots |= panel.position;
 			}
-			this.primary_monitor = mon;
 
 			raven_screen = primary.area;
 			if (top != null) {
@@ -581,7 +584,14 @@ namespace Budgie {
 				this.do_reset();
 			}
 			var scr = Gdk.Screen.get_default();
-			primary_monitor = scr.get_primary_monitor();
+			var dis = scr.get_display();
+
+			for (int i = 0; i < dis.get_n_monitors(); i++) {
+				if (dis.get_monitor(i).is_primary()) {
+					primary_monitor = i;
+				}
+			}
+
 			scr.monitors_changed.connect(this.on_monitors_changed);
 			scr.size_changed.connect(this.on_monitors_changed);
 

@@ -35,9 +35,6 @@ namespace Budgie {
 		public signal void Opened();
 
 		[GtkChild]
-		private unowned Gtk.Button? button_cancel;
-
-		[GtkChild]
 		private unowned Gtk.Button? button_logout;
 
 		[GtkChild]
