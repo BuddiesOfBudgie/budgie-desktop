@@ -120,7 +120,6 @@ public class Tracker : Object {
 		this.categories.add(new Category(_("Graphics")) {
 			included_categories = { "Graphics" },
 			excluded_applications = {
-				"eog.desktop",
 				"org.gnome.Evince.desktop",
 				"simple-scan.desktop"
 			}

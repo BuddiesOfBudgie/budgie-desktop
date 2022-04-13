@@ -110,14 +110,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 		});
 
 		// We should go away when a user menu button is clicked
-		this.user_menu.item_clicked.connect(() => {
-			this.hide();
-		});
+		this.user_menu.item_clicked.connect(this.hide);
 
 		// We should go away when an app is launched from the menu
-		this.view.app_launched.connect(() => {
-			this.hide();
-		});
+		this.view.app_launched.connect(this.hide);
 	}
 
 	/**

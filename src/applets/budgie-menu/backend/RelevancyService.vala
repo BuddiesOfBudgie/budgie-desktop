@@ -85,8 +85,7 @@ public class RelevancyService : Object {
 	 * into account, and it's way easier to have an arbitrary
 	 * threshold when you have a set minimum value.
 	 *
-	 * Totally stole (most of) this from Brisk (Which I (Josh)
-	 * wrote anyway so woo.)
+	 * This was inspired by prior art from Brisk Menu.
 	 */
 	public void update_relevancy(Application app, string term) {
 		if (scores == null) {
