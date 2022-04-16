@@ -399,7 +399,13 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		button.update();
 
-		this.remove_button(app.id.to_string());
+		if (button.button_id != app.id.to_string()) {
+			this.swap_button(app.id.to_string(), button.button_id);
+			button.first_app = null;
+			button.set_app_for_class_group();
+		} else {
+			this.remove_button(app.id.to_string());
+		}
 	}
 
 	private void on_active_window_changed() {
@@ -537,6 +543,15 @@ public class IconTasklistApplet : Budgie.Applet {
 	private void remove_button(string key) {
 		lock(this.buttons) {
 			this.buttons.remove(key);
+		}
+	}
+
+	/**
+	 * Ensure that we don't access the resource simultaneously when swapping a button's key.
+	 */
+	private void swap_button(string old_key, string new_key) {
+		lock(this.buttons) {
+			this.buttons.insert(new_key, this.buttons.take(old_key));
 		}
 	}
 }

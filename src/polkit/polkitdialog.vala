@@ -305,9 +305,9 @@ namespace Budgie {
 		}
 
 		private async bool register_with_session() {
-			try {
-				sclient = yield LibSession.register_with_session("budgie-polkit");
-			} catch (Error e) {
+			sclient = yield LibSession.register_with_session("budgie-polkit");
+
+			if (sclient == null) {
 				return false;
 			}
 

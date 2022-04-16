@@ -77,11 +77,15 @@ public class RavenTriggerApplet : Budgie.Applet {
 		if (raven_proxy == null) {
 			return false;
 		}
-		try {
-			raven_proxy.ToggleAppletView.begin();
-		} catch (Error e) {
-			message("Error in dbus: %s", e.message);
-		}
+
+		raven_proxy.ToggleAppletView.begin((obj,res) => {
+			try {
+				raven_proxy.ToggleAppletView.end(res);
+			} catch (Error e) {
+				message("Error in dbus: %s", e.message);
+			}
+		});
+
 		return false;
 	}
 

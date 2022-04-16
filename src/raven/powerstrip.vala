@@ -78,15 +78,17 @@ namespace Budgie {
 			btn = new Gtk.Button.from_icon_name("system-log-out-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			power_btn = btn;
 			btn.clicked.connect(() => {
-				try {
-					raven.set_expanded(false);
-					if (session == null) {
-						return;
-					}
-					session.Logout.begin(0);
-				} catch (Error e) {
-					message("Error invoking end session dialog: %s", e.message);
+				raven.set_expanded(false);
+				if (session == null) {
+					return;
 				}
+				session.Logout.begin(0, (obj,res) => {
+					try {
+						session.Logout.end(res);
+					} catch (Error e) {
+						message("Error invoking end session dialog: %s", e.message);
+					}
+				});
 			});
 			btn.halign = Gtk.Align.START;
 			btn.get_style_context().add_class("flat");
