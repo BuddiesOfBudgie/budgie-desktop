@@ -28,11 +28,6 @@ lib_applet_budgiemenu_resources = static_library(
 )
 
 applet_budgiemenu_sources = [
-    'backend/Application.vala',
-    'backend/Category.vala',
-    'backend/RelevancyService.vala',
-    'backend/Switcheroo.vala',
-    'backend/Tracker.vala',
     'BudgieMenu.vala',
     'BudgieMenuButtons.vala',
     'BudgieMenuWindow.vala',
@@ -48,11 +43,12 @@ applet_budgiemenu_sources = [
 
 applet_budgiemenu_deps = [
     libplugin_vapi,
-    dep_gtk3,
     dep_gee,
+    dep_gtk3,
     dep_peas,
     dep_accountsservice,
     dep_cairo,
+    link_libappindexer,
     link_libplugin,
 ]
 
@@ -71,9 +67,6 @@ shared_library(
     ],
     link_whole: [
         lib_applet_budgiemenu_resources,
-    ],
-    c_args: [
-        '-DGMENU_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_budgiemenu_dir,

@@ -27,7 +27,7 @@ public class ApplicationListView : ApplicationView {
 	public Settings settings { get; construct; default = null; }
 
 	// The current group
-	private Category? current_category = null;
+	private Budgie.Category? current_category = null;
 	private bool compact_mode;
 	private bool headers_visible;
 	private bool show_control_center_panels;
@@ -120,7 +120,7 @@ public class ApplicationListView : ApplicationView {
 	/**
 	 * Refreshes the category and application lists.
 	 */
-	public override void refresh(Tracker app_tracker) {
+	public override void refresh(Budgie.AppIndex app_tracker) {
 		lock (this.reloading) {
 			if (this.reloading) {
 				return;
@@ -155,7 +155,7 @@ public class ApplicationListView : ApplicationView {
 	/**
 	 * Build the category and application lists.
 	 */
-	private void load_menus(Tracker app_tracker) {
+	private void load_menus(Budgie.AppIndex app_tracker) {
 		// "All" button"
 		this.all_categories = new CategoryButton(null);
 		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
@@ -164,7 +164,7 @@ public class ApplicationListView : ApplicationView {
 		});
 		this.categories.pack_start(this.all_categories, false, false, 0);
 
-		foreach (var category in app_tracker.categories) {
+		foreach (var category in app_tracker.get_categories()) {
 			// Skip empty categories
 			if (category.apps.is_empty) {
 				continue;
@@ -439,15 +439,15 @@ public class ApplicationListView : ApplicationView {
 		}
 
 		// Only perform category grouping if headers are visible
-		string parentA = RelevancyService.searchable_string(child1.category.name);
-		string parentB = RelevancyService.searchable_string(child2.category.name);
+		string parentA = Budgie.RelevancyService.searchable_string(child1.category.name);
+		string parentB = Budgie.RelevancyService.searchable_string(child2.category.name);
 		if (child1.category != child2.category && this.headers_visible) {
 			return parentA.collate(parentB);
 		}
 
 		// Two application items, sort by name
-		string nameA = RelevancyService.searchable_string(child1.app.name);
-		string nameB = RelevancyService.searchable_string(child2.app.name);
+		string nameA = Budgie.RelevancyService.searchable_string(child1.app.name);
+		string nameB = Budgie.RelevancyService.searchable_string(child2.app.name);
 		return nameA.collate(nameB);
 	}
 

@@ -13,9 +13,9 @@
  * Factory widget to represent a category
  */
 public class CategoryButton : Gtk.RadioButton {
-	public new Category? category { public get ; protected set; }
+	public new Budgie.Category? category { public get ; protected set; }
 
-	public CategoryButton(Category? category) {
+	public CategoryButton(Budgie.Category? category) {
 		this.category = category;
 
 		string name = null;
@@ -48,10 +48,10 @@ public class CategoryButton : Gtk.RadioButton {
  * Factory widget to represent a menu item
  */
 public class MenuButton : Gtk.Button {
-	public Application app { get; private set; }
-	public Category category { get; private set; }
+	public Budgie.Application app { get; private set; }
+	public Budgie.Category category { get; private set; }
 
-	public MenuButton(Application app, Category category, int icon_size) {
+	public MenuButton(Budgie.Application app, Budgie.Category category, int icon_size) {
 		this.app = app;
 		this.category = category;
 

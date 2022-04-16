@@ -86,14 +86,14 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		// searching functionality :)
 		this.search_entry.search_changed.connect(()=> {
-			var search_term = RelevancyService.searchable_string(this.search_entry.text);
+			var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
 			this.view.search_changed(search_term);
 		});
 
 		// Enabling activation by search entry
 		this.search_entry.activate.connect(() => {
 			// Make the view (and filter) is updated before calling activate
-			var search_term = RelevancyService.searchable_string(this.search_entry.text);
+			var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
 			this.view.search_changed(search_term);
 
 			this.view.on_search_entry_activated();
@@ -119,11 +119,11 @@ public class BudgieMenuWindow : Budgie.Popover {
 	/**
 	 * Refresh the category and application views.
 	 */
-	public void refresh(Tracker app_tracker, bool now = false) {
+	public void refresh(Budgie.AppIndex app_index, bool now = false) {
 		if (now) {
-			this.view.refresh(app_tracker);
+			this.view.refresh(app_index);
 		} else {
-			this.view.queue_refresh(app_tracker);
+			this.view.queue_refresh(app_index);
 		}
 	}
 

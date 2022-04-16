@@ -20,7 +20,7 @@ public abstract class ApplicationView : Gtk.Box {
 	public string search_term { get; public set; default = ""; }
 	public int icon_size { get; protected set; default = 24; }
 
-	protected RelevancyService relevancy_service;
+	protected Budgie.RelevancyService relevancy_service;
 	private uint timeout_id = 0;
 
 	/**
@@ -31,7 +31,7 @@ public abstract class ApplicationView : Gtk.Box {
 	construct {
 		this.application_buttons = new HashTable<string,MenuButton?>(str_hash, str_equal);
 		this.control_center_buttons = new Gee.ArrayList<MenuButton>();
-		this.relevancy_service = new RelevancyService();
+		this.relevancy_service = new Budgie.RelevancyService();
 	}
 
 	/**
@@ -42,7 +42,7 @@ public abstract class ApplicationView : Gtk.Box {
 	/**
 	 * Refreshes the entire application view.
 	 */
-	public abstract void refresh(Tracker app_tracker);
+	public abstract void refresh(Budgie.AppIndex app_tracker);
 
 	/**
 	 * Invalidate aspects of the view, e.g. category headers.
@@ -55,7 +55,7 @@ public abstract class ApplicationView : Gtk.Box {
 	 * The time to wait before refreshing can be set by passing in `seconds`.
 	 * By default, the time is 1 second.
 	 */
-	public void queue_refresh(Tracker app_tracker, int seconds = 1) {
+	public void queue_refresh(Budgie.AppIndex app_tracker, int seconds = 1) {
 		// Reset the refresh timer if an update is already queued
 		if (this.timeout_id != 0) {
 			Source.remove(this.timeout_id);

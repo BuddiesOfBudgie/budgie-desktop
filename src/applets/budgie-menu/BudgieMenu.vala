@@ -82,7 +82,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 	public string uuid { public set ; public get; }
 
-	private Tracker app_tracker;
+	private Budgie.AppIndex app_index;
 
 	public override Gtk.Widget? get_settings_ui() {
 		return new BudgieMenuSettings(this.get_applet_settings(uuid));
@@ -102,7 +102,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 		settings.changed.connect(on_settings_changed);
 
-		app_tracker = new Tracker();
+		app_index = new Budgie.AppIndex();
 
 		widget = new Gtk.ToggleButton();
 		widget.relief = Gtk.ReliefStyle.NONE;
@@ -124,8 +124,8 @@ public class BudgieMenuApplet : Budgie.Applet {
 		st.add_class("panel-button");
 		popover = new BudgieMenuWindow(settings, widget);
 		popover.bind_property("visible", widget, "active");
-		popover.refresh(this.app_tracker, true);
-		app_tracker.changed.connect(() => {
+		popover.refresh(this.app_index, true);
+		app_index.changed.connect(() => {
 			/*
 			 * Refesh the view on application system change.
 			 * We don't want to update the UI when the popover
@@ -140,11 +140,11 @@ public class BudgieMenuApplet : Budgie.Applet {
 						return true;
 					}
 
-					popover.refresh(this.app_tracker);
+					popover.refresh(this.app_index);
 					return false;
 				}, Priority.DEFAULT_IDLE);
 			} else {
-				popover.refresh(this.app_tracker);
+				popover.refresh(this.app_index);
 			}
 		});
 
@@ -241,7 +241,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 				label.set_visible(visible);
 				break;
 			case "menu-show-control-center-items":
-				this.app_tracker.queue_refresh();
+				this.app_index.queue_refresh();
 				break;
 			default:
 				break;
