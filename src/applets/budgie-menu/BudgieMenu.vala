@@ -102,7 +102,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 		settings.changed.connect(on_settings_changed);
 
-		app_index = new Budgie.AppIndex();
+		app_index = Budgie.AppIndex.@get();
 
 		widget = new Gtk.ToggleButton();
 		widget.relief = Gtk.ReliefStyle.NONE;

@@ -15,13 +15,12 @@ namespace Budgie {
 	* installed applications on the system.
 	*/
 	public class AppIndex : Object {
+		private static AppIndex _instance;
+
 		/**
 		 * List of all categories with apps in them.
-		 * This is `static` because the class is intended to be used
-		 * in multiple places, and we really only ever want one instance
-		 * of the index.
 		 */
-		private static Gee.ArrayList<Category> categories;
+		private Gee.ArrayList<Category> categories;
 
 		private AppInfoMonitor monitor;
 		private uint timeout_id = 0;
@@ -32,15 +31,12 @@ namespace Budgie {
 		*/
 		public signal void changed();
 
-		public AppIndex() {
+		private AppIndex() {
 			Object();
 		}
 
-		static construct {
-			categories = new Gee.ArrayList<Category>();
-		}
-
 		construct {
+			this.categories = new Gee.ArrayList<Category>();
 			this.monitor = AppInfoMonitor.@get();
 			this.monitor.changed.connect(() => {
 				this.queue_refresh();
@@ -48,6 +44,20 @@ namespace Budgie {
 
 			// Start building the tree right now
 			this.refresh();
+		}
+
+		/**
+		 * Gets the shared static AppIndex instance.
+		 *
+		 * If it has not yet been created, this function will
+		 * create it and return it.
+		 */
+		public static new AppIndex @get() {
+			if (_instance == null) {
+				_instance = new AppIndex();
+			}
+
+			return _instance;
 		}
 
 		/**
