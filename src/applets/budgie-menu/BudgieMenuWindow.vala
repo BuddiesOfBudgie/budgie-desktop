@@ -85,7 +85,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		});
 
 		// searching functionality :)
-		this.search_entry.search_changed.connect(()=> {
+		this.search_entry.changed.connect(()=> {
 			var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
 			this.view.search_changed(search_term);
 		});
