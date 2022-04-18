@@ -21,8 +21,10 @@ namespace Budgie {
 		 * List of all categories with apps in them.
 		 */
 		private Gee.ArrayList<Category> categories;
+		private Category misc_category;
 
 		private AppInfoMonitor monitor;
+		private FileMonitor file_monitor;
 		private uint timeout_id = 0;
 
 		/**
@@ -37,10 +39,31 @@ namespace Budgie {
 
 		construct {
 			this.categories = new Gee.ArrayList<Category>();
+
+			// Create our misc category, but don't add it to the list until it actually has apps in it
+			this.misc_category = new Category(_("Other"), true) {
+				excluded_categories = { "Core", "Screensaver", "Settings" },
+				// All of these should be in Utilities
+				excluded_applications = { "htop.desktop", "onboard.desktop", "org.gnome.FileRoller.desktop", "org.gnome.font-viewer.desktop" }
+			};
+
 			this.monitor = AppInfoMonitor.@get();
 			this.monitor.changed.connect(() => {
 				this.queue_refresh();
 			});
+
+			// Start watching the desktop-directories folder for custom category support
+			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
+			var directory_file = File.new_for_path(path);
+			try {
+				this.file_monitor = directory_file.monitor_directory(FileMonitorFlags.NONE, null);
+				this.file_monitor.changed.connect(() => {
+					// Refresh the index when there is a category file change
+					this.queue_refresh();
+				});
+			} catch (IOError e) {
+				warning("Failed to create monitor for desktop directory: %s", e.message);
+			}
 
 			// Start building the tree right now
 			this.refresh();
@@ -106,6 +129,7 @@ namespace Budgie {
 			}
 
 			categories.clear();
+			this.misc_category.apps.clear();
 
 			/*
 			* Add our categories, adhearing to the Freedesktop Menu spec.
@@ -203,12 +227,8 @@ namespace Budgie {
 				included_categories = { "X-GNOME-Utilities" }
 			});
 
-			// Create our misc category, but don't add it to the list until it actually has apps in it
-			var misc_category = new Category(_("Other"), true) {
-				excluded_categories = { "Core", "Screensaver", "Settings" },
-				// All of these should be in Utilities
-				excluded_applications = { "htop.desktop", "onboard.desktop", "org.gnome.FileRoller.desktop", "org.gnome.font-viewer.desktop" }
-			};
+			// See if there are any user-custom categories
+			this.create_custom_categories();
 
 			// Iterate over all registered AppInfos and try to put them in categories
 			foreach (var app in AppInfo.get_all()) {
@@ -217,47 +237,97 @@ namespace Budgie {
 					continue;
 				}
 
-				// Check if this is a control center panel
-				var control_center = "budgie-control-center";
-				bool is_control_center_panel = (
-					app.get_commandline() != null &&
-					control_center in app.get_commandline() &&
-					app.get_commandline().length != control_center.length
-				);
-
-				// Check if we should not add this application to the index.
-				// We have to make sure to add BCC panel items because they
-				// have NoDisplay set, so this would otherwise exclude them.
-				// Showing/hiding them is handled by the UI layer.
-				bool should_skip = (!desktop_app.should_show() && !is_control_center_panel) ||
-									(desktop_app.get_boolean("Terminal"));
-
-				if (should_skip) {
-					continue;
-				}
-
-				// Try to get the best category for this app
-				bool category_found = false;
-				foreach (var category in categories) {
-					if (category.maybe_add_app(desktop_app)) {
-						category_found = true; // Don't break because apps can be in multiple categories
-					}
-				}
-
-				// No suitable category for this app was found, so add it
-				// to the misc category
-				if (!category_found) {
-					misc_category.maybe_add_app(desktop_app);
-				}
+				// Sort the application based on its DesktopAppInfo
+				this.sort_application(desktop_app);
 			}
 
 			// Add the misc category if there are apps in it
-			if (misc_category.apps.size > 0) {
-				categories.add(misc_category);
+			if (this.misc_category.apps.size > 0) {
+				this.categories.add(this.misc_category);
 			}
 
 			// Emit our signal for changes
 			this.changed();
+		}
+
+		/**
+		 * Read files in `~/.local/share/desktop-directories` and add a new category
+		 * for each of them.
+		 */
+		private void create_custom_categories() {
+			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
+			var directory_file = File.new_for_path(path);
+
+			try {
+				// Enumerate all of the files in the desktop-directories dir
+				var children = directory_file.enumerate_children(FileAttribute.STANDARD_NAME, FileQueryInfoFlags.NONE, null);
+
+				// Iterate over all of the children
+				FileInfo child = null;
+				while ((child = children.next_file(null)) != null) {
+					var file_path = Path.build_path(Path.DIR_SEPARATOR_S, path, child.get_name());
+
+					// Make sure that this is a file for a category/directory
+					if (!child.get_name().has_suffix(".directory")) {
+						continue;
+					}
+
+					try {
+						// Try to build the category from the file
+						var file = File.new_for_path(file_path);
+						var category = Category.new_for_file(file);
+
+						debug("Adding custom category '%s'", category.name);
+						this.categories.add(category);
+					} catch (Error e) {
+						// There was an error reading the file, skip
+						warning("Error creating category from '%s': %s", child.get_name(), e.message);
+						continue;
+					}
+				}
+			} catch (Error e) {
+				warning("Error enumerating files in desktop-directories: %s", e.message);
+			}
+		}
+
+		/**
+		 * Sort a single application into the proper categories.
+		 */
+		private void sort_application(DesktopAppInfo app_info) {
+			// Check if this is a control center panel
+			var control_center = "budgie-control-center";
+			bool is_control_center_panel = (
+				app_info.get_commandline() != null &&
+				control_center in app_info.get_commandline() &&
+				app_info.get_commandline().length != control_center.length
+			);
+
+			// Check if we should not add this application to the index.
+			// We have to make sure to add BCC panel items because they
+			// have NoDisplay set, so this would otherwise exclude them.
+			// Showing/hiding them is handled by the UI layer.
+			bool should_skip = (!app_info.should_show() && !is_control_center_panel) ||
+								(app_info.get_boolean("Terminal"));
+
+			if (should_skip) {
+				return;
+			}
+
+			var application = new Application(app_info);
+
+			// Try to get the best category for this app
+			bool category_found = false;
+			// Iterate over all of this application's categories
+			foreach (var category in this.categories) {
+				if (category.maybe_add_app(application)) {
+					category_found = true; // Don't break because apps can be in multiple categories
+				}
+			}
+
+			// No suitable category was found, so add it to the misc category
+			if (!category_found) {
+				this.misc_category.maybe_add_app(application);
+			}
 		}
 	}
 }

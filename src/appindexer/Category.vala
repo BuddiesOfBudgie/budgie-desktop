@@ -41,27 +41,56 @@ namespace Budgie {
 		}
 
 		/**
+		 * Create a new category from a file.
+		 *
+		 * Errors are thrown if the file doesn't exist or is a directory,
+		 * or if the input stream is closed while reading the file.
+		 */
+		public static Category? new_for_file(File file) throws Error {
+			// Make sure we have a default name
+			var name = _("New Category");
+
+			// Open the file
+			var input_stream = file.read(null);
+			var data_stream = new DataInputStream(input_stream);
+
+			// Read the lines
+			string line = null;
+			while ((line = data_stream.read_line()) != null) {
+				// Look for a name to set
+				if (line.has_prefix("Name=")) {
+					name = line.substring(5).strip();
+					break;
+				}
+			}
+
+			return new Category(name) {
+				included_categories = { name }
+			};
+		}
+
+		/**
 		* Add an application to this category if the app belongs in
 		* this category.
 		*
 		* Returns `true` if the application should be in this category,
 		* otherwise `false`.
 		*/
-		public bool maybe_add_app(DesktopAppInfo app) {
+		public bool maybe_add_app(Application app) {
 			// Check if the application is excluded from this category
-			if (app.get_id() in excluded_applications) {
+			if (app.desktop_id in excluded_applications) {
 				return false;
 			}
 
 			// Get the categories for this application
-			unowned var categories = app.get_categories();
+			unowned var categories = app.categories;
 			if (categories == null) {
 				if (!this.misc_category) {
 					return false;
 				}
 
 				// Add the app if this is the misc category and no categories are set
-				this.apps.add(new Application(app));
+				this.apps.add(app);
 				return true;
 			}
 
@@ -81,13 +110,17 @@ namespace Budgie {
 
 			// Category found, add the application
 			if (found_category) {
-				this.apps.add(new Application(app));
+				debug("Adding '%s' to category '%s'", app.name, this.name);
+
+				this.apps.add(app);
 				return true;
 			}
 
 			// If this category is a misc category, add the app anyways
 			if (this.misc_category) {
-				this.apps.add(new Application(app));
+				debug("Adding '%s' to category '%s'", app.name, this.name);
+
+				this.apps.add(app);
 				return true;
 			}
 
