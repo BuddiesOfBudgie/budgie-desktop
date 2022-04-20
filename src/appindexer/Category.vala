@@ -64,8 +64,10 @@ namespace Budgie {
 				}
 			}
 
+			string filename_without_ext = file.get_basename().replace(".directory", "");
+
 			return new Category(name) {
-				included_categories = { name }
+				included_categories = { name, filename_without_ext }
 			};
 		}
 
