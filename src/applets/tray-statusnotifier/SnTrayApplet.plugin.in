@@ -1,0 +1,8 @@
+[Plugin]
+Module=sntrayapplet.so
+Name=System Tray (Status Notifier)
+_Description=System tray using the Status Notifier protocol
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2015-2022 Budgie Desktop Developers
+Website=https://buddiesofbudgie.org
+Icon=system-tray-symbolic
