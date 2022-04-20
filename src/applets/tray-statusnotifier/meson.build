@@ -16,7 +16,11 @@ applet_sntray_resources = gnome.compile_resources(
     c_name: 'budgie_sntray',
 )
 
-applet_sntray_sources = ['SnTrayApplet.vala', applet_sntray_resources]
+applet_sntray_sources = [
+    'SnTrayApplet.vala',
+    'StatusNotifierWatcher.vala',
+    applet_sntray_resources,
+]
 
 applet_sntray_deps = [
     libplugin_vapi,

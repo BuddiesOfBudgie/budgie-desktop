@@ -34,6 +34,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private Gtk.EventBox box;
 	private Gtk.Orientation orient;
 
+	private static StatusNotifierWatcher? watcher;
 	private static int ref_counter;
 
 	public SnTrayApplet(string uuid) {
@@ -50,12 +51,18 @@ public class SnTrayApplet : Budgie.Applet {
 		settings = get_applet_settings(uuid);
 
 		AtomicInt.inc(ref ref_counter);
+		if (watcher == null) {
+			watcher = new StatusNotifierWatcher();
+		}
 
 		show_all();
 	}
 
 	~SnTrayApplet() {
-		AtomicInt.dec_and_test(ref ref_counter);
+		// if this is the last applet left and it's being deleted, we don't need the watcher
+		if (AtomicInt.dec_and_test(ref ref_counter)) {
+			watcher = null;
+		}
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
