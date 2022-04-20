@@ -31,17 +31,31 @@ public class SnTraySettings : Gtk.Grid {
 public class SnTrayApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
 	private Settings? settings;
+	private Gtk.EventBox box;
 	private Gtk.Orientation orient;
+
+	private static int ref_counter;
 
 	public SnTrayApplet(string uuid) {
 		Object(uuid: uuid);
 
 		get_style_context().add_class("system-tray-applet");
 
+		box = new Gtk.EventBox();
+		add(box);
+
 		settings_schema = "org.buddiesofbudgie.sntray";
 		settings_prefix = "/org/buddiesofbudgie/budgie-panel/instance/sntray";
 
 		settings = get_applet_settings(uuid);
+
+		AtomicInt.inc(ref ref_counter);
+
+		show_all();
+	}
+
+	~SnTrayApplet() {
+		AtomicInt.dec_and_test(ref ref_counter);
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
