@@ -33,6 +33,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private Settings? settings;
 	private Gtk.EventBox box;
 	private Gtk.Orientation orient;
+	private uint dbus_identifier;
 
 	private static StatusNotifierWatcher? watcher;
 	private static int ref_counter;
@@ -55,10 +56,28 @@ public class SnTrayApplet : Budgie.Applet {
 			watcher = new StatusNotifierWatcher();
 		}
 
+		string host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
+
+		dbus_identifier = Bus.own_name(
+			BusType.SESSION,
+			host_name,
+			BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+			(conn,name)=>{
+				try {
+					watcher.register_status_notifier_host(host_name);
+				} catch (Error e) {
+					critical("Failed to register Status Notifier host: %s", e.message);
+				}
+			}
+		);
+
 		show_all();
 	}
 
 	~SnTrayApplet() {
+		// breaks adding items on panel reinit for some reason
+		//  Bus.unown_name(dbus_identifier);
+
 		// if this is the last applet left and it's being deleted, we don't need the watcher
 		if (AtomicInt.dec_and_test(ref ref_counter)) {
 			watcher = null;
