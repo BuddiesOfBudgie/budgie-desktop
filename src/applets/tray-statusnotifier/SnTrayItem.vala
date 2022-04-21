@@ -1,3 +1,9 @@
+public struct IconPixmap {
+	int width;
+	int height;
+	char[] data;
+}
+
 [DBus (name="org.kde.StatusNotifierItem")]
 public interface StatusNotifierItem : Object {
 	public abstract string category {owned get;}
@@ -6,11 +12,11 @@ public interface StatusNotifierItem : Object {
 	public abstract string status {owned get;}
 	public abstract uint32 window_id {owned get;}
 	public abstract string icon_name {owned get;}
-	//  public abstract Variant icon_pixmap {owned get;}
+	public abstract IconPixmap[] icon_pixmap {owned get;}
 	public abstract string overlay_icon_name {owned get;}
-	//  public abstract Variant overlay_icon_pixmap {owned get;}
+	public abstract IconPixmap[] overlay_icon_pixmap {owned get;}
 	public abstract string attention_icon_name {owned get;}
-	//  public abstract Variant attention_icon_pixmap {owned get;}
+	public abstract IconPixmap[] attention_icon_pixmap {owned get;}
 	public abstract string attention_movie_name {owned get;}
 	//  public abstract Variant tool_tip {owned get;}
 	public abstract bool item_is_menu {owned get;}
