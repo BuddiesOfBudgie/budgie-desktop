@@ -75,8 +75,7 @@ public class SnTrayApplet : Budgie.Applet {
 	}
 
 	~SnTrayApplet() {
-		// breaks adding items on panel reinit for some reason
-		//  Bus.unown_name(dbus_identifier);
+		Bus.unown_name(dbus_identifier);
 
 		// if this is the last applet left and it's being deleted, we don't need the watcher
 		if (AtomicInt.dec_and_test(ref ref_counter)) {
