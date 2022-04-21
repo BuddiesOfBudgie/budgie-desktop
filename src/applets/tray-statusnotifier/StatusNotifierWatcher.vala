@@ -53,6 +53,11 @@ private class StatusNotifierWatcher : Object {
 			name = service;
 		}
 
+		// we already have this item; ignore the request
+		if (item_services.contains(path + name)) {
+			return;
+		}
+
 		uint watch_identifier = Bus.watch_name(
 			BusType.SESSION,
 			name,

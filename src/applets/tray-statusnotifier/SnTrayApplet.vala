@@ -33,6 +33,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private Settings? settings;
 	private Gtk.EventBox box;
 	private Gtk.Box layout;
+	private HashTable<string, SnTrayItem> items;
 	private Gtk.Orientation orient;
 	private uint dbus_identifier;
 
@@ -55,6 +56,7 @@ public class SnTrayApplet : Budgie.Applet {
 			layout.set_spacing(settings.get_int("spacing"));
 		});
 
+		items = new HashTable<string, SnTrayItem>(str_hash, str_equal);
 		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, settings.get_int("spacing"));
 		box.add(layout);
 
@@ -66,10 +68,17 @@ public class SnTrayApplet : Budgie.Applet {
 		watcher.status_notifier_item_registered_custom.connect((name,path)=>{
 			try {
 				StatusNotifierItem dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, path);
-				layout.add(new SnTrayItem(dbus_item));
+				var new_item = new SnTrayItem(dbus_item);
+				items.set(path + name, new_item);
+				layout.add(new_item);
 			} catch (Error e) {
 				warning("Failed to fetch dbus item info for name=%s and path=%s", name, path);
 			}
+		});
+
+		watcher.status_notifier_item_unregistered_custom.connect((name,path)=>{
+			layout.remove(items.get(path + name));
+			items.remove(path + name);
 		});
 
 		string host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
