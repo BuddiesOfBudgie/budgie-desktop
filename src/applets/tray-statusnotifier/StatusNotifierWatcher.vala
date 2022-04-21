@@ -1,36 +1,5 @@
-[DBus (name="org.kde.StatusNotifierItem")]
-private interface StatusNotifierItem : Object {
-	public abstract string category {owned get;}
-	public abstract string id {owned get;}
-	public abstract string title {owned get;}
-	public abstract string status {owned get;}
-	public abstract uint32 window_id {owned get;}
-	public abstract string icon_name {owned get;}
-	public abstract Variant icon_pixmap {owned get;}
-	public abstract string overlay_icon_name {owned get;}
-	public abstract Variant overlay_icon_pixmap {owned get;}
-	public abstract string attention_icon_name {owned get;}
-	public abstract Variant attention_icon_pixmap {owned get;}
-	public abstract string attention_movie_name {owned get;}
-	public abstract Variant tool_tip {owned get;}
-	public abstract bool item_is_menu {owned get;}
-	public abstract Variant menu {owned get;}
-
-	public abstract void context_menu(int x, int y) throws DBusError, IOError;
-	public abstract void activate(int x, int y) throws DBusError, IOError;
-	public abstract void secondary_activate(int x, int y) throws DBusError, IOError;
-	public abstract void scroll(int delta, string orientation) throws DBusError, IOError;
-
-	public abstract signal void new_title();
-	public abstract signal void new_icon();
-	public abstract signal void new_attention_icon();
-	public abstract signal void new_overlay_icon();
-	public abstract signal void new_tool_tip();
-	public abstract signal void new_status();
-}
-
 [DBus (name="org.kde.StatusNotifierWatcher")]
-public class StatusNotifierWatcher : Object {
+private class StatusNotifierWatcher : Object {
 	public string[] registered_status_notifier_items {get; private set;}
 	public bool is_status_notifier_host_registered {get; private set; default = true;}
 	public int32 protocol_version {get; private set; default = 0;}
@@ -91,11 +60,13 @@ public class StatusNotifierWatcher : Object {
 			(conn,name,owner)=>{
 				warning("Registered item with path=%s, name=%s", path, name);
 				status_notifier_item_registered(service);
+				status_notifier_item_registered_custom(name, path);
 			},
 			(conn,name)=>{
 				warning("Unregistered item with path=%s, name=%s", path, name);
 				item_services.remove(path + name);
 				status_notifier_item_unregistered(service);
+				status_notifier_item_unregistered_custom(name, path);
 			}
 		);
 
@@ -121,6 +92,10 @@ public class StatusNotifierWatcher : Object {
 	}
 
 	public signal bool status_notifier_item_registered(string item);
+	public signal void status_notifier_item_registered_custom(string name, string path);
+
 	public signal bool status_notifier_item_unregistered(string item);
+	public signal void status_notifier_item_unregistered_custom(string name, string path);
+
 	public signal bool status_notifier_host_registered();
 }

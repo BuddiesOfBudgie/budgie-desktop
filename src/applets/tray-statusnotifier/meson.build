@@ -18,6 +18,7 @@ applet_sntray_resources = gnome.compile_resources(
 
 applet_sntray_sources = [
     'SnTrayApplet.vala',
+    'SnTrayItem.vala',
     'StatusNotifierWatcher.vala',
     applet_sntray_resources,
 ]
