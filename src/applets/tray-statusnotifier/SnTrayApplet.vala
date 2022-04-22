@@ -70,7 +70,7 @@ public class SnTrayApplet : Budgie.Applet {
 				StatusNotifierItem dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, path);
 				var new_item = new SnTrayItem(dbus_item);
 				items.set(path + name, new_item);
-				layout.add(new_item);
+				layout.pack_end(new_item);
 			} catch (Error e) {
 				warning("Failed to fetch dbus item info for name=%s and path=%s", name, path);
 			}

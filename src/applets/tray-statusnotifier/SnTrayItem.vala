@@ -18,6 +18,7 @@ public interface StatusNotifierItem : Object {
 	public abstract string attention_icon_name {owned get;}
 	public abstract IconPixmap[] attention_icon_pixmap {owned get;}
 	public abstract string attention_movie_name {owned get;}
+	public abstract string icon_theme_path {owned get;}
 	//  public abstract Variant tool_tip {owned get;}
 	public abstract bool item_is_menu {owned get;}
 	//  public abstract Variant menu {owned get;}
@@ -38,22 +39,29 @@ public interface StatusNotifierItem : Object {
 public class SnTrayItem : Gtk.EventBox {
 	private StatusNotifierItem dbus_item;
 	public Gtk.Image icon {get; private set;}
-	
+
 	public SnTrayItem(StatusNotifierItem dbus_item) {
-		warning("Creating new tray icon");
+		warning("Creating new tray icon with icon theme path %s", dbus_item.icon_theme_path);
 
 		this.dbus_item = dbus_item;
-		
+
 		icon = new Gtk.Image();
-		icon.set_from_icon_name(dbus_item.icon_name, Gtk.IconSize.INVALID);
 		icon.pixel_size = 24;
+		reset_icon();
 		add(icon);
 
-		dbus_item.new_icon.connect(()=>{
-			icon.set_from_icon_name(dbus_item.icon_name, Gtk.IconSize.INVALID);
-			icon.pixel_size = 24;
-		});
+		dbus_item.new_icon.connect(reset_icon);
 		show_all();
+	}
+
+	private void reset_icon() {
+		if (dbus_item.icon_theme_path != null) {
+			Gtk.IconTheme icon_theme = new Gtk.IconTheme();
+			icon_theme.append_search_path(dbus_item.icon_theme_path);
+			icon.set_from_pixbuf(icon_theme.load_icon(dbus_item.icon_name, 24, Gtk.IconLookupFlags.FORCE_SIZE));
+		} else {
+			icon.set_from_icon_name(dbus_item.icon_name, Gtk.IconSize.INVALID);
+		}
 	}
 
 	public override bool button_release_event(Gdk.EventButton event) {
