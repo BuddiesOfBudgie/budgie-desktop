@@ -56,6 +56,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private Gtk.Orientation orient;
 	private uint dbus_identifier;
 	private SnWatcherInterface? watcher;
+	private int panel_size;
 
 	public SnTrayApplet(string uuid) {
 		Object(uuid: uuid);
@@ -150,7 +151,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private void register_new_item(string name, string object_path) {
 		try {
 			SnItemInterface dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, object_path);
-			var new_item = new SnTrayItem(dbus_item);
+			var new_item = new SnTrayItem(dbus_item, panel_size);
 			items.set(object_path + name, new_item);
 			layout.pack_end(new_item);
 		} catch (Error e) {
@@ -161,9 +162,20 @@ public class SnTrayApplet : Budgie.Applet {
 	public override void panel_position_changed(Budgie.PanelPosition position) {
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
 			orient = Gtk.Orientation.VERTICAL;
+			valign = Gtk.Align.BASELINE;
+			halign = Gtk.Align.FILL;
 		} else {
 			orient = Gtk.Orientation.HORIZONTAL;
+			valign = Gtk.Align.FILL;
+			halign = Gtk.Align.BASELINE;
 		}
+	}
+
+	public override void panel_size_changed(int panel, int icon, int small_icon) {
+		panel_size = panel;
+		items.get_values().foreach((item)=>{
+			item.resize(panel);
+		});
 	}
 
 	public override bool supports_settings() {

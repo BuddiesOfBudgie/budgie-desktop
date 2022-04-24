@@ -27,6 +27,7 @@ applet_sntray_deps = [
     dep_gtk3,
     dep_peas,
     link_libplugin,
+    meson.get_compiler('c').find_library('m', required: false)
 ]
 
 shared_library(

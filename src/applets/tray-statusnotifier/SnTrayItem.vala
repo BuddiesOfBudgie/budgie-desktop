@@ -4,6 +4,10 @@ public struct IconPixmap {
 	char[] data;
 }
 
+const int TARGET_ICON_PADDING = 18;
+const double TARGET_ICON_SCALE = 2.0 / 3.0;
+const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
+
 [DBus (name="org.kde.StatusNotifierItem")]
 public interface SnItemInterface : Object {
 	public abstract string category {owned get;}
@@ -39,28 +43,40 @@ public interface SnItemInterface : Object {
 public class SnTrayItem : Gtk.EventBox {
 	private SnItemInterface dbus_item;
 	public Gtk.Image icon {get; private set;}
+	public int target_icon_size = 8;
 
-	public SnTrayItem(SnItemInterface dbus_item) {
+	public SnTrayItem(SnItemInterface dbus_item, int applet_size) {
 		warning("Creating new tray icon with icon theme path %s", dbus_item.icon_theme_path);
 
 		this.dbus_item = dbus_item;
 
 		icon = new Gtk.Image();
-		icon.pixel_size = 24;
-		reset_icon();
+		resize(applet_size);
 		add(icon);
 
 		dbus_item.new_icon.connect(reset_icon);
+		dbus_item.new_status.connect(reset_icon);
 		show_all();
 	}
 
 	private void reset_icon() {
+		string icon_name;
+		if (dbus_item.status == "NeedsAttention") {
+			icon_name = dbus_item.attention_icon_name;
+		} else {
+			icon_name = dbus_item.icon_name;
+		}
+
 		if (dbus_item.icon_theme_path != null) {
 			Gtk.IconTheme icon_theme = new Gtk.IconTheme();
 			icon_theme.append_search_path(dbus_item.icon_theme_path);
-			icon.set_from_pixbuf(icon_theme.load_icon(dbus_item.icon_name, 24, Gtk.IconLookupFlags.FORCE_SIZE));
+			icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
 		} else {
-			icon.set_from_icon_name(dbus_item.icon_name, Gtk.IconSize.INVALID);
+			icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
+		}
+
+		if (target_icon_size > 0) {
+			this.icon.pixel_size = target_icon_size;
 		}
 	}
 
@@ -82,5 +98,15 @@ public class SnTrayItem : Gtk.EventBox {
 		}
 
 		return base.button_release_event(event);
+	}
+
+	public void resize(int applet_size) {
+		if (applet_size > FORMULA_SWAP_POINT) {
+			target_icon_size = applet_size - TARGET_ICON_PADDING;
+		} else {
+			target_icon_size = (int) Math.round(TARGET_ICON_SCALE * applet_size);
+		}
+
+		reset_icon();
 	}
 }
