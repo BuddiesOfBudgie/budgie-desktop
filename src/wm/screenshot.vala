@@ -41,10 +41,10 @@ namespace Budgie {
 		[DBus (visible = false)]
 		public void setup_dbus() {
 			/* Hook up screenshot dbus */
-            Bus.own_name (BusType.SESSION, DBUS_SCREENSHOT, BusNameOwnerFlags.REPLACE,
-                on_bus_acquired,
-                () => {},
-                () => {} );
+			Bus.own_name (BusType.SESSION, DBUS_SCREENSHOT, BusNameOwnerFlags.REPLACE,
+				on_bus_acquired,
+				() => {},
+				() => {} );
 		}
 
 		void on_bus_acquired(DBusConnection conn) {
@@ -61,7 +61,7 @@ namespace Budgie {
 
 			// do some boundary checks
 			if (x < 0 || y < 0 || !(width >= 1 && height >= 1)) {
-				throw new DBusError.FAILED ("Invalid sizing parameters");
+				throw new DBusError.FAILED ("flash area - Invalid sizing parameters");
 			}
 
 			var transition = new Clutter.KeyframeTransition ("opacity") {
@@ -107,7 +107,7 @@ namespace Budgie {
 			// do some boundary checks
 			if (x < 0 || y < 0 || !(width >= 1 && height >= 1)) {
 				success = false;
-				throw new DBusError.FAILED ("Invalid sizing parameters");
+				throw new DBusError.FAILED ("screenshot_area Invalid sizing parameters");
 			}
 
 			var image = take_screenshot (x, y, width, height, include_cursor);
@@ -135,15 +135,21 @@ namespace Budgie {
 
 			var rect = window.get_frame_rect ();
 			if ((include_frame && window.is_client_decorated ()) ||
-                (!include_frame && !window.is_client_decorated ())) {
-                rect = window.frame_rect_to_client_rect (rect);
-            }
+				(!include_frame && !window.is_client_decorated ())) {
+				rect = window.frame_rect_to_client_rect (rect);
+			}
+
+			// do some boundary checks
+			if (rect.x < 0 || rect.y < 0 || !(rect.width >= 1 && rect.height >= 1)) {
+				throw new DBusError.FAILED ("screenshot_window Invalid sizing parameters");
+			}
 
 			Cairo.RectangleInt clip = { rect.x - (int) actor_x, rect.y - (int) actor_y, rect.width, rect.height };
 			var image = (Cairo.ImageSurface) window_actor.get_image (clip);
 			if (image == null) {
 				throw new DBusError.FAILED ("Failed to get image from the focus window");
 			}
+
 			if (include_cursor) {
 				image = composite_stage_cursor (image, { rect.x, rect.y, rect.width, rect.height });
 			}
