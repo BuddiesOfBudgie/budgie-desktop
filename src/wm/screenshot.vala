@@ -90,6 +90,8 @@ namespace Budgie {
 
 		public async void screenshot (bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
 			int width, height;
+			yield wait_stage_repaint ();
+
 			display.get_size (out width, out height);
 
 			var image = take_screenshot (0, 0, width, height, include_cursor);
@@ -122,6 +124,8 @@ namespace Budgie {
 		}
 
 		public async void screenshot_window (bool include_frame, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
+			yield wait_stage_repaint ();
+
 			var window = display.get_focus_window ();
 
 			if (window == null) {
