@@ -5,7 +5,7 @@ public struct IconPixmap {
 }
 
 [DBus (name="org.kde.StatusNotifierItem")]
-public interface StatusNotifierItem : Object {
+public interface SnItemInterface : Object {
 	public abstract string category {owned get;}
 	public abstract string id {owned get;}
 	public abstract string title {owned get;}
@@ -37,10 +37,10 @@ public interface StatusNotifierItem : Object {
 }
 
 public class SnTrayItem : Gtk.EventBox {
-	private StatusNotifierItem dbus_item;
+	private SnItemInterface dbus_item;
 	public Gtk.Image icon {get; private set;}
 
-	public SnTrayItem(StatusNotifierItem dbus_item) {
+	public SnTrayItem(SnItemInterface dbus_item) {
 		warning("Creating new tray icon with icon theme path %s", dbus_item.icon_theme_path);
 
 		this.dbus_item = dbus_item;

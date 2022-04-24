@@ -21,6 +21,7 @@ namespace Budgie {
 		/* On Screen Display */
 		Budgie.OSDManager? osd;
 		Budgie.Notifications.Server? notifications;
+		Budgie.StatusNotifier.Watcher? status_notifier;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
@@ -41,6 +42,7 @@ namespace Budgie {
 			osd.setup_dbus(replace);
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
+			status_notifier = new Budgie.StatusNotifier.Watcher();
 			menus = new Budgie.MenuManager();
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();

@@ -28,6 +28,25 @@ public class SnTraySettings : Gtk.Grid {
 	}
 }
 
+public struct DBusPathName {
+	public string name;
+	public string object_path;
+}
+
+[DBus (name="org.kde.StatusNotifierWatcher")]
+private interface SnWatcherInterface : Object {
+	public abstract string[] registered_status_notifier_items {owned get;}
+	public abstract bool is_status_notifier_host_registered {owned get;}
+	public abstract int32 protocol_version {owned get;}
+
+	public abstract void register_status_notifier_host(string service) throws DBusError, IOError;
+	public abstract DBusPathName[] get_registered_status_notifier_pathnames() throws DBusError, IOError;
+
+	// these signals are specifically for use with budgie
+	public signal void status_notifier_item_registered_budgie(string name, string object_path);
+	public signal void status_notifier_item_unregistered_budgie(string name, string object_path);
+}
+
 public class SnTrayApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
 	private Settings? settings;
@@ -36,9 +55,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private HashTable<string, SnTrayItem> items;
 	private Gtk.Orientation orient;
 	private uint dbus_identifier;
-
-	private static StatusNotifierWatcher? watcher;
-	private static int ref_counter;
+	private SnWatcherInterface? watcher;
 
 	public SnTrayApplet(string uuid) {
 		Object(uuid: uuid);
@@ -60,23 +77,56 @@ public class SnTrayApplet : Budgie.Applet {
 		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, settings.get_int("spacing"));
 		box.add(layout);
 
-		AtomicInt.inc(ref ref_counter);
-		if (watcher == null) {
-			watcher = new StatusNotifierWatcher();
+		get_watcher_proxy();
+
+		show_all();
+	}
+
+	~SnTrayApplet() {
+		Bus.unown_name(dbus_identifier);
+	}
+
+	private void get_watcher_proxy() {
+		Bus.get_proxy.begin<SnWatcherInterface>(
+			BusType.SESSION,
+			"org.kde.StatusNotifierWatcher",
+			"/org/kde/StatusNotifierWatcher",
+			0,
+			null,
+			on_dbus_get
+		);
+	}
+
+	private void on_dbus_get(Object? o, AsyncResult? res) {
+		try {
+			watcher = Bus.get_proxy.end(res);
+		} catch (Error e) {
+			critical("Unable to connect to status notifier watcher: %s", e.message);
+			return;
 		}
 
-		watcher.status_notifier_item_registered_custom.connect((name,path)=>{
-			try {
-				StatusNotifierItem dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, path);
-				var new_item = new SnTrayItem(dbus_item);
-				items.set(path + name, new_item);
-				layout.pack_end(new_item);
-			} catch (Error e) {
-				warning("Failed to fetch dbus item info for name=%s and path=%s", name, path);
-			}
-		});
+		Bus.watch_name(
+			BusType.SESSION,
+			"org.kde.StatusNotifierWatcher",
+			0,
+			(conn,name,owner)=>{on_watcher_init();},
+			(conn,name)=>{get_watcher_proxy();}
+		);
+	}
 
-		watcher.status_notifier_item_unregistered_custom.connect((name,path)=>{
+	private void on_watcher_init() {
+		try {
+			DBusPathName[] pathnames = watcher.get_registered_status_notifier_pathnames();
+			for (int i = 0; i < pathnames.length; i++) {
+				register_new_item(pathnames[i].name, pathnames[i].object_path);
+			}
+		} catch (Error e) {
+			critical("Unable to fetch existing status notifier items: %s", e.message);
+		}
+
+		watcher.status_notifier_item_registered_budgie.connect(register_new_item);
+
+		watcher.status_notifier_item_unregistered_budgie.connect((name,path)=>{
 			layout.remove(items.get(path + name));
 			items.remove(path + name);
 		});
@@ -95,16 +145,16 @@ public class SnTrayApplet : Budgie.Applet {
 				}
 			}
 		);
-
-		show_all();
 	}
 
-	~SnTrayApplet() {
-		Bus.unown_name(dbus_identifier);
-
-		// if this is the last applet left and it's being deleted, we don't need the watcher
-		if (AtomicInt.dec_and_test(ref ref_counter)) {
-			watcher = null;
+	private void register_new_item(string name, string object_path) {
+		try {
+			SnItemInterface dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, object_path);
+			var new_item = new SnTrayItem(dbus_item);
+			items.set(object_path + name, new_item);
+			layout.pack_end(new_item);
+		} catch (Error e) {
+			warning("Failed to fetch dbus item info for name=%s and path=%s", name, object_path);
 		}
 	}
 
