@@ -4,6 +4,13 @@ public struct IconPixmap {
 	char[] data;
 }
 
+public struct ToolTip {
+	string icon_name;
+	IconPixmap[] icon_data;
+	string title;
+	string markup;
+}
+
 const int TARGET_ICON_PADDING = 18;
 const double TARGET_ICON_SCALE = 2.0 / 3.0;
 const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
@@ -23,7 +30,7 @@ public interface SnItemInterface : Object {
 	public abstract IconPixmap[] attention_icon_pixmap {owned get;}
 	public abstract string attention_movie_name {owned get;}
 	public abstract string icon_theme_path {owned get;}
-	//  public abstract Variant tool_tip {owned get;}
+	public abstract ToolTip? tool_tip {owned get;}
 	public abstract bool item_is_menu {owned get;}
 	//  public abstract Variant menu {owned get;}
 
@@ -54,8 +61,12 @@ public class SnTrayItem : Gtk.EventBox {
 		resize(applet_size);
 		add(icon);
 
+		reset_tooltip();
+
 		dbus_item.new_icon.connect(reset_icon);
 		dbus_item.new_status.connect(reset_icon);
+		dbus_item.new_tool_tip.connect(reset_tooltip);
+		dbus_item.new_title.connect(reset_tooltip);
 		show_all();
 	}
 
@@ -77,6 +88,18 @@ public class SnTrayItem : Gtk.EventBox {
 
 		if (target_icon_size > 0) {
 			this.icon.pixel_size = target_icon_size;
+		}
+	}
+
+	private void reset_tooltip() {
+		if (dbus_item.tool_tip != null) {
+			if (dbus_item.tool_tip.markup != "") {
+				set_tooltip_markup(dbus_item.tool_tip.markup);
+			} else {
+				set_tooltip_text(dbus_item.tool_tip.title);
+			}
+		} else {
+			set_tooltip_text(dbus_item.title);
 		}
 	}
 
