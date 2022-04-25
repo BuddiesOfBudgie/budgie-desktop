@@ -66,7 +66,6 @@ public class SnTrayItem : Gtk.EventBox {
 		dbus_item.new_icon.connect(reset_icon);
 		dbus_item.new_status.connect(reset_icon);
 		dbus_item.new_tool_tip.connect(reset_tooltip);
-		dbus_item.new_title.connect(reset_tooltip);
 		show_all();
 	}
 
