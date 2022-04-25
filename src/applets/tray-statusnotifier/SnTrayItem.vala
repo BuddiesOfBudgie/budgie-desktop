@@ -99,7 +99,7 @@ public class SnTrayItem : Gtk.EventBox {
 				set_tooltip_text(dbus_item.tool_tip.title);
 			}
 		} else {
-			set_tooltip_text(dbus_item.title);
+			set_tooltip_text(null);
 		}
 	}
 
