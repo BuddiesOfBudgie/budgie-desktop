@@ -59,8 +59,8 @@ namespace Budgie {
 			double[] keyframes = { 0.3f, 0.8f };
 			GLib.Value[] values = { 180U, 0U };
 
-			// do some boundary checks
-			if (x < 0 || y < 0 || !(width >= 1 && height >= 1)) {
+			// do some sizing checks
+			if (!(width >= 1 && height >= 1)) {
 				throw new DBusError.FAILED ("flash area - Invalid sizing parameters");
 			}
 
@@ -106,8 +106,8 @@ namespace Budgie {
 		public async void screenshot_area (int x, int y, int width, int height, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
 			yield wait_stage_repaint ();
 
-			// do some boundary checks
-			if (x < 0 || y < 0 || !(width >= 1 && height >= 1)) {
+			// do some sizing checks
+			if (!(width >= 1 && height >= 1)) {
 				success = false;
 				throw new DBusError.FAILED ("screenshot_area Invalid sizing parameters");
 			}
@@ -143,8 +143,8 @@ namespace Budgie {
 				rect = window.frame_rect_to_client_rect (rect);
 			}
 
-			// do some boundary checks
-			if (rect.x < 0 || rect.y < 0 || !(rect.width >= 1 && rect.height >= 1)) {
+			// do some sizing checks
+			if (!(rect.width >= 1 && rect.height >= 1)) {
 				throw new DBusError.FAILED ("screenshot_window Invalid sizing parameters");
 			}
 
