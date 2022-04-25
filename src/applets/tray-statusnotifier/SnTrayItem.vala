@@ -1,10 +1,10 @@
-public struct IconPixmap {
+internal struct IconPixmap {
 	int width;
 	int height;
 	char[] data;
 }
 
-public struct ToolTip {
+internal struct ToolTip {
 	string icon_name;
 	IconPixmap[] icon_data;
 	string title;
@@ -15,8 +15,21 @@ const int TARGET_ICON_PADDING = 18;
 const double TARGET_ICON_SCALE = 2.0 / 3.0;
 const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
 
+[DBus (name="com.canonical.dbusmenu")]
+internal interface DBusMenuInterface : Object {
+	public abstract uint32 version {get;}
+	public abstract string status {owned get;}
+	public abstract string text_direction {owned get;}
+	public abstract string[] icon_theme_path {owned get;}
+
+	public abstract bool about_to_show(int32 id) throws DBusError, IOError;
+	public abstract void event(int32 id, string event_id, Variant? data, uint32 timestamp) throws DBusError, IOError;
+	public abstract void get_layout(int32 parent_id, int32 recursion_depth, string[] property_names, out uint32 revision, [DBus (signature="(ia{sv}av)")] out Variant? layout) throws DBusError, IOError;
+	public abstract Variant? get_property(int32 id, string name) throws DBusError, IOError;
+}
+
 [DBus (name="org.kde.StatusNotifierItem")]
-public interface SnItemInterface : Object {
+internal interface SnItemInterface : Object {
 	public abstract string category {owned get;}
 	public abstract string id {owned get;}
 	public abstract string title {owned get;}
@@ -32,7 +45,7 @@ public interface SnItemInterface : Object {
 	public abstract string icon_theme_path {owned get;}
 	public abstract ToolTip? tool_tip {owned get;}
 	public abstract bool item_is_menu {owned get;}
-	//  public abstract Variant menu {owned get;}
+	public abstract ObjectPath? menu {owned get;}
 
 	public abstract void context_menu(int x, int y) throws DBusError, IOError;
 	public abstract void activate(int x, int y) throws DBusError, IOError;
@@ -47,21 +60,35 @@ public interface SnItemInterface : Object {
 	public abstract signal void new_status();
 }
 
-public class SnTrayItem : Gtk.EventBox {
+internal class SnTrayItem : Gtk.EventBox {
 	private SnItemInterface dbus_item;
+	private string dbus_name;
+	private DBusMenuInterface? dbus_menu;
+
 	public Gtk.Image icon {get; private set;}
 	public int target_icon_size = 8;
 
-	public SnTrayItem(SnItemInterface dbus_item, int applet_size) {
+	public SnTrayItem(SnItemInterface dbus_item, string dbus_name, int applet_size) {
 		warning("Creating new tray icon with icon theme path %s", dbus_item.icon_theme_path);
 
 		this.dbus_item = dbus_item;
+		this.dbus_name = dbus_name;
 
 		icon = new Gtk.Image();
 		resize(applet_size);
 		add(icon);
 
 		reset_tooltip();
+
+		if (dbus_item.menu != null) {
+			try {
+				dbus_menu = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_item.menu);
+
+				build_menu();
+			} catch (Error e) {
+				warning("Failed to get a proxy object for tray item menu: %s", e.message);
+			}
+		}
 
 		dbus_item.new_icon.connect(reset_icon);
 		dbus_item.new_status.connect(reset_icon);
@@ -99,6 +126,18 @@ public class SnTrayItem : Gtk.EventBox {
 			}
 		} else {
 			set_tooltip_text(null);
+		}
+	}
+
+	private void build_menu() {
+		string[] props = {"type", "children-display"};
+		uint32 revision;
+		Variant layout;
+
+		try {
+			dbus_menu.get_layout(0, -1, props, out revision, out layout);
+		} catch (Error e) {
+			warning("Failed to get layout for dbus menu: %s", e.message);
 		}
 	}
 
