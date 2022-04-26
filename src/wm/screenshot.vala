@@ -167,34 +167,6 @@ namespace Budgie {
 				throw new DBusError.FAILED ("Failed to save image");
 		}
 
-
-		static string find_target_path () {
-			/*
-			 * If path in screenshots exists/or can be created then use this path
-			 * otherwise use the PICTURES xdg-dir path
-			 * default is the home folder as the ultimate fallback
-			 */
-			unowned string? base_path = Environment.get_user_special_dir (UserDirectory.PICTURES);
-			if (base_path != null && FileUtils.test (base_path, FileTest.EXISTS)) {
-				var path = "";
-				var settings_schema = "org.gnome.gnome-screenshot";  /*DM this needs changing to a budgie-desktop path*/
-				var schema = GLib.SettingsSchemaSource.get_default ().lookup (settings_schema, true);
-				if (schema != null) { // settings schema does exist
-					var settings = new Settings(settings_schema);
-					path = settings.get_string("auto-save-directory");
-				}
-				if (FileUtils.test (path, FileTest.EXISTS)) {
-					return path;
-				} else if (DirUtils.create (path, 0755) == 0) {
-					return path;
-				} else {
-					return base_path;
-				}
-			}
-
-			return Environment.get_home_dir ();
-		}
-
 		private async bool save_image (Cairo.ImageSurface image, string filename, out string used_filename) {
 			used_filename = filename;
 
@@ -209,7 +181,7 @@ namespace Budgie {
 					used_filename = used_filename.splice (scale_pos, scale_pos, "@%ix".printf (scale_factor));
 				}
 
-				var path = find_target_path ();
+				var path = Environment.get_tmp_dir();
 				used_filename = Path.build_filename (path, used_filename, null);
 			}
 
