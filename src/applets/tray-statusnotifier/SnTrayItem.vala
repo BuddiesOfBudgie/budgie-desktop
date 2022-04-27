@@ -32,6 +32,13 @@ internal interface DBusMenuInterface : Object {
 	public abstract void event(int32 id, string event_id, Variant? data, uint32 timestamp) throws DBusError, IOError;
 	public abstract void get_layout(int32 parent_id, int32 recursion_depth, string[] property_names, out uint32 revision, [DBus (signature="(ia{sv}av)")] out Variant? layout) throws DBusError, IOError;
 	public abstract Variant? get_property(int32 id, string name) throws DBusError, IOError;
+
+	public abstract signal void item_activation_requested(int32 id, uint32 timestamp);
+	public abstract signal void items_properties_updated(
+		[DBus (signature="a(ia{sv})")] Variant updated_props,
+		[DBus (signature="a(ias)")] Variant removed_props
+	);
+	public abstract signal void layout_updated(uint32 revision, int32 parent_id);
 }
 
 [DBus (name="org.kde.StatusNotifierItem")]
@@ -93,6 +100,10 @@ internal class SnTrayItem : Gtk.EventBox {
 				dbus_menu = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_item.menu);
 
 				build_menu();
+
+				dbus_menu.layout_updated.connect((revision, parent_id) => {
+					build_menu();
+				});
 			} catch (Error e) {
 				warning("Failed to get a proxy object for tray item menu: %s", e.message);
 			}
@@ -172,8 +183,7 @@ internal class SnTrayItem : Gtk.EventBox {
 				props_table.set(key, value);
 			}
 
-			if (props_table.contains("visible") && !props_table.get("visible").get_boolean() ||
-				props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
+			if (props_table.contains("visible") && !props_table.get("visible").get_boolean()) {
 				continue;
 			}
 
@@ -205,6 +215,9 @@ internal class SnTrayItem : Gtk.EventBox {
 			}
 
 			if (item != null) {
+				if (props_table.contains("enabled") && props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
+					item.set_sensitive(false);
+				}
 				context_menu.add(item);
 			}
 		}
