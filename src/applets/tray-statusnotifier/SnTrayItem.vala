@@ -11,6 +11,12 @@ internal struct ToolTip {
 	string markup;
 }
 
+private struct MenuItem {
+	string type;
+	bool enabled;
+	bool visible;
+}
+
 const int TARGET_ICON_PADDING = 18;
 const double TARGET_ICON_SCALE = 2.0 / 3.0;
 const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
@@ -149,11 +155,13 @@ internal class SnTrayItem : Gtk.EventBox {
 		Variant children = layout.get_child_value(2);
 
 		context_menu = new Gtk.Menu();
+		bool last_is_separator = true;
 
 		VariantIter it = children.iterator();
 		for (var child = it.next_value(); child != null; child = it.next_value()) {
 			child = child.get_variant();
 
+			int32 child_id = child.get_child_value(0).get_int32();
 			Variant child_properties = child.get_child_value(1);
 			HashTable<string, Variant?> props_table = new HashTable<string, Variant?>(str_hash, str_equal);
 
@@ -164,25 +172,36 @@ internal class SnTrayItem : Gtk.EventBox {
 				props_table.set(key, value);
 			}
 
-			if (props_table.contains("visible") && props_table.get("visible").get_boolean() == false) {
-				continue;
-			}
-			if (props_table.contains("enabled") && props_table.get("enabled").get_boolean() == false) {
+			if (props_table.contains("visible") && !props_table.get("visible").get_boolean() ||
+				props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 				continue;
 			}
 
 			Gtk.MenuItem item = null;
 			if (props_table.contains("type")) {
-				if (props_table.get("type").get_string() == "separator") {
+				if (props_table.get("type").get_string() == "separator" &&
+					context_menu.get_children().length() != 0 &&
+					!last_is_separator
+				) {
 					item = new Gtk.SeparatorMenuItem();
+					last_is_separator = true;
 				}
 			} else if (props_table.contains("toggle-type")) {
 				if (props_table.get("toggle-type").get_string() == "checkmark") {
-					item = new Gtk.CheckMenuItem.with_mnemonic(props_table.get("label").get_string());
-					((Gtk.CheckMenuItem) item).set_active(props_table.contains("toggle-state") && props_table.get("toggle-state").get_int32() != 0);
+					Gtk.CheckMenuItem check_item = new Gtk.CheckMenuItem.with_mnemonic(props_table.get("label").get_string());
+					check_item.set_active(props_table.contains("toggle-state") && props_table.get("toggle-state").get_int32() != 0);
+					check_item.toggled.connect(() => {
+						dbus_menu.event(child_id, "clicked", new Variant.boolean(check_item.get_active()), (uint32) get_real_time());
+					});
+					item = check_item;
+					last_is_separator = false;
 				}
 			} else {
 				item = new Gtk.MenuItem.with_mnemonic(props_table.get("label").get_string());
+				item.activate.connect(() => {
+					dbus_menu.event(child_id, "clicked", new Variant.int32(0), (uint32) get_real_time());
+				});
+				last_is_separator = false;
 			}
 
 			if (item != null) {
@@ -192,6 +211,10 @@ internal class SnTrayItem : Gtk.EventBox {
 
 		context_menu.show_all();
 	}
+
+	//  private Gtk.MenuItem build_menu_item(Variant layout) {
+
+	//  }
 
 	public override bool button_release_event(Gdk.EventButton event) {
 		warning("Received button release event: x=%f, y=%f, x_root=%f, y_root=%f", event.x, event.y, event.x_root, event.y_root);
