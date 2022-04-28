@@ -42,12 +42,12 @@ internal interface DBusMenuInterface : Object {
 }
 
 [DBus (name="org.kde.StatusNotifierItem")]
-internal interface SnItemInterface : Object {
+internal interface SnItemProperties : Object {
 	public abstract string category {owned get;}
 	public abstract string id {owned get;}
 	public abstract string title {owned get;}
 	public abstract string status {owned get;}
-	public abstract uint32 window_id {owned get;}
+	public abstract uint32 window_id {get;}
 	public abstract string icon_name {owned get;}
 	public abstract IconPixmap[] icon_pixmap {owned get;}
 	public abstract string overlay_icon_name {owned get;}
@@ -57,9 +57,12 @@ internal interface SnItemInterface : Object {
 	public abstract string attention_movie_name {owned get;}
 	public abstract string icon_theme_path {owned get;}
 	public abstract ToolTip? tool_tip {owned get;}
-	public abstract bool item_is_menu {owned get;}
+	public abstract bool item_is_menu {get;}
 	public abstract ObjectPath? menu {owned get;}
+}
 
+[DBus (name="org.kde.StatusNotifierItem")]
+internal interface SnItemInterface : Object {
 	public abstract void context_menu(int x, int y) throws DBusError, IOError;
 	public abstract void activate(int x, int y) throws DBusError, IOError;
 	public abstract void secondary_activate(int x, int y) throws DBusError, IOError;
@@ -76,20 +79,25 @@ internal interface SnItemInterface : Object {
 
 internal class SnTrayItem : Gtk.EventBox {
 	private SnItemInterface dbus_item;
-	private string dbus_name;
-	private DBusMenuInterface? dbus_menu;
+	private SnItemProperties dbus_properties;
 
+	private string dbus_name;
+	private string dbus_object_path;
+
+	private DBusMenuInterface? dbus_menu;
 	private Gtk.Menu? context_menu;
 
-	private Gtk.IconTheme? icon_theme = null;
-	public Gtk.Image icon {get; private set;}
+	private string? icon_theme_path = null;
+	private Gtk.Image icon;
+
 	public int target_icon_size = 8;
 
-	public SnTrayItem(SnItemInterface dbus_item, string dbus_name, int applet_size) {
-		warning("Creating new tray icon with icon theme path %s", dbus_item.icon_theme_path);
+	public SnTrayItem(string dbus_name, string dbus_object_path, int applet_size) throws DBusError, IOError {
+		this.dbus_item = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
+		this.dbus_properties = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 
-		this.dbus_item = dbus_item;
 		this.dbus_name = dbus_name;
+		this.dbus_object_path = dbus_object_path;
 
 		reset_icon_theme();
 		icon = new Gtk.Image();
@@ -98,9 +106,9 @@ internal class SnTrayItem : Gtk.EventBox {
 
 		reset_tooltip();
 
-		if (dbus_item.menu != null) {
+		if (dbus_properties.menu != null) {
 			try {
-				dbus_menu = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_item.menu);
+				dbus_menu = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_properties.menu);
 
 				build_menu();
 
@@ -113,9 +121,11 @@ internal class SnTrayItem : Gtk.EventBox {
 		}
 
 		dbus_item.new_icon.connect(() => {
+			update_dbus_properties();
 			reset_icon();
 		});
 		dbus_item.new_attention_icon.connect(() => {
+			update_dbus_properties();
 			reset_icon();
 		});
 		dbus_item.new_icon_theme_path.connect((new_path) => {
@@ -124,23 +134,40 @@ internal class SnTrayItem : Gtk.EventBox {
 		dbus_item.new_status.connect((new_status) => {
 			reset_icon(new_status);
 		});
-		dbus_item.new_tool_tip.connect(reset_tooltip);
+		dbus_item.new_tool_tip.connect(() => {
+			update_dbus_properties();
+			reset_tooltip();
+		});
 
 		show_all();
 	}
 
+	private void update_dbus_properties() {
+		try {
+			this.dbus_properties = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
+		} catch (Error e) {
+			warning("Failed to update dbus properties: %s", e.message);
+		}
+	}
+
 	private void reset_icon(string? status = null) {
 		string icon_name;
-		if ((status ?? dbus_item.status) == "NeedsAttention") {
-			icon_name = dbus_item.attention_icon_name;
+		if ((status ?? dbus_properties.status) == "NeedsAttention") {
+			icon_name = dbus_properties.attention_icon_name;
 		} else {
-			icon_name = dbus_item.icon_name;
+			icon_name = dbus_properties.icon_name;
 		}
 
-		if (icon_theme != null) {
-			icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
-		} else {
-			icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
+		try {
+			if (icon_theme_path != null) {
+				var icon_theme = new Gtk.IconTheme();
+				icon_theme.append_search_path(icon_theme_path);
+				icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
+			} else {
+				icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
+			}
+		} catch (Error e) {
+			warning("Failed to get icon from theme: %s", e.message);
 		}
 
 		if (target_icon_size > 0) {
@@ -150,22 +177,18 @@ internal class SnTrayItem : Gtk.EventBox {
 
 	private void reset_icon_theme(string? new_path = null) {
 		if (new_path != null) {
-			icon_theme = new Gtk.IconTheme();
-			icon_theme.append_search_path(new_path);
-		} else if (dbus_item.icon_theme_path != null) {
-			icon_theme = new Gtk.IconTheme();
-			icon_theme.append_search_path(dbus_item.icon_theme_path);
-		} else {
-			icon_theme = null;
+			icon_theme_path = new_path;
+		} else if (dbus_properties.icon_theme_path != null) {
+			icon_theme_path = dbus_properties.icon_theme_path;
 		}
 	}
 
 	private void reset_tooltip() {
-		if (dbus_item.tool_tip != null) {
-			if (dbus_item.tool_tip.markup != "") {
-				set_tooltip_markup(dbus_item.tool_tip.markup);
+		if (dbus_properties.tool_tip != null) {
+			if (dbus_properties.tool_tip.markup != "") {
+				set_tooltip_markup(dbus_properties.tool_tip.markup);
 			} else {
-				set_tooltip_text(dbus_item.tool_tip.title);
+				set_tooltip_text(dbus_properties.tool_tip.title);
 			}
 		} else {
 			set_tooltip_text(null);
@@ -253,6 +276,7 @@ internal class SnTrayItem : Gtk.EventBox {
 
 	public override bool button_release_event(Gdk.EventButton event) {
 		warning("Received button release event: x=%f, y=%f, x_root=%f, y_root=%f", event.x, event.y, event.x_root, event.y_root);
+
 		try {
 			if (event.button == 3) { // Right click
 				if (context_menu != null) {

@@ -150,8 +150,7 @@ public class SnTrayApplet : Budgie.Applet {
 
 	private void register_new_item(string name, string object_path) {
 		try {
-			SnItemInterface dbus_item = Bus.get_proxy_sync(BusType.SESSION, name, object_path);
-			var new_item = new SnTrayItem(dbus_item, name, panel_size);
+			var new_item = new SnTrayItem(name, object_path, panel_size);
 			items.set(object_path + name, new_item);
 			layout.pack_end(new_item);
 		} catch (Error e) {
