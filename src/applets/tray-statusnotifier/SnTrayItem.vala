@@ -67,10 +67,11 @@ internal interface SnItemInterface : Object {
 
 	public abstract signal void new_title();
 	public abstract signal void new_icon();
+	public abstract signal void new_icon_theme_path(string new_path);
 	public abstract signal void new_attention_icon();
 	public abstract signal void new_overlay_icon();
 	public abstract signal void new_tool_tip();
-	public abstract signal void new_status();
+	public abstract signal void new_status(string new_status);
 }
 
 internal class SnTrayItem : Gtk.EventBox {
@@ -80,6 +81,7 @@ internal class SnTrayItem : Gtk.EventBox {
 
 	private Gtk.Menu? context_menu;
 
+	private Gtk.IconTheme? icon_theme = null;
 	public Gtk.Image icon {get; private set;}
 	public int target_icon_size = 8;
 
@@ -89,6 +91,7 @@ internal class SnTrayItem : Gtk.EventBox {
 		this.dbus_item = dbus_item;
 		this.dbus_name = dbus_name;
 
+		reset_icon_theme();
 		icon = new Gtk.Image();
 		resize(applet_size);
 		add(icon);
@@ -109,25 +112,32 @@ internal class SnTrayItem : Gtk.EventBox {
 			}
 		}
 
-		dbus_item.new_icon.connect(reset_icon);
-		dbus_item.new_attention_icon.connect(reset_icon);
-		dbus_item.new_status.connect(reset_icon);
+		dbus_item.new_icon.connect(() => {
+			reset_icon();
+		});
+		dbus_item.new_attention_icon.connect(() => {
+			reset_icon();
+		});
+		dbus_item.new_icon_theme_path.connect((new_path) => {
+			reset_icon_theme(new_path);
+		});
+		dbus_item.new_status.connect((new_status) => {
+			reset_icon(new_status);
+		});
 		dbus_item.new_tool_tip.connect(reset_tooltip);
 
 		show_all();
 	}
 
-	private void reset_icon() {
+	private void reset_icon(string? status = null) {
 		string icon_name;
-		if (dbus_item.status == "NeedsAttention") {
+		if ((status ?? dbus_item.status) == "NeedsAttention") {
 			icon_name = dbus_item.attention_icon_name;
 		} else {
 			icon_name = dbus_item.icon_name;
 		}
 
-		if (dbus_item.icon_theme_path != null) {
-			Gtk.IconTheme icon_theme = new Gtk.IconTheme();
-			icon_theme.append_search_path(dbus_item.icon_theme_path);
+		if (icon_theme != null) {
 			icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
 		} else {
 			icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
@@ -135,6 +145,18 @@ internal class SnTrayItem : Gtk.EventBox {
 
 		if (target_icon_size > 0) {
 			this.icon.pixel_size = target_icon_size;
+		}
+	}
+
+	private void reset_icon_theme(string? new_path = null) {
+		if (new_path != null) {
+			icon_theme = new Gtk.IconTheme();
+			icon_theme.append_search_path(new_path);
+		} else if (dbus_item.icon_theme_path != null) {
+			icon_theme = new Gtk.IconTheme();
+			icon_theme.append_search_path(dbus_item.icon_theme_path);
+		} else {
+			icon_theme = null;
 		}
 	}
 
