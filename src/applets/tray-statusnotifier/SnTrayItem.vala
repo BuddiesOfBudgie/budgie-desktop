@@ -211,7 +211,7 @@ internal class SnTrayItem : Gtk.EventBox {
 		Variant children = layout.get_child_value(2);
 
 		context_menu = new Gtk.Menu();
-		bool last_is_separator = true;
+		bool wants_separator = false;
 
 		VariantIter it = children.iterator();
 		for (var child = it.next_value(); child != null; child = it.next_value()) {
@@ -234,12 +234,9 @@ internal class SnTrayItem : Gtk.EventBox {
 
 			Gtk.MenuItem item = null;
 			if (props_table.contains("type")) {
-				if (props_table.get("type").get_string() == "separator" &&
-					context_menu.get_children().length() != 0 &&
-					!last_is_separator
-				) {
-					item = new Gtk.SeparatorMenuItem();
-					last_is_separator = true;
+				if (props_table.get("type").get_string() == "separator") {
+					wants_separator = true;
+					continue;
 				}
 			} else if (props_table.contains("toggle-type")) {
 				if (props_table.get("toggle-type").get_string() == "checkmark") {
@@ -249,17 +246,20 @@ internal class SnTrayItem : Gtk.EventBox {
 						dbus_menu.event(child_id, "clicked", new Variant.boolean(check_item.get_active()), (uint32) get_real_time());
 					});
 					item = check_item;
-					last_is_separator = false;
 				}
 			} else {
 				item = new Gtk.MenuItem.with_mnemonic(props_table.get("label").get_string());
 				item.activate.connect(() => {
 					dbus_menu.event(child_id, "clicked", new Variant.int32(0), (uint32) get_real_time());
 				});
-				last_is_separator = false;
 			}
 
 			if (item != null) {
+				if (wants_separator) {
+					context_menu.add(new Gtk.SeparatorMenuItem());
+					wants_separator = false;
+				}
+
 				if (props_table.contains("enabled") && props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 					item.set_sensitive(false);
 				}
