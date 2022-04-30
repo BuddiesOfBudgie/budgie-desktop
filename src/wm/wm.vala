@@ -36,10 +36,8 @@ namespace Budgie {
 	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
-	//public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.ScreenshotControl";
-	//public const string SCREENSHOTCONTROL_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/ScreenshotControl";
-	public const string SCREENSHOTCLIENT_DBUS_NAME = "org.budgie_desktop.ScreenshotClient";
-	public const string SCREENSHOTCLIENT_DBUS_OBJECT_PATH = "/org/budgie_desktop/ScreenshotClient";
+	public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.ScreenshotControl";
+	public const string SCREENSHOTCONTROL_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/ScreenshotControl";
 
 	[Flags]
 	public enum PanelAction {
@@ -109,19 +107,13 @@ namespace Budgie {
 	/**
 	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
 	*/
-	/*[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
+	[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
     interface ScreenshotControl : GLib.Object {
         public async abstract void StartMainWindow() throws GLib.Error;
         public async abstract void StartAreaSelect() throws GLib.Error;
         public async abstract void StartWindowScreenshot() throws GLib.Error;
         public async abstract void StartFullScreenshot() throws GLib.Error;
-    }*/
-	[DBus (name="org.budgie_desktop.ScreenshotClient")]
-	public interface ScreenshotClient: GLib.Object {
-		public abstract async void ScreenshotClientArea() throws Error;
-		public abstract async void ScreenshotClientWindow() throws Error;
-		public abstract async void ScreenshotClientFullscreen() throws Error;
-	}
+    }
 
 	public class MinimizeData {
 		public float scale_x;
@@ -161,8 +153,7 @@ namespace Budgie {
 		ShellShim? shim = null;
 		BudgieWMDBUS? focus_interface = null;
 		ScreenshotManager? screenshot = null;
-		//ScreenshotControl? screenshotcontrol_proxy = null;
-		ScreenshotClient? screenshotcontrol_proxy = null;
+		ScreenshotControl? screenshotcontrol_proxy = null;
 		PanelRemote? panel_proxy = null;
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
@@ -306,7 +297,7 @@ namespace Budgie {
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
 				}
-				/*else {
+				else {
 					screenshotcontrol_proxy.StartFullScreenshot.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartFullScreenshot.end(res);
@@ -314,7 +305,7 @@ namespace Budgie {
 							message("Failed to StartFullScreenshot: %s", e.message);
 						}
 					});
-				}*/
+				}
 
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
@@ -329,7 +320,7 @@ namespace Budgie {
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
 				}
-				/*else {
+				else {
 					screenshotcontrol_proxy.StartAreaSelect.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartAreaSelect.end(res);
@@ -337,7 +328,7 @@ namespace Budgie {
 							message("Failed to StartAreaSelect: %s", e.message);
 						}
 					});
-				}*/
+				}
 
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
@@ -351,7 +342,7 @@ namespace Budgie {
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
 				}
-				/*else {
+				else {
 					screenshotcontrol_proxy.StartWindowScreenshot.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartWindowScreenshot.end(res);
@@ -359,7 +350,7 @@ namespace Budgie {
 							message("Failed to StartWindowScreenshot: %s", e.message);
 						}
 					});
-				}*/
+				}
 
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
@@ -422,11 +413,8 @@ namespace Budgie {
 
 		/* Set up the proxy when screenshotcontrol appears */
 		void has_screenshotcontrol() {
-			//if (screenshotcontrol_proxy == null) {
-			//	Bus.get_proxy.begin<ScreenshotControl>(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, SCREENSHOTCONTROL_DBUS_OBJECT_PATH, 0, null, on_screenshotcontrol_get);
-			//}
 			if (screenshotcontrol_proxy == null) {
-				Bus.get_proxy.begin<ScreenshotClient>(BusType.SESSION, SCREENSHOTCLIENT_DBUS_NAME, SCREENSHOTCLIENT_DBUS_OBJECT_PATH, 0, null, on_screenshotcontrol_get);
+				Bus.get_proxy.begin<ScreenshotControl>(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, SCREENSHOTCONTROL_DBUS_OBJECT_PATH, 0, null, on_screenshotcontrol_get);
 			}
 		}
 
@@ -573,11 +561,8 @@ namespace Budgie {
 				has_switcher, lost_switcher);
 
 			/* ScreenshotControl */
-			//Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
-			//	has_screenshotcontrol, lost_screenshotcontrol);
-			Bus.watch_name(BusType.SESSION, SCREENSHOTCLIENT_DBUS_NAME, BusNameWatcherFlags.NONE,
+			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_screenshotcontrol, lost_screenshotcontrol);
-
 
 			/* Keep an eye out for systemd stuffs */
 			if (have_logind()) {
