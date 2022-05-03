@@ -150,7 +150,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
+		public signal void NotificationClosed(uint32 id, uint32 reason);
 
 		/**
 		 * Returns the capabilities of this DBus Notification server.
