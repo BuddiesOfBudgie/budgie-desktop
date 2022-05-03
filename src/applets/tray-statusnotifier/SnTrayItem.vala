@@ -275,29 +275,53 @@ internal class SnTrayItem : Gtk.EventBox {
 	//  }
 
 	public override bool button_release_event(Gdk.EventButton event) {
-		warning("Received button release event: x=%f, y=%f, x_root=%f, y_root=%f", event.x, event.y, event.x_root, event.y_root);
-
-		try {
-			if (event.button == 3) { // Right click
-				if (context_menu != null) {
-					context_menu.popup_at_pointer(event);
-				} else {
-					dbus_item.context_menu((int) event.x_root, (int) event.y_root);
-				}
-
-				return Gdk.EVENT_STOP;
-			} else if (event.button == 1) { // Left click
-				dbus_item.activate((int) event.x_root, (int) event.y_root);
-				return Gdk.EVENT_STOP;
-			} else if (event.button == 2) { // Middle click
-				dbus_item.secondary_activate((int) event.x_root, (int) event.y_root);
-				return Gdk.EVENT_STOP;
-			}
-		} catch (Error e) {
-			warning("Failed to process button event: %s", e.message);
+		if (event.button == 3) { // Right click
+			show_context_menu(event);
+			return Gdk.EVENT_STOP;
+		} else if (event.button == 1) { // Left click
+			activate(event);
+			return Gdk.EVENT_STOP;
+		} else if (event.button == 2) { // Middle click
+			secondary_activate(event);
+			return Gdk.EVENT_STOP;
 		}
 
 		return base.button_release_event(event);
+	}
+
+	private void activate(Gdk.EventButton event) {
+		try {
+			dbus_item.activate((int) event.x_root, (int) event.y_root);
+		} catch (DBusError e) {
+			// this happens if the application doesn't implement the activate dbus method
+			debug("Failed to call activate method on StatusNotifier item: %s", e.message);
+		} catch (IOError e) {
+			warning("Failed to call activate method on StatusNotifier item: %s", e.message);
+		}
+	}
+
+	private void secondary_activate(Gdk.EventButton event) {
+		try {
+			dbus_item.secondary_activate((int) event.x_root, (int) event.y_root);
+		} catch (DBusError e) {
+			// this happens if the application doesn't implement the secondary activate dbus method
+			debug("Failed to call secondary activate method on StatusNotifier item: %s", e.message);
+		} catch (IOError e) {
+			warning("Failed to call secondary activate method on StatusNotifier item: %s", e.message);
+		}
+	}
+
+	private void show_context_menu(Gdk.EventButton event) {
+		if (context_menu != null) {
+			context_menu.popup_at_pointer(event);
+		} else try {
+			dbus_item.context_menu((int) event.x_root, (int) event.y_root);
+		} catch (DBusError e) {
+			// this happens if the application doesn't implement the context menu dbus method
+			debug("Failed to show context menu on StatusNotifier item: %s", e.message);
+		} catch (IOError e) {
+			warning("Failed to show context menu on StatusNotifier item: %s", e.message);
+		}
 	}
 
 	public void resize(int applet_size) {
