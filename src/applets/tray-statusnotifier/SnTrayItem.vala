@@ -278,7 +278,7 @@ internal class SnTrayItem : Gtk.EventBox {
 		if (event.button == 3) { // Right click
 			show_context_menu(event);
 			return Gdk.EVENT_STOP;
-		} else if (event.button == 1) { // Left click
+		} else if (event.button == 1 && !dbus_properties.item_is_menu) { // Left click
 			activate(event);
 			return Gdk.EVENT_STOP;
 		} else if (event.button == 2) { // Middle click
