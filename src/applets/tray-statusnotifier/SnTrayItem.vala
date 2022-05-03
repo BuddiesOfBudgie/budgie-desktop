@@ -260,7 +260,7 @@ internal class SnTrayItem : Gtk.EventBox {
 					wants_separator = false;
 				}
 
-				if (props_table.contains("enabled") && props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
+				if (props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 					item.set_sensitive(false);
 				}
 				context_menu.add(item);
