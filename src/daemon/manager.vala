@@ -23,7 +23,7 @@ namespace Budgie {
 		Budgie.Notifications.Server? notifications;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
-		Budgie.ScreenshotServer? screenshotcontrol;
+		BudgieScr.ScreenshotServer? screenshotcontrol;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -44,23 +44,12 @@ namespace Budgie {
 			switcher = new Budgie.TabSwitcher();
 			switcher.setup_dbus(replace);
 
-
 			try {
-				screenshotcontrol = new Budgie.ScreenshotServer();
+				screenshotcontrol = new BudgieScr.ScreenshotServer();
 				screenshotcontrol.setup_dbus();
 			}
 			catch (Error e) {
-				stderr.printf ("%s\n", e.message);
-			}
-
-			try {
-				Budgie.client = GLib.Bus.get_proxy_sync (
-					BusType.SESSION, "org.buddiesofbudgie.Screenshot",
-					("/org/buddiesofbudgie/Screenshot")
-				);
-			}
-			catch (Error e) {
-				stderr.printf ("%s\n", e.message);
+				warning("ServiceManager %s\n", e.message);
 			}
 		}
 

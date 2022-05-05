@@ -4,35 +4,17 @@ using Cairo;
 using Gst;
 
 /*
-Budgie Screenshot
-Author: Jacob Vlijm
-Copyright © 2022 Ubuntu Budgie Developers
-Website=https://ubuntubudgie.org
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or any later version. This
-program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE. See the GNU General Public License for more details. You
-should have received a copy of the GNU General Public License along with this
-program.  If not, see <https://www.gnu.org/licenses/>.
+ * This file is part of budgie-desktop
+ *
+ * Author: Jacob Vlijm, David Mohammed
+ * Copyright © 2022 Budgie Desktop Developers
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
 */
 
-// valac --pkg cairo --pkg gtk+-3.0 --pkg gdk-3.0 --pkg gstreamer-1.0 --pkg gio-2.0
-
-/*
-* if daemon is running, use below to call its methods:
-* dbus-send --session --type=method_call --dest=org.buddiesofbudgie.ScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.ScreenshotControl.StartMainWindow
-* dbus-send --session --type=method_call --dest=org.buddiesofbudgie.ScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.ScreenshotControl.StartAreaSelect
-* dbus-send --session --type=method_call --dest=org.buddiesofbudgie.ScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.ScreenshotControl.StartFullScreenshot
-* dbus-send --session --type=method_call --dest=org.buddiesofbudgie.ScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.ScreenshotControl.StartWindowScreenshot
-*/
-
-
-namespace Budgie {
-
-	ScreenshotClient client;
-
+namespace BudgieScr {
 	enum WindowState {
 		NONE,
 		MAINWINDOW,
@@ -58,9 +40,9 @@ namespace Budgie {
 		public string tempfile_path {get; private set;}
 		public bool startedfromgui {get; private set; default = false;}
 
-		public signal void buttonpos_changed ();
+		public signal void buttonpos_changed();
 
-		public CurrentState () {
+		public CurrentState() {
 			screenshot_settings = new GLib.Settings("org.buddiesofbudgie.screenshot");
 
 			buttonplacement = new GLib.Settings("com.solus-project.budgie-wm");
@@ -151,15 +133,15 @@ namespace Budgie {
 				conn.register_object("/org/buddiesofbudgie/ScreenshotControl",	new ScreenshotServer());
 			}
 			catch (IOError e) {
-				stderr.printf ("Could not register service\n");
+				warning("on_bus_acquired Could not register service\n");
 			}
 		}
 
 		public void setup_dbus() throws Error {
 			GLib.Bus.own_name (
 				BusType.SESSION, "org.buddiesofbudgie.ScreenshotControl",
-				BusNameOwnerFlags.NONE, on_bus_acquired,
-				() => {}, () => stderr.printf ("Could not acquire name\n"));
+				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE, on_bus_acquired,
+				() => {}, () => warning("setup_dbus Could not acquire name\n"));
 		}
 
 	}
@@ -169,7 +151,7 @@ namespace Budgie {
 		public abstract async void ScreenshotArea(int x, int y, int width, int height, bool include_cursor,	bool flash, string filename,
 			out bool success, out string filename_used) throws Error;
 		public abstract async void Screenshot(bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws Error;
-		public abstract async void ScreenshotWindow (bool include_frame, bool include_cursor, bool flash, string filename,
+		public abstract async void ScreenshotWindow(bool include_frame, bool include_cursor, bool flash, string filename,
 			out bool success, out string filename_used) throws Error;
 	}
 
@@ -182,8 +164,22 @@ namespace Budgie {
 		bool include_cursor;
 		bool include_frame;
 		CurrentState windowstate;
+		static ScreenshotClient? client=null;
 
 		public MakeScreenshot(int[]? area) {
+
+			if (client == null) {
+				try {
+					client = GLib.Bus.get_proxy_sync(
+						BusType.SESSION, "org.buddiesofbudgie.Screenshot",
+						("/org/buddiesofbudgie/Screenshot")
+					);
+				}
+				catch (Error e) {
+					warning("MakeScreenshot get_proxy_sync %s\n", e.message);
+					client=null;
+				}
+			}
 			windowstate = new CurrentState();
 			this.area = area;
 			scale = get_scaling();
@@ -226,7 +222,7 @@ namespace Budgie {
 				yield client.ScreenshotWindow(include_frame, include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
 			}
 			catch (Error e) {
-				stderr.printf ("%s, failed to make screenshot\n", e.message);
+				warning("shoow_window %s, failed to make screenshot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -245,7 +241,7 @@ namespace Budgie {
 				yield client.Screenshot(include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
 			}
 			catch (Error e) {
-				stderr.printf ("%s, failed to make screenhot\n", e.message);
+				warning("shoot_screen %s, failed to make screenhot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 			if (success) {
@@ -267,13 +263,13 @@ namespace Budgie {
 			play_shuttersound(0);
 
 			try {
-				yield client.ScreenshotArea (
+				yield client.ScreenshotArea(
 					topleftx*scale, toplefty*scale, width*scale, height*scale,
 					include_cursor, true, windowstate.tempfile_path, out success, out filename_used
 				);
 			}
 			catch (Error e) {
-				stderr.printf ("%s, failed to make screenhot\n", e.message);
+				warning("shoot_area %s, failed to make screenhot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 			if (success) {
@@ -291,17 +287,15 @@ namespace Budgie {
 				}
 			}
 			catch (Error e) {
-				error ("Error: %s", e.message);
+				error("Error: %s", e.message);
 			}
 			Gst.Element pipeline;
 
 			try {
-				pipeline = Gst.parse_launch(
-					"playbin uri=file:///usr/share/sounds/freedesktop/stereo/screen-capture.oga"
-				);
+				pipeline = Gst.parse_launch("playbin uri=file:///usr/share/sounds/freedesktop/stereo/screen-capture.oga");
 			}
 			catch (Error e) {
-				error ("Error: %s", e.message);
+				error("Error: %s", e.message);
 			}
 
 			GLib.Timeout.add(timeout, ()=> {
@@ -311,7 +305,7 @@ namespace Budgie {
 				bus.timed_pop_filtered(
 					Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS
 				);
-				pipeline.set_state (Gst.State.NULL);
+				pipeline.set_state(Gst.State.NULL);
 
 				return false;
 			});
@@ -343,7 +337,7 @@ namespace Budgie {
 			windowstate.statechanged(WindowState.MAINWINDOW);
 
 			var theme = Gtk.IconTheme.get_default();
-			theme.add_resource_path ("/org/buddiesofbudgie/Screenshot/icons/scalable/apps/");
+			theme.add_resource_path("/org/buddiesofbudgie/Screenshot/icons/scalable/apps/");
 
 			string home_css = """
 			.buttonlabel {
@@ -368,8 +362,8 @@ namespace Budgie {
 			this.set_titlebar(topbar);
 
 			/*
-			/ left or right windowbuttons, that's the question when
-			/ (re-?) arranging headerbar buttons
+			 * left or right windowbuttons, that's the question when
+			 * (re-?) arranging headerbar buttons
 			*/
 			button_id=windowstate.buttonpos_changed.connect(()=> {rearrange_headerbar();});
 			rearrange_headerbar();
@@ -833,7 +827,7 @@ namespace Budgie {
 						return pxb;
 					}
 					catch (Error e) {
-						print("unable to load image from /tmp\n");
+						message("unable to load image from /tmp\n");
 					}
 				}
 				n += 1;
@@ -846,7 +840,6 @@ namespace Budgie {
 			windowstate=new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {
-				print("Error loading pixbuf!\n");
 				windowstate.statechanged(WindowState.NONE);
 			}
 			else {
@@ -871,7 +864,7 @@ namespace Budgie {
 			monitor.mount_removed.connect(update_dropdown);
 			update_dropdown();
 			pickdir_combo.changed.connect(()=> {
-				if (act_ondropdown) {item_changed(pickdir_combo);}
+				if (act_ondropdown) { item_changed(pickdir_combo); }
 			});
 
 			// headerbar
@@ -987,9 +980,9 @@ namespace Budgie {
 			File file = File.new_for_path(path);
 			if (file.query_exists()) {
 				try {
-					AppInfo.launch_default_for_uri (file.get_uri (), null);
+					AppInfo.launch_default_for_uri(file.get_uri(), null);
 				} catch (Error e) {
-					warning ("Unable to launch %s", path);
+					warning("Unable to launch %s", path);
 				}
 			}
 		}
@@ -1022,7 +1015,7 @@ namespace Budgie {
 				pxb.save(usedpath, extension);
 			}
 			catch (Error e) {
-				stderr.printf ("%s\n", e.message);
+				warning("save_tofile %s\n", e.message);
 				Button savebutton = decisionbuttons[1];
 				set_buttoncontent(
 					savebutton, "saveshot-noaccess-symbolic"
@@ -1146,13 +1139,13 @@ namespace Budgie {
 			create_row(null, null, null, true);
 			// second section: look up mounted volumes
 			bool add_separator = false;
-			List<Mount> mounts = monitor.get_mounts ();
+			List<Mount> mounts = monitor.get_mounts();
 			foreach (Mount mount in mounts) {
 				add_separator = true;
 				GLib.Icon icon = mount.get_icon();
 				string ic_name = get_icon_fromgicon(icon);
 				string displayedname = mount.get_name();
-				string dirpath = mount.get_default_location().get_path ();
+				string dirpath = mount.get_default_location().get_path();
 				create_row(dirpath, displayedname, ic_name, false);
 			}
 
@@ -1219,7 +1212,7 @@ namespace Budgie {
 				return get_icon_fromgicon(icon);
 			}
 			catch (Error e) {
-				stderr.printf ("%s\n", e.message);
+				warning("lookup_icon_name %s\n", e.message);
 
 				return "";
 			}
@@ -1246,7 +1239,7 @@ namespace Budgie {
 			else {
 				pickdir_combo.set_active(windowstate.screenshot_settings.get_int("last-save-directory"));
 			}
-			dialog.destroy ();
+			dialog.destroy();
 		}
 
 		private string get_icon_fromgicon(GLib.Icon ic) {

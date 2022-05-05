@@ -14,7 +14,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <template class="BudgieAfterShotWindow" parent="GtkWindow">
+  <template class="BudgieScrAfterShotWindow" parent="GtkWindow">
     <property name="can-focus">False</property>
     <property name="resizable">False</property>
     <property name="window-position">center-always</property>
