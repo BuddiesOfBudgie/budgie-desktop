@@ -20,6 +20,7 @@
     <property name="window-position">center-always</property>
     <property name="default-width">100</property>
     <property name="default-height">100</property>
+    <property name="icon-name">org.buddiesofbudgie.screenshot</property>
     <child>
       <!-- n-columns=1 n-rows=2 -->
       <object class="GtkGrid" id="maingrid">
@@ -129,6 +130,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </template>
 </interface>

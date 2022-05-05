@@ -334,6 +334,7 @@ namespace BudgieScr {
 		public ScreenshotHomeWindow() {
 			windowstate=new CurrentState();
 			this.set_keep_above(true);
+			this.set_wmclass("screenshot-control", "screenshot-control");
 			windowstate.statechanged(WindowState.MAINWINDOW);
 
 			var theme = Gtk.IconTheme.get_default();
@@ -837,6 +838,7 @@ namespace BudgieScr {
 		}
 
 		public AfterShotWindow() {
+			this.set_wmclass("screenshot-control", "screenshot-control");
 			windowstate=new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {
