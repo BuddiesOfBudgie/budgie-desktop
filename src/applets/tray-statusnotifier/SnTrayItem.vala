@@ -161,8 +161,13 @@ internal class SnTrayItem : Gtk.EventBox {
 		try {
 			if (icon_theme_path != null) {
 				var icon_theme = Gtk.IconTheme.get_default();
-				icon_theme.prepend_search_path(icon_theme_path);
-				icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
+				
+				if (icon_theme.has_icon(icon_name)) {
+					icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
+				} else {
+					icon_theme.prepend_search_path(icon_theme_path);
+					icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
+				}
 			} else {
 				icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
 			}
