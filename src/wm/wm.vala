@@ -415,16 +415,39 @@ namespace Budgie {
 			this.complete_display_change(ok);
 		}
 
+		/*
+		 * This is a rewrite of Meta.Util.show_dialog because question dialogs via zenity do not have the --no-wrap parameter
+		 * which leads to derpy looking dialogs with text squashed into one button column.
+		 */
+		private Pid show_dialog(string type, string message, string timeout, string ok_text, string cancel_text, string icon_name) {
+			Pid child_pid;
+
+			try {
+				string[] spawn_args = {
+					"zenity", type, "--no-wrap", "--class", "mutter-dialog", "--title", "", "--text", message,
+					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon-name", icon_name
+				};
+
+				Process.spawn_async("/",
+					spawn_args,
+					null,
+					SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
+					null,
+					out child_pid);
+			} catch (SpawnError e) {
+				warning("Error: %s\n", e.message);
+			}
+
+			return child_pid;
+		}
+
 		public override void confirm_display_change() {
-			Pid pid = Meta.Util.show_dialog("--question",
-							"Does the display look OK? Requires a restart to apply all changes.",
+			Pid pid = show_dialog("--question",
+							"Does the display look OK?\n\nRequires a restart to apply all changes.",
 							"20",
-							"",
 							"_Keep This Configuration",
 							"_Restore Previous Configuration",
-							"preferences-desktop-display",
-							0,
-							new SList<void*>(), new SList<void*>());
+							"preferences-desktop-display");
 
 			ChildWatch.add(pid, on_dialog_closed);
 		}
