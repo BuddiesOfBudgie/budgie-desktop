@@ -417,7 +417,7 @@ namespace Budgie {
 
 		public override void confirm_display_change() {
 			Pid pid = Meta.Util.show_dialog("--question",
-							"Does the display look OK?",
+							"Does the display look OK? Requires a restart to apply all changes.",
 							"20",
 							"",
 							"_Keep This Configuration",
