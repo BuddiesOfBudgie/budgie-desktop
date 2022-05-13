@@ -1,5 +1,13 @@
 name: Build on Ubuntu 22.04
-on: [push]
+on:
+  push:
+    branches:
+    - master
+    - v10.6.x
+  pull_request:
+    branches:
+    - master
+    - v10.6.x
 jobs:
   ubuntu:
     runs-on: ubuntu-22.04
