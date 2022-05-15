@@ -34,6 +34,7 @@ applet_status_deps = [
     dep_peas,
     dep_accountsservice,
     dependency('upower-glib', version: '>= 0.99.0'),
+    dependency('libnm', version: '>= 1.22.10'),
     link_libpanelplugin,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
