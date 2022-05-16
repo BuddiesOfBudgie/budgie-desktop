@@ -1044,6 +1044,7 @@ namespace BudgieScr {
 			buttonimage.margin_left = 8;
 			buttonimage.margin_right = 8;
 			b.add(buttonimage);
+			b.show_all();
 		}
 
 		private Gdk.Pixbuf resize_pixbuf(Pixbuf pxb, int scale) {
