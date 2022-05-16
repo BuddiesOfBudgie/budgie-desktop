@@ -23,6 +23,7 @@ namespace Budgie {
 		Budgie.Notifications.Server? notifications;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
+		BudgieScr.ScreenshotServer? screenshotcontrol;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -42,6 +43,14 @@ namespace Budgie {
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
 			switcher.setup_dbus(replace);
+
+			try {
+				screenshotcontrol = new BudgieScr.ScreenshotServer();
+				screenshotcontrol.setup_dbus();
+			}
+			catch (Error e) {
+				warning("ServiceManager %s\n", e.message);
+			}
 		}
 
 		/**
