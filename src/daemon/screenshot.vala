@@ -487,10 +487,9 @@ namespace BudgieScr {
 			var iconfile =  new ThemedIcon(name="shootscreen-symbolic");
 			Gtk.Image shootimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DND);
 			shootimage.pixel_size = 24;
-			Gtk.Grid shootgrid = new Gtk.Grid();
-			shootgrid.attach(shootimage, 0, 0, 1, 1);
-			shootbutton.add(shootgrid);
-			set_margins(shootgrid, 10, 10, 0, 0);
+			shootimage.margin_left = 10;
+			shootimage.margin_right = 10;
+			shootbutton.add(shootimage);
 			shootbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 			shootbutton.clicked.connect(()=> {
 				windowstate.disconnect(button_id);
@@ -562,20 +561,20 @@ namespace BudgieScr {
 				var iconfile = new ThemedIcon(name=icon_names[i]);
 				Gtk.Image selecticon = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DIALOG);
 				selecticon.pixel_size = 60;
-				Grid buttongrid = new Gtk.Grid();
-				buttongrid.attach(selecticon, 0, 0, 1, 1);
+				Box buttonbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
+				buttonbox.pack_start(selecticon);
 
 				// label
 				Label selectionlabel = new Label(s);
-				selectionlabel.set_size_request(90, 10);
 				selectionlabel.xalign = (float)0.5;
+				selectionlabel.margin_bottom = 8;
 				selectionlabel.get_style_context().add_class("buttonlabel");
-				buttongrid.attach(selectionlabel, 0, 1, 1, 1);
+				buttonbox.pack_start(selectionlabel);
 
 				// grid in button
 				ToggleButton b = new Gtk.ToggleButton();
 				b.get_style_context().add_class("centerbutton");
-				b.add(buttongrid);
+				b.add(buttonbox);
 				if (i == active) {
 					b.set_active(true);
 				}
@@ -1037,16 +1036,14 @@ namespace BudgieScr {
 				w.destroy();
 			}
 
-			Grid buttongrid = new Gtk.Grid();
 			var theme = Gtk.IconTheme.get_default();
 			theme.add_resource_path("/org/buddiesofbudgie/Screenshot/icons/scalable/apps/");
 			var iconfile =  new ThemedIcon(name=icon);
 			Gtk.Image buttonimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.BUTTON);
 			buttonimage.pixel_size = 24;
-			buttongrid.attach(buttonimage, 0, 0, 1, 1);
-			set_margins(buttongrid, 8, 8, 0, 0);
-			b.add(buttongrid);
-			buttongrid.show_all();
+			buttonimage.margin_left = 8;
+			buttonimage.margin_right = 8;
+			b.add(buttonimage);
 		}
 
 		private Gdk.Pixbuf resize_pixbuf(Pixbuf pxb, int scale) {
