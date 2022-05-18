@@ -49,9 +49,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
 		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
 		this.abomination.active_app_changed.connect(this.on_active_app_changed);
-
-		//  TODO: have a signal in Abomination for active_window_changed (currently wnck)
-		//  TODO: have a signal in Abomination for active_workspace_changed (currently wnck)
+		this.abomination.active_workspace_changed.connect((previous, current) => this.on_active_workspace_changed(current));
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
@@ -72,7 +70,16 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
 			orientation = Gtk.Orientation.VERTICAL;
 		}
-		//  tlist.set_orientation(orientation);
+
+		this.container.set_orientation(orientation);
+
+		if (orientation == Gtk.Orientation.HORIZONTAL) {
+			this.scroller.hscrollbar_policy = Gtk.PolicyType.EXTERNAL;
+			this.scroller.vscrollbar_policy = Gtk.PolicyType.NEVER;
+		} else {
+			this.scroller.hscrollbar_policy = Gtk.PolicyType.NEVER;
+			this.scroller.vscrollbar_policy = Gtk.PolicyType.EXTERNAL;
+		}
 	}
 
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
@@ -113,6 +120,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 			}
 			button.set_active(true);
 		}
+	}
+
+	private void on_active_workspace_changed(Budgie.Abomination.Workspace current_workspace) {
+		// TODO: Iterate through the buttons & check if button is part of the workspace or not
 	}
 }
 
