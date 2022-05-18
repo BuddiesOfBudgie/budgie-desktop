@@ -15,7 +15,7 @@ public class Button : Gtk.ToggleButton {
 	private Gtk.Box container;
 	private Gtk.Label label;
 
-	private Budgie.Abomination.RunningApp? app;
+	public Budgie.Abomination.RunningApp? app { get; private set; }
 
 	public Button(Budgie.Abomination.RunningApp app) {
 		this.container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
