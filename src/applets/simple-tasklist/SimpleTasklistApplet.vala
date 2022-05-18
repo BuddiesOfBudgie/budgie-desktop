@@ -49,7 +49,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
 		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
 		this.abomination.active_app_changed.connect(this.on_active_app_changed);
-		this.abomination.active_workspace_changed.connect((previous, current) => this.on_active_workspace_changed(current));
+		this.abomination.active_workspace_changed.connect(this.on_active_workspace_changed);
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
@@ -87,6 +87,8 @@ public class SimpleTasklistApplet : Budgie.Applet {
 			return;
 		}
 
+		app.workspace_changed.connect(() => this.on_app_workspace_changed(app));
+
 		var button = new Button(app);
 		this.container.pack_start(button);
 		this.show_all();
@@ -122,8 +124,23 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		}
 	}
 
-	private void on_active_workspace_changed(Budgie.Abomination.Workspace current_workspace) {
-		// TODO: Iterate through the buttons & check if button is part of the workspace or not
+	private void on_active_workspace_changed() {
+		foreach (Button button in this.buttons.get_values()) {
+			this.on_app_workspace_changed(button.app);
+		}
+	}
+
+	private void on_app_workspace_changed(Budgie.Abomination.RunningApp app) {
+		var button = this.buttons.get(app.id.to_string());
+		if (button == null) {
+			return;
+		}
+
+		if (app.workspace.get_number() == this.abomination.get_active_workspace().get_number()) {
+			button.show();
+		} else {
+			button.hide();
+		}
 	}
 }
 
