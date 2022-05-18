@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+private const int LABEL_MAX_WIDTH = 25;
+
 public class Button : Gtk.ToggleButton {
 	private Gtk.Box container;
 	private Gtk.Label label;
@@ -16,37 +18,40 @@ public class Button : Gtk.ToggleButton {
 	private Budgie.Abomination.RunningApp? app;
 
 	public Button(Budgie.Abomination.RunningApp app) {
-		this.app = app;
-
 		this.container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		this.add(this.container);
 
 		this.label = new Gtk.Label(null);
 		this.label.set_ellipsize(Pango.EllipsizeMode.END);
-		this.label.set_max_width_chars(25); // TODO: make it a const
+		this.label.set_max_width_chars(LABEL_MAX_WIDTH);
 
 		this.container.add(this.label);
+
+		this.app = app;
 
 		this.on_app_name_changed();
 		this.on_app_icon_changed();
 
-		this.show_all();
+		this.show_all(); // Only show after setting the name
 
-		this.app.renamed_app.connect(() => this.on_app_name_changed());
-		this.app.icon_changed.connect(() => this.on_app_icon_changed());
+		this.app.renamed_app.connect(this.on_app_name_changed);
+		this.app.icon_changed.connect(this.on_app_icon_changed);
 
-		// TODO: size request
+		this.set_size_request(232, 36); // FIXME: Need to be done better than that
+
+		// TODO: size request. We should respect parent max width and max height like a good citizen and properly set our size request
 	}
 
 	public void gracefully_die() {
-		// TODO: disconnect signal handlers
-
-		//  if (!this.get_settings().gtk_enable_animations) {
+		if (!this.get_settings().gtk_enable_animations) {
 			this.hide();
 			this.destroy();
-		//  }
+			return;
+		}
 
 		//  TODO: slick animation from ButtonWrapper
+		this.hide();
+		this.destroy();
 	}
 
 	public override bool button_release_event(Gdk.EventButton event) {
@@ -56,7 +61,7 @@ public class Button : Gtk.ToggleButton {
 		}
 
 		if (event.button == 2) { // Middle click
-			// TODO: Close app
+			this.app.close();
 			return Gdk.EVENT_STOP;
 		}
 
