@@ -138,8 +138,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		if (app.workspace.get_number() == this.abomination.get_active_workspace().get_number()) {
 			button.show();
+			button.set_no_show_all(false);
 		} else {
 			button.hide();
+			button.set_no_show_all(true); // make sure we don't randomly show buttons not belonging to the current workspace
 		}
 	}
 }
