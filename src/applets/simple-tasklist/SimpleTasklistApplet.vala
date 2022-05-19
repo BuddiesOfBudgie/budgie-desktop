@@ -52,16 +52,6 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.abomination.active_workspace_changed.connect(this.on_active_workspace_changed);
 	}
 
-	public override bool scroll_event(Gdk.EventScroll event) {
-		if (event.direction == Gdk.ScrollDirection.UP) { // Scrolling up
-			scroller.hadjustment.value -= 50;
-		} else { // Scrolling down
-			scroller.hadjustment.value += 50; // Always increment by 50
-		}
-
-		return Gdk.EVENT_STOP;
-	}
-
 	/**
 	 * Update the tasklist orientation to match the panel direction
 	 */
@@ -82,6 +72,9 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		}
 	}
 
+	/**
+	 * Create a button for the newly opened app and add it to our tracking map.
+	 */
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
 		if (this.buttons.contains(app.id.to_string())) {
 			return;
@@ -96,6 +89,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.buttons.insert(app.id.to_string(), button);
 	}
 
+	/**
+	 * Gracefully remove button associated with app and remove it from our
+	 * tracking map.
+	 */
 	private void on_app_closed(Budgie.Abomination.RunningApp app) {
 		var button = this.buttons.get(app.id.to_string());
 		if (button == null) {
@@ -107,6 +104,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.buttons.remove(app.id.to_string());
 	}
 
+	/**
+	 * Manage active state of buttons, mark button associated with new active
+	 * app as active and previous active button as inactive.
+	 */
 	private void on_active_app_changed(Budgie.Abomination.RunningApp? previous_app, Budgie.Abomination.RunningApp? current_app) {
 		if (previous_app != null) {
 			var button = this.buttons.get(previous_app.id.to_string());
@@ -124,12 +125,20 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		}
 	}
 
+	/**
+	 * Go through the managed buttons list and check if they should be
+	 * displayed for the current workspace.
+	 */
 	private void on_active_workspace_changed() {
 		foreach (Button button in this.buttons.get_values()) {
 			this.on_app_workspace_changed(button.app);
 		}
 	}
 
+	/**
+	 * Show / Hide button attached to the app depending on if it is in the
+	 * current workspace.
+	 */
 	private void on_app_workspace_changed(Budgie.Abomination.RunningApp app) {
 		var button = this.buttons.get(app.id.to_string());
 		if (button == null) {
