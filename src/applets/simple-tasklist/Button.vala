@@ -14,6 +14,7 @@ private const int LABEL_MAX_WIDTH = 25;
 public class Button : Gtk.ToggleButton {
 	private Gtk.Box container;
 	private Gtk.Label label;
+	private Gtk.Image icon;
 
 	public Budgie.Abomination.RunningApp? app { get; private set; }
 
@@ -21,10 +22,19 @@ public class Button : Gtk.ToggleButton {
 		this.container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		this.add(this.container);
 
+		this.icon = new Gtk.Image();
+		this.icon.get_style_context().add_class("icon");
+		this.icon.set_margin_start(4);
+		this.icon.set_margin_end(4);
+		// TODO: Set max icon size for apps that does strange stuff, so far even libreoffice behave
+
 		this.label = new Gtk.Label(null);
 		this.label.set_ellipsize(Pango.EllipsizeMode.END);
 		this.label.set_max_width_chars(LABEL_MAX_WIDTH);
+		this.label.set_margin_start(4);
+		this.label.set_margin_end(4);
 
+		this.container.add(this.icon);
 		this.container.add(this.label);
 
 		this.app = app;
@@ -81,6 +91,11 @@ public class Button : Gtk.ToggleButton {
 	}
 
 	private void on_app_icon_changed() {
+		if (this.app.app_info == null || this.app.app_info.get_icon() == null) {
+			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
+			return;
+		}
 
+		this.icon.set_from_gicon(this.app.app_info.get_icon(), Gtk.IconSize.INVALID);
 	}
 }
