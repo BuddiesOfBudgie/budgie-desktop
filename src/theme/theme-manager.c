@@ -32,7 +32,7 @@ static void budgie_theme_manager_set_theme_css(BudgieThemeManager* self, const g
 static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GtkSettings* settings);
 static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const gchar* key, GSettings* settings);
 #ifdef GSD42
-static void budgie_theme_manager_dark_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GSettings* settings);
+static void budgie_theme_manager_preferred_style_changed(BudgieThemeManager* self, GParamSpec* prop, GSettings* settings);
 #endif
 
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
@@ -86,15 +86,15 @@ static void budgie_theme_manager_init(BudgieThemeManager* self) {
 
 	settings = gtk_settings_get_default();
 	g_signal_connect_swapped(settings, "notify::gtk-theme-name", G_CALLBACK(budgie_theme_manager_theme_changed), self);
+	budgie_theme_manager_theme_changed(self, NULL, settings);
 
 	/* Bind the dark-theme option for the whole process */
 	g_settings_bind(self->desktop_settings, "dark-theme", settings, "gtk-application-prefer-dark-theme", G_SETTINGS_BIND_GET);
 #ifdef GSD42
-	g_signal_connect_swapped(self->desktop_settings, "changed::dark-theme", G_CALLBACK(budgie_theme_manager_dark_theme_changed), self);
+	g_signal_connect_swapped(self->ui_settings, "changed::color-scheme", G_CALLBACK(budgie_theme_manager_preferred_style_changed), self);
 
-	budgie_theme_manager_dark_theme_changed(self, NULL, self->desktop_settings);
+	budgie_theme_manager_preferred_style_changed(self, NULL, self->ui_settings);
 #endif
-	budgie_theme_manager_theme_changed(self, NULL, settings);
 }
 
 /**
@@ -157,16 +157,30 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attri
 	gchar* theme_name = NULL;
 	const gchar* theme_css = NULL;
 
+	g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
+
 	/* Set theme_css NULL if internal theming is disabled */
 	if (self->builtin_enabled) {
-		g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
 		if (theme_name && g_str_equal(theme_name, "HighContrast")) {
 			theme_css = "theme_hc";
 		} else {
 			theme_css = "theme";
 		}
-		g_free(theme_name);
 	}
+
+	if (prop != NULL) { /* changed theme only invoked from the combobox signal */
+		if (g_str_has_suffix(theme_name, "-dark")) {
+			g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
+		}
+		else if (g_str_has_suffix(theme_name, "-light")) {
+			g_settings_set_string(self->ui_settings, "color-scheme", "prefer-light");
+		}
+		else {
+			g_settings_reset(self->ui_settings, "color-scheme");
+		}
+	}
+
+	g_free(theme_name);
 
 	budgie_theme_manager_set_theme_css(self, theme_css);
 }
@@ -178,15 +192,14 @@ static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const
 }
 
 #ifdef GSD42
-static void budgie_theme_manager_dark_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GSettings* settings) {
-	gboolean dark_theme = g_settings_get_boolean(settings, "dark-theme");
+static void budgie_theme_manager_preferred_style_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GSettings* settings) {
+	gchar* preferred_style = g_settings_get_string(settings, "color-scheme");
 
-	if (dark_theme) {
-		g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
+	if (g_str_equal(preferred_style, "prefer-dark")) {
+		g_settings_set_boolean(self->desktop_settings, "dark-theme", TRUE);
 	}
 	else {
-		g_settings_reset(self->ui_settings, "color-scheme");
+		g_settings_reset(self->desktop_settings, "dark-theme");
 	}
-
 }
 #endif
