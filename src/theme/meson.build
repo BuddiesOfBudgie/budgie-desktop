@@ -1,14 +1,6 @@
 gnome = import('gnome')
 pkgconfig = import('pkgconfig')
 
-config_h = configuration_data()
-config_h.set('GSD42', dep_gsd.version().version_compare('>= 42'))
-# Write config.h
-configure_file(
-    output: 'config.h',
-    configuration: config_h,
-)
-
 # Compile to CSS dynamically.
 sassc = find_program('sassc')
 

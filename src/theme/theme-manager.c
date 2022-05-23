@@ -31,9 +31,7 @@ struct _BudgieThemeManager {
 static void budgie_theme_manager_set_theme_css(BudgieThemeManager* self, const gchar* theme_portion);
 static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, GParamSpec* prop, GtkSettings* settings);
 static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const gchar* key, GSettings* settings);
-#ifdef GSD42
 static void budgie_theme_manager_preferred_style_changed(BudgieThemeManager* self, GParamSpec* prop, GSettings* settings);
-#endif
 
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
@@ -156,8 +154,13 @@ remove_provider:
 static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GtkSettings* settings) {
 	gchar* theme_name = NULL;
 	const gchar* theme_css = NULL;
+	gchar** theme_parts = NULL;
+	gboolean found = FALSE;
 
 	g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
+
+	if (theme_name == NULL)
+		return;
 
 	/* Set theme_css NULL if internal theming is disabled */
 	if (self->builtin_enabled) {
@@ -168,19 +171,32 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attri
 		}
 	}
 
-#ifdef GSD42
+	theme_parts = g_strsplit_set(theme_name, "_- ", -1);
 	if (prop != NULL) { /* changed theme only invoked from the combobox signal */
-		if (g_str_has_suffix(theme_name, "-dark")) {
-			g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
+		for (guint loop = 0; loop < g_strv_length(theme_parts); loop++) {
+			gchar * casefold_name;
+			casefold_name = g_utf8_casefold (theme_parts[loop], -1);
+
+			if (g_strcmp0(theme_parts[loop], "dark") == 0) {
+				g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
+				found = TRUE;
+				g_free(casefold_name);
+				break;
+			}
+			else if (g_strcmp0(theme_parts[loop], "light") == 0) {
+				g_settings_set_string(self->ui_settings, "color-scheme", "prefer-light");
+				found = TRUE;
+				g_free(casefold_name);
+				break;
+			}
+			g_free(casefold_name);
 		}
-		else if (g_str_has_suffix(theme_name, "-light")) {
-			g_settings_set_string(self->ui_settings, "color-scheme", "prefer-light");
-		}
-		else {
+
+		if (!found) {
 			g_settings_reset(self->ui_settings, "color-scheme");
 		}
+		g_strfreev(theme_parts);
 	}
-#endif
 
 	g_free(theme_name);
 
@@ -193,7 +209,6 @@ static void budgie_theme_manager_builtin_changed(BudgieThemeManager* self, const
 	budgie_theme_manager_theme_changed(self, NULL, gtk_settings_get_default());
 }
 
-#ifdef GSD42
 static void budgie_theme_manager_preferred_style_changed(BudgieThemeManager* self, __attribute__((unused)) GParamSpec* prop, GSettings* settings) {
 	gchar* preferred_style = g_settings_get_string(settings, "color-scheme");
 
@@ -204,4 +219,3 @@ static void budgie_theme_manager_preferred_style_changed(BudgieThemeManager* sel
 		g_settings_reset(self->desktop_settings, "dark-theme");
 	}
 }
-#endif
