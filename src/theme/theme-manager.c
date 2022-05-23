@@ -11,7 +11,6 @@
 
 #define _GNU_SOURCE
 
-#include "config.h"
 #include "theme-manager.h"
 #include "theme.h"
 #include <gtk/gtk.h>
@@ -88,11 +87,9 @@ static void budgie_theme_manager_init(BudgieThemeManager* self) {
 
 	/* Bind the dark-theme option for the whole process */
 	g_settings_bind(self->desktop_settings, "dark-theme", settings, "gtk-application-prefer-dark-theme", G_SETTINGS_BIND_GET);
-#ifdef GSD42
 	g_signal_connect_swapped(self->ui_settings, "changed::color-scheme", G_CALLBACK(budgie_theme_manager_preferred_style_changed), self);
 
 	budgie_theme_manager_preferred_style_changed(self, NULL, self->ui_settings);
-#endif
 }
 
 /**
