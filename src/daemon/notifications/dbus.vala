@@ -196,7 +196,18 @@
 			int32 expire_timeout
 		) throws DBusError, IOError {
 			var id = (replaces_id != 0 ? replaces_id : ++notif_id);
-			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expire_timeout);
+			var expires = expire_timeout;
+
+			// The spec says that an expiry_timeout of 0 means that the
+			// notification should never expire. That doesn't really make
+			// sense for our implementation however, since this only handles
+			// popups. Notification "storage" is done seperately by Raven.
+			if (expires < 6000) {
+				// Let's have a 6 second minimum showing time
+				expires = 6000;
+			}
+
+			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expires);
 
 			string settings_app_name = app_name;
 			bool should_show = true; // Default to showing notification
