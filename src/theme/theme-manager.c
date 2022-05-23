@@ -168,6 +168,7 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attri
 		}
 	}
 
+#ifdef GSD42
 	if (prop != NULL) { /* changed theme only invoked from the combobox signal */
 		if (g_str_has_suffix(theme_name, "-dark")) {
 			g_settings_set_string(self->ui_settings, "color-scheme", "prefer-dark");
@@ -179,6 +180,7 @@ static void budgie_theme_manager_theme_changed(BudgieThemeManager* self, __attri
 			g_settings_reset(self->ui_settings, "color-scheme");
 		}
 	}
+#endif
 
 	g_free(theme_name);
 
