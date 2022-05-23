@@ -205,8 +205,7 @@
 			// sense for our implementation however, since this only handles
 			// popups. Notification "storage" is done seperately by Raven.
 			// All of that is to say: clamp the expiry
-			var expires = expire_timeout < MINIMUM_EXPIRY ? MINIMUM_EXPIRY : expire_timeout;
-			expires = expires > MAXIMUM_EXPIRY ? MAXIMUM_EXPIRY : expires;
+			var expires = expire_timeout.clamp(MINIMUM_EXPIRY, MAXIMUM_EXPIRY);
 
 			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expires);
 
