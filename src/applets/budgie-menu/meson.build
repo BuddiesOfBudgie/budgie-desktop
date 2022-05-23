@@ -19,12 +19,19 @@ applet_budgiemenu_resources = gnome.compile_resources(
     c_name: 'budgie_budgiemenuapplet',
 )
 
+lib_applet_budgiemenu_resources = static_library(
+    'budgiemenu-applet-resources',
+    applet_budgiemenu_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 applet_budgiemenu_sources = [
     'BudgieMenu.vala',
     'BudgieMenuButtons.vala',
     'BudgieMenuWindow.vala',
     'IconChooser.vala',
-    applet_budgiemenu_resources,
 ]
 
 applet_budgiemenu_deps = [
@@ -48,6 +55,9 @@ shared_library(
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
+    ],
+    link_whole: [
+        lib_applet_budgiemenu_resources,
     ],
     c_args: [
         '-DGMENU_I_KNOW_THIS_IS_UNSTABLE',

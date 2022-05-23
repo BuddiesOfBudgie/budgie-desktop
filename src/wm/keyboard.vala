@@ -61,7 +61,7 @@ namespace Budgie {
 		string[] options = {};
 
 		Settings? settings = null;
-		Array<InputSource> sources;
+		Array<InputSource> sources = null;
 		InputSource fallback;
 
 		uint current_source = 0;
@@ -102,6 +102,9 @@ namespace Budgie {
 		void switch_input_source(Meta.Display display,
 								Meta.Window? window, Clutter.KeyEvent? event,
 								Meta.KeyBinding binding) {
+			if (sources == null || sources.length == 0) {
+				return;
+			}
 			current_source = (current_source+1) % sources.length;
 			this.hold_keyboard();
 			this.apply_layout(current_source);
@@ -111,6 +114,9 @@ namespace Budgie {
 		void switch_input_source_backward(Meta.Display display,
 										Meta.Window? window, Clutter.KeyEvent? event,
 										Meta.KeyBinding binding) {
+			if (sources == null || sources.length == 0) {
+				return;
+			}
 			current_source = (current_source-1) % sources.length;
 			this.hold_keyboard();
 			this.apply_layout(current_source);

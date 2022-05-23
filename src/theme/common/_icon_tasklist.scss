@@ -11,11 +11,6 @@ $budgie_tasklist_indicator_color_attention: #D84E4E;
         background-clip: padding-box;
     }
 
-    #{$launcher_type}.launcher:not(.running):hover {
-        box-shadow: inset 1px 0 transparentize(black, 0.8),
-                    inset -1px 0 transparentize(black, 0.8);
-    }
-
     #{$launcher_type}.launcher {
         &:hover,
         &:active, &:checked {

@@ -15,7 +15,6 @@ public class ClockPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
-public const string CALENDAR_MIME = "text/calendar";
 private const string CLOCK_SETTINGS_SCHEMA = "com.solus-project.clock";
 private const string GNOME_SETTINGS_SCHEMA = "org.gnome.desktop.interface";
 
@@ -32,8 +31,6 @@ public class ClockApplet : Budgie.Applet {
 	protected Settings gnome_settings;
 
 	Budgie.Popover? popover = null;
-	AppInfo? calprov = null;
-	Gtk.Button cal_button;
 
 	Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
 
@@ -111,25 +108,20 @@ public class ClockApplet : Budgie.Applet {
 		// Create a submenu system
 		popover = new Budgie.Popover(widget);
 
-		var stack = new Gtk.Stack();
-		stack.get_style_context().add_class("clock-applet-stack");
-
-		popover.add(stack);
-		stack.set_homogeneous(true);
-		stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+		var container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		container.get_style_context().add_class("clock-applet-stack");
+		container.set_homogeneous(true);
 
 		var menu = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
+		menu.get_style_context().add_class("clock-applet-stack");
 		menu.border_width = 6;
 
+		popover.add(menu);
+
 		var time_button = this.new_plain_button(_("System time and date settings"));
-		cal_button = this.new_plain_button(_("Calendar"));
 		time_button.clicked.connect(on_date_activate);
-		cal_button.clicked.connect(on_cal_activate);
 
 		menu.pack_start(time_button, false, false, 0);
-		menu.pack_start(cal_button, false, false, 0);
-
-		stack.add(menu);
 
 		widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
@@ -166,26 +158,11 @@ public class ClockApplet : Budgie.Applet {
 			update_clock();
 		});
 
-		calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
-
-		var monitor = AppInfoMonitor.get();
-		monitor.changed.connect(update_cal);
-
-		cal_button.set_sensitive(calprov != null);
-		cal_button.clicked.connect(on_cal_activate);
-
-		update_cal();
-
 		add(widget);
 
 		popover.get_child().show_all();
 
 		show_all();
-	}
-
-	void update_cal() {
-		calprov = AppInfo.get_default_for_type(CALENDAR_MIME, false);
-		cal_button.set_sensitive(calprov != null);
 	}
 
 	void on_date_activate() {
@@ -199,19 +176,6 @@ public class ClockApplet : Budgie.Applet {
 			app_info.launch(null, null);
 		} catch (Error e) {
 			message("Unable to launch budgie-datetime-panel.desktop: %s", e.message);
-		}
-	}
-
-	void on_cal_activate() {
-		this.popover.hide();
-
-		if (calprov == null) {
-			return;
-		}
-		try {
-			calprov.launch(null, null);
-		} catch (Error e) {
-			message("Unable to launch %s: %s", calprov.get_name(), e.message);
 		}
 	}
 
@@ -247,7 +211,13 @@ public class ClockApplet : Budgie.Applet {
 				case "use-custom-timezone":
 				case "custom-timezone":
 					if (settings.get_boolean("use-custom-timezone")) {
-						this.clock_timezone = new TimeZone(settings.get_string("custom-timezone"));
+						string custom_tz = settings.get_string("custom_timezone");
+						try {
+							this.clock_timezone = new TimeZone.identifier(custom_tz);
+						} catch (Error e) {
+							warning("Clock applet: Failed to set time zone from identifier %s. Using UTC instead.", custom_tz);
+							this.clock_timezone = new TimeZone.utc();
+						}
 					} else {
 						this.clock_timezone = new TimeZone.local();
 					}
@@ -373,25 +343,25 @@ public class ClockApplet : Budgie.Applet {
 public class ClockSettings : Gtk.Grid {
 
 	[GtkChild]
-	private Gtk.Switch? show_date;
+	private unowned Gtk.Switch? show_date;
 
 	[GtkChild]
-	private Gtk.Switch? show_seconds;
+	private unowned Gtk.Switch? show_seconds;
 
 	[GtkChild]
-	private Gtk.Switch? use_24_hour_time;
+	private unowned Gtk.Switch? use_24_hour_time;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_format;
+	private unowned Gtk.Switch? use_custom_format;
 
 	[GtkChild]
-	private Gtk.Entry? custom_format;
+	private unowned Gtk.Entry? custom_format;
 
 	[GtkChild]
-	private Gtk.Switch? use_custom_timezone;
+	private unowned Gtk.Switch? use_custom_timezone;
 
 	[GtkChild]
-	private Gtk.Entry? custom_timezone;
+	private unowned Gtk.Entry? custom_timezone;
 
 	public ClockSettings(Settings? settings, Settings? gnome_settings) {
 		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);

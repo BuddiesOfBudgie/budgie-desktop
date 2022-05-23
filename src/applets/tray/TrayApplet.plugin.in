@@ -1,8 +1,8 @@
 [Plugin]
 Module=trayapplet.so
 Name=System Tray
-_Description=System Tray
+_Description=System tray using the XEMBED protocol
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2015-2022 Budgie Desktop Developers
-Website=https://budgie-desktop.org
+Website=https://buddiesofbudgie.org
 Icon=system-tray-symbolic

@@ -83,10 +83,10 @@ namespace Budgie {
 	[GtkTemplate (ui="/com/solus-project/budgie/daemon/tabswitcher.ui")]
 	public class TabSwitcherWindow : Gtk.Window {
 		[GtkChild]
-		private Gtk.FlowBox window_box;
+		private unowned Gtk.FlowBox window_box;
 
 		[GtkChild]
-		private Gtk.Label window_title;
+		private unowned Gtk.Label window_title;
 
 		/**
 		* Track the primary monitor to show on

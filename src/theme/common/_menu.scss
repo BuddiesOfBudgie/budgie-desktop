@@ -113,7 +113,16 @@
 // Menu Button
 @mixin budgie_menu_button($button) {
     #{$button}.budgie-menu-launcher {
+        @extend %reset_style;
+
         padding: 0 2px;
+        transition: background-color 170ms ease-out;
+
+        &:hover { background-color: transparentize(white, 0.9); }
+        &:active {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+        }
     }
 }
 

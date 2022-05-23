@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Budgie Background Services
-Comment=Budgie Background Services
 Exec=budgie-daemon
 Terminal=false
 Categories=GNOME;GTK;System;Core;

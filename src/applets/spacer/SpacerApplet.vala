@@ -20,7 +20,7 @@ public class SpacerSettings : Gtk.Grid {
 	Settings? settings = null;
 
 	[GtkChild]
-	private Gtk.SpinButton? spinbutton_size;
+	private unowned Gtk.SpinButton? spinbutton_size;
 
 	public SpacerSettings(Settings? settings) {
 		this.settings = settings;

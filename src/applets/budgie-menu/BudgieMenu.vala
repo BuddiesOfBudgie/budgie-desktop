@@ -18,25 +18,25 @@ public class BudgieMenu : Budgie.Plugin, Peas.ExtensionBase {
 [GtkTemplate (ui="/com/solus-project/budgie-menu/settings.ui")]
 public class BudgieMenuSettings : Gtk.Grid {
 	[GtkChild]
-	private Gtk.Switch? switch_menu_label;
+	private unowned Gtk.Switch? switch_menu_label;
 
 	[GtkChild]
-	private Gtk.Switch? switch_menu_compact;
+	private unowned Gtk.Switch? switch_menu_compact;
 
 	[GtkChild]
-	private Gtk.Switch? switch_menu_headers;
+	private unowned Gtk.Switch? switch_menu_headers;
 
 	[GtkChild]
-	private Gtk.Switch? switch_menu_categories_hover;
+	private unowned Gtk.Switch? switch_menu_categories_hover;
 
 	[GtkChild]
-	private Gtk.Entry? entry_label;
+	private unowned Gtk.Entry? entry_label;
 
 	[GtkChild]
-	private Gtk.Entry? entry_icon_pick;
+	private unowned Gtk.Entry? entry_icon_pick;
 
 	[GtkChild]
-	private Gtk.Button? button_icon_pick;
+	private unowned Gtk.Button? button_icon_pick;
 
 	private Settings? settings;
 

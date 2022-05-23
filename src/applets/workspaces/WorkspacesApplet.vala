@@ -26,7 +26,7 @@ namespace Workspaces {
 	[GtkTemplate (ui="/com/solus-project/workspaces/settings.ui")]
 	public class WorkspacesAppletSettings : Gtk.Grid {
 		[GtkChild]
-		private Gtk.ComboBoxText? combobox_visibility;
+		private unowned Gtk.ComboBoxText? combobox_visibility;
 
 		private Settings? settings;
 
@@ -391,10 +391,7 @@ namespace Workspaces {
 		}
 
 		public override void panel_size_changed(int panel_size, int icon_size, int small_icon_size) {
-			WorkspacesApplet.panel_size = panel_size - 1;
-			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-				WorkspacesApplet.panel_size = panel_size - 6;
-			}
+			WorkspacesApplet.panel_size = panel_size;
 
 			if (startup) {
 				return;

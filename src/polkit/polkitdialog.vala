@@ -13,22 +13,22 @@ namespace Budgie {
 	[GtkTemplate (ui="/com/solus-project/budgie/polkit/dialog.ui")]
 	public class AgentDialog : Gtk.Window {
 		[GtkChild]
-		private Gtk.Entry? entry_auth;
+		private unowned Gtk.Entry? entry_auth;
 
 		[GtkChild]
-		private Gtk.Label? label_message;
+		private unowned Gtk.Label? label_message;
 
 		[GtkChild]
-		private Gtk.Image? image_icon;
+		private unowned Gtk.Image? image_icon;
 
 		[GtkChild]
-		private Gtk.ComboBox? combobox_idents;
+		private unowned Gtk.ComboBox? combobox_idents;
 
 		[GtkChild]
-		private Gtk.Label? label_prompt;
+		private unowned Gtk.Label? label_prompt;
 
 		[GtkChild]
-		private Gtk.Label? label_error;
+		private unowned Gtk.Label? label_error;
 
 		public bool is_cancelled;
 
@@ -305,9 +305,9 @@ namespace Budgie {
 		}
 
 		private async bool register_with_session() {
-			try {
-				sclient = yield LibSession.register_with_session("budgie-polkit");
-			} catch (Error e) {
+			sclient = yield LibSession.register_with_session("budgie-polkit");
+
+			if (sclient == null) {
 				return false;
 			}
 

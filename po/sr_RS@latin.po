@@ -1,25 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Milisav Cetkovic <mcetkovic@gmail.com>, 2017
-# Stefan Ric (cybre) <stfric369@gmail.com>, 2016-2017
-# Stefan Ric (cybre) <stfric369@gmail.com>, 2015-2017
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-03-17 09:05+0000\n"
-"Last-Translator: Joshua Strobl <joshua@getsol.us>\n"
-"Language-Team: Serbian (latin) <http://translate.getsol.us/projects/budgie-desktop/translations/sr_Latn/>\n"
-"Language: sr_RS@latin\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Serbian (Latin) (Serbia) (https://www.transifex.com/buddiesofbudgie/teams/129844/sr_RS@latin/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"Language: sr_RS@latin\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -40,7 +40,7 @@ msgstr "Dodaj aplet"
 
 #: src/panel/settings/settings_panel_applets.vala:234
 msgid "Choose a new applet to add to this panel"
-msgstr ""
+msgstr "Изабери и додај нови прибор на радну траку"
 
 #: src/panel/settings/settings_panel_applets.vala:248
 msgid "No settings available"
@@ -60,31 +60,36 @@ msgstr "Kraj"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
-msgstr ""
+msgstr "Потврди уклањање радне траке"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr ""
+"Да ли заиста желите уклонити ову радну траку? \n"
+"Ова одлука не може бити опозвана."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
-msgstr ""
+msgstr "Уклони радну траку"
 
 #: src/panel/settings/settings_panel_dialogs.vala:43
 msgid "Keep panel"
-msgstr ""
+msgstr "Задржи радну траку"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr ""
+msgstr "Потврди уклањање прибора"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
+"Да ли заиста желите уклонити овај прибор? \n"
+"Ова одлука не може бити опозвана."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
-msgstr ""
+msgstr "Не понављај ово питање"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
@@ -109,7 +114,7 @@ msgstr "Sesija"
 #: src/panel/settings/settings_main.vala:68 src/daemon/menus.vala:46
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr ""
+msgstr "Подешавање Budgie радне површине"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
@@ -124,7 +129,9 @@ msgid "Attach modal dialogs to windows"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:46
@@ -148,7 +155,9 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:64
@@ -156,7 +165,9 @@ msgid "Pause notifications when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
@@ -164,7 +175,9 @@ msgid "Automatic tiling"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:76
@@ -172,7 +185,9 @@ msgid "Enable window focus change on mouse enter and leave"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
@@ -180,16 +195,19 @@ msgid "Disable unredirection of windows"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
-#, fuzzy
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Ova opcija je za napredne korisnike. Koristi je ako imas grafickih ili problema sa performansama graficke kartice. "
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -199,7 +217,7 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:99
 #: src/panel/settings/settings_panel.vala:181 src/raven/raven.vala:33
 msgid "Left"
-msgstr ""
+msgstr "Лево"
 
 #: src/panel/settings/settings_style.vala:32
 msgid "Style"
@@ -230,13 +248,12 @@ msgid "Set the globally used mouse cursor theme"
 msgstr "Postqvi globalnu temu za kursor"
 
 #: src/panel/settings/settings_style.vala:61
-#, fuzzy
 msgid "Notification Position"
-msgstr "Obaveštenja"
+msgstr "Позиција обавештења"
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Set the location for notification popups"
-msgstr ""
+msgstr "Подесите место појаве обавештења"
 
 #: src/panel/settings/settings_style.vala:71
 msgid "Dark theme"
@@ -247,9 +264,9 @@ msgid "Built-in theme"
 msgstr "Ugrađena tema"
 
 #: src/panel/settings/settings_style.vala:79
-#, fuzzy
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Pri ukljucivanju ove opcije komponente desktopa ce biti stilizovane ugradjenom temom. "
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr "Када је укључена, уграђена тема мења изглед радне површине"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -261,76 +278,86 @@ msgstr "Podesi da li prozori i navigacione komande koriste efekte"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
-msgstr ""
+msgstr "Горе лево"
 
 #: src/panel/settings/settings_style.vala:206
-#, fuzzy
 msgid "Bottom Left"
-msgstr "Dno"
+msgstr "Доле лево"
 
 #: src/panel/settings/settings_style.vala:208
-#, fuzzy
 msgid "Bottom Right"
-msgstr "Dno"
+msgstr "Горе десно"
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
-msgstr ""
+msgstr "Горе десно"
 
 #: src/panel/settings/settings_raven.vala:61
 msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
-msgstr ""
+msgstr "Одобри појачавање звука преко 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
 msgstr ""
+"Омогућава појачавање у подешавању звука, као и звучног Виџета у Рејвену на "
+"150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
-msgstr ""
+msgstr "Омогући приказ броја недеље у Календару."
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr ""
+"Ово подешавање омогућава приказ редног броја недеље у виџету Календар."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
-msgstr ""
+msgstr "Прикажи виџет Календар."
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr ""
+msgstr "Приказује или сакрива виџет Календар у Рејвеновом одељку Програмчићи."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
-msgstr ""
+msgstr "Прикажи виџет за звучни излаз"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
 msgstr ""
+"Приказује или сакрива виџет за звучни излаз у Рејвеновом одељку Програмчићи."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
-msgstr ""
+msgstr " Прикажи виџет за микрофон"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
 msgstr ""
+"Приказује или сакрива виџет за микрофон у Рејвеновом одељку Програмчићи."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
-msgstr ""
+msgstr "Прикажи виџет са контролама репродукције звучних медија."
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:102
@@ -355,7 +382,7 @@ msgstr "Otkaži"
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
-msgstr ""
+msgstr "Радна површина"
 
 #. Budgie native implementation
 #. Get the settings for Budgie Desktop View
@@ -365,7 +392,8 @@ msgstr ""
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -375,7 +403,8 @@ msgstr "Desktop ikonice"
 msgid "Control whether to allow icons on the desktop."
 msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -389,28 +418,28 @@ msgstr ""
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr ""
+msgstr "Лична фасцикла"
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr ""
+msgstr "Додај пречицу Личне фасцикле на радну површину."
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
 msgid "Trash"
-msgstr ""
+msgstr "Смеће"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr ""
+msgstr "Додај пречицу за Смеће на радну површину."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Veličina"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
@@ -418,11 +447,13 @@ msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr ""
+msgstr "Број виртуалних радних површина"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
+"Број виртуалних радних површина створених приликом покретању рачунара."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -438,7 +469,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -469,13 +501,12 @@ msgid "Settings"
 msgstr "Podešavanja"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Ukloni applet"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
-msgstr ""
+msgstr "Уклони ову радну траку с екрана"
 
 #: src/panel/settings/settings_panel.vala:123
 msgid "Top Dock"
@@ -515,7 +546,7 @@ msgstr "Vrh"
 
 #: src/panel/settings/settings_panel.vala:179 src/raven/raven.vala:35
 msgid "Right"
-msgstr ""
+msgstr "Десно"
 
 #: src/panel/settings/settings_panel.vala:183
 msgid "Bottom"
@@ -527,17 +558,17 @@ msgstr "Uvek"
 
 #: src/panel/settings/settings_panel.vala:195
 msgid "Dynamic"
-msgstr ""
+msgstr "Динамички"
 
 #: src/panel/settings/settings_panel.vala:198
 #: src/panel/settings/settings_fonts.vala:84
 #: src/panel/settings/settings_fonts.vala:110
 msgid "None"
-msgstr ""
+msgstr "Нема"
 
 #: src/panel/settings/settings_panel.vala:208 src/raven/raven.vala:38
 msgid "Automatic"
-msgstr ""
+msgstr "Aутоматски"
 
 #: src/panel/settings/settings_panel.vala:210
 msgid "Intelligent"
@@ -553,7 +584,7 @@ msgstr "Pozicija"
 
 #: src/panel/settings/settings_panel.vala:229
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr ""
+msgstr "Одредите ивицу заслона на којој ће стајати радна трака"
 
 #: src/panel/settings/settings_panel.vala:237
 msgid "Size"
@@ -562,6 +593,7 @@ msgstr "Veličina"
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
+"Одредите димензије (ширину или висину, зависно од положаја) ове радне траке"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -570,6 +602,8 @@ msgstr "Automatski sakriti"
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
+"Када је постављена, радна трака се аутоматски сакрива, да би се добила "
+"максимална корисна површина заслона"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -577,7 +611,7 @@ msgstr "Transparentnost"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Control when this panel should have a solid background"
-msgstr ""
+msgstr "Контролишите када би ова радна трака требало да буде непровидна"
 
 #: src/panel/settings/settings_panel.vala:259
 msgid "Shadow"
@@ -585,22 +619,28 @@ msgstr "Senka"
 
 #: src/panel/settings/settings_panel.vala:260
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
+msgstr "Додаје декоративну падајућу сенку, идеалну за непровидне радне траке"
 
 #: src/panel/settings/settings_panel.vala:266
 msgid "Stylize regions"
 msgstr "Stilizuj oblasti"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
 msgstr ""
+"Додаје репер тамо где ће бити крај сваке, од три, главне области радне "
+"траке, тако да би сваки одељак могао да има посебну тему."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr ""
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
 msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:134
@@ -655,19 +695,16 @@ msgid "Autostart"
 msgstr "Automatsko pokretanje"
 
 #: src/panel/settings/settings_autostart.vala:464
-#, fuzzy
 msgid "Autostart apps"
-msgstr "Automatsko pokretanje"
+msgstr "Изабери почетни прибор"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Aplikacije"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Komanda"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -679,7 +716,7 @@ msgstr "Naslovi prozora"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications."
-msgstr ""
+msgstr "Подесите словолик који се користи у наслову траке програма."
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -694,9 +731,8 @@ msgid "Interface"
 msgstr "Interfejs"
 
 #: src/panel/settings/settings_fonts.vala:58
-#, fuzzy
 msgid "Set the primary font used by application controls."
-msgstr "Podesi izgled prozora i navigacionih dugmica. "
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -752,11 +788,11 @@ msgstr ""
 
 #: src/raven/start_listening.vala:20
 msgid "No apps are currently playing audio."
-msgstr ""
+msgstr "Тренутно ниједан прозор не пушта звук."
 
 #: src/raven/start_listening.vala:28
 msgid "Play some music"
-msgstr ""
+msgstr "Пусти музику"
 
 #: src/raven/notifications_view.vala:101
 msgid "Nothing to see here"
@@ -785,11 +821,11 @@ msgstr "Nema novih obaveštenja"
 #. 125ms
 #: src/raven/sound.vala:158
 msgid "Apps"
-msgstr ""
+msgstr "Програми"
 
 #: src/raven/sound.vala:159
 msgid "Devices"
-msgstr ""
+msgstr "Уређаји"
 
 #: src/raven/main_view.vala:60
 #: src/applets/notifications/NotificationsApplet.plugin.in.h:1
@@ -801,12 +837,11 @@ msgstr "Obaveštenja"
 #: src/raven/notifications_group.vala:47
 #: src/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
-msgstr ""
+msgstr "Радна Кафа"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Podešavanja"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -823,21 +858,21 @@ msgstr "Isključivanje"
 #. Should show a notification
 #: src/daemon/settings.vala:341
 msgid "Turned on Caffeine Boost"
-msgstr ""
+msgstr "Радна кафа је укључена"
 
 #: src/daemon/settings.vala:341
 msgid "Turned off Caffeine Boost"
-msgstr ""
+msgstr "Радна кафа је искључена"
 
 #: src/daemon/settings.vala:346
 msgid "Will turn off in a minute"
-msgstr ""
+msgstr "Искључиће се за минут"
 
 #. use plural
 #: src/daemon/settings.vala:349
 #, c-format
 msgid "Will turn off in %d minutes"
-msgstr ""
+msgstr "Искључиће се за %d минута"
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:99
@@ -953,19 +988,21 @@ msgstr "Unesi enskripcionu sifru da bi video ovaj uredjaj"
 
 #: src/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
-msgstr ""
+msgstr "Лозинка коју сте укуцали није тачна"
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr ""
+"Дошло је до непознате грешке, приликом покушаја монтаже овог меморијског "
+"капацитета"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr ""
+msgstr "Други процеси користе капацитет диска"
 
 #: src/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
-msgstr ""
+msgstr "Задатак је отказан"
 
 #: src/applets/places-indicator/MountHelper.vala:51
 msgid "Type your password"
@@ -1056,7 +1093,7 @@ msgstr "Ukloni"
 
 #: src/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr ""
+msgstr "Одбројавање (минути)"
 
 #. there's already an active tray, create an informative icon with a popover
 #: src/applets/tray/TrayApplet.vala:114
@@ -1082,7 +1119,7 @@ msgstr "Postavi meni ikonicu"
 
 #: src/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
-msgstr ""
+msgstr "Слике"
 
 #: src/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
@@ -1090,12 +1127,12 @@ msgstr "Bilo koji fajl"
 
 #: src/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
-msgstr ""
+msgstr "Постави иконицу"
 
 #. placeholder in case of no results
 #: src/applets/budgie-menu/BudgieMenuWindow.vala:123
 msgid "Sorry, no items found"
-msgstr ""
+msgstr "Нема нађених предмета"
 
 #: src/applets/clock/ClockApplet.vala:143
 msgid "Time and date settings"
@@ -1125,56 +1162,54 @@ msgstr "Koristi 24-oro časovno vreme"
 
 #: src/applets/icon-tasklist/IconPopover.vala:106
 msgid "Launch New Instance"
-msgstr ""
+msgstr "Покрени нови прозор"
 
 #: src/applets/icon-tasklist/IconPopover.vala:109
 msgid "Close All Windows"
-msgstr ""
+msgstr "Затвори све прозоре"
 
 #: src/applets/icon-tasklist/IconPopover.vala:117
-#, fuzzy
 msgid "Always On Top"
-msgstr "Uvek"
+msgstr "Увек на врху"
 
 #: src/applets/icon-tasklist/IconPopover.vala:119
 #: src/applets/icon-tasklist/IconPopover.vala:545
 msgid "Maximize"
-msgstr ""
+msgstr "Подигни прозор на радну површину"
 
 #: src/applets/icon-tasklist/IconPopover.vala:120
 msgid "Minimize"
-msgstr ""
+msgstr "Спусти прозор на радну траку"
 
 #: src/applets/icon-tasklist/IconPopover.vala:433
 msgid "Unfavorite"
-msgstr ""
+msgstr "Искључи са радне траке"
 
 #: src/applets/icon-tasklist/IconPopover.vala:433
 msgid "Favorite"
-msgstr ""
+msgstr "Прикључи радној траци"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
 #, c-format
 msgid "Move To Workspace %i"
-msgstr ""
+msgstr "Премести на радну површину %i"
 
 #. Update our always on top button
 #: src/applets/icon-tasklist/IconPopover.vala:545
 msgid "Unmaximize"
-msgstr ""
+msgstr "Одређени приказ прозора"
 
 #: src/applets/icon-tasklist/IconPopover.vala:604
-#, fuzzy
 msgid "Close Window"
-msgstr "Prozori"
+msgstr "Затвори прозор"
 
 #: src/applets/icon-tasklist/IconPopover.vala:606
-#, fuzzy
 msgid "Show Window Controls"
-msgstr "Naslovi prozora"
+msgstr "Прикажи управности прозора"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1237,14 +1272,12 @@ msgid "Show on mouseover"
 msgstr ""
 
 #: src/applets/workspaces/settings.ui.h:4
-#, fuzzy
 msgid "Always show"
-msgstr "Uvek"
+msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:1
-#, fuzzy
 msgid "Enable notification"
-msgstr "Nema novih obaveštenja"
+msgstr "Омогући обавештења"
 
 #: src/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
@@ -1345,13 +1378,14 @@ msgid "Budgie Panel"
 msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
 msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
-#, fuzzy
 msgid "Change desktop appearance and behavior"
-msgstr "Promeni izgled i ponasanje desktopa"
+msgstr "Мења изглед и понашање радне површине"
 
 #: src/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"
@@ -1383,7 +1417,7 @@ msgstr "Prebacivač jezika tastature"
 
 #: src/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Caffeine"
-msgstr ""
+msgstr "Кафа"
 
 #: src/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"

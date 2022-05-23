@@ -13,16 +13,16 @@ namespace NightLight {
 	[GtkTemplate (ui="/org/budgie-desktop/night-light/indicator_window.ui")]
 	class IndicatorWindow : Budgie.Popover {
 		[GtkChild]
-		private Gtk.Switch? nightlight_switch;
+		private unowned Gtk.Switch? nightlight_switch;
 
 		[GtkChild]
-		private Gtk.Grid? item_grid;
+		private unowned Gtk.Grid? item_grid;
 
 		[GtkChild]
-		private Gtk.SpinButton? temperature_spinbutton;
+		private unowned Gtk.SpinButton? temperature_spinbutton;
 
 		[GtkChild]
-		private Gtk.ComboBoxText? schedule_combobox;
+		private unowned Gtk.ComboBoxText? schedule_combobox;
 
 		private Settings settings;
 

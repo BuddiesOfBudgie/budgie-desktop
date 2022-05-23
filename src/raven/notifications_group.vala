@@ -109,11 +109,13 @@ namespace Budgie {
 		 * dismiss_all is responsible for dismissing all notifications
 		 */
 		public void dismiss_all() {
-			notifications.foreach((id, notification) => { // For reach notification
-				remove_notification(id); // Remove this notification
+			notifications.foreach_steal((id, notification) => {
+				list.remove(notification.get_parent());
+				notification.destroy();
+				dismissed_notification(id);
+				return true;
 			});
 
-			notifications.steal_all();
 			update_count();
 			dismissed_group(app_name);
 		}
