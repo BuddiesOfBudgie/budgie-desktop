@@ -13,6 +13,9 @@
 	public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
+	const int32 MINIMUM_EXPIRY = 6000;
+	const int32 MAXIMUM_EXPIRY = 12000;
+
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
 		/**
@@ -196,16 +199,14 @@
 			int32 expire_timeout
 		) throws DBusError, IOError {
 			var id = (replaces_id != 0 ? replaces_id : ++notif_id);
-			var expires = expire_timeout;
 
 			// The spec says that an expiry_timeout of 0 means that the
 			// notification should never expire. That doesn't really make
 			// sense for our implementation however, since this only handles
 			// popups. Notification "storage" is done seperately by Raven.
-			if (expires < 6000) {
-				// Let's have a 6 second minimum showing time
-				expires = 6000;
-			}
+			// All of that is to say: clamp the expiry
+			var expires = expire_timeout < MINIMUM_EXPIRY ? MINIMUM_EXPIRY : expire_timeout;
+			expires = expires > MAXIMUM_EXPIRY ? MAXIMUM_EXPIRY : expires;
 
 			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expires);
 
