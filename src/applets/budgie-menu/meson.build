@@ -38,7 +38,6 @@ applet_budgiemenu_sources = [
     'MenuItem.vala',
     'views/ListView.vala',
     'views/View.vala',
-    applet_budgiemenu_resources,
 ]
 
 applet_budgiemenu_deps = [
