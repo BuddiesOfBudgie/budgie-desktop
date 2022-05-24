@@ -518,7 +518,6 @@ namespace Budgie {
 				return (int) (a.position > b.position) - (int) (a.position < b.position);
 			};
 
-			/* Two loops so we can track when we've fully loaded the panel */
 			lock (expected_uuids) {
 				for (int i = 0; i < applets.length; i++) {
 					this.expected_uuids.append(applets[i]);
@@ -533,10 +532,8 @@ namespace Budgie {
 					Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
 
 					if (info == null) {
-						/* Faiiiil */
 						if (name == null) {
 							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
-							/* TODO: No longer expecting this guy to load */
 							if (g != null) {
 								expected_uuids.remove_link(g);
 							}
@@ -551,7 +548,6 @@ namespace Budgie {
 						}
 					}
 
-					/* um add this bro to the panel :o */
 					if (info.alignment == "start") {
 						start_applets.insert_sorted(info, infocmp);
 					} else if (info.alignment == "center") {
