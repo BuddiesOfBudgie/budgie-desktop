@@ -10,11 +10,14 @@
  */
 
 private const int LABEL_MAX_WIDTH = 25;
+private const int BUTTON_PADDING = 4;
 
 public class Button : Gtk.ToggleButton {
 	private Gtk.Box container;
 	private Gtk.Label label;
 	private Gtk.Image icon;
+
+	private Gtk.Allocation definite_allocation;
 
 	public Budgie.Abomination.RunningApp? app { get; private set; }
 
@@ -24,15 +27,15 @@ public class Button : Gtk.ToggleButton {
 
 		this.icon = new Gtk.Image();
 		this.icon.get_style_context().add_class("icon");
-		this.icon.set_margin_start(4);
-		this.icon.set_margin_end(4);
-		// TODO: Set max icon size for apps that does strange stuff, so far even libreoffice behave
+		this.icon.set_margin_start(BUTTON_PADDING);
+		this.icon.set_margin_end(BUTTON_PADDING);
+		this.icon.set_pixel_size(16); // TODO: We should be able to handle panel resize and icon only mode
 
 		this.label = new Gtk.Label(null);
 		this.label.set_ellipsize(Pango.EllipsizeMode.END);
 		this.label.set_max_width_chars(LABEL_MAX_WIDTH);
-		this.label.set_margin_start(4);
-		this.label.set_margin_end(4);
+		this.label.set_margin_start(BUTTON_PADDING);
+		this.label.set_margin_end(BUTTON_PADDING);
 
 		this.container.add(this.icon);
 		this.container.add(this.label);
@@ -44,10 +47,22 @@ public class Button : Gtk.ToggleButton {
 
 		this.show_all(); // Only show after setting the name
 
+		// SIGNALS
+		this.size_allocate.connect(this.on_size_allocate);
 		this.app.renamed_app.connect(this.on_app_name_changed);
 		this.app.icon_changed.connect(this.on_app_icon_changed);
+		this.app.app_info_changed.connect(() => {
+			warning("App Info changed for %s", this.app.name);
 
-		this.set_size_request(232, 36); // FIXME: Need to be done better than that
+			this.on_app_name_changed();
+			this.on_app_icon_changed();
+		});
+
+		// set_size_request is for MINIMUM size. How to set maximum size?
+		// Also how to make it so that the parent scale this maximum size? i.e. that button takes the most it can when opened if it has room?
+
+		// TODO: How to set consistent default width w/out relying on that? If we set that we pretty much don't have the widget compression mechanism
+		//  this.set_size_request(232, 36); // FIXME: Need to be done better than that
 
 		// TODO: size request. We should respect parent max width and max height like a good citizen and properly set our size request
 	}
@@ -64,7 +79,7 @@ public class Button : Gtk.ToggleButton {
 		this.destroy();
 	}
 
-	public override bool button_release_event(Gdk.EventButton event) {
+	protected override bool button_release_event(Gdk.EventButton event) {
 		if (event.button == 3) { // Right click
 			//  TODO: show popover
 			return Gdk.EVENT_STOP;
@@ -84,18 +99,33 @@ public class Button : Gtk.ToggleButton {
 		return base.button_release_event(event);
 	}
 
+	private void on_size_allocate(Gtk.Allocation allocation) {
+		if (this.definite_allocation == allocation) {
+			return;
+		}
+
+		this.definite_allocation = allocation;
+
+		// TODO: Determine icon size
+
+		base.size_allocate(definite_allocation);
+	}
+
 	private void on_app_name_changed() {
 		var name = this.app.name;
+		while (name.char_count() < LABEL_MAX_WIDTH - 1) { // Dirty way to ensure that button occupy it's max size when created
+			name = name.concat("\u2800");
+		} // FIXME: Find a better way, this is ugly when reaching size where we compress the button
+
 		this.label.set_label(name);
 		this.set_tooltip_text(name);
 	}
 
 	private void on_app_icon_changed() {
-		if (this.app.app_info == null || this.app.app_info.get_icon() == null) {
-			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
-			return;
-		}
+		Gdk.Pixbuf icon_pixbuf = this.app.get_icon();
 
-		this.icon.set_from_gicon(this.app.app_info.get_icon(), Gtk.IconSize.INVALID);
+		icon_pixbuf = icon_pixbuf.scale_simple(16, 16, Gdk.InterpType.BILINEAR);
+
+		this.icon.set_from_pixbuf(icon_pixbuf);
 	}
 }
