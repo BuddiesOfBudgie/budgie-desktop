@@ -5,12 +5,14 @@
 # Translators:
 # jemin_jeon, 2017-2018
 # SD SkyKlouD <koongchi135@gmail.com>, 2017
+# Junghee Lee <daemul72@gmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Budgie Desktop\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-03-17 09:05+0000\n"
+"PO-Revision-Date: 2022-05-29 00:57+0900\n"
 "Last-Translator: Kyong Hwan Lim <lim@nesou.com>\n"
 "Language-Team: Korean <http://translate.getsol.us/projects/budgie-desktop/translations/ko/>\n"
 "Language: ko\n"
@@ -18,11 +20,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
-msgstr "인증 실패"
+msgstr "인증 실패함"
 
 #: src/polkit/polkitdialog.vala:215
 msgid "Group:"
@@ -39,11 +41,11 @@ msgstr "애플릿 추가하기"
 
 #: src/panel/settings/settings_panel_applets.vala:234
 msgid "Choose a new applet to add to this panel"
-msgstr "이 작업표시줄에 추가할 새 애플릿 선택하세요"
+msgstr "이 패널에 추가할 새 애플릿 선택하기"
 
 #: src/panel/settings/settings_panel_applets.vala:248
 msgid "No settings available"
-msgstr "사용 가능한 설정이 없습니다"
+msgstr "사용 가능한 설정 없음"
 
 #: src/panel/settings/settings_panel_applets.vala:401
 msgid "Start"
@@ -59,23 +61,23 @@ msgstr "끝"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
-msgstr "작업표시줄 제거 확인"
+msgstr "패널 없애기 확인하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "이 작업표시줄을 정말 삭제하시겠습니까? 이 작업은 취소할 수 없습니다."
+msgstr "이 패널을 제거하시겠습니까? 이 작업은 취소할 수 없습니다."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
-msgstr "작업표시줄 제거"
+msgstr "패널 제거하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:43
 msgid "Keep panel"
-msgstr "작업표시줄 유지"
+msgstr "패널 유지하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "애플릿 제거 확인"
+msgstr "애플릿 없애기 확인하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid "Do you really want to remove this applet? This action cannot be undone."
@@ -87,7 +89,7 @@ msgstr "더 이상 묻지 않기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
-msgstr "애플릿 제거"
+msgstr "애플릿 제거하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid "Keep applet"
@@ -99,7 +101,7 @@ msgstr "모양새"
 
 #: src/panel/settings/settings_main.vala:58
 msgid "Panels"
-msgstr "작업표시줄"
+msgstr "패널"
 
 #: src/panel/settings/settings_main.vala:59
 msgid "Session"
@@ -112,7 +114,7 @@ msgstr "Budgie 데스크톱 설정"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
-msgstr "새 작업표시줄 생성하기"
+msgstr "새 패널 만들기"
 
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
@@ -140,25 +142,23 @@ msgstr "새 창을 화면 중앙에 띄우기"
 
 #: src/panel/settings/settings_wm.vala:53
 msgid "Center newly launched windows on the current screen."
-msgstr "새 창을 현재 화면의 중앙에 띄우기."
+msgstr "새로 시작한 창을 현재 화면의 중앙에 배치합니다."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "전체 화면 상태일 때 야간 모드 끄기"
+msgstr "창이 전체 화면일 때 야간 모드 끄기"
 
 #: src/panel/settings/settings_wm.vala:59
 msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
 msgstr "전체 화면 상태일 때 야간 모드를 끕니다. 전체 화면 상태를 벗어나면 다시 켜집니다."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "전체 화면 상태일 때 야간 모드 끄기"
+msgstr "창이 전체 화면일 때 알림 일시중지하기"
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
 msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "전체 화면 상태일 때 야간 모드를 끕니다. 전체 화면 상태를 벗어나면 다시 켜집니다."
+msgstr "창이 전체 화면일 때 알림이 표시되지 않도록 합니다. 전체 화면을 종료할 때 일시 중지를 해제합니다."
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
@@ -170,7 +170,7 @@ msgstr "마우스로 창을 화면 맨 위나 가장자리 구석으로 가져�
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "마우스 위치에 따라 창 활성화"
+msgstr "마우스 위치에 따라 창 포커스 변경 활성화"
 
 #: src/panel/settings/settings_wm.vala:77
 msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
@@ -178,24 +178,23 @@ msgstr "마우스 포인터가 창 내부로 이동하면 창이 활성화되고
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
-msgstr "창의 역방향지정을 비활성화합니다"
+msgstr "창의 리디렉션 해제 비활성화"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "이 설정은 고급 사용자를 위한 설정입니다. 외장 그래픽카드와 관련된 문제가 있을 때 사용하세요."
+msgstr "이 옵션은 고급 사용자를 위한 것입니다. 전용 GPU에 그래픽 또는 성능 문제가 있는 경우 이 옵션을 사용합니다."
 
 #: src/panel/settings/settings_wm.vala:89
-#, fuzzy
 msgid "Show all windows in tab switcher"
-msgstr "클릭시 모든 창 표시"
+msgstr "탭 전환기에 모든 창 표시하기"
 
 #: src/panel/settings/settings_wm.vala:90
 msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr ""
+msgstr "사용 중인 작업 공간에 관계없이 모든 탭이 탭 전환기에 표시됩니다."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
-msgstr "오른쪽 (기본값)"
+msgstr "오른쪽 (기준)"
 
 #: src/panel/settings/settings_wm.vala:99
 #: src/panel/settings/settings_panel.vala:181 src/raven/raven.vala:33
@@ -212,7 +211,7 @@ msgstr "위젯"
 
 #: src/panel/settings/settings_style.vala:47
 msgid "Set the appearance of window decorations and controls"
-msgstr "창과 제어단추의 모습을 설정합니다"
+msgstr "창과 제어단추의 모양 설정하기"
 
 #: src/panel/settings/settings_style.vala:51
 msgid "Icons"
@@ -260,27 +259,27 @@ msgstr "창과 제어단추들이 애니메이션을 사용할지 설정하기"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
-msgstr "왼쪽 위"
+msgstr "왼쪽 상단"
 
 #: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
-msgstr "왼쪽 아래"
+msgstr "왼쪽 하단"
 
 #: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
-msgstr "오른쪽 아래"
+msgstr "오른쪽 하단"
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
-msgstr "오른쪽 위"
+msgstr "오른쪽 상단"
 
 #: src/panel/settings/settings_raven.vala:61
 msgid "Set Raven position"
-msgstr ""
+msgstr "Raven 위치 설정하기"
 
 #: src/panel/settings/settings_raven.vala:62
 msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr ""
+msgstr "Raven이 화면 어느 쪽에서 열 것인지 설정합니다. 자동으로 설정하면 Raven은 상위 패널이 있는 위치에서 열립니다."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
@@ -304,7 +303,7 @@ msgstr "달력 위젯 표시"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "달력 위젯을 Raven의 애플릿 섹션에 표시하거나 숨 깁니다."
+msgstr "Raven의 애플릿 섹션에 달력 위젯을 표시하거나 숨깁니다."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -312,7 +311,7 @@ msgstr "사운드 출력 위젯 표시"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Raven 애플릿 섹션에서 사운드 출력 위젯을 표시하거나 숨 깁니다."
+msgstr "Raven의 애플릿 섹션에 사운드 출력 위젯을 표시하거나 숨깁니다."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -328,7 +327,7 @@ msgstr "미디어 재생 제어 위젯 표시"
 
 #: src/panel/settings/settings_raven.vala:97
 msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Raven의 애플릿 섹션에서미디어 재생 제어 (MPRIS) 위젯을 표시하거나 숨 깁니다."
+msgstr "Raven의 애플릿 섹션에서 MPRIS(미디어 재생 제어) 위젯을 표시하거나 숨깁니다."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -336,7 +335,7 @@ msgstr "전원 탭 표시"
 
 #: src/panel/settings/settings_raven.vala:103
 msgid "Shows or hides the Power Strip in the bottom of Raven."
-msgstr "Raven의 아래쪽에있는 전원 탭을 보이거나 숨 깁니다."
+msgstr "Raven의 하단에 전원 탭을 표시하거나 숨깁니다."
 
 #: src/panel/settings/settings_applet_chooser.vala:74
 msgid "Choose an applet"
@@ -348,7 +347,7 @@ msgstr "애플릿 선택하기"
 #: src/applets/budgie-menu/IconChooser.vala:52 src/polkit/dialog.ui.h:4
 #: src/daemon/endsession.ui.h:3
 msgid "Cancel"
-msgstr "취소"
+msgstr "취소하기"
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
@@ -369,30 +368,28 @@ msgid "Desktop Icons"
 msgstr "바탕화면 아이콘"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "바탕화면에 바로가기와 아이콘을 표시할지 설정."
+msgstr "바탕화면에 아이콘을 표시할지 여부를 제어합니다."
 
 #. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr ""
+msgstr "활성 마운트"
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "바탕화면에 바로가기와 아이콘을 표시할지 설정."
+msgstr "바탕화면에 모든 활성 마운트를 표시합니다."
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr "사용자 홈 폴더"
+msgstr "홈 디렉터리"
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr "바탕화면에 사용자 홈 폴더 바로가기 추가."
+msgstr "바탕 화면에 홈 디렉터리의 바로가기를 추가합니다."
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
@@ -401,64 +398,62 @@ msgstr "휴지통"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "데스크톱에 휴지통 바로가기 추가."
+msgstr "바탕화면의 휴지통 디렉터리에 바로가기를 추가합니다."
 
 #. DesktopType doesn't support icon size changing. Nemo might but needs validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "크기"
+msgstr "아이콘 크기"
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "바탕화면에 바로가기와 아이콘을 표시할지 설정."
+msgstr "바탕화면에서 원하는 아이콘 크기를 설정합니다."
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr ""
+msgstr "가상 데스크톱 수"
 
 #: src/panel/settings/settings_desktop.vala:149
 msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr ""
+msgstr "시작 시 자동으로 생성할 가상 바탕화면/작업공간 수입니다."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
-msgstr ""
+msgstr "한 개"
 
 #. If the click policy is to double click
 #: src/panel/settings/settings_desktop.vala:221
 msgid "Double"
-msgstr ""
+msgstr "두 개"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr ""
+msgstr "방침 클릭"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid "Click Policy determines if we should open items on a single or double click."
-msgstr ""
+msgstr "방침을 클릭하면 항목을 한 번 클릭으로 열 것인지 두 번 클릭으로 열 것인지 결정합니다."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
-msgstr ""
+msgstr "보통"
 
 #. Small
 #: src/panel/settings/settings_desktop.vala:292
 msgid "Small"
-msgstr ""
+msgstr "소형"
 
 #. Large
 #: src/panel/settings/settings_desktop.vala:294
 msgid "Large"
-msgstr ""
+msgstr "대형"
 
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr ""
+msgstr "초대형"
 
 #: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
 msgid "Applets"
@@ -469,49 +464,48 @@ msgid "Settings"
 msgstr "설정"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "작업표시줄 제거"
+msgstr "패널 제거하기"
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
-msgstr "화면에서 이 작업표시줄 제거하기"
+msgstr "화면에서 이 패널 제거하기"
 
 #: src/panel/settings/settings_panel.vala:123
 msgid "Top Dock"
-msgstr "위쪽 간소화된 작업표시줄"
+msgstr "상단 Dock"
 
 #: src/panel/settings/settings_panel.vala:125
 msgid "Right Dock"
-msgstr "오른쪽 간소화된 작업표시줄"
+msgstr "오른쪽 Dock"
 
 #: src/panel/settings/settings_panel.vala:127
 msgid "Left Dock"
-msgstr "왼쪽 간소화된 작업표시줄"
+msgstr "왼쪽 Dock"
 
 #: src/panel/settings/settings_panel.vala:129
 msgid "Bottom Dock"
-msgstr "아래쪽 간소화된 작업표시줄"
+msgstr "하단 Dock"
 
 #: src/panel/settings/settings_panel.vala:134
 msgid "Top Panel"
-msgstr "위쪽 작업표시줄"
+msgstr "상단 패널"
 
 #: src/panel/settings/settings_panel.vala:136
 msgid "Right Panel"
-msgstr "오른쪽 작업표시줄"
+msgstr "오른쪽 패널"
 
 #: src/panel/settings/settings_panel.vala:138
 msgid "Left Panel"
-msgstr "왼쪽 작업표시줄"
+msgstr "왼쪽 패널"
 
 #: src/panel/settings/settings_panel.vala:140
 msgid "Bottom Panel"
-msgstr "아래쪽 작업표시줄"
+msgstr "하단 패널"
 
 #: src/panel/settings/settings_panel.vala:177
 msgid "Top"
-msgstr "위쪽"
+msgstr "상단"
 
 #: src/panel/settings/settings_panel.vala:179 src/raven/raven.vala:35
 msgid "Right"
@@ -519,7 +513,7 @@ msgstr "오른쪽"
 
 #: src/panel/settings/settings_panel.vala:183
 msgid "Bottom"
-msgstr "아래쪽"
+msgstr "하단"
 
 #: src/panel/settings/settings_panel.vala:193
 msgid "Always"
@@ -553,7 +547,7 @@ msgstr "위치"
 
 #: src/panel/settings/settings_panel.vala:229
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "이 작업표시줄이 위치할 화면의 가장자리 부분을 설정합니다"
+msgstr "이 패널이 위치할 화면 가장자리를 설정합니다"
 
 #: src/panel/settings/settings_panel.vala:237
 msgid "Size"
@@ -561,15 +555,15 @@ msgstr "크기"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "이 작업표시줄의 크기(방향에 따른 가로길이와 높이) 설정하기"
+msgstr "이 패널의 크기(방향에 따라 너비 또는 높이) 설정하기"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
-msgstr "자동으로 숨기기"
+msgstr "자동으로 숨김"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "설정하면 화면 공간을 최대화하기 위해 작업표시줄을 자동으로 숨깁니다"
+msgstr "이 패널을 설정하면, 화면 속성을 최대화하기 위해 이 패널이 보기에서 숨겨집니다"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -577,7 +571,7 @@ msgstr "투명도"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Control when this panel should have a solid background"
-msgstr "작업표시줄을 단일 색상으로 표시할 때 설정"
+msgstr "이 패널을 단일 색상으로 표시해야 하는 경우 제어하기"
 
 #: src/panel/settings/settings_panel.vala:259
 msgid "Shadow"
@@ -585,23 +579,23 @@ msgstr "그림자"
 
 #: src/panel/settings/settings_panel.vala:260
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "불투명한 작업표시줄에 잘 어울리는 가장자리 그림자 추가하기"
+msgstr "불투명 패널에 잘 어울리는 가장자리 그림자 추가하기"
 
 #: src/panel/settings/settings_panel.vala:266
 msgid "Stylize regions"
-msgstr "지역 스타일 지정"
+msgstr "영역 스타일 지정"
 
 #: src/panel/settings/settings_panel.vala:267
 msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "작업표시줄의 세가지 주요 영역을 다르게 꾸밀 수 있도록 미리보기 보여주기."
+msgstr "패널의 세 가지 주요 영역에 각각 다른 테마를 지정할 수 있도록 패널에 힌트를 추가합니다."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
-msgstr "간소화된 작업표시줄"
+msgstr "Dock 모드"
 
 #: src/panel/settings/settings_panel.vala:275
 msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
+msgstr "Dock 모드 사용 시, 패널이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -617,12 +611,12 @@ msgstr "실행 중"
 
 #: src/panel/settings/settings_autostart.vala:185
 msgid "Applications"
-msgstr "응용 프로그램"
+msgstr "응용프로그램"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
 msgid "Add"
-msgstr "추가"
+msgstr "추가하기"
 
 #: src/panel/settings/settings_autostart.vala:354
 #: src/panel/settings/settings_autostart.vala:387
@@ -652,21 +646,19 @@ msgstr "선택"
 
 #: src/panel/settings/settings_autostart.vala:446
 msgid "Autostart"
-msgstr "자동 시작"
+msgstr "자동시작"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr "자동 시작 앱"
+msgstr "자동시작 앱"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "응용 프로그램"
+msgstr "응용프로그램 추가하기"
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "명령어"
+msgstr "명령어 추가하기"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -706,54 +698,51 @@ msgstr "글자 위주 응용프로그램에서 사용할 고정폭 글꼴을 설
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
-msgstr "문장 배율 조정"
+msgstr "텍스트 크기 조정"
 
 #: src/panel/settings/settings_fonts.vala:72
 msgid "Set the text scaling factor."
-msgstr "글자의 크기 배율을 설정합니다."
+msgstr "텍스트 크기 조정 인수를 설정합니다."
 
 #: src/panel/settings/settings_fonts.vala:81
 msgid "Full"
-msgstr ""
+msgstr "전체"
 
 #: src/panel/settings/settings_fonts.vala:82
 msgid "Medium"
-msgstr ""
+msgstr "중간"
 
 #: src/panel/settings/settings_fonts.vala:83
-#, fuzzy
 msgid "Slight"
-msgstr "오른쪽"
+msgstr "약간"
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Hinting"
-msgstr ""
+msgstr "도움말"
 
 #: src/panel/settings/settings_fonts.vala:101
-#, fuzzy
 msgid "Set the type of hinting to use."
-msgstr "글자의 크기 배율을 설정합니다."
+msgstr "사용할 도움말 유형을 설정합니다."
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Subpixel (for LCD screens)"
-msgstr ""
+msgstr "하위픽셀 (LCD 화면용)"
 
 #: src/panel/settings/settings_fonts.vala:109
 msgid "Standard (grayscale)"
-msgstr ""
+msgstr "표준 (그레이스케일)"
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Antialiasing"
-msgstr ""
+msgstr "안티엘리어싱"
 
 #: src/panel/settings/settings_fonts.vala:126
-#, fuzzy
 msgid "Set the type of antialiasing to use."
-msgstr "글자의 크기 배율을 설정합니다."
+msgstr "사용할 안티앨리어싱 유형을 설정합니다."
 
 #: src/raven/start_listening.vala:20
 msgid "No apps are currently playing audio."
-msgstr "오디오를 재생 중인 앱이 없습니다."
+msgstr "현재 오디오를 재생하는 앱이 없습니다."
 
 #: src/raven/start_listening.vala:28
 msgid "Play some music"
@@ -805,9 +794,8 @@ msgid "Caffeine Mode"
 msgstr "카페인 모드"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "설정"
+msgstr "시스템 설정"
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -819,26 +807,26 @@ msgstr "시스템 재시작"
 
 #: src/daemon/endsession.vala:173 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "시스템 종료"
+msgstr "전원 끄기"
 
 #. Should show a notification
 #: src/daemon/settings.vala:341
 msgid "Turned on Caffeine Boost"
-msgstr "카페인 부스트 켬"
+msgstr "카페인 부스트 켜짐"
 
 #: src/daemon/settings.vala:341
 msgid "Turned off Caffeine Boost"
-msgstr "카페인 부스트 끔"
+msgstr "카페인 부스트 꺼짐"
 
 #: src/daemon/settings.vala:346
 msgid "Will turn off in a minute"
-msgstr ""
+msgstr "1분 후에 꺼집니다"
 
 #. use plural
 #: src/daemon/settings.vala:349
 #, c-format
 msgid "Will turn off in %d minutes"
-msgstr ""
+msgstr "%d분 후에 꺼집니다"
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:99
@@ -857,7 +845,7 @@ msgstr "절전"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:107
 msgid "Hibernate"
-msgstr "잠자기"
+msgstr "최대 절전"
 
 #: src/applets/user-indicator/UserIndicatorWindow.vala:108
 #: src/daemon/endsession.ui.h:5
@@ -913,11 +901,11 @@ msgstr "기타"
 #: src/applets/places-indicator/MountItem.vala:58
 #: src/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
-msgstr "안전하게 제거"
+msgstr "꺼내기"
 
 #: src/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
-msgstr "꺼내기"
+msgstr "마운트 해제하기"
 
 #: src/applets/places-indicator/MountItem.vala:63
 #: src/applets/places-indicator/PlaceItem.vala:36
@@ -928,7 +916,7 @@ msgstr "\"%s\" 열기"
 #: src/applets/places-indicator/MountItem.vala:75
 #: src/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
-msgstr "이제 안전하게 제거해도 됩니다"
+msgstr "이제 안전하게 제거할 수 있습니다"
 
 #: src/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
@@ -940,17 +928,17 @@ msgstr "장치 제거 중 오류가 발생했습니다"
 
 #: src/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
-msgstr "볼륨을 꺼내는 중 오류가 발생했습니다"
+msgstr "볼륨을 마운트 해제하는 동안 오류가 발생했습니다"
 
 #: src/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "\"%s\" 장착하고 열기"
+msgstr "\"%s\" 마운트하고 열기"
 
 #: src/applets/places-indicator/VolumeItem.vala:73
 #: src/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "이 볼륨을 잠금해제하려면 비밀번호를 입력하세요"
+msgstr "이 볼륨의 잠금을 해제하려면 암호화 열쇠글 입력하기"
 
 #: src/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
@@ -958,7 +946,7 @@ msgstr "입력하신 비밀번호가 틀렸습니다"
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "이 볼륨을 장착하는 중 알 수 없는 오류가 발생했습니다"
+msgstr "이 볼륨을 마운트하는 동안 알 수 없는 오류가 발생했습니다"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -985,11 +973,11 @@ msgstr "현재 표시할 내용이 없습니다"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Mount some drives"
-msgstr "드라이브 장착하기"
+msgstr "드라이브 마운트하기"
 
 #: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Enable more sections"
-msgstr "섹션 더 활성화하기"
+msgstr "더 많은 섹션 활성화하기"
 
 #. Settings button
 #: src/applets/status/BluetoothIndicator.vala:53
@@ -1018,7 +1006,7 @@ msgstr "블루투스 켜짐"
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "장치 %d개에 연결됨"
+msgstr[0] "%d개 장치에 연결됨"
 
 #: src/applets/status/PowerIndicator.vala:93
 msgid "Battery fully charged."
@@ -1035,11 +1023,11 @@ msgstr "배터리 충전 중"
 
 #: src/applets/status/PowerIndicator.vala:110
 msgid "Battery remaining"
-msgstr "남은 배터리"
+msgstr "배터리 잔량"
 
 #: src/applets/status/PowerIndicator.vala:161
 msgid "Show battery percentage"
-msgstr "배터리 잔량 퍼센티지로 표시하기"
+msgstr "배터리 백분율 표시하기"
 
 #: src/applets/status/PowerIndicator.vala:169
 msgid "Power settings"
@@ -1051,7 +1039,7 @@ msgstr "이름 변경"
 
 #: src/applets/workspaces/WorkspaceItem.vala:77
 msgid "Remove"
-msgstr "제거"
+msgstr "제거하기"
 
 #: src/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1060,15 +1048,15 @@ msgstr "타이머 (분)"
 #. there's already an active tray, create an informative icon with a popover
 #: src/applets/tray/TrayApplet.vala:114
 msgid "Only one instance of the System Tray can be active at a time."
-msgstr ""
+msgstr "시스템 트레이의 한 인스턴스만 한 번에 활성화할 수 있습니다."
 
 #: src/applets/tray/TrayApplet.vala:140
 msgid "The System Tray failed to initialize."
-msgstr ""
+msgstr "시스템 트레이를 초기화하지 못했습니다."
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
-msgstr "바탕화면 보기/숨기기"
+msgstr "바탕화면 전환하기"
 
 #. Special case, "All"
 #: src/applets/budgie-menu/BudgieMenuButtons.vala:25
@@ -1108,7 +1096,7 @@ msgstr "달력"
 #: src/applets/clock/ClockApplet.vala:151
 #: src/applets/clock/ClockApplet.vala:182
 msgid "Preferences"
-msgstr "설정"
+msgstr "기본설정"
 
 #: src/applets/clock/ClockApplet.vala:161
 msgid "Show date"
@@ -1174,7 +1162,7 @@ msgstr "창 제어기 표시"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "인증 필요"
+msgstr "인증 필요함"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"
@@ -1210,11 +1198,11 @@ msgstr "이동식 장치 표시"
 
 #: src/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "위치 항상 확장하기"
+msgstr "항상 위치 확장하기"
 
 #: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr ""
+msgstr "아이콘 간격"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
@@ -1242,11 +1230,11 @@ msgstr "알림 켜기"
 
 #: src/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
-msgstr "화면 밝기 최대로"
+msgstr "밝기 최대화"
 
 #: src/applets/caffeine/settings.ui.h:3
 msgid "Brightness Level"
-msgstr "화면 밝기"
+msgstr "밝기 수준"
 
 #: src/applets/night-light/indicator_window.ui.h:1
 #: src/applets/night-light/NightLight.plugin.in.h:1
@@ -1275,7 +1263,7 @@ msgstr "디스플레이 설정"
 
 #: src/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "메뉴 이름 표시"
+msgstr "메뉴 레이블 표시"
 
 #: src/applets/budgie-menu/settings.ui.h:2
 msgid "Compact Mode"
@@ -1287,7 +1275,7 @@ msgstr "헤더 보이기"
 
 #: src/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Label"
-msgstr "메뉴 꼬리표"
+msgstr "메뉴 레이블"
 
 #: src/applets/budgie-menu/settings.ui.h:5
 msgid "Roll-over mouse"
@@ -1307,7 +1295,7 @@ msgstr "즐겨 찾기만 표시"
 
 #: src/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
-msgstr "아이콘 잠그기"
+msgstr "아이콘 잠금"
 
 #: src/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
@@ -1319,11 +1307,11 @@ msgstr "창 그룹화"
 
 #: src/applets/icon-tasklist/settings.ui.h:6
 msgid "Middle click to launch new window"
-msgstr ""
+msgstr "새 창을 시작하려면 가운데 버튼 클릭"
 
 #: src/applets/icon-tasklist/settings.ui.h:7
 msgid "Require a double-click to launch new window"
-msgstr ""
+msgstr "새 창을 시작하려면 두 번 클릭 필요"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -1336,7 +1324,7 @@ msgstr "Budgie 데스크톱에 로그인합니다"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Budgie 작업표시줄"
+msgstr "Budgie 패널"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
@@ -1352,7 +1340,7 @@ msgstr "사용자 표시기"
 
 #: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Lock Keys Indicator"
-msgstr "Caps/Num lock 상태"
+msgstr "잠금 키 표시기"
 
 #: src/applets/status/StatusApplet.plugin.in.h:1
 msgid "Status Indicator"
@@ -1360,7 +1348,7 @@ msgstr "상태 표시기"
 
 #: src/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Spacer"
-msgstr "간격"
+msgstr "공백"
 
 #: src/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Separator"
@@ -1368,7 +1356,7 @@ msgstr "구분자"
 
 #: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Workspace Switcher"
-msgstr "작업공간 전환"
+msgstr "작업공간 전환기"
 
 #: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Keyboard Layout Indicator"
@@ -1380,15 +1368,15 @@ msgstr "카페인"
 
 #: src/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System Tray"
-msgstr "작업표시줄 알림영역"
+msgstr "시스템 트레이"
 
 #: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Raven Sidebar Control"
-msgstr "레이븐 사이드바 설정"
+msgstr "Raven 사이드바 제어"
 
 #: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "Show Desktop Button"
-msgstr "바탕 화면 보기 버튼"
+msgstr "바탕화면 버튼 표시"
 
 #: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Budgie Menu"
