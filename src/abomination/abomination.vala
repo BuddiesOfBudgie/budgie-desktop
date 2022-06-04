@@ -151,6 +151,16 @@ namespace Budgie.Abomination {
 			// Instead of returning NULL, Wnck.Window.get_name() will return "Untitled Window", whereas has_name will return if the window truly has a name.
 			// Preventing apps from being added when they have no name seems pretty reasonable and prevents false-positives like persistently buttons being added when apps like VLC close.
 			if (!window.has_name()) {
+				ulong handler_id = 0;
+
+				handler_id = window.name_changed.connect(() => {
+					Timeout.add(100, () => {
+						window.disconnect(handler_id);
+						add_app(window);
+						return false;
+					});
+				});
+
 				return;
 			}
 
