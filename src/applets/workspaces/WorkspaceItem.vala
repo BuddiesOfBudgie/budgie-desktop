@@ -289,10 +289,9 @@ namespace Workspaces {
 				min = nat = real_alloc.width = WorkspacesApplet.panel_size;
 				return;
 			}
-			float w_width = (float)workspace.get_width();
-			float width = (w_width/workspace.get_height()) * WorkspacesApplet.panel_size;
-			min = nat = (int) (width * 1.6);
-			real_alloc.width = (int) (width * 1.6);
+			float height = WorkspacesApplet.panel_size;
+			min = nat = (int) (height * 2.9);
+			real_alloc.width = (int) (height * 2.9);
 		}
 
 		public override void get_preferred_height(out int min, out int nat) {
