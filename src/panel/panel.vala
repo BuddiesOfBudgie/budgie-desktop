@@ -514,33 +514,60 @@ namespace Budgie {
 				return;
 			}
 
-			/* Two loops so we can track when we've fully loaded the panel */
+			CompareFunc<Budgie.AppletInfo?> infocmp = (a, b) => {
+				return (int) (a.position > b.position) - (int) (a.position < b.position);
+			};
+
 			lock (expected_uuids) {
 				for (int i = 0; i < applets.length; i++) {
 					this.expected_uuids.append(applets[i]);
 				}
+
+				var start_applets = new List<Budgie.AppletInfo?>();
+				var center_applets = new List<Budgie.AppletInfo?>();
+				var end_applets = new List<Budgie.AppletInfo?>();
 
 				for (int i = 0; i < applets.length; i++) {
 					string? name = null;
 					Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
 
 					if (info == null) {
-						/* Faiiiil */
 						if (name == null) {
 							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
-							/* TODO: No longer expecting this guy to load */
 							if (g != null) {
 								expected_uuids.remove_link(g);
 							}
 							message("Unable to load invalid applet: %s", applets[i]);
+							applet_removed(applets[i]);
 							continue;
 						}
-						this.add_pending(applets[i], name);
-						manager.modprobe(name);
-					} else {
-						/* um add this bro to the panel :o */
-						this.add_applet(info);
+
+						info = this.add_pending(applets[i], name);
+						if (info == null) {
+							continue;
+						}
 					}
+
+					if (info.alignment == "start") {
+						start_applets.insert_sorted(info, infocmp);
+					} else if (info.alignment == "center") {
+						center_applets.insert_sorted(info, infocmp);
+					} else {
+						end_applets.insert_sorted(info, infocmp);
+					}
+				}
+
+				for (int i = 0; i < start_applets.length(); i++) {
+					start_applets.nth_data(i).position = i;
+					add_applet(start_applets.nth_data(i));
+				}
+				for (int i = 0; i < center_applets.length(); i++) {
+					center_applets.nth_data(i).position = i;
+					add_applet(center_applets.nth_data(i));
+				}
+				for (int i = 0; i < end_applets.length(); i++) {
+					end_applets.nth_data(i).position = i;
+					add_applet(end_applets.nth_data(i));
 				}
 			}
 		}
@@ -899,13 +926,13 @@ namespace Budgie {
 			return;
 		}
 
-		void add_pending(string uuid, string plugin_name) {
+		Budgie.AppletInfo? add_pending(string uuid, string plugin_name) {
 			string? rname = null;
 			unowned HashTable<string,string>? table = null;
 
 			if (!this.manager.is_extension_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
-				return;
+				return null;
 			}
 
 			if (!this.manager.is_extension_loaded(plugin_name)) {
@@ -915,23 +942,23 @@ namespace Budgie {
 					if (!table.contains(uuid)) {
 						table.insert(uuid, uuid);
 					}
-					return;
+					return null;
 				}
 				/* Looks insane but avoids copies */
 				pending.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
 				table = pending.lookup(plugin_name);
 				table.insert(uuid, uuid);
 				this.manager.modprobe(plugin_name);
-				return;
+				return null;
 			}
 
 			/* Already exists */
 			Budgie.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
 			if (info == null) {
 				critical("Failed to load applet when we know it exists");
-				return;
+				return null;
 			}
-			this.add_applet(info);
+			return info;
 		}
 
 		public override void map() {
