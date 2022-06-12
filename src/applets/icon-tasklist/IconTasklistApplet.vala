@@ -399,7 +399,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		button.update();
 
-		if (button.button_id != app.id.to_string()) {
+		if (button.button_id != app.id.to_string() && app.id.to_string() in buttons) {
 			this.swap_button(app.id.to_string(), button.button_id);
 			button.first_app = null;
 			button.set_app_for_class_group();
