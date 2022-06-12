@@ -243,7 +243,6 @@
 				this.popups[id] = new Popup(this, notification);
 				this.configure_window(this.popups[id]);
 				this.latest_popup_id = id;
-				this.popups[id].show_all();
 				this.popups[id].begin_decay(notification.expire_timeout);
 
 				this.popups[id].ActionInvoked.connect((action_key) => {
@@ -293,18 +292,22 @@
 		}
 
 		/**
-		 * Configures the location of a notification popup.
+		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
 			var screen = Gdk.Screen.get_default();
 
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
-			Gdk.Rectangle rect = mon.get_geometry();
+			Gdk.Rectangle mon_rect = mon.get_geometry();
 
-			/* Set the x, y position of the notification */
-			int x = 0, y = 0;
-			calculate_position(popup, rect, out x, out y);
-			popup.move(x, y);
+			popup.get_child().size_allocate.connect((alloc) => {
+				/* Set the x, y position of the notification */
+				int x = 0, y = 0;
+				calculate_position(popup, mon_rect, out x, out y);
+				popup.move(x, y);
+			});
+
+			popup.show_all();
 		}
 
 		/**
@@ -338,10 +341,7 @@
 						y = existing_y - existing_height - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
-
-						int height;
-						window.get_size(null, out height); // Get the estimated height of the notification
-						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.BOTTOM_RIGHT:
@@ -351,10 +351,7 @@
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
-
-						int height;
-						window.get_size(null, out height); // Get the estimated height of the notification
-						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
