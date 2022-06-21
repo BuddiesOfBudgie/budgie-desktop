@@ -130,7 +130,6 @@ with_polkit = get_option('with-polkit')
 # Get gvc built before we do anything
 gvc = subproject('gvc',
     default_options: [
-        'c_std=c89',
         'static=false',
         'pkglibdir=@0@'.format(rpath_libdir),
         'package_name=' + meson.project_name(),
