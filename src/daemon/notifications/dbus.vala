@@ -300,7 +300,14 @@
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
 			Gdk.Rectangle mon_rect = mon.get_geometry();
 
-			popup.get_child().size_allocate.connect((alloc) => {
+			ulong handler_id = 0;
+			handler_id = popup.get_child().size_allocate.connect((alloc) => {
+				// Diconnect from the signal to avoid trying to recalculate
+				// the position unexpectedly, which occurs when mousing over
+				// or clicking the close button with some GTK themes.
+				popup.get_child().disconnect(handler_id);
+				handler_id = 0;
+
 				/* Set the x, y position of the notification */
 				int x = 0, y = 0;
 				calculate_position(popup, mon_rect, out x, out y);
