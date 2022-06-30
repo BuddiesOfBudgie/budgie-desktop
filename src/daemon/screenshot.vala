@@ -487,8 +487,8 @@ namespace BudgieScr {
 			var iconfile =  new ThemedIcon(name="shootscreen-symbolic");
 			Gtk.Image shootimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DND);
 			shootimage.pixel_size = 24;
-			shootimage.margin_left = 10;
-			shootimage.margin_right = 10;
+			shootimage.margin_start = 10;
+			shootimage.margin_end = 10;
 			shootbutton.add(shootimage);
 			shootbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 			shootbutton.clicked.connect(()=> {
@@ -1041,8 +1041,8 @@ namespace BudgieScr {
 			var iconfile =  new ThemedIcon(name=icon);
 			Gtk.Image buttonimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.BUTTON);
 			buttonimage.pixel_size = 24;
-			buttonimage.margin_left = 8;
-			buttonimage.margin_right = 8;
+			buttonimage.margin_start = 8;
+			buttonimage.margin_end = 8;
 			b.add(buttonimage);
 			b.show_all();
 		}
@@ -1265,14 +1265,6 @@ namespace BudgieScr {
 
 			dialog.response.connect(save_customdir);
 			dialog.show();
-		}
-
-		private void set_margins(Gtk.Grid grid, int left, int right, int top, int bottom) {
-			// setting margins for a grid
-			grid.set_margin_start(left);
-			grid.set_margin_end(right);
-			grid.set_margin_top(top);
-			grid.set_margin_bottom(bottom);
 		}
 
 		private void item_changed(Gtk.ComboBox combo) {

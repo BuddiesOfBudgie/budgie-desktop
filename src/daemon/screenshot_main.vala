@@ -59,6 +59,7 @@ namespace Budgie {
                         message("Failed to StartMainWindow: %s", e.message);
                     }
                 });
+                GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
                 return 0;
             }
             if (area) {
@@ -69,6 +70,7 @@ namespace Budgie {
                         message("Failed to StartAreaSelect: %s", e.message);
                     }
                 });
+                GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
                 return 0;
             }
             if (window){
@@ -79,6 +81,7 @@ namespace Budgie {
                         message("Failed to StartWindowScreenshot: %s", e.message);
                     }
                 });
+                GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
                 return 0;
             }
 
@@ -89,6 +92,7 @@ namespace Budgie {
                     message("Failed to StartFullScreenshot: %s", e.message);
                 }
             });
+            GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
             return 0;
         }
         catch (Error e) {
