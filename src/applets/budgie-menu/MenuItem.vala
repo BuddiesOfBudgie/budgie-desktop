@@ -31,7 +31,6 @@ public class MenuItem : Gtk.Button {
 	public string? label_text {
 		get { return _label_text; }
 		set {
-			this._label_text = label_text;
 			this.set_label(label_text);
 		}
 	}
@@ -71,12 +70,14 @@ public class MenuItem : Gtk.Button {
 	 * Sets the label for this item.
 	 */
 	public new void set_label(string text) {
+		this._label_text = text.dup();
+
 		if (this.button_label == null) {
-			this.button_label = new Gtk.Label(text) {
+			this.button_label = new Gtk.Label(this._label_text) {
 				halign = Gtk.Align.START
 			};
 		} else {
-			this.button_label.set_text(text);
+			this.button_label.set_text(this._label_text);
 		}
 	}
 }

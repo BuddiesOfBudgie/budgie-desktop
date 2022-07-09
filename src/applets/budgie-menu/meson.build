@@ -33,7 +33,7 @@ applet_budgiemenu_sources = [
     'BudgieMenuWindow.vala',
     'IconChooser.vala',
     'DBusInterfaces.vala',
-    'PowerMenu.vala',
+    'OverlayMenus.vala',
     'UserButton.vala',
     'MenuItem.vala',
     'views/ListView.vala',

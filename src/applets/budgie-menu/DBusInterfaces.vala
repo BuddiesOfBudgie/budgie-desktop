@@ -43,3 +43,11 @@ public interface SessionManagerRemote : Object {
 public interface ScreenSaverRemote : GLib.Object {
 	public abstract void lock() throws Error;
 }
+
+/* Budgie */
+
+[DBus (name="org.buddiesofbudgie.XDGDirTracker")]
+public interface XDGDirTrackerRemote : GLib.Object {
+	public abstract UserDirectory[] get_dirs() throws Error;
+	public signal void xdg_dirs_exist(UserDirectory[] dirs);
+}

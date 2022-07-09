@@ -33,6 +33,7 @@ daemon_sources = [
     'osd.vala',
     'settings.vala',
     'tabswitcher.vala',
+    'xdgdirtracker/dbus.vala',
 ]
 
 daemon_deps = [
