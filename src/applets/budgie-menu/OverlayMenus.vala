@@ -60,6 +60,7 @@ public class OverlayMenus : Revealer {
 		this.stack.set_transition_type(StackTransitionType.NONE); // Don't waste any time on transitions
 
 		this.folder_items = new ListBox();
+		this.folder_items.get_style_context().add_class("left-overlay-menu");
 		this.folder_items.activate_on_single_click = false;
 		this.folder_items.selection_mode = SelectionMode.NONE; 
 		this.folder_items.set_filter_func(this.filter_list_box_item);
@@ -98,6 +99,7 @@ public class OverlayMenus : Revealer {
 		this.shutdown_menu = new MenuItem(_("Shutdown"), "system-shutdown-symbolic");
 
 		this.power_menu_items = new Box(Orientation.VERTICAL, 0);
+		this.power_menu_items.get_style_context().add_class("right-overlay-menu");
 
 		this.power_menu_items.add(lock_menu);
 		this.power_menu_items.add(logout_menu);

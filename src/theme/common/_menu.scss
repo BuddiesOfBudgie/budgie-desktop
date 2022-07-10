@@ -117,14 +117,26 @@
         margin-bottom: 6px;
         padding: 8px;
 
+        .left-overlay-menu {
+            button {
+                padding: 4px 8px 4px 2px;
+                margin: 2px 8px 0px 0px;
+            }
+        }
+
+        .right-overlay-menu {
+            button {
+                padding: 4px 8px 4px 2px;
+                margin: 2px 0;
+            }
+        }
+
         button {
             @extend %reset_style;
 
             transition-property: background-color, color;
             transition: 170ms ease-out;
             background-color: transparent;
-            margin: 2px 0;
-            padding: 4px 8px 4px 2px;
             border-radius: 3px;
 
             &:hover { background-color: transparentize(white, 0.9); }
