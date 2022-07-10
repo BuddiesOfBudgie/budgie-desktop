@@ -71,9 +71,32 @@ namespace Budgie {
 				}
 
 				File xdg_file = File.new_for_path(path); // Get the file
+				try {
+					FileInfo? info = xdg_file.query_info("standard::*", 0); // Get the file info (if this is a symlink, it follows it - this does not seem to actually query info for it correctly though)
 
-				if (xdg_file.query_exists()) { // If it exists
-					existing_xdgs += xdg_dir; // Add this directory
+					if (info == null) {
+						continue;
+					}
+
+					FileType t = info.get_file_type();
+					if (t == FileType.DIRECTORY) { // Is a directory and does exist
+						existing_xdgs += xdg_dir; // Add this directory
+					} else if (t == FileType.SYMBOLIC_LINK) { // Is a symlink
+						string? symlink_target = info.get_symlink_target();
+
+						if (symlink_target == null) {
+							continue;
+						}
+
+						File sym_file = File.new_for_path(symlink_target); // Get the file
+						if (!sym_file.query_exists()) { // Does not exist
+							continue;
+						}
+
+						existing_xdgs += xdg_dir; // Add this directory
+					}
+				} catch (Error e) {
+					warning("Failed to get file info for %s: %s", path, e.message);
 				}
 			}
 
