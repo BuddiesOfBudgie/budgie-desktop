@@ -13,6 +13,7 @@ public class BatteryIcon : Gtk.Box {
 	/** The battery associated with this icon */
 	public unowned Up.Device battery { protected set; public get; }
 	bool changing = false;
+	bool emitted_warning = false;
 
 	private Gtk.Image image;
 
@@ -63,7 +64,10 @@ public class BatteryIcon : Gtk.Box {
 		try {
 			this.battery.refresh_sync(null);
 		} catch (Error e) {
-			warning("Failed to refresh battery: %s", e.message);
+			if (!emitted_warning) {
+				warning("Failed to refresh battery: %s", e.message);
+				emitted_warning = true;
+			}
 		}
 
 		this.update_ui(this.battery);
@@ -174,7 +178,6 @@ public class PowerIndicator : Gtk.Bin {
 		battery_settings = new Settings("org.gnome.desktop.interface");
 		battery_settings.bind("show-battery-percentage", this, "label-visible", SettingsBindFlags.GET);
 		notify["label-visible"].connect_after(this.update_labels);
-
 
 		check_percent = new Gtk.CheckButton.with_label(_("Show battery percentage"));
 		check_percent.get_child().set_property("margin", 4);
