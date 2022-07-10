@@ -109,27 +109,13 @@
         }
     }
 
-    .budgie-menu-overlay {
+    .left-overlay-menu, .right-overlay-menu {
         @extend %reset_style;
 
         background-color: $raven_bg;
         border-radius: 6px;
         margin-bottom: 6px;
         padding: 8px;
-
-        .left-overlay-menu {
-            button {
-                padding: 4px 8px 4px 2px;
-                margin: 2px 8px 0px 0px;
-            }
-        }
-
-        .right-overlay-menu {
-            button {
-                padding: 4px 8px 4px 2px;
-                margin: 2px 0;
-            }
-        }
 
         button {
             @extend %reset_style;
@@ -141,6 +127,20 @@
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
+        }
+    }
+
+    .left-overlay-menu {
+        button {
+            padding: 4px 8px 4px 2px;
+            margin: 2px 8px 0px 0px;
+        }
+    }
+
+    .right-overlay-menu {
+        button {
+            padding: 4px 8px 4px 2px;
+            margin: 2px 0;
         }
     }
 
