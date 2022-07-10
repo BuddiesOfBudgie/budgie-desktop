@@ -29,14 +29,16 @@
 		 */
 		public bool notifications_paused { get; set; default = false; }
 
-		construct {
-			Bus.own_name(
-				BusType.SESSION,
-				NOTIFICATION_DBUS_NAME,
-				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-				null,
-				on_dbus_acquired
-			);
+		construct {}
+
+		[DBus (visible=false)]
+		public void setup_dbus(bool replace) {
+			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+			if (replace) {
+				flags |= BusNameOwnerFlags.REPLACE;
+			}
+			Bus.own_name(BusType.SESSION, Budgie.Notifications.NOTIFICATION_DBUS_NAME, flags,
+				on_dbus_acquired, ()=> {}, Budgie.DaemonNameLost);
 		}
 
 		private void on_dbus_acquired(DBusConnection conn) {
@@ -114,17 +116,20 @@
 		private uint32 latest_popup_id { private get; private set; default = 0; }
 
 		construct {
-			Bus.own_name(
-				BusType.SESSION,
-				"org.freedesktop.Notifications",
-				BusNameOwnerFlags.NONE,
-				on_bus_acquired
-			);
-
 			this.dispatcher = new Dispatcher();
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
+		}
+
+		[DBus (visible=false)]
+		public void setup_dbus(bool replace) {
+			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+			if (replace) {
+				flags |= BusNameOwnerFlags.REPLACE;
+			}
+			Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications", flags, on_bus_acquired, ()=> {}, Budgie.DaemonNameLost);
+			this.dispatcher.setup_dbus(replace);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
