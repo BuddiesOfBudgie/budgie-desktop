@@ -122,25 +122,13 @@
 
             transition-property: background-color, color;
             transition: 170ms ease-out;
+            padding: 4px 8px 4px 2px;
+            margin: 2px 0;
             background-color: transparent;
             border-radius: 3px;
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
-        }
-    }
-
-    .left-overlay-menu {
-        button {
-            padding: 4px 8px 4px 2px;
-            margin: 2px 8px 0px 0px;
-        }
-    }
-
-    .right-overlay-menu {
-        button {
-            padding: 4px 8px 4px 2px;
-            margin: 2px 0;
         }
     }
 
