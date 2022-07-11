@@ -62,7 +62,7 @@ namespace Budgie {
 					this.queue_refresh();
 				});
 			} catch (IOError e) {
-				warning("Failed to create monitor for desktop directory: %s", e.message);
+				debug("Failed to create monitor for desktop directory: %s", e.message);
 			}
 
 			// Start building the tree right now
