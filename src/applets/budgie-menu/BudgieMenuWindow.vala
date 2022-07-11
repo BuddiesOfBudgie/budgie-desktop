@@ -178,6 +178,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 	 * If `clear_search` is set to true, the search entry text will be cleared.
 	 */
 	public void reset(bool clear_search) {
+		this.view.on_show();
 		this.overlay_menu.set_reveal_child(false);
 		this.search_entry.sensitive = true;
 		this.search_entry.grab_focus();
@@ -186,8 +187,6 @@ public class BudgieMenuWindow : Budgie.Popover {
 		if (clear_search) {
 			this.search_entry.text = "";
 		}
-
-		this.view.on_show();
 	}
 
 	public override void show() {
