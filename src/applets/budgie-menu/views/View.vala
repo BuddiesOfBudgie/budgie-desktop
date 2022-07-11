@@ -40,6 +40,12 @@ public abstract class ApplicationView : Gtk.Box {
 	public abstract void on_search_entry_activated();
 
 	/**
+	 * Performs any work that should be done to the view when the menu
+	 * is opened, e.g. resetting the current category or invalidating filters.
+	 */
+	public abstract void on_show();
+
+	/**
 	 * Refreshes the entire application view.
 	 */
 	public abstract void refresh(Budgie.AppIndex app_tracker);
