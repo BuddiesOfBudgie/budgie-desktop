@@ -7,7 +7,7 @@ appindexer_sources = [
 ]
 
 libappindexer = shared_library(
-    'appindexer',
+    'budgie-appindexer',
     appindexer_sources,
     dependencies: [
         dep_gee,
