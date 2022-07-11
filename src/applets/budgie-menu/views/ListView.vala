@@ -465,15 +465,15 @@ public class ApplicationListView : ApplicationView {
 	 * We need to make some changes to our display before we go showing ourselves
 	 * again! :)
 	 */
-	public override void show() {
-		this.current_category = null;
+	public override void on_show() {
 		this.all_categories.set_active(true);
+		this.update_category(all_categories);
+
 		this.applications.select_row(null);
 		this.content_scroll.get_vadjustment().set_value(0);
 		this.categories_scroll.get_vadjustment().set_value(0);
 		this.categories.sensitive = true;
 
-		base.show();
 		if (!this.compact_mode) {
 			this.categories_scroll.show_all();
 		} else {

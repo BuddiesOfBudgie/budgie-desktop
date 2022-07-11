@@ -186,12 +186,10 @@ public class BudgieMenuWindow : Budgie.Popover {
 		if (clear_search) {
 			this.search_entry.text = "";
 		}
+
+		this.view.on_show();
 	}
 
-	/**
-	 * We need to make some changes to our display before we go showing ourselves
-	 * again! :)
-	 */
 	public override void show() {
 		this.reset(true);
 		base.show();
