@@ -6,6 +6,7 @@ subdir('config')
 subdir('libsession')
 
 # Needed for daemon + applets
+subdir('appindexer')
 subdir('appsys')
 subdir('abomination')
 

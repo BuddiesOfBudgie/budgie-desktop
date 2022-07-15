@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.6.1',
+    version: '10.6.2',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -32,6 +32,7 @@ gnome_minimum_version = '>= 40.0'
 
 dep_gtk3 = dependency('gtk+-3.0', version: '>= 3.24.0')
 dep_glib = dependency('glib-2.0', version: '>= 2.64.0')
+dep_gee = dependency('gee-0.8', version: '>= 0.20.0')
 dep_giounix = dependency('gio-unix-2.0', version: '>= 2.64.0')
 dep_peas = dependency('libpeas-1.0', version: '>= 1.26.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: '>= 3.24.0')
@@ -39,6 +40,9 @@ dep_libuuid = dependency('uuid')
 dep_vala = dependency('vapigen', version: '>= 0.52.5')
 dep_gst = dependency('gstreamer-1.0')
 dep_cairo = dependency('cairo')
+
+# Needed for Budgie Menu
+dep_cairo = dependency('cairo', version: '>= 1.15.10')
 
 # Needed for keyboardy bits
 dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
@@ -132,7 +136,6 @@ with_polkit = get_option('with-polkit')
 # Get gvc built before we do anything
 gvc = subproject('gvc',
     default_options: [
-        'c_std=c89',
         'static=false',
         'pkglibdir=@0@'.format(rpath_libdir),
         'package_name=' + meson.project_name(),

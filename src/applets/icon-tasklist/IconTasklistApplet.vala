@@ -171,7 +171,16 @@ public class IconTasklistApplet : Budgie.Applet {
 				return;
 			}
 
-			wrapper.gracefully_die();
+			if (!button.pinned) {
+				wrapper.gracefully_die();
+			} else {
+				// the button that we were going to replace is pinned, so instead of removing it from the view, 
+				// just remove its class group and first app, then update it visually. this prevents apps like
+				// the LibreOffice launcher from vanishing after a document is opened, despite being pinned 
+				button.set_class_group(null);
+				button.first_app = null;
+				button.update();
+			}
 
 			this.remove_button(window.get_xid().to_string());
 			this.on_app_opened(app);
@@ -399,7 +408,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		button.update();
 
-		if (button.button_id != app.id.to_string()) {
+		if (button.button_id != app.id.to_string() && app.id.to_string() in buttons) {
 			this.swap_button(app.id.to_string(), button.button_id);
 			button.first_app = null;
 			button.set_app_for_class_group();

@@ -97,7 +97,7 @@ namespace Budgie {
 				struts[Struts.LEFT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
 				break;
 			case PanelPosition.RIGHT:
-				struts[Struts.RIGHT] = (screen.get_width() + panel_size) - (primary_monitor_rect.x + primary_monitor_rect.width) * scale;
+				struts[Struts.RIGHT] = (panel_size + screen.get_width() - primary_monitor_rect.x - primary_monitor_rect.width) * scale;
 				struts[Struts.RIGHT_START] = primary_monitor_rect.y * scale;
 				struts[Struts.RIGHT_END] = (primary_monitor_rect.y + primary_monitor_rect.height) * scale - 1;
 				break;

@@ -24,6 +24,7 @@ namespace Budgie {
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
+		Budgie.XDGDirTracker? xdg_tracker;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -39,6 +40,7 @@ namespace Budgie {
 			osd = new Budgie.OSDManager();
 			osd.setup_dbus(replace);
 			notifications = new Budgie.Notifications.Server();
+			notifications.setup_dbus(replace);
 			menus = new Budgie.MenuManager();
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
@@ -51,6 +53,8 @@ namespace Budgie {
 			catch (Error e) {
 				warning("ServiceManager %s\n", e.message);
 			}
+			xdg_tracker = new Budgie.XDGDirTracker();
+			xdg_tracker.setup_dbus(replace);
 		}
 
 		/**

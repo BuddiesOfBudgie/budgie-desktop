@@ -78,6 +78,60 @@
         }
     }
 
+    .budgie-menu-footer {
+        border-top: 1px solid transparentize(white, 0.9);
+        padding-top: 6px;
+
+        .image-button {
+            @extend %reset_style;
+
+            transition-property: background-color;
+            transition: 170ms ease-out;
+            padding: 4px;
+            min-height: 24px;
+            min-width: 24px;
+            border-radius: 100%;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+
+        .user-icon-button {
+            @extend %reset_style;
+
+            transition-property: background-color, color;
+            transition: 170ms ease-out;
+            padding: 4px 8px 4px 6px;
+            border-radius: 3px;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+    }
+
+    .left-overlay-menu, .right-overlay-menu {
+        @extend %reset_style;
+
+        background-color: $raven_bg;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        padding: 8px;
+
+        button {
+            @extend %reset_style;
+
+            transition-property: background-color, color;
+            transition: 170ms ease-out;
+            padding: 4px 8px 4px 2px;
+            margin: 2px 0;
+            background-color: transparent;
+            border-radius: 3px;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+    }
+
     .categories {
         @extend %reset_style;
 
