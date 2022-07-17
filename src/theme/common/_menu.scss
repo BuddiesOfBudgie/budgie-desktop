@@ -11,6 +11,10 @@
 
     label, #{$search} {
         color: darken(white, 0.1);
+
+        &:disabled {
+            color: transparentize(white, 0.4);
+        }
     }
 
     scrollbar > contents > trough > slider {
