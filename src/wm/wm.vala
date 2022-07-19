@@ -314,7 +314,6 @@ namespace Budgie {
 
 		/* Binding for take-region-screenshot */
 		void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
-			message("on take region");
 			try {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
 				if (cmd != "") {
