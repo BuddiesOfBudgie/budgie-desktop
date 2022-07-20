@@ -211,7 +211,7 @@ public class ClockApplet : Budgie.Applet {
 				case "use-custom-timezone":
 				case "custom-timezone":
 					if (settings.get_boolean("use-custom-timezone")) {
-						string custom_tz = settings.get_string("custom_timezone");
+						string custom_tz = settings.get_string("custom-timezone");
 						try {
 							this.clock_timezone = new TimeZone.identifier(custom_tz);
 						} catch (Error e) {
