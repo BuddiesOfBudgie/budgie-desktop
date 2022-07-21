@@ -131,8 +131,6 @@ namespace Budgie {
 
 		private Meta.BackgroundGroup? background_group;
 
-		private KeyboardManager? keyboard = null;
-
 		Settings? settings = null;
 		Settings? gnome_desktop_prefs = null;
 		RavenRemote? raven_proxy = null;
@@ -544,8 +542,7 @@ namespace Budgie {
 			display_group.show();
 			stage.show();
 
-			keyboard = new KeyboardManager(this);
-			keyboard.hook_extra();
+			KeyboardManager.init(this);
 
 			display.get_workspace_manager().override_workspace_layout(Meta.DisplayCorner.TOPLEFT, false, 1, -1);
 		}
