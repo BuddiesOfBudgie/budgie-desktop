@@ -152,6 +152,12 @@
 			<description>The binding to use to toggle Raven notifications</description>
 		</key>
 
+		<key type="as" name="toggle-layout">
+			<default><![CDATA[['<Super>T']]]></default>
+			<summary>The binding to use to toggle the layout between floating and horizontal tiling</summary>
+			<description>The binding to use to toggle the layout between floating and horizontal tiling</description>
+		</key>
+
 		<key name="button-layout" type="s">
 			<default>'appmenu:minimize,maximize,close'</default>
 			<summary>Arrangement of buttons on the titlebar</summary>

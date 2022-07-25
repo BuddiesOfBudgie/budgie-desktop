@@ -119,6 +119,12 @@ namespace Budgie {
 		}
 	}
 
+	private enum Layout {
+		FLOATING, // The default, traditional layout.
+		TILING_HORIZ, // tiling with windows having 100% width and screen size / clients height
+		TILING_VERT, // the opposite of the TILING_HORIZ layout.
+	}
+
 	public class BudgieWM : Meta.Plugin {
 		static Meta.PluginInfo info;
 
@@ -142,6 +148,7 @@ namespace Budgie {
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		Layout layout = Layout.FLOATING;
 
 		Settings? iface_settings = null;
 
@@ -352,6 +359,20 @@ namespace Budgie {
 			});
 		}
 
+		/* Binding for toggle-layout activated */
+		void on_layout_toggle(Meta.Display display,
+			Meta.Window? window, Clutter.KeyEvent? event,
+			Meta.KeyBinding binding) {
+			// Cycle through all available options. The list is [Floating, Horizontal Tiling, Vertical Tiling]
+			if (layout == Layout.FLOATING) {
+				layout = Layout.TILING_HORIZ;
+			} else if (layout == Layout.TILING_HORIZ) {
+				layout = Layout.TILING_VERT;
+			} else {
+				layout = Layout.FLOATING;
+			}
+		}
+
 		/* Set up the proxy when raven appears */
 		void has_raven() {
 			if (raven_proxy == null) {
@@ -495,6 +516,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("toggle-layout", settings, Meta.KeyBindingFlags.NONE, on_layout_toggle);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -796,6 +818,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(map_done);
 			state_map.insert(actor, AnimationState.MAP);
 			actor.restore_easing_state();
+			if (layout != Layout.FLOATING) tile_windows();
 		}
 
 		void minimize_done(Clutter.Actor? actor) {
@@ -955,6 +978,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(destroy_done);
 			state_map.insert(actor, AnimationState.DESTROY);
 			actor.restore_easing_state();
+			if (layout != Layout.FLOATING) tile_windows();
 		}
 
 		private ScreenTilePreview? tile_preview = null;
@@ -1167,6 +1191,94 @@ namespace Budgie {
 			}
 			uint32 curr_xid = (uint32)win.get_xwindow();
 			switcher_proxy.ShowSwitcher.begin(curr_xid);
+		}
+
+		private void tile_windows() {
+			var workspace = get_display().get_workspace_manager().get_active_workspace();
+			if (workspace == null) return;
+			var win_list = workspace.list_windows();
+			var screen = Gdk.Screen.get_default();
+			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
+			if (mon == null) return;
+			Gdk.Rectangle rect = mon.get_geometry();
+			switch (layout) {
+				case Layout.FLOATING: return; // called incorrectly
+				case Layout.TILING_HORIZ: tile_windows_horiz(rect, win_list); break;
+				case Layout.TILING_VERT: tile_windows_vert(rect, win_list); break;
+			}
+		}
+		
+		private void tile_windows_horiz(Gdk.Rectangle screen_size, List<weak Meta.Window> win_list) {
+			int irrev_len = 0;
+			int strut_top = 0, strut_bottom = 0;
+			foreach (var window in win_list) {
+				if (window == null) continue;
+				if (window.get_window_type() == Meta.WindowType.DOCK) {
+					var geom = window.get_frame_rect();
+					assert(geom.y >= 0);
+					if (geom.y == 0 && geom.width > geom.height) {
+						strut_top = geom.height;
+					} else if (geom.y > 0 && geom.width > geom.height) { // fairly reasonable checks
+						strut_bottom = geom.height;
+					}
+				}
+				if ((window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) || window.minimized) {
+					++irrev_len;
+					continue;
+				}
+				if (window.maximized_horizontally || window.maximized_vertically) {
+					window.unmaximize(Meta.MaximizeFlags.HORIZONTAL);
+					window.unmaximize(Meta.MaximizeFlags.VERTICAL);
+				}
+			}
+			uint win_i = 0;
+			foreach (var window in win_list) {
+				if (window == null) return;
+				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+					continue;
+				}
+				window.move_resize_frame(false, 0, 
+					((int)((screen_size.height)/ (int)(win_list.length() - irrev_len))*(int)win_i), screen_size.width, 
+					(int)((screen_size.height) / (int)(win_list.length() - irrev_len)) - (win_i == 0 ? strut_top : 0)
+					- (win_i == (win_list.length() - irrev_len - 1) ? strut_bottom : 0));
+				++win_i;
+			}
+		}
+		
+		private void tile_windows_vert(Gdk.Rectangle screen_size, List<weak Meta.Window> win_list) {
+			int irrev_len = 0;
+			int strut_left = 0, strut_right = 0;
+			foreach (var window in win_list) {
+				if (window == null) continue;
+				if (window.get_window_type() == Meta.WindowType.DOCK) {
+					var geom = window.get_frame_rect();
+					assert(geom.y >= 0);
+					if (geom.x == 0 && geom.height > geom.width) {
+						strut_left = geom.width;
+					} else if (geom.x > 0 && geom.height > geom.width) { // fairly reasonable checks
+						strut_right = geom.width;
+					}
+				}
+				if ((window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) || window.minimized) {
+					++irrev_len;
+					continue;
+				}
+				if (window.maximized_horizontally || window.maximized_vertically) {
+					window.unmaximize(Meta.MaximizeFlags.HORIZONTAL);
+					window.unmaximize(Meta.MaximizeFlags.VERTICAL);
+				}
+			}
+			uint win_i = 0;
+			foreach (var window in win_list) {
+				if (window == null) return;
+				if (window.get_window_type() != Meta.WindowType.NORMAL && window.get_window_type() != Meta.WindowType.UTILITY) {
+					continue;
+				}
+				window.move_resize_frame(false, (int)(screen_size.width)/ (int)(win_list.length() - irrev_len) * (int) win_i,
+					0, (int)(screen_size.width)/ (int)(win_list.length() - irrev_len) - (win_i == 0 ? strut_left : 0) - (win_i == (win_list.length() - irrev_len - 1) ? strut_right : 0), 
+					screen_size.height);
+				++win_i;
+			}
 		}
 
 		/* Return sorted list of user open tabs */
