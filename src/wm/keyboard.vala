@@ -358,6 +358,9 @@ namespace Budgie {
 			is_keyboard_held = true;
 		}
 
+		/**
+		* Respond correctly to ALT+SHIFT_L
+		*/
 		[CCode (instance_pos = -1)]
 		bool handle_modifiers_accelerator_activated (Meta.Display display) {
 			display.ungrab_keyboard (display.get_current_time ());
@@ -370,33 +373,35 @@ namespace Budgie {
 			if (n_sources < 2)
 				return true;
 
-			var current = settings.get_uint ("current");
-			settings.set_uint ("current", (current + 1) % n_sources);
+			settings.set_uint ("current", (current_source + 1) % n_sources);
 
 			return true;
 		}
 
+		/**
+		* Called whenever  the keyboard layout needs to be set/reset
+		*/
 		[CCode (instance_pos = -1)]
 		void set_keyboard_layout (string key) {
 			if (!(key == "current" || key == "sources" || key == "xkb-options"))
 				return;
 
-			string layout = "us", variant = "", options = "";
+			string layout = DEFAULT_LAYOUT, variant = DEFAULT_VARIANT, options = "";
 
 			var sources = settings.get_value ("sources");
 			if (!sources.is_of_type (sources_variant_type))
 				return;
 
-			var current = settings.get_uint ("current");
 			unowned string? type = null, name = null;
-			if (sources.n_children () > current)
-				sources.get_child (current, "(&s&s)", out type, out name);
+			if (sources.n_children () > current_source)
+				sources.get_child (current_source, "(&s&s)", out type, out name);
 			if (type == "xkb") {
 				string[] arr = name.split ("+", 2);
 				layout = arr[0];
 				variant = arr[1] ?? "";
 			} else {
-				return;  //We do not want to change the current xkb layout here when using ibus.
+				//Do not want to change the current xkb layout when using ibus.
+				return;
 			}
 
 			var xkb_options = settings.get_strv ("xkb-options");
@@ -404,8 +409,8 @@ namespace Budgie {
 				options = string.joinv (",", xkb_options);
 
 			// Needed to make common keybindings work on non-latin layouts
-			if (layout != "us" || variant != "") {
-				layout = layout + ",us";
+			if (layout != DEFAULT_LAYOUT || variant != DEFAULT_VARIANT) {
+				layout = layout + "," + DEFAULT_LAYOUT;
 				variant = variant + ",";
 			}
 
