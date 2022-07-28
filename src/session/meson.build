@@ -105,7 +105,7 @@ xsession_conf = configure_file(
 # Now merge the translations of the .desktop.in to a .desktop
 custom_target('desktop-file-xsession',
     input : xsession_conf,
-    output : 'budgie-desktop.desktop',
+    output : 'org.buddiesofbudgie.BudgieDesktop.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'xsessions'),
@@ -115,7 +115,7 @@ custom_target('desktop-file-xsession',
 # Merge + install nm-applet
 custom_target('desktop-file-nm-applet',
     input : 'budgie-desktop-nm-applet.desktop.in',
-    output : 'budgie-desktop-nm-applet.desktop',
+    output : 'org.buddiesofbudgie.BudgieDesktopNmApplet.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,
@@ -139,7 +139,7 @@ endif
 # Merge + install screensaver
 custom_target('desktop-file-screensaver',
     input : session_screensaver,
-    output : 'budgie-desktop-screensaver.desktop',
+    output : 'org.buddiesofbudgie.BudgieDesktopScreensaver.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,

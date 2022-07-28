@@ -1,6 +1,6 @@
 custom_target('desktop-file-wm',
     input : 'budgie-wm.desktop.in',
-    output : 'budgie-wm.desktop',
+    output : 'org.buddiesofbudgie.BudgieWm.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))

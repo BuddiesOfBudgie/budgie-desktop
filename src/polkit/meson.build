@@ -2,7 +2,7 @@
 
 custom_target('desktop-file-polkit',
     input : 'budgie-polkit.desktop.in',
-    output : 'budgie-polkit.desktop',
+    output : 'org.buddiesofbudgie.BudgiePolkit.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
