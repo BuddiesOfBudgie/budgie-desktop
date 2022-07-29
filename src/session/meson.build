@@ -43,13 +43,13 @@ gsd_324_max = [
 
 # Always in Budgie
 budgie_components = [
-    'budgie-wm',
-    'budgie-daemon',
-    'budgie-panel',
+    'org.buddiesofbudgie.BudgieWm',
+    'org.buddiesofbudgie.BudgieDaemon',
+    'org.buddiesofbudgie.BudgiePanel',
 ]
 
 if with_polkit == true
-    budgie_components += 'budgie-polkit'
+    budgie_components += 'org.buddiesofbudgie.BudgiePolkit'
 endif
 
 dep_gsd = dependency('gnome-settings-daemon', version: gnome_minimum_version)
@@ -81,7 +81,7 @@ session_conf = configure_file(
 # Now merge the translations of the .desktop.in to a .desktop
 custom_target('desktop-file-session-main',
     input : session_conf,
-    output : 'budgie-desktop.session',
+    output : 'org.buddiesofbudgie.BudgieDesktop.session',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'gnome-session', 'sessions'),
