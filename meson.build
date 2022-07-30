@@ -38,6 +38,8 @@ dep_peas = dependency('libpeas-1.0', version: '>= 1.26.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: '>= 3.24.0')
 dep_libuuid = dependency('uuid')
 dep_vala = dependency('vapigen', version: '>= 0.52.5')
+dep_gst = dependency('gstreamer-1.0')
+dep_cairo = dependency('cairo')
 
 # Needed for Budgie Menu
 dep_cairo = dependency('cairo', version: '>= 1.15.10')

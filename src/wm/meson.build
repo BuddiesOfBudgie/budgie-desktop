@@ -13,6 +13,7 @@ budgie_wm_sources = [
     'main.vala',
     'shim.vala',
     'wm.vala',
+    'screenshot.vala',
 ]
 
 budgie_wm_status_vala_args = []

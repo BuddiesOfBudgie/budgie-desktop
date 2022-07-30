@@ -73,3 +73,5 @@ install_man('budgie-daemon.1')
 install_man('budgie-desktop-settings.1')
 install_man('budgie-polkit-dialog.1')
 install_man('budgie-wm.1')
+install_man('budgie-screenshot.1')
+

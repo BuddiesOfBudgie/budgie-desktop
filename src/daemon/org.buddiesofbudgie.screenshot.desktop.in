@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie Screenshot
+Comment=Budgie screenshot app
+Exec=budgie-screenshot -i
+Icon=org.buddiesofbudgie.screenshot
+Categories=Utility;
+Keywords=Screenshot
+StartupWMClass=screenshot-control
