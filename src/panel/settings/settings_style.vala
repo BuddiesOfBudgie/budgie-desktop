@@ -16,10 +16,10 @@ namespace Budgie {
 	*/
 	public class StylePage : Budgie.SettingsPage {
 		private Gtk.ComboBox? combobox_gtk;
+		private Gtk.ComboBox? combobox_preferred_style;
 		private Gtk.ComboBox? combobox_icon;
 		private Gtk.ComboBox? combobox_cursor;
 		private Gtk.ComboBox? combobox_notification_position;
-		private Gtk.Switch? switch_dark;
 		private Gtk.Switch? switch_builtin;
 		private Gtk.Switch? switch_animations;
 		private Settings ui_settings;
@@ -47,6 +47,11 @@ namespace Budgie {
 				_("Widgets"),
 				_("Set the appearance of window decorations and controls")));
 
+			combobox_preferred_style = new Gtk.ComboBox();
+			grid.add_row(new SettingsRow(combobox_preferred_style,
+				_("Styling"),
+				_("Set the preferred application style")));
+
 			combobox_icon = new Gtk.ComboBox();
 			grid.add_row(new SettingsRow(combobox_icon,
 				_("Icons"),
@@ -64,12 +69,10 @@ namespace Budgie {
 
 			/* Stick the combos in a size group */
 			group.add_widget(combobox_gtk);
+			group.add_widget(combobox_preferred_style);
 			group.add_widget(combobox_icon);
 			group.add_widget(combobox_cursor);
 			group.add_widget(combobox_notification_position);
-
-			switch_dark = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_dark, _("Dark theme")));
 
 			bool show_builtin = budgie_settings.get_boolean("show-builtin-theme-option");
 
@@ -86,6 +89,27 @@ namespace Budgie {
 			grid.add_row(new SettingsRow(switch_animations,
 				_("Animations"),
 				_("Control whether windows and controls use animations")));
+
+			/* Add options for the preferred styling options */
+			var pref_model = new Gtk.ListStore(2, typeof(string), typeof(string));
+			string[] pref_style_display = {
+				_("Prefer Dark"),
+				_("Application Preference"),
+				_("Prefer Light")
+			};
+			const string[] pref_style_values = {
+				"prefer-dark",
+				"default",
+				"prefer-light",
+			};
+			Gtk.TreeIter pref_iter;
+			for (int i = 0; i < pref_style_values.length; i++) {
+				pref_model.append(out pref_iter);
+				pref_model.set(pref_iter, 0, pref_style_values[i], 1, pref_style_display[i], -1);
+			}
+
+			combobox_preferred_style.set_model(pref_model);
+			combobox_preferred_style.set_id_column(0);
 
 			/* Add options for notification position */
 			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.NotificationPosition));
@@ -110,6 +134,8 @@ namespace Budgie {
 			var render = new Gtk.CellRendererText();
 			combobox_gtk.pack_start(render, true);
 			combobox_gtk.add_attribute(render, "text", 0);
+			combobox_preferred_style.pack_start(render, true);
+			combobox_preferred_style.add_attribute(render, "text", 1);
 			combobox_icon.pack_start(render, true);
 			combobox_icon.add_attribute(render, "text", 0);
 			combobox_cursor.pack_start(render, true);
@@ -118,7 +144,7 @@ namespace Budgie {
 			combobox_notification_position.add_attribute(render, "text", 1);
 
 			/* Hook up settings */
-			budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
+			ui_settings.bind("color-scheme", combobox_preferred_style, "active-id", SettingsBindFlags.DEFAULT);
 
 			if (show_builtin) {
 				budgie_settings.bind("builtin-theme", switch_builtin, "active", SettingsBindFlags.DEFAULT);
