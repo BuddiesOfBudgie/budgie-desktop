@@ -105,7 +105,7 @@ xsession_conf = configure_file(
 # Now merge the translations of the .desktop.in to a .desktop
 custom_target('desktop-file-xsession',
     input : xsession_conf,
-    output : 'org.buddiesofbudgie.BudgieDesktop.desktop',
+    output : 'budgie-desktop.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'xsessions'),
