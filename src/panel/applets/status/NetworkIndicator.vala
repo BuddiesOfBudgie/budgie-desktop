@@ -20,6 +20,14 @@ public class NetworkIndicator : Gtk.Bin {
 	private Gtk.ListBox ethernetList = null;
 	private Gtk.ListBox wifiList = null;
 
+	private static CompareFunc<NM.Device> compareFunc = (a, b) => {
+		if (a.device_type == b.device_type) {
+			return strcmp(a.product, b.product);
+		} else {
+			return (int) (a.device_type > b.device_type) - (int) (a.device_type < b.device_type);
+		}
+	};
+
 	public NetworkIndicator(int spacing) {
 		ebox = new Gtk.EventBox();
 		add(ebox);
@@ -128,24 +136,12 @@ public class NetworkIndicator : Gtk.Bin {
 
 	// gets all devices from the client and sorts them, first by type, then by product string
 	private List<unowned NM.Device> get_devices_sorted() {
-		CompareFunc<NM.Device> compareFunc = (a, b) => {
-			return strcmp(a.product, b.product);
-		};
-
-		List<NM.Device> ethDevices = new List<NM.Device>();
-		List<NM.Device> wifiDevices = new List<NM.Device>();
-
+		List<NM.Device> allDevices = new List<NM.Device>();
 		client.get_devices().foreach((device) => {
-			if (device.device_type == NM.DeviceType.ETHERNET) {
-				ethDevices.insert_sorted(device, compareFunc);
-			} else if (device.device_type == NM.DeviceType.WIFI) {
-				wifiDevices.insert_sorted(device, compareFunc);
+			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
+				allDevices.insert_sorted(device, compareFunc);
 			}
 		});
-
-		List<NM.Device> allDevices = new List<NM.Device>();
-		ethDevices.foreach((it) => allDevices.append(it));
-		wifiDevices.foreach((it) => allDevices.append(it));
 		return allDevices.copy();
 	}
 
