@@ -12,7 +12,7 @@
 public class NetworkIndicator : Gtk.Bin {
 	private NM.Client client = null;
 
-	public Gtk.Image? image = null;
+	private Gtk.Box iconBox = null;
 
 	public Gtk.EventBox? ebox = null;
 	public Budgie.Popover? popover = null;
@@ -20,13 +20,12 @@ public class NetworkIndicator : Gtk.Bin {
 	private Gtk.ListBox ethernetList = null;
 	private Gtk.ListBox wifiList = null;
 
-	public NetworkIndicator() {
-		image = new Gtk.Image.from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU);
-
+	public NetworkIndicator(int spacing) {
 		ebox = new Gtk.EventBox();
 		add(ebox);
 
-		ebox.add(image);
+		iconBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, spacing);
+		ebox.add(iconBox);
 
 		ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
 		ebox.button_release_event.connect(on_button_release_event);
@@ -109,7 +108,11 @@ public class NetworkIndicator : Gtk.Bin {
 			warning("Interface name: %s", connection.get_interface_name());
 		});
 
-		set_icon_from_state();
+		recreate_icons();
+		Timeout.add_seconds(5, () => {
+			recreate_icons();
+			return Source.CONTINUE;
+		});
 
 		// Ensure all content is shown
 		box.show_all();
@@ -119,23 +122,116 @@ public class NetworkIndicator : Gtk.Bin {
 		wifiList.hide();
 	}
 
-	void set_icon_from_state() {
-		switch (client.get_state()) {
-			case NM.State.ASLEEP:
-				image.set_from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU);
-				break;
-			case NM.State.CONNECTED_GLOBAL:
-				image.set_from_icon_name("network-wired-activated-symbolic", Gtk.IconSize.MENU);
-				break;
-			case NM.State.CONNECTED_LOCAL:
-			case NM.State.CONNECTED_SITE:
-				image.set_from_icon_name("network-wired-no-route-symbolic", Gtk.IconSize.MENU);
-				break;
-			case NM.State.CONNECTING:
-			case NM.State.DISCONNECTING:
-				image.set_from_icon_name("network-wired-acquiring-symbolic", Gtk.IconSize.MENU);
-				break;
+	public void set_spacing(int spacing) {
+		iconBox.set_spacing(spacing);
+	}
+
+	// gets all devices from the client and sorts them, first by type, then by product string
+	private List<unowned NM.Device> get_devices_sorted() {
+		CompareFunc<NM.Device> compareFunc = (a, b) => {
+			return strcmp(a.product, b.product);
+		};
+
+		List<NM.Device> ethDevices = new List<NM.Device>();
+		List<NM.Device> wifiDevices = new List<NM.Device>();
+
+		client.get_devices().foreach((device) => {
+			if (device.device_type == NM.DeviceType.ETHERNET) {
+				ethDevices.insert_sorted(device, compareFunc);
+			} else if (device.device_type == NM.DeviceType.WIFI) {
+				wifiDevices.insert_sorted(device, compareFunc);
+			}
+		});
+
+		List<NM.Device> allDevices = new List<NM.Device>();
+		ethDevices.foreach((it) => allDevices.append(it));
+		wifiDevices.foreach((it) => allDevices.append(it));
+		return allDevices.copy();
+	}
+
+	private void recreate_icons() {
+		iconBox.foreach((image) => iconBox.remove(image));
+
+		string iconName = null;
+		get_devices_sorted().foreach((it) => {
+			if (it.device_type == NM.DeviceType.ETHERNET) {
+				iconName = wired_icon_from_state(it);
+			} else if (it.device_type == NM.DeviceType.WIFI) {
+				iconName = wireless_icon_from_state(it as NM.DeviceWifi);
+			}
+
+			iconBox.add(new Gtk.Image.from_icon_name(iconName, Gtk.IconSize.MENU));
+		});
+
+		if (iconBox.get_children().length() == 0) {
+			iconBox.add(new Gtk.Image.from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU));
 		}
+
+		iconBox.show_all();
+	}
+
+	private string? wired_icon_from_state(NM.Device device) {
+		switch (device.get_state()) {
+			case NM.DeviceState.UNAVAILABLE:
+			case NM.DeviceState.UNKNOWN:
+			case NM.DeviceState.UNMANAGED:
+			case NM.DeviceState.DISCONNECTED:
+				return null;
+			case NM.DeviceState.ACTIVATED:
+				return "network-wired-activated-symbolic";
+			case NM.DeviceState.CONFIG:
+			case NM.DeviceState.DEACTIVATING:
+			case NM.DeviceState.FAILED:
+			case NM.DeviceState.IP_CHECK:
+			case NM.DeviceState.IP_CONFIG:
+			case NM.DeviceState.NEED_AUTH:
+			case NM.DeviceState.PREPARE:
+			case NM.DeviceState.SECONDARIES:
+				return "network-wired-acquiring-symbolic";
+		}
+
+		return null;
+	}
+
+	private string? wireless_icon_from_state(NM.DeviceWifi device) {
+		switch (device.get_state()) {
+			case NM.DeviceState.UNAVAILABLE:
+			case NM.DeviceState.UNKNOWN:
+			case NM.DeviceState.UNMANAGED:
+				return null;
+			case NM.DeviceState.ACTIVATED:
+				return get_icon_name_from_ap_strength(device);
+			case NM.DeviceState.CONFIG:
+			case NM.DeviceState.DEACTIVATING:
+			case NM.DeviceState.FAILED:
+			case NM.DeviceState.IP_CHECK:
+			case NM.DeviceState.IP_CONFIG:
+			case NM.DeviceState.NEED_AUTH:
+			case NM.DeviceState.PREPARE:
+			case NM.DeviceState.SECONDARIES:
+				return "network-wireless-acquiring-symbolic";
+			case NM.DeviceState.DISCONNECTED:
+				return "network-wireless-disconnected-symbolic";
+		}
+
+		return null;
+	}
+
+	private string get_icon_name_from_ap_strength(NM.DeviceWifi device) {
+		var strength = device.active_access_point.get_strength();
+		var iconStrength = "00";
+
+		if (strength > 80) {
+			iconStrength = "100";
+		} else if (strength > 55) {
+			iconStrength = "75";
+		} else if (strength > 30) {
+			iconStrength = "50";
+		} else if (strength > 5) {
+			iconStrength = "25";
+		}
+
+		return "network-wireless-connected-" + iconStrength + "-symbolic";
 	}
 
 	private bool on_button_release_event(Gdk.EventButton e) {

@@ -64,6 +64,7 @@ public class StatusApplet : Budgie.Applet {
 		settings = get_applet_settings(uuid);
 		settings.changed["spacing"].connect((key) => {
 			if (widget != null) widget.set_spacing(settings.get_int("spacing"));
+			if (net != null) net.set_spacing(settings.get_int("spacing"));
 		});
 
 		wrap = new Gtk.EventBox();
@@ -78,23 +79,23 @@ public class StatusApplet : Budgie.Applet {
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 
-		net = new NetworkIndicator();
-		widget.pack_start(net, false, false, 0);
-		net.show_all();
-
 		sound = new SoundIndicator();
 		widget.pack_start(sound, false, false, 0);
 		sound.show_all();
 
-		/* Hook up the popovers */
-		this.setup_popover(power.ebox, power.popover);
-		this.setup_popover(sound.ebox, sound.popover);
-		this.setup_popover(net.ebox, net.popover);
+		net = new NetworkIndicator(settings.get_int("spacing"));
+		widget.pack_start(net, false, false, 0);
+		net.show_all();
 
 		blue = new BluetoothIndicator();
 		widget.pack_start(blue, false, false, 0);
 		blue.show_all();
+
+		/* Hook up the popovers */
+		this.setup_popover(power.ebox, power.popover);
+		this.setup_popover(sound.ebox, sound.popover);
 		this.setup_popover(blue.ebox, blue.popover);
+		this.setup_popover(net.ebox, net.popover);
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
