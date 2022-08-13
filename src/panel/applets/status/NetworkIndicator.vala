@@ -160,7 +160,9 @@ public class NetworkIndicator : Gtk.Bin {
 				iconName = wireless_icon_from_state(it as NM.DeviceWifi);
 			}
 
-			iconBox.add(new Gtk.Image.from_icon_name(iconName, Gtk.IconSize.MENU));
+			if (iconName != null) {
+				iconBox.add(new Gtk.Image.from_icon_name(iconName, Gtk.IconSize.MENU));
+			}
 		});
 
 		if (iconBox.get_children().length() == 0) {
