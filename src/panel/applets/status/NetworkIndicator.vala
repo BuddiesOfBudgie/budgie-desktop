@@ -93,27 +93,14 @@ public class NetworkIndicator : Gtk.Bin {
 			error("Failed to initialize a NetworkManager client: %s", e.message);
 		}
 
-		client.get_devices().foreach((device) => {
-			warning("Type: %s, Description: %s", device.device_type.to_string(), device.get_description());
-			if (device.device_type == NM.DeviceType.ETHERNET) {
-				var ethernetDevice = device as NM.DeviceEthernet;
-				var row = new Gtk.ListBoxRow();
-				row.add(new Gtk.Label(ethernetDevice.get_description()));
-				ethernetList.add(row);
-			} else if (device.device_type == NM.DeviceType.WIFI) {
-				var wifiDevice = device as NM.DeviceWifi;
-				wifiDevice.get_access_points().foreach((ap) => {
-					if (ap.ssid != null) {
-						var row = new Gtk.ListBoxRow();
-						row.add(new Gtk.Label(NM.Utils.ssid_to_utf8(ap.ssid.get_data())));
-						wifiList.add(row);
-					}
-				});
-			}
+		get_devices_sorted().foreach((it) => {
+			it.state_changed.connect((newState, oldState, reason) => recreate_icons());
 		});
-
-		client.get_connections().foreach((connection) => {
-			warning("Interface name: %s", connection.get_interface_name());
+		client.device_added.connect((device) => {
+			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
+				recreate_icons();
+				device.state_changed.connect((newState, oldState, reason) => recreate_icons());
+			}
 		});
 
 		recreate_icons();
@@ -196,6 +183,7 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.UNAVAILABLE:
 			case NM.DeviceState.UNKNOWN:
 			case NM.DeviceState.UNMANAGED:
+			case NM.DeviceState.DISCONNECTED:
 				return null;
 			case NM.DeviceState.ACTIVATED:
 				return get_icon_name_from_ap_strength(device);
@@ -208,8 +196,6 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.PREPARE:
 			case NM.DeviceState.SECONDARIES:
 				return "network-wireless-acquiring-symbolic";
-			case NM.DeviceState.DISCONNECTED:
-				return "network-wireless-disconnected-symbolic";
 		}
 
 		return null;
