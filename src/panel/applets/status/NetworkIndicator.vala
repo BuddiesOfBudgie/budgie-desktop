@@ -20,6 +20,9 @@ public class NetworkIndicator : Gtk.Bin {
 	private Gtk.ListBox ethernetList = null;
 	private Gtk.ListBox wifiList = null;
 
+	private List<unowned NM.Device> devices_sorted;
+
+	// compares devices, first by type, then by product ID
 	private static CompareFunc<NM.Device> compareFunc = (a, b) => {
 		if (a.device_type == b.device_type) {
 			return strcmp(a.product, b.product);
@@ -93,13 +96,26 @@ public class NetworkIndicator : Gtk.Bin {
 			error("Failed to initialize a NetworkManager client: %s", e.message);
 		}
 
-		get_devices_sorted().foreach((it) => {
+		devices_sorted = new List<unowned NM.Device>();
+		client.get_devices().foreach((device) => {
+			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
+				devices_sorted.insert_sorted(device, compareFunc);
+			}
+		});
+
+		devices_sorted.foreach((it) => {
 			it.state_changed.connect((newState, oldState, reason) => recreate_icons());
 		});
 		client.device_added.connect((device) => {
 			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
+				devices_sorted.insert_sorted(device, compareFunc);
 				recreate_icons();
 				device.state_changed.connect((newState, oldState, reason) => recreate_icons());
+			}
+		});
+		client.device_removed.connect((device) => {
+			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
+				devices_sorted.remove(device);
 			}
 		});
 
@@ -121,22 +137,11 @@ public class NetworkIndicator : Gtk.Bin {
 		iconBox.set_spacing(spacing);
 	}
 
-	// gets all devices from the client and sorts them, first by type, then by product string
-	private List<unowned NM.Device> get_devices_sorted() {
-		List<NM.Device> allDevices = new List<NM.Device>();
-		client.get_devices().foreach((device) => {
-			if (device.device_type == NM.DeviceType.ETHERNET || device.device_type == NM.DeviceType.WIFI) {
-				allDevices.insert_sorted(device, compareFunc);
-			}
-		});
-		return allDevices.copy();
-	}
-
 	private void recreate_icons() {
 		iconBox.foreach((image) => iconBox.remove(image));
 
 		string iconName = null;
-		get_devices_sorted().foreach((it) => {
+		devices_sorted.foreach((it) => {
 			if (it.device_type == NM.DeviceType.ETHERNET) {
 				iconName = wired_icon_from_state(it);
 			} else if (it.device_type == NM.DeviceType.WIFI) {
