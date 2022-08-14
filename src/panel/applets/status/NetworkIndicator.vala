@@ -140,27 +140,52 @@ public class NetworkIndicator : Gtk.Bin {
 	private void recreate_icons() {
 		iconBox.foreach((image) => iconBox.remove(image));
 
-		string iconName = null;
+		var iconInfos = new List<NetworkIconInfo>();
+
 		devices_sorted.foreach((it) => {
+			NetworkIconInfo? iconInfo = null;
 			if (it.device_type == NM.DeviceType.ETHERNET) {
-				iconName = wired_icon_from_state(it);
+				iconInfo = wired_icon_info_from_state(it as NM.DeviceEthernet);
 			} else if (it.device_type == NM.DeviceType.WIFI) {
-				iconName = wireless_icon_from_state(it as NM.DeviceWifi);
+				iconInfo = wireless_icon_info_from_state(it as NM.DeviceWifi);
 			}
 
-			if (iconName != null) {
-				iconBox.add(new Gtk.Image.from_icon_name(iconName, Gtk.IconSize.MENU));
+			if (iconInfo != null) {
+				iconInfos.append(iconInfo);
 			}
 		});
 
-		if (iconBox.get_children().length() == 0) {
-			iconBox.add(new Gtk.Image.from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU));
+		// we need at least one icon in the box
+		var targetNumIcons = iconInfos.length() > 1 ? iconInfos.length() : 1;
+
+		// avoid recreating any image widgets by adding and removing them from the icon box on demand
+		var difference = targetNumIcons - iconBox.get_children().length();
+		for (int i = 0; i < difference; i++) {
+			iconBox.add(new Gtk.Image());
+		}
+		for (int i = 0; i > difference; i--) {
+			iconBox.remove(iconBox.get_children().last().data);
+		}
+
+		for (int i = 0; i < iconInfos.length(); i++) {
+			NetworkIconInfo iconInfo = iconInfos.nth_data(i);
+			var image = iconBox.get_children().nth_data(i) as Gtk.Image;
+			image.set_from_icon_name(iconInfo.iconName, Gtk.IconSize.MENU);
+			image.tooltip_text = iconInfo.tooltip;
+		}
+
+		if (iconInfos.length() == 0) {
+			var image = iconBox.get_children().nth_data(0) as Gtk.Image;
+			image.set_from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU);
 		}
 
 		iconBox.show_all();
 	}
 
-	private string? wired_icon_from_state(NM.Device device) {
+	private NetworkIconInfo? wired_icon_info_from_state(NM.DeviceEthernet device) {
+		string iconName = null;
+		string tooltip = null;
+
 		switch (device.get_state()) {
 			case NM.DeviceState.UNAVAILABLE:
 			case NM.DeviceState.UNKNOWN:
@@ -168,22 +193,32 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.DISCONNECTED:
 				return null;
 			case NM.DeviceState.ACTIVATED:
-				return "network-wired-activated-symbolic";
+				iconName = "network-wired-activated-symbolic";
+				tooltip = "Connected via Ethernet";
+				break;
 			case NM.DeviceState.CONFIG:
-			case NM.DeviceState.DEACTIVATING:
-			case NM.DeviceState.FAILED:
 			case NM.DeviceState.IP_CHECK:
 			case NM.DeviceState.IP_CONFIG:
 			case NM.DeviceState.NEED_AUTH:
 			case NM.DeviceState.PREPARE:
 			case NM.DeviceState.SECONDARIES:
-				return "network-wired-acquiring-symbolic";
+				iconName = "network-wired-acquiring-symbolic";
+				tooltip = "Connecting...";
+				break;
+			case NM.DeviceState.DEACTIVATING:
+			case NM.DeviceState.FAILED:
+				iconName = "network-wired-acquiring-symbolic";
+				tooltip = "Disconnecting...";
+				break;
 		}
 
-		return null;
+		return new NetworkIconInfo(iconName, tooltip);
 	}
 
-	private string? wireless_icon_from_state(NM.DeviceWifi device) {
+	private NetworkIconInfo? wireless_icon_info_from_state(NM.DeviceWifi device) {
+		string iconName = null;
+		string tooltip = null;
+
 		switch (device.get_state()) {
 			case NM.DeviceState.UNAVAILABLE:
 			case NM.DeviceState.UNKNOWN:
@@ -191,19 +226,26 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.DISCONNECTED:
 				return null;
 			case NM.DeviceState.ACTIVATED:
-				return get_icon_name_from_ap_strength(device);
+				iconName = get_icon_name_from_ap_strength(device);
+				tooltip = "Connected to " + NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data());
+				break;
 			case NM.DeviceState.CONFIG:
-			case NM.DeviceState.DEACTIVATING:
-			case NM.DeviceState.FAILED:
 			case NM.DeviceState.IP_CHECK:
 			case NM.DeviceState.IP_CONFIG:
 			case NM.DeviceState.NEED_AUTH:
 			case NM.DeviceState.PREPARE:
 			case NM.DeviceState.SECONDARIES:
-				return "network-wireless-acquiring-symbolic";
+				iconName = "network-wireless-acquiring-symbolic";
+				tooltip = "Connecting...";
+				break;
+			case NM.DeviceState.DEACTIVATING:
+			case NM.DeviceState.FAILED:
+				iconName = "network-wireless-acquiring-symbolic";
+				tooltip = "Disconnecting...";
+				break;
 		}
 
-		return null;
+		return new NetworkIconInfo(iconName, tooltip);
 	}
 
 	private string get_icon_name_from_ap_strength(NM.DeviceWifi device) {
@@ -243,5 +285,15 @@ public class NetworkIndicator : Gtk.Bin {
 		} catch (Error e) {
 			message("Unable to launch budgie-network-panel.desktop: %s", e.message);
 		}
+	}
+}
+
+private class NetworkIconInfo {
+	public string iconName;
+	public string tooltip;
+
+	public NetworkIconInfo(string iconName, string tooltip) {
+		this.iconName = iconName;
+		this.tooltip = tooltip;
 	}
 }
