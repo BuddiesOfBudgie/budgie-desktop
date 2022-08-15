@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - run: sudo apt update
-    - run: sudo apt install meson ninja-build gnome-screensaver gnome-settings-daemon-dev gtk-doc-tools intltool libaccountsservice-dev libasound2-dev libgnome-bluetooth-dev libgnome-desktop-3-dev libgnome-menu-3-dev libgtk-3-dev libibus-1.0-dev libmutter-10-dev libpeas-dev libpolkit-agent-1-dev libpulse-dev libupower-glib-dev libwnck-3-dev sassc uuid-dev valac
+    - run: sudo apt install meson ninja-build gnome-screensaver gnome-settings-daemon-dev gtk-doc-tools intltool libaccountsservice-dev libasound2-dev libgee-0.8-dev libgnome-bluetooth-dev libgnome-desktop-3-dev libgnome-menu-3-dev libgtk-3-dev libibus-1.0-dev libmutter-10-dev libpeas-dev libpolkit-agent-1-dev libpulse-dev libupower-glib-dev libwnck-3-dev sassc uuid-dev valac
     - run: meson build -Dwith-gnome-screensaver=true
     - run: meson compile -C build

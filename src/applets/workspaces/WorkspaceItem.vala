@@ -23,10 +23,12 @@ namespace Workspaces {
 		public signal void pls_update_windows();
 		private Gtk.Grid icon_grid;
 		private Gtk.Allocation real_alloc;
+		private float size_multiplier;
 
-		public WorkspaceItem(Wnck.Workspace space) {
+		public WorkspaceItem(Wnck.Workspace space, float multiplier) {
 			this.get_style_context().add_class("workspace-item");
 			this.workspace = space;
+			this.size_multiplier = multiplier;
 			this.set_tooltip_text(workspace.get_name());
 
 			real_alloc.width = 0;
@@ -261,6 +263,10 @@ namespace Workspaces {
 			this.queue_resize();
 		}
 
+		public void set_size_multiplier(float multiplier) {
+			size_multiplier = multiplier;
+		}
+
 		public override void size_allocate(Gtk.Allocation allocation) {
 			this.queue_resize();
 			base.size_allocate(real_alloc);
@@ -289,10 +295,9 @@ namespace Workspaces {
 				min = nat = real_alloc.width = WorkspacesApplet.panel_size;
 				return;
 			}
-			float w_width = (float)workspace.get_width();
-			float width = (w_width/workspace.get_height()) * WorkspacesApplet.panel_size;
-			min = nat = (int) (width * 1.6);
-			real_alloc.width = (int) (width * 1.6);
+			float height = WorkspacesApplet.panel_size;
+			min = nat = (int) (height * 2.9 * size_multiplier);
+			real_alloc.width = (int) (height * 2.9 * size_multiplier);
 		}
 
 		public override void get_preferred_height(out int min, out int nat) {
@@ -302,8 +307,8 @@ namespace Workspaces {
 				return;
 			}
 			float height = WorkspacesApplet.panel_size;
-			min = nat = (int) (height * 2);
-			real_alloc.height = (int) (height * 2);
+			min = nat = (int) (height * 2 * size_multiplier);
+			real_alloc.height = (int) (height * 2 * size_multiplier);
 		}
 
 		public Wnck.Workspace get_workspace() {

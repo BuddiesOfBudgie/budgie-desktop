@@ -43,6 +43,12 @@
       <summary>Activate menu categories by rolling over them</summary>
       <description>Activate menu categories by rolling over them</description>
     </key>
+
+    <key type="b" name="menu-show-control-center-items">
+      <default>false</default>
+      <summary>Show control center shortcuts in the menu</summary>
+      <description>Show control center shortcuts in the menu</description>
+    </key>
   </schema>
 
 </schemalist>

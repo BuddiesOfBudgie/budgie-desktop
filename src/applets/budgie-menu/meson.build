@@ -32,14 +32,23 @@ applet_budgiemenu_sources = [
     'BudgieMenuButtons.vala',
     'BudgieMenuWindow.vala',
     'IconChooser.vala',
+    'DBusInterfaces.vala',
+    'OverlayMenus.vala',
+    'UserButton.vala',
+    'MenuItem.vala',
+    'views/ListView.vala',
+    'views/View.vala',
 ]
 
 applet_budgiemenu_deps = [
     libplugin_vapi,
+    dep_gee,
     dep_gtk3,
     dep_peas,
+    dep_accountsservice,
+    dep_cairo,
+    link_libappindexer,
     link_libplugin,
-    dependency('libgnome-menu-3.0', version: '>= 3.10.3'),
 ]
 
 shared_library(
@@ -49,7 +58,6 @@ shared_library(
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'libgnome-menu-3.0',
         '--pkg', 'gio-unix-2.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         # Make gresource work
@@ -58,9 +66,6 @@ shared_library(
     ],
     link_whole: [
         lib_applet_budgiemenu_resources,
-    ],
-    c_args: [
-        '-DGMENU_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_budgiemenu_dir,

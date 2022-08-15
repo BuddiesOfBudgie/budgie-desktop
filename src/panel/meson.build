@@ -2,7 +2,7 @@
 
 custom_target('desktop-file-panel',
     input : 'budgie-panel.desktop.in',
-    output : 'budgie-panel.desktop',
+    output : 'org.buddiesofbudgie.BudgiePanel.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
@@ -101,7 +101,7 @@ executable(
 # Now merge the translations of the .desktop.in to a .desktop
 custom_target('desktop-file-settings',
     input : 'budgie-desktop-settings.desktop.in',
-    output : 'budgie-desktop-settings.desktop',
+    output : 'org.buddiesofbudgie.BudgieDesktopSettings.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'),
