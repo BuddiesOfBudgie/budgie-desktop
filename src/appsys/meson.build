@@ -8,6 +8,7 @@ libappsys = static_library(
     'appsys',
     libappsys_sources,
     dependencies: [
+        dep_giounix,
         dep_gtk3,
         dep_gdkx11,
         dep_wnck,

@@ -33,6 +33,7 @@ endif
 
 budgie_wm_deps = [
     link_libconfig,
+    dep_giounix,
     dep_mutter,
     dep_gnomedesktop,
     dep_gsettings,
