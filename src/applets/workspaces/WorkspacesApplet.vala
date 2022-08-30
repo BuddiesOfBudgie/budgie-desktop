@@ -226,7 +226,7 @@ namespace Workspaces {
 				}
 				Timeout.add(100, () => {
 					update_workspaces.begin();
-					return true;
+					return false;
 				});
 			}
 		}
