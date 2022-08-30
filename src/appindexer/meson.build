@@ -11,6 +11,7 @@ libappindexer = shared_library(
     appindexer_sources,
     dependencies: [
         dep_gee,
+        dep_giounix,
         dep_gtk3,
     ],
     vala_args: [

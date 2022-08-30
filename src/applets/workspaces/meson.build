@@ -28,6 +28,7 @@ applet_workspaces_sources = [
 
 applet_workspaces_deps = [
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_wnck,
     dep_peas,

@@ -7,7 +7,10 @@ libsession_sources = [
 libsession = static_library(
     'session',
     libsession_sources,
-    dependencies: dep_glib,
+    dependencies: [
+        dep_glib,
+        dep_giounix
+    ],
     vala_args: [
         '--pkg', 'gio-unix-2.0',
     ],

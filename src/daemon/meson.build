@@ -37,6 +37,7 @@ daemon_sources = [
 ]
 
 daemon_deps = [
+    dep_giounix,
     dep_gtk3,
     dep_gdkx11,
     dep_notify,

@@ -41,6 +41,7 @@ panel_sources = [
 
 panel_deps = [
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     dep_libuuid,

@@ -24,6 +24,7 @@ polkit_sources = [
 pkversion = '>= 0.105'
 
 polkit_deps = [
+    dep_giounix,
     dep_gtk3,
     link_libconfig,
     link_libtheme,
