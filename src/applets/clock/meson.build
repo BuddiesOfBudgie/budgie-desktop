@@ -21,9 +21,16 @@ applet_clock_resources = gnome.compile_resources(
     c_name: 'budgie_Clock',
 )
 
+lib_applet_clock_resources = static_library(
+    'clock-applet-resources',
+    applet_clock_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 applet_clock_sources = [
     'ClockApplet.vala',
-    applet_clock_resources,
 ]
 
 
@@ -32,9 +39,13 @@ shared_library(
     applet_clock_sources,
     dependencies: [
         libplugin_vapi,
+        dep_giounix,
         dep_gtk3,
         dep_peas,
         link_libplugin,
+    ],
+    link_whole: [
+        lib_applet_clock_resources,
     ],
     vala_args: [
         '--pkg', 'gtk+-3.0',

@@ -10,6 +10,14 @@ libraven_resources = gnome.compile_resources(
     c_name: 'budgie_raven',
 )
 
+lib_libraven_resources = static_library(
+    'budgie-raven-resources',
+    libraven_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 libraven_sources = [
     'app_sound_control.vala',
     'calendar.vala',
@@ -26,7 +34,6 @@ libraven_sources = [
     'sound.vala',
     'start_listening.vala',
     'widget.vala',
-    libraven_resources,
 ]
 
 libraven_deps = [
@@ -34,6 +41,7 @@ libraven_deps = [
     # https://github.com/mesonbuild/meson/issues/2096
     link_libbudgieprivate,
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     link_libconfig,
@@ -49,6 +57,9 @@ libraven = shared_library(
     'raven', libraven_sources,
     version: '0.0.0',
     dependencies: libraven_deps,
+    link_whole: [
+        lib_libraven_resources,
+    ],
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

@@ -306,11 +306,14 @@ namespace Budgie {
 				warning("Raven does not appear to be running!");
 				return;
 			}
-			try {
-				raven_proxy.ClearNotifications.begin();
-			} catch (Error e) {
-				warning("Unable to ClearNotifications() in Raven: %s", e.message);
-			}
+
+			raven_proxy.ClearNotifications.begin((obj,res) => {
+				try {
+					raven_proxy.ClearNotifications.end(res);
+				} catch (Error e) {
+					warning("Unable to ClearNotifications() in Raven: %s", e.message);
+				}
+			});
 		}
 
 		/* Binding for toggle-raven activated */
@@ -321,11 +324,14 @@ namespace Budgie {
 				warning("Raven does not appear to be running!");
 				return;
 			}
-			try {
-				raven_proxy.ToggleAppletView.begin();
-			} catch (Error e) {
-				warning("Unable to ToggleAppletView() in Raven: %s", e.message);
-			}
+
+			raven_proxy.ToggleAppletView.begin((obj,res) => {
+				try {
+					raven_proxy.ToggleAppletView.end(res);
+				} catch (Error e) {
+					warning("Unable to ToggleAppletView() in Raven: %s", e.message);
+				}
+			});
 		}
 
 		/* Binding for toggle-notifications activated */
@@ -336,11 +342,14 @@ namespace Budgie {
 				warning("Raven does not appear to be running!");
 				return;
 			}
-			try {
-				raven_proxy.ToggleNotificationsView.begin();
-			} catch (Error e) {
-				warning("Unable to ToggleNotificationsView() in Raven: %s", e.message);
-			}
+
+			raven_proxy.ToggleNotificationsView.begin((obj,res) => {
+				try {
+					raven_proxy.ToggleNotificationsView.end(res);
+				} catch (Error e) {
+					warning("Unable to ToggleNotificationsView() in Raven: %s", e.message);
+				}
+			});
 		}
 
 		/* Set up the proxy when raven appears */
@@ -370,11 +379,14 @@ namespace Budgie {
 				}
 			} else {
 				Idle.add(() => {
-					try {
-						panel_proxy.ActivateAction.begin((int) PanelAction.MENU);
-					} catch (Error e) {
-						message("Unable to ActivateAction for menu: %s", e.message);
-					}
+					panel_proxy.ActivateAction.begin((int) PanelAction.MENU, (obj,res) => {
+						try {
+							panel_proxy.ActivateAction.end(res);
+						} catch (Error e) {
+							message("Unable to ActivateAction for menu: %s", e.message);
+						}
+					});
+
 					return false;
 				});
 			}
@@ -403,16 +415,39 @@ namespace Budgie {
 			this.complete_display_change(ok);
 		}
 
+		/*
+		 * This is a rewrite of Meta.Util.show_dialog because question dialogs via zenity do not have the --no-wrap parameter
+		 * which leads to derpy looking dialogs with text squashed into one button column.
+		 */
+		private Pid show_dialog(string type, string message, string timeout, string ok_text, string cancel_text, string icon_name) {
+			Pid child_pid;
+
+			try {
+				string[] spawn_args = {
+					"zenity", type, "--no-wrap", "--class", "mutter-dialog", "--title", "", "--text", message,
+					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon-name", icon_name
+				};
+
+				Process.spawn_async("/",
+					spawn_args,
+					null,
+					SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
+					null,
+					out child_pid);
+			} catch (SpawnError e) {
+				warning("Error: %s\n", e.message);
+			}
+
+			return child_pid;
+		}
+
 		public override void confirm_display_change() {
-			Pid pid = Meta.Util.show_dialog("--question",
-							"Does the display look OK?",
+			Pid pid = show_dialog("--question",
+							"Does the display look OK?\n\nRequires a restart to apply all changes.",
 							"20",
-							"",
 							"_Keep This Configuration",
 							"_Restore Previous Configuration",
-							"preferences-desktop-display",
-							0,
-							new SList<void*>(), new SList<void*>());
+							"preferences-desktop-display");
 
 			ChildWatch.add(pid, on_dialog_closed);
 		}
@@ -525,11 +560,14 @@ namespace Budgie {
 				if (menu_proxy == null) {
 					return CLUTTER_EVENT_STOP;
 				}
-				try {
-					menu_proxy.ShowDesktopMenu.begin(3, 0);
-				} catch (Error e) {
-					message("Error invoking MenuManager: %s", e.message);
-				}
+
+				menu_proxy.ShowDesktopMenu.begin(3, 0, (obj,res) => {
+					try {
+						menu_proxy.ShowDesktopMenu.end(res);
+					} catch (Error e) {
+						message("Error invoking MenuManager: %s", e.message);
+					}
+				});
 			} else {
 				return CLUTTER_EVENT_PROPAGATE;
 			}
@@ -566,11 +604,14 @@ namespace Budgie {
 			}
 			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
-				try {
-					menu_proxy.ShowWindowMenu.begin(xid, 3, 0);
-				} catch (Error e) {
-					message("Error invoking MenuManager: %s", e.message);
-				}
+				menu_proxy.ShowWindowMenu.begin(xid, 3, 0, (obj, res) => {
+					try {
+						menu_proxy.ShowWindowMenu.end(res);
+					} catch (Error e) {
+						message("Error invoking MenuManager: %s", e.message);
+					}
+				});
+
 				return false;
 			});
 		}
@@ -984,21 +1025,21 @@ namespace Budgie {
 			}
 		}
 
-		static int tab_sort(Meta.Window a, Meta.Window b) {
-			uint32 at;
-			uint32 bt;
+		//  static int tab_sort(Meta.Window a, Meta.Window b) {
+		//  	uint32 at;
+		//  	uint32 bt;
 
-			at = a.get_user_time();
-			bt = a.get_user_time();
+		//  	at = a.get_user_time();
+		//  	bt = a.get_user_time();
 
-			if (at < bt) {
-				return -1;
-			}
-			if (at > bt) {
-				return 1;
-			}
-			return 0;
-		}
+		//  	if (at < bt) {
+		//  		return -1;
+		//  	}
+		//  	if (at > bt) {
+		//  		return 1;
+		//  	}
+		//  	return 0;
+		//  }
 
 		static int tab_sort_reverse(Meta.Window a, Meta.Window b) {
 			uint32 at;
@@ -1196,12 +1237,15 @@ namespace Budgie {
 		public const int SWITCH_TIMEOUT = 250;
 		public override void switch_workspace(int from, int to, Meta.MotionDirection direction) {
 			if (raven_proxy != null) { // Raven proxy is defined
-				try {
-					raven_proxy.Dismiss.begin(); // Dismiss
-					Timeout.add(200, () => {return false;}); // Delay until animation is complete. Looks janky otherwise
-				} catch (Error e) {
-					warning("Failed to dismiss Raven: %s", e.message);
-				}
+				raven_proxy.Dismiss.begin((obj,res) => {
+					try {
+						raven_proxy.Dismiss.end(res);
+					} catch (Error e) {
+						warning("Failed to dismiss Raven: %s", e.message);
+					}
+				}); // Dismiss
+
+				Timeout.add(200, () => {return false;}); // Delay until animation is complete. Looks janky otherwise
 			}
 
 			bool use_animations = iface_settings.get_boolean("enable-animations");

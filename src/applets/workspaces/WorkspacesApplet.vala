@@ -26,13 +26,16 @@ namespace Workspaces {
 	[GtkTemplate (ui="/com/solus-project/workspaces/settings.ui")]
 	public class WorkspacesAppletSettings : Gtk.Grid {
 		[GtkChild]
-		private Gtk.ComboBoxText? combobox_visibility;
+		private unowned Gtk.ComboBoxText? combobox_visibility;
+		[GtkChild]
+		private unowned Gtk.ComboBoxText? combobox_multiplier;
 
 		private Settings? settings;
 
 		public WorkspacesAppletSettings(Settings? settings) {
 			this.settings = settings;
 			settings.bind("addbutton-visibility", combobox_visibility, "active_id", SettingsBindFlags.DEFAULT);
+			settings.bind("item-size-multiplier", combobox_multiplier, "active_id", SettingsBindFlags.DEFAULT);
 		}
 	}
 
@@ -58,6 +61,7 @@ namespace Workspaces {
 		private List<int> dynamically_created_workspaces;
 		private Settings settings;
 		private AddButtonVisibility button_visibility = AddButtonVisibility.ALWAYS;
+		private float item_size_multiplier = 1.0f;
 
 		public string uuid { public set ; public get ; }
 
@@ -120,6 +124,7 @@ namespace Workspaces {
 			main_layout.pack_start(add_button_revealer, false, false, 0);
 
 			on_settings_change("addbutton-visibility");
+			on_settings_change("item-size-multiplier");
 
 			Gtk.drag_dest_set(
 				add_button,
@@ -209,13 +214,21 @@ namespace Workspaces {
 		}
 
 		private void on_settings_change(string key) {
-			if (key != "addbutton-visibility") {
-				return;
+			if (key == "addbutton-visibility") {
+				button_visibility = (AddButtonVisibility)settings.get_enum(key);
+				add_button_revealer.set_reveal_child(((button_visibility == AddButtonVisibility.ALWAYS) && below_max_workspace_count()));
+			} else if (key == "item-size-multiplier") {
+				item_size_multiplier = float.parse(settings.get_string(key));
+				foreach (Gtk.Widget widget in workspaces_layout.get_children()) {
+					Gtk.Revealer revealer = widget as Gtk.Revealer;
+					WorkspaceItem item = revealer.get_child() as WorkspaceItem;
+					item.set_size_multiplier(item_size_multiplier);
+				}
+				Timeout.add(100, () => {
+					update_workspaces.begin();
+					return true;
+				});
 			}
-
-			button_visibility = (AddButtonVisibility)settings.get_enum(key);
-
-			add_button_revealer.set_reveal_child(((button_visibility == AddButtonVisibility.ALWAYS) && below_max_workspace_count()));
 		}
 
 		private void populate_workspaces() {
@@ -278,7 +291,7 @@ namespace Workspaces {
 		}
 
 		private void workspace_added(Wnck.Workspace space) {
-			WorkspaceItem item = new WorkspaceItem(space);
+			WorkspaceItem item = new WorkspaceItem(space, item_size_multiplier);
 			var _workspace = wnck_screen.get_active_workspace();
 			if (_workspace != null && _workspace == space) {
 				item.get_style_context().add_class("current-workspace");
@@ -391,10 +404,7 @@ namespace Workspaces {
 		}
 
 		public override void panel_size_changed(int panel_size, int icon_size, int small_icon_size) {
-			WorkspacesApplet.panel_size = panel_size - 1;
-			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-				WorkspacesApplet.panel_size = panel_size - 6;
-			}
+			WorkspacesApplet.panel_size = panel_size;
 
 			if (startup) {
 				return;

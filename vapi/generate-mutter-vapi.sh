@@ -1,7 +1,7 @@
 #!/bin/bash
 set -xe
 
-version=${9-10}
+version=$1
 girdir=$(pkg-config libmutter-$version --variable=girdir)
 
 cd $(dirname $0)

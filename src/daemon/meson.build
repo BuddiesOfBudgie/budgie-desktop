@@ -2,7 +2,7 @@
 
 custom_target('desktop-file-daemon',
     input : 'budgie-daemon.desktop.in',
-    output : 'budgie-daemon.desktop',
+    output : 'org.buddiesofbudgie.BudgieDaemon.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
@@ -15,6 +15,14 @@ daemon_resources = gnome.compile_resources(
     c_name: 'budgie_polkit',
 )
 
+lib_daemon_resources = static_library(
+    'budgie-daemon-resources',
+    daemon_resources,
+    dependencies: [ dep_glib ],
+    install: false,
+    c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
+)
+
 daemon_sources = [
     'endsession.vala',
     'notifications/dbus.vala',
@@ -25,10 +33,11 @@ daemon_sources = [
     'osd.vala',
     'settings.vala',
     'tabswitcher.vala',
-    daemon_resources,
+    'xdgdirtracker/dbus.vala',
 ]
 
 daemon_deps = [
+    dep_giounix,
     dep_gtk3,
     dep_gdkx11,
     dep_notify,
@@ -56,6 +65,9 @@ endif
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
+    link_whole: [
+        lib_daemon_resources,
+    ],
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,

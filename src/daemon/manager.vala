@@ -23,6 +23,7 @@ namespace Budgie {
 		Budgie.Notifications.Server? notifications;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
+		Budgie.XDGDirTracker? xdg_tracker;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -38,19 +39,22 @@ namespace Budgie {
 			osd = new Budgie.OSDManager();
 			osd.setup_dbus(replace);
 			notifications = new Budgie.Notifications.Server();
+			notifications.setup_dbus(replace);
 			menus = new Budgie.MenuManager();
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
 			switcher.setup_dbus(replace);
+			xdg_tracker = new Budgie.XDGDirTracker();
+			xdg_tracker.setup_dbus(replace);
 		}
 
 		/**
 		* Attempt registration with the Session Manager
 		*/
 		private async bool register_with_session() {
-			try {
-				sclient = yield LibSession.register_with_session("budgie-daemon");
-			} catch (Error e) {
+			sclient = yield LibSession.register_with_session("budgie-daemon");
+
+			if (sclient == null) {
 				return false;
 			}
 

@@ -46,6 +46,12 @@
       <description>Height of panel if horizontal, or the width if it is vertical</description>
     </key>
 
+    <key type="i" name="spacing">
+      <default>2</default>
+      <summary>Applet spacing</summary>
+      <description>Space between each applet</description>
+    </key>
+
     <key enum="com.solus-project.budgie-panel.Transparency" name="transparency">
       <default>'none'</default>
       <summary>Panel transparency</summary>
@@ -112,7 +118,7 @@
     </key>
 
     <key type="as" name="spam-apps">
-      <default>['Spotify', 'Lollypop', 'audacious', 'budgie-desktop-nm-applet.desktop', 'lollypop.desktop', 'budgie-power-panel', 'budgie-printer-panel', 'gnome-power-panel', 'gnome-printer-panel', 'nm-applet']</default>
+      <default>['Spotify', 'Lollypop', 'audacious', 'org.buddiesofbudgie.BudgieDesktopNmApplet.desktop', 'lollypop.desktop', 'budgie-power-panel', 'budgie-printer-panel', 'gnome-power-panel', 'gnome-printer-panel', 'nm-applet']</default>
       <summary>Spam Apps</summary>
       <description>Notifications send by these apps will not be displayed in Raven.</description>
     </key>

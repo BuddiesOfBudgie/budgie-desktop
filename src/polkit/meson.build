@@ -2,7 +2,7 @@
 
 custom_target('desktop-file-polkit',
     input : 'budgie-polkit.desktop.in',
-    output : 'budgie-polkit.desktop',
+    output : 'org.buddiesofbudgie.BudgiePolkit.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
@@ -24,6 +24,7 @@ polkit_sources = [
 pkversion = '>= 0.105'
 
 polkit_deps = [
+    dep_giounix,
     dep_gtk3,
     link_libconfig,
     link_libtheme,
@@ -59,6 +60,7 @@ executable(
     ],
     c_args: [
         '-DPOLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE',
+        '-Wno-overlength-strings', # gresource generates overlength strings...
     ],
     install: true,
 )

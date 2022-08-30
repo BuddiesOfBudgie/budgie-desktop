@@ -23,20 +23,23 @@ namespace Workspaces {
 		public signal void pls_update_windows();
 		private Gtk.Grid icon_grid;
 		private Gtk.Allocation real_alloc;
+		private float size_multiplier;
 
-		public WorkspaceItem(Wnck.Workspace space) {
+		public WorkspaceItem(Wnck.Workspace space, float multiplier) {
 			this.get_style_context().add_class("workspace-item");
 			this.workspace = space;
+			this.size_multiplier = multiplier;
 			this.set_tooltip_text(workspace.get_name());
 
 			real_alloc.width = 0;
 			real_alloc.height = 0;
 
 			icon_grid = new Gtk.Grid();
-			icon_grid.set_column_spacing(0);
-			icon_grid.set_row_spacing(0);
+			icon_grid.set_column_spacing(1);
+			icon_grid.set_row_spacing(1);
 			icon_grid.set_row_homogeneous(true);
 			icon_grid.set_column_homogeneous(true);
+			icon_grid.set_border_width(2);
 			this.add(icon_grid);
 
 			popover = new Budgie.Popover(this);
@@ -183,18 +186,8 @@ namespace Workspaces {
 		}
 
 		public void update_windows(List<unowned Wnck.Window> window_list) {
-			int column_offset = 0;
-			int row_offset = 0;
-
-			if (WorkspacesApplet.get_orientation() == Gtk.Orientation.HORIZONTAL) {
-				column_offset = 18;
-				row_offset = 5;
-			} else {
-				column_offset = 10;
-				row_offset = 15;
-			}
-			int num_columns = (real_alloc.width - column_offset) / 16;
-			int num_rows = (real_alloc.height - row_offset) / 16;
+			int num_columns = (real_alloc.width - 4) / 20;
+			int num_rows = (real_alloc.height - 4) / 20;
 
 			if (num_columns <= 0) {
 				num_columns = 1;
@@ -270,6 +263,10 @@ namespace Workspaces {
 			this.queue_resize();
 		}
 
+		public void set_size_multiplier(float multiplier) {
+			size_multiplier = multiplier;
+		}
+
 		public override void size_allocate(Gtk.Allocation allocation) {
 			this.queue_resize();
 			base.size_allocate(real_alloc);
@@ -298,15 +295,20 @@ namespace Workspaces {
 				min = nat = real_alloc.width = WorkspacesApplet.panel_size;
 				return;
 			}
-			float w_width = (float)workspace.get_width();
-			float width = (w_width/workspace.get_height()) * WorkspacesApplet.panel_size;
-			min = nat = (int)width;
-			real_alloc.width = (int)width;
+			float height = WorkspacesApplet.panel_size;
+			min = nat = (int) (height * 2.9 * size_multiplier);
+			real_alloc.width = (int) (height * 2.9 * size_multiplier);
 		}
 
 		public override void get_preferred_height(out int min, out int nat) {
-			base.get_preferred_height(out min, out nat);
-			min = nat = real_alloc.height = WorkspacesApplet.panel_size;
+			if (WorkspacesApplet.get_orientation() == Gtk.Orientation.HORIZONTAL) {
+				base.get_preferred_width(out min, out nat);
+				min = nat = real_alloc.height = WorkspacesApplet.panel_size;
+				return;
+			}
+			float height = WorkspacesApplet.panel_size;
+			min = nat = (int) (height * 2 * size_multiplier);
+			real_alloc.height = (int) (height * 2 * size_multiplier);
 		}
 
 		public Wnck.Workspace get_workspace() {

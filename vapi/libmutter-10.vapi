@@ -314,7 +314,7 @@ namespace Meta {
 		[CCode (has_construct_function = false)]
 		protected CursorTracker ();
 		public void get_hot (out int x, out int y);
-		public void get_pointer (Graphene.Point coords, out Clutter.ModifierType mods);
+		public void get_pointer (out Graphene.Point coords, out Clutter.ModifierType mods);
 		public bool get_pointer_visible ();
 		public float get_scale ();
 		public unowned Cogl.Texture get_sprite ();
@@ -823,6 +823,7 @@ namespace Meta {
 		public uint user_time { get; }
 		public Meta.WindowType window_type { get; }
 		public string wm_class { get; }
+		public signal void monitor_changed (int old_monitor);
 		public signal void position_changed ();
 		public signal void raised ();
 		public signal void shown ();

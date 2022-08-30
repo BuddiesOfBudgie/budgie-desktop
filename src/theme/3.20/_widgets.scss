@@ -48,8 +48,8 @@
         }
         &.linked {
             button:nth-child(2) {
-                &:dir(ltr) { @extend %linked:last-child; }
-                &:dir(rtl) { @extend %linked:first-child; }
+                &:dir(ltr) { @extend %linked, :last-child; }
+                &:dir(rtl) { @extend %linked, :first-child; }
             }
         }
     }
@@ -158,7 +158,7 @@
     // Scrollbars
     scrollbar {
         @include widget_scrollbar(button, slider, trought, hover, disabled);
-    
+
         $_slider_margin: 3px;
         $_slider_fine_tune_margin: 4px;
 

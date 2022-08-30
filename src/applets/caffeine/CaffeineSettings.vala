@@ -16,13 +16,13 @@ namespace Caffeine {
 		private Settings? wm_settings = null;
 
 		[GtkChild]
-		private Gtk.Switch? notify_switch;
+		private unowned Gtk.Switch? notify_switch;
 
 		[GtkChild]
-		private Gtk.Switch? brightness_switch;
+		private unowned Gtk.Switch? brightness_switch;
 
 		[GtkChild]
-		private Gtk.SpinButton? brightness_level;
+		private unowned Gtk.SpinButton? brightness_level;
 
 		public AppletSettings(Settings? settings) {
 			Object();

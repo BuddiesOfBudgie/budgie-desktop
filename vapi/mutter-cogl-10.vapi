@@ -884,7 +884,7 @@ namespace Cogl {
 		SYNC_AND_COMPLETE_EVENT,
 		N_FEATURES
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", cprefix = "COGL_SCANOUT_ERROR_")]
+	[CCode (cheader_filename = "cogl/cogl.h", cprefix = "COGL_SCANOUT_ERROR_", has_type_id = false)]
 	public errordomain ScanoutError {
 		[CCode (cname = "COGL_SCANOUT_ERROR_INHIBITED")]
 		SCANOUT_ERROR_INHIBITED;

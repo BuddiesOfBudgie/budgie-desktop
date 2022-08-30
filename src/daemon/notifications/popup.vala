@@ -11,8 +11,6 @@
 
 namespace Budgie.Notifications {
 	public const int NOTIFICATION_WIDTH = 400;
-	public const int MIN_TIMEOUT = 4000;
-	public const int MAX_TIMEOUT = 10000;
 
 	/**
 	 * This class is a notification popup with no content in it.
@@ -82,14 +80,7 @@ namespace Budgie.Notifications {
 				Source.remove(this.expire_id);
 			}
 
-			var t = timeout;
-			if (timeout < MIN_TIMEOUT && timeout != 0) {
-				t = MIN_TIMEOUT;
-			} else if (timeout > MAX_TIMEOUT) {
-				t = MAX_TIMEOUT;
-			}
-
-			this.expire_id = Timeout.add(t, do_expire, Priority.HIGH);
+			this.expire_id = Timeout.add(timeout, do_expire, Priority.HIGH);
 		}
 
 		/**
@@ -274,9 +265,11 @@ namespace Budgie.Notifications {
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
-				max_width_chars = 35,
-				halign = Gtk.Align.START,
+				width_chars = 33,
+				max_width_chars = 33,
+				lines = 2,
 				valign = Gtk.Align.START,
+				xalign = 0,
 				hexpand = true,
 				vexpand = true
 			};

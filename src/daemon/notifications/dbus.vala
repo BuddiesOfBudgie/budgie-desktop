@@ -13,6 +13,9 @@
 	public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
+	const int32 MINIMUM_EXPIRY = 6000;
+	const int32 MAXIMUM_EXPIRY = 12000;
+
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
 		/**
@@ -26,14 +29,16 @@
 		 */
 		public bool notifications_paused { get; set; default = false; }
 
-		construct {
-			Bus.own_name(
-				BusType.SESSION,
-				NOTIFICATION_DBUS_NAME,
-				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-				null,
-				on_dbus_acquired
-			);
+		construct {}
+
+		[DBus (visible=false)]
+		public void setup_dbus(bool replace) {
+			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+			if (replace) {
+				flags |= BusNameOwnerFlags.REPLACE;
+			}
+			Bus.own_name(BusType.SESSION, Budgie.Notifications.NOTIFICATION_DBUS_NAME, flags,
+				on_dbus_acquired, ()=> {}, Budgie.DaemonNameLost);
 		}
 
 		private void on_dbus_acquired(DBusConnection conn) {
@@ -111,17 +116,20 @@
 		private uint32 latest_popup_id { private get; private set; default = 0; }
 
 		construct {
-			Bus.own_name(
-				BusType.SESSION,
-				"org.freedesktop.Notifications",
-				BusNameOwnerFlags.NONE,
-				on_bus_acquired
-			);
-
 			this.dispatcher = new Dispatcher();
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
+		}
+
+		[DBus (visible=false)]
+		public void setup_dbus(bool replace) {
+			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
+			if (replace) {
+				flags |= BusNameOwnerFlags.REPLACE;
+			}
+			Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications", flags, on_bus_acquired, ()=> {}, Budgie.DaemonNameLost);
+			this.dispatcher.setup_dbus(replace);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -150,7 +158,7 @@
 		/**
 		 * Signal emitted when a notification is closed.
 		 */
-		public signal void NotificationClosed(uint32 id, NotificationCloseReason reason);
+		public signal void NotificationClosed(uint32 id, uint32 reason);
 
 		/**
 		 * Returns the capabilities of this DBus Notification server.
@@ -196,7 +204,15 @@
 			int32 expire_timeout
 		) throws DBusError, IOError {
 			var id = (replaces_id != 0 ? replaces_id : ++notif_id);
-			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expire_timeout);
+
+			// The spec says that an expiry_timeout of 0 means that the
+			// notification should never expire. That doesn't really make
+			// sense for our implementation however, since this only handles
+			// popups. Notification "storage" is done seperately by Raven.
+			// All of that is to say: clamp the expiry
+			var expires = expire_timeout.clamp(MINIMUM_EXPIRY, MAXIMUM_EXPIRY);
+
+			var notification = new Notification(id, app_name, app_icon, summary, body, actions, hints, expires);
 
 			string settings_app_name = app_name;
 			bool should_show = true; // Default to showing notification
@@ -232,7 +248,6 @@
 				this.popups[id] = new Popup(this, notification);
 				this.configure_window(this.popups[id]);
 				this.latest_popup_id = id;
-				this.popups[id].show_all();
 				this.popups[id].begin_decay(notification.expire_timeout);
 
 				this.popups[id].ActionInvoked.connect((action_key) => {
@@ -282,18 +297,29 @@
 		}
 
 		/**
-		 * Configures the location of a notification popup.
+		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
 			var screen = Gdk.Screen.get_default();
 
 			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
-			Gdk.Rectangle rect = mon.get_geometry();
+			Gdk.Rectangle mon_rect = mon.get_geometry();
 
-			/* Set the x, y position of the notification */
-			int x = 0, y = 0;
-			calculate_position(popup, rect, out x, out y);
-			popup.move(x, y);
+			ulong handler_id = 0;
+			handler_id = popup.get_child().size_allocate.connect((alloc) => {
+				// Diconnect from the signal to avoid trying to recalculate
+				// the position unexpectedly, which occurs when mousing over
+				// or clicking the close button with some GTK themes.
+				popup.get_child().disconnect(handler_id);
+				handler_id = 0;
+
+				/* Set the x, y position of the notification */
+				int x = 0, y = 0;
+				calculate_position(popup, mon_rect, out x, out y);
+				popup.move(x, y);
+			});
+
+			popup.show_all();
 		}
 
 		/**
@@ -327,10 +353,7 @@
 						y = existing_y - existing_height - BUFFER_ZONE;
 					} else { // This is the first nofication on the screen
 						x = rect.x + BUFFER_ZONE;
-
-						int height;
-						window.get_size(null, out height); // Get the estimated height of the notification
-						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.BOTTOM_RIGHT:
@@ -340,10 +363,7 @@
 					} else { // This is the first nofication on the screen
 						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
 						x -= BUFFER_ZONE; // Don't touch edge of the screen
-
-						int height;
-						window.get_size(null, out height); // Get the estimated height of the notification
-						y = (rect.y + rect.height) - height - INITIAL_BUFFER_ZONE;
+						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
 					}
 					break;
 				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case

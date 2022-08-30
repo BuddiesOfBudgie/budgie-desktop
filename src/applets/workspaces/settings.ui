@@ -11,11 +11,28 @@
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="hexpand">True</property>
         <property name="label" translatable="yes">"Add" button visibility</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="hexpand">True</property>
+        <property name="label" translatable="yes">Item Size Multiplier</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
     <child>
@@ -33,6 +50,28 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="combobox_multiplier">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="hexpand">True</property>
+        <property name="active">3</property>
+        <property name="active_id">1.0</property>
+        <items>
+          <item id="0.5" translatable="yes">0.5x</item>
+          <item id="0.75" translatable="yes">0.75x</item>
+          <item id="1.0" translatable="yes">1.0x</item>
+          <item id="1.5" translatable="yes">1.5x</item>
+          <item id="2.0" translatable="yes">2.0x</item>
+        </items>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
   </template>
