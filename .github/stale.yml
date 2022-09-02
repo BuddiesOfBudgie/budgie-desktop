@@ -1,0 +1,26 @@
+# Configuration for our stale bot
+# See all options at https://github.com/probot/stale
+
+daysUntilStale: 30
+
+# If we triaged it to a certain milestone or project, Stale should leave it alone
+exemptAssignees: true
+exemptMilestones: true
+exemptProjects: true
+
+# Stale should leave PRs alone. It is okay for them to stay open for a while
+only: issues
+
+# Only apply to labels we manually add here...
+onlyLabels: [needs-more-info, third-party]
+
+#  Comment the bot posts
+markComment: >
+  This issue has been automatically marked as stale because it has not had recent activity. This will be closed if no further activity occurs.
+  This issue may have been marked for the following reasons:
+  1. If it was marked as needs-more-info, we are currently awaiting actionable information to address this issue.
+  2. If it was marked as third-party, this may be an issue related to a third-party rather than Budgie itself. These issues are kept open for a certain amount of time of facilitate discussions / investigations.
+
+# The default is wontfix which may send the wrong message.
+# For example, if we are waiting for more information, the implication we won't fix the issue just because we don't have all the details isn't friendly.
+staleLabel: closed-by-stale

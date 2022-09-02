@@ -14,6 +14,7 @@ libbudgieprivate = shared_library(
     dependencies: [
         libplugin_vapi,
         dep_peas,
+        dep_giounix,
         dep_gtk3,
         meson.get_compiler('c').find_library('m', required: false),
         link_libplugin,

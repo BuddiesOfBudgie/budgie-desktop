@@ -347,6 +347,9 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (target_icon_size > 0) {
 			this.icon.pixel_size = target_icon_size;
+		} else {
+			// prevents apps making the panel massive when the icon initially gets added
+			this.icon.pixel_size = this.desktop_helper.icon_size;
 		}
 	}
 

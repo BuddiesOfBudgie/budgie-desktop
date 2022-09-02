@@ -40,6 +40,7 @@ public class ClockApplet : Budgie.Applet {
 	private bool clock_show_seconds;
 	private bool clock_use_24_hour_time;
 	private bool clock_use_custom_format;
+	private bool clock_use_custom_timezone;
 	private string clock_custom_format;
 	private TimeZone clock_timezone;
 
@@ -210,8 +211,9 @@ public class ClockApplet : Budgie.Applet {
 					break;
 				case "use-custom-timezone":
 				case "custom-timezone":
-					if (settings.get_boolean("use-custom-timezone")) {
-						string custom_tz = settings.get_string("custom_timezone");
+					this.clock_use_custom_timezone = settings.get_boolean("use-custom-timezone");
+					if (this.clock_use_custom_timezone) {
+						string custom_tz = settings.get_string("custom-timezone");
 						try {
 							this.clock_timezone = new TimeZone.identifier(custom_tz);
 						} catch (Error e) {
@@ -287,6 +289,9 @@ public class ClockApplet : Budgie.Applet {
 	 * This is called once every second, updating the time
 	 */
 	protected bool update_clock() {
+		if (!this.clock_use_custom_timezone) {
+			this.clock_timezone = new TimeZone.local();
+		}
 		this.time = new DateTime.now(this.clock_timezone);
 
 		string format;

@@ -75,7 +75,7 @@ namespace Budgie {
 		* Launch Budgie Desktop Settings
 		*/
 		private void budgie_activate() {
-			launch_desktop_name("budgie-desktop-settings.desktop");
+			launch_desktop_name("org.buddiesofbudgie.BudgieDesktopSettings.desktop");
 		}
 
 		/**

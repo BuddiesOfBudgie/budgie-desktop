@@ -39,6 +39,7 @@ applet_icontasklist_sources = [
 
 applet_icontasklist_deps = [
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     dep_wnck,

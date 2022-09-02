@@ -1,162 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">folder-open</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">folder-open</property>
     <property name="icon_size">1</property>
   </object>
+  <!-- n-columns=3 n-rows=7 -->
   <template class="BudgieMenuSettings" parent="GtkGrid">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="row_spacing">10</property>
-    <property name="column_spacing">6</property>
+    <property name="can-focus">False</property>
+    <property name="row-spacing">10</property>
+    <property name="column-spacing">6</property>
     <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
         <property name="label" translatable="yes">Show Menu Label</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkSwitch" id="switch_menu_label">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="halign">end</property>
         <property name="hexpand">True</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes">Compact Mode</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkSwitch" id="switch_menu_compact">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="halign">end</property>
         <property name="hexpand">True</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label4">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes">Show Headers</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkSwitch" id="switch_menu_headers">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="halign">end</property>
         <property name="hexpand">True</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
         <property name="label" translatable="yes">Menu Label</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="entry_label">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="halign">end</property>
-        <property name="caps_lock_warning">False</property>
+        <property name="caps-lock-warning">False</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label5">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes">Roll-over mouse</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkSwitch" id="switch_menu_categories_hover">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="halign">end</property>
         <property name="hexpand">True</property>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label6">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="hexpand">True</property>
         <property name="label" translatable="yes">Menu Icon</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <child>
           <object class="GtkEntry" id="entry_icon_pick">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -167,14 +168,14 @@
         <child>
           <object class="GtkButton" id="button_icon_pick">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="image">image1</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -183,9 +184,55 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label7">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="label" translatable="yes">Show settings items</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="switch_menu_show_settings_items">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="halign">end</property>
+        <property name="hexpand">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">6</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </template>
   <object class="GtkSizeGroup" id="szgrp_entries">
