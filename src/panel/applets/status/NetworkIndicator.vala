@@ -16,11 +16,7 @@ public class NetworkIndicator : Gtk.Bin {
 	private Gtk.Box iconBox = null;
 
 	public Budgie.Popover? popover = null;
-
-	private Gtk.Switch wifiSwitch = null;
-	private Gtk.ListBox wifiList = null;
-
-	private Gtk.ListBox ethernetList = null;
+	private NetworkIndicatorMenu? menu = null;
 
 	private List<unowned NM.Device> devices_sorted;
 
@@ -43,28 +39,15 @@ public class NetworkIndicator : Gtk.Bin {
 		ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
 		ebox.button_release_event.connect(on_button_release_event);
 
-		popover = build_popover();
-
 		try {
 			client = new NM.Client();
 		} catch (Error e) {
 			error("Failed to initialize a NetworkManager client: %s", e.message);
 		}
 
-		wifiSwitch.set_state(client.wireless_get_enabled());
-		client.notify["wireless-enabled"].connect(() => wifiSwitch.set_state(client.wireless_get_enabled()));
-		wifiSwitch.state_set.connect((state) => {
-			client.dbus_set_property.begin(
-				"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
-				"WirelessEnabled", state,
-				-1, null, () => {
-					wifiSwitch.set_state(state);
-					wifiList.visible = state;
-				}
-			);
-
-			return true;
-		});
+		popover = new Budgie.Popover(ebox);
+		menu = new NetworkIndicatorMenu(client);
+		popover.add(menu);
 
 		devices_sorted = new List<unowned NM.Device>();
 		client.get_devices().foreach((device) => {
@@ -96,10 +79,8 @@ public class NetworkIndicator : Gtk.Bin {
 		});
 
 		// Ensure all content is shown
+		menu.show_all();
 		show_all();
-
-		ethernetList.hide();
-		wifiList.hide();
 	}
 
 	public void set_spacing(int spacing) {
@@ -149,49 +130,6 @@ public class NetworkIndicator : Gtk.Bin {
 		}
 
 		iconBox.show_all();
-	}
-
-	private Budgie.Popover? build_popover() {
-		// Create our popover
-		Budgie.Popover? popover = new Budgie.Popover(ebox);
-		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
-		box.border_width = 6;
-		popover.add(box);
-
-		// Ethernet
-		var ethernetBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		ethernetBox.pack_start(new Gtk.Label(_("Ethernet")), false, false, 0);
-		box.pack_start(ethernetBox, false, false, 0);
-
-		ethernetList = new Gtk.ListBox();
-		box.pack_start(ethernetList, false, false, 0);
-
-		// Separator
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-
-		// Wifi
-		wifiSwitch = new Gtk.Switch();
-		var wifiBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		wifiBox.pack_start(new Gtk.Label(_("Wi-Fi")), false, false, 0);
-		wifiBox.pack_end(wifiSwitch, false, false, 0);
-		box.pack_start(wifiBox, false, false, 0);
-
-		wifiList = new Gtk.ListBox();
-		box.pack_start(wifiList, false, false, 0);
-
-		// Separator
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-
-		// Settings button
-		var button = new Gtk.Button.with_label(_("Network Settings"));
-		button.get_child().set_halign(Gtk.Align.START);
-		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		button.clicked.connect(on_settings_activate);
-		box.pack_start(button, false, false, 0);
-
-		box.show_all();
-
-		return popover;
 	}
 
 	private NetworkIconInfo? wired_icon_info_from_state(NM.DeviceEthernet device) {
@@ -249,7 +187,7 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.DISCONNECTED:
 				return null;
 			case NM.DeviceState.ACTIVATED:
-				iconName = get_icon_name_from_ap_strength(device);
+				iconName = get_connected_icon_name_from_ap_strength(device.active_access_point);
 				status = _("Connected to <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
 				extraStatus = _("Signal strength: %u%%").printf(device.active_access_point.get_strength());
 				break;
@@ -285,8 +223,8 @@ public class NetworkIndicator : Gtk.Bin {
 		return new NetworkIconInfo(iconName, tooltip);
 	}
 
-	private string get_icon_name_from_ap_strength(NM.DeviceWifi device) {
-		var strength = device.active_access_point.get_strength();
+	private string get_connected_icon_name_from_ap_strength(NM.AccessPoint ap) {
+		var strength = ap.get_strength();
 		var iconStrength = "00";
 
 		if (strength > 80) {
@@ -308,20 +246,6 @@ public class NetworkIndicator : Gtk.Bin {
 		}
 
 		return Gdk.EVENT_STOP;
-	}
-
-	void on_settings_activate() {
-		this.popover.hide();
-
-		var app_info = new DesktopAppInfo("budgie-network-panel.desktop");
-		if (app_info == null) {
-			return;
-		}
-		try {
-			app_info.launch(null, null);
-		} catch (Error e) {
-			message("Unable to launch budgie-network-panel.desktop: %s", e.message);
-		}
 	}
 }
 
