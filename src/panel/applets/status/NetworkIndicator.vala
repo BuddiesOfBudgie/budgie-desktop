@@ -15,8 +15,7 @@ public class NetworkIndicator : Gtk.Bin {
 	public Gtk.EventBox? ebox = null;
 	private Gtk.Box iconBox = null;
 
-	public Budgie.Popover? popover = null;
-	private NetworkIndicatorMenu? menu = null;
+	public NetworkIndicatorPopover? popover = null;
 
 	private List<unowned NM.Device> devices_sorted;
 
@@ -45,9 +44,7 @@ public class NetworkIndicator : Gtk.Bin {
 			error("Failed to initialize a NetworkManager client: %s", e.message);
 		}
 
-		popover = new Budgie.Popover(ebox);
-		menu = new NetworkIndicatorMenu(client);
-		popover.add(menu);
+		popover = new NetworkIndicatorPopover(ebox, client);
 
 		devices_sorted = new List<unowned NM.Device>();
 		client.get_devices().foreach((device) => {
@@ -79,7 +76,6 @@ public class NetworkIndicator : Gtk.Bin {
 		});
 
 		// Ensure all content is shown
-		menu.show_all();
 		show_all();
 	}
 
