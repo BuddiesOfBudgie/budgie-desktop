@@ -240,6 +240,7 @@ public class NetworkIndicator : Gtk.Bin {
 	private NetworkIconInfo? wireless_icon_info_from_state(NM.DeviceWifi device) {
 		string iconName = "network-wireless-acquiring-symbolic";
 		string status = null;
+		string extraStatus = null;
 
 		switch (device.get_state()) {
 			case NM.DeviceState.UNAVAILABLE:
@@ -250,6 +251,7 @@ public class NetworkIndicator : Gtk.Bin {
 			case NM.DeviceState.ACTIVATED:
 				iconName = get_icon_name_from_ap_strength(device);
 				status = _("Connected to <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
+				extraStatus = _("Signal strength: %u%%").printf(device.active_access_point.get_strength());
 				break;
 			case NM.DeviceState.CONFIG:
 				status = _("Connecting...");
@@ -276,6 +278,9 @@ public class NetworkIndicator : Gtk.Bin {
 		}
 
 		string tooltip = "<b>%s</b>\n%s".printf(_("Wi-Fi"), status);
+		if (extraStatus != null) {
+			tooltip += "\n%s".printf(extraStatus);
+		}
 
 		return new NetworkIconInfo(iconName, tooltip);
 	}
