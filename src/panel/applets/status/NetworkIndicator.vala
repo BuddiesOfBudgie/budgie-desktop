@@ -183,8 +183,8 @@ public class NetworkIndicator : Gtk.Bin {
 	}
 
 	private NetworkIconInfo? wired_icon_info_from_state(NM.DeviceEthernet device) {
-		string iconName = null;
-		string tooltip = null;
+		string iconName = "network-wired-acquiring-symbolic";
+		string status = null;
 
 		switch (device.get_state()) {
 			case NM.DeviceState.UNAVAILABLE:
@@ -194,47 +194,40 @@ public class NetworkIndicator : Gtk.Bin {
 				return null;
 			case NM.DeviceState.ACTIVATED:
 				iconName = "network-wired-activated-symbolic";
-				tooltip = "Connected";
+				status = _("Connected");
 				break;
 			case NM.DeviceState.CONFIG:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Connecting...";
+				status = _("Connecting...");
 				break;
 			case NM.DeviceState.IP_CHECK:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Checking for further steps to connect...";
+				status = _("Checking for additional steps to connect...");
 				break;
 			case NM.DeviceState.IP_CONFIG:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Requesting IP address...";
+				status = _("Requesting IP address...");
 				break;
 			case NM.DeviceState.NEED_AUTH:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Authorization required";
+				status = _("Authorization required");
 				break;
 			case NM.DeviceState.PREPARE:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Preparing connection to network...";
+				status = _("Preparing connection to network...");
 				break;
 			case NM.DeviceState.SECONDARIES:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Connecting...";
+				status = _("Connecting...");
 				break;
 			case NM.DeviceState.DEACTIVATING:
 			case NM.DeviceState.FAILED:
-				iconName = "network-wired-acquiring-symbolic";
-				tooltip = "Disconnecting...";
+				status = _("Disconnecting...");
 				break;
 		}
 
-		tooltip = "<b>Ethernet</b> <small>(" + device.get_description() + ")</small>\n" + tooltip;
+		string tooltip = "<b>%s</b>\n%s".printf(_("Ethernet"), status);
 
 		return new NetworkIconInfo(iconName, tooltip);
 	}
 
 	private NetworkIconInfo? wireless_icon_info_from_state(NM.DeviceWifi device) {
 		string iconName = "network-wireless-acquiring-symbolic";
-		string tooltip = null;
+		string status = null;
 
 		switch (device.get_state()) {
 			case NM.DeviceState.UNAVAILABLE:
@@ -244,33 +237,33 @@ public class NetworkIndicator : Gtk.Bin {
 				return null;
 			case NM.DeviceState.ACTIVATED:
 				iconName = get_icon_name_from_ap_strength(device);
-				tooltip = "Connected to " + NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data());
+				status = _("Connected to <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
 				break;
 			case NM.DeviceState.CONFIG:
-				tooltip = "Connecting...";
+				status = _("Connecting...");
 				break;
 			case NM.DeviceState.IP_CHECK:
-				tooltip = "Checking for further steps to connect...";
+				status = _("Checking for further steps to connect...");
 				break;
 			case NM.DeviceState.IP_CONFIG:
-				tooltip = "Requesting IP address...";
+				status = _("Requesting IP address...");
 				break;
 			case NM.DeviceState.NEED_AUTH:
-				tooltip = "Authorization required";
+				status = _("Authorization required");
 				break;
 			case NM.DeviceState.PREPARE:
-				tooltip = "Preparing connection to network...";
+				status = _("Preparing connection to network...");
 				break;
 			case NM.DeviceState.SECONDARIES:
-				tooltip = "Connecting...";
+				status = _("Connecting...");
 				break;
 			case NM.DeviceState.DEACTIVATING:
 			case NM.DeviceState.FAILED:
-				tooltip = "Disconnecting...";
+				status = _("Disconnecting...");
 				break;
 		}
 
-		tooltip = "<b>WiFi</b> <small>(" + device.get_description() + ")</small>\n" + tooltip;
+		string tooltip = "<b>%s</b>\n%s".printf(_("Wi-Fi"), status);
 
 		return new NetworkIconInfo(iconName, tooltip);
 	}
