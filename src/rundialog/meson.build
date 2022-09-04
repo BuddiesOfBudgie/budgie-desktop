@@ -1,11 +1,14 @@
 # Provides budgie-run-dialog binary
 rundialog_sources = [
+    'LauncherButton.vala',
     'RunDialog.vala'
 ]
 
 rundialog_deps = [
+    dep_gee,
     dep_giounix,
     dep_gtk3,
+    link_libappindexer,
     link_libconfig,
     link_libtheme,
 ]
