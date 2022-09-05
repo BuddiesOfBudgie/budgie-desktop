@@ -25,6 +25,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 	public NetworkIndicatorPopover(Gtk.EventBox ebox, NM.Client client) {
 		Object(relative_to: ebox);
 
+		get_style_context().add_class("budgie-network-popover");
+
 		this.client = client;
 
 		wifiDevices = new List<NM.DeviceWifi>();
@@ -48,7 +50,18 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 				-1, null
 			);
 
-			wifiListRevealer.set_reveal_child(state);
+			if (state) {
+				var placeholderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+				var spinner = new Gtk.Spinner();
+				spinner.start();
+				placeholderBox.add(spinner);
+				placeholderBox.add(new Gtk.Label(_("Searching for networks...")));
+				placeholderBox.set_halign(Gtk.Align.CENTER);
+				wifiNetworkList.add(placeholderBox);
+				wifiNetworkList.show_all();
+			} else {
+				wifiListRevealer.set_reveal_child(false);
+			}
 
 			return true;
 		});
@@ -68,8 +81,6 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiNetworkList.get_children().foreach((row) => {
 			row.destroy();
 		});
-
-		wifiNetworkList.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 
 		var activeIds = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 		var table = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
@@ -129,25 +140,32 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
 		box.border_width = 10;
 
-		// Wifi
-		wifiSwitch = new Gtk.Switch();
-		wifiSwitch.set_halign(Gtk.Align.END);
-
 		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi")));
 		wifiLabel.set_use_markup(true);
 		wifiLabel.margin_start = 4;
 		wifiLabel.margin_end = 48;
 
-		var wifiBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		wifiBox.pack_start(wifiLabel, false, false, 0);
-		wifiBox.pack_end(wifiSwitch, false, false, 0);
-		box.pack_start(wifiBox, false, false, 0);
+		// Wifi
+		wifiSwitch = new Gtk.Switch();
+		wifiSwitch.set_halign(Gtk.Align.END);
+
+		var wifiHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		wifiHeaderBox.pack_start(wifiLabel, false, false, 0);
+		wifiHeaderBox.pack_end(wifiSwitch, false, false, 0);
+
+		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		wifiNetworkList = new Gtk.ListBox();
+
+		wifiRevealerBox.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+		wifiRevealerBox.add(wifiNetworkList);
 
 		wifiListRevealer = new Gtk.Revealer();
-		box.pack_start(wifiListRevealer, false, false, 0);
+		wifiListRevealer.add(wifiRevealerBox);
 
-		wifiNetworkList = new Gtk.ListBox();
-		wifiListRevealer.add(wifiNetworkList);
+		var wifiBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+		wifiBox.pack_start(wifiHeaderBox, false, false, 0);
+		wifiBox.pack_start(wifiListRevealer, false, false, 0);
+		box.pack_start(wifiBox);
 
 		// Separator
 		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
@@ -189,10 +207,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 		wifiSwitch.set_state(state);
 		if (state) {
-			wifiNetworkList.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-			wifiNetworkList.add(new Gtk.Label(_("Searching for networks...")));
-			wifiNetworkList.show_all();
-
+			wifiListRevealer.set_reveal_child(true);
 			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
 				recreate_wifi_list();
 				return client.wireless_get_enabled();

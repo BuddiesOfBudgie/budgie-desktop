@@ -25,6 +25,7 @@ sass_depend_files = files([
     'common/_imports.scss',
     'common/_menubar.scss',
     'common/_menu.scss',
+    'common/_networkpopover.scss',
     'common/_nightlight.scss',
     'common/_notifications.scss',
     'common/_panel.scss',
