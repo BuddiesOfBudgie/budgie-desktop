@@ -20,6 +20,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private List<NM.DeviceWifi> wifiDevices = null;
 
+	private uint wifi_recreate_timeout = 0;
+
 	public NetworkIndicatorPopover(Gtk.EventBox ebox, NM.Client client) {
 		Object(relative_to: ebox);
 
@@ -38,16 +40,12 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 		wifiSwitch.set_state(client.wireless_get_enabled());
 		wifiListRevealer.set_reveal_child(client.wireless_get_enabled());
-		client.notify["wireless-enabled"].connect(() => wifiSwitch.set_state(client.wireless_get_enabled()));
+		client.notify["wireless-enabled"].connect(on_wireless_state_changed);
 		wifiSwitch.state_set.connect((state) => {
 			client.dbus_set_property.begin(
 				"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
 				"WirelessEnabled", state,
-				-1, null, () => {
-					wifiSwitch.set_state(state);
-
-					recreate_wifi_list();
-				}
+				-1, null
 			);
 
 			wifiListRevealer.set_reveal_child(state);
@@ -56,13 +54,12 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		});
 
 		recreate_wifi_list();
-		Timeout.add_seconds(10, () => {
-			if (visible) {
+		if (client.wireless_get_enabled()) {
+			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
 				recreate_wifi_list();
-			}
-
-			return Source.CONTINUE;
-		});
+				return client.wireless_get_enabled();
+			});
+		}
 
 		box.show_all();
 	}
@@ -71,6 +68,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiNetworkList.get_children().foreach((row) => {
 			row.destroy();
 		});
+
+		wifiNetworkList.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 
 		var activeIds = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 		var table = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
@@ -182,6 +181,24 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			wifiDevices.append(wifiDevice);
 			wifiDevice.access_point_added.connect((ap) => recreate_wifi_list());
 			wifiDevice.access_point_removed.connect((ap) => recreate_wifi_list());
+		}
+	}
+
+	private void on_wireless_state_changed() {
+		var state = client.wireless_get_enabled();
+
+		wifiSwitch.set_state(state);
+		if (state) {
+			wifiNetworkList.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+			wifiNetworkList.add(new Gtk.Label(_("Searching for networks...")));
+			wifiNetworkList.show_all();
+
+			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
+				recreate_wifi_list();
+				return client.wireless_get_enabled();
+			});
+		} else if (wifi_recreate_timeout != 0) {
+			Source.remove(wifi_recreate_timeout);
 		}
 	}
 
