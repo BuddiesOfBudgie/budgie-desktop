@@ -16,12 +16,23 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private Gtk.Switch wifiSwitch = null;
 	private Gtk.Revealer wifiListRevealer = null;
-	private Gtk.ListBox wifiList = null;
+	private Gtk.ListBox wifiNetworkList = null;
+
+	private List<NM.DeviceWifi> wifiDevices = null;
 
 	public NetworkIndicatorPopover(Gtk.EventBox ebox, NM.Client client) {
 		Object(relative_to: ebox);
 
 		this.client = client;
+
+		wifiDevices = new List<NM.DeviceWifi>();
+		client.get_devices().foreach(on_device_added);
+		client.device_added.connect(on_device_added);
+		client.device_removed.connect((device) => {
+			if (device.device_type == NM.DeviceType.WIFI) {
+				wifiDevices.remove(device as NM.DeviceWifi);
+			}
+		});
 
 		build_contents();
 
@@ -34,16 +45,18 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 				"WirelessEnabled", state,
 				-1, null, () => {
 					wifiSwitch.set_state(state);
-					wifiListRevealer.set_reveal_child(state);
+
 					recreate_wifi_list();
 				}
 			);
+
+			wifiListRevealer.set_reveal_child(state);
 
 			return true;
 		});
 
 		recreate_wifi_list();
-		Timeout.add_seconds(2, () => {
+		Timeout.add_seconds(10, () => {
 			if (visible) {
 				recreate_wifi_list();
 			}
@@ -55,34 +68,30 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 	}
 
 	private void recreate_wifi_list() {
-		wifiList.get_children().foreach((row) => {
+		wifiNetworkList.get_children().foreach((row) => {
 			row.destroy();
 		});
 
 		var activeIds = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 		var table = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 
-		client.get_devices().foreach((device) => {
-			if (device.device_type == NM.DeviceType.WIFI) {
-				var wifiDevice = device as NM.DeviceWifi;
-
-				var activeAP = wifiDevice.get_active_access_point();
-				if (activeAP != null) {
-					activeIds.insert(gen_ap_identifier(activeAP), activeAP);
-				}
-
-				wifiDevice.get_access_points().foreach((ap) => {
-					if (ap.ssid != null) {
-						var identifier = gen_ap_identifier(ap);
-
-						if (!table.contains(identifier)) {
-							table.insert(identifier, ap);
-						} else if (ap.get_strength() > table.get(identifier).get_strength()) {
-							table.replace(identifier, ap);
-						}
-					}
-				});
+		wifiDevices.foreach((device) => {
+			var activeAP = device.get_active_access_point();
+			if (activeAP != null) {
+				activeIds.insert(gen_ap_identifier(activeAP), activeAP);
 			}
+
+			device.get_access_points().foreach((ap) => {
+				if (ap.ssid != null) {
+					var identifier = gen_ap_identifier(ap);
+
+					if (!table.contains(identifier)) {
+						table.insert(identifier, ap);
+					} else if (ap.get_strength() > table.get(identifier).get_strength()) {
+						table.replace(identifier, ap);
+					}
+				}
+			});
 		});
 
 		activeIds.foreach((id, ap) => {
@@ -100,7 +109,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			row_box.pack_end(connectedLabel, false, false, 0);
 
 			row_box.set_border_width(4);
-			wifiList.add(row_box);
+			wifiNetworkList.add(row_box);
 		});
 
 		table.foreach((id, ap) => {
@@ -111,10 +120,10 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			row_box.pack_start(icon, false, false, 0);
 			row_box.pack_start(label, false, false, 0);
 			row_box.set_border_width(4);
-			wifiList.add(row_box);
+			wifiNetworkList.add(row_box);
 		});
 
-		wifiList.show_all();
+		wifiNetworkList.show_all();
 	}
 
 	private void build_contents() {
@@ -138,8 +147,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiListRevealer = new Gtk.Revealer();
 		box.pack_start(wifiListRevealer, false, false, 0);
 
-		wifiList = new Gtk.ListBox();
-		wifiListRevealer.add(wifiList);
+		wifiNetworkList = new Gtk.ListBox();
+		wifiListRevealer.add(wifiNetworkList);
 
 		// Separator
 		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
@@ -151,14 +160,10 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		settingsLabel.margin_end = 48;
 
 		var networkSettings = new Gtk.Button.from_icon_name("network-wired-symbolic", Gtk.IconSize.BUTTON);
-		networkSettings.clicked.connect(() => {
-			on_settings_activate("budgie-network-panel.desktop");
-		});
+		networkSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
 
 		var wifiSettings = new Gtk.Button.from_icon_name("network-wireless-symbolic", Gtk.IconSize.BUTTON);
-		wifiSettings.clicked.connect(() => {
-			on_settings_activate("budgie-wifi-panel.desktop");
-		});
+		wifiSettings.clicked.connect(() => on_settings_activate("budgie-wifi-panel.desktop"));
 
 		var settingsBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 		settingsBox.pack_start(settingsLabel, false, false, 0);
@@ -168,6 +173,16 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		box.pack_start(settingsBox);
 
 		add(box);
+	}
+
+	private void on_device_added(NM.Device device) {
+		if (device.device_type == NM.DeviceType.WIFI) {
+			var wifiDevice = device as NM.DeviceWifi;
+
+			wifiDevices.append(wifiDevice);
+			wifiDevice.access_point_added.connect((ap) => recreate_wifi_list());
+			wifiDevice.access_point_removed.connect((ap) => recreate_wifi_list());
+		}
 	}
 
 	private string get_signal_icon_name_from_ap_strength(NM.AccessPoint ap) {
