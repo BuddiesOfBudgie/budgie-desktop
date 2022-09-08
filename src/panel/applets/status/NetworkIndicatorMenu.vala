@@ -17,6 +17,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 	private Gtk.Switch wifiSwitch = null;
 	private Gtk.Revealer wifiListRevealer = null;
 	private Gtk.ListBox wifiNetworkList = null;
+	private Gtk.Box wifiPlaceholderBox = null;
+	private Gtk.Spinner wifiPlaceholderSpinner = null;
 
 	private List<NM.DeviceWifi> wifiDevices = null;
 
@@ -51,14 +53,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			);
 
 			if (state) {
-				var placeholderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
-				var spinner = new Gtk.Spinner();
-				spinner.start();
-				placeholderBox.add(spinner);
-				placeholderBox.add(new Gtk.Label(_("Searching for networks...")));
-				placeholderBox.set_halign(Gtk.Align.CENTER);
-				wifiNetworkList.add(placeholderBox);
-				wifiNetworkList.show_all();
+				wifiPlaceholderBox.show();
 			} else {
 				wifiListRevealer.set_reveal_child(false);
 			}
@@ -75,6 +70,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		}
 
 		box.show_all();
+		wifiPlaceholderBox.hide();
 	}
 
 	private void recreate_wifi_list() {
@@ -133,6 +129,13 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			wifiNetworkList.add(row_box);
 		});
 
+		if (wifiNetworkList.get_children().length() == 0) {
+			wifiPlaceholderBox.show_all();
+			wifiPlaceholderSpinner.start();
+		} else {
+			wifiPlaceholderBox.hide();
+		}
+
 		wifiNetworkList.show_all();
 	}
 
@@ -153,10 +156,19 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiHeaderBox.pack_start(wifiLabel, false, false, 0);
 		wifiHeaderBox.pack_end(wifiSwitch, false, false, 0);
 
-		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		wifiPlaceholderSpinner = new Gtk.Spinner();
+
+		wifiPlaceholderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+		wifiPlaceholderBox.add(wifiPlaceholderSpinner);
+		wifiPlaceholderBox.add(new Gtk.Label(_("Searching for networks...")));
+		wifiPlaceholderBox.set_halign(Gtk.Align.CENTER);
+		wifiPlaceholderBox.border_width = 4;
+
 		wifiNetworkList = new Gtk.ListBox();
 
+		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		wifiRevealerBox.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+		wifiRevealerBox.add(wifiPlaceholderBox);
 		wifiRevealerBox.add(wifiNetworkList);
 
 		wifiListRevealer = new Gtk.Revealer();
