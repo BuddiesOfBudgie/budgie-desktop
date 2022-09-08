@@ -83,7 +83,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 		wifiDevices.foreach((device) => {
 			var activeAP = device.get_active_access_point();
-			if (activeAP != null) {
+			if (activeAP != null && activeAP.ssid != null) {
 				activeIds.insert(gen_ap_identifier(activeAP), activeAP);
 			}
 

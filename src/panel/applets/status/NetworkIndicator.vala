@@ -176,39 +176,44 @@ public class NetworkIndicator : Gtk.Bin {
 		string status = null;
 		string extraStatus = null;
 
-		switch (device.get_state()) {
-			case NM.DeviceState.UNAVAILABLE:
-			case NM.DeviceState.UNKNOWN:
-			case NM.DeviceState.UNMANAGED:
-			case NM.DeviceState.DISCONNECTED:
-				return null;
-			case NM.DeviceState.ACTIVATED:
-				iconName = get_connected_icon_name_from_ap_strength(device.active_access_point);
-				status = _("Connected to <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
-				extraStatus = _("Signal strength: %u%%").printf(device.active_access_point.get_strength());
-				break;
-			case NM.DeviceState.CONFIG:
-				status = _("Connecting...");
-				break;
-			case NM.DeviceState.IP_CHECK:
-				status = _("Checking for further steps to connect...");
-				break;
-			case NM.DeviceState.IP_CONFIG:
-				status = _("Requesting IP address...");
-				break;
-			case NM.DeviceState.NEED_AUTH:
-				status = _("Authorization required");
-				break;
-			case NM.DeviceState.PREPARE:
-				status = _("Preparing connection to network...");
-				break;
-			case NM.DeviceState.SECONDARIES:
-				status = _("Connecting...");
-				break;
-			case NM.DeviceState.DEACTIVATING:
-			case NM.DeviceState.FAILED:
-				status = _("Disconnecting...");
-				break;
+		if (device.get_mode() == NM.@80211Mode.AP) {
+			iconName = "network-wireless-hotspot-symbolic";
+			status = _("Hotspot enabled with name <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
+		} else {
+			switch (device.get_state()) {
+				case NM.DeviceState.UNAVAILABLE:
+				case NM.DeviceState.UNKNOWN:
+				case NM.DeviceState.UNMANAGED:
+				case NM.DeviceState.DISCONNECTED:
+					return null;
+				case NM.DeviceState.ACTIVATED:
+					iconName = get_connected_icon_name_from_ap_strength(device.active_access_point);
+					status = _("Connected to <i>%s</i>").printf(NM.Utils.ssid_to_utf8(device.active_access_point.ssid.get_data()));
+					extraStatus = _("Signal strength: %u%%").printf(device.active_access_point.get_strength());
+					break;
+				case NM.DeviceState.CONFIG:
+					status = _("Connecting...");
+					break;
+				case NM.DeviceState.IP_CHECK:
+					status = _("Checking for further steps to connect...");
+					break;
+				case NM.DeviceState.IP_CONFIG:
+					status = _("Requesting IP address...");
+					break;
+				case NM.DeviceState.NEED_AUTH:
+					status = _("Authorization required");
+					break;
+				case NM.DeviceState.PREPARE:
+					status = _("Preparing connection to network...");
+					break;
+				case NM.DeviceState.SECONDARIES:
+					status = _("Connecting...");
+					break;
+				case NM.DeviceState.DEACTIVATING:
+				case NM.DeviceState.FAILED:
+					status = _("Disconnecting...");
+					break;
+			}
 		}
 
 		string tooltip = "<b>%s</b>\n%s".printf(_("Wi-Fi"), status);
