@@ -189,12 +189,14 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		settingsLabel.margin_end = 48;
 
 		var networkSettings = new Gtk.Button.from_icon_name("network-wired-symbolic", Gtk.IconSize.BUTTON);
+		networkSettings.set_tooltip_text(_("Open Network Settings"));
 		networkSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
 
 		var wifiSettings = new Gtk.Button.from_icon_name("network-wireless-symbolic", Gtk.IconSize.BUTTON);
+		wifiSettings.set_tooltip_text(_("Open Wi-Fi Settings"));
 		wifiSettings.clicked.connect(() => on_settings_activate("budgie-wifi-panel.desktop"));
 
-		var settingsBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+		var settingsBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		settingsBox.pack_start(settingsLabel, false, false, 0);
 		settingsBox.pack_end(networkSettings, false, false, 0);
 		settingsBox.pack_end(wifiSettings, false, false, 0);
