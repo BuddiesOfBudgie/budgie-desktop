@@ -28,6 +28,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		Object(relative_to: ebox);
 
 		get_style_context().add_class("budgie-network-popover");
+		width_request = 250;
 
 		this.client = client;
 
@@ -130,13 +131,13 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		});
 
 		if (wifiNetworkList.get_children().length() == 0) {
+			wifiNetworkList.hide();
 			wifiPlaceholderBox.show_all();
 			wifiPlaceholderSpinner.start();
 		} else {
 			wifiPlaceholderBox.hide();
+			wifiNetworkList.show_all();
 		}
-
-		wifiNetworkList.show_all();
 	}
 
 	private void build_contents() {
@@ -213,6 +214,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			wifiDevices.append(wifiDevice);
 			wifiDevice.access_point_added.connect((ap) => recreate_wifi_list());
 			wifiDevice.access_point_removed.connect((ap) => recreate_wifi_list());
+
+			wifiDevice.state_changed.connect(recreate_wifi_list);
 		}
 	}
 

@@ -33,7 +33,7 @@
         @extend %reset_style;
 
         background-color: $button_bg;
-        border-radius: 12px;
+        border-radius: 11px;
         transition: background-color 100ms;
 
         &:checked {
@@ -47,7 +47,7 @@
             border-radius: 8px;
             min-width: 16px;
             min-height: 16px;
-            margin: 4px;
+            margin: 3px;
             -gtk-outline-radius: 999px;
         }
 
