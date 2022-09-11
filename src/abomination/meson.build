@@ -8,6 +8,7 @@ libabomination_sources = [
 ]
 
 libabomination_deps = [
+    dep_giounix,
     dep_gtk3,
     dep_gdkx11,
     dep_wnck,

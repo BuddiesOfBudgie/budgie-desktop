@@ -41,6 +41,7 @@ libraven_deps = [
     # https://github.com/mesonbuild/meson/issues/2096
     link_libbudgieprivate,
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     link_libconfig,
