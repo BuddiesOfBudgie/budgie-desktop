@@ -58,4 +58,17 @@
             box-shadow: none;
         }
     }
+
+    .wifi-network-list {
+        row {
+            transition-property: background-color;
+            transition: 170ms ease-out;
+            padding: 0 4px;
+            margin: 2px 0;
+            border-radius: 4px;
+
+            &:hover { background-color: transparentize(white, 0.9); }
+            &:active { background-color: transparentize(white, 0.8); }
+        }
+    }
 }

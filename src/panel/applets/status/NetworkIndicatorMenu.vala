@@ -128,7 +128,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			var icon = new Gtk.Image.from_icon_name(get_signal_icon_name_from_ap_strength(ap), Gtk.IconSize.MENU);
 			var label = new Gtk.Label(NM.Utils.ssid_to_utf8(ap.ssid.get_data()));
 			label.ellipsize = Pango.EllipsizeMode.END;
-			label.set_max_width_chars(24);
+			label.set_max_width_chars(20);
 			label.xalign = 0.0f;
 			row_box.pack_start(icon, false, false, 0);
 			row_box.pack_start(label, false, false, 0);
@@ -147,7 +147,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 	}
 
 	private void build_contents() {
-		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		box.border_width = 10;
 
 		// Ethernet
@@ -156,17 +156,13 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		ethernetLabel.margin_start = 4;
 		ethernetLabel.margin_end = 48;
 
-		// Wifi
 		ethernetSwitch = new Gtk.Switch();
 		ethernetSwitch.set_halign(Gtk.Align.END);
 
 		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		ethernetHeaderBox.pack_start(ethernetLabel, false, false, 0);
 		ethernetHeaderBox.pack_end(ethernetSwitch, false, false, 0);
-
-		box.pack_start(ethernetHeaderBox);
-
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+		ethernetHeaderBox.margin_bottom = 8;
 
 		// Wifi
 		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi")));
@@ -190,6 +186,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiPlaceholderBox.border_width = 4;
 
 		wifiNetworkList = new Gtk.ListBox();
+		wifiNetworkList.set_selection_mode(Gtk.SelectionMode.NONE);
+		wifiNetworkList.get_style_context().add_class("wifi-network-list");
 
 		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		wifiRevealerBox.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
@@ -202,10 +200,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		var wifiBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 		wifiBox.pack_start(wifiHeaderBox, false, false, 0);
 		wifiBox.pack_start(wifiListRevealer, false, false, 0);
-		box.pack_start(wifiBox);
-
-		// Separator
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+		wifiBox.margin_top = 8;
 
 		// Settings
 		var settingsLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Settings")));
@@ -225,7 +220,12 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		settingsBox.pack_start(settingsLabel, false, false, 0);
 		settingsBox.pack_end(networkSettings, false, false, 0);
 		settingsBox.pack_end(wifiSettings, false, false, 0);
+		settingsBox.margin_top = 4;
 
+		box.pack_start(ethernetHeaderBox);
+		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+		box.pack_start(wifiBox);
+		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 		box.pack_start(settingsBox);
 
 		add(box);
