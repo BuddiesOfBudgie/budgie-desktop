@@ -30,7 +30,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		Object(relative_to: ebox);
 
 		get_style_context().add_class("budgie-network-popover");
-		width_request = 250;
+		width_request = 275;
 
 		this.client = client;
 
@@ -183,6 +183,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiPlaceholderBox.add(wifiPlaceholderSpinner);
 		wifiPlaceholderBox.add(new Gtk.Label(_("Searching for networks...")));
 		wifiPlaceholderBox.set_halign(Gtk.Align.CENTER);
+		wifiPlaceholderBox.get_style_context().add_class("wifi-network-placeholder");
 		wifiPlaceholderBox.border_width = 4;
 
 		wifiNetworkList = new Gtk.ListBox();
@@ -190,6 +191,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		wifiNetworkList.get_style_context().add_class("wifi-network-list");
 
 		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		wifiRevealerBox.get_style_context().add_class("wifi-network-revealer-box");
 		wifiRevealerBox.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 		wifiRevealerBox.add(wifiPlaceholderBox);
 		wifiRevealerBox.add(wifiNetworkList);

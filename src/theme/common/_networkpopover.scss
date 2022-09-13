@@ -3,7 +3,7 @@
     color: $fg_color;
 
     separator {
-        background-color: transparentize($selected_fg_color, 0.9);
+        background-color: lighten($panel_bg, 8%);
     }
 
     button {
@@ -59,12 +59,18 @@
         }
     }
 
+    .wifi-network-revealer-box {
+        background-color: transparentize(black, 0.75);
+    }
+
     .wifi-network-list {
+        padding: 2px;
+
         row {
             transition-property: background-color;
             transition: 170ms ease-out;
             padding: 0 4px;
-            margin: 2px 0;
+            margin: 2px;
             border-radius: 4px;
 
             &:hover { background-color: transparentize(white, 0.9); }
