@@ -14,6 +14,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private Gtk.Box box;
 
+	private Gtk.Switch ethernetSwitch = null;
+
 	private Gtk.Switch wifiSwitch = null;
 	private Gtk.Revealer wifiListRevealer = null;
 	private Gtk.ListBox wifiNetworkList = null;
@@ -107,6 +109,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			var row_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 			var icon = new Gtk.Image.from_icon_name(get_signal_icon_name_from_ap_strength(bestAP), Gtk.IconSize.MENU);
 			var label = new Gtk.Label(NM.Utils.ssid_to_utf8(bestAP.ssid.get_data()));
+			label.ellipsize = Pango.EllipsizeMode.END;
+			label.set_max_width_chars(16);
 			label.xalign = 0.0f;
 			row_box.pack_start(icon, false, false, 0);
 			row_box.pack_start(label, false, false, 0);
@@ -123,6 +127,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			var row_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 			var icon = new Gtk.Image.from_icon_name(get_signal_icon_name_from_ap_strength(ap), Gtk.IconSize.MENU);
 			var label = new Gtk.Label(NM.Utils.ssid_to_utf8(ap.ssid.get_data()));
+			label.ellipsize = Pango.EllipsizeMode.END;
+			label.set_max_width_chars(24);
 			label.xalign = 0.0f;
 			row_box.pack_start(icon, false, false, 0);
 			row_box.pack_start(label, false, false, 0);
@@ -141,15 +147,33 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 	}
 
 	private void build_contents() {
-		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
+		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 		box.border_width = 10;
 
+		// Ethernet
+		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet")));
+		ethernetLabel.set_use_markup(true);
+		ethernetLabel.margin_start = 4;
+		ethernetLabel.margin_end = 48;
+
+		// Wifi
+		ethernetSwitch = new Gtk.Switch();
+		ethernetSwitch.set_halign(Gtk.Align.END);
+
+		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		ethernetHeaderBox.pack_start(ethernetLabel, false, false, 0);
+		ethernetHeaderBox.pack_end(ethernetSwitch, false, false, 0);
+
+		box.pack_start(ethernetHeaderBox);
+
+		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+
+		// Wifi
 		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi")));
 		wifiLabel.set_use_markup(true);
 		wifiLabel.margin_start = 4;
 		wifiLabel.margin_end = 48;
 
-		// Wifi
 		wifiSwitch = new Gtk.Switch();
 		wifiSwitch.set_halign(Gtk.Align.END);
 
