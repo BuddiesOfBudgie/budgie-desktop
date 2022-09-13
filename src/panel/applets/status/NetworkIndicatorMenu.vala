@@ -148,7 +148,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private void build_contents() {
 		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		box.border_width = 10;
+		box.margin = 8;
+		box.margin_bottom = 4;
 
 		// Ethernet
 		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet")));

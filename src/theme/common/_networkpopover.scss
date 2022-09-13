@@ -74,7 +74,10 @@
             border-radius: 4px;
 
             &:hover { background-color: transparentize(white, 0.9); }
-            &:active { background-color: transparentize(white, 0.8); }
+            &:active {
+                background-color: transparentize(white, 0.8);
+                color: $fg_color;
+            }
         }
     }
 }
