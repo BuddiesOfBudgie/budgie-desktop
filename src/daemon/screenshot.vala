@@ -47,14 +47,14 @@ namespace BudgieScr {
 
 			buttonplacement = new GLib.Settings("com.solus-project.budgie-wm");
 
-			buttonplacement.changed["button-style"].connect(()=> {
+			buttonplacement.changed["button-style"].connect(() => {
 				fill_buttonpos();
 				buttonpos_changed();
 			});
 			fill_buttonpos();
 
 			showtooltips = screenshot_settings.get_boolean("showtooltips");
-			screenshot_settings.changed["showtooltips"].connect(()=>{
+			screenshot_settings.changed["showtooltips"].connect(() => {
 				showtooltips = screenshot_settings.get_boolean("showtooltips");
 			});
 
@@ -62,24 +62,23 @@ namespace BudgieScr {
 			// so use the logged in user to differentiate in multiuser
 			// scenarious
 			string username = Environment.get_user_name();
-			string tmpdir = GLib.Environment.get_tmp_dir();
+			string tmpdir = Environment.get_tmp_dir();
 			tempfile_path = tmpdir.concat("/", username, "_budgiescreenshot_tempfile");
 		}
 
 		private void fill_buttonpos() {
 			if (buttonplacement.get_string("button-style")=="left") {
-				buttonpos=ButtonPlacement.LEFT;
-			}
-			else {
-				buttonpos=ButtonPlacement.RIGHT;
+				buttonpos = ButtonPlacement.LEFT;
+			} else {
+				buttonpos = ButtonPlacement.RIGHT;
 			}
 		}
 
 		public void statechanged(int n) {
 			newstate = n;
 
-			(newstate == 0)?  startedfromgui = false : startedfromgui;
-			(newstate == 1)?  startedfromgui = true : startedfromgui;
+			(newstate == 0) ? startedfromgui = false : startedfromgui;
+			(newstate == 1) ? startedfromgui = true : startedfromgui;
 		}
 	}
 
@@ -87,13 +86,8 @@ namespace BudgieScr {
 	public class ScreenshotServer : GLib.Object {
 		CurrentState windowstate;
 
-		private int getcurrentstate() throws Error {
-			return windowstate.newstate;
-		}
-
-		private void set_target(string target) {
-			windowstate.screenshot_settings.set_string("screenshot-mode", target);
-			windowstate.screenshot_settings.set_int("delay", 0);
+		public ScreenshotServer() {
+			windowstate = new CurrentState();
 		}
 
 		public async void StartMainWindow() throws Error {
@@ -122,17 +116,13 @@ namespace BudgieScr {
 				new MakeScreenshot(null);
 			}
 		}
-		public ScreenshotServer() {
-			windowstate = new CurrentState();
-		}
 
 		// setup dbus
 		void on_bus_acquired(DBusConnection conn) {
 			// register the bus
 			try {
 				conn.register_object("/org/buddiesofbudgie/ScreenshotControl",	new ScreenshotServer());
-			}
-			catch (IOError e) {
+			} catch (IOError e) {
 				warning("on_bus_acquired Could not register service\n");
 			}
 		}
@@ -141,9 +131,18 @@ namespace BudgieScr {
 			GLib.Bus.own_name (
 				BusType.SESSION, "org.buddiesofbudgie.ScreenshotControl",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE, on_bus_acquired,
-				() => {}, () => warning("setup_dbus Could not acquire name\n"));
+				() => {}, () => warning("setup_dbus Could not acquire name\n")
+			);
 		}
 
+		private int getcurrentstate() throws Error {
+			return windowstate.newstate;
+		}
+
+		private void set_target(string target) {
+			windowstate.screenshot_settings.set_string("screenshot-mode", target);
+			windowstate.screenshot_settings.set_int("delay", 0);
+		}
 	}
 
 	[DBus (name = "org.buddiesofbudgie.Screenshot")]
@@ -156,7 +155,6 @@ namespace BudgieScr {
 	}
 
 	class MakeScreenshot {
-
 		int delay;
 		int scale;
 		int[]? area;
@@ -164,22 +162,18 @@ namespace BudgieScr {
 		bool include_cursor;
 		bool include_frame;
 		CurrentState windowstate;
-		static ScreenshotClient? client=null;
+		static ScreenshotClient? client = null;
 
 		public MakeScreenshot(int[]? area) {
-
 			if (client == null) {
 				try {
-					client = GLib.Bus.get_proxy_sync(
-						BusType.SESSION, "org.buddiesofbudgie.Screenshot",
-						("/org/buddiesofbudgie/Screenshot")
-					);
-				}
-				catch (Error e) {
+					client = GLib.Bus.get_proxy_sync(BusType.SESSION, "org.buddiesofbudgie.Screenshot", "/org/buddiesofbudgie/Screenshot");
+				} catch (Error e) {
 					warning("MakeScreenshot get_proxy_sync %s\n", e.message);
-					client=null;
+					client = null;
 				}
 			}
+
 			windowstate = new CurrentState();
 			this.area = area;
 			scale = get_scaling();
@@ -190,26 +184,23 @@ namespace BudgieScr {
 
 			switch (screenshot_mode) {
 				case "Selection":
-				GLib.Timeout.add(200 + (delay*1000), ()=> {
-					shoot_area.begin();
-
-					return false;
-				});
-				break;
+					Timeout.add(200 + (delay * 1000), () => {
+						shoot_area.begin();
+						return false;
+					});
+					break;
 				case "Screen":
-				GLib.Timeout.add(200 + (delay*1000), ()=> {
-					shoot_screen.begin();
-
-					return false;
-				});
-				break;
+					Timeout.add(200 + (delay * 1000), () => {
+						shoot_screen.begin();
+						return false;
+					});
+					break;
 				case "Window":
-				GLib.Timeout.add(200 + (delay*1000), ()=> {
-					shoot_window.begin();
-
-					return false;
-				});
-				break;
+					Timeout.add(200 + (delay * 1000), () => {
+						shoot_window.begin();
+						return false;
+					});
+					break;
 			}
 		}
 
@@ -239,11 +230,11 @@ namespace BudgieScr {
 
 			try {
 				yield client.Screenshot(include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				warning("shoot_screen %s, failed to make screenhot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
+
 			if (success) {
 				new AfterShotWindow();
 			}
@@ -264,11 +255,10 @@ namespace BudgieScr {
 
 			try {
 				yield client.ScreenshotArea(
-					topleftx*scale, toplefty*scale, width*scale, height*scale,
+					topleftx * scale, toplefty * scale, width * scale, height * scale,
 					include_cursor, true, windowstate.tempfile_path, out success, out filename_used
 				);
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				warning("shoot_area %s, failed to make screenhot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
@@ -277,7 +267,7 @@ namespace BudgieScr {
 			}
 		}
 
-		private void play_shuttersound(int timeout, string[]? args=null) {
+		private void play_shuttersound(int timeout, string[]? args = null) {
 			// todo: we should probably not hardcode the soundfile?
 			try {
 				var check = Gst.init_check(ref args);
@@ -285,26 +275,22 @@ namespace BudgieScr {
 					warning("Could not initialise gstreamer");
 					return;
 				}
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				error("Error: %s", e.message);
 			}
 			Gst.Element pipeline;
 
 			try {
-				pipeline = Gst.parse_launch("playbin uri=file:///usr/share/sounds/freedesktop/stereo/screen-capture.oga");
-			}
-			catch (Error e) {
+				pipeline = Gst.parse_launch("playbin uri = file:///usr/share/sounds/freedesktop/stereo/screen-capture.oga");
+			} catch (Error e) {
 				error("Error: %s", e.message);
 			}
 
-			GLib.Timeout.add(timeout, ()=> {
+			Timeout.add(timeout, () => {
 				// fake thread to make sure flash and shutter are in sync
 				pipeline.set_state(State.PLAYING);
 				Gst.Bus bus = pipeline.get_bus();
-				bus.timed_pop_filtered(
-					Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS
-				);
+				bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS);
 				pipeline.set_state(Gst.State.NULL);
 
 				return false;
@@ -320,7 +306,7 @@ namespace BudgieScr {
 		int selectmode = 0;
 		bool ignore = false;
 		Label[] shortcutlabels;
-		ulong? button_id=null;
+		ulong? button_id = null;
 
 		[GtkChild]
 		private unowned Gtk.Grid? maingrid;
@@ -332,7 +318,7 @@ namespace BudgieScr {
 		private unowned Gtk.Switch? showpointerswitch;
 
 		public ScreenshotHomeWindow() {
-			windowstate=new CurrentState();
+			windowstate = new CurrentState();
 			this.set_keep_above(true);
 			this.set_wmclass("screenshot-control", "screenshot-control");
 			windowstate.statechanged(WindowState.MAINWINDOW);
@@ -366,7 +352,7 @@ namespace BudgieScr {
 			 * left or right windowbuttons, that's the question when
 			 * (re-?) arranging headerbar buttons
 			*/
-			button_id=windowstate.buttonpos_changed.connect(()=> {rearrange_headerbar();});
+			button_id = windowstate.buttonpos_changed.connect(() => {rearrange_headerbar();});
 			rearrange_headerbar();
 
 			// css stuff
@@ -392,9 +378,9 @@ namespace BudgieScr {
 			// - delay
 			windowstate.screenshot_settings.bind("delay", delayspin, "value", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
-			this.destroy.connect(()=> {
+			this.destroy.connect(() => {
 				// prevent WindowState.NONE if follow up button is pressed
-				GLib.Timeout.add(100, ()=> {
+				Timeout.add(100, () => {
 					if (windowstate.newstate == WindowState.MAINWINDOW) {
 						windowstate.statechanged(WindowState.NONE);
 					}
@@ -415,7 +401,7 @@ namespace BudgieScr {
 			int currshot = 0;
 			foreach (string s in keyvals) {
 				Variant shc = scrshot_shortcuts.get_strv(s);
-				string shc_action = (string)shc.get_child_value(0);
+				string shc_action = (string) shc.get_child_value(0);
 				string newaction = shc_action.replace("<", "").replace(">", " + ");
 
 				// let's do capital
@@ -484,21 +470,21 @@ namespace BudgieScr {
 				shootbutton.set_tooltip_text("Take a screenshot");
 			}
 
-			var iconfile =  new ThemedIcon(name="shootscreen-symbolic");
+			var iconfile =  new ThemedIcon(name = "shootscreen-symbolic");
 			Gtk.Image shootimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DND);
 			shootimage.pixel_size = 24;
 			shootimage.margin_start = 10;
 			shootimage.margin_end = 10;
 			shootbutton.add(shootimage);
 			shootbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-			shootbutton.clicked.connect(()=> {
+			shootbutton.clicked.connect(() => {
 				windowstate.disconnect(button_id);
 				this.close();
 				string shootmode = windowstate.screenshot_settings.get_string(
 					"screenshot-mode"
 				);
 				// allow the window to gracefully disappear
-				GLib.Timeout.add(100, ()=> {
+				Timeout.add(100, () => {
 					switch (shootmode) {
 						case "Selection": // don't translate!
 							new SelectLayer();
@@ -528,8 +514,7 @@ namespace BudgieScr {
 			if (windowstate.buttonpos == ButtonPlacement.LEFT) {
 				topbar.pack_end(shootbutton);
 				topbar.pack_end(helpbutton);
-			}
-			else {
+			} else {
 				topbar.pack_start(shootbutton);
 				topbar.pack_start(helpbutton);
 			}
@@ -558,7 +543,7 @@ namespace BudgieScr {
 			int i = 0;
 			ToggleButton[] selectbuttons = {};
 			foreach (string s in areabuttons_labels) {
-				var iconfile = new ThemedIcon(name=icon_names[i]);
+				var iconfile = new ThemedIcon(name = icon_names[i]);
 				Gtk.Image selecticon = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DIALOG);
 				selecticon.pixel_size = 60;
 				Box buttonbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
@@ -566,7 +551,7 @@ namespace BudgieScr {
 
 				// label
 				Label selectionlabel = new Label(s);
-				selectionlabel.xalign = (float)0.5;
+				selectionlabel.xalign = 0.5f;
 				selectionlabel.margin_bottom = 8;
 				selectionlabel.get_style_context().add_class("buttonlabel");
 				buttonbox.pack_start(selectionlabel);
@@ -580,12 +565,12 @@ namespace BudgieScr {
 				}
 				areabuttonbox.pack_start(b);
 				selectbuttons += b;
-				b.clicked.connect(()=> {
+				b.clicked.connect(() => {
 					if (!ignore) {
 						ignore = true;
 						select_action(b, selectbuttons);
 						b.set_active(true);
-						GLib.Timeout.add(200, ()=> {
+						Timeout.add(200, () => {
 							ignore = false;
 
 							return false;
@@ -636,8 +621,8 @@ namespace BudgieScr {
 		GLib.Settings? theme_settings;
 		CurrentState windowstate;
 
-		public SelectLayer(int? overrule_delay=null) {
-			windowstate=new CurrentState();
+		public SelectLayer(int? overrule_delay = null) {
+			windowstate = new CurrentState();
 			windowstate.statechanged(WindowState.SELECTINGAREA);
 			theme_settings = new GLib.Settings("org.gnome.desktop.interface");
 			this.set_type_hint(Gdk.WindowTypeHint.UTILITY);
@@ -660,7 +645,7 @@ namespace BudgieScr {
 			this.add(darea);
 			// connect button & move
 			this.button_press_event.connect(determine_startpoint);
-			this.button_release_event.connect(()=> {
+			this.button_release_event.connect(() => {
 				take_shot.begin();
 
 				return true;
@@ -688,8 +673,8 @@ namespace BudgieScr {
 			/ determine first point of the selected rectangle, which is not
 			/ necessarily topleft(!)
 			*/
-			startx = (int)e.x;
-			starty = (int)e.y;
+			startx = (int) e.x;
+			starty = (int) e.y;
 
 			return true;
 		}
@@ -699,8 +684,8 @@ namespace BudgieScr {
 			/ determine end of selected area, which is not necessarily
 			/ bottom_right(!)
 			*/
-			int endx = (int)e.x;
-			int endy = (int)e.y;
+			int endx = (int) e.x;
+			int endy = (int) e.y;
 			// now make sure we define top-left -> bottom-right
 			int[] areageo = calculate_rectangle(
 				startx, starty, endx, endy
@@ -745,7 +730,7 @@ namespace BudgieScr {
 			this.set_visual(visual);
 
 			//  this.draw.connect(on_draw);
-			this.draw.connect((da, ctx)=> {
+			this.draw.connect((da, ctx) => {
 				ctx.set_source_rgba(0, 0, 0, 0);
 				ctx.set_operator(Cairo.Operator.SOURCE);
 				ctx.paint();
@@ -795,7 +780,7 @@ namespace BudgieScr {
 		string? extension;
 		int counted_dirs;
 		CurrentState windowstate;
-		ulong? button_id=null;
+		ulong? button_id = null;
 
 		enum Column {
 			DIRPATH,
@@ -807,15 +792,14 @@ namespace BudgieScr {
 		private void delete_file(File file) {
 			try {
 				file.delete();
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				// nothing to do, file does not exist
 			}
 		}
 
 		private Gdk.Pixbuf? get_pxb() {
 			// wait max 2 sec for file to appear in /tmp
-			File pixfile = GLib.File.new_for_path(windowstate.tempfile_path);
+			File pixfile = File.new_for_path(windowstate.tempfile_path);
 			int n = 0;
 			while (n < 20) {
 				Thread.usleep(100000);
@@ -825,8 +809,7 @@ namespace BudgieScr {
 						delete_file(pixfile);
 
 						return pxb;
-					}
-					catch (Error e) {
+					} catch (Error e) {
 						message("unable to load image from /tmp\n");
 					}
 				}
@@ -838,12 +821,11 @@ namespace BudgieScr {
 
 		public AfterShotWindow() {
 			this.set_wmclass("screenshot-control", "screenshot-control");
-			windowstate=new CurrentState();
+			windowstate = new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {
 				windowstate.statechanged(WindowState.NONE);
-			}
-			else {
+			} else {
 				makeaftershotwindow(pxb);
 			}
 		}
@@ -864,14 +846,14 @@ namespace BudgieScr {
 			monitor.mount_added.connect(update_dropdown);
 			monitor.mount_removed.connect(update_dropdown);
 			update_dropdown();
-			pickdir_combo.changed.connect(()=> {
+			pickdir_combo.changed.connect(() => {
 				if (act_ondropdown) { item_changed(pickdir_combo); }
 			});
 
 			// headerbar
 			HeaderBar decisionbar = new Gtk.HeaderBar();
 			decisionbar.show_close_button = false;
-			button_id=windowstate.buttonpos_changed.connect(()=> {
+			button_id = windowstate.buttonpos_changed.connect(() => {
 				decisionbuttons = {};
 				setup_headerbar(decisionbar, filenameentry, clp, pxb);
 			});
@@ -921,14 +903,13 @@ namespace BudgieScr {
 
 			// aligned headerbar buttons
 			string[] align = {"left", "right", "right", "right"}; // don't translate!
-			(windowstate.buttonpos == ButtonPlacement.LEFT)? align = {"right", "left", "left", "left"} : align; // don't translate!
+			(windowstate.buttonpos == ButtonPlacement.LEFT) ? align = {"right", "left", "left", "left"} : align; // don't translate!
 
 			int b_index = 0;
 			foreach (Button b in decisionbuttons) {
 				if (align[b_index] == "left") {
 					bar.pack_end(b);
-				}
-				else {
+				} else {
 					bar.pack_start(b);
 				}
 				b_index += 1;
@@ -936,12 +917,11 @@ namespace BudgieScr {
 
 			// set headerbar button actions
 			// - trash button: cancel
-			decisionbuttons[0].clicked.connect(()=> {
+			decisionbuttons[0].clicked.connect(() => {
 				if (!windowstate.startedfromgui) {
 					windowstate.statechanged(WindowState.NONE);
 					close_window();
-				}
-				else {
+				} else {
 					windowstate.statechanged(WindowState.MAINWINDOW);
 					close_window();
 					new ScreenshotHomeWindow();
@@ -949,7 +929,7 @@ namespace BudgieScr {
 			});
 
 			// - save to file
-			decisionbuttons[1].clicked.connect(()=> {
+			decisionbuttons[1].clicked.connect(() => {
 				if (save_tofile(filenameentry, pickdir_combo, pxb) != "fail") {
 					windowstate.statechanged(WindowState.NONE);
 					close_window();
@@ -957,14 +937,14 @@ namespace BudgieScr {
 			});
 
 			// - copy to clipboard
-			decisionbuttons[2].clicked.connect(()=> {
+			decisionbuttons[2].clicked.connect(() => {
 				clp.set_image(pxb);
 				windowstate.statechanged(WindowState.NONE);
 				close_window();
 			});
 
 			// - save to file. open in default
-			decisionbuttons[3].clicked.connect(()=> {
+			decisionbuttons[3].clicked.connect(() => {
 				string usedpath = save_tofile(filenameentry, pickdir_combo, pxb);
 				if (usedpath != "fail") {
 					open_indefaultapp(usedpath);
@@ -995,7 +975,7 @@ namespace BudgieScr {
 			combo.get_active_iter(out iter);
 			dir_liststore.get_value(iter, 0, out val);
 
-			return (string)val;
+			return (string) val;
 		}
 
 		private string get_scrshotname() {
@@ -1014,16 +994,11 @@ namespace BudgieScr {
 
 			try {
 				pxb.save(usedpath, extension);
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				warning("save_tofile %s\n", e.message);
 				Button savebutton = decisionbuttons[1];
-				set_buttoncontent(
-					savebutton, "saveshot-noaccess-symbolic"
-				);
-				savebutton.set_tooltip_text(
-					"A permission error on the directory occurred"
-				);
+				set_buttoncontent(savebutton, "saveshot-noaccess-symbolic");
+				savebutton.set_tooltip_text("A permission error on the directory occurred");
 
 				return "fail";
 			}
@@ -1038,7 +1013,7 @@ namespace BudgieScr {
 
 			var theme = Gtk.IconTheme.get_default();
 			theme.add_resource_path("/org/buddiesofbudgie/Screenshot/icons/scalable/apps/");
-			var iconfile =  new ThemedIcon(name=icon);
+			var iconfile = new ThemedIcon(name = icon);
 			Gtk.Image buttonimage = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.BUTTON);
 			buttonimage.pixel_size = 24;
 			buttonimage.margin_start = 8;
@@ -1054,16 +1029,16 @@ namespace BudgieScr {
 			*/
 			int maxw_h = 345;
 			float resize = 1;
-			int scaled_width = (int)(pxb.get_width()/scale);
-			int scaled_height = (int)(pxb.get_height()/scale);
+			int scaled_width = (int) (pxb.get_width() / scale);
+			int scaled_height = (int) (pxb.get_height() / scale);
 
 			if (scaled_width > maxw_h || scaled_height > maxw_h) {
-				(scaled_width >= scaled_height)? resize = (float)maxw_h/scaled_width : resize;
-				(scaled_height >= scaled_width)? resize = (float)maxw_h/scaled_height : resize;
+				(scaled_width >= scaled_height) ? resize = (float) maxw_h / scaled_width : resize;
+				(scaled_height >= scaled_width) ? resize = (float) maxw_h / scaled_height : resize;
 			}
 
-			int dest_width = (int)(scaled_width * resize);
-			int dest_height = (int)(scaled_height * resize);
+			int dest_width = (int) (scaled_width * resize);
+			int dest_height = (int) (scaled_height * resize);
 			Gdk.Pixbuf resized = pxb.scale_simple(dest_width, dest_height, InterpType.BILINEAR);
 
 			return resized;
@@ -1086,7 +1061,7 @@ namespace BudgieScr {
 			GLib.Value is_sep;
 			dir_liststore.get_value(iter, 3, out is_sep);
 
-			return (bool)is_sep;
+			return (bool) is_sep;
 		}
 
 		private string get_dir_basename(string path) {
@@ -1115,7 +1090,7 @@ namespace BudgieScr {
 			// first section: user-dirs
 			int n_dirs = UserDirectory.N_DIRECTORIES;
 			counted_dirs = 0;
-			for(int i=0; i<n_dirs; i++) {
+			for(int i = 0; i<n_dirs; i++) {
 				string path = Environment.get_user_special_dir(i);
 				string mention = get_dir_basename(path);
 				string iconname = userdir_iconnames[i];
@@ -1130,8 +1105,8 @@ namespace BudgieScr {
 			create_row(null, null, null, true);
 			// (home)
 			create_row(
-				GLib.Environment.get_home_dir(),
-				get_dir_basename(GLib.Environment.get_home_dir()),
+				Environment.get_home_dir(),
+				get_dir_basename(Environment.get_home_dir()),
 				"user-home",
 				false
 			);
@@ -1142,7 +1117,7 @@ namespace BudgieScr {
 			List<Mount> mounts = monitor.get_mounts();
 			foreach (Mount mount in mounts) {
 				add_separator = true;
-				GLib.Icon icon = mount.get_icon();
+				Icon icon = mount.get_icon();
 				string ic_name = get_icon_fromgicon(icon);
 				string displayedname = mount.get_name();
 				string dirpath = mount.get_default_location().get_path();
@@ -1161,9 +1136,7 @@ namespace BudgieScr {
 				r_index = find_stringindex(c_path, alldirs);
 
 				if (r_index == -1) {
-					create_row(
-						c_path, custompath_row[1], custompath_row[2], false
-					);
+					create_row(c_path, custompath_row[1], custompath_row[2], false);
 
 					// now update the index to set new dir active
 					r_index = find_stringindex(c_path, alldirs);
@@ -1195,10 +1168,10 @@ namespace BudgieScr {
 
 			// prevent segfault error on incorrect gsettings value
 			// if set row > found number of user dirs -> land on home row
-			(active_row > counted_dirs - 1)? active_row = counted_dirs + 1 : active_row;
+			(active_row > counted_dirs - 1) ? active_row = counted_dirs + 1 : active_row;
 
 			// a bit overdone, since we already checked on row creation but:
-			(r_index != -1)? active_row = r_index : active_row;
+			(r_index != -1) ? active_row = r_index : active_row;
 			pickdir_combo.set_active(active_row);
 			pickdir_combo.show();
 			act_ondropdown = true;
@@ -1210,8 +1183,7 @@ namespace BudgieScr {
 				Icon icon = info.get_icon();
 
 				return get_icon_fromgicon(icon);
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				warning("lookup_icon_name %s\n", e.message);
 
 				return "";
@@ -1235,14 +1207,13 @@ namespace BudgieScr {
 				// delivering info to set new row
 				custompath_row = {custompath, mention, ic_name};
 				update_dropdown();
-			}
-			else {
+			} else {
 				pickdir_combo.set_active(windowstate.screenshot_settings.get_int("last-save-directory"));
 			}
 			dialog.destroy();
 		}
 
-		private string get_icon_fromgicon(GLib.Icon ic) {
+		private string get_icon_fromgicon(Icon ic) {
 			/*
 			* kind of dirty, we should find a cleaner one
 			* if gicon holds ThemedIcon info, it starts with "". ThemedIcon",
@@ -1251,7 +1222,7 @@ namespace BudgieScr {
 			*/
 			string found_icon = "";
 			string[] iconinfo = ic.to_string().split(" ");
-			(iconinfo.length >=3)? found_icon = iconinfo[2] : found_icon = iconinfo[0];
+			(iconinfo.length >= 3) ? found_icon = iconinfo[2] : found_icon = iconinfo[0];
 
 			return found_icon;
 		}
@@ -1260,7 +1231,7 @@ namespace BudgieScr {
 			// set custom dir to found dir
 			Gtk.FileChooserDialog dialog = new Gtk.FileChooserDialog(
 				_("Open Folder"), this, Gtk.FileChooserAction.SELECT_FOLDER,
-				_("Cancel"), Gtk.ResponseType.CANCEL, _("Open"),Gtk.ResponseType.ACCEPT, null
+				_("Cancel"), Gtk.ResponseType.CANCEL, _("Open"), Gtk.ResponseType.ACCEPT, null
 			);
 
 			dialog.response.connect(save_customdir);
@@ -1286,8 +1257,7 @@ namespace BudgieScr {
 
 			if (get_path_fromcombo(combo) == null) {
 				get_customdir();
-			}
-			else {
+			} else {
 				custompath_row = null;
 			}
 		}
@@ -1302,7 +1272,7 @@ namespace BudgieScr {
 	}
 
 	private int find_stringindex(string str, string[] arr) {
-		for(int i=0; i<arr.length; i++) {
+		for(int i = 0; i < arr.length; i++) {
 			if (str == arr[i]) {
 				return i;
 			}
