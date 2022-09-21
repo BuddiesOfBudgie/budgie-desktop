@@ -1087,16 +1087,20 @@ namespace BudgieScr {
 				"folder-templates", "folder-videos"
 			}; // do we need fallbacks?
 
+			string homedir_path = Environment.get_home_dir();
+			File homedir_file = File.new_for_path(homedir_path);
+
 			// first section: user-dirs
 			int n_dirs = UserDirectory.N_DIRECTORIES;
 			counted_dirs = 0;
 			for(int i = 0; i<n_dirs; i++) {
 				string path = Environment.get_user_special_dir(i);
+				File file = File.new_for_path(path);
 				string mention = get_dir_basename(path);
 				string iconname = userdir_iconnames[i];
 
 				// check if dir exists
-				if (GLib.File.new_for_path(path).query_exists()) {
+				if (file.query_exists() && file.get_path() != homedir_file.get_path()) {
 					create_row(path, mention, iconname, false);
 					counted_dirs += 1;
 				}
