@@ -148,35 +148,52 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private void build_contents() {
 		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		box.margin = 8;
-		box.margin_bottom = 4;
+		box.margin = 6;
 
 		// Ethernet
-		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet")));
-		ethernetLabel.set_use_markup(true);
-		ethernetLabel.margin_start = 4;
-		ethernetLabel.margin_end = 48;
+		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet"))) {
+			use_markup = true,
+			valign = Gtk.Align.CENTER,
+			margin_start = 4
+		};
 
-		ethernetSwitch = new Gtk.Switch();
-		ethernetSwitch.set_halign(Gtk.Align.END);
+		var ethernetSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
+		ethernetSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+		ethernetSettings.set_tooltip_text(_("Open Network Settings"));
+		ethernetSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
 
-		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		ethernetSwitch = new Gtk.Switch() {
+			halign = Gtk.Align.END,
+			valign = Gtk.Align.CENTER
+		};
+
+		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		ethernetHeaderBox.pack_start(ethernetLabel, false, false, 0);
 		ethernetHeaderBox.pack_end(ethernetSwitch, false, false, 0);
-		ethernetHeaderBox.margin_bottom = 8;
+		ethernetHeaderBox.pack_end(ethernetSettings, false, false, 0);
+		ethernetHeaderBox.margin_bottom = 6;
 
 		// Wifi
-		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi")));
-		wifiLabel.set_use_markup(true);
-		wifiLabel.margin_start = 4;
-		wifiLabel.margin_end = 48;
+		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi"))) {
+			use_markup = true,
+			valign = Gtk.Align.CENTER,
+			margin_start = 4
+		};
 
-		wifiSwitch = new Gtk.Switch();
-		wifiSwitch.set_halign(Gtk.Align.END);
+		var wifiSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
+		wifiSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+		wifiSettings.set_tooltip_text(_("Open Wi-Fi Settings"));
+		wifiSettings.clicked.connect(() => on_settings_activate("budgie-wifi-panel.desktop"));
 
-		var wifiHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		wifiSwitch = new Gtk.Switch() {
+			halign = Gtk.Align.END,
+			valign = Gtk.Align.CENTER
+		};
+
+		var wifiHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		wifiHeaderBox.pack_start(wifiLabel, false, false, 0);
 		wifiHeaderBox.pack_end(wifiSwitch, false, false, 0);
+		wifiHeaderBox.pack_end(wifiSettings, false, false, 0);
 
 		wifiPlaceholderSpinner = new Gtk.Spinner();
 
@@ -193,43 +210,25 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		wifiRevealerBox.get_style_context().add_class("wifi-network-revealer-box");
-		wifiRevealerBox.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 		wifiRevealerBox.add(wifiPlaceholderBox);
 		wifiRevealerBox.add(wifiNetworkList);
 
 		wifiListRevealer = new Gtk.Revealer();
 		wifiListRevealer.add(wifiRevealerBox);
 
-		var wifiBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+		var wifiBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		wifiBox.pack_start(wifiHeaderBox, false, false, 0);
 		wifiBox.pack_start(wifiListRevealer, false, false, 0);
-		wifiBox.margin_top = 8;
+		wifiBox.margin_top = 6;
 
 		// Settings
 		var settingsLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Settings")));
 		settingsLabel.set_use_markup(true);
 		settingsLabel.margin_start = 4;
-		settingsLabel.margin_end = 48;
-
-		var networkSettings = new Gtk.Button.from_icon_name("network-wired-symbolic", Gtk.IconSize.BUTTON);
-		networkSettings.set_tooltip_text(_("Open Network Settings"));
-		networkSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
-
-		var wifiSettings = new Gtk.Button.from_icon_name("network-wireless-symbolic", Gtk.IconSize.BUTTON);
-		wifiSettings.set_tooltip_text(_("Open Wi-Fi Settings"));
-		wifiSettings.clicked.connect(() => on_settings_activate("budgie-wifi-panel.desktop"));
-
-		var settingsBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-		settingsBox.pack_start(settingsLabel, false, false, 0);
-		settingsBox.pack_end(networkSettings, false, false, 0);
-		settingsBox.pack_end(wifiSettings, false, false, 0);
-		settingsBox.margin_top = 4;
 
 		box.pack_start(ethernetHeaderBox);
 		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 		box.pack_start(wifiBox);
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-		box.pack_start(settingsBox);
 
 		add(box);
 	}

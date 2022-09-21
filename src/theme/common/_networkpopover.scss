@@ -10,20 +10,13 @@
         @extend %reset_style;
 
         color: $button_fg;
-        background-color: $button_bg;
-
-        &:hover {
-            color: $button_fg;
-            background-color: opacify(lighten($button_bg, 15%), 0.1);
-        }
-
-        &:active {
-            color: $selected_fg_color;
-            background-color: $selected_bg_color;
-        }
+        &:hover { background-color: transparentize(white, 0.9); }
+        &:active { background-color: transparentize(white, 0.8); }
 
         &.image-button, &.expander-button {
-            padding: 6px;
+            min-width: 20px;
+            min-height: 20px;
+            padding: 3px;
             border-radius: 50%;
             -gtk-outline-radius: 999px;
         }
@@ -59,18 +52,14 @@
         }
     }
 
-    .wifi-network-revealer-box {
-        background-color: transparentize(black, 0.75);
-    }
-
     .wifi-network-list {
-        padding: 2px;
+        padding: 2px 0;
 
         row {
             transition-property: background-color;
             transition: 170ms ease-out;
             padding: 0 4px;
-            margin: 2px;
+            margin: 1px 0;
             border-radius: 4px;
 
             &:hover { background-color: transparentize(white, 0.9); }
