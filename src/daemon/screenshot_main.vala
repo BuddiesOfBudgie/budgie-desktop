@@ -46,13 +46,13 @@ namespace Budgie {
             return 0;
         }
         try {
-            control = GLib.Bus.get_proxy_sync (
+            control = GLib.Bus.get_proxy_sync(
                 BusType.SESSION, "org.buddiesofbudgie.ScreenshotControl",
-                ("/org/buddiesofbudgie/ScreenshotControl")
+                "/org/buddiesofbudgie/ScreenshotControl"
             );
 
             if (interactive) {
-                control.StartMainWindow.begin((obj,res) => {
+                control.StartMainWindow.begin((obj, res) => {
                     try {
                         control.StartMainWindow.end(res);
                     } catch (Error e) {
@@ -63,7 +63,7 @@ namespace Budgie {
                 return 0;
             }
             if (area) {
-                control.StartAreaSelect.begin((obj,res) => {
+                control.StartAreaSelect.begin((obj, res) => {
                     try {
                         control.StartAreaSelect.end(res);
                     } catch (Error e) {
@@ -73,8 +73,8 @@ namespace Budgie {
                 GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
                 return 0;
             }
-            if (window){
-                control.StartWindowScreenshot.begin((obj,res) => {
+            if (window) {
+                control.StartWindowScreenshot.begin((obj, res) => {
                     try {
                         control.StartWindowScreenshot.end(res);
                     } catch (Error e) {
@@ -85,7 +85,7 @@ namespace Budgie {
                 return 0;
             }
 
-            control.StartFullScreenshot.begin((obj,res) => {
+            control.StartFullScreenshot.begin((obj, res) => {
                 try {
                     control.StartFullScreenshot.end(res);
                 } catch (Error e) {
@@ -96,7 +96,7 @@ namespace Budgie {
             return 0;
         }
         catch (Error e) {
-            stderr.printf ("%s\n", e.message);
+            stderr.printf("%s\n", e.message);
             return 1;
         }
     }
