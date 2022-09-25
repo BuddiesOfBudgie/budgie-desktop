@@ -102,7 +102,7 @@ public class BudgieMenuWindow : Budgie.Popover {
 		});
 
 		this.budgie_desktop_prefs_button.clicked.connect(() => {
-			this.open_desktop_entry("budgie-desktop-settings.desktop");
+			this.open_desktop_entry("org.buddiesofbudgie.BudgieDesktopSettings.desktop");
 		});
 
 		// Enabling activation by search entry

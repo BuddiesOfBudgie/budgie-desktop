@@ -1,6 +1,6 @@
 custom_target('desktop-file-wm',
     input : 'budgie-wm.desktop.in',
-    output : 'budgie-wm.desktop',
+    output : 'org.buddiesofbudgie.BudgieWm.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
@@ -19,21 +19,22 @@ budgie_wm_sources = [
 budgie_wm_status_vala_args = []
 
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_mutter = dependency('libmutter-10', version: gnome_minimum_version, required: false)
+dep_mutter = dependency('libmutter-11', version: '>= 43', required: false)
 if dep_mutter.found()
     #budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_9']
-    message('Using libmutter-10 ABI from GNOME 42')
-    vapi_mutter = 'libmutter-10'
+    message('Using libmutter-11 ABI from GNOME 43')
+    vapi_mutter = 'libmutter-11'
 else
-    dep_mutter = dependency('libmutter-9', version: gnome_minimum_version)
+    dep_mutter = dependency('libmutter-10', version: gnome_minimum_version)
     if dep_mutter.found()
-        message('Using libmutter-9 ABI from GNOME 41')
-        vapi_mutter = 'libmutter-9'
+        message('Using libmutter-10 ABI from GNOME 42')
+        vapi_mutter = 'libmutter-10'
     endif
 endif
 
 budgie_wm_deps = [
     link_libconfig,
+    dep_giounix,
     dep_mutter,
     dep_gnomedesktop,
     dep_gsettings,
