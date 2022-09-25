@@ -323,7 +323,7 @@ public class ClockApplet : Budgie.Applet {
 			ftime = "<small>%s</small>";
 		}
 
-		var formatted = ftime.printf(ctime);
+		var formatted = ftime.printf(ctime).replace("\u2007", "");
 		if (old == formatted) {
 			return true;
 		}
