@@ -8,6 +8,10 @@ To refresh the Polkit vapi files:
 
 Then have fun un-mangling it to support vala async syntax
 
+To generate the UPower vapi files:
+
+    vapigen --library upower-glib /usr/share/gir-1.0/UpowerGlib-1.0.gir --metadatadir . --pkg gio-unix-2.0 UPowerGlib-1.0-custom.vala
+
 For mutter (and shipped cogl and clutter), once you defined the relative `*.deps`, `*.metadata` and `*-custom.vala` files, you can run:
 
     ./vapi/generate-mutter-vapi.sh <mutter-version>

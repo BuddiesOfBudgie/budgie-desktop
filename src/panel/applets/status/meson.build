@@ -19,6 +19,10 @@ applet_status_resources = gnome.compile_resources(
 )
 
 applet_status_sources = [
+    'BluetoothClient.vala',
+    'BluetoothDBus.vala',
+    'BluetoothDevice.vala',
+    'BluetoothEnums.vala',
     'BluetoothIndicator.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
@@ -32,19 +36,20 @@ applet_status_deps = [
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
-    dependency('upower-glib', version: '>= 0.99.0'),
     link_libpanelplugin,
+    dependency('upower-glib', version: '>= 0.99.14'),
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
+# TODO: Nuke
 if with_bluetooth == true
     applet_status_deps += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
 endif
 
 shared_library(
     'statusapplet',
-    applet_status_sources,
+    sources: applet_status_sources,
     dependencies: applet_status_deps,
     c_args: [
         '-lm'
