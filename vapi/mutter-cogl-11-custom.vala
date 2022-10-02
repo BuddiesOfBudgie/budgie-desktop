@@ -1,161 +1,119 @@
 namespace Cogl {
+	[Compact]
+	[CCode (cname = "CoglHandle")]
+	public class Buffer: Handle {
+		public uint get_size ();
+		public bool set_data (size_t offset, [CCode (array_length_type = "size_t")] uint8[] data);
+		public void unmap ();
+	}
+
+	[CCode (has_type_id = false)]
 	public struct Color {
-		[Version (since = "1.4")]
-		[CCode (cname="cogl_color_init_from_4f")]
 		public Color.from_4f (float red, float green, float blue, float alpha);
-		[Version (since = "1.4")]
-		[CCode (cname="cogl_color_init_from_4fv")]
-		public Color.from_4fv (float color_array);
-		[Version (since = "1.4")]
-		[CCode (cname="cogl_color_init_from_4ub")]
 		public Color.from_4ub (uint8 red, uint8 green, uint8 blue, uint8 alpha);
-		[Version (since = "1.16")]
-		[CCode (cname="cogl_color_init_from_hsl")]
-		public Color.from_hsl (float hue, float saturation, float luminance);
 	}
 
 	[Compact]
-	[CCode (cname = "CoglHandle", cheader_filename = "cogl/cogl.h", type_id = "cogl_handle_get_gtype ()", ref_function = "cogl_object_ref", unref_function = "cogl_object_unref")]
-	public class Shader : Cogl.Handle {
-	}
-
-	[CCode (cheader_filename = "cogl/cogl.h", type_id = "cogl_primitive_get_gtype ()")]
-	public class Primitive : Cogl.Object {
-		[CCode (has_construct_function = false)]
-		protected Primitive ();
-		[Version (since = "1.10")]
-		public Cogl.Primitive copy ();
-		[Version (since = "1.16")]
-		public void draw (Cogl.Framebuffer framebuffer, Cogl.Pipeline pipeline);
-		public int get_first_vertex ();
-		public Cogl.VerticesMode get_mode ();
-		[Version (since = "1.8")]
-		public int get_n_vertices ();
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p2 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP2[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p2c4 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP2C4[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p2t2 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP2T2[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p2t2c4 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP2T2C4[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p3 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP3[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p3c4 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP3C4[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p3t2 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP3T2[] data);
-		[CCode (has_construct_function = false)]
-		[Version (since = "1.6")]
-		public Primitive.p3t2c4 (Cogl.Context context, Cogl.VerticesMode mode, [CCode (array_length_cname = "n_vertices", array_length_pos = 2.5)] Cogl.VertexP3T2C4[] data);
-		public void set_first_vertex (int first_vertex);
-		public void set_mode (Cogl.VerticesMode mode);
-		[Version (since = "1.8")]
-		public void set_n_vertices (int n_vertices);
-	}
-
-	[Compact]
-	[CCode (cname = "CoglHandle", cheader_filename = "cogl/cogl.h", type_id = "cogl_handle_get_gtype ()", ref_function = "cogl_object_ref", unref_function = "cogl_object_unref")]
-	public class Program : Cogl.Handle {
-	}
-
-	[Compact]
-	[CCode (cheader_filename = "cogl/cogl.h", type_id = "cogl_handle_get_gtype ()", ref_function = "cogl_object_ref", unref_function = "cogl_object_unref")]
+	[CCode (ref_function = "cogl_handle_ref", unref_function = "cogl_handle_unref")]
 	public class Handle {
-		[CCode (cheader_filename = "cogl/cogl.h", cname="cogl_is_material")]
-		[Version (deprecated = true, deprecated_since = "1.16")]
+		[CCode (cname = "cogl_is_bitmap")]
+		public bool is_bitmap ();
+		[CCode (cname = "cogl_is_buffer")]
+		public bool is_buffer ();
+		[CCode (cname = "cogl_is_material")]
 		public bool is_material ();
-		[CCode (cheader_filename = "cogl/cogl.h", cname="cogl_is_program")]
-		[Version (deprecated = true, deprecated_since = "1.16")]
-		public bool is_program (Cogl.Handle handle);
-		[CCode (cheader_filename = "cogl/cogl.h", cname="cogl_is_shader")]
-		[Version (deprecated = true, deprecated_since = "1.16")]
+		[CCode (cname = "cogl_is_offscreen")]
+		public bool is_offscreen ();
+		[CCode (cname = "cogl_is_pixel_buffer")]
+		public bool is_pixel_buffer ();
+		[CCode (cname = "cogl_is_program")]
+		public bool is_program ();
+		[CCode (cname = "cogl_is_shader")]
 		public bool is_shader ();
-		[CCode (cheader_filename = "cogl/cogl.h", cname="cogl_is_texture")]
+		[CCode (cname = "cogl_is_texture")]
 		public bool is_texture ();
+		[CCode (cname = "cogl_is_vertex_buffer")]
+		public bool is_vertex_buffer ();
 	}
 
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP2 {
-		public float x;
-		public float y;
+	[CCode (cheader_filename = "cogl/cogl.h", copy_function = "cogl_path_copy")]
+	[Compact]
+	public class Path {
+		public static void @new ();
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP2C4 {
-		public float x;
-		public float y;
-		public uint8 r;
-		public uint8 g;
-		public uint8 b;
-		public uint8 a;
+
+	[Compact]
+	public class PixelBuffer: Handle {
+		public PixelBuffer (uint size);
+		public PixelBuffer.for_size (uint width, uint height, Cogl.PixelFormat format, uint stride);
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP2T2 {
-		public float x;
-		public float y;
-		public float s;
-		public float t;
+
+	[Compact]
+	[CCode (cname = "CoglHandle", ref_function = "cogl_program_ref", unref_function = "cogl_program_unref")]
+	public class Program: Handle {
+		[CCode (cname = "cogl_create_program", type = "CoglHandle*", has_construct_function = false)]
+		public Program ();
+		public void attach_shader (Cogl.Shader shader_handle);
+		public int get_uniform_location (string uniform_name);
+		public void link ();
+		public static void uniform_1f (int uniform_no, float value);
+		public static void uniform_1i (int uniform_no, int value);
+		public static void uniform_float (int uniform_no, int size, [CCode (array_length_pos = 2.9)] float[] value);
+		public static void uniform_int (int uniform_no, int size, [CCode (array_length_pos = 2.9)] int[] value);
+		public static void uniform_matrix (int uniform_no, int size, bool transpose, [CCode (array_length_pos = 2.9)] float[] value);
+		public void use ();
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP2T2C4 {
-		public float x;
-		public float y;
-		public float s;
-		public float t;
-		public uint8 r;
-		public uint8 g;
-		public uint8 b;
-		public uint8 a;
+
+	[Compact]
+	[CCode (cname = "CoglHandle", ref_function = "cogl_shader_ref", unref_function = "cogl_shader_unref")]
+	public class Shader: Handle {
+		[CCode (cname = "cogl_create_shader", type = "CoglHandle*", has_construct_function = false)]
+		public Shader (Cogl.ShaderType shader_type);
+		public void compile ();
+		public string get_info_log ();
+		public Cogl.ShaderType get_type ();
+		public bool is_compiled ();
+		public void source (string source);
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP3 {
-		public float x;
-		public float y;
-		public float z;
+
+	[Compact]
+	[CCode (cname = "CoglHandle", ref_function = "cogl_vertex_buffer_ref", unref_function = "cogl_vertex_buffer_unref")]
+	public class VertexBuffer: Handle {
+		[CCode (type = "CoglHandle*", has_construct_function = false)]
+		public VertexBuffer (uint n_vertices);
+		public void add (string attribute_name, uchar n_components, Cogl.AttributeType type, bool normalized, uint16 stride, void* pointer);
+		public void delete (string attribute_name);
+		public void disable (string attribute_name);
+		public void draw (Cogl.VerticesMode mode, int first, int count);
+		public void draw_elements (Cogl.VerticesMode mode, VertexBufferIndices indices, int min_index, int max_index, int indices_offset, int count);
+		public void enable (string attribute_name);
+		public uint get_n_vertices ();
+		public void submit ();
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP3C4 {
-		public float x;
-		public float y;
-		public float z;
-		public uint8 r;
-		public uint8 g;
-		public uint8 b;
-		public uint8 a;
+
+	[Compact]
+	[CCode (cname = "CoglHandle")]
+	public class VertexBufferIndices: Handle {
+		public VertexBufferIndices (Cogl.IndicesType indices_type, void* indices_array, int indices_len);
+		public static unowned Cogl.VertexBufferIndices get_for_quads (uint n_indices);
+		public Cogl.IndicesType get_type ();
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP3T2 {
-		public float x;
-		public float y;
-		public float z;
-		public float s;
-		public float t;
+
+	[CCode (type_id = "COGL_TYPE_MATRIX", cheader_filename = "cogl/cogl.h")]
+	public struct Matrix {
+		[CCode (cname = "cogl_matrix_init_from_array", array_length = false, array_null_terminated = false)]
+		public Matrix.from_array ([CCode (array_length = false)] float[] array);
+		[CCode (cname = "cogl_matrix_init_identity")]
+		public Matrix.identity ();
+		[CCode (cname = "cogl_matrix_multiply")]
+		public Matrix.multiply (Cogl.Matrix a, Cogl.Matrix b);
 	}
-	[CCode (cheader_filename = "cogl/cogl.h", has_type_id = false)]
-	[Version (since = "1.6")]
-	public struct VertexP3T2C4 {
-		public float x;
-		public float y;
-		public float z;
-		public float s;
-		public float t;
-		public uint8 r;
-		public uint8 g;
-		public uint8 b;
-		public uint8 a;
+
+	[SimpleType]
+	[GIR (name = "Bool")]
+	[BooleanType]
+	public struct Bool : bool {
 	}
+
+	public static GLib.Callback get_proc_address(string s);
 }
