@@ -31,6 +31,7 @@ libraven_sources = [
     'notification_widget.vala',
     'notifications_group.vala',
     'notifications_view.vala',
+    'plugin_manager.vala',
     'powerstrip.vala',
     'raven.vala',
     'sound.vala',
@@ -42,6 +43,8 @@ libraven_deps = [
     # XXX: Keep this order the same to work around
     # https://github.com/mesonbuild/meson/issues/2096
     link_libbudgieprivate,
+    link_libravenplugin,
+    libravenplugin_vapi,
     libplugin_vapi,
     dep_giounix,
     dep_gtk3,

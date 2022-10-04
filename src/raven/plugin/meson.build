@@ -1,9 +1,9 @@
-# Provides the core API for budgie 10 plugins
+# Provides the core API for budgie 10 raven plugins
 gnome = import('gnome')
 pkgconfig = import('pkgconfig')
 
 # Generate enums for gobject typing
-plugin_enums = gnome.mkenums(
+ravenplugin_enums = gnome.mkenums(
     'budgie-raven-enums',
     sources: [],
     c_template: 'budgie-raven-enums.c.template',
@@ -13,44 +13,81 @@ plugin_enums = gnome.mkenums(
 )
 
 # Fight meson race conditions..
-libenum = static_library(
-    'enum',
-    plugin_enums,
+libravenenum = static_library(
+    'raven-enum',
+    ravenplugin_enums,
     dependencies: dep_gtk3,
 )
 
-link_libenum = declare_dependency(
-    sources: plugin_enums,
+link_libravenenum = declare_dependency(
+    sources: ravenplugin_enums,
     include_directories: include_directories('.'),
 )
 
 # install headers
-plugin_headers = []
+ravenplugin_headers = [
+    'plugin.h',
+]
 
-plugin_sources = []
+ravenplugin_sources = [
+    'plugin.c',
+]
 
-plugin_deps = [
+ravenplugin_deps = [
     dep_gtk3,
     dep_peas,
 ]
 
 # build plugin
-libplugin = shared_library(
+libravenplugin = shared_library(
     'budgie-raven-plugin',
-    plugin_sources,
+    ravenplugin_sources,
     dependencies: [
-        plugin_deps,
-        link_libenum,
+        ravenplugin_deps,
+        link_libravenenum,
     ],
     version: '0.0.0',
     install: true,
 )
 
-install_headers(plugin_headers, subdir: 'budgie-desktop')
+install_headers(ravenplugin_headers, subdir: 'budgie-desktop')
+
+# Generate .gir
+libravenplugin_gir = gnome.generate_gir(
+    libravenplugin,
+    sources: ravenplugin_sources + ravenplugin_headers + ravenplugin_enums,
+    namespace: 'Budgie',
+    nsversion: '1.0',
+    dependencies: ravenplugin_deps,
+    includes: [
+        'GObject-2.0',
+        'Gio-2.0',
+        'Gtk-3.0',
+        'Peas-1.0',
+    ],
+    symbol_prefix: 'budgie',
+    identifier_prefix: 'Budgie',
+    install: true,
+    extra_args: [
+        '--warn-all',
+        '--c-include', 'plugin.h',
+    ],
+)
+
+libravenplugin_vapi = gnome.generate_vapi(
+    'budgie-1.0',
+    sources: [libravenplugin_gir[0]],
+    packages: [
+        'gtk+-3.0',
+        'gio-unix-2.0',
+        'libpeas-1.0',
+    ],
+    install: true,
+)
 
 # Install pkgconfig file to enable building against budgie-plugin
 pkgconfig.generate(
-    name: 'budgie-raven',
+    name: 'budgie-raven-plugin',
     description: 'Budgie Raven Plugin Library',
     version: '2',
     filebase: 'budgie-1.0',
@@ -66,8 +103,8 @@ pkgconfig.generate(
 
 
 link_libravenplugin = declare_dependency(
-    link_with: libplugin,
-    dependencies: plugin_deps,
+    link_with: libravenplugin,
+    dependencies: ravenplugin_deps,
     include_directories: [
         include_directories('.'),
     ],
