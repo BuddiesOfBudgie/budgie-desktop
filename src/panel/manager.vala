@@ -701,7 +701,7 @@ namespace Budgie {
 		* Initialise the plugin engine, paths, loaders, etc.
 		*/
 		void setup_plugins() {
-			engine = Peas.Engine.get_default();
+			engine = new Peas.Engine();
 			engine.enable_loader("python3");
 
 			/* Ensure libpeas doesn't freak the hell out for Python extensions */

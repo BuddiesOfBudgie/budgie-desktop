@@ -199,6 +199,8 @@ namespace Budgie {
 
 		public Budgie.DesktopManager? manager { public set; public get; }
 
+		private Budgie.RavenPluginManager? plugin_manager;
+
 		public double nscale {
 			public set {
 				scale = value;
@@ -224,6 +226,7 @@ namespace Budgie {
 			try {
 				iface = new RavenIface(this);
 				conn.register_object(Budgie.RAVEN_DBUS_OBJECT_PATH, iface);
+				plugin_manager.setup_plugins();
 			} catch (Error e) {
 				stderr.printf("Error registering Raven: %s\n", e.message);
 				Process.exit(1);
@@ -345,6 +348,12 @@ namespace Budgie {
 			this.screen_edge = Gtk.PositionType.LEFT;
 
 			on_power_strip_change(); // Trigger our power strip change func immediately
+
+			plugin_manager = new RavenPluginManager();
+
+			//  plugin_manager.plugin_loaded.connect((module_name) => {
+			//  	warning("%s loaded", module_name);
+			//  });
 		}
 
 		/**

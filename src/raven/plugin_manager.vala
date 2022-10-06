@@ -19,8 +19,8 @@ namespace Budgie {
 		/**
 		* Initialise the plugin engine, paths, loaders, etc.
 		*/
-		void setup_plugins() {
-			engine = Peas.Engine.get_default();
+		public void setup_plugins() {
+			engine = new Peas.Engine();
 			engine.enable_loader("python3");
 
 			/* Ensure libpeas doesn't freak the hell out for Python plugins */
@@ -35,20 +35,13 @@ namespace Budgie {
 
 			/* System path */
 			var dir = Environment.get_user_data_dir();
-			engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
+			engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR, Budgie.RAVEN_PLUGIN_DATADIR);
 
 			/* User path */
-			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "plugins");
-			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
+			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-plugins");
+			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-data");
 			engine.add_search_path(user_mod, hdata);
 
-			/* Legacy path */
-			var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "modules");
-			if (FileUtils.test(hmod, FileTest.EXISTS)) {
-				warning("Using legacy path %s, please migrate to %s", hmod, user_mod);
-				message("Legacy %s path will not be supported in next major version", hmod);
-				engine.add_search_path(hmod, hdata);
-			}
 			engine.rescan_plugins();
 
 			plugin_set = new Peas.ExtensionSet(engine, typeof(Budgie.RavenPlugin));
