@@ -92,8 +92,14 @@ intltool = find_program('intltool-merge')
 plugin_libdir = join_paths(libdir, meson.project_name(), 'plugins')
 plugin_datadir = join_paths(datadir, meson.project_name(), 'plugins')
 
+# and raven widget builds
+raven_plugin_libdir = join_paths(libdir, meson.project_name(), 'raven-plugins')
+raven_plugin_datadir = join_paths(datadir, meson.project_name(), 'raven-plugins')
+
 cdata.set_quoted('MODULEDIR', plugin_libdir)
 cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
+cdata.set_quoted('RAVEN_PLUGIN_LIBDIR', raven_plugin_libdir)
+cdata.set_quoted('RAVEN_PLUGIN_DATADIR', raven_plugin_datadir)
 cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
