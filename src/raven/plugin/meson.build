@@ -26,11 +26,11 @@ link_libravenenum = declare_dependency(
 
 # install headers
 ravenplugin_headers = [
-    'plugin.h',
+    'raven-plugin.h',
 ]
 
 ravenplugin_sources = [
-    'plugin.c',
+    'raven-plugin.c',
 ]
 
 ravenplugin_deps = [
@@ -70,12 +70,12 @@ libravenplugin_gir = gnome.generate_gir(
     install: true,
     extra_args: [
         '--warn-all',
-        '--c-include', 'plugin.h',
+        '--c-include', 'raven-plugin.h',
     ],
 )
 
 libravenplugin_vapi = gnome.generate_vapi(
-    'budgie-1.0',
+    'budgie-raven-1.0',
     sources: [libravenplugin_gir[0]],
     packages: [
         'gtk+-3.0',

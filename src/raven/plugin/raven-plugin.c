@@ -9,7 +9,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
-#include "plugin.h"
+#include "raven-plugin.h"
 
 typedef BudgieRavenPluginIface BudgieRavenPluginInterface;
 
