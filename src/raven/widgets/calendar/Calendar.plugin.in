@@ -1,0 +1,9 @@
+[Plugin]
+Module=org.buddiesofbudgie.Calendar.so
+Builtin=TRUE
+_Name=Calendar
+_Description=A simple calendar with a month view.
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2022 Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=calendar

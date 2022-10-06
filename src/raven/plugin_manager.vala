@@ -3,10 +3,10 @@
  *
  * Copyright © 2015-2022 Budgie Desktop Developers
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  */
 
 namespace Budgie {
@@ -15,6 +15,10 @@ namespace Budgie {
 		Peas.ExtensionSet plugin_set;
 
 		HashTable<string, Peas.PluginInfo?> plugins;
+
+		public RavenPluginManager() {
+			plugins = new HashTable<string, Peas.PluginInfo?>(str_hash, str_equal);
+		}
 
 		/**
 		* Initialise the plugin engine, paths, loaders, etc.
@@ -54,6 +58,10 @@ namespace Budgie {
 					return;
 				}
 				on_plugin_added(i, e);
+			});
+
+			engine.get_plugin_list().foreach((info) => {
+				engine.load_plugin(info);
 			});
 		}
 

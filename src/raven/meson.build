@@ -1,6 +1,7 @@
 # Provides budgie's Raven component
 
 subdir('plugin')
+subdir('widgets')
 
 gresource = join_paths(meson.current_source_dir(), 'ui', 'budgie-raven.gresource.xml')
 
