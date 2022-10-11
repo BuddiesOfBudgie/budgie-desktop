@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class MprisWidget : RavenWidget {
+public class MprisWidget : LegacyRavenWidget {
 	DBusImpl impl;
 
 	HashTable<string,ClientWidget> ifaces;

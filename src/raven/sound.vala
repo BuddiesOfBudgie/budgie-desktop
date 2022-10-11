@@ -10,7 +10,7 @@
  */
 
 namespace Budgie {
-	public class SoundWidget : RavenWidget {
+	public class SoundWidget : LegacyRavenWidget {
 		/**
 		 * Logic and Mixer variables
 		 */

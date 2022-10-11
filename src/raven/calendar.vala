@@ -12,7 +12,7 @@
 
 const string ENABLE_WEEK_NUM = "enable-week-numbers";
 
-public class CalendarWidget : RavenWidget {
+public class CalendarWidget : LegacyRavenWidget {
 	private Budgie.HeaderWidget? header = null;
 	private Gtk.Calendar? cal = null;
 	private unowned Settings settings = null;

@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class RavenWidget : Gtk.Box {
+public class LegacyRavenWidget : Gtk.Box {
 	/**
 	 * set_show will set our show / hide to specified state
 	 */
