@@ -62,6 +62,11 @@ namespace Budgie {
 
 			engine.get_plugin_list().foreach((info) => {
 				engine.load_plugin(info);
+				var extension = plugin_set.get_extension(info);
+				if (extension != null) {
+					var plugin = extension as Budgie.RavenPlugin;
+					warning("Loaded plugin %s", info.get_name());
+				}
 			});
 		}
 

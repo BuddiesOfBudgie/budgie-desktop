@@ -15,5 +15,4 @@ typedef BudgieRavenPluginIface BudgieRavenPluginInterface;
 
 G_DEFINE_INTERFACE(BudgieRavenPlugin, budgie_raven_plugin, G_TYPE_OBJECT)
 
-static void budgie_raven_plugin_default_init(__attribute__((unused)) BudgieRavenPluginIface* iface) {
-}
+static void budgie_raven_plugin_default_init(__attribute__((unused)) BudgieRavenPluginIface* iface) {}

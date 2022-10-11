@@ -27,10 +27,12 @@ link_libravenenum = declare_dependency(
 # install headers
 ravenplugin_headers = [
     'raven-plugin.h',
+    'raven-widget.h',
 ]
 
 ravenplugin_sources = [
     'raven-plugin.c',
+    'raven-widget.c',
 ]
 
 ravenplugin_deps = [
