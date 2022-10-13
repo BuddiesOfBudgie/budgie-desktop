@@ -11,6 +11,12 @@
 
 public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {}
 
+public class CalendarRavenWidget : Budgie.RavenWidget {
+	public CalendarRavenWidget(string uuid, GLib.Settings settings) {
+		initialize(uuid, settings);
+	}
+}
+
 [ModuleInit]
 public void peas_register_types(TypeModule module) {
 	// boilerplate - all modules need this

@@ -11,6 +11,12 @@
 
 public class SoundRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {}
 
+public class SoundRavenWidget : Budgie.RavenWidget {
+	public SoundRavenWidget(string uuid, GLib.Settings settings) {
+		initialize(uuid, settings);
+	}
+}
+
 [ModuleInit]
 public void peas_register_types(TypeModule module) {
 	// boilerplate - all modules need this

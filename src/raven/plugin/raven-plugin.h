@@ -12,6 +12,7 @@
 #pragma once
 
 #include <budgie-raven-enums.h>
+#include <raven-widget.h>
 
 G_BEGIN_DECLS
 

@@ -25,13 +25,18 @@ static void budgie_raven_widget_dispose(GObject* g_object);
 
 // public methods
 
-BudgieRavenWidget* budgie_raven_widget_new(char* uuid, GSettings* instance_settings) {
-	BudgieRavenWidget* self = g_object_new(BUDGIE_TYPE_RAVEN_WIDGET, NULL);
+BudgieRavenWidget* budgie_raven_widget_new() {
+	return g_object_new(BUDGIE_TYPE_RAVEN_WIDGET, NULL);
+}
 
+void budgie_raven_widget_initialize(BudgieRavenWidget* self, const char* uuid, GSettings* instance_settings) {
+	if (self->priv->initialized) {
+		return;
+	}
+
+	self->priv->initialized = TRUE;
 	self->priv->uuid = uuid;
 	self->priv->instance_settings = instance_settings;
-
-	return self;
 }
 
 gboolean budgie_raven_widget_supports_settings(BudgieRavenWidget* self) {
@@ -76,6 +81,7 @@ GSettings* budgie_raven_widget_get_settings(BudgieRavenWidget* self) {
 static void budgie_raven_widget_init(BudgieRavenWidget* self) {
 	self->priv->uuid = NULL;
 	self->priv->instance_settings = NULL;
+	self->priv->initialized = FALSE;
 }
 
 static void budgie_raven_widget_class_init(BudgieRavenWidgetClass* klass) {
@@ -86,9 +92,7 @@ static void budgie_raven_widget_class_init(BudgieRavenWidgetClass* klass) {
 static void budgie_raven_widget_dispose(GObject* g_object) {
 	BudgieRavenWidget* self = BUDGIE_RAVEN_WIDGET(g_object);
 
-	g_clear_pointer(&self->priv->uuid, g_free);
 	g_clear_pointer(&self->priv->instance_settings, g_free);
-
 	g_clear_pointer(&self->priv, g_free);
 
 	G_OBJECT_CLASS(budgie_raven_widget_parent_class)->dispose(g_object);

@@ -69,11 +69,8 @@ libravenplugin_gir = gnome.generate_gir(
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
+    header: 'raven-plugin.h',
     install: true,
-    extra_args: [
-        '--warn-all',
-        '--c-include', 'raven-plugin.h',
-    ],
 )
 
 libravenplugin_vapi = gnome.generate_vapi(
