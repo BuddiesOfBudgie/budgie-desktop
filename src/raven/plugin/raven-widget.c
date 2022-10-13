@@ -18,7 +18,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgieRavenWidget, budgie_raven_widget, GTK_TYPE_BIN)
 
 // static method header
 
-static void budg
 static void budgie_raven_widget_init(BudgieRavenWidget* self);
 static void budgie_raven_widget_class_init(BudgieRavenWidgetClass* klass);
 static void budgie_raven_widget_dispose(GObject* g_object);
@@ -34,8 +33,6 @@ BudgieRavenWidget* budgie_raven_widget_new(char* uuid, GSettings* instance_setti
 
 	return self;
 }
-
-
 
 gboolean budgie_raven_widget_supports_settings(BudgieRavenWidget* self) {
 	if (!BUDGIE_IS_RAVEN_WIDGET(self)) {
