@@ -16,3 +16,11 @@ typedef BudgieRavenPluginIface BudgieRavenPluginInterface;
 G_DEFINE_INTERFACE(BudgieRavenPlugin, budgie_raven_plugin, G_TYPE_OBJECT)
 
 static void budgie_raven_plugin_default_init(__attribute__((unused)) BudgieRavenPluginIface* iface) {}
+
+BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, const char* uuid, GSettings* settings) {
+    if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
+		return NULL;
+	}
+
+	return BUDGIE_RAVEN_PLUGIN_GET_IFACE(self)->new_widget_instance(self, uuid, settings);
+}

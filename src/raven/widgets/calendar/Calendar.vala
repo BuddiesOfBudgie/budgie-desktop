@@ -9,7 +9,11 @@
  * (at your option) any later version.
  */
 
-public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {}
+public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
+	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings settings) {
+		return new CalendarRavenWidget(uuid, settings);
+	}
+}
 
 public class CalendarRavenWidget : Budgie.RavenWidget {
 	public CalendarRavenWidget(string uuid, GLib.Settings settings) {
