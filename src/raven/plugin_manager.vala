@@ -16,6 +16,8 @@ namespace Budgie {
 
 		HashTable<string, Peas.PluginInfo?> plugins;
 
+		private const string WIDGET_INSTANCE_SETTINGS_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets";
+
 		public RavenPluginManager() {
 			plugins = new HashTable<string, Peas.PluginInfo?>(str_hash, str_equal);
 		}
@@ -64,7 +66,6 @@ namespace Budgie {
 				engine.load_plugin(info);
 				var extension = plugin_set.get_extension(info);
 				if (extension != null) {
-					var plugin = extension as Budgie.RavenPlugin;
 					warning("Loaded plugin %s", info.get_name());
 				}
 			});
@@ -97,6 +98,25 @@ namespace Budgie {
 			return get_plugin_info(module_name) != null;
 		}
 
+		Budgie.RavenWidget? new_widget_instance_for_plugin(string module_name) {
+			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
+			if (plugin_info == null) {
+				return null;
+			}
+
+			var extension = plugin_set.get_extension(plugin_info);
+			if (extension == null) {
+				return null;
+			}
+
+			var plugin = extension as Budgie.RavenPlugin;
+			var uuid = generate_uuid();
+			var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
+			var instance_settings_path = "%s/%s/%s".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid, "instance-settings");
+			var instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
+			return plugin.new_widget_instance(uuid, instance_settings);
+		}
+
 		public List<Peas.PluginInfo?> get_raven_plugins() {
 			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
 			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
@@ -124,6 +144,16 @@ namespace Budgie {
 				return;
 			}
 			this.engine.try_load_plugin(i);
+		}
+
+		private static string generate_uuid() {
+			uint8 time[16];
+			char uuid[37];
+
+			LibUUID.generate(time);
+			LibUUID.unparse_lower(time, uuid);
+
+			return (string) uuid;
 		}
 	}
 }
