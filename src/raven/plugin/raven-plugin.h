@@ -32,11 +32,11 @@ typedef struct _BudgieRavenPluginIface BudgieRavenPluginIface;
 struct _BudgieRavenPluginIface {
 	GTypeInterface parent_iface;
 
-    BudgieRavenWidget* (*new_widget_instance)(BudgieRavenPlugin* self, const char* uuid, GSettings* settings);
+    BudgieRavenWidget* (*new_widget_instance)(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings);
 };
 
-GType budgie_raven_plugin_get_type(void);
+BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings);
 
-BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, const char* uuid, GSettings* settings);
+GType budgie_raven_plugin_get_type(void);
 
 G_END_DECLS
