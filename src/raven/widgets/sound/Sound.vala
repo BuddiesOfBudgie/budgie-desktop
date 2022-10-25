@@ -10,13 +10,17 @@
  */
 
 public class SoundRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
-	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings settings) {
+	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings? settings) {
 		return new SoundRavenWidget(uuid, settings);
+	}
+
+	public bool supports_settings() {
+		return false;
 	}
 }
 
 public class SoundRavenWidget : Budgie.RavenWidget {
-	public SoundRavenWidget(string uuid, GLib.Settings settings) {
+	public SoundRavenWidget(string uuid, GLib.Settings? settings) {
 		initialize(uuid, settings);
 	}
 }

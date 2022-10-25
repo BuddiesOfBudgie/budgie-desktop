@@ -98,7 +98,7 @@ namespace Budgie {
 			return get_plugin_info(module_name) != null;
 		}
 
-		Budgie.RavenWidget? new_widget_instance_for_plugin(string module_name) {
+		public Gtk.Bin? new_widget_instance_for_plugin(string module_name) {
 			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
 			if (plugin_info == null) {
 				return null;
@@ -111,9 +111,12 @@ namespace Budgie {
 
 			var plugin = extension as Budgie.RavenPlugin;
 			var uuid = generate_uuid();
-			var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
-			var instance_settings_path = "%s/%s/%s".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid, "instance-settings");
-			var instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
+			GLib.Settings? instance_settings = null;
+			if (plugin.supports_settings()) {
+				var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
+				var instance_settings_path = "/%s/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid, "instance-settings");
+				instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
+			}
 			return plugin.new_widget_instance(uuid, instance_settings);
 		}
 

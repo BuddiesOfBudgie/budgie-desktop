@@ -17,6 +17,7 @@ namespace Budgie {
 		private Budgie.SoundWidget? audio_input_widget = null;
 		private Budgie.SoundWidget? audio_output_widget = null;
 		private Settings? raven_settings = null;
+		private Gtk.ScrolledWindow? scroll = null;
 
 		private Gtk.Stack? main_stack = null;
 		private Gtk.StackSwitcher? switcher = null;
@@ -53,7 +54,7 @@ namespace Budgie {
 
 			pack_start(main_stack, true, true, 0);
 
-			var scroll = new Gtk.ScrolledWindow(null, null);
+			scroll = new Gtk.ScrolledWindow(null, null);
 			main_stack.add_titled(scroll, "applets", _("Applets"));
 			/* Dummy - no notifications right now */
 			var not = new NotificationsView();
@@ -94,6 +95,12 @@ namespace Budgie {
 			audio_input_widget.devices_state_changed.connect(() => { // When the Sound Input widget has devices
 				on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
 			});
+		}
+
+		public void add_widget_instance(Gtk.Bin? widget_instance) {
+			box.pack_start(widget_instance, false, false, 0);
+			scroll.show_all();
+			requested_draw();
 		}
 
 		void on_name_change() {

@@ -352,6 +352,8 @@ namespace Budgie {
 			plugin_manager = new RavenPluginManager();
 
 			plugin_manager.plugin_loaded.connect((module_name) => {
+				var instance = plugin_manager.new_widget_instance_for_plugin(module_name);
+				main_view.add_widget_instance(instance);
 				warning("%s loaded", module_name);
 			});
 		}
