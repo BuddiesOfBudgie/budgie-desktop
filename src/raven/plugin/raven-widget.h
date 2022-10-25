@@ -30,8 +30,7 @@ typedef struct _BudgieRavenWidgetClass BudgieRavenWidgetClass;
 struct _BudgieRavenWidgetClass {
 	GtkBinClass parent_class;
 
-	gboolean (*supports_settings)(BudgieRavenWidget* self);
-	GtkWidget* (*get_settings_ui)(BudgieRavenWidget* self);
+	GtkWidget* (*build_settings_ui)(BudgieRavenWidget* self);
 };
 
 struct _BudgieRavenWidgetPrivate {
@@ -48,13 +47,12 @@ struct _BudgieRavenWidget {
 BudgieRavenWidget* budgie_raven_widget_new(void);
 
 // should be implemented by subclasses
-gboolean budgie_raven_widget_supports_settings(BudgieRavenWidget* self);
-GtkWidget* budgie_raven_widget_get_settings_ui(BudgieRavenWidget* self);
+GtkWidget* budgie_raven_widget_build_settings_ui(BudgieRavenWidget* self);
 
 // cannot be implemented by subclasses
 void budgie_raven_widget_initialize(BudgieRavenWidget* self, const char* uuid, GSettings* instance_settings);
 gchar* budgie_raven_widget_get_uuid(BudgieRavenWidget* self);
-GSettings* budgie_raven_widget_get_settings(BudgieRavenWidget* self);
+GSettings* budgie_raven_widget_get_instance_settings(BudgieRavenWidget* self);
 
 GType budgie_raven_widget_get_type(void);
 

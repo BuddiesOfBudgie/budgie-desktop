@@ -58,7 +58,7 @@ install_headers(ravenplugin_headers, subdir: 'budgie-desktop')
 libravenplugin_gir = gnome.generate_gir(
     libravenplugin,
     sources: ravenplugin_sources + ravenplugin_headers + ravenplugin_enums,
-    namespace: 'Budgie',
+    namespace: 'BudgieRavenPlugin',
     nsversion: '1.0',
     dependencies: ravenplugin_deps,
     includes: [

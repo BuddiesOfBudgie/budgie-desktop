@@ -20,11 +20,11 @@ static void budgie_raven_plugin_default_init(__attribute__((unused)) BudgieRaven
 
 /**
  * budgie_raven_plugin_new_widget_instance:
- * @self: A #BudgieRavenWidget
+ * @self: A #BudgieRavenPlugin
  * @uuid: UUID for this new instance
- * @settings: Settings for this new instance
+ * @settings: (nullable): Settings for this new instance
  *
- * Returns: (transfer full): A newly initialised Raven widget
+ * Returns: (transfer full): A newly initialized Raven widget
  */
 BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings) {
     if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
@@ -32,4 +32,18 @@ BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* se
 	}
 
 	return BUDGIE_RAVEN_PLUGIN_GET_IFACE(self)->new_widget_instance(self, uuid, settings);
+}
+
+/**
+ * budgie_raven_plugin_supports_settings:
+ * @self: A #BudgieRavenPlugin
+ *
+ * Returns: (transfer full): Whether this plugin supports per-instance settings
+ */
+gboolean budgie_raven_plugin_supports_settings(BudgieRavenPlugin* self) {
+	if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
+		return FALSE;
+	}
+
+	return BUDGIE_RAVEN_PLUGIN_GET_IFACE(self)->supports_settings(self);
 }

@@ -33,9 +33,11 @@ struct _BudgieRavenPluginIface {
 	GTypeInterface parent_iface;
 
     BudgieRavenWidget* (*new_widget_instance)(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings);
+	gboolean (*supports_settings)(BudgieRavenPlugin* self);
 };
 
 BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings);
+gboolean budgie_raven_plugin_supports_settings(BudgieRavenPlugin* self);
 
 GType budgie_raven_plugin_get_type(void);
 

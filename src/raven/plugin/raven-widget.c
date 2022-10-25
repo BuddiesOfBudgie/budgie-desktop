@@ -39,31 +39,31 @@ void budgie_raven_widget_initialize(BudgieRavenWidget* self, const char* uuid, G
 	self->priv->instance_settings = instance_settings;
 }
 
-gboolean budgie_raven_widget_supports_settings(BudgieRavenWidget* self) {
-	if (!BUDGIE_IS_RAVEN_WIDGET(self)) {
-		return FALSE;
-	}
-
-	BudgieRavenWidgetClass* klass = BUDGIE_RAVEN_WIDGET_GET_CLASS(self);
-	if (!klass->supports_settings) {
-		return FALSE;
-	}
-	return klass->supports_settings(self);
-}
-
-GtkWidget* budgie_raven_widget_get_settings_ui(BudgieRavenWidget* self) {
+/**
+ * budgie_raven_widget_build_settings_ui:
+ * @self: A #BudgieRavenWidget
+ *
+ * Returns: (transfer full): The settings UI to be presented in Budgie Desktop Settings for this widget instance
+ */
+GtkWidget* budgie_raven_widget_build_settings_ui(BudgieRavenWidget* self) {
 	if (!BUDGIE_IS_RAVEN_WIDGET(self)) {
 		return NULL;
 	}
 
 	BudgieRavenWidgetClass* klass = BUDGIE_RAVEN_WIDGET_GET_CLASS(self);
-	if (!klass->supports_settings || klass->get_settings_ui == NULL) {
+	if (klass->build_settings_ui == NULL) {
 		return NULL;
 	}
-	return klass->get_settings_ui(self);
+	return klass->build_settings_ui(self);
 }
 
-GSettings* budgie_raven_widget_get_settings(BudgieRavenWidget* self) {
+/**
+ * budgie_raven_widget_get_instance_settings:
+ * @self: A #BudgieRavenWidget
+ *
+ * Returns: (transfer none): The settings object for this widget instance
+ */
+GSettings* budgie_raven_widget_get_instance_settings(BudgieRavenWidget* self) {
 	if (!BUDGIE_IS_RAVEN_WIDGET(self)) {
 		return NULL;
 	}
@@ -79,6 +79,7 @@ GSettings* budgie_raven_widget_get_settings(BudgieRavenWidget* self) {
 // static method definitions
 
 static void budgie_raven_widget_init(BudgieRavenWidget* self) {
+	self->priv = budgie_raven_widget_get_instance_private(self);
 	self->priv->uuid = NULL;
 	self->priv->instance_settings = NULL;
 	self->priv->initialized = FALSE;
@@ -92,7 +93,9 @@ static void budgie_raven_widget_class_init(BudgieRavenWidgetClass* klass) {
 static void budgie_raven_widget_dispose(GObject* g_object) {
 	BudgieRavenWidget* self = BUDGIE_RAVEN_WIDGET(g_object);
 
-	g_clear_pointer(&self->priv->instance_settings, g_free);
+	if (self->priv->instance_settings != NULL) {
+		g_clear_pointer(&self->priv->instance_settings, g_free);
+	}
 	g_clear_pointer(&self->priv, g_free);
 
 	G_OBJECT_CLASS(budgie_raven_widget_parent_class)->dispose(g_object);
