@@ -131,10 +131,17 @@ namespace Budgie {
 		public void ShowWindowMenu(uint32 xid, uint button, uint32 timestamp) throws DBusError, IOError {
 			active_window = Wnck.Window.get(xid);
 			if (active_window == null) {
+				warning("invalid active_window");
 				return;
 			}
-			action_menu = new Wnck.ActionMenu(active_window);
-			action_menu.popup_at_pointer(null);
+
+			Idle.add(() => {
+				action_menu = new Wnck.ActionMenu(active_window);
+				action_menu.show_all();
+				action_menu.popup(null,null,null,0,Gtk.get_current_event_time());
+				return false;
+			});
+
 			this.xid = xid;
 		}
 	}
