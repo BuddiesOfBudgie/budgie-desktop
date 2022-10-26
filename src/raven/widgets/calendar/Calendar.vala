@@ -20,6 +20,9 @@ public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 }
 
 public class CalendarRavenWidget : Budgie.RavenWidget {
+	private Gtk.Box? header = null;
+	private Gtk.Box? content = null;
+	private Gtk.Label? header_label = null;
 	private Gtk.Box? main_box = null;
 	private Gtk.Calendar? cal = null;
 
@@ -31,12 +34,27 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		add(main_box);
 
+		header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		header.get_style_context().add_class("raven-header");
+		main_box.add(header);
+
+		var icon = new Gtk.Image.from_icon_name("calendar", Gtk.IconSize.MENU);
+		icon.margin = 8;
+		icon.margin_start = 12;
+		icon.margin_end = 12;
+		header.add(icon);
+
+		var time = new DateTime.now_local();
+		header_label = new Gtk.Label(time.format(date_format));
+		header.add(header_label);
+
+		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		content.get_style_context().add_class("raven-background");
+		main_box.add(content);
+
 		cal = new Gtk.Calendar();
 		cal.get_style_context().add_class("raven-calendar");
-		var ebox = new Gtk.EventBox();
-		ebox.get_style_context().add_class("raven-background");
-		ebox.add(cal);
-		main_box.add(ebox);
+		content.add(cal);
 
 		Timeout.add_seconds_full(Priority.LOW, 30, this.update_date);
 
@@ -60,6 +78,8 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 
 	private bool update_date() {
 		var time = new DateTime.now_local();
+		var strf = time.format(date_format);
+		header_label.label = strf;
 		cal.day = (cal.month + 1) == time.get_month() && cal.year == time.get_year() ? time.get_day_of_month() : 0;
 		return true;
 	}
