@@ -55,7 +55,7 @@ namespace Budgie {
 			pack_start(main_stack, true, true, 0);
 
 			scroll = new Gtk.ScrolledWindow(null, null);
-			main_stack.add_titled(scroll, "applets", _("Applets"));
+			main_stack.add_titled(scroll, "widgets", _("Widgets"));
 			/* Dummy - no notifications right now */
 			var not = new NotificationsView();
 			main_stack.add_titled(not, "notifications", _("Notifications"));
@@ -98,8 +98,7 @@ namespace Budgie {
 		}
 
 		public void add_widget_instance(Gtk.Bin? widget_instance) {
-			box.pack_start(widget_instance, false, false, 0);
-			scroll.show_all();
+			box.pack_end(widget_instance, false, false, 0);
 			requested_draw();
 		}
 
@@ -151,7 +150,7 @@ namespace Budgie {
 			on_raven_settings_changed(SHOW_SOUND_OUTPUT_WIDGET);
 			on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
 			on_raven_settings_changed("show-mpris-widget");
-			main_stack.set_visible_child_name("applets");
+			main_stack.set_visible_child_name("widgets");
 		}
 	}
 }
