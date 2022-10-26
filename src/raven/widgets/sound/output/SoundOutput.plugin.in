@@ -1,8 +1,8 @@
 [Plugin]
-Module=org.buddiesofbudgie.Sound.so
+Module=org.buddiesofbudgie.SoundOutput.so
 Builtin=TRUE
-_Name=Sound
-_Description=Per-app and global audio output control, and global audio input control.
+_Name=Sound Output
+_Description=Per-app and global audio output control.
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/

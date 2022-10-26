@@ -98,7 +98,7 @@ namespace Budgie {
 		}
 
 		public void add_widget_instance(Gtk.Bin? widget_instance) {
-			box.pack_end(widget_instance, false, false, 0);
+			box.pack_end(widget_instance, false, false, 8);
 			requested_draw();
 		}
 
