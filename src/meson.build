@@ -25,8 +25,5 @@ subdir('rundialog')
 subdir('wm')
 subdir('panel')
 
-# Now build applets
-subdir('applets')
-
 # Finish up by doing the session
 subdir('session')

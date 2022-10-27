@@ -38,7 +38,7 @@ shared_library(
     dependencies: applet_tray_deps,
     vala_args: [
         '--pkg', 'libpeas-1.0',
-        join_paths(meson.source_root(), 'src', 'applets', 'tray', 'carbontray', 'carbontray-1.0.vapi'),
+        join_paths(meson.source_root(), 'src', 'panel', 'applets', 'tray', 'carbontray', 'carbontray-1.0.vapi'),
     ],
     install: true,
     install_dir: applet_tray_dir,
