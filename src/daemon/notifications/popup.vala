@@ -187,12 +187,18 @@ namespace Budgie.Notifications {
 			// Handle mouse enter/leave events to pause/start popup decay
 			this.enter_notify_event.connect(() => {
 				this.stop_decay();
-				return Gdk.EVENT_STOP;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
-			this.leave_notify_event.connect(() => {
+			this.leave_notify_event.connect((event) => {
+				// This keeps the decay timer from restarting when the mouse enters another
+				// widget in the popup.
+				if (event.detail == Gdk.NotifyType.INFERIOR) {
+					return Gdk.EVENT_STOP;
+				}
+
 				this.begin_decay(this.notification.expire_timeout);
-				return Gdk.EVENT_STOP;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
 			// Handle interaction events
