@@ -35,7 +35,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	private HashTable<uint,Gtk.ListBoxRow?> devices;
 	private ulong primary_notify_id = 0;
 	private Gvc.MixerStream? primary_stream = null;
-	private string widget_type = "";
 
 	/**
 	 * Signals
@@ -72,7 +71,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		header_icon = new Gtk.Image.from_icon_name("audio-volume-muted", Gtk.IconSize.MENU);
 		header_icon.margin = 8;
 		header_icon.margin_start = 12;
-		header_icon.margin_end = 12;
+		header_icon.margin_end = 8;
 		header.add(header_icon);
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -80,7 +79,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		main_box.add(content);
 
 		get_style_context().add_class("audio-widget");
-		widget_type = "output";
 
 		/**
 		 * Shared  Logic
@@ -192,16 +190,10 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		 * Widget Expansion
 		 */
 
-		//  var expander = new Budgie.RavenExpander(header);
-		//  expander.expanded = (widget_type != "input");
-
 		show_all();
 
-		if (widget_type == "output") {
-			on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
-			toggle_start_listening();
-		}
-
+		on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
+		toggle_start_listening();
 	}
 
 	/**
@@ -219,7 +211,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			return;
 		}
 
-		var device = (widget_type == "input") ? this.mixer.lookup_input_id(id) : this.mixer.lookup_output_id(id);
+		var device = mixer.lookup_output_id(id);
 
 		if (device == null) {
 			return;
@@ -231,7 +223,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		var card = device.card as Gvc.MixerCard;
 
-		if ((this.widget_type == "output") && ("Digital Output" in device.description)) {
+		if ("Digital Output" in device.description) {
 			return; // Digital Output switching is really jank with Gvc. Don't support it.
 		}
 
@@ -260,7 +252,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * on_device_changed will handle when a Gvc.MixerUIDevice has been changed
 	 */
 	private void on_device_changed(uint id) {
-		Gvc.MixerStream stream = (widget_type == "input") ? mixer.get_default_source() : mixer.get_default_sink(); // Set default_stream to the respective source or sink
+		Gvc.MixerStream stream = mixer.get_default_sink(); // Set default_stream to the respective source or sink
 
 		if (stream == null) { // Our default stream is null
 			return;
@@ -333,14 +325,10 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	private void on_device_selected(Gtk.ListBoxRow? list_item) {
 		SignalHandler.block_by_func((void*)devices_list, (void*)on_device_selected, this);
 		uint id = list_item.get_data("device_id");
-		var device = (widget_type == "input") ? mixer.lookup_input_id(id) : mixer.lookup_output_id(id);
+		var device = mixer.lookup_output_id(id);
 
 		if (device != null) {
-			if (widget_type == "input") { // Input
-				mixer.change_input(device);
-			} else { // Output
-				mixer.change_output(device);
-			}
+			mixer.change_output(device);
 		}
 		SignalHandler.unblock_by_func((void*)devices_list, (void*)on_device_selected, this);
 	}
@@ -362,24 +350,22 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * on_state_changed will handle when the state of our Mixer or its streams have changed
 	 */
 	private void on_state_changed(uint id) {
-		if (widget_type == "output") {
-			var stream = mixer.lookup_stream_id(id);
+		var stream = mixer.lookup_stream_id(id);
 
-			if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
-				if (apps.contains(id)) { // If our apps contains this stream
-					Budgie.AppSoundControl? control = get_control_for_app(id);
+		if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
+			if (apps.contains(id)) { // If our apps contains this stream
+				Budgie.AppSoundControl? control = get_control_for_app(id);
 
-					if (control != null) {
-						if (stream.is_running()) { // If running
-							control.refresh(); // Update our control
-						} else { // If not running
-							control.destroy();
-							apps.steal(id);
-						}
+				if (control != null) {
+					if (stream.is_running()) { // If running
+						control.refresh(); // Update our control
+					} else { // If not running
+						control.destroy();
+						apps.steal(id);
 					}
-
-					toggle_start_listening();
 				}
+
+				toggle_start_listening();
 			}
 		}
 
@@ -510,21 +496,15 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * toggle_start_listening will handle showing or hiding our Start Listening box if needed
 	 */
 	private void toggle_start_listening() {
-		if (widget_type == "output") { // Output
-			bool apps_exist = (apps.length != 0);
-			listening_box_revealer.set_reveal_child(!apps_exist); // Show if no apps, hide if apps
-			apps_list_revealer.set_reveal_child(apps_exist); // Show if apps, hide if no apps
-		}
+		bool apps_exist = (apps.length != 0);
+		listening_box_revealer.set_reveal_child(!apps_exist); // Show if no apps, hide if apps
+		apps_list_revealer.set_reveal_child(apps_exist); // Show if apps, hide if no apps
 	}
 
 	/**
 	 * update_input_draw_markers will update our draw markers
 	 */
 	private void update_input_draw_markers() {
-		if (widget_type == "input") {
-			return;
-		}
-
 		bool builtin_enabled = budgie_settings.get_boolean("builtin-theme");
 		string current_theme = gnome_desktop_settings.get_string("gtk-theme");
 		bool supported_theme = (current_theme.index_of("Arc") == -1);
@@ -550,7 +530,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		var vol = primary_stream.get_volume();
 		var vol_max = mixer.get_vol_max_norm();
 
-		if ((widget_type == "output") && raven_settings.get_boolean(MAX_KEY)) { // Allowing max
+		if (raven_settings.get_boolean(MAX_KEY)) { // Allowing max
 			vol_max = mixer.get_vol_max_amplified();
 		}
 
@@ -560,10 +540,10 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		string image_name;
 
 		// Work out an icon
-		string icon_prefix = (widget_type == "input") ? "microphone-sensitivity-" : "audio-volume-";
+		string icon_prefix = "audio-volume-";
 
 		if (primary_stream.get_is_muted() || vol <= 0) {
-			image_name = "muted-symbolic";
+			image_name = "muted";
 		} else {
 			switch (n) {
 				case 1:
