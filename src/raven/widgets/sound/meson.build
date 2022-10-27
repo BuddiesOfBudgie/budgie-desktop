@@ -27,5 +27,5 @@ link_raven_libsound = declare_dependency(
     include_directories: include_directories('.'),
 )
 
-# subdir('input')
+subdir('input')
 subdir('output')
