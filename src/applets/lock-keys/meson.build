@@ -14,10 +14,10 @@ applet_lockkeys_sources = [
 ]
 
 applet_lockkeys_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(
@@ -27,7 +27,7 @@ shared_library(
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--vapidir', dir_libplugin,
+        '--vapidir', dir_libpanelplugin,
     ],
     install: true,
     install_dir: applet_lockkeys_dir,

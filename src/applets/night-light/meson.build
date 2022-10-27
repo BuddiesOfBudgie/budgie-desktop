@@ -33,11 +33,11 @@ applet_nightlight_sources = [
 ]
 
 applet_nightlight_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
     dep_peas,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

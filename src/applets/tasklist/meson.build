@@ -14,11 +14,11 @@ applet_tasklist_sources = [
 ]
 
 applet_tasklist_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_wnck,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

@@ -199,7 +199,7 @@ namespace Budgie {
 
 		public Budgie.DesktopManager? manager { public set; public get; }
 
-		private Budgie.RavenPluginManager? plugin_manager;
+		private unowned Budgie.RavenPluginManager? plugin_manager;
 
 		public double nscale {
 			public set {
@@ -276,7 +276,7 @@ namespace Budgie {
 			}
 		}
 
-		public Raven(Budgie.DesktopManager? manager) {
+		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
 			get_style_context().add_class("budgie-container");
 
@@ -284,6 +284,8 @@ namespace Budgie {
 			settings.changed["show-power-strip"].connect(on_power_strip_change);
 
 			Raven._instance = this;
+
+			this.plugin_manager = plugin_manager;
 
 			var vis = screen.get_rgba_visual();
 			if (vis == null) {
@@ -348,8 +350,6 @@ namespace Budgie {
 			this.screen_edge = Gtk.PositionType.LEFT;
 
 			on_power_strip_change(); // Trigger our power strip change func immediately
-
-			plugin_manager = new RavenPluginManager();
 
 			plugin_manager.plugin_loaded.connect((module_name) => {
 				var instance = plugin_manager.new_widget_instance_for_plugin(module_name);

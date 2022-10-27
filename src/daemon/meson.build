@@ -43,7 +43,7 @@ daemon_deps = [
     dep_notify,
     dep_wnck,
     link_libbudgieprivate,
-    libplugin_vapi,
+    libpanelplugin_vapi,
     link_libappsys,
     link_libconfig,
     link_libtheme,

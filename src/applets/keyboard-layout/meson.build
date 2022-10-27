@@ -14,13 +14,13 @@ applet_keyboardlayout_sources = [
 ]
 
 applet_keyboardlayout_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_gnomedesktop,
     dep_gsettings,
     dep_ibus,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

@@ -38,7 +38,7 @@ applet_icontasklist_sources = [
 ]
 
 applet_icontasklist_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
     dep_peas,
@@ -46,7 +46,7 @@ applet_icontasklist_deps = [
     dep_gdkx11,
     link_libabomination,
     link_libappsys,
-    link_libplugin,
+    link_libpanelplugin,
     meson.get_compiler('c').find_library('m', required: false)
 ]
 

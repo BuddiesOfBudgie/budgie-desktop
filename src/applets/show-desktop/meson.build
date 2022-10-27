@@ -14,11 +14,11 @@ applet_showdesktop_sources = [
 ]
 
 applet_showdesktop_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_wnck,
     dep_peas,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

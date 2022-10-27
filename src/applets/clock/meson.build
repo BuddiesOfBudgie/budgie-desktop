@@ -38,11 +38,11 @@ shared_library(
     'clockapplet',
     applet_clock_sources,
     dependencies: [
-        libplugin_vapi,
+        libpanelplugin_vapi,
         dep_giounix,
         dep_gtk3,
         dep_peas,
-        link_libplugin,
+        link_libpanelplugin,
     ],
     link_whole: [
         lib_applet_clock_resources,

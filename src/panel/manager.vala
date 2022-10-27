@@ -157,6 +157,7 @@ namespace Budgie {
 		HashTable<string,Peas.PluginInfo?> plugins;
 
 		private Budgie.Raven? raven = null;
+		private Budgie.RavenPluginManager? raven_plugin_manager = null;
 		RavenPosition raven_position;
 
 		private Budgie.ThemeManager theme_manager;
@@ -621,7 +622,8 @@ namespace Budgie {
 
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
-			raven = new Budgie.Raven(this);
+			raven_plugin_manager = new Budgie.RavenPluginManager();
+			raven = new Budgie.Raven(this, raven_plugin_manager);
 			raven.request_settings_ui.connect(this.on_settings_requested);
 
 			/* Ensure we only have wnck initialised once otherwise everything goes cranky */

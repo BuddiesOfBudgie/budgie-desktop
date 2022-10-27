@@ -23,13 +23,13 @@ applet_tray_resources = gnome.compile_resources(
 applet_tray_sources = ['TrayApplet.vala', applet_tray_resources]
 
 applet_tray_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dependency('x11'),
     dependency('gdk-x11-3.0'),
     dep_peas,
     link_libcarbontray,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

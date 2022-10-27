@@ -40,10 +40,10 @@ applet_placesindicator_sources = [
 ]
 
 applet_placesindicator_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

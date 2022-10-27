@@ -16,11 +16,11 @@ applet_userindicator_sources = [
 ]
 
 applet_userindicator_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

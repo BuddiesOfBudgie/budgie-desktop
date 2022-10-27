@@ -41,7 +41,7 @@ applet_budgiemenu_sources = [
 ]
 
 applet_budgiemenu_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gee,
     dep_giounix,
     dep_gtk3,
@@ -49,7 +49,7 @@ applet_budgiemenu_deps = [
     dep_accountsservice,
     dep_cairo,
     link_libappindexer,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

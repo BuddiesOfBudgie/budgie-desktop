@@ -27,13 +27,13 @@ applet_workspaces_sources = [
 ]
 
 applet_workspaces_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
     dep_wnck,
     dep_peas,
     link_libappsys,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(

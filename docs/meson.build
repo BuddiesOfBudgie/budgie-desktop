@@ -12,5 +12,5 @@ gnome.gtkdoc(
         '--ignore-headers=util.h',
     ],
     gobject_typesfile : 'budgie-desktop.types',
-    dependencies: link_libplugin,
+    dependencies: link_libpanelplugin,
 )

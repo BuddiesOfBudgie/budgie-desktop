@@ -1,6 +1,5 @@
 # Provides budgie's Raven component
 
-subdir('plugin')
 subdir('widgets')
 
 gresource = join_paths(meson.current_source_dir(), 'ui', 'budgie-raven.gresource.xml')
@@ -45,14 +44,14 @@ libraven_deps = [
     # https://github.com/mesonbuild/meson/issues/2096
     link_libbudgieprivate,
     link_libravenplugin,
+    link_libpanelplugin,
     libravenplugin_vapi,
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
     dep_libuuid,
     dep_peas,
     link_libconfig,
-    link_libplugin,
     link_libtheme,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),

@@ -27,14 +27,14 @@ applet_status_sources = [
 ]
 
 applet_status_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
     dependency('gnome-bluetooth-1.0', version: '>= 3.34.0'),
     dependency('upower-glib', version: '>= 0.99.0'),
-    link_libplugin,
+    link_libpanelplugin,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
