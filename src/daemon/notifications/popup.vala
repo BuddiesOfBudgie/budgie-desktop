@@ -18,14 +18,15 @@ namespace Budgie.Notifications {
 	 * Widget Structure & GTK Classes:
 	 * - GtkWindow (class: budgie-notification-window)
 	 *   - GtkBox (class: drop-shadow)
-	 *      - GtkOverlay
-	 *        - GtkGrid (for some reason, adding the Stack to the Overlay directly breaks the layout. So, this exists)
-	 *          - GtkStack (holds the notification body/content)
-	 *            - ...
-	 *        - GtkButton (class: close)
+	 *     - GtkRevealer (used for fade in/out animation)
+	 *       - GtkOverlay
+	 *         - GtkStack (holds the notification body/content)
+	 *           - ...
+	 *         - GtkButton (class: close)
 	 */
 	public class PopupBase : Gtk.Window {
 		protected Gtk.Stack content_stack;
+		protected Gtk.Revealer revealer;
 
 		private uint expire_id { get; private set; }
 
@@ -49,14 +50,10 @@ namespace Budgie.Notifications {
 
 			this.content_stack = new Gtk.Stack() {
 				transition_type = Gtk.StackTransitionType.SLIDE_LEFT,
+				hexpand = true,
+				margin = 4,
 				vhomogeneous = false
 			};
-
-			var grid = new Gtk.Grid() {
-				hexpand = true,
-				margin = 4
-			};
-			grid.attach(content_stack, 0, 0);
 
 			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
 				halign = Gtk.Align.END,
@@ -65,12 +62,20 @@ namespace Budgie.Notifications {
 			close_button.get_style_context().add_class("close");
 
 			var overlay = new Gtk.Overlay();
-			overlay.add(grid);
+			overlay.add(content_stack);
 			overlay.add_overlay(close_button);
+
+			// Add a revealer for open/close animation
+			this.revealer = new Gtk.Revealer() {
+				reveal_child = true,
+				transition_duration = 250,
+				transition_type = Gtk.RevealerTransitionType.CROSSFADE
+			};
+			this.revealer.add(overlay);
 
 			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			box.get_style_context().add_class("drop-shadow");
-			box.pack_start(overlay, true, true, 0);
+			box.pack_start(revealer, true, true, 0);
 
 			this.add(box);
 
@@ -86,18 +91,11 @@ namespace Budgie.Notifications {
 		 */
 		public void dismiss() {
 			this.destroying = true;
-			destroy();
-		}
-
-		/**
-		 * Close this notification when it expires.
-		 */
-		bool do_expire() {
-			this.expire_id = 0;
-
-			this.Closed(NotificationCloseReason.EXPIRED);
-			this.dismiss();
-			return false;
+			this.revealer.reveal_child = false;
+			GLib.Timeout.add(revealer.transition_duration, () => {
+				destroy();
+				return Gdk.EVENT_STOP;
+			});
 		}
 
 		/**
@@ -108,7 +106,12 @@ namespace Budgie.Notifications {
 				Source.remove(this.expire_id);
 			}
 
-			this.expire_id = Timeout.add(timeout, do_expire, Priority.HIGH);
+			this.expire_id = GLib.Timeout.add(timeout, () => {
+				this.expire_id = 0;
+				this.Closed(NotificationCloseReason.EXPIRED);
+				this.dismiss();
+				return Gdk.EVENT_STOP;
+			}, Priority.HIGH);
 		}
 
 		/**
