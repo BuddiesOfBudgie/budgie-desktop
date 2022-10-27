@@ -14,6 +14,15 @@ namespace Budgie.Notifications {
 
 	/**
 	 * This class is a notification popup with no content in it.
+	 *
+	 * Widget Structure & GTK Classes:
+	 * - GtkWindow (class: budgie-notification-window)
+	 *   - GtkBox (class: drop-shadow)
+	 *      - GtkOverlay
+	 *        - GtkGrid (for some reason, adding the Stack to the Overlay directly breaks the layout. So, this exists)
+	 *          - GtkStack (holds the notification body/content)
+	 *            - ...
+	 *        - GtkButton (class: close)
 	 */
 	public class PopupBase : Gtk.Window {
 		protected Gtk.Stack content_stack;
@@ -30,9 +39,6 @@ namespace Budgie.Notifications {
 			this.skip_taskbar_hint = true;
 			this.set_decorated(false);
 
-			this.halign = Gtk.Align.FILL;
-			this.valign = Gtk.Align.FILL;
-
 			var visual = this.screen.get_rgba_visual();
 			if (visual != null) {
 				this.set_visual(visual);
@@ -43,14 +49,36 @@ namespace Budgie.Notifications {
 
 			this.content_stack = new Gtk.Stack() {
 				transition_type = Gtk.StackTransitionType.SLIDE_LEFT,
-				border_width = 8,
-				halign = Gtk.Align.FILL,
-				valign = Gtk.Align.FILL,
 				vhomogeneous = false
 			};
-			this.content_stack.get_style_context().add_class("drop-shadow");
 
-			this.add(this.content_stack);
+			var grid = new Gtk.Grid() {
+				hexpand = true,
+				margin = 4
+			};
+			grid.attach(content_stack, 0, 0);
+
+			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
+				halign = Gtk.Align.END,
+				valign = Gtk.Align.START
+			};
+			close_button.get_style_context().add_class("close");
+
+			var overlay = new Gtk.Overlay();
+			overlay.add(grid);
+			overlay.add_overlay(close_button);
+
+			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			box.get_style_context().add_class("drop-shadow");
+			box.pack_start(overlay, true, true, 0);
+
+			this.add(box);
+
+			// Hook up the close button
+			close_button.clicked.connect(() => {
+				this.Closed(NotificationCloseReason.DISMISSED);
+				this.dismiss();
+			});
 		}
 
 		/**
@@ -139,14 +167,9 @@ namespace Budgie.Notifications {
 				baseline_position = Gtk.BaselinePosition.CENTER
 			};
 			var contents = new Body(this.notification);
-			this.content_stack.add(content_box);
-			content_box.pack_start(contents, false, true, 0);
 
-			// Hook up the close button
-			contents.Closed.connect(() => {
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
-			});
+			this.content_stack.add(content_box);
+			content_box.pack_start(contents, false, false, 0);
 
 			// Add notification actions if any are present
 			if (this.notification.actions.length > 0) {
@@ -155,7 +178,7 @@ namespace Budgie.Notifications {
 					this.ActionInvoked(action_key);
 					this.dismiss();
 				});
-				content_box.pack_start(actions, false, true, 0);
+				content_box.pack_start(actions, false, false, 0);
 			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
@@ -202,11 +225,6 @@ namespace Budgie.Notifications {
 			var new_contents = new Body(new_notif);
 			content_box.add(new_contents);
 
-			new_contents.Closed.connect(() => {
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
-			});
-
 			// Add notification actions if any are present
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
@@ -231,8 +249,6 @@ namespace Budgie.Notifications {
 	private class Body: Gtk.Grid {
 		public Notification notification { get; construct; }
 
-		public signal void Closed();
-
 		public Body(Notification notification) {
 			Object(notification: notification);
 		}
@@ -255,6 +271,7 @@ namespace Budgie.Notifications {
 				ellipsize = Pango.EllipsizeMode.END,
 				max_width_chars = 35,
 				margin_bottom = 5,
+				margin_right = 16,
 				halign = Gtk.Align.START,
 				hexpand = true
 			};
@@ -265,7 +282,6 @@ namespace Budgie.Notifications {
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
-				width_chars = 33,
 				max_width_chars = 33,
 				lines = 2,
 				valign = Gtk.Align.START,
@@ -273,20 +289,12 @@ namespace Budgie.Notifications {
 				hexpand = true,
 				vexpand = true
 			};
+			body_label.set_size_request(33, -1); // This ensures that lines wrap at the desired place regardless of font-size
 			body_label.get_style_context().add_class("notification-body");
-
-			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
-				halign = Gtk.Align.END,
-				valign = Gtk.Align.START
-			};
-			close_button.clicked.connect(() => {
-				this.Closed();
-			});
 
 			// Attach the icon and labels to our grid
 			this.attach(app_icon, 0, 0, 1, 2);
 			this.attach(title_label, 1, 0);
-			this.attach(close_button, 2, 0);
 			this.attach(body_label, 1, 1);
 		}
 	}
