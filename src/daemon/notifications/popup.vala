@@ -93,8 +93,8 @@ namespace Budgie.Notifications {
 			this.destroying = true;
 			this.revealer.reveal_child = false;
 			GLib.Timeout.add(revealer.transition_duration, () => {
-				destroy();
-				return Gdk.EVENT_STOP;
+				this.destroy();
+				return Source.REMOVE;
 			});
 		}
 
@@ -110,7 +110,7 @@ namespace Budgie.Notifications {
 				this.expire_id = 0;
 				this.Closed(NotificationCloseReason.EXPIRED);
 				this.dismiss();
-				return Gdk.EVENT_STOP;
+				return Source.REMOVE;
 			}, Priority.HIGH);
 		}
 
