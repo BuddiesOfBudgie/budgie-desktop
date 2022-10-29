@@ -72,7 +72,7 @@ namespace Budgie.Notifications {
 
 			// Add a revealer for open/close animation
 			this.revealer = new Gtk.Revealer() {
-				reveal_child = true,
+				reveal_child = false,
 				transition_duration = 250,
 				transition_type = Gtk.RevealerTransitionType.CROSSFADE,
 			};
@@ -105,6 +105,12 @@ namespace Budgie.Notifications {
 		public void begin_decay(uint timeout) {
 			if (this.expire_id != 0) {
 				Source.remove(this.expire_id);
+			}
+
+			// Prevent popups being shown for a second if DND is enabled
+			// or an application is fullscreened
+			if (timeout > 0) {
+				this.revealer.reveal_child = true;
 			}
 
 			this.expire_id = GLib.Timeout.add(timeout, () => {
