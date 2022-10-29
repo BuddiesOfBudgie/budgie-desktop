@@ -17,8 +17,8 @@ namespace Budgie.Notifications {
 	 *
 	 * Widget Structure & GTK Classes:
 	 * - GtkWindow (class: budgie-notification-window)
-	 *   - GtkBox (class: drop-shadow)
-	 *     - GtkRevealer (used for fade in/out animation)
+	 *   - GtkRevealer
+	 *     - GtkBox (class: drop-shadow)
 	 *       - GtkOverlay
 	 *         - GtkStack (holds the notification body/content)
 	 *           - ...
@@ -62,22 +62,23 @@ namespace Budgie.Notifications {
 			close_button.get_style_context().add_class("close");
 
 			var overlay = new Gtk.Overlay();
+			overlay.get_style_context().add_class("btn");
 			overlay.add(content_stack);
 			overlay.add_overlay(close_button);
+
+			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			box.get_style_context().add_class("drop-shadow");
+			box.pack_start(overlay, true, true, 0);
 
 			// Add a revealer for open/close animation
 			this.revealer = new Gtk.Revealer() {
 				reveal_child = true,
 				transition_duration = 250,
-				transition_type = Gtk.RevealerTransitionType.CROSSFADE
+				transition_type = Gtk.RevealerTransitionType.CROSSFADE,
 			};
-			this.revealer.add(overlay);
+			this.revealer.add(box);
 
-			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-			box.get_style_context().add_class("drop-shadow");
-			box.pack_start(revealer, true, true, 0);
-
-			this.add(box);
+			this.add(revealer);
 
 			// Hook up the close button
 			close_button.clicked.connect(() => {
