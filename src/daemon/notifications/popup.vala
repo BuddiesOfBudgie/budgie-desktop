@@ -39,6 +39,7 @@ namespace Budgie.Notifications {
 			this.skip_pager_hint = true;
 			this.skip_taskbar_hint = true;
 			this.set_decorated(false);
+			this.set_accept_focus(false);
 
 			var visual = this.screen.get_rgba_visual();
 			if (visual != null) {
