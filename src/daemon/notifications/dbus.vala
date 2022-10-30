@@ -106,6 +106,8 @@
 		private const int BUFFER_ZONE = 10;
 		/** Spacing between the first notification and the edge of the screen */
 		private const int INITIAL_BUFFER_ZONE = 45;
+		/** Maximum number of popups to show on the screen at once */
+		private const int MAX_POPUPS_SHOWN = 3;
 
 		private uint32 notif_id = 0;
 
@@ -231,9 +233,10 @@
 			);
 
 			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationUrgency.CRITICAL;
-			should_show = app_notification_settings.get_boolean("enable") &&
-							app_notification_settings.get_boolean("show-banners") &&
-							!this.dispatcher.notifications_paused;
+			should_show = app_notification_settings.get_boolean("enable") && // notifications for this app are enabled
+							app_notification_settings.get_boolean("show-banners") && // notification popups for this app are enabled
+							!this.dispatcher.notifications_paused && // notifications aren't paused, e.g. no fullscreen apps
+							(this.popups.size() < MAX_POPUPS_SHOWN || notification.urgency == NotificationUrgency.CRITICAL); // below the number of max popups, or the noti is critical
 
 			// Set to expire immediately if a popup shouldn't be shown.
 			if (!should_notify || !should_show) {
