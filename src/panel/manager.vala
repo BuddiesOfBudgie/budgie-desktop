@@ -365,16 +365,24 @@ namespace Budgie {
 		/**
 		* Determine if the window is on the primary screen, i.e. where the main
 		* budgie panels will show
+		* note wnck window geometry includes scale factors
 		*/
 		bool window_on_primary(Wnck.Window? window) {
 			Gdk.Rectangle area = Gdk.Rectangle();
 			window.get_geometry(out area.x, out area.y, out area.width, out area.height);
 			var primary = screens.lookup(this.primary_monitor);
-			return area.intersect(primary.area, null);
+
+			// get the geometry of the primary monitor including the scale factor
+			var scr = Gdk.Screen.get_default();
+			var dis = scr.get_display();
+
+			int scale = dis.get_monitor(this.primary_monitor).get_scale_factor();
+			Gdk.Rectangle calc = {primary.area.x * scale, primary.area.y * scale, primary.area.width *scale, primary.area.height * scale};
+			return area.intersect(calc, null);
 		}
 
 		/*
-		* Decide wether or not the panel should be opaque
+		* Decide whether or not the panel should be opaque
 		* The panel should be opaque when:
 		* - Raven is open
 		* - a window fills these requirements:
@@ -391,6 +399,7 @@ namespace Budgie {
 
 			window_list.foreach((window) => {
 				bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
+
 				if (window.get_workspace() != wnck_screen.get_active_workspace()) {
 					return;
 				}
