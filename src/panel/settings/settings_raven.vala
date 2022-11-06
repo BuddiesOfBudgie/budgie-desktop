@@ -14,11 +14,11 @@ namespace Budgie {
 	* RavenPage shows options for configuring Raven
 	*/
 	public class RavenPage : Budgie.SettingsPage {
+		private Gtk.Stack stack;
+		private Gtk.StackSwitcher switcher;
+
 		private Gtk.ComboBox? raven_position;
 		private Gtk.Switch? enable_week_numbers;
-		private Gtk.Switch? show_calendar_widget;
-		private Gtk.Switch? show_sound_output_widget;
-		private Gtk.Switch? show_mic_input_widget;
 		private Gtk.Switch? show_mpris_widget;
 		private Gtk.Switch? show_powerstrip;
 		private Settings raven_settings;
@@ -31,8 +31,30 @@ namespace Budgie {
 				icon_name: "preferences-calendar-and-tasks" // Subject to change
 			);
 
+			var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			pack_start(swbox, false, false, 0);
+
+			/* Main layout bits */
+			switcher = new Gtk.StackSwitcher();
+			switcher.halign = Gtk.Align.CENTER;
+			stack = new Gtk.Stack();
+			stack.set_homogeneous(false);
+			switcher.set_stack(stack);
+			swbox.pack_start(switcher, true, true, 0);
+			pack_start(stack, true, true, 0);
+
+			stack.add_titled(widgets_page(), "widgets", _("Widgets"));
+			stack.add_titled(settings_page(), "settings", _("Settings"));
+
+			show_all();
+		}
+
+		private SettingsGrid widgets_page() {
+			return new SettingsGrid();
+		}
+
+		private SettingsGrid settings_page() {
 			var grid = new SettingsGrid();
-			this.add(grid);
 
 			raven_position = new Gtk.ComboBox();
 
@@ -67,24 +89,6 @@ namespace Budgie {
 				_("This setting enables the display of week numbers in the Calendar widget.")
 			));
 
-			show_calendar_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_calendar_widget,
-				_("Show Calendar Widget"),
-				_("Shows or hides the Calendar Widget in Raven's Applets section.")
-			));
-
-			show_sound_output_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_sound_output_widget,
-				_("Show Sound Output Widget"),
-				_("Shows or hides the Sound Output Widget in Raven's Applets section.")
-			));
-
-			show_mic_input_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_mic_input_widget,
-				_("Show Microphone Input Widget"),
-				_("Shows or hides the Microphone Input Widget in Raven's Applets section.")
-			));
-
 			show_mpris_widget = new Gtk.Switch();
 			grid.add_row(new SettingsRow(show_mpris_widget,
 				_("Show Media Playback Controls Widget"),
@@ -100,11 +104,10 @@ namespace Budgie {
 			raven_settings = new Settings("com.solus-project.budgie-raven");
 			raven_settings.bind("raven-position", raven_position, "active-id", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("enable-week-numbers", enable_week_numbers, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-sound-output-widget", show_sound_output_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-mic-input-widget", show_mic_input_widget, "active", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("show-mpris-widget", show_mpris_widget, "active", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("show-power-strip", show_powerstrip, "active", SettingsBindFlags.DEFAULT);
+
+			return grid;
 		}
 	}
 }
