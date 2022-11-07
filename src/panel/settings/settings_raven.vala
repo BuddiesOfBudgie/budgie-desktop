@@ -28,6 +28,7 @@ namespace Budgie {
 			border_width = 0;
 			margin_top = 8;
 			margin_bottom = 8;
+			halign = Gtk.Align.FILL;
 
 			var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			pack_start(swbox, false, false, 0);
@@ -36,6 +37,7 @@ namespace Budgie {
 			switcher = new Gtk.StackSwitcher();
 			switcher.halign = Gtk.Align.CENTER;
 			stack = new Gtk.Stack();
+			stack.border_width = 20;
 			stack.set_homogeneous(false);
 			switcher.set_stack(stack);
 			swbox.pack_start(switcher, true, true, 0);
