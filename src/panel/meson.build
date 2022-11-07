@@ -21,6 +21,7 @@ panel_sources = [
     'main.vala',
     'manager.vala',
     'panel.vala',
+    'plugin_manager.vala',
     'uuid.vala',
     'settings/settings_applet_chooser.vala',
     'settings/settings_autostart.vala',
