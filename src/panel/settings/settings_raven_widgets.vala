@@ -114,7 +114,13 @@ namespace Budgie {
 		}
 
 		void add_widget() {
-			// no-op
+			var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
+			dlg.set_plugin_list(this.manager.get_raven_plugins());
+			string? applet_id = dlg.run();
+			dlg.destroy();
+			if (applet_id == null) {
+				return;
+			}
 		}
 	}
 }

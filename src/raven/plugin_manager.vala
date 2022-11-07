@@ -120,7 +120,7 @@ namespace Budgie {
 			return plugin.new_widget_instance(uuid, instance_settings);
 		}
 
-		public List<Peas.PluginInfo?> get_raven_plugins() {
+		public List<Peas.PluginInfo?> get_all_plugins() {
 			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
 			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
 				ret.append(info);
