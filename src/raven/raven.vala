@@ -180,7 +180,8 @@ namespace Budgie {
 
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
-		private Settings? settings = null;
+		private Settings? old_settings = null;
+		private Settings? new_settings = null;
 
 		bool expanded = false;
 
@@ -280,8 +281,10 @@ namespace Budgie {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
 			get_style_context().add_class("budgie-container");
 
-			settings = new Settings("com.solus-project.budgie-raven");
-			settings.changed["show-power-strip"].connect(on_power_strip_change);
+			old_settings = new Settings("com.solus-project.budgie-raven");
+			old_settings.changed["show-power-strip"].connect(on_power_strip_change);
+
+			new_settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven");
 
 			Raven._instance = this;
 
@@ -362,7 +365,7 @@ namespace Budgie {
 		* on_power_strip_change will handle when the settings for Raven's Power Strip has changed
 		*/
 		private void on_power_strip_change() {
-			bool show_strip = settings.get_boolean("show-power-strip");
+			bool show_strip = old_settings.get_boolean("show-power-strip");
 
 			if (show_strip) { // If we should show the strip
 				strip.show_all();
