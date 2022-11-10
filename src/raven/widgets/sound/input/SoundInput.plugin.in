@@ -6,4 +6,4 @@ _Description=Global audio input control.
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=audio-ready
+Icon=audio-input-microphone
