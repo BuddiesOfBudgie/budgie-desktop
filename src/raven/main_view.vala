@@ -21,8 +21,6 @@ namespace Budgie {
 
 		private Gtk.Stack? main_stack = null;
 		private Gtk.StackSwitcher? switcher = null;
-		private string SHOW_SOUND_OUTPUT_WIDGET = "show-sound-output-widget";
-		private string SHOW_MIC_INPUT_WIDGET = "show-mic-input-widget";
 
 		public signal void requested_draw(); // Request the window to redraw itself
 
@@ -84,17 +82,6 @@ namespace Budgie {
 
 			main_stack.notify["visible-child-name"].connect(on_name_change);
 			set_clean();
-			set_sound_widget_events();
-		}
-
-		private void set_sound_widget_events() {
-			audio_output_widget.devices_state_changed.connect(() => { // When the Sound Output widget has devices
-				on_raven_settings_changed(SHOW_SOUND_OUTPUT_WIDGET);
-			});
-
-			audio_input_widget.devices_state_changed.connect(() => { // When the Sound Input widget has devices
-				on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
-			});
 		}
 
 		public void add_widget_instance(Gtk.Bin? widget_instance) {
@@ -124,21 +111,7 @@ namespace Budgie {
 			* You're probably wondering why I'm not just setting a visible value here, and that's typically a good idea.
 			* However, it causes weird focus and rendering issues even when has_visible_focus is set to false. I don't get it either, so we're doing this.
 			*/
-			if (key == "show-calendar-widget") { // Calendar
-				cal.set_show(show_widget);
-			} else if (key == SHOW_SOUND_OUTPUT_WIDGET) { // Sound Output
-				if (audio_output_widget.has_devices()) { // If output has devices, so there's a point to showing in the first place
-					audio_output_widget.set_show(show_widget);
-				} else {
-					audio_output_widget.set_show(false);
-				}
-			} else if (key == SHOW_MIC_INPUT_WIDGET) { // Sound Input
-				if (audio_input_widget.has_devices()) { // If the input has devices
-					audio_input_widget.set_show(show_widget);
-				} else {
-					audio_input_widget.set_show(false);
-				}
-			} else if (key == "show-mpris-widget") { // MPRIS
+			if (key == "show-mpris-widget") { // MPRIS
 				mpris.set_show(show_widget);
 			}
 
@@ -146,9 +119,6 @@ namespace Budgie {
 		}
 
 		public void set_clean() {
-			on_raven_settings_changed("show-calendar-widget");
-			on_raven_settings_changed(SHOW_SOUND_OUTPUT_WIDGET);
-			on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
 			on_raven_settings_changed("show-mpris-widget");
 			main_stack.set_visible_child_name("widgets");
 		}
