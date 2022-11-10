@@ -180,8 +180,8 @@ namespace Budgie {
 
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
-		private Settings? old_settings = null;
-		private Settings? new_settings = null;
+		private Settings? settings = null;
+		private Settings? widget_settings = null;
 
 		bool expanded = false;
 
@@ -281,10 +281,10 @@ namespace Budgie {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
 			get_style_context().add_class("budgie-container");
 
-			old_settings = new Settings("com.solus-project.budgie-raven");
-			old_settings.changed["show-power-strip"].connect(on_power_strip_change);
+			settings = new Settings("com.solus-project.budgie-raven");
+			settings.changed["show-power-strip"].connect(on_power_strip_change);
 
-			new_settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven");
+			widget_settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
 
 			Raven._instance = this;
 
@@ -353,19 +353,13 @@ namespace Budgie {
 			this.screen_edge = Gtk.PositionType.LEFT;
 
 			on_power_strip_change(); // Trigger our power strip change func immediately
-
-			plugin_manager.plugin_loaded.connect((module_name) => {
-				var instance = plugin_manager.new_widget_instance_for_plugin(module_name);
-				main_view.add_widget_instance(instance);
-				warning("%s loaded", module_name);
-			});
 		}
 
 		/**
 		* on_power_strip_change will handle when the settings for Raven's Power Strip has changed
 		*/
 		private void on_power_strip_change() {
-			bool show_strip = old_settings.get_boolean("show-power-strip");
+			bool show_strip = settings.get_boolean("show-power-strip");
 
 			if (show_strip) { // If we should show the strip
 				strip.show_all();
@@ -544,12 +538,20 @@ namespace Budgie {
 		}
 
 		public void create_widget_instance(string module_name) {
-			main_view.add_widget_instance(plugin_manager.new_widget_instance_for_plugin(module_name));
+			var widget_data = plugin_manager.new_widget_instance_for_plugin(module_name);
+			if (widget_data == null) {
+				return;
+			}
+
+			main_view.add_widget_instance(widget_data.widget_instance);
+			on_widget_added(widget_data);
 		}
 
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/
 		public signal void request_settings_ui();
+
+		public signal void on_widget_added(Budgie.RavenWidgetData widget_data);
 	}
 }

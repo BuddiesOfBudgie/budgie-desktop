@@ -15,6 +15,7 @@ namespace Budgie {
 		private unowned Budgie.Raven? raven = null;
 
 		private Gtk.ListBox listbox_widgets;
+		private HashTable<string, RavenWidgetItem?> items;
 		Gtk.Button button_add;
 		private Gtk.Button button_move_widget_up;
 		private Gtk.Button button_move_widget_down;
@@ -28,6 +29,28 @@ namespace Budgie {
 
 			this.manager = manager;
 			this.raven = Budgie.Raven.get_instance();
+
+			this.raven.on_widget_added.connect((widget_data) => {
+				if (items.contains(widget_data.uuid)) {
+					return;
+				}
+
+				/* Allow viewing settings on demand */
+				//  if (widget_data.supports_settings) {
+				//  	var frame = new AppletSettingsFrame();
+				//  	var ui = applet.applet.get_settings_ui();
+				//  	frame.add(ui);
+				//  	ui.show();
+				//  	frame.show();
+				//  	settings_stack.add_named(frame, applet.uuid);
+				//  }
+
+				/* Stuff the new item into display */
+				var item = new RavenWidgetItem(widget_data);
+				item.show_all();
+				listbox_widgets.add(item);
+				items[widget_data.uuid] = item;
+			});
 
 			valign = Gtk.Align.FILL;
 			margin = 6;
@@ -118,13 +141,47 @@ namespace Budgie {
 		void add_widget() {
 			var dlg = new RavenWidgetChooser(this.get_toplevel() as Gtk.Window);
 			dlg.set_plugin_list(this.manager.get_raven_plugins());
-			string? applet_id = dlg.run();
+			string? widget_id = dlg.run();
 			dlg.destroy();
-			if (applet_id == null) {
+			if (widget_id == null) {
 				return;
 			}
 
-			raven.create_widget_instance(applet_id);
+			raven.create_widget_instance(widget_id);
+		}
+	}
+
+	/**
+	* WidgetItem is used to represent a Budgie Widget in the list
+	*/
+	public class RavenWidgetItem : Gtk.Box {
+		public Budgie.RavenWidgetData widget_data;
+
+		private Gtk.Image image;
+		private Gtk.Label label;
+
+		/**
+		* Construct a new WidgetItem for the given widget
+		*/
+		public RavenWidgetItem(Budgie.RavenWidgetData widget_data) {
+			this.widget_data = widget_data;
+
+			get_style_context().add_class("widget-item");
+
+			margin_top = 4;
+			margin_bottom = 4;
+
+			image = new Gtk.Image.from_icon_name(widget_data.plugin_info.get_icon_name(), Gtk.IconSize.MENU);
+			image.margin_start = 12;
+			image.margin_end = 14;
+			pack_start(image, false, false, 0);
+
+			label = new Gtk.Label(widget_data.plugin_info.get_name());
+			label.margin_end = 18;
+			label.halign = Gtk.Align.START;
+			pack_start(label, false, false, 0);
+
+			this.show_all();
 		}
 	}
 }

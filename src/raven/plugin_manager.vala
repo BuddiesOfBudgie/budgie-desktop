@@ -16,7 +16,9 @@ namespace Budgie {
 
 		HashTable<string, Peas.PluginInfo?> plugins;
 
-		private const string WIDGET_INSTANCE_SETTINGS_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets";
+		private const string WIDGET_INSTANCE_SETTINGS_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-settings";
+		private const string WIDGET_INSTANCE_INFO_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-info";
+		private const string WIDGET_INSTANCE_INFO_SCHEMA = "org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info";
 
 		public RavenPluginManager() {
 			plugins = new HashTable<string, Peas.PluginInfo?>(str_hash, str_equal);
@@ -98,7 +100,7 @@ namespace Budgie {
 			return get_plugin_info(module_name) != null;
 		}
 
-		public Gtk.Bin? new_widget_instance_for_plugin(string module_name) {
+		public RavenWidgetData? new_widget_instance_for_plugin(string module_name) {
 			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
 			if (plugin_info == null) {
 				return null;
@@ -114,10 +116,20 @@ namespace Budgie {
 			GLib.Settings? instance_settings = null;
 			if (plugin.supports_settings()) {
 				var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
-				var instance_settings_path = "/%s/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid, "instance-settings");
+				var instance_settings_path = "/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid);
 				instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
 			}
-			return plugin.new_widget_instance(uuid, instance_settings);
+
+			var instance = plugin.new_widget_instance(uuid, instance_settings);
+			if (instance == null) {
+				return null;
+			}
+
+			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
+			GLib.Settings? instance_info = new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
+			instance_info.set_string("module", module_name);
+
+			return new RavenWidgetData(instance, plugin_info, uuid, plugin.supports_settings());
 		}
 
 		public List<Peas.PluginInfo?> get_all_plugins() {
@@ -157,6 +169,20 @@ namespace Budgie {
 			LibUUID.unparse_lower(time, uuid);
 
 			return (string) uuid;
+		}
+	}
+
+	public class RavenWidgetData {
+		public Gtk.Bin widget_instance;
+		public Peas.PluginInfo plugin_info;
+		public string uuid;
+		public bool supports_settings;
+
+		public RavenWidgetData(Gtk.Bin widget_instance, Peas.PluginInfo plugin_info, string uuid, bool supports_settings) {
+			this.widget_instance = widget_instance;
+			this.plugin_info = plugin_info;
+			this.uuid = uuid;
+			this.supports_settings = supports_settings;
 		}
 	}
 }

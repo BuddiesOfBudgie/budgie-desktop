@@ -6,15 +6,15 @@
     <value nick="BUDGIE_RAVEN_POSITION_RIGHT" value="3" />
   </enum>
 
-  <schema path="/org/buddiesofbudgie/budgie-desktop/raven/" id="org.buddiesofbudgie.budgie-desktop.raven">
-    <key type="as" name="widgets">
+  <schema path="/org/buddiesofbudgie/budgie-desktop/raven/widgets/" id="org.buddiesofbudgie.budgie-desktop.raven.widgets">
+    <key type="as" name="uuids">
       <default>[]</default>
       <summary>Widget UUIDs</summary>
       <description>UUIDs of widget instances in the Widgets view, in order from top to bottom.</description>
     </key>
   </schema>
 
-  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widgetinfo">
+  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info">
     <key type="s" name="module">
       <default>''</default>
       <summary>Module name</summary>
