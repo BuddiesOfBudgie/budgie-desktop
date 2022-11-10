@@ -12,6 +12,7 @@
 namespace Budgie {
 	public class RavenWidgetsPage : Gtk.Box {
 		private unowned Budgie.DesktopManager? manager = null;
+		private unowned Budgie.Raven? raven = null;
 
 		private Gtk.ListBox listbox_widgets;
 		Gtk.Button button_add;
@@ -26,6 +27,7 @@ namespace Budgie {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
 
 			this.manager = manager;
+			this.raven = Budgie.Raven.get_instance();
 
 			valign = Gtk.Align.FILL;
 			margin = 6;
@@ -114,13 +116,15 @@ namespace Budgie {
 		}
 
 		void add_widget() {
-			var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
+			var dlg = new RavenWidgetChooser(this.get_toplevel() as Gtk.Window);
 			dlg.set_plugin_list(this.manager.get_raven_plugins());
 			string? applet_id = dlg.run();
 			dlg.destroy();
 			if (applet_id == null) {
 				return;
 			}
+
+			raven.create_widget_instance(applet_id);
 		}
 	}
 }

@@ -543,6 +543,10 @@ namespace Budgie {
 			return this.expanded;
 		}
 
+		public void create_widget_instance(string module_name) {
+			main_view.add_widget_instance(plugin_manager.new_widget_instance_for_plugin(module_name));
+		}
+
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/
