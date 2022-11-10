@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="budgie-desktop">
-
   <enum id="com.solus-project.budgie-raven.RavenPosition">
     <value nick="BUDGIE_RAVEN_POSITION_AUTOMATIC" value="1" />
     <value nick="BUDGIE_RAVEN_POSITION_LEFT" value="2" />
     <value nick="BUDGIE_RAVEN_POSITION_RIGHT" value="3" />
   </enum>
+
+  <schema path="/org/buddiesofbudgie/budgie-desktop/raven/" id="org.buddiesofbudgie.budgie-desktop.raven">
+    <key type="as" name="widgets">
+      <default>[]</default>
+      <summary>Widget UUIDs</summary>
+      <description>UUIDs of widget instances in the Widgets view, in order from top to bottom.</description>
+    </key>
+  </schema>
+
+  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widgetinfo">
+    <key type="s" name="module">
+      <default>''</default>
+      <summary>Module name</summary>
+      <description>Module name of the provider plugin</description>
+    </key>
+  </schema>
 
   <schema path="/com/solus-project/budgie-raven/" id="com.solus-project.budgie-raven">
     <key enum="com.solus-project.budgie-raven.RavenPosition" name="raven-position">
@@ -38,5 +53,4 @@
       <description>Show the Power Strip in Raven.</description>
     </key>
   </schema>
-
 </schemalist>

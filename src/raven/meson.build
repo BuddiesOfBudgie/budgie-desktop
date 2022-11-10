@@ -95,8 +95,3 @@ install_data(
     'com.solus-project.budgie.raven.gschema.xml',
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )
-
-install_data(
-    'org.buddiesofbudgie.budgie-desktop.raven.gschema.xml',
-    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
-)
