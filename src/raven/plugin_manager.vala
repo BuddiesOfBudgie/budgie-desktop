@@ -100,7 +100,12 @@ namespace Budgie {
 			return get_plugin_info(module_name) != null;
 		}
 
-		public RavenWidgetData? new_widget_instance_for_plugin(string module_name) {
+		public GLib.Settings? get_widget_info_from_uuid(string uuid) {
+			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
+			return new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
+		}
+
+		public RavenWidgetData? new_widget_instance_for_plugin(string module_name, string? existing_uuid = null) {
 			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
 			if (plugin_info == null) {
 				return null;
@@ -112,7 +117,7 @@ namespace Budgie {
 			}
 
 			var plugin = extension as Budgie.RavenPlugin;
-			var uuid = generate_uuid();
+			var uuid = existing_uuid != null ? existing_uuid : generate_uuid();
 			GLib.Settings? instance_settings = null;
 			if (plugin.supports_settings()) {
 				var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
@@ -125,8 +130,7 @@ namespace Budgie {
 				return null;
 			}
 
-			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
-			GLib.Settings? instance_info = new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
+			var instance_info = get_widget_info_from_uuid(uuid);
 			instance_info.set_string("module", module_name);
 
 			return new RavenWidgetData(instance, plugin_info, uuid, plugin.supports_settings());
