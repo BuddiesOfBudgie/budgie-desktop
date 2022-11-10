@@ -25,7 +25,7 @@ raven_plugin_sound_input_deps = [
 top_vapidir = join_paths(meson.source_root(), 'vapi')
 
 shared_library(
-    'org.buddiesofbudgie.SoundInput',
+    'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundInput',
     raven_plugin_sound_input_sources,
     dependencies: raven_plugin_sound_input_deps,
     vala_args: [

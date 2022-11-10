@@ -1,5 +1,5 @@
 [Plugin]
-Module=org.buddiesofbudgie.SoundOutput.so
+Module=org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput.so
 Builtin=TRUE
 _Name=Sound Output
 _Description=Per-app and global audio output control.

@@ -1,5 +1,5 @@
 [Plugin]
-Module=org.buddiesofbudgie.SoundInput.so
+Module=org.buddiesofbudgie.budgie-desktop.raven.widget.SoundInput.so
 Builtin=TRUE
 _Name=Sound Input
 _Description=Global audio input control.

@@ -19,7 +19,7 @@ raven_plugin_calendar_deps = [
 ]
 
 shared_library(
-    'org.buddiesofbudgie.Calendar',
+    'org.buddiesofbudgie.budgie-desktop.raven.widget.Calendar',
     raven_plugin_calendar_sources,
     dependencies: raven_plugin_calendar_deps,
     vala_args: [

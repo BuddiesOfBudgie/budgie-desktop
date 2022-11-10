@@ -25,7 +25,7 @@ raven_plugin_sound_output_deps = [
 top_vapidir = join_paths(meson.source_root(), 'vapi')
 
 shared_library(
-    'org.buddiesofbudgie.SoundOutput',
+    'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput',
     raven_plugin_sound_output_sources,
     dependencies: raven_plugin_sound_output_deps,
     vala_args: [
