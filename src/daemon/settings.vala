@@ -65,8 +65,6 @@ namespace Budgie {
 		private bool temporary_notification_disabled = false;
 
 		public SettingsManager() {
-			Notify.init("com.solus-project.budgie-daemon"); // Attempt initialization of Notify
-
 			set_supported_caffeine_icons(); // Set supported Caffeine icons will determine whether or not to use an IconTheme or Budgie caffeine icons
 
 			/* Settings we need to write to */
