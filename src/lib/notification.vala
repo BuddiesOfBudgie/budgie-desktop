@@ -63,7 +63,7 @@
 		public string summary { get; construct set; }
 		public uint expire_timeout { get; construct set; }
 
-		public string category { get; construct set; }
+		public string? category { get; construct set; }
 		public int64 timestamp { get; construct set; }
 
 		/* Icon stuff */
