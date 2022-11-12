@@ -189,7 +189,7 @@ namespace Budgie.Notifications {
 					this.ActionInvoked(action_key);
 					this.dismiss();
 				});
-				content_box.pack_start(actions, false, false, 0);
+				content_box.pack_start(actions, true, true, 0);
 			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
