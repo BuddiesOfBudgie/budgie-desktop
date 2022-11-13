@@ -10,6 +10,13 @@
  */
 
 namespace Budgie {
+	public enum RavenWidgetCreationResult {
+		SUCCESS,
+		PLUGIN_INFO_MISSING,
+		PLUGIN_NOT_LOADED,
+		INSTANCE_CREATION_FAILED
+	}
+
 	public class RavenPluginManager {
 		Peas.Engine engine;
 		Peas.ExtensionSet plugin_set;
@@ -105,15 +112,17 @@ namespace Budgie {
 			return new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
 		}
 
-		public RavenWidgetData? new_widget_instance_for_plugin(string module_name, string? existing_uuid = null) {
+		public RavenWidgetCreationResult new_widget_instance_for_plugin(string module_name, string? existing_uuid, out RavenWidgetData? widget_data) {
+			widget_data = null;
+
 			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
 			if (plugin_info == null) {
-				return null;
+				return RavenWidgetCreationResult.PLUGIN_INFO_MISSING;
 			}
 
 			var extension = plugin_set.get_extension(plugin_info);
 			if (extension == null) {
-				return null;
+				return RavenWidgetCreationResult.PLUGIN_NOT_LOADED;
 			}
 
 			var plugin = extension as Budgie.RavenPlugin;
@@ -127,13 +136,14 @@ namespace Budgie {
 
 			var instance = plugin.new_widget_instance(uuid, instance_settings);
 			if (instance == null) {
-				return null;
+				return RavenWidgetCreationResult.INSTANCE_CREATION_FAILED;
 			}
 
 			var instance_info = get_widget_info_from_uuid(uuid);
 			instance_info.set_string("module", module_name);
 
-			return new RavenWidgetData(instance, plugin_info, uuid, plugin.supports_settings());
+			widget_data = new RavenWidgetData(instance, plugin_info, uuid, plugin.supports_settings());
+			return RavenWidgetCreationResult.SUCCESS;
 		}
 
 		public List<Peas.PluginInfo?> get_all_plugins() {

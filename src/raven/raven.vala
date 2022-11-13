@@ -559,14 +559,24 @@ namespace Budgie {
 		}
 
 		private void create_widget_instance_with_uuid(string module_name, string? uuid) {
-			var widget_data = plugin_manager.new_widget_instance_for_plugin(module_name, uuid);
-			if (widget_data == null) {
-				return;
+			Budgie.RavenWidgetData? widget_data;
+			var result = plugin_manager.new_widget_instance_for_plugin(module_name, uuid, out widget_data);
+			switch (result) {
+				case RavenWidgetCreationResult.SUCCESS:
+					widgets.insert(widget_data.uuid, widget_data);
+					main_view.add_widget_instance(widget_data.widget_instance);
+					on_widget_added(widget_data);
+					break;
+				case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
+					warning("Failed to create Raven widget instance with uuid %s: No plugin info found for module %s", uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.PLUGIN_NOT_LOADED:
+					warning("Failed to create Raven widget instance with uuid %s: Plugin not loaded for module %s", uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
+					warning("Failed to create Raven widget instance with uuid %s: Unknown failure", uuid);
+					break;
 			}
-
-			widgets.insert(widget_data.uuid, widget_data);
-			main_view.add_widget_instance(widget_data.widget_instance);
-			on_widget_added(widget_data);
 		}
 
 		private void load_existing_widgets() {
