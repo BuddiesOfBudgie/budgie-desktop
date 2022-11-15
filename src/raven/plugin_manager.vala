@@ -23,8 +23,6 @@ namespace Budgie {
 
 		HashTable<string, Peas.PluginInfo?> plugins;
 
-		public bool loaded { public get; private set; }
-
 		private const string WIDGET_INSTANCE_SETTINGS_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-settings";
 		private const string WIDGET_INSTANCE_INFO_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-info";
 		private const string WIDGET_INSTANCE_INFO_SCHEMA = "org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info";
@@ -63,85 +61,6 @@ namespace Budgie {
 
 			plugin_set = new Peas.ExtensionSet(engine, typeof(Budgie.RavenPlugin));
 			plugin_set.extension_added.connect(on_plugin_loaded);
-		}
-
-		public void load_existing_widgets(string[] stored_uuids) {
-			if (loaded) {
-				return;
-			}
-
-			var loaded_widgets = new List<RavenWidgetData>();
-
-			if (stored_uuids != null && stored_uuids.length > 0) {
-				var expected_uuids = new List<string>();
-				for (int i = 0; i < stored_uuids.length; i++) {
-					expected_uuids.append(stored_uuids[i]);
-				}
-
-				var pending_uuids = generate_pending_uuids(expected_uuids);
-				CompareDataFunc<RavenWidgetData> widgetcmp = (a, b) => {
-					int a_index = expected_uuids.index(a.uuid);
-					int b_index = expected_uuids.index(b.uuid);
-					return (int) (a_index > b_index) - (int) (a_index < b_index);
-				};
-
-
-				pending_uuids.for_each((module_name, module_uuids) => {
-					if (engine.try_load_plugin(engine.get_plugin_info(module_name))) {
-						module_uuids.foreach((uuid) => {
-							RavenWidgetData? widget_data;
-							var result = new_widget_instance_for_plugin(module_name, uuid, out widget_data);
-							switch (result) {
-								case RavenWidgetCreationResult.SUCCESS:
-									loaded_widgets.insert_sorted_with_data(widget_data, widgetcmp);
-									break;
-								case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
-									warning("Failed to create Raven widget instance with uuid %s: No plugin info found for module %s", uuid, module_name);
-									break;
-								case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
-									warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s failed to load", uuid, module_name);
-									break;
-								case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
-									warning("Failed to create Raven widget instance with uuid %s: Unknown failure", uuid);
-									break;
-							}
-						});
-					}
-				});
-			}
-
-			loaded = true;
-			existing_widgets_loaded(loaded_widgets);
-		}
-
-		private HashTable<string, GenericSet<string>> generate_pending_uuids(List<string> expected_uuids) {
-			var pending_uuids = new HashTable<string, GenericSet<string>>(str_hash, str_equal);
-
-			for (int i = 0; i < expected_uuids.length(); i++) {
-				unowned string uuid = expected_uuids.nth_data(i);
-				GLib.Settings? widget_info = get_widget_info_from_uuid(uuid);
-
-				if (widget_info == null) {
-					warning("Widget info for uuid %s is null", uuid);
-					continue;
-				}
-
-				string? module_name = widget_info.get_string("module");
-				if (module_name == null || !is_plugin_valid(module_name)) {
-					warning("Module name is null or plugin is invalid");
-					continue;
-				}
-
-				if (pending_uuids.contains(module_name)) {
-					pending_uuids.get(module_name).add(uuid);
-				} else {
-					var module_uuids = new GenericSet<string>(str_hash, str_equal);
-					module_uuids.add(uuid);
-					pending_uuids.set(module_name, module_uuids);
-				}
-			}
-
-			return pending_uuids;
 		}
 
 		/**

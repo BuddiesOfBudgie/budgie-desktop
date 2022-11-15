@@ -147,7 +147,7 @@ namespace Budgie {
 
 		private Gtk.PositionType _screen_edge = Gtk.PositionType.RIGHT;
 
-		private HashTable<string, Budgie.RavenWidgetData>? widgets = null;
+		private List<Budgie.RavenWidgetData>? widgets = null;
 
 		/* Anchor to the right by default */
 		public Gtk.PositionType screen_edge {
@@ -291,7 +291,7 @@ namespace Budgie {
 
 			Raven._instance = this;
 
-			this.widgets = new HashTable<string, Budgie.RavenWidgetData>(str_hash, str_equal);
+			this.widgets = new List<RavenWidgetData>();
 			this.plugin_manager = plugin_manager;
 
 			var vis = screen.get_rgba_visual();
@@ -544,18 +544,14 @@ namespace Budgie {
 		public void update_uuids() {
 			string[] uuids = null;
 
-			widgets.for_each((uuid, widget_data) => {
-				uuids += uuid;
+			widgets.foreach((widget_data) => {
+				uuids += widget_data.uuid;
 			});
 
 			widget_settings.set_strv("uuids", uuids);
 		}
 
 		public void create_widget_instance(string module_name) {
-			if (!plugin_manager.loaded) {
-				return;
-			}
-
 			create_widget_instance_with_uuid(module_name, null);
 			update_uuids();
 		}
@@ -565,7 +561,7 @@ namespace Budgie {
 			var result = plugin_manager.new_widget_instance_for_plugin(module_name, uuid, out widget_data);
 			switch (result) {
 				case RavenWidgetCreationResult.SUCCESS:
-					widgets.insert(widget_data.uuid, widget_data);
+					widgets.append(widget_data);
 					main_view.add_widget_instance(widget_data.widget_instance);
 					on_widget_added(widget_data);
 					break;
@@ -583,17 +579,28 @@ namespace Budgie {
 
 		private void load_existing_widgets() {
 			string[] stored_uuids = widget_settings.get_strv("uuids");
+			unowned string uuid;
+			GLib.Settings? widget_info;
 
-			plugin_manager.existing_widgets_loaded.connect((existing_widgets) => {
-				existing_widgets.foreach((widget_data) => {
-					main_view.add_widget_instance(widget_data.widget_instance);
-					widgets.insert(widget_data.uuid, widget_data);
-					on_widget_added(widget_data);
-				});
-				update_uuids();
-			});
+			for (int i = 0; i < stored_uuids.length; i++) {
+				uuid = stored_uuids[i];
+				widget_info = plugin_manager.get_widget_info_from_uuid(uuid);
 
-			plugin_manager.load_existing_widgets(stored_uuids);
+				if (widget_info == null) {
+					warning("Widget info for uuid %s is null", uuid);
+					continue;
+				}
+
+				string? module_name = widget_info.get_string("module");
+				if (module_name == null) {
+					warning("Module name of widget instance %s is null", uuid);
+					continue;
+				}
+
+				create_widget_instance_with_uuid(module_name, uuid);
+			}
+
+			update_uuids();
 		}
 
 		/* As cheap as it looks. The DesktopManager responds to this signal and
