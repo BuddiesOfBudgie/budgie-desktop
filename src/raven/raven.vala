@@ -607,6 +607,12 @@ namespace Budgie {
 			return widgets.copy();
 		}
 
+		public void remove_widget(RavenWidgetData widget_data) {
+			widgets.remove(widget_data);
+			main_view.remove_widget_instance(widget_data.widget_instance);
+			update_uuids();
+		}
+
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/

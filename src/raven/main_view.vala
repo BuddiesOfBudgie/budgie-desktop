@@ -89,6 +89,11 @@ namespace Budgie {
 			requested_draw();
 		}
 
+		public void remove_widget_instance(Gtk.Bin? widget_instance) {
+			box.remove(widget_instance);
+			requested_draw();
+		}
+
 		void on_name_change() {
 			if (main_stack.get_visible_child_name() == "notifications") {
 				Raven.get_instance().ReadNotifications();

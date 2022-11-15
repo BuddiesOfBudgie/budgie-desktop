@@ -46,6 +46,7 @@ namespace Budgie {
 			move_box.add(button_move_widget_down);
 
 			button_remove_widget = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
+			button_remove_widget.clicked.connect(remove_widget);
 			move_box.add(button_remove_widget);
 
 			frame_box.pack_start(move_box, false, false, 0);
@@ -160,7 +161,7 @@ namespace Budgie {
 		* selection.
 		*/
 		void update_action_buttons() {
-			unowned Gtk.ListBoxRow? row = this.listbox_widgets.get_selected_row();
+			unowned Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
 			Budgie.RavenWidgetData? widget_data = null;
 
 			if (row != null) {
@@ -190,6 +191,34 @@ namespace Budgie {
 			}
 
 			raven.create_widget_instance(widget_id);
+		}
+
+		/**
+		* User requested we delete this widget. Make sure they meant it!
+		*/
+		void remove_widget() {
+			var row = listbox_widgets.get_selected_row();
+			if (row == null) {
+				return;
+			}
+
+			var dlg = new RemoveAppletDialog(this.get_toplevel() as Gtk.Window);
+			bool del = dlg.run();
+			dlg.destroy();
+			if (del) {
+				raven.remove_widget(get_current_data());
+				listbox_widgets.remove(row);
+
+				// Reset selection and disable controls
+				button_remove_widget.set_sensitive(false);
+				button_move_widget_up.set_sensitive(false);
+				button_move_widget_down.set_sensitive(false);
+			}
+		}
+
+		RavenWidgetData get_current_data() {
+			unowned Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
+			return ((RavenWidgetItem) row.get_child()).widget_data;
 		}
 	}
 
