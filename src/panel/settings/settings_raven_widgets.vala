@@ -58,6 +58,7 @@ namespace Budgie {
 
 			listbox_widgets = new Gtk.ListBox();
 			listbox_widgets.set_activate_on_single_click(true);
+			listbox_widgets.row_selected.connect(row_selected);
 
 			Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow(null, null);
 			scroll.add(listbox_widgets);
@@ -128,6 +129,55 @@ namespace Budgie {
 			/* Empty placeholder for no selection .. */
 			var empty = new Gtk.EventBox();
 			settings_stack.add_named(empty, "main");
+			Idle.add(() => {
+				settings_stack.set_visible_child_name("main");
+				return false;
+			});
+		}
+
+		/**
+		* Changed the row so update the UI
+		*/
+		private void row_selected(Gtk.ListBoxRow? row) {
+			if (row == null) {
+				this.settings_stack.set_visible_child_name("main");
+				return;
+			}
+
+			update_action_buttons();
+			unowned RavenWidgetItem? item = row.get_child() as RavenWidgetItem;
+			if (!item.widget_data.supports_settings) {
+				settings_stack.set_visible_child_name("no-settings");
+				return;
+			}
+
+			unowned Gtk.Widget? lookup = settings_stack.get_child_by_name(item.widget_data.uuid);
+			settings_stack.set_visible_child(lookup);
+		}
+
+		/**
+		* Update the sensitivity of the action buttons based on the current
+		* selection.
+		*/
+		void update_action_buttons() {
+			unowned Gtk.ListBoxRow? row = this.listbox_widgets.get_selected_row();
+			Budgie.RavenWidgetData? widget_data = null;
+
+			if (row != null) {
+				widget_data = ((RavenWidgetItem) row.get_child()).widget_data;
+			}
+
+			/* Require widget info to be useful. */
+			if (widget_data == null) {
+				button_remove_widget.set_sensitive(false);
+				button_move_widget_up.set_sensitive(false);
+				button_move_widget_down.set_sensitive(false);
+				return;
+			}
+
+			button_remove_widget.set_sensitive(true);
+			button_move_widget_up.set_sensitive(false);
+			button_move_widget_down.set_sensitive(false);
 		}
 
 		void add_widget() {
