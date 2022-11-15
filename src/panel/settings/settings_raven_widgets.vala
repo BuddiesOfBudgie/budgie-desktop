@@ -30,28 +30,6 @@ namespace Budgie {
 			this.manager = manager;
 			this.raven = Budgie.Raven.get_instance();
 
-			this.raven.on_widget_added.connect((widget_data) => {
-				if (items.contains(widget_data.uuid)) {
-					return;
-				}
-
-				/* Allow viewing settings on demand */
-				//  if (widget_data.supports_settings) {
-				//  	var frame = new AppletSettingsFrame();
-				//  	var ui = applet.applet.get_settings_ui();
-				//  	frame.add(ui);
-				//  	ui.show();
-				//  	frame.show();
-				//  	settings_stack.add_named(frame, applet.uuid);
-				//  }
-
-				/* Stuff the new item into display */
-				var item = new RavenWidgetItem(widget_data);
-				item.show_all();
-				listbox_widgets.add(item);
-				items[widget_data.uuid] = item;
-			});
-
 			valign = Gtk.Align.FILL;
 			margin = 6;
 
@@ -91,6 +69,20 @@ namespace Budgie {
 			listbox_widgets.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
 
 			configure_actions();
+
+			this.raven.on_widget_added.connect(add_widget_item);
+			this.raven.get_existing_widgets().foreach(add_widget_item);
+		}
+
+		private void add_widget_item(RavenWidgetData widget_data) {
+			if (items.contains(widget_data.uuid)) {
+				return;
+			}
+
+			var item = new RavenWidgetItem(widget_data);
+			item.show_all();
+			listbox_widgets.add(item);
+			items[widget_data.uuid] = item;
 		}
 
 		/**

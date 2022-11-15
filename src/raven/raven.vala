@@ -603,6 +603,10 @@ namespace Budgie {
 			update_uuids();
 		}
 
+		public List<unowned RavenWidgetData> get_existing_widgets() {
+			return widgets.copy();
+		}
+
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/

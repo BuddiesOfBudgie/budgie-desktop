@@ -161,10 +161,10 @@ namespace Budgie {
 	}
 
 	public class RavenWidgetData {
-		public Gtk.Bin widget_instance;
-		public Peas.PluginInfo plugin_info;
-		public string uuid;
-		public bool supports_settings;
+		public Gtk.Bin widget_instance { public get; private set; }
+		public Peas.PluginInfo plugin_info { public get; private set; }
+		public string uuid { public get; private set; }
+		public bool supports_settings { public get; private set; }
 
 		public RavenWidgetData(Gtk.Bin widget_instance, Peas.PluginInfo plugin_info, string uuid, bool supports_settings) {
 			this.widget_instance = widget_instance;
