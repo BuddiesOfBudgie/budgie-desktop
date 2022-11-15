@@ -13,7 +13,7 @@ namespace Budgie {
 	public enum RavenWidgetCreationResult {
 		SUCCESS,
 		PLUGIN_INFO_MISSING,
-		PLUGIN_NOT_LOADED,
+		PLUGIN_LOAD_FAILED,
 		INSTANCE_CREATION_FAILED
 	}
 
@@ -22,6 +22,8 @@ namespace Budgie {
 		Peas.ExtensionSet plugin_set;
 
 		HashTable<string, Peas.PluginInfo?> plugins;
+
+		public bool loaded { public get; private set; }
 
 		private const string WIDGET_INSTANCE_SETTINGS_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-settings";
 		private const string WIDGET_INSTANCE_INFO_PREFIX = "org/buddiesofbudgie/budgie-desktop/raven/widgets/instance-info";
@@ -60,51 +62,112 @@ namespace Budgie {
 			engine.rescan_plugins();
 
 			plugin_set = new Peas.ExtensionSet(engine, typeof(Budgie.RavenPlugin));
-
-			plugin_set.extension_added.connect(on_plugin_added);
-			engine.load_plugin.connect_after((i) => {
-				Peas.Extension? e = plugin_set.get_extension(i);
-				if (e == null) {
-					critical("Failed to find plugin for: %s", i.get_name());
-					return;
-				}
-				on_plugin_added(i, e);
-			});
-
-			engine.get_plugin_list().foreach((info) => {
-				engine.load_plugin(info);
-				var extension = plugin_set.get_extension(info);
-				if (extension != null) {
-					warning("Loaded plugin %s", info.get_name());
-				}
-			});
+			plugin_set.extension_added.connect(on_plugin_loaded);
 		}
 
-		/**
-		* Indicate that a plugin that was being waited for, is now available
-		*/
-		public signal void plugin_loaded(string module_name);
+		public void load_existing_widgets(string[] stored_uuids) {
+			if (loaded) {
+				return;
+			}
+
+			var loaded_widgets = new List<RavenWidgetData>();
+
+			if (stored_uuids != null && stored_uuids.length > 0) {
+				var expected_uuids = new List<string>();
+				for (int i = 0; i < stored_uuids.length; i++) {
+					expected_uuids.append(stored_uuids[i]);
+				}
+
+				var pending_uuids = generate_pending_uuids(expected_uuids);
+				CompareDataFunc<RavenWidgetData> widgetcmp = (a, b) => {
+					int a_index = expected_uuids.index(a.uuid);
+					int b_index = expected_uuids.index(b.uuid);
+					return (int) (a_index > b_index) - (int) (a_index < b_index);
+				};
+
+
+				pending_uuids.for_each((module_name, module_uuids) => {
+					if (engine.try_load_plugin(engine.get_plugin_info(module_name))) {
+						module_uuids.foreach((uuid) => {
+							RavenWidgetData? widget_data;
+							var result = new_widget_instance_for_plugin(module_name, uuid, out widget_data);
+							switch (result) {
+								case RavenWidgetCreationResult.SUCCESS:
+									loaded_widgets.insert_sorted_with_data(widget_data, widgetcmp);
+									break;
+								case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
+									warning("Failed to create Raven widget instance with uuid %s: No plugin info found for module %s", uuid, module_name);
+									break;
+								case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
+									warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s failed to load", uuid, module_name);
+									break;
+								case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
+									warning("Failed to create Raven widget instance with uuid %s: Unknown failure", uuid);
+									break;
+							}
+						});
+					}
+				});
+			}
+
+			loaded = true;
+			existing_widgets_loaded(loaded_widgets);
+		}
+
+		private HashTable<string, GenericSet<string>> generate_pending_uuids(List<string> expected_uuids) {
+			var pending_uuids = new HashTable<string, GenericSet<string>>(str_hash, str_equal);
+
+			for (int i = 0; i < expected_uuids.length(); i++) {
+				unowned string uuid = expected_uuids.nth_data(i);
+				GLib.Settings? widget_info = get_widget_info_from_uuid(uuid);
+
+				if (widget_info == null) {
+					warning("Widget info for uuid %s is null", uuid);
+					continue;
+				}
+
+				string? module_name = widget_info.get_string("module");
+				if (module_name == null || !is_plugin_valid(module_name)) {
+					warning("Module name is null or plugin is invalid");
+					continue;
+				}
+
+				if (pending_uuids.contains(module_name)) {
+					pending_uuids.get(module_name).add(uuid);
+				} else {
+					var module_uuids = new GenericSet<string>(str_hash, str_equal);
+					module_uuids.add(uuid);
+					pending_uuids.set(module_name, module_uuids);
+				}
+			}
+
+			return pending_uuids;
+		}
 
 		/**
 		* Handle plugin loading
 		*/
-		void on_plugin_added(Peas.PluginInfo? info, Object p) {
-			if (plugins.contains(info.get_module_name())) {
-				return;
+		private void on_plugin_loaded(Peas.PluginInfo? info) {
+			lock(plugins) {
+				if (plugins.contains(info.get_module_name())) {
+					return;
+				}
+
+				plugins.insert(info.get_module_name(), info);
 			}
-			plugins.insert(info.get_module_name(), info);
-			plugin_loaded(info.get_module_name());
 		}
 
 		public bool is_plugin_loaded(string module_name) {
-			return plugins.contains(module_name);
+			lock (plugins) {
+				return plugins.contains(module_name);
+			}
 		}
 
 		/**
 		* Determine if the plugin is known to be valid
 		*/
 		public bool is_plugin_valid(string module_name) {
-			return get_plugin_info(module_name) != null;
+			return engine.get_plugin_info(module_name) != null;
 		}
 
 		public GLib.Settings? get_widget_info_from_uuid(string uuid) {
@@ -115,15 +178,17 @@ namespace Budgie {
 		public RavenWidgetCreationResult new_widget_instance_for_plugin(string module_name, string? existing_uuid, out RavenWidgetData? widget_data) {
 			widget_data = null;
 
-			Peas.PluginInfo? plugin_info = get_plugin_info(module_name);
+			Peas.PluginInfo? plugin_info = engine.get_plugin_info(module_name);
 			if (plugin_info == null) {
 				return RavenWidgetCreationResult.PLUGIN_INFO_MISSING;
 			}
 
-			var extension = plugin_set.get_extension(plugin_info);
-			if (extension == null) {
-				return RavenWidgetCreationResult.PLUGIN_NOT_LOADED;
+			if (!is_plugin_loaded(module_name)) {
+				if (!engine.try_load_plugin(plugin_info)) {
+					return RavenWidgetCreationResult.PLUGIN_LOAD_FAILED;
+				}
 			}
+			var extension = plugin_set.get_extension(plugin_info);
 
 			var plugin = extension as Budgie.RavenPlugin;
 			var uuid = existing_uuid != null ? existing_uuid : generate_uuid();
@@ -154,20 +219,8 @@ namespace Budgie {
 			return ret;
 		}
 
-		/**
-		* PeasEngine.get_plugin_info == completely broken
-		*/
-		private unowned Peas.PluginInfo? get_plugin_info(string module_name) {
-			foreach (unowned Peas.PluginInfo? info in engine.get_plugin_list()) {
-				if (info.get_module_name() == module_name) {
-					return info;
-				}
-			}
-			return null;
-		}
-
 		public void modprobe(string module_name) {
-			Peas.PluginInfo? i = get_plugin_info(module_name);
+			Peas.PluginInfo? i = engine.get_plugin_info(module_name);
 			if (i == null) {
 				warning("budgie_panel_modprobe called for non existent module: %s", module_name);
 				return;
@@ -184,6 +237,8 @@ namespace Budgie {
 
 			return (string) uuid;
 		}
+
+		public signal void existing_widgets_loaded(List<RavenWidgetData> widgets);
 	}
 
 	public class RavenWidgetData {

@@ -90,7 +90,7 @@ namespace Budgie {
 
 		/* Used applet storage */
 		Gtk.ListBox listbox_applets;
-		HashTable<string,AppletItem?> items;
+		HashTable<string, AppletItem?> items;
 
 		/* Allow us to display settings when each item is selected */
 		Gtk.Stack settings_stack;
