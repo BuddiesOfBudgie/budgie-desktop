@@ -40,9 +40,11 @@ namespace Budgie {
 			move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 			button_move_widget_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
+			button_move_widget_up.clicked.connect(move_widget_up);
 			move_box.add(button_move_widget_up);
 
 			button_move_widget_down = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
+			button_move_widget_down.clicked.connect(move_widget_down);
 			move_box.add(button_move_widget_down);
 
 			button_remove_widget = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
@@ -56,6 +58,8 @@ namespace Budgie {
 			frame.margin_end = 20;
 			frame.margin_top = 12;
 			frame.add(frame_box);
+
+			items = new HashTable<string, RavenWidgetItem?>(str_hash, str_equal);
 
 			listbox_widgets = new Gtk.ListBox();
 			listbox_widgets.set_activate_on_single_click(true);
@@ -161,15 +165,10 @@ namespace Budgie {
 		* selection.
 		*/
 		void update_action_buttons() {
-			unowned Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
-			Budgie.RavenWidgetData? widget_data = null;
-
-			if (row != null) {
-				widget_data = ((RavenWidgetItem) row.get_child()).widget_data;
-			}
+			unowned var selected_row = listbox_widgets.get_selected_row();
 
 			/* Require widget info to be useful. */
-			if (widget_data == null) {
+			if (selected_row == null) {
 				button_remove_widget.set_sensitive(false);
 				button_move_widget_up.set_sensitive(false);
 				button_move_widget_down.set_sensitive(false);
@@ -177,8 +176,8 @@ namespace Budgie {
 			}
 
 			button_remove_widget.set_sensitive(true);
-			button_move_widget_up.set_sensitive(false);
-			button_move_widget_down.set_sensitive(false);
+			button_move_widget_up.set_sensitive(can_move_row_up(selected_row));
+			button_move_widget_down.set_sensitive(can_move_row_down(selected_row));
 		}
 
 		void add_widget() {
@@ -208,15 +207,47 @@ namespace Budgie {
 			if (del) {
 				raven.remove_widget(get_current_data());
 				listbox_widgets.remove(row);
-
-				// Reset selection and disable controls
-				button_remove_widget.set_sensitive(false);
-				button_move_widget_up.set_sensitive(false);
-				button_move_widget_down.set_sensitive(false);
+				update_action_buttons();
 			}
 		}
 
-		RavenWidgetData get_current_data() {
+		private bool can_move_row_up(Gtk.ListBoxRow? row) {
+			return row == null ? false : row.get_index() > 0;
+		}
+
+		private bool can_move_row_down(Gtk.ListBoxRow? row) {
+			return row == null ? false : row.get_index() < listbox_widgets.get_children().length() - 1;
+		}
+
+		private void move_widget_up() {
+			Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
+
+			if (can_move_row_up(row)) {
+				listbox_widgets.unselect_row(row);
+
+				var new_index = row.get_index() - 1;
+				listbox_widgets.remove(row);
+				listbox_widgets.insert(row, new_index);
+
+				listbox_widgets.select_row(row);
+			}
+		}
+
+		private void move_widget_down() {
+			Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
+
+			if (can_move_row_down(row)) {
+				listbox_widgets.unselect_row(row);
+
+				var new_index = row.get_index() + 1;
+				listbox_widgets.remove(row);
+				listbox_widgets.insert(row, new_index);
+
+				listbox_widgets.select_row(row);
+			}
+		}
+
+		private RavenWidgetData get_current_data() {
 			unowned Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
 			return ((RavenWidgetItem) row.get_child()).widget_data;
 		}
