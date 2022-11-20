@@ -21,6 +21,8 @@ public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 
 public class CalendarRavenWidget : Budgie.RavenWidget {
 	private Gtk.Box? header = null;
+	private Gtk.Button? header_reveal_button = null;
+	private Gtk.Revealer? content_revealer = null;
 	private Gtk.Box? content = null;
 	private Gtk.Label? header_label = null;
 	private Gtk.Box? main_box = null;
@@ -50,7 +52,26 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		content.get_style_context().add_class("raven-background");
-		main_box.add(content);
+
+		content_revealer = new Gtk.Revealer();
+		content_revealer.add(content);
+		main_box.add(content_revealer);
+
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button.get_style_context().add_class("flat");
+		header_reveal_button.get_style_context().add_class("expander-button");
+		header_reveal_button.margin = 4;
+		header_reveal_button.valign = Gtk.Align.CENTER;
+		header_reveal_button.clicked.connect(() => {
+			content_revealer.reveal_child = !content_revealer.child_revealed;
+			var image = (Gtk.Image?) header_reveal_button.get_image();
+			if (content_revealer.reveal_child) {
+				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+			} else {
+				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+			}
+		});
+		header.pack_end(header_reveal_button, false, false, 0);
 
 		cal = new Gtk.Calendar();
 		cal.get_style_context().add_class("raven-calendar");

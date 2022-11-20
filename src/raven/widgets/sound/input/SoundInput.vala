@@ -42,6 +42,8 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 	private Gtk.ListBox? devices_list = null;
 	private Gtk.Box? header = null;
 	private Gtk.Image? header_icon = null;
+	private Gtk.Button? header_reveal_button = null;
+	private Gtk.Revealer? content_revealer = null;
 	private Gtk.Box? content = null;
 	private Gtk.Scale? volume_slider = null;
 
@@ -63,7 +65,10 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		content.get_style_context().add_class("raven-background");
-		main_box.add(content);
+
+		content_revealer = new Gtk.Revealer();
+		content_revealer.add(content);
+		main_box.add(content_revealer);
 
 		get_style_context().add_class("audio-widget");
 
@@ -98,8 +103,23 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		volume_slider.set_draw_value(false);
 		volume_slider.value_changed.connect(on_scale_change);
 		volume_slider.hexpand = true;
-		volume_slider.margin_end = 12;
 		header.add(volume_slider);
+
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button.get_style_context().add_class("flat");
+		header_reveal_button.get_style_context().add_class("expander-button");
+		header_reveal_button.margin = 4;
+		header_reveal_button.valign = Gtk.Align.CENTER;
+		header_reveal_button.clicked.connect(() => {
+			content_revealer.reveal_child = !content_revealer.child_revealed;
+			var image = (Gtk.Image?) header_reveal_button.get_image();
+			if (content_revealer.reveal_child) {
+				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+			} else {
+				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+			}
+		});
+		header.pack_end(header_reveal_button, false, false, 0);
 
 		mixer.default_source_changed.connect(on_device_changed);
 		mixer.state_changed.connect(on_state_changed);
