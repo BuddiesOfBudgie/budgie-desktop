@@ -41,7 +41,7 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 	private Gtk.Box? main_box = null;
 	private Gtk.ListBox? devices_list = null;
 	private Gtk.Box? header = null;
-	private Gtk.Image? header_icon = null;
+	private Gtk.Button? header_icon = null;
 	private Gtk.Button? header_reveal_button = null;
 	private Gtk.Revealer? content_revealer = null;
 	private Gtk.Box? content = null;
@@ -57,10 +57,16 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		header.get_style_context().add_class("raven-header");
 		main_box.add(header);
 
-		header_icon = new Gtk.Image.from_icon_name("microphone-sensitivity-muted", Gtk.IconSize.MENU);
-		header_icon.margin = 8;
-		header_icon.margin_start = 12;
-		header_icon.margin_end = 8;
+		header_icon = new Gtk.Button.from_icon_name("microphone-sensitivity-muted", Gtk.IconSize.MENU);
+		header_icon.get_style_context().add_class("flat");
+		header_icon.valign = Gtk.Align.CENTER;
+		header_icon.margin_start = 8;
+		header_icon.margin_end = 4;
+		header_icon.clicked.connect(() => {
+			if (primary_stream != null) {
+				primary_stream.change_is_muted(!primary_stream.get_is_muted());
+			}
+		});
 		header.add(header_icon);
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -259,7 +265,7 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 	 * When our volume slider has changed
 	 */
 	private void on_scale_change() {
-		if (primary_stream == null) {
+		if (primary_stream == null || primary_stream.get_is_muted()) {
 			return;
 		}
 
@@ -306,7 +312,8 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 			}
 		}
 
-		header_icon.set_from_icon_name(icon_prefix + image_name, Gtk.IconSize.MENU);
+		var header_image = (Gtk.Image?) header_icon.get_image();
+		header_image.set_from_icon_name(icon_prefix + image_name, Gtk.IconSize.MENU);
 
 		/* Each scroll increments by 5%, much better than units..*/
 		var step_size = vol_max / 20;
@@ -317,7 +324,13 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 
 		volume_slider.set_increments(step_size, step_size);
 		volume_slider.set_range(0, vol_max);
-		volume_slider.set_value(vol);
+		if (primary_stream.get_is_muted()) {
+			volume_slider.set_sensitive(false);
+			volume_slider.set_value(0);
+		} else {
+			volume_slider.set_sensitive(true);
+			volume_slider.set_value(vol);
+		}
 
 		if (scale_id > 0) {
 			SignalHandler.unblock(volume_slider, scale_id);
