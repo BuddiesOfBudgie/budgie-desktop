@@ -613,6 +613,28 @@ namespace Budgie {
 			update_uuids();
 		}
 
+		public void move_widget_up(RavenWidgetData widget_data) {
+			var current_index = widgets.index(widget_data);
+
+			if (current_index > 0) {
+				widgets.remove(widget_data);
+				widgets.insert(widget_data, current_index - 1);
+
+				main_view.move_widget_instance_up(widget_data.widget_instance);
+			}
+		}
+
+		public void move_widget_down(RavenWidgetData widget_data) {
+			var current_index = widgets.index(widget_data);
+
+			if (current_index < widgets.length() - 1) {
+				widgets.remove(widget_data);
+				widgets.insert(widget_data, current_index + 1);
+
+				main_view.move_widget_instance_down(widget_data.widget_instance);
+			}
+		}
+
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/

@@ -230,6 +230,8 @@ namespace Budgie {
 				listbox_widgets.insert(row, new_index);
 
 				listbox_widgets.select_row(row);
+
+				raven.move_widget_up(((RavenWidgetItem) row.get_child()).widget_data);
 			}
 		}
 
@@ -244,6 +246,8 @@ namespace Budgie {
 				listbox_widgets.insert(row, new_index);
 
 				listbox_widgets.select_row(row);
+
+				raven.move_widget_down(((RavenWidgetItem) row.get_child()).widget_data);
 			}
 		}
 

@@ -61,7 +61,7 @@ namespace Budgie {
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
 			/* Eventually these guys get dynamically loaded */
-			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 			scroll.add(box);
 
 			cal = new CalendarWidget(raven_settings);
@@ -85,13 +85,29 @@ namespace Budgie {
 		}
 
 		public void add_widget_instance(Gtk.Bin? widget_instance) {
-			box.pack_end(widget_instance, false, false, 8);
+			box.add(widget_instance);
 			requested_draw();
 		}
 
 		public void remove_widget_instance(Gtk.Bin? widget_instance) {
 			box.remove(widget_instance);
 			requested_draw();
+		}
+
+		public void move_widget_instance_up(Gtk.Bin? widget_instance) {
+			var current_index = box.get_children().index(widget_instance);
+
+			if (current_index > 0) {
+				box.reorder_child(widget_instance, current_index - 1);
+			}
+		}
+
+		public void move_widget_instance_down(Gtk.Bin? widget_instance) {
+			var current_index = box.get_children().index(widget_instance);
+
+			if (current_index < box.get_children().length() - 1) {
+				box.reorder_child(widget_instance, current_index + 1);
+			}
 		}
 
 		void on_name_change() {
