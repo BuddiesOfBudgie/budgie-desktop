@@ -1,0 +1,9 @@
+[Plugin]
+Module=org.buddiesofbudgie.budgie-desktop.raven.widget.Mpris.so
+Builtin=TRUE
+_Name=Mpris
+_Description=Controls for video and audio playback.
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2022 Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=audio-player

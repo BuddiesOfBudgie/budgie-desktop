@@ -13,10 +13,10 @@
  * Simple wrapper to ensure a lifetime reference to the encapsulated objects
  */
 public class MprisClient : GLib.Object {
-	public PlayerIface player { construct set; get; }
-	public DbusPropIface prop { construct set; get; }
+	public MprisPlayerIface player { construct set; get; }
+	public MprisDbusPropIface prop { construct set; get; }
 
-	public MprisClient(PlayerIface player, DbusPropIface prop) {
+	public MprisClient(MprisPlayerIface player, MprisDbusPropIface prop) {
 		Object(player: player, prop: prop);
 	}
 }
@@ -25,7 +25,7 @@ public class MprisClient : GLib.Object {
  * We need to probe the dbus daemon directly, hence this interface
  */
 [DBus (name="org.freedesktop.DBus")]
-public interface DBusImpl : Object {
+public interface MprisDBusImpl : Object {
 	public abstract async string[] list_names() throws DBusError, IOError;
 	public signal void name_owner_changed(string name, string old_owner, string new_owner);
 	public signal void name_acquired(string name);
@@ -35,7 +35,7 @@ public interface DBusImpl : Object {
  * Vala dbus property notifications are not working. Manually probe property changes.
  */
 [DBus (name="org.freedesktop.DBus.Properties")]
-public interface DbusPropIface : GLib.Object {
+public interface MprisDbusPropIface : GLib.Object {
 	public signal void properties_changed(string iface, HashTable<string,Variant> changed, string[] invalid);
 }
 
@@ -66,7 +66,7 @@ public interface MprisIface : GLib.Object {
  * iface initialisations over one
  */
 [DBus (name="org.mpris.MediaPlayer2.Player")]
-public interface PlayerIface : MprisIface {
+public interface MprisPlayerIface : MprisIface {
 	public abstract async void next() throws DBusError, IOError;
 	public abstract async void previous() throws DBusError, IOError;
 	public abstract async void pause() throws DBusError, IOError;
@@ -104,9 +104,9 @@ public interface PlayerIface : MprisIface {
  * @return a new MprisClient, or null if errors occurred.
  */
 public async MprisClient? new_iface(string busname) {
-	PlayerIface? play = null;
+	MprisPlayerIface? play = null;
 	MprisClient? cl = null;
-	DbusPropIface? prop = null;
+	MprisDbusPropIface? prop = null;
 
 	try {
 		play = yield Bus.get_proxy(BusType.SESSION, busname, "/org/mpris/MediaPlayer2");

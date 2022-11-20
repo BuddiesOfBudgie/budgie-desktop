@@ -12,7 +12,6 @@
 namespace Budgie {
 	public class MainView : Gtk.Box {
 		private Gtk.Box? box = null; // Holds our content
-		private MprisWidget? mpris = null;
 		private Settings? raven_settings = null;
 		private Gtk.ScrolledWindow? scroll = null;
 
@@ -59,10 +58,9 @@ namespace Budgie {
 
 			/* Eventually these guys get dynamically loaded */
 			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+			box.margin_top = 8;
+			box.margin_bottom = 8;
 			scroll.add(box);
-
-			mpris = new MprisWidget();
-			box.pack_start(mpris, false, false, 0);
 
 			// Make sure everything is shown. Not having this can cause
 			// silent failures when switching stack pages or opening Raven.
@@ -114,21 +112,10 @@ namespace Budgie {
 				return;
 			}
 
-			bool show_widget = raven_settings.get_boolean(key);
-
-			/**
-			* You're probably wondering why I'm not just setting a visible value here, and that's typically a good idea.
-			* However, it causes weird focus and rendering issues even when has_visible_focus is set to false. I don't get it either, so we're doing this.
-			*/
-			if (key == "show-mpris-widget") { // MPRIS
-				mpris.set_show(show_widget);
-			}
-
 			requested_draw();
 		}
 
 		public void set_clean() {
-			on_raven_settings_changed("show-mpris-widget");
 			main_stack.set_visible_child_name("widgets");
 		}
 	}

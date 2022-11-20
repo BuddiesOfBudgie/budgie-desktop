@@ -5,3 +5,4 @@ raven_plugin_dir = join_paths(raven_plugin_libdir, raven_plugin_namespace)
 
 subdir('calendar')
 subdir('sound')
+subdir('mpris')

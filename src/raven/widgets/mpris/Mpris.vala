@@ -9,17 +9,36 @@
  * (at your option) any later version.
  */
 
-public class MprisWidget : LegacyRavenWidget {
-	DBusImpl impl;
+public class MprisRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
+	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings? settings) {
+		return new MprisRavenWidget(uuid, settings);
+	}
 
-	HashTable<string,ClientWidget> ifaces;
+	public bool supports_settings() {
+		return false;
+	}
+}
 
-	int our_width = 250;
+public class MprisRavenWidget : Budgie.RavenWidget {
+	private MprisDBusImpl impl;
 
-	public MprisWidget() {
-		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+	private HashTable<string, MprisClientWidget> ifaces;
+	private Gtk.Box? content = null;
+	private Gtk.Label? placeholder = null;
 
-		ifaces = new HashTable<string,ClientWidget>(str_hash, str_equal);
+	private int our_width = 250;
+
+	public MprisRavenWidget(string uuid, GLib.Settings? settings) {
+		initialize(uuid, settings);
+
+		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
+		add(content);
+
+		placeholder = new Gtk.Label(_("Nothing is playing."));
+		placeholder.get_style_context().add_class("raven-header");
+		content.pack_start(placeholder, false, false, 0);
+
+		ifaces = new HashTable<string,MprisClientWidget>(str_hash, str_equal);
 
 		setup_dbus.begin();
 
@@ -39,8 +58,8 @@ public class MprisWidget : LegacyRavenWidget {
 	}
 
 	bool notify_clients_on_width_change() {
-		var iter = HashTableIter<string,ClientWidget>(ifaces);
-		ClientWidget? widget = null;
+		var iter = HashTableIter<string,MprisClientWidget>(ifaces);
+		MprisClientWidget? widget = null;
 		while (iter.next(null, out widget)) {
 			widget.update_width(our_width);
 		}
@@ -54,14 +73,13 @@ public class MprisWidget : LegacyRavenWidget {
 	 * @param iface The constructed MprisClient instance
 	 */
 	void add_iface(string name, MprisClient iface) {
-		ClientWidget widg = new ClientWidget(iface, our_width);
+		MprisClientWidget widg = new MprisClientWidget(iface, our_width);
 		widg.show_all();
-		pack_start(widg, false, false, 0);
+		if (content.get_children().index(placeholder) != -1) {
+			content.remove(placeholder);
+		}
+		content.pack_start(widg, false, false, 0);
 		ifaces.insert(name, widg);
-
-		this.queue_draw();
-
-		get_toplevel().queue_draw();
 	}
 
 	/**
@@ -71,12 +89,14 @@ public class MprisWidget : LegacyRavenWidget {
 	 */
 	void destroy_iface(string name) {
 		var widg = ifaces[name];
-		if (widg  != null) {
-			remove(widg);
+		if (widg != null) {
+			content.remove(widg);
 			ifaces.remove(name);
 		}
-		this.queue_draw();
-		get_toplevel().queue_draw();
+
+		if (ifaces.size() == 0) {
+			content.pack_start(placeholder, false, false, 0);
+		}
 	}
 
 	void on_name_owner_changed(string? n, string? o, string? ne) {
@@ -122,4 +142,11 @@ public class MprisWidget : LegacyRavenWidget {
 			warning("Failed to initialise dbus: %s", e.message);
 		}
 	}
+}
+
+[ModuleInit]
+public void peas_register_types(TypeModule module) {
+	// boilerplate - all modules need this
+	var objmodule = module as Peas.ObjectModule;
+	objmodule.register_extension_type(typeof(Budgie.RavenPlugin), typeof(MprisRavenPlugin));
 }

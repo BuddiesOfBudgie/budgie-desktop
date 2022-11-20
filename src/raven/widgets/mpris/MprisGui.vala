@@ -15,12 +15,12 @@ const int BACKGROUND_SIZE = 250;
  * A fancier Gtk.Image, which forces a fade-effect across the bottom of the image
  * making it easier to use/see the overlayed playback controls within the ClientWidget
  */
-public class ClientImage : Gtk.Image {
-	public ClientImage.from_pixbuf(Gdk.Pixbuf pbuf) {
+public class MprisClientImage : Gtk.Image {
+	public MprisClientImage.from_pixbuf(Gdk.Pixbuf pbuf) {
 		Object(pixbuf: pbuf);
 	}
 
-	public ClientImage.from_icon_name(string icon_name, Gtk.IconSize size) {
+	public MprisClientImage.from_icon_name(string icon_name, Gtk.IconSize size) {
 		Object(icon_name : icon_name, icon_size: size);
 	}
 }
@@ -31,8 +31,7 @@ public class ClientImage : Gtk.Image {
  * It is "designed" to be self contained and added to a large UI, enabling multiple
  * MPRIS clients to be controlled with multiple widgets
  */
-public class ClientWidget : Gtk.Box {
-	Budgie.RavenExpander player_revealer;
+public class MprisClientWidget : Gtk.Box {
 	Gtk.Image background;
 	Gtk.EventBox background_wrap;
 	MprisClient client;
@@ -47,14 +46,12 @@ public class ClientWidget : Gtk.Box {
 
 	int our_width = BACKGROUND_SIZE;
 
-	Budgie.HeaderWidget? header = null;
-
 	/**
 	 * Create a new ClientWidget
 	 *
 	 * @param client The underlying MprisClient instance to use
 	 */
-	public ClientWidget(MprisClient client, int width) {
+	public MprisClientWidget(MprisClient client, int width) {
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 		Gtk.Widget? row = null;
 		cancel = new Cancellable();
@@ -63,31 +60,9 @@ public class ClientWidget : Gtk.Box {
 
 		this.client = client;
 
-		/* Set up our header widget */
-		header = new Budgie.HeaderWidget(client.player.identity, "media-playback-pause-symbolic", false);
-		header.closed.connect(() => {
-			if (client.player.can_quit) {
-				client.player.quit.begin((obj, res) => {
-					try {
-						try {
-							client.player.quit.end(res);
-						} catch (IOError e) {
-							warning("Error closing %s: %s", client.player.identity, e.message);
-						}
-					} catch (DBusError e) {
-						warning("Error closing %s: %s", client.player.identity, e.message);
-					}
-				});
-			}
-		});
-
-		player_revealer = new Budgie.RavenExpander(header);
-		player_revealer.expanded = true;
 		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-		header.can_close = client.player.can_quit;
-
-		background = new ClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+		background = new MprisClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
 		background.pixel_size = our_width;
 		background_wrap = new Gtk.EventBox();
 		background_wrap.add(background);
@@ -107,7 +82,6 @@ public class ClientWidget : Gtk.Box {
 		box.margin = 6;
 		box.margin_top = 12;
 		top_box.pack_start(box, true, true, 0);
-
 
 		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		controls.get_style_context().add_class("raven-mpris-controls");
@@ -226,8 +200,7 @@ public class ClientWidget : Gtk.Box {
 
 		get_style_context().add_class("mpris-widget");
 
-		player_revealer.add(player_box);
-		pack_start(player_revealer);
+		pack_start(player_box, false, false, 0);
 	}
 
 	public void update_width(int new_width) {
@@ -265,18 +238,18 @@ public class ClientWidget : Gtk.Box {
 	void update_play_status() {
 		switch (client.player.playback_status) {
 			case "Playing":
-				header.icon_name = "media-playback-start-symbolic";
-				header.text = "%s - Playing".printf(client.player.identity);
+				//  header.icon_name = "media-playback-start-symbolic";
+				//  header.text = "%s - Playing".printf(client.player.identity);
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			case "Paused":
-				header.icon_name = "media-playback-pause-symbolic";
-				header.text = "%s - Paused".printf(client.player.identity);
+				//  header.icon_name = "media-playback-pause-symbolic";
+				//  header.text = "%s - Paused".printf(client.player.identity);
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			default:
-				header.text = client.player.identity;
-				header.icon_name = "media-playback-stop-symbolic";
+				//  header.text = client.player.identity;
+				//  header.icon_name = "media-playback-stop-symbolic";
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 		}

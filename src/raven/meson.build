@@ -23,9 +23,6 @@ lib_libraven_resources = static_library(
 libraven_sources = [
     'headerwidget.vala',
     'main_view.vala',
-    'mpris/MprisClient.vala',
-    'mpris/MprisGui.vala',
-    'mpris/MprisWidget.vala',
     'notification_widget.vala',
     'notifications_group.vala',
     'notifications_view.vala',
