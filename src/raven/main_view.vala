@@ -13,9 +13,6 @@ namespace Budgie {
 	public class MainView : Gtk.Box {
 		private Gtk.Box? box = null; // Holds our content
 		private MprisWidget? mpris = null;
-		private CalendarWidget? cal = null;
-		private Budgie.SoundWidget? audio_input_widget = null;
-		private Budgie.SoundWidget? audio_output_widget = null;
 		private Settings? raven_settings = null;
 		private Gtk.ScrolledWindow? scroll = null;
 
@@ -63,15 +60,6 @@ namespace Budgie {
 			/* Eventually these guys get dynamically loaded */
 			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 			scroll.add(box);
-
-			cal = new CalendarWidget(raven_settings);
-			box.pack_start(cal, false, false, 0);
-
-			audio_output_widget = new Budgie.SoundWidget("output");
-			box.pack_start(audio_output_widget, false, false, 0);
-
-			audio_input_widget = new Budgie.SoundWidget("input");
-			box.pack_start(audio_input_widget, false, false, 0);
 
 			mpris = new MprisWidget();
 			box.pack_start(mpris, false, false, 0);

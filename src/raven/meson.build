@@ -21,8 +21,6 @@ lib_libraven_resources = static_library(
 )
 
 libraven_sources = [
-    'app_sound_control.vala',
-    'calendar.vala',
     'headerwidget.vala',
     'main_view.vala',
     'mpris/MprisClient.vala',
@@ -34,7 +32,6 @@ libraven_sources = [
     'plugin_manager.vala',
     'powerstrip.vala',
     'raven.vala',
-    'sound.vala',
     'start_listening.vala',
     'widget.vala',
 ]
