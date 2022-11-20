@@ -621,6 +621,7 @@ namespace Budgie {
 				widgets.insert(widget_data, current_index - 1);
 
 				main_view.move_widget_instance_up(widget_data.widget_instance);
+				update_uuids();
 			}
 		}
 
@@ -632,6 +633,7 @@ namespace Budgie {
 				widgets.insert(widget_data, current_index + 1);
 
 				main_view.move_widget_instance_down(widget_data.widget_instance);
+				update_uuids();
 			}
 		}
 
