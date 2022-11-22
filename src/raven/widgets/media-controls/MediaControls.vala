@@ -9,9 +9,9 @@
  * (at your option) any later version.
  */
 
-public class MprisRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
+public class MediaControlsRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings? settings) {
-		return new MprisRavenWidget(uuid, settings);
+		return new MediaControlsRavenWidget(uuid, settings);
 	}
 
 	public bool supports_settings() {
@@ -19,7 +19,7 @@ public class MprisRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	}
 }
 
-public class MprisRavenWidget : Budgie.RavenWidget {
+public class MediaControlsRavenWidget : Budgie.RavenWidget {
 	private MprisDBusImpl impl;
 
 	private HashTable<string, MprisClientWidget> ifaces;
@@ -28,7 +28,7 @@ public class MprisRavenWidget : Budgie.RavenWidget {
 
 	private int our_width = 250;
 
-	public MprisRavenWidget(string uuid, GLib.Settings? settings) {
+	public MediaControlsRavenWidget(string uuid, GLib.Settings? settings) {
 		initialize(uuid, settings);
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
@@ -148,5 +148,5 @@ public class MprisRavenWidget : Budgie.RavenWidget {
 public void peas_register_types(TypeModule module) {
 	// boilerplate - all modules need this
 	var objmodule = module as Peas.ObjectModule;
-	objmodule.register_extension_type(typeof(Budgie.RavenPlugin), typeof(MprisRavenPlugin));
+	objmodule.register_extension_type(typeof(Budgie.RavenPlugin), typeof(MediaControlsRavenPlugin));
 }

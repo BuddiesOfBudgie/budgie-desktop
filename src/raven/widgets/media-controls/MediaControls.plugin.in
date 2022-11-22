@@ -1,0 +1,9 @@
+[Plugin]
+Module=org.buddiesofbudgie.budgie-desktop.raven.widget.MediaControls.so
+Builtin=true
+_Name=Media Controls
+_Description=This widget uses the Mpris API to show actively playing media with metadata and playback controls, and supports both audio and video.
+Authors=Budgie Desktop Developers
+Copyright=Copyright © 2022 Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=audio-player
