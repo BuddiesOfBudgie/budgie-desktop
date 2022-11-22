@@ -55,9 +55,10 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 
 		content_revealer = new Gtk.Revealer();
 		content_revealer.add(content);
+		content_revealer.reveal_child = true;
 		main_box.add(content_revealer);
 
-		header_reveal_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
 		header_reveal_button.get_style_context().add_class("flat");
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
