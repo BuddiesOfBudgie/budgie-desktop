@@ -31,7 +31,7 @@ public class MprisRavenWidget : Budgie.RavenWidget {
 	public MprisRavenWidget(string uuid, GLib.Settings? settings) {
 		initialize(uuid, settings);
 
-		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
+		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 		add(content);
 
 		placeholder = new Gtk.Label(_("Nothing is playing."));

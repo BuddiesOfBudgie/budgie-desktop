@@ -32,6 +32,12 @@ public class MprisClientImage : Gtk.Image {
  * MPRIS clients to be controlled with multiple widgets
  */
 public class MprisClientWidget : Gtk.Box {
+	private Gtk.Box? header = null;
+	private Gtk.Image? header_icon = null;
+	private Gtk.Label? header_label = null;
+	private Gtk.Button? header_reveal_button = null;
+	private Gtk.Revealer? content_revealer = null;
+
 	Gtk.Image background;
 	Gtk.EventBox background_wrap;
 	MprisClient client;
@@ -53,6 +59,20 @@ public class MprisClientWidget : Gtk.Box {
 	 */
 	public MprisClientWidget(MprisClient client, int width) {
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+
+		header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		header.get_style_context().add_class("raven-header");
+		add(header);
+
+		header_icon = new Gtk.Image.from_icon_name("emblem-music", Gtk.IconSize.MENU);
+		header_icon.margin = 8;
+		header_icon.margin_start = 12;
+		header_icon.margin_end = 12;
+		header.add(header_icon);
+
+		header_label = new Gtk.Label(client.player.identity);
+		header.add(header_label);
+
 		Gtk.Widget? row = null;
 		cancel = new Cancellable();
 
@@ -200,7 +220,26 @@ public class MprisClientWidget : Gtk.Box {
 
 		get_style_context().add_class("mpris-widget");
 
-		pack_start(player_box, false, false, 0);
+		content_revealer = new Gtk.Revealer();
+		content_revealer.add(player_box);
+		content_revealer.reveal_child = true;
+		add(content_revealer);
+
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button.get_style_context().add_class("flat");
+		header_reveal_button.get_style_context().add_class("expander-button");
+		header_reveal_button.margin = 4;
+		header_reveal_button.valign = Gtk.Align.CENTER;
+		header_reveal_button.clicked.connect(() => {
+			content_revealer.reveal_child = !content_revealer.child_revealed;
+			var image = (Gtk.Image?) header_reveal_button.get_image();
+			if (content_revealer.reveal_child) {
+				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+			} else {
+				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+			}
+		});
+		header.pack_end(header_reveal_button, false, false, 0);
 	}
 
 	public void update_width(int new_width) {
@@ -238,18 +277,18 @@ public class MprisClientWidget : Gtk.Box {
 	void update_play_status() {
 		switch (client.player.playback_status) {
 			case "Playing":
-				//  header.icon_name = "media-playback-start-symbolic";
-				//  header.text = "%s - Playing".printf(client.player.identity);
+				header_icon.set_from_icon_name("media-playback-start", Gtk.IconSize.MENU);
+				header_label.set_text("%s - Playing".printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			case "Paused":
-				//  header.icon_name = "media-playback-pause-symbolic";
-				//  header.text = "%s - Paused".printf(client.player.identity);
+				header_icon.set_from_icon_name("media-playback-pause", Gtk.IconSize.MENU);
+				header_label.set_text("%s - Paused".printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			default:
-				//  header.text = client.player.identity;
-				//  header.icon_name = "media-playback-stop-symbolic";
+				header_icon.set_from_icon_name("media-playback-stop", Gtk.IconSize.MENU);
+				header_label.set_text(client.player.identity);
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 		}
