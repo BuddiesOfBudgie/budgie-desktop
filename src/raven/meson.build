@@ -30,7 +30,6 @@ libraven_sources = [
     'powerstrip.vala',
     'raven.vala',
     'start_listening.vala',
-    'widget.vala',
 ]
 
 libraven_deps = [
