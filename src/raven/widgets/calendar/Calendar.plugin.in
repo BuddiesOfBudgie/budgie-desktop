@@ -1,6 +1,6 @@
 [Plugin]
 Module=org.buddiesofbudgie.budgie-desktop.raven.widget.Calendar.so
-Builtin=TRUE
+Builtin=true
 _Name=Calendar
 _Description=A simple calendar with a month view.
 Authors=Budgie Desktop Developers

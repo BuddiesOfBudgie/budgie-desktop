@@ -1,6 +1,6 @@
 [Plugin]
 Module=org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput.so
-Builtin=TRUE
+Builtin=true
 _Name=Sound Output
 _Description=Per-app and global audio output control.
 Authors=Budgie Desktop Developers
