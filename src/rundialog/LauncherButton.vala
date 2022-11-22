@@ -15,10 +15,7 @@ public class LauncherButton : Gtk.Box {
 		var right_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
 
 		var app_name = Markup.escape_text(application.name);
-		var sdesc = application.description;
-		if (sdesc == null) {
-			sdesc = "";
-		}
+		var sdesc = application.description ?? "";
 
 		var desc = Markup.escape_text(sdesc);
 		var name_label = new Gtk.Label("<big>%s</big>".printf(app_name)) {

@@ -109,9 +109,10 @@ namespace Budgie {
 			/* Set size properties */
 			var monitor = this.screen.get_display().get_primary_monitor();
 			var rect = monitor.get_workarea();
+			var width = (rect.width / 3).clamp(420, 960);
 
-			set_size_request(rect.width / 3, -1);
-			set_default_size(rect.width / 3, -1);
+			set_size_request(width, -1);
+			set_default_size(width, -1);
 
 			/* Connect events */
 			focus_out_event.connect(() => {
