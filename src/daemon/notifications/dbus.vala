@@ -543,8 +543,16 @@
 				return;
 			}
 
-			var summary = _("Notifications Unpaused");
-			var body = _("While notifications were paused, %d notifications were received.".printf(this.paused_notifications));
+			// translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
+			var summary = _("Unread Notifications");
+
+			string? body = null;
+			if (paused_notifications == 1) {
+				body = _("You received 1 notification while an application was fullscreened.");
+			} else {
+				body = _("You received %d notifications while an application was fullscreened.".printf(this.paused_notifications));
+			}
+
 			var icon = "dialog-information";
 
 			// If we have an existing noti for some reason, update it
@@ -553,7 +561,8 @@
 			} else {
 				// No existing ref, make a new notification
 				unpaused_noti = new Notify.Notification(summary, body, icon);
-				unpaused_noti.add_action("default", "default", (notification, action) => {
+				// translators: Text for a button on the notification to open Raven to the notifications view
+				unpaused_noti.add_action("view-notifications", _("View Notifications"), (notification, action) => {
 					// Open Raven to notifications view
 					this.raven.ToggleNotificationsView.begin((obj, res) => {
 						try {
