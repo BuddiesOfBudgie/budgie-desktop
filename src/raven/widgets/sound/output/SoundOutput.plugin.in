@@ -2,7 +2,7 @@
 Module=org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput.so
 Builtin=true
 _Name=Sound Output
-_Description=Per-app and global audio output control.
+_Description=Allows global and per-app audio output volume control, and displays a list of available audio output devices.
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
