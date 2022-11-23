@@ -10,6 +10,33 @@
  */
 
 namespace Budgie {
+	/**
+	* RavenWidgetSettingsFrame provides a UI wrapper for widget instance settings
+	*/
+	public class RavenWidgetSettingsFrame : Gtk.Box {
+		public RavenWidgetSettingsFrame() {
+			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+
+			Gtk.Label lab = new Gtk.Label(null);
+			lab.set_markup("<big>%s</big>".printf(_("Widget Settings")));
+			lab.halign = Gtk.Align.START;
+			lab.margin_bottom = 6;
+			valign = Gtk.Align.START;
+
+			this.get_style_context().add_class("settings-frame");
+			lab.get_style_context().add_class("settings-title");
+
+			var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+			sep.margin_bottom = 6;
+			this.pack_start(lab, false, false, 0);
+			this.pack_start(sep, false, false, 0);
+		}
+
+		public override void add(Gtk.Widget widget) {
+			this.pack_start(widget, false, false, 0);
+		}
+	}
+
 	public class RavenWidgetsPage : Gtk.Box {
 		private unowned Budgie.DesktopManager? manager = null;
 		private unowned Budgie.Raven? raven = null;
@@ -83,6 +110,16 @@ namespace Budgie {
 		private void add_widget_item(RavenWidgetData widget_data) {
 			if (items.contains(widget_data.uuid)) {
 				return;
+			}
+
+			/* Allow viewing settings on demand */
+			if (widget_data.supports_settings) {
+				var frame = new RavenWidgetSettingsFrame();
+				var ui = (widget_data.widget_instance as Budgie.RavenWidget).build_settings_ui();
+				frame.add(ui);
+				ui.show();
+				frame.show();
+				settings_stack.add_named(frame, widget_data.uuid);
 			}
 
 			var item = new RavenWidgetItem(widget_data);

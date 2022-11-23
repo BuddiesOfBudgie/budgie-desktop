@@ -55,6 +55,8 @@ panel_deps = [
     link_libbudgieprivate,
     link_libtheme,
     link_libpanelplugin,
+    link_libravenplugin,
+    libravenplugin_vapi,
     link_libraven,
     gvc.get_variable('libgvc_dep'),
 ]

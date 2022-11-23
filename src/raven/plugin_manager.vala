@@ -110,12 +110,14 @@ namespace Budgie {
 			var extension = plugin_set.get_extension(plugin_info);
 
 			var plugin = extension as Budgie.RavenPlugin;
+
 			var uuid = existing_uuid != null ? existing_uuid : generate_uuid();
 			GLib.Settings? instance_settings = null;
 			if (plugin.supports_settings()) {
 				var instance_settings_schema = module_name.slice(0, module_name.last_index_of("."));
 				var instance_settings_path = "/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid);
 				instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
+				instance_settings.ref();
 			}
 
 			var instance = plugin.new_widget_instance(uuid, instance_settings);

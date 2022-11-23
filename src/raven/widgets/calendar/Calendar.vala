@@ -15,7 +15,7 @@ public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	}
 
 	public bool supports_settings() {
-		return false;
+		return true;
 	}
 }
 
@@ -92,7 +92,7 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 	/**
 	 * set_week_number will set the display of the week number
 	 */
-	 private void set_week_number() {
+	private void set_week_number() {
 		bool show = false;
 
 		this.cal.show_week_numbers = show;
@@ -104,6 +104,23 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		header_label.label = strf;
 		cal.day = (cal.month + 1) == time.get_month() && cal.year == time.get_year() ? time.get_day_of_month() : 0;
 		return true;
+	}
+
+	public override Gtk.Widget build_settings_ui() {
+		return new CalendarRavenWidgetSettings(get_instance_settings());
+	}
+}
+
+[GtkTemplate (ui="/org/buddiesofbudgie/budgie-desktop/raven/widget/Calendar/settings.ui")]
+public class CalendarRavenWidgetSettings : Gtk.Grid {
+	Settings? settings = null;
+
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_week_numbers;
+
+	public CalendarRavenWidgetSettings(Settings? settings) {
+		this.settings = settings;
+		settings.bind("show-week-numbers", switch_show_week_numbers, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
