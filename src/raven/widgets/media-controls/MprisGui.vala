@@ -12,20 +12,6 @@
 const int BACKGROUND_SIZE = 250;
 
 /**
- * A fancier Gtk.Image, which forces a fade-effect across the bottom of the image
- * making it easier to use/see the overlayed playback controls within the ClientWidget
- */
-public class MprisClientImage : Gtk.Image {
-	public MprisClientImage.from_pixbuf(Gdk.Pixbuf pbuf) {
-		Object(pixbuf: pbuf);
-	}
-
-	public MprisClientImage.from_icon_name(string icon_name, Gtk.IconSize size) {
-		Object(icon_name : icon_name, icon_size: size);
-	}
-}
-
-/**
  * A ClientWidget is simply used to control and display information in a two-way
  * fashion with an underlying MPRIS provider (MediaPlayer2)
  * It is "designed" to be self contained and added to a large UI, enabling multiple
@@ -82,7 +68,7 @@ public class MprisClientWidget : Gtk.Box {
 
 		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-		background = new MprisClientImage.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
+		background = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
 		background.pixel_size = our_width;
 		background_wrap = new Gtk.EventBox();
 		background_wrap.add(background);
