@@ -37,7 +37,8 @@ namespace Budgie {
 			switcher = new Gtk.StackSwitcher();
 			switcher.halign = Gtk.Align.CENTER;
 			stack = new Gtk.Stack();
-			stack.border_width = 20;
+			stack.margin_top = 12;
+			stack.margin_bottom = 12;
 			stack.set_homogeneous(false);
 			switcher.set_stack(stack);
 			swbox.pack_start(switcher, true, true, 0);

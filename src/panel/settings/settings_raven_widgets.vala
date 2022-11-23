@@ -58,7 +58,6 @@ namespace Budgie {
 			this.raven = Budgie.Raven.get_instance();
 
 			valign = Gtk.Align.FILL;
-			margin = 6;
 
 			var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
@@ -83,7 +82,7 @@ namespace Budgie {
 			var frame = new Gtk.Frame(null);
 			frame.vexpand = false;
 			frame.margin_end = 20;
-			frame.margin_top = 12;
+			frame.margin_top = 6;
 			frame.add(frame_box);
 
 			items = new HashTable<string, RavenWidgetItem?>(str_hash, str_equal);
@@ -96,7 +95,7 @@ namespace Budgie {
 			scroll.add(listbox_widgets);
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 			frame_box.pack_start(scroll, true, true, 0);
-			this.pack_start(frame, false, true, 0);
+			this.pack_start(frame, false, false, 0);
 
 			move_box.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
 			listbox_widgets.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);

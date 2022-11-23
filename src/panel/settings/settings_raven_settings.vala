@@ -18,6 +18,10 @@
 		private Settings raven_settings;
 
 		public RavenSettingsPage() {
+			margin_top = 8;
+			margin_start = 20;
+			margin_end = 20;
+
 			raven_position = new Gtk.ComboBox();
 
 			// Add options for Raven position
