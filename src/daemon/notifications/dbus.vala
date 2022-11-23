@@ -261,10 +261,10 @@
 				return id;
 			}
 
-			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationUrgency.CRITICAL;
+			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationPriority.URGENT;
 			should_show = app_notification_settings.get_boolean("show-banners") && // notification popups for this app are enabled
 							!this.dispatcher.notifications_paused && // notifications aren't paused, e.g. no fullscreen apps
-							(this.popups.size() < MAX_POPUPS_SHOWN || notification.urgency == NotificationUrgency.CRITICAL); // below the number of max popups, or the noti is critical
+							(this.popups.size() < MAX_POPUPS_SHOWN || notification.urgency == NotificationPriority.URGENT); // below the number of max popups, or the noti is critical
 
 			// Set to expire immediately if a popup shouldn't be shown.
 			if (!should_notify || !should_show) {
@@ -304,7 +304,7 @@
 				string? sound_name = "dialog-information";
 
 				// Give critical notifications a special sound
-				if (notification.urgency == NotificationUrgency.CRITICAL) {
+				if (notification.urgency == NotificationPriority.URGENT) {
 					sound_name = "dialog-warning";
 				}
 
