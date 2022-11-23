@@ -107,9 +107,11 @@ namespace Budgie {
 			this.load_buttons();
 
 			/* Set size properties */
-			var monitor = this.screen.get_display().get_primary_monitor();
+			int x, y;
+			get_position(out x, out y);
+			var monitor = get_screen().get_display().get_monitor_at_point(x, y);
 			var rect = monitor.get_workarea();
-			var width = (rect.width / 3).clamp(420, 960);
+			var width = (rect.width / 3).clamp(420, 840);
 
 			set_size_request(width, -1);
 			set_default_size(width, -1);
