@@ -12,8 +12,6 @@
  namespace Budgie {
 	public class RavenSettingsPage : Budgie.SettingsGrid {
 		private Gtk.ComboBox? raven_position;
-		private Gtk.Switch? enable_week_numbers;
-		private Gtk.Switch? show_mpris_widget;
 		private Gtk.Switch? show_powerstrip;
 		private Settings raven_settings;
 
@@ -49,18 +47,6 @@
 				_("Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is.")
 			));
 
-			enable_week_numbers = new Gtk.Switch();
-			add_row(new SettingsRow(enable_week_numbers,
-				_("Enable display of week numbers in Calendar"),
-				_("This setting enables the display of week numbers in the Calendar widget.")
-			));
-
-			show_mpris_widget = new Gtk.Switch();
-			add_row(new SettingsRow(show_mpris_widget,
-				_("Show Media Playback Controls Widget"),
-				_("Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section.")
-			));
-
 			show_powerstrip = new Gtk.Switch();
 			add_row(new SettingsRow(show_powerstrip,
 				_("Show Power Strip"),
@@ -69,8 +55,6 @@
 
 			raven_settings = new Settings("com.solus-project.budgie-raven");
 			raven_settings.bind("raven-position", raven_position, "active-id", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("enable-week-numbers", enable_week_numbers, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-mpris-widget", show_mpris_widget, "active", SettingsBindFlags.DEFAULT);
 			raven_settings.bind("show-power-strip", show_powerstrip, "active", SettingsBindFlags.DEFAULT);
 		}
 	}
