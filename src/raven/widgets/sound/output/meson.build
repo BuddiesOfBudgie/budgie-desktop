@@ -7,8 +7,19 @@ custom_target('raven-plugin-sound-output-file',
     install : true,
     install_dir : raven_plugin_sound_output_dir)
 
+raven_plugin_sound_output_gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
+
+# Compile the assets into the binary
+raven_plugin_sound_output_resources = gnome.compile_resources(
+    'raven-plugin-sound-output-resources',
+    raven_plugin_sound_output_gresource,
+    source_dir: meson.current_source_dir(),
+    c_name: 'budgie_raven_plugin_sound_output',
+)
+
 raven_plugin_sound_output_sources = [
     'SoundOutput.vala',
+    raven_plugin_sound_output_resources,
 ]
 
 raven_plugin_sound_output_deps = [
@@ -36,4 +47,9 @@ shared_library(
     ],
     install: true,
     install_dir: raven_plugin_sound_output_dir,
+)
+
+install_data(
+    'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )

@@ -91,14 +91,11 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		show_all();
 	}
 
-	/**
-	 * set_week_number will set the display of the week number
-	 */
 	private void settings_updated(string key) {
 		if (key == "show-week-numbers") {
-			cal.show_week_numbers = get_instance_settings().get_boolean("show-week-numbers");
+			cal.show_week_numbers = get_instance_settings().get_boolean(key);
 		} else if (key == "show-day-names") {
-			cal.show_day_names = get_instance_settings().get_boolean("show-day-names");
+			cal.show_day_names = get_instance_settings().get_boolean(key);
 		}
 	}
 

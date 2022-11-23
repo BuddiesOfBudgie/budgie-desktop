@@ -15,19 +15,14 @@ public class SoundOutputRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	}
 
 	public bool supports_settings() {
-		return false;
+		return true;
 	}
 }
 
 public class SoundOutputRavenWidget : Budgie.RavenWidget {
-	/**
-	 * Logic and Mixer variables
-	 */
-	private const string MAX_KEY = "allow-volume-overdrive";
 	private Settings? gnome_sound_settings = null;
 	private Settings? budgie_settings = null;
 	private Settings? gnome_desktop_settings = null;
-	private Settings? raven_settings = null;
 	private ulong scale_id = 0;
 	private Gvc.MixerControl mixer = null;
 	private HashTable<uint,Gtk.ListBoxRow?> apps;
@@ -144,7 +139,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		gnome_sound_settings = new Settings("org.gnome.desktop.sound");
 		apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash, direct_equal);
 		budgie_settings = new Settings("com.solus-project.budgie-panel");
-		raven_settings = new Settings("com.solus-project.budgie-raven");
 		gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
 
 		mixer.default_sink_changed.connect(on_device_changed);
@@ -153,7 +147,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		mixer.state_changed.connect(on_state_changed);
 		mixer.stream_added.connect(on_stream_added);
 		mixer.stream_removed.connect(on_stream_removed);
-		raven_settings.changed[MAX_KEY].connect(on_volume_safety_changed);
 
 		budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
 		gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
@@ -202,7 +195,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		widget_area_switch.set_homogeneous(true);
 
 		// Add marks when sound slider can go beyond 100%
-		this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
+		settings.changed.connect(settings_updated);
+		settings_updated("allow-volume-overdrive");
 
 		//  header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, volume_slider);
 		content.pack_start(widget_area, false, false, 0);
@@ -219,7 +213,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		show_all();
 
-		on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
 		toggle_start_listening();
 	}
 
@@ -485,14 +478,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		}
 	}
 
-	/**
-	 * on_volume_safety_changed will listen to changes to our above 100 percent key
-	 * If the volume is allowed to go over 100%, we'll update the slider range. Otherwise, we'll change or keep it at 100%
-	 */
-	private void on_volume_safety_changed() {
-		this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
-	}
-
 	/*
 	 * set_slider_range_on_max will set the slider range based on whether or not we are allowing overdrive
 	 */
@@ -537,7 +522,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		bool supported_theme = (current_theme.index_of("Arc") == -1);
 
 		if (!builtin_enabled && supported_theme) { // If built-in theme is disabled
-			bool allow_higher_than_max = raven_settings.get_boolean(MAX_KEY);
+			bool allow_higher_than_max = get_instance_settings().get_boolean("allow-volume-overdrive");
 
 			if (allow_higher_than_max) { // If overdrive is enabled and thus should show mark
 				var vol_max = mixer.get_vol_max_norm();
@@ -557,7 +542,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		var vol = primary_stream.get_volume();
 		var vol_max = mixer.get_vol_max_norm();
 
-		if (raven_settings.get_boolean(MAX_KEY)) { // Allowing max
+		if (get_instance_settings().get_boolean("allow-volume-overdrive")) { // Allowing max
 			vol_max = mixer.get_vol_max_amplified();
 		}
 
@@ -608,6 +593,26 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		if (scale_id > 0) {
 			SignalHandler.unblock(volume_slider, scale_id);
 		}
+	}
+
+	private void settings_updated(string key) {
+		if (key == "allow-volume-overdrive") {
+			set_slider_range_on_max(get_instance_settings().get_boolean(key));
+		}
+	}
+
+	public override Gtk.Widget build_settings_ui() {
+		return new SoundOutputRavenWidgetSettings(get_instance_settings());
+	}
+}
+
+[GtkTemplate (ui="/org/buddiesofbudgie/budgie-desktop/raven/widget/SoundOutput/settings.ui")]
+public class SoundOutputRavenWidgetSettings : Gtk.Grid {
+	[GtkChild]
+	private unowned Gtk.Switch? switch_allow_volume_overdrive;
+
+	public SoundOutputRavenWidgetSettings(Settings? settings) {
+		settings.bind("allow-volume-overdrive", switch_allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
