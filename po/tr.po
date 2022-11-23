@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Sabri Ünal <libreajans@gmail.com>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>, 2022\n"
 "Language-Team: Turkish (https://www.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +24,7 @@ msgstr ""
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
-msgstr "Doğrulama başarısız"
+msgstr "Kimlik doğrulama başarısız"
 
 #: src/polkit/polkitdialog.vala:215
 msgid "Group:"
@@ -200,7 +201,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
-msgstr "Pencere tekrar yönlendirmemelerini (unredirection) devre dışı bırak"
+msgstr "Pencere tekrar yönlendirmemelerini devre dışı bırak"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -237,7 +238,7 @@ msgstr "Stil"
 
 #: src/panel/settings/settings_style.vala:46
 msgid "Widgets"
-msgstr "Widget'lar"
+msgstr "Gereçler"
 
 #: src/panel/settings/settings_style.vala:47
 msgid "Set the appearance of window decorations and controls"
@@ -328,8 +329,8 @@ msgid ""
 "Allows raising the volume via Sound Settings as well as the Sound Output "
 "Widget in Raven up to 150%."
 msgstr ""
-"Ses Ayarları'ndan ve Raven'daki Ses Çıktı Widget'ından ses düzeyinin %150'ye"
-" kadar çıkarılmasına izin verir."
+"Ses Ayarları'ndan ve Raven'daki Ses Çıktı Gerecinden ses düzeyinin %150'ye "
+"kadar çıkarılmasına izin verir."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
@@ -338,48 +339,47 @@ msgstr "Takvimde hafta numaralarının gösterimini etkinleştir"
 #: src/panel/settings/settings_raven.vala:73
 msgid ""
 "This setting enables the display of week numbers in the Calendar widget."
-msgstr ""
-"Bu ayar Takvim Widget'ında hafta sayılarının görünümünü etkinleştirir."
+msgstr "Bu ayar Takvim Gerecinde hafta sayılarının görünümünü etkinleştirir."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
-msgstr "Takvim Widget'ını göster"
+msgstr "Takvim Gerecini Göster"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
 msgstr ""
-"Raven'ın Uygulamalar bölümündeki Takvim Widgetı'nı gösterir veya saklar."
+"Raven'ın Uygulamalar bölümündeki Takvim Gerecini gösterir veya gizler."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
-msgstr "Ses Çıktı Widget'ını göster"
+msgstr "Ses Çıktı Gerecini Göster"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
 msgstr ""
-"Raven'ın Uygulamalar bölümündeki Ses Çıktı Widgetı'nı gösterir veya saklar."
+"Raven'ın Uygulamalar bölümündeki Ses Çıktı Gerecini gösterir veya gizler."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
-msgstr "Mikrofon Girdi Widget'ını göster"
+msgstr "Mikrofon Girdi Gerecini Göster"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
 msgstr ""
-"Raven'ın Uygulamalar bölümündeki Mikrofon Girdi Widgetı'nı gösterir veya "
-"saklar."
+"Raven'ın Uygulamalar bölümündeki Mikrofon Girdi Gerecini gösterir veya "
+"gizler."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
-msgstr "Medya Yürütme Kontrolleri Widget'ını göster"
+msgstr "Medya Yürütme Kontrolleri Gerecini Göster"
 
 #: src/panel/settings/settings_raven.vala:97
 msgid ""
 "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
 " section."
 msgstr ""
-"Raven'ın Uygulamalar bölümündeki Medya Yürütme Kontrolleri (MPRIS) "
-"Widget'ını gösterir veya saklar."
+"Raven'ın Uygulamalar bölümündeki Medya Yürütme Kontrolleri (MPRIS) Gerecini "
+"gösterir veya gizler."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -387,7 +387,7 @@ msgstr "Güç Şeridini göster"
 
 #: src/panel/settings/settings_raven.vala:103
 msgid "Shows or hides the Power Strip in the bottom of Raven."
-msgstr "Raven'ın altındaki Güç Şeridini gösterir veya saklar."
+msgstr "Raven'ın altındaki Güç Şeridini gösterir veya gizler."
 
 #: src/panel/settings/settings_applet_chooser.vala:74
 msgid "Choose an applet"
@@ -522,7 +522,7 @@ msgstr "Ayarlar"
 
 #: src/panel/settings/settings_panel.vala:85
 msgid "Remove Panel"
-msgstr "Paneli kaldır"
+msgstr "Paneli Kaldır"
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -1236,7 +1236,7 @@ msgstr "Pencere Kontrollerini Göster"
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Doğrulama Gerekli"
+msgstr "Kimlik Doğrulama Gerekli"
 
 #: src/polkit/dialog.ui.h:2
 msgid "Password:"

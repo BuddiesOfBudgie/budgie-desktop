@@ -19,7 +19,7 @@ namespace Budgie {
 		public string desktop_id { get; construct set; }
 		public string exec { get; private set; }
 		public string[] keywords { get; private set;}
-		public Icon icon { get; private set; default = new ThemedIcon("application-default-icon"); }
+		public Icon icon { get; private set; default = new ThemedIcon.with_default_fallbacks("application-default-icon"); }
 		public string desktop_path { get; private set; }
 		public string categories { get; private set; }
 		public string generic_name { get; private set; default = ""; }
