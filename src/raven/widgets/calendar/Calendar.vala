@@ -84,7 +84,9 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 			update_date();
 		});
 
-		set_week_number();
+		settings.changed.connect(settings_updated);
+		settings_updated("show-week-numbers");
+		settings_updated("show-day-names");
 
 		show_all();
 	}
@@ -92,10 +94,12 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 	/**
 	 * set_week_number will set the display of the week number
 	 */
-	private void set_week_number() {
-		bool show = false;
-
-		this.cal.show_week_numbers = show;
+	private void settings_updated(string key) {
+		if (key == "show-week-numbers") {
+			cal.show_week_numbers = get_instance_settings().get_boolean("show-week-numbers");
+		} else if (key == "show-day-names") {
+			cal.show_day_names = get_instance_settings().get_boolean("show-day-names");
+		}
 	}
 
 	private bool update_date() {
@@ -113,13 +117,13 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 
 [GtkTemplate (ui="/org/buddiesofbudgie/budgie-desktop/raven/widget/Calendar/settings.ui")]
 public class CalendarRavenWidgetSettings : Gtk.Grid {
-	Settings? settings = null;
-
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_day_names;
 	[GtkChild]
 	private unowned Gtk.Switch? switch_show_week_numbers;
 
 	public CalendarRavenWidgetSettings(Settings? settings) {
-		this.settings = settings;
+		settings.bind("show-day-names", switch_show_day_names, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("show-week-numbers", switch_show_week_numbers, "active", SettingsBindFlags.DEFAULT);
 	}
 }

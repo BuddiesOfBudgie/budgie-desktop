@@ -6,5 +6,10 @@
       <summary>Display week numbers</summary>
       <description>This setting enables the display of week numbers in the calendar.</description>
     </key>
+    <key type="b" name="show-day-names">
+      <default>true</default>
+      <summary>Display day names</summary>
+      <description>This setting enables the display of day-of-the-week names in the calendar.</description>
+    </key>
   </schema>
 </schemalist>
