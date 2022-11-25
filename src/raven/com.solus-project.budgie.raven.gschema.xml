@@ -12,6 +12,12 @@
       <summary>Widget UUIDs</summary>
       <description>UUIDs of widget instances in the Widgets view, in order from top to bottom.</description>
     </key>
+
+    <key type="b" name="confirm-widget-removal">
+      <default>true</default>
+      <summary>Confirm widget removal</summary>
+      <description>When removing a widget from the Raven Widgets view, show a dialog asking if the user is certain they want to remove the widget.</description>
+    </key>
   </schema>
 
   <schema id="org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info">

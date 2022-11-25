@@ -109,4 +109,63 @@ namespace Budgie {
 			return base.run() == Gtk.ResponseType.ACCEPT;
 		}
 	}
+
+	/**
+	* RemovePanelDialog is used to confirm whether the panel should *really* be
+	* removed
+	*/
+	public class RemoveRavenWidgetDialog : Gtk.Dialog {
+		private Settings settings;
+		private Gtk.CheckButton check_confirm;
+		private Gtk.Label confirm_label;
+		private Gtk.Image confirm_image;
+
+		public RemoveRavenWidgetDialog(Gtk.Window parent) {
+			Object(use_header_bar: 1,
+				transient_for: parent,
+				title: _("Confirm widget removal"),
+				modal: true);
+
+			unowned Gtk.Box? content = this.get_content_area() as Gtk.Box;
+
+			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			confirm_image = new Gtk.Image.from_icon_name("edit-delete-symbolic", Gtk.IconSize.DIALOG);
+			confirm_label = new Gtk.Label(_("Do you really want to remove this widget? This action cannot be undone."));
+			confirm_label.set_line_wrap_mode(Pango.WrapMode.WORD);
+			confirm_label.set_line_wrap(true);
+			box.pack_start(confirm_image, false, false, 0);
+			confirm_image.margin_end = 12;
+			box.pack_start(confirm_label, false, false, 0);
+
+			content.pack_start(box, false, false, 0);
+			content.margin = 12;
+
+			var sep = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+			sep.margin_top = 6;
+			sep.margin_bottom = 6;
+			content.pack_start(sep, false, false, 0);
+
+			check_confirm = new Gtk.CheckButton.with_label(_("Don't ask me again"));
+			check_confirm.halign = Gtk.Align.START;
+			settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
+			settings.bind("confirm-widget-removal", check_confirm, "active", SettingsBindFlags.DEFAULT|SettingsBindFlags.INVERT_BOOLEAN);
+
+			check_confirm.margin_bottom = 6;
+			content.pack_end(check_confirm, false, false, 0);
+			content.show_all();
+
+			add_button(_("Remove"), Gtk.ResponseType.ACCEPT).get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+			add_button(_("Cancel"), Gtk.ResponseType.CANCEL).get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+		}
+
+		/**
+		* Simple wrapper to ensure dialog always does the right thing
+		*/
+		public new bool run() {
+			if (!this.settings.get_boolean("confirm-widget-removal")) {
+				return true;
+			}
+			return base.run() == Gtk.ResponseType.ACCEPT;
+		}
+	}
 }

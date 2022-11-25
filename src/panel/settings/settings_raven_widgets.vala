@@ -237,7 +237,7 @@ namespace Budgie {
 				return;
 			}
 
-			var dlg = new RemoveAppletDialog(this.get_toplevel() as Gtk.Window);
+			var dlg = new RemoveRavenWidgetDialog(get_toplevel() as Gtk.Window);
 			bool del = dlg.run();
 			dlg.destroy();
 			if (del) {
