@@ -65,6 +65,22 @@
     .option-subtitle {
         font-size: smaller;
     }
+
+    levelbar > trough {
+        background: transparentize(white, 0.9);
+
+        > block.filled {
+            background: #46ca72;
+
+            &.high {
+                background: #c9ca46;
+            }
+
+            &.full {
+                background: #ca5746;
+            }
+        }
+    }
 }
 
 .raven-frame > border {
