@@ -114,7 +114,7 @@ namespace Budgie {
 			/* Allow viewing settings on demand */
 			if (widget_data.supports_settings) {
 				var frame = new RavenWidgetSettingsFrame();
-				var ui = (widget_data.widget_instance as Budgie.RavenWidget).build_settings_ui();
+				var ui = ((Budgie.RavenWidget) widget_data.widget_instance).build_settings_ui();
 				frame.add(ui);
 				ui.show();
 				frame.show();
