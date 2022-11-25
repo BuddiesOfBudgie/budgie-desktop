@@ -42,7 +42,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		icon.margin_end = 12;
 		header.add(icon);
 
-		var header_label = new Gtk.Label("Usage Monitor");
+		var header_label = new Gtk.Label(_("Usage Monitor"));
 		header.add(header_label);
 
 		var content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -76,13 +76,13 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		rows.margin_bottom = 8;
 		content.add(rows);
 
-		cpu = new UsageMonitorRow("CPU");
+		cpu = new UsageMonitorRow(_("CPU"));
 		rows.add(cpu);
 
-		ram = new UsageMonitorRow("RAM");
+		ram = new UsageMonitorRow(_("RAM"));
 		rows.add(ram);
 
-		swap = new UsageMonitorRow("Swap");
+		swap = new UsageMonitorRow(_("Swap"));
 		rows.add(swap);
 
 		update_cpu();
