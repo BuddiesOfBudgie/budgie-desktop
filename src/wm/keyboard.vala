@@ -125,9 +125,18 @@ namespace Budgie {
 			settings.changed.connect(on_settings_changed);
 			update_fallback();
 
-			on_settings_changed("xkb-options");
-			on_settings_changed("sources");
-			on_settings_changed("current");
+			Timeout.add(500, () => {
+				/***
+				 * add a small delay to allow gnome-session keyboard handling to kick in
+				 * before switching to the current keyboard layout otherwise the layout
+				 * defaults to the first keyboard source
+				*/
+				on_settings_changed("xkb-options");
+				on_settings_changed("sources");
+				on_settings_changed("current");
+
+				return false;
+			});
 		}
 
 		public delegate void KeyHandlerFunc(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
