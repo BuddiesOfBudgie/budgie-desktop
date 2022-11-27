@@ -38,7 +38,7 @@ BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* se
  * budgie_raven_plugin_supports_settings:
  * @self: A #BudgieRavenPlugin
  *
- * Returns: (transfer full): Whether this plugin supports per-instance settings
+ * Returns: Whether this plugin supports per-instance settings
  */
 gboolean budgie_raven_plugin_supports_settings(BudgieRavenPlugin* self) {
 	if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
