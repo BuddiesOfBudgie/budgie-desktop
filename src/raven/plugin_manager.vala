@@ -94,6 +94,16 @@ namespace Budgie {
 			return new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
 		}
 
+		public void clear_widget_instance_info(string uuid) {
+			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
+			reset_dconf_path(instance_info_path);
+		}
+
+		public void clear_widget_instance_settings(string uuid) {
+			var instance_settings_path = "/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid);
+			reset_dconf_path(instance_settings_path);
+		}
+
 		public RavenWidgetCreationResult new_widget_instance_for_plugin(string module_name, string? existing_uuid, out RavenWidgetData? widget_data) {
 			widget_data = null;
 
@@ -157,6 +167,21 @@ namespace Budgie {
 			LibUUID.unparse_lower(time, uuid);
 
 			return (string) uuid;
+		}
+
+		private static void reset_dconf_path(string path) {
+			Settings.sync();
+
+			string argv[] = { "dconf", "reset", "-f", path};
+			message("Resetting dconf path: %s", path);
+
+			try {
+				Process.spawn_command_line_sync(string.joinv(" ", argv), null, null, null);
+			} catch (Error e) {
+				warning("Failed to reset dconf path %s: %s", path, e.message);
+			}
+
+			Settings.sync();
 		}
 
 		public signal void existing_widgets_loaded(List<RavenWidgetData> widgets);

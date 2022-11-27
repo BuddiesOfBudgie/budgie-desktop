@@ -610,6 +610,10 @@ namespace Budgie {
 		public void remove_widget(RavenWidgetData widget_data) {
 			widgets.remove(widget_data);
 			main_view.remove_widget_instance(widget_data.widget_instance);
+			plugin_manager.clear_widget_instance_info(widget_data.uuid);
+			if (widget_data.supports_settings) {
+				plugin_manager.clear_widget_instance_settings(widget_data.uuid);
+			}
 			update_uuids();
 		}
 
