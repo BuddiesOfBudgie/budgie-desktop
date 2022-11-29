@@ -265,9 +265,11 @@ namespace Budgie.Notifications {
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
-				max_width_chars = 35,
-				halign = Gtk.Align.START,
+				width_chars = 33,
+				max_width_chars = 33,
+				lines = 2,
 				valign = Gtk.Align.START,
+				xalign = 0,
 				hexpand = true,
 				vexpand = true
 			};

@@ -43,6 +43,7 @@ applet_budgiemenu_sources = [
 applet_budgiemenu_deps = [
     libplugin_vapi,
     dep_gee,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     dep_accountsservice,

@@ -34,6 +34,7 @@ applet_nightlight_sources = [
 
 applet_nightlight_deps = [
     libplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     link_libplugin,

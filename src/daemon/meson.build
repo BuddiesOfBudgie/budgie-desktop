@@ -2,7 +2,7 @@
 
 custom_target('desktop-file-daemon',
     input : 'budgie-daemon.desktop.in',
-    output : 'budgie-daemon.desktop',
+    output : 'org.buddiesofbudgie.BudgieDaemon.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'))
@@ -37,6 +37,7 @@ daemon_sources = [
 ]
 
 daemon_deps = [
+    dep_giounix,
     dep_gtk3,
     dep_gdkx11,
     dep_notify,
