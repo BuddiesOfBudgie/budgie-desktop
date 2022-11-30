@@ -118,7 +118,7 @@ namespace Budgie {
 			this.always_on_top_button.height_request = 32;
 			this.maximize_button = new Budgie.IconPopoverItem(_("Maximize"));
 			this.minimize_button = new Budgie.IconPopoverItem(_("Minimize"));
-			this.back_button = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			this.back_button = new Gtk.Button.from_icon_name("pan-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			this.back_button.width_request = 100;
 
 			actions_view_buttons = new Gtk.Grid();
@@ -602,7 +602,7 @@ namespace Budgie {
 
 			close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			close_button.set_tooltip_text(_("Close Window"));
-			window_controls_button = new Gtk.Button.from_icon_name("go-next-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			window_controls_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			window_controls_button.set_tooltip_text(_("Show Window Controls"));
 
 			apply_button_style();

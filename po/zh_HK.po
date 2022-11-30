@@ -5,7 +5,9 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Karsten Ng, 2022
 # Gavin Zhao, 2022
+# Yazi Tian, 2022
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Gavin Zhao, 2022\n"
+"Last-Translator: Yazi Tian, 2022\n"
 "Language-Team: Chinese (Hong Kong) (https://www.transifex.com/buddiesofbudgie/teams/129844/zh_HK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -159,13 +161,13 @@ msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
-msgstr ""
+msgstr "當視窗處於全螢幕時停止通知"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Prevents notifications from appearing when a window is fullscreen. Unpauses "
 "when leaving fullscreen."
-msgstr ""
+msgstr "有視窗處於全螢幕時暫停通知。離開全螢幕時將取消暫停通知。"
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
@@ -199,13 +201,13 @@ msgstr "此选项针对高级用户。如果您在使用独立显卡时遇到图
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
-msgstr ""
+msgstr "在 tab 切换器中显示所有窗口"
 
 #: src/panel/settings/settings_wm.vala:90
 msgid ""
 "All tabs will be displayed in tab switcher regardless of the workspace in "
 "use."
-msgstr ""
+msgstr "所有选项卡都将显示在选项卡切换器中，无论使用的工作区是什么."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -291,13 +293,13 @@ msgstr "右上"
 
 #: src/panel/settings/settings_raven.vala:61
 msgid "Set Raven position"
-msgstr ""
+msgstr "设置乌夜啼的位置"
 
 #: src/panel/settings/settings_raven.vala:62
 msgid ""
 "Set which side of the screen Raven will open on. If set to Automatic, Raven "
 "will open where its parent panel is."
-msgstr ""
+msgstr "设置 Raven 将打开屏幕的哪一边。如果设置为自动，Raven 将在其父面板所在的位置打开."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
@@ -393,7 +395,7 @@ msgstr "桌面圖示"
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
-msgstr ""
+msgstr "控制是否允許圖示出現在桌面上。"
 
 #. DesktopFolder doesn't support fancy options like showing home folder,
 #. trash, or active mounts
@@ -401,11 +403,11 @@ msgstr ""
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr ""
+msgstr "激活挂载"
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
-msgstr ""
+msgstr "在桌面上显示所有活动的挂载."
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -435,7 +437,7 @@ msgstr "图标大小"
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
-msgstr ""
+msgstr "设置桌面图标的大小"
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
@@ -457,31 +459,31 @@ msgstr "双击"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr ""
+msgstr "点击设置"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
 "Click Policy determines if we should open items on a single or double click."
-msgstr ""
+msgstr "使用单击或双击以打开桌面项目"
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
-msgstr ""
+msgstr "正常"
 
 #. Small
 #: src/panel/settings/settings_desktop.vala:292
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 #. Large
 #: src/panel/settings/settings_desktop.vala:294
 msgid "Large"
-msgstr ""
+msgstr "大"
 
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr ""
+msgstr "超大"
 
 #: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
 msgid "Applets"
@@ -493,7 +495,7 @@ msgstr "設定"
 
 #: src/panel/settings/settings_panel.vala:85
 msgid "Remove Panel"
-msgstr ""
+msgstr "移除面板"
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -686,11 +688,11 @@ msgstr "自动启动应用"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
-msgstr ""
+msgstr "添加程序"
 
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
-msgstr ""
+msgstr "添加命令"
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -1080,11 +1082,11 @@ msgstr "計時器(分鐘)"
 #. there's already an active tray, create an informative icon with a popover
 #: src/applets/tray/TrayApplet.vala:114
 msgid "Only one instance of the System Tray can be active at a time."
-msgstr ""
+msgstr "一次只能有一个系统托盘实例处于活动状态."
 
 #: src/applets/tray/TrayApplet.vala:140
 msgid "The System Tray failed to initialize."
-msgstr ""
+msgstr "系统托盘初始化失败。处理步骤."
 
 #: src/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
@@ -1235,7 +1237,7 @@ msgstr "总是扩展区域"
 
 #: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr ""
+msgstr "图标间隔"
 
 #: src/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
@@ -1340,7 +1342,7 @@ msgstr "窗口分组"
 
 #: src/applets/icon-tasklist/settings.ui.h:6
 msgid "Middle click to launch new window"
-msgstr ""
+msgstr "中击以打开新窗口"
 
 #: src/applets/icon-tasklist/settings.ui.h:7
 msgid "Require a double-click to launch new window"
