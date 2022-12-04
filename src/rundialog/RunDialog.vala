@@ -20,60 +20,20 @@ namespace Budgie {
 	}
 
 	/**
-	* Simple launcher button
-	*/
-	public class AppLauncherButton : Gtk.Box {
-		public DesktopAppInfo? app_info = null;
-
-		public AppLauncherButton(DesktopAppInfo? info) {
-			Object(orientation: Gtk.Orientation.HORIZONTAL);
-			this.app_info = info;
-
-			get_style_context().add_class("launcher-button");
-			var image = new Gtk.Image.from_gicon(info.get_icon(), Gtk.IconSize.DIALOG);
-			image.pixel_size = 48;
-			image.set_margin_start(8);
-			pack_start(image, false, false, 0);
-
-			var nom = Markup.escape_text(info.get_name());
-			var sdesc = info.get_description();
-			if (sdesc == null) {
-				sdesc = "";
-			}
-			var desc = Markup.escape_text(sdesc);
-			var label = new Gtk.Label("<big>%s</big>\n<small>%s</small>".printf(nom, desc));
-			label.get_style_context().add_class("dim-label");
-			label.set_line_wrap(true);
-			label.set_property("xalign", 0.0);
-			label.use_markup = true;
-			label.set_margin_start(12);
-			label.set_max_width_chars(60);
-			label.set_halign(Gtk.Align.START);
-			pack_start(label, false, false, 0);
-
-			set_hexpand(false);
-			set_vexpand(false);
-			set_halign(Gtk.Align.START);
-			set_valign(Gtk.Align.START);
-			set_tooltip_text(info.get_name());
-			set_margin_top(3);
-			set_margin_bottom(3);
-		}
-	}
-
-	/**
 	* The meat of the operation
 	*/
 	public class RunDialog : Gtk.ApplicationWindow {
 		Gtk.Revealer bottom_revealer;
 		Gtk.ListBox? app_box;
 		Gtk.SearchEntry entry;
-		Budgie.ThemeManager theme_manager;
-		Gdk.AppLaunchContext context;
+
 		bool focus_quit = true;
 		DBusImpl? impl = null;
 
-		string search_text = "";
+		string search_term = "";
+
+		Budgie.RelevancyService relevancy;
+		Budgie.ThemeManager theme_manager;
 
 		/* The .desktop file without the .desktop */
 		string wanted_dbus_id = "";
@@ -81,37 +41,26 @@ namespace Budgie {
 		/* Active dbus names */
 		HashTable<string,bool> active_names = null;
 
-		public RunDialog(Gtk.Application app) {
-			Object(application: app);
+		construct {
 			set_keep_above(true);
-			set_skip_pager_hint(true);
-			set_skip_taskbar_hint(true);
 			set_position(Gtk.WindowPosition.CENTER);
 			Gdk.Visual? visual = screen.get_rgba_visual();
 			if (visual != null) {
 				this.set_visual(visual);
 			}
-
-			/* Quicker than a list lookup */
-			active_names = new HashTable<string,bool>(str_hash, str_equal);
-
-			context = get_display().get_app_launch_context();
-			context.launched.connect(on_launched);
-			context.launch_failed.connect(on_launch_failed);
-
-			/* Handle all theme management */
-			this.theme_manager = new Budgie.ThemeManager();
-
-			var header = new Gtk.EventBox();
-			set_titlebar(header);
-			header.get_style_context().remove_class("titlebar");
-
 			get_style_context().add_class("budgie-run-dialog");
 
-			key_release_event.connect(on_key_release);
+			this.relevancy = new Budgie.RelevancyService();
+			this.theme_manager = new Budgie.ThemeManager(); // Initialize theme manager. What does this even do?
+
+			/* Quicker than a list lookup */
+			this.active_names = new HashTable<string,bool>(str_hash, str_equal);
+
+			var header = new Gtk.EventBox();
+			header.get_style_context().remove_class("titlebar");
+			this.set_titlebar(header);
 
 			var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			add(main_layout);
 
 			/* Main layout, just a hbox with search-as-you-type */
 			var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -123,47 +72,150 @@ namespace Budgie {
 			entry.get_style_context().set_junction_sides(Gtk.JunctionSides.BOTTOM);
 			hbox.pack_start(entry, true, true, 0);
 
-			bottom_revealer = new Gtk.Revealer();
-			main_layout.pack_start(bottom_revealer, true, true, 0);
-			app_box = new Gtk.ListBox();
-			app_box.set_selection_mode(Gtk.SelectionMode.SINGLE);
-			app_box.set_activate_on_single_click(true);
+			/* Revealer to hold the search results */
+			bottom_revealer = new Gtk.Revealer() {
+				reveal_child = false,
+				transition_duration = 250,
+				transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN
+			};
+
+			app_box = new Gtk.ListBox() {
+				selection_mode = Gtk.SelectionMode.SINGLE,
+				activate_on_single_click = true
+			};
 			app_box.row_activated.connect(on_row_activate);
 			app_box.set_filter_func(this.on_filter);
-			var scroll = new Gtk.ScrolledWindow(null, null);
+			app_box.set_sort_func(this.on_sort);
+
+			var scroll = new Gtk.ScrolledWindow(null, null) {
+				hscrollbar_policy = Gtk.PolicyType.NEVER,
+				vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
+				max_content_height = 300,
+				propagate_natural_height = true
+			};
 			scroll.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
-			scroll.set_size_request(-1, 300);
+
 			scroll.add(app_box);
-			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 			bottom_revealer.add(scroll);
+			main_layout.pack_start(bottom_revealer, true, true, 0);
+			this.add(main_layout);
 
 			/* Just so I can debug for now */
 			bottom_revealer.set_reveal_child(false);
 
-			this.build_app_box();
+			/* Create our launcher buttons */
+			this.load_buttons();
 
-			set_size_request(420, -1);
-			set_default_size(420, -1);
-			main_layout.show_all();
-			set_border_width(0);
-			set_resizable(false);
+			/* Set size properties */
+			int x, y;
+			get_position(out x, out y);
+			var monitor = get_screen().get_display().get_monitor_at_point(x, y);
+			var rect = monitor.get_workarea();
+			var width = (rect.width / 3).clamp(420, 840);
 
+			set_size_request(width, -1);
+			set_default_size(width, -1);
+
+			/* Connect events */
 			focus_out_event.connect(() => {
 				if (!this.focus_quit) {
 					return Gdk.EVENT_STOP;
 				}
+				debug("quiting from focus_out_event");
 				this.application.quit();
 				return Gdk.EVENT_STOP;
 			});
 
+			this.key_release_event.connect(on_key_release);
+
+			/* Show and do DBus stuff */
+			this.show_all();
+
 			setup_dbus.begin();
+		}
+
+		/**
+		 * Create a new budgie-run-dialog application window.
+		 */
+		public RunDialog(Gtk.Application app) {
+			Object(
+				application: app,
+				border_width: 0,
+				resizable: false,
+				skip_pager_hint: true,
+				skip_taskbar_hint: true,
+				type_hint: Gdk.WindowTypeHint.DIALOG
+			);
+		}
+
+		/**
+		 * Create our launcher buttons from the Budgie AppIndexer.
+		 */
+		void load_buttons() {
+			var added = new List<Budgie.Application>();
+			var index = Budgie.AppIndex.get();
+			var categories = index.get_categories();
+
+			// Iterate over all of the applications and add
+			// buttons for all of them
+			foreach (Budgie.Category category in categories) {
+				foreach (Budgie.Application a in category.apps) {
+					// Check if the application should be shown
+					if (!a.should_show) {
+						continue;
+					}
+
+					// Check for duplicate entries
+					if (added.find(a) != null) {
+						continue;
+					}
+
+					var button = new LauncherButton(a);
+					button.application.launched.connect(this.on_launched);
+					button.application.launch_failed.connect(this.on_launch_failed);
+
+					// Add the button if one hasn't already been created
+					// for this application
+					added.append(a);
+					this.app_box.add(button);
+				}
+			}
+		}
+
+		/**
+		 * Launch the given preconfigured button.
+		 *
+		 * This does additional DBus checking for apps to try to make
+		 * sure they actually launched. That is because some apps are
+		 * activated by DBus and the API lies about when the application
+		 * starts, causing us to not actually launch the app before
+		 * quitting.
+		 */
+		void launch_button(LauncherButton button) {
+			var app = button.application;
+
+			this.focus_quit = false;
+			var splits = app.desktop_id.split(".desktop");
+			if (app.dbus_activatable) {
+				// Add this application to the list of DBus IDs to look for
+				this.wanted_dbus_id = string.joinv(".desktop", splits[0:splits.length-1]);
+			}
+
+			if (app.launch()) {
+				this.check_dbus_name();
+				/* Some apps are slow to open so hide and quit when they're done */
+				this.hide();
+			} else {
+				warning("Failed to launch application '%s'", app.name);
+				this.application.quit();
+			}
 		}
 
 		/**
 		* Handle click/<enter> activation on the main list
 		*/
 		void on_row_activate(Gtk.ListBoxRow row) {
-			var child = ((Gtk.Bin) row).get_child() as AppLauncherButton;
+			var child = ((Gtk.Bin) row).get_child() as LauncherButton;
 			this.launch_button(child);
 		}
 
@@ -171,46 +223,46 @@ namespace Budgie {
 		* Handle <enter> activation on the search
 		*/
 		void on_search_activate() {
-			AppLauncherButton? act = null;
-			foreach (var row in app_box.get_children()) {
-				if (row.get_visible() && row.get_child_visible()) {
-					act = ((Gtk.Bin) row).get_child() as AppLauncherButton;
-					break;
+			// Make sure the search is up to date first
+			this.on_search_changed();
+
+			LauncherButton? button = null;
+
+			var selected = app_box.get_selected_row();
+			if (selected != null) {
+				button = selected.get_child() as LauncherButton;
+			} else {
+				foreach (var row in app_box.get_children()) {
+					if (row.get_visible() && row.get_child_visible()) {
+						button = ((Gtk.Bin) row).get_child() as LauncherButton;
+						break;
+					}
 				}
 			}
-			if (act != null) {
-				this.launch_button(act);
-			}
-		}
 
-		/**
-		* Launch the given preconfigured button
-		*/
-		void launch_button(AppLauncherButton button) {
-			try {
-				var dinfo = button.app_info as DesktopAppInfo;
-
-				context.set_screen(get_screen());
-				context.set_timestamp(Gdk.CURRENT_TIME);
-				this.focus_quit = false;
-				var splits = dinfo.get_id().split(".desktop");
-				if (dinfo.get_boolean("DBusActivatable")) {
-					this.wanted_dbus_id = string.joinv(".desktop", splits[0:splits.length-1]);
-				}
-				dinfo.launch(null, context);
-				this.check_dbus_name();
-				/* Some apps are slow to open so hide and quit when they're done */
-				this.hide();
-			} catch (Error e) {
-				this.application.quit();
+			if (button == null) {
+				return;
 			}
+
+			debug("launching '%s'", button.application.name);
+			this.launch_button(button);
 		}
 
 		void on_search_changed() {
-			this.search_text = entry.get_text().down();
-			this.app_box.invalidate_filter();
-			Gtk.Widget? active_row = null;
+			this.search_term = entry.get_text();
 
+			// Update the relevancy of all apps when
+			// the search term changes
+			foreach (var row in this.app_box.get_children()) {
+				var button = ((Gtk.Bin) row).get_child() as LauncherButton;
+				this.relevancy.update_relevancy(button.application, search_term);
+			}
+
+			this.app_box.invalidate_filter();
+			this.app_box.invalidate_sort();
+
+			// Check if there are visible entries
+			Gtk.Widget? active_row = null;
 			foreach (var row in app_box.get_children()) {
 				if (row.get_visible() && row.get_child_visible()) {
 					active_row = row;
@@ -218,81 +270,59 @@ namespace Budgie {
 				}
 			}
 
+			// Open or close the revealer as necessary
 			if (active_row == null) {
-				bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
 				bottom_revealer.set_reveal_child(false);
 			} else {
-				bottom_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
 				bottom_revealer.set_reveal_child(true);
 				app_box.select_row(active_row as Gtk.ListBoxRow);
 			}
 		}
 
 		/**
-		* Filter the list
+		* Filter the list based on the application's relevancy to
+		* the current search, if one is ongoing.
 		*/
 		bool on_filter(Gtk.ListBoxRow row) {
-			var button = row.get_child() as AppLauncherButton;
+			var button = row.get_child() as LauncherButton;
 
-			if (search_text == "") {
+			// No search happening, hide everything
+			if (search_term == "") {
 				return false;
 			}
 
-			string? app_name, desc, name, exec;
-
-			/* Ported across from budgie menu */
-			app_name = button.app_info.get_display_name();
-			if (app_name != null) {
-				app_name = app_name.down();
-			} else {
-				app_name = "";
-			}
-			desc = button.app_info.get_description();
-			if (desc != null) {
-				desc = desc.down();
-			} else {
-				desc = "";
-			}
-			name = button.app_info.get_name();
-			if (name != null) {
-				name = name.down();
-			} else {
-				name = "";
-			};
-			exec = button.app_info.get_executable();
-			if (exec != null) {
-				exec = exec.down();
-			} else {
-				exec = "";
-			}
-			bool in_keywords = false;
-			string[] keywords = button.app_info.get_keywords(); // Get any potential keywords
-
-			if ((keywords != null) && (search_text in keywords)) {
-				in_keywords = true;
-			}
-
-			return (search_text in app_name || search_text in desc ||
-					search_text in name || search_text in exec || in_keywords);
+			// Only show this item if its relevancy to the search term
+			// is within an arbitrary threshold
+			return this.relevancy.is_app_relevant(button.application);
 		}
 
 		/**
-		* Build the app box in the background
-		*/
-		void build_app_box() {
-			var apps = AppInfo.get_all();
-			apps.foreach(this.add_application);
-			app_box.show_all();
-			this.entry.set_text("");
-		}
+		 * Sort rows based on their relevancy score.
+		 *
+		 * Copied from BudgieMenu.
+		 */
+		int on_sort(Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
+			LauncherButton btn1 = row1.get_child() as LauncherButton;
+			LauncherButton btn2 = row2.get_child() as LauncherButton;
 
-		void add_application(AppInfo? app_info) {
-			if (!app_info.should_show()) {
-				return;
+			// Check for an active search
+			if (search_term.length > 0) {
+				// Get the scores relative to the search term
+				int sc1 = this.relevancy.get_score(btn1.application);
+				int sc2 = this.relevancy.get_score(btn2.application);
+
+				// The item with the lower score should be higher in the list
+				if (sc1 < sc2) {
+					return -1;
+				} else if (sc1 > sc2) {
+					return 1;
+				}
+				return 0;
 			}
-			var button = new AppLauncherButton(app_info as DesktopAppInfo);
-			app_box.add(button);
-			button.show_all();
+
+			// No active search, just return 0 because nothing will be
+			// shown anyways
+			return 0;
 		}
 
 		/**
@@ -314,6 +344,7 @@ namespace Budgie {
 		* We may not get the ID but we'll be told it's launched
 		*/
 		private void on_launched(AppInfo info, Variant v) {
+			debug("on_launched called");
 			Variant? elem;
 
 			var iter = v.iterator();
@@ -402,7 +433,7 @@ namespace Budgie {
 			if (rd == null) {
 				rd = new RunDialog(this);
 			}
-			rd.present();
+			rd.show();
 		}
 	}
 }

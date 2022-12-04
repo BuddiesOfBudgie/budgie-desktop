@@ -43,7 +43,6 @@ langs = [
     'id',
     'it',
     'ja',
-    'ja_JP',
     'ka',
     'ko',
     'lt',
