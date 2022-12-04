@@ -211,9 +211,8 @@ namespace BudgieScr {
 
 			try {
 				yield client.ScreenshotWindow(include_frame, include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
-			}
-			catch (Error e) {
-				warning("shoow_window %s, failed to make screenshot\n", e.message);
+			} catch (Error e) {
+				warning("show_window %s, failed to make screenshot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -231,7 +230,7 @@ namespace BudgieScr {
 			try {
 				yield client.Screenshot(include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
 			} catch (Error e) {
-				warning("shoot_screen %s, failed to make screenhot\n", e.message);
+				warning("shoot_screen %s, failed to make screenshot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -259,7 +258,7 @@ namespace BudgieScr {
 					include_cursor, true, windowstate.tempfile_path, out success, out filename_used
 				);
 			} catch (Error e) {
-				warning("shoot_area %s, failed to make screenhot\n", e.message);
+				warning("shoot_area %s, failed to make screenshot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 			if (success) {
@@ -362,8 +361,7 @@ namespace BudgieScr {
 			try {
 				css_provider.load_from_data(home_css);
 				Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				// not much to be done
 				warning("Error loading css data\n");
 			}
@@ -590,8 +588,7 @@ namespace BudgieScr {
 			foreach (ToggleButton bt in btns) {
 				if (bt != b) {
 					bt.set_active(false);
-				}
-				else {
+				} else {
 					selectmode = i;
 					windowstate.screenshot_settings.set_string("screenshot-mode", selectmodes[i]);
 				}

@@ -108,12 +108,12 @@ namespace Budgie {
 	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
 	*/
 	[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
-    interface ScreenshotControl : GLib.Object {
-        public async abstract void StartMainWindow() throws GLib.Error;
-        public async abstract void StartAreaSelect() throws GLib.Error;
-        public async abstract void StartWindowScreenshot() throws GLib.Error;
-        public async abstract void StartFullScreenshot() throws GLib.Error;
-    }
+	public interface ScreenshotControl : GLib.Object {
+		public async abstract void StartMainWindow() throws GLib.Error;
+		public async abstract void StartAreaSelect() throws GLib.Error;
+		public async abstract void StartWindowScreenshot() throws GLib.Error;
+		public async abstract void StartFullScreenshot() throws GLib.Error;
+	}
 
 	public class MinimizeData {
 		public float scale_x;
@@ -296,8 +296,7 @@ namespace Budgie {
 				string cmd=this.settings.get_string("full-screenshot-cmd");
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
-				}
-				else {
+				} else {
 					screenshotcontrol_proxy.StartFullScreenshot.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartFullScreenshot.end(res);
@@ -318,8 +317,7 @@ namespace Budgie {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
-				}
-				else {
+				} else {
 					screenshotcontrol_proxy.StartAreaSelect.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartAreaSelect.end(res);
@@ -340,8 +338,7 @@ namespace Budgie {
 				string cmd=this.settings.get_string("take-window-screenshot-cmd");
 				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
-				}
-				else {
+				} else {
 					screenshotcontrol_proxy.StartWindowScreenshot.begin((obj,res) => {
 						try {
 							screenshotcontrol_proxy.StartWindowScreenshot.end(res);
@@ -909,7 +906,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(minimize_done);
 
 			/* Save the minimize state for later restoration */
-			var scale_factor = Meta.Backend.get_backend ().get_settings ().get_ui_scaling_factor ();
+			var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
 			var scale_x = (float)((icon.width * scale_factor) / actor.width);
 			var scale_y = (float)((icon.height * scale_factor) / actor.height);
 			var place_x = (float)icon.x * scale_factor;
@@ -957,7 +954,7 @@ namespace Budgie {
 			finalize_animations(actor);
 
 			actor.set_pivot_point(0f, 0f);
-			actor.set_scale (d.scale_x, d.scale_y);
+			actor.set_scale(d.scale_x, d.scale_y);
 			actor.set_x(d.place_x);
 			actor.set_y(d.place_y);
 			actor.opacity = 0U;
@@ -968,7 +965,7 @@ namespace Budgie {
 			actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
 			actor.set_easing_duration(UNMINIMIZE_TIMEOUT);
 
-			actor.set_scale (1.0f, 1.0f);
+			actor.set_scale(1.0f, 1.0f);
 			actor.opacity = 255U;
 			actor.set_x(d.old_x);
 			actor.set_y(d.old_y);

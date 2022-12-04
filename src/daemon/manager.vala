@@ -49,8 +49,7 @@ namespace Budgie {
 			try {
 				screenshotcontrol = new BudgieScr.ScreenshotServer();
 				screenshotcontrol.setup_dbus();
-			}
-			catch (Error e) {
+			} catch (Error e) {
 				warning("ServiceManager %s\n", e.message);
 			}
 			xdg_tracker = new Budgie.XDGDirTracker();
