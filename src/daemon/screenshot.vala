@@ -651,6 +651,10 @@ namespace BudgieScr {
 			this.motion_notify_event.connect(update_preview);
 			set_win_transparent();
 			this.show_all();
+
+			Gdk.Window gdk_win = this.get_window();
+			gdk_win.set_fullscreen_mode(FullscreenMode.ALL_MONITORS);
+
 			change_cursor();
 		}
 
