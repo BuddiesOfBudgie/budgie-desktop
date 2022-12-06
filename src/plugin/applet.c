@@ -457,6 +457,6 @@ static void budgie_applet_init(BudgieApplet* self) {
  *
  * Returns: (transfer full): A new BudgieApplet
  */
-BudgieApplet* budgie_applet_new() {
+BudgieApplet* budgie_applet_new(void) {
 	return g_object_new(BUDGIE_TYPE_APPLET, NULL);
 }
