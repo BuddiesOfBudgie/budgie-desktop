@@ -100,7 +100,7 @@ dependency('gtk+-3.0'),
 ]
 
 executable(
-    'budgie-screenshot', main_sources,
+    'org.buddiesofbudgie.Screenshot', main_sources,
     dependencies: ScreenshotMainDependencies,
     install: true,
     vala_args: daemon_vala_args,
@@ -115,9 +115,9 @@ install_data('icons/org.buddiesofbudgie.screenshot.svg',
 )
 
 # Now merge the translations of the .desktop.in to a .desktop
-custom_target('budgie-screenshot',
-    input : 'org.buddiesofbudgie.screenshot.desktop.in',
-    output : 'org.buddiesofbudgie.screenshot.desktop',
+custom_target('org.buddiesofbudgie.Screenshot',
+    input : 'org.buddiesofbudgie.Screenshot.desktop.in',
+    output : 'org.buddiesofbudgie.Screenshot.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'),

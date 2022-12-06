@@ -2,8 +2,8 @@
 Type=Application
 Name=Budgie Screenshot
 Comment=Budgie screenshot app
-Exec=budgie-screenshot -i
+Exec=org.buddiesofbudgie.Screenshot -i
 Icon=org.buddiesofbudgie.screenshot
 Categories=Utility;
-Keywords=Screenshot
-StartupWMClass=screenshot-control
+Keywords=Screenshot;Snip;
+StartupWMClass=org.buddiesofbudgie.Screenshot

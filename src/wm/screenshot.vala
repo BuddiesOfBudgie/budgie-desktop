@@ -119,8 +119,9 @@ namespace Budgie {
 			}
 
 			success = yield save_image(image, filename, out filename_used);
-			if (!success)
+			if (!success) {
 				throw new DBusError.FAILED("Failed to save image");
+			}
 		}
 
 		public async void screenshot_window(bool include_frame, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
@@ -163,8 +164,9 @@ namespace Budgie {
 			}
 
 			success = yield save_image(image, filename, out filename_used);
-			if (!success)
+			if (!success) {
 				throw new DBusError.FAILED("Failed to save image");
+			}
 		}
 
 		private async bool save_image(Cairo.ImageSurface image, string filename, out string used_filename) {
@@ -229,51 +231,24 @@ namespace Budgie {
 
 			image = new Cairo.ImageSurface(Cairo.Format.ARGB32, image_width, image_height);
 
-			var paint_flags = Clutter.PaintFlag.CLEAR;
-			if (include_cursor) {
-				paint_flags |= Clutter.PaintFlag.FORCE_CURSORS;
-			} else {
-				paint_flags |= Clutter.PaintFlag.NO_CURSORS;
+			var paint_flags = Clutter.PaintFlag.CLEAR | (include_cursor ? Clutter.PaintFlag.FORCE_CURSORS : Clutter.PaintFlag.NO_CURSORS);
+
+			bool is_little_endian = GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN;
+
+			try {
+				stage.paint_to_buffer(
+					{x, y, width, height},
+					scale,
+					image.get_data(),
+					image.get_stride(),
+					(is_little_endian ? Cogl.PixelFormat.BGRA_8888_PRE : Cogl.PixelFormat.ARGB_8888_PRE),
+					paint_flags
+				);
+			} catch (Error e) {
+				message("Unable to paint_to_buffer (%s): %s", is_little_endian ? "BGRA" : "RGBA", e.message);
 			}
 
-			if (GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN) {
-				//gnome shell uses CLUTTER_CAIRO_FORMAT_ARGB32 - in the cairo header
-				//this is defined depending on the architecture and maps to a pixel format
-				try {
-					stage.paint_to_buffer(
-						{x, y, width, height},
-						scale,
-						image.get_data(),
-						image.get_stride(),
-						Cogl.PixelFormat.BGRA_8888_PRE,
-						paint_flags
-					);
-				} catch (Error e) {
-					message("Unable to paint_to_buffer (BGRA): %s", e.message);
-				}
-
-			} else {
-				try {
-					stage.paint_to_buffer(
-						{x, y, width, height},
-						scale,
-						image.get_data(),
-						image.get_stride(),
-						Cogl.PixelFormat.ARGB_8888_PRE,
-						paint_flags
-					);
-				} catch (Error e) {
-					message("Unable to paint_to_buffer (ARGB): %s", e.message);
-				}
-			}
-
-			if (include_cursor) {
-				if (include_cursor) {
-					image = composite_stage_cursor(image, { x, y, width, height });
-				}
-			}
-
-			return image;
+			return include_cursor ? composite_stage_cursor(image, { x, y, width, height }) : image;
 		}
 
 		Cairo.ImageSurface composite_stage_cursor(Cairo.ImageSurface image, Cairo.RectangleInt image_rect) {
@@ -285,7 +260,6 @@ namespace Budgie {
 			if (texture == null) {
 				return image;
 			}
-
 
 			var region = new Cairo.Region.rectangle(image_rect);
 			cursor_tracker.get_pointer(out coords, null);

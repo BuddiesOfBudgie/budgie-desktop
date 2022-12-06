@@ -6,13 +6,13 @@ using Gst;
 /*
  * This file is part of budgie-desktop
  *
- * Author: Jacob Vlijm, David Mohammed
  * Copyright © 2022 Budgie Desktop Developers
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
-*/
+ */
 
 namespace BudgieScr {
 	enum WindowState {
@@ -60,18 +60,14 @@ namespace BudgieScr {
 
 			// we need to use the same temporary file across instances
 			// so use the logged in user to differentiate in multiuser
-			// scenarious
+			// scenarios
 			string username = Environment.get_user_name();
 			string tmpdir = Environment.get_tmp_dir();
 			tempfile_path = tmpdir.concat("/", username, "_budgiescreenshot_tempfile");
 		}
 
 		private void fill_buttonpos() {
-			if (buttonplacement.get_string("button-style")=="left") {
-				buttonpos = ButtonPlacement.LEFT;
-			} else {
-				buttonpos = ButtonPlacement.RIGHT;
-			}
+			buttonpos = (buttonplacement.get_string("button-style") =="left") ? ButtonPlacement.LEFT : ButtonPlacement.RIGHT;
 		}
 
 		public void statechanged(int n) {
@@ -98,21 +94,21 @@ namespace BudgieScr {
 
 		public async void StartAreaSelect() throws Error {
 			if (getcurrentstate() == 0) {
-				set_target("Selection"); // don't translate!
+				set_target("Selection");
 				new SelectLayer();
 			}
 		}
 
 		public async void StartWindowScreenshot() throws Error {
 			if (getcurrentstate() == 0) {
-				set_target("Window"); // don't translate!
+				set_target("Window");
 				new MakeScreenshot(null);
 			}
 		}
 
 		public async void StartFullScreenshot() throws Error {
 			if (getcurrentstate() == 0) {
-				set_target("Screen"); // don't translate!
+				set_target("Screen");
 				new MakeScreenshot(null);
 			}
 		}
@@ -261,6 +257,7 @@ namespace BudgieScr {
 				warning("shoot_area %s, failed to make screenshot\n", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
+
 			if (success) {
 				new AfterShotWindow();
 			}
@@ -318,8 +315,9 @@ namespace BudgieScr {
 
 		public ScreenshotHomeWindow() {
 			windowstate = new CurrentState();
-			this.set_keep_above(true);
-			this.set_wmclass("screenshot-control", "screenshot-control");
+			this.set_startup_id("org.buddiesofbudgie.Screenshot");
+			this.set_title(_("Budgie Screenshot"));
+			this.set_wmclass("org.buddiesofbudgie.Screenshot", _("Budgie Screenshot"));
 			windowstate.statechanged(WindowState.MAINWINDOW);
 
 			var theme = Gtk.IconTheme.get_default();
@@ -370,10 +368,10 @@ namespace BudgieScr {
 			Gtk.Box areabuttonbox = setup_areabuttons();
 			maingrid.attach(areabuttonbox, 0, 0, 1, 1);;
 
-			// - show pointer
+			// show pointer
 			windowstate.screenshot_settings.bind("include-cursor", showpointerswitch, "active",	SettingsBindFlags.GET|SettingsBindFlags.SET);
 
-			// - delay
+			// delay
 			windowstate.screenshot_settings.bind("delay", delayspin, "value", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
 			this.destroy.connect(() => {
@@ -484,14 +482,14 @@ namespace BudgieScr {
 				// allow the window to gracefully disappear
 				Timeout.add(100, () => {
 					switch (shootmode) {
-						case "Selection": // don't translate!
+						case "Selection":
 							new SelectLayer();
 							break;
-						case "Screen": // don't translate!
+						case "Screen":
 							windowstate.statechanged(WindowState.WAITINGFORSHOT);
 							new MakeScreenshot(null);
 							break;
-						case "Window": // don't translate!
+						case "Window":
 							windowstate.statechanged(WindowState.WAITINGFORSHOT);
 							new MakeScreenshot(null);
 							break;
@@ -558,9 +556,7 @@ namespace BudgieScr {
 				ToggleButton b = new Gtk.ToggleButton();
 				b.get_style_context().add_class("centerbutton");
 				b.add(buttonbox);
-				if (i == active) {
-					b.set_active(true);
-				}
+				b.set_active(i == active);
 				areabuttonbox.pack_start(b);
 				selectbuttons += b;
 				b.clicked.connect(() => {
@@ -582,7 +578,7 @@ namespace BudgieScr {
 		}
 
 		private void select_action(ToggleButton b, ToggleButton[] btns) {
-			string[] selectmodes = {"Screen", "Window", "Selection"}; // don't translate!
+			string[] selectmodes = {"Screen", "Window", "Selection"};
 			int i = 0;
 
 			foreach (ToggleButton bt in btns) {
@@ -642,8 +638,13 @@ namespace BudgieScr {
 			this.add(darea);
 			// connect button & move
 			this.button_press_event.connect(determine_startpoint);
-			this.button_release_event.connect(() => {
-				take_shot.begin();
+			this.button_release_event.connect((e) => {
+				if (e.button == 1) {
+					take_shot.begin();
+				} else {
+					windowstate.statechanged(WindowState.NONE);
+					this.close();
+				}
 
 				return true;
 			});
@@ -821,7 +822,9 @@ namespace BudgieScr {
 		}
 
 		public AfterShotWindow() {
-			this.set_wmclass("screenshot-control", "screenshot-control");
+			this.set_startup_id("org.buddiesofbudgie.Screenshot");
+			this.set_title(_("Budgie Screenshot"));
+			this.set_wmclass("org.buddiesofbudgie.Screenshot", _("Budgie Screenshot"));
 			windowstate = new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {
@@ -903,8 +906,8 @@ namespace BudgieScr {
 			decisionbuttons[1].get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
 			// aligned headerbar buttons
-			string[] align = {"left", "right", "right", "right"}; // don't translate!
-			(windowstate.buttonpos == ButtonPlacement.LEFT) ? align = {"right", "left", "left", "left"} : align; // don't translate!
+			string[] align = {"left", "right", "right", "right"};
+			(windowstate.buttonpos == ButtonPlacement.LEFT) ? align = {"right", "left", "left", "left"} : align;
 
 			int b_index = 0;
 			foreach (Button b in decisionbuttons) {
@@ -917,7 +920,7 @@ namespace BudgieScr {
 			}
 
 			// set headerbar button actions
-			// - trash button: cancel
+			// trash button: cancel
 			decisionbuttons[0].clicked.connect(() => {
 				if (!windowstate.startedfromgui) {
 					windowstate.statechanged(WindowState.NONE);
@@ -929,7 +932,7 @@ namespace BudgieScr {
 				}
 			});
 
-			// - save to file
+			// save to file
 			decisionbuttons[1].clicked.connect(() => {
 				if (save_tofile(filenameentry, pickdir_combo, pxb) != "fail") {
 					windowstate.statechanged(WindowState.NONE);
@@ -937,14 +940,14 @@ namespace BudgieScr {
 				}
 			});
 
-			// - copy to clipboard
+			// copy to clipboard
 			decisionbuttons[2].clicked.connect(() => {
 				clp.set_image(pxb);
 				windowstate.statechanged(WindowState.NONE);
 				close_window();
 			});
 
-			// - save to file. open in default
+			// save to file. open in default
 			decisionbuttons[3].clicked.connect(() => {
 				string usedpath = save_tofile(filenameentry, pickdir_combo, pxb);
 				if (usedpath != "fail") {
@@ -1077,7 +1080,7 @@ namespace BudgieScr {
 			// temporarily surpass dropdown-connect
 			act_ondropdown = false;
 
-			// - and clean up stuff
+			// and clean up stuff
 			pickdir_combo.clear();
 			dir_liststore.clear();
 
