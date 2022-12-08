@@ -61,8 +61,11 @@ public class MenuButton : Gtk.Button {
 		};
 
 		var lab = new Gtk.Label(app.name) {
-			halign = Gtk.Align.START,
-			valign = Gtk.Align.CENTER
+			valign = Gtk.Align.CENTER,
+			xalign = 0.0f,
+			max_width_chars = 1,
+			ellipsize = Pango.EllipsizeMode.END,
+			hexpand = true,
 		};
 
 		const Gtk.TargetEntry[] drag_targets = { {"text/uri-list", 0, 0 }, {"application/x-desktop", 0, 0 } };
@@ -74,6 +77,7 @@ public class MenuButton : Gtk.Button {
 		set_can_focus(false);
 
 		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		layout.set_size_request(250, -1);
 		layout.pack_start(img, false, false, 0);
 		layout.pack_start(lab, true, true, 0);
 		add(layout);
