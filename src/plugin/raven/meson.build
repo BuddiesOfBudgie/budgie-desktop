@@ -84,12 +84,12 @@ libravenplugin_vapi = gnome.generate_vapi(
     install: true,
 )
 
-# Install pkgconfig file to enable building against budgie-plugin
+# Install pkgconfig file to enable building against budgie-raven-plugin
 pkgconfig.generate(
     name: 'budgie-raven-plugin',
     description: 'Budgie Raven Plugin Library',
-    version: '2',
-    filebase: 'budgie-1.0',
+    version: '1',
+    filebase: 'budgie-raven-plugin-1.0',
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-raven-plugin'],
     requires: [
