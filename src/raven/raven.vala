@@ -578,7 +578,9 @@ namespace Budgie {
 		}
 
 		private void load_existing_widgets() {
-			if (!widget_settings.get_boolean("initialized")) {
+			string[] stored_uuids = widget_settings.get_strv("uuids");
+
+			if (stored_uuids.length == 0 && !widget_settings.get_boolean("initialized")) {
 				update_uuids();
 
 				/**
@@ -604,7 +606,8 @@ namespace Budgie {
 				return;
 			}
 
-			string[] stored_uuids = widget_settings.get_strv("uuids");
+			widget_settings.set_boolean("initialized", true);
+
 			unowned string uuid;
 			GLib.Settings? widget_info;
 
