@@ -1,4 +1,4 @@
-raven_plugin_mediacontrols_dir = raven_plugin_dir + '.Mpris'
+raven_plugin_mediacontrols_dir = raven_plugin_dir + '.MediaControls'
 
 custom_target('raven-plugin-mediacontrols-file',
     input : 'MediaControls.plugin.in',
