@@ -317,7 +317,7 @@ namespace BudgieScr {
 			windowstate = new CurrentState();
 			this.set_startup_id("org.buddiesofbudgie.Screenshot");
 			this.set_title(_("Budgie Screenshot"));
-			this.set_wmclass("org.buddiesofbudgie.Screenshot", _("Budgie Screenshot"));
+			this.set_wmclass("org.buddiesofbudgie.Screenshot", "org.buddiesofbudgie.Screenshot");
 			windowstate.statechanged(WindowState.MAINWINDOW);
 
 			var theme = Gtk.IconTheme.get_default();
@@ -824,7 +824,7 @@ namespace BudgieScr {
 		public AfterShotWindow() {
 			this.set_startup_id("org.buddiesofbudgie.Screenshot");
 			this.set_title(_("Budgie Screenshot"));
-			this.set_wmclass("org.buddiesofbudgie.Screenshot", _("Budgie Screenshot"));
+			this.set_wmclass("org.buddiesofbudgie.Screenshot", "org.buddiesofbudgie.Screenshot");
 			windowstate = new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {

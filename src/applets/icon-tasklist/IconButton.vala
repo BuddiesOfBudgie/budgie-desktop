@@ -459,7 +459,8 @@ public class IconButton : Gtk.ToggleButton {
 	public void set_tooltip() {
 		if (this.window_count != 0) { // If we have valid windows open
 			if (this.window_count == 1 && this.first_app != null) { // Only one window and a valid AbominationRunningApp for it
-				this.set_tooltip_text(this.first_app.name);
+				var is_budgie_screenshot = this.first_app.name == "budgie-daemon"; // Budgie Screensaver reports as budgie-daemon, so at the very least fix here as a workaround
+				this.set_tooltip_text(is_budgie_screenshot ? _("Budgie Screenshot") : this.first_app.name);
 			} else if (this.app_info != null) { // Has app info
 				this.set_tooltip_text(this.app_info.get_display_name());
 			}
