@@ -578,6 +578,32 @@ namespace Budgie {
 		}
 
 		private void load_existing_widgets() {
+			if (!widget_settings.get_boolean("initialized")) {
+				update_uuids();
+
+				/**
+				* Try in order, and load the first one that exists:
+				* - /etc/budgie-desktop/raven/widgets.ini
+				* - /usr/share/budgie-desktop/raven/widgets.ini
+				* - Built in widgets.ini
+				*/
+				string[] system_configs = {
+					@"file://$(Budgie.CONFDIR)/budgie-desktop/raven/widgets.ini",
+					@"file://$(Budgie.DATADIR)/budgie-desktop/raven/widgets.ini",
+					"resource:///org/buddiesofbudgie/budgie-desktop/raven/widgets.ini"
+				};
+
+				foreach (string? filepath in system_configs) {
+					if (load_default_from_config(filepath)) {
+						update_uuids();
+						widget_settings.set_boolean("initialized", true);
+						break;
+					}
+				}
+
+				return;
+			}
+
 			string[] stored_uuids = widget_settings.get_strv("uuids");
 			unowned string uuid;
 			GLib.Settings? widget_info;
@@ -639,6 +665,63 @@ namespace Budgie {
 				main_view.move_widget_instance_down(widget_data.widget_instance);
 				update_uuids();
 			}
+		}
+
+		/**
+		* Attempt to load the configuration from the given URL
+		*/
+		private bool load_default_from_config(string uri) {
+			File f = null;
+			KeyFile config_file = new KeyFile();
+			StringBuilder builder = new StringBuilder();
+			string? line = null;
+
+			try {
+				f = File.new_for_uri(uri);
+				if (!f.query_exists()) {
+					return false;
+				}
+
+				var dis = new DataInputStream(f.read());
+				while ((line = dis.read_line()) != null) {
+					builder.append_printf("%s\n", line);
+				}
+				config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
+			} catch (Error e) {
+				warning("Failed to load default Raven widget config: %s", e.message);
+				return false;
+			}
+
+			try {
+				if (!config_file.has_key("Widgets", "Widgets")) {
+					warning("widgets.ini is missing required Widgets section");
+					return false;
+				}
+
+				var widgets = config_file.get_string_list("Widgets", "Widgets");
+
+				foreach (string widget in widgets) {
+					widget = widget.strip();
+
+					if (!config_file.has_group(widget)) {
+						warning("Raven widget %s missing from widgets.ini", widget);
+						continue;
+					}
+
+					if (!config_file.has_key(widget, "Module")) {
+						warning("Raven widget %s is missing Module key in widgets.ini", widget);
+						continue;
+					}
+
+					var module_name = config_file.get_string(widget, "Module").strip();
+					create_widget_instance_with_uuid(module_name, null);
+				}
+			} catch (Error e) {
+				warning("Error configuring Raven widgets from raven-widget.ini: %s", e.message);
+				return false;
+			}
+
+			return true;
 		}
 
 		/* As cheap as it looks. The DesktopManager responds to this signal and

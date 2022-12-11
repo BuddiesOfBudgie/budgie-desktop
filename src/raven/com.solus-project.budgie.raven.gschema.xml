@@ -18,6 +18,12 @@
       <summary>Confirm widget removal</summary>
       <description>When removing a widget from the Raven Widgets view, show a dialog asking if the user is certain they want to remove the widget.</description>
     </key>
+
+    <key type="b" name="initialized">
+      <default>false</default>
+      <summary>Whether the Widgets view has been initialized</summary>
+      <description>Signals to Raven if the Widgets view should be populated with the default set of widgets.</description>
+    </key>
   </schema>
 
   <schema id="org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info">
