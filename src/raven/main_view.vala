@@ -12,6 +12,7 @@
 namespace Budgie {
 	public class MainView : Gtk.Box {
 		private Gtk.Box? box = null; // Holds our content
+		private Gtk.Label? widget_placeholder = null;
 		private Settings? raven_settings = null;
 		private Gtk.ScrolledWindow? scroll = null;
 
@@ -56,10 +57,22 @@ namespace Budgie {
 
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
+			widget_placeholder = new Gtk.Label(null) {
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 1,
+				justify = Gtk.Justification.CENTER,
+				hexpand = true,
+				vexpand = true,
+			};
+			widget_placeholder.set_markup("<span size='large' alpha='50%'>%s</span>".printf(_("No widgets added.")));
+
 			/* Eventually these guys get dynamically loaded */
 			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
 			box.margin_top = 8;
 			box.margin_bottom = 8;
+			box.set_size_request(250, -1);
+			box.add(widget_placeholder);
 			scroll.add(box);
 
 			// Make sure everything is shown. Not having this can cause
@@ -72,11 +85,15 @@ namespace Budgie {
 
 		public void add_widget_instance(Gtk.Bin? widget_instance) {
 			box.add(widget_instance);
+			box.remove(widget_placeholder);
 			requested_draw();
 		}
 
 		public void remove_widget_instance(Gtk.Bin? widget_instance) {
 			box.remove(widget_instance);
+			if (box.get_children().length() == 0) {
+				box.add(widget_placeholder);
+			}
 			requested_draw();
 		}
 
