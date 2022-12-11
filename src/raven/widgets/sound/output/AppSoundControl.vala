@@ -28,7 +28,8 @@ namespace Budgie {
 		private ulong scale_id;
 
 		public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon, string c_name) {
-			Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 10);
+			Object(orientation: Gtk.Orientation.HORIZONTAL);
+
 			valign = Gtk.Align.START;
 
 			if (c_mixer == null) {

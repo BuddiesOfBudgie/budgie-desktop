@@ -1,5 +1,4 @@
 raven_libsound_sources = [
-    'AppSoundControl.vala',
     'StartListening.vala',
 ]
 
