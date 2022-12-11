@@ -344,6 +344,7 @@ namespace BudgieScr {
 			topbar = new Gtk.HeaderBar();
 			topbar.show_close_button = true;
 			this.set_titlebar(topbar);
+			this.set_keep_above(true);
 
 			/*
 			 * left or right windowbuttons, that's the question when
