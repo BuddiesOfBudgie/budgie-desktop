@@ -13,7 +13,7 @@ using Gtk;
 
 namespace Budgie {
 
-	[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshotControl")]
 	interface ScreenshotControl : GLib.Object {
 		public async abstract void StartMainWindow() throws GLib.Error;
 		public async abstract void StartAreaSelect() throws GLib.Error;
@@ -47,7 +47,7 @@ namespace Budgie {
 		}
 		try {
 			control = GLib.Bus.get_proxy_sync(
-				BusType.SESSION, "org.buddiesofbudgie.ScreenshotControl",
+				BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshotControl",
 				"/org/buddiesofbudgie/ScreenshotControl"
 			);
 

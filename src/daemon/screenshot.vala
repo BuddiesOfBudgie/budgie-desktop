@@ -78,7 +78,7 @@ namespace BudgieScr {
 		}
 	}
 
-	[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshotControl")]
 	public class ScreenshotServer : GLib.Object {
 		CurrentState windowstate;
 
@@ -125,7 +125,7 @@ namespace BudgieScr {
 
 		public void setup_dbus() throws Error {
 			GLib.Bus.own_name (
-				BusType.SESSION, "org.buddiesofbudgie.ScreenshotControl",
+				BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshotControl",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE, on_bus_acquired,
 				() => {}, () => warning("setup_dbus Could not acquire name\n")
 			);
@@ -141,7 +141,7 @@ namespace BudgieScr {
 		}
 	}
 
-	[DBus (name = "org.buddiesofbudgie.Screenshot")]
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshot")]
 	public interface ScreenshotClient : GLib.Object {
 		public abstract async void ScreenshotArea(int x, int y, int width, int height, bool include_cursor,	bool flash, string filename,
 			out bool success, out string filename_used) throws Error;
@@ -163,7 +163,7 @@ namespace BudgieScr {
 		public MakeScreenshot(int[]? area) {
 			if (client == null) {
 				try {
-					client = GLib.Bus.get_proxy_sync(BusType.SESSION, "org.buddiesofbudgie.Screenshot", "/org/buddiesofbudgie/Screenshot");
+					client = GLib.Bus.get_proxy_sync(BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshot", "/org/buddiesofbudgie/Screenshot");
 				} catch (Error e) {
 					warning("MakeScreenshot get_proxy_sync %s\n", e.message);
 					client = null;
@@ -315,9 +315,9 @@ namespace BudgieScr {
 
 		public ScreenshotHomeWindow() {
 			windowstate = new CurrentState();
-			this.set_startup_id("org.buddiesofbudgie.Screenshot");
+			this.set_startup_id("org.buddiesofbudgie.BudgieScreenshot");
 			this.set_title(_("Budgie Screenshot"));
-			this.set_wmclass("org.buddiesofbudgie.Screenshot", "org.buddiesofbudgie.Screenshot");
+			this.set_wmclass("org.buddiesofbudgie.BudgieScreenshot", "org.buddiesofbudgie.BudgieScreenshot");
 			windowstate.statechanged(WindowState.MAINWINDOW);
 
 			var theme = Gtk.IconTheme.get_default();
@@ -823,9 +823,9 @@ namespace BudgieScr {
 		}
 
 		public AfterShotWindow() {
-			this.set_startup_id("org.buddiesofbudgie.Screenshot");
+			this.set_startup_id("org.buddiesofbudgie.BudgieScreenshot");
 			this.set_title(_("Budgie Screenshot"));
-			this.set_wmclass("org.buddiesofbudgie.Screenshot", "org.buddiesofbudgie.Screenshot");
+			this.set_wmclass("org.buddiesofbudgie.BudgieScreenshot", "org.buddiesofbudgie.BudgieScreenshot");
 			windowstate = new CurrentState();
 			Gdk.Pixbuf pxb = get_pxb();
 			if (pxb == null) {

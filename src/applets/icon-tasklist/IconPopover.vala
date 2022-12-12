@@ -134,7 +134,7 @@ namespace Budgie {
 
 			if (app_info != null) {
 				is_budgie_desktop_settings = app_info.get_startup_wm_class() == "budgie-desktop-settings";
-				is_budgie_screenshot = app_info.get_startup_wm_class() == "org.buddiesofbudgie.Screenshot";
+				is_budgie_screenshot = app_info.get_startup_wm_class() == "org.buddiesofbudgie.BudgieScreenshot";
 
 				if (is_budgie_desktop_settings) {
 					acquire_settings_remote();
@@ -220,7 +220,7 @@ namespace Budgie {
 				acquire_settings_remote();
 			}
 
-			is_budgie_screenshot = window.get_class_instance_name() == "org.buddiesofbudgie.Screenshot";
+			is_budgie_screenshot = window.get_class_instance_name() == "org.buddiesofbudgie.BudgieScreenshot";
 
 			Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(
 				is_budgie_screenshot ? _("Budgie Screenshot") : name, // Budgie Screensaver reports as budgie-daemon, so at the very least fix here as a workaround

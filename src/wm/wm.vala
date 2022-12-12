@@ -36,7 +36,7 @@ namespace Budgie {
 	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
-	public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.ScreenshotControl";
+	public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.BudgieScreenshotControl";
 	public const string SCREENSHOTCONTROL_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/ScreenshotControl";
 
 	[Flags]
@@ -107,7 +107,7 @@ namespace Budgie {
 	/**
 	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
 	*/
-	[DBus (name = "org.buddiesofbudgie.ScreenshotControl")]
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshotControl")]
 	public interface ScreenshotControl : GLib.Object {
 		public async abstract void StartMainWindow() throws GLib.Error;
 		public async abstract void StartAreaSelect() throws GLib.Error;

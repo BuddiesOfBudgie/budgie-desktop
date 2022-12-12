@@ -15,10 +15,10 @@
 
 namespace Budgie {
 	const string EXTENSION = ".png";
-	const string DBUS_SCREENSHOT = "org.buddiesofbudgie.Screenshot";
+	const string DBUS_SCREENSHOT = "org.buddiesofbudgie.BudgieScreenshot";
 	const string DBUS_SCREENSHOT_PATH = "/org/buddiesofbudgie/Screenshot";
 
-	[DBus (name="org.buddiesofbudgie.Screenshot")]
+	[DBus (name="org.buddiesofbudgie.BudgieScreenshot")]
 	public class ScreenshotManager : Object {
 		static ScreenshotManager? instance;
 
