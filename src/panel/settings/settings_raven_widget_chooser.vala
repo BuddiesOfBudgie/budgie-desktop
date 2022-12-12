@@ -39,20 +39,35 @@ namespace Budgie {
 			image.margin_start = 8;
 			image.margin_end = 12;
 
-			label = new Gtk.Label(null);
-			label.set_markup("<b>%s</b>".printf(info.get_name()));
-			label.margin_end = 32;
-			label.halign = Gtk.Align.START;
+			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 
-			pack_start(image, false, false, 0);
-			pack_start(label, false, false, 0);
+			label = new Gtk.Label(null) {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
+			};
+			label.set_markup("<b>%s</b>".printf(info.get_name()));
+			label_box.add(label);
+
 			if (info.is_builtin()) {
-				var builtin = new Gtk.Label(null);
+				var builtin = new Gtk.Label(null) {
+					valign = Gtk.Align.CENTER,
+					xalign = 0.0f,
+					max_width_chars = 1,
+					ellipsize = Pango.EllipsizeMode.END,
+					hexpand = true,
+				};
 				builtin.set_markup("<i>%s</i>".printf(_("Built-in")));
 				builtin.get_style_context().add_class("dim-label");
-				builtin.margin_end = 12;
-				pack_end(builtin, false, false, 0);
+				label_box.add(builtin);
+			} else {
+				label.vexpand = true;
 			}
+
+			add(image);
+			add(label_box);
 
 			show_all();
 		}
@@ -92,6 +107,7 @@ namespace Budgie {
 			var scroll = new Gtk.ScrolledWindow(null, null);
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 			applets = new Gtk.ListBox();
+			applets.set_size_request(200, -1);
 			applets.set_activate_on_single_click(false);
 			applets.set_sort_func(this.sort_applets);
 			scroll.add(applets);
@@ -107,13 +123,15 @@ namespace Budgie {
 			selected_plugin_name = new Gtk.Label("");
 			selected_plugin_name.halign = Gtk.Align.START;
 
-			selected_plugin_description = new Gtk.Label("");
-			selected_plugin_description.set_line_wrap(true);
-			selected_plugin_description.set_size_request(368, -1);
-			selected_plugin_description.set_max_width_chars(0);
+			selected_plugin_description = new Gtk.Label("") {
+				xalign = 0.0f,
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 1,
+				justify = Gtk.Justification.LEFT,
+				hexpand = true,
+			};
 			selected_plugin_description.margin_start = 4;
-			selected_plugin_description.xalign = 0.0f;
-			selected_plugin_description.halign = Gtk.Align.START;
 
 			selected_plugin_authors = new Gtk.Label("");
 			selected_plugin_authors.halign = Gtk.Align.START;
@@ -140,19 +158,20 @@ namespace Budgie {
 			plugin_info_box.pack_start(upper_box, false, false, 0);
 			plugin_info_box.pack_start(selected_plugin_description, false, false, 0);
 			plugin_info_box.pack_end(selected_plugin_copyright, false, false, 0);
+			plugin_info_box.set_size_request(350, -1);
 
 			content_area.pack_start(plugin_info_box, true, true, 0);
 
 			content_area.show_all();
 
-			set_default_size(650, 350);
+			set_default_size(-1, 350);
 		}
 
 		/**
 		* Simple accessor to get the new widget ID to be added
 		*/
 		public new string? run() {
-			Gtk.ResponseType resp = (Gtk.ResponseType)base.run();
+			Gtk.ResponseType resp = (Gtk.ResponseType) base.run();
 			switch (resp) {
 				case Gtk.ResponseType.ACCEPT:
 					return this.applet_id;
@@ -169,7 +188,14 @@ namespace Budgie {
 			Peas.PluginInfo? infoA = ((RavenPluginItem) a.get_child()).plugin;
 			Peas.PluginInfo? infoB = ((RavenPluginItem) b.get_child()).plugin;
 
-			return strcmp(infoA.get_name().down(), infoB.get_name().down());
+			if (infoA.is_builtin() == infoB.is_builtin()) {
+				return strcmp(infoA.get_name().down(), infoB.get_name().down());
+			} else if (infoA.is_builtin()) {
+				return -1;
+			} else {
+				return 1;
+			}
+
 		}
 
 		/**
