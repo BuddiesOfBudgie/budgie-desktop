@@ -22,6 +22,7 @@ public class MprisClientWidget : Gtk.Box {
 	private Gtk.Image? header_icon = null;
 	private Gtk.Label? header_label = null;
 	private Gtk.Button? header_reveal_button = null;
+	private Gtk.Button? header_close_button = null;
 	private Gtk.Revealer? content_revealer = null;
 
 	Gtk.Image background;
@@ -226,6 +227,29 @@ public class MprisClientWidget : Gtk.Box {
 			}
 		});
 		header.pack_end(header_reveal_button, false, false, 0);
+
+		if (client.player.can_quit) {
+			header_close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.MENU);
+			header_close_button.get_style_context().add_class("flat");
+			header_close_button.get_style_context().add_class("primary-control");
+			header_close_button.valign = Gtk.Align.CENTER;
+			header_close_button.clicked.connect(() => {
+				if (client.player.can_quit) {
+					client.player.quit.begin((obj, res) => {
+						try {
+							try {
+								client.player.quit.end(res);
+							} catch (IOError e) {
+								warning("Error closing %s: %s", client.player.identity, e.message);
+							}
+						} catch (DBusError e) {
+							warning("Error closing %s: %s", client.player.identity, e.message);
+						}
+					});
+				}
+			});
+			header.pack_end(header_close_button, false, false, 0);
+		}
 	}
 
 	public void update_width(int new_width) {
@@ -326,7 +350,8 @@ public class MprisClientWidget : Gtk.Box {
 	void update_art_fallback() {
 		get_style_context().add_class("no-album-art");
 		background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-		background.pixel_size = this.our_width;
+		background.pixel_size = 168;
+		background.set_size_request(our_width, our_width);
 	}
 
 	/**
@@ -344,6 +369,7 @@ public class MprisClientWidget : Gtk.Box {
 			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
 				this.our_width, this.our_width, true, cancel);
 			background.set_from_pixbuf(pbuf);
+			background.set_size_request(-1, -1);
 			get_style_context().remove_class("no-album-art");
 		} catch (Error e) {
 			update_art_fallback();
