@@ -42,10 +42,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	private Gtk.Box? main_box = null;
 	private Gtk.Box? apps_area = null;
 	private Gtk.ListBox? apps_listbox = null;
-	private Gtk.Revealer? apps_list_revealer = null;
+	private Gtk.Label? apps_placeholder_label = null;
 	private Gtk.ListBox? devices_list = null;
-	private Budgie.StartListening? listening_box = null;
-	private Gtk.Revealer? listening_box_revealer = null;
 	private Gtk.Box? header = null;
 	private Gtk.Button? header_icon = null;
 	private Gtk.Button? header_reveal_button = null;
@@ -156,36 +154,36 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		 * Proceed to add those items to our content
 		 */
 		apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+
 		apps_listbox = new Gtk.ListBox();
 		apps_listbox.get_style_context().add_class("apps-list");
 		apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
 		apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
-
+		apps_listbox.margin_top = 4;
+		apps_listbox.margin_bottom = 4;
 		apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
 			var app_1 = ((Budgie.AppSoundControl) row1.get_child()).app_name;
 			var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
 			return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
 		});
+		apps_area.add(apps_listbox);
 
-		apps_list_revealer = new Gtk.Revealer();
-		apps_list_revealer.set_transition_duration(250);
-		apps_list_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
-		apps_list_revealer.add(apps_listbox);
-
-		listening_box_revealer = new Gtk.Revealer();
-		listening_box_revealer.set_transition_duration(250);
-		listening_box_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-		listening_box = new Budgie.StartListening(); // Create our start listening box
-		listening_box_revealer.add(listening_box);
-
-		apps_area.pack_start(listening_box_revealer, true, true, 0);
-		apps_area.pack_end(apps_list_revealer, true, true, 0);
+		apps_placeholder_label = new Gtk.Label(null) {
+			wrap = true,
+			wrap_mode = Pango.WrapMode.WORD_CHAR,
+			max_width_chars = 1,
+			justify = Gtk.Justification.CENTER,
+			margin_top = 8,
+			margin_bottom = 8,
+			hexpand = true,
+		};
+		apps_placeholder_label.set_markup("<span alpha='70%'>%s</span>".printf(_("No apps are playing audio.")));
+		apps_area.add(apps_placeholder_label);
 
 		widget_area = new Gtk.Stack();
-		widget_area.margin_top = 10;
-		widget_area.margin_bottom = 10;
 		widget_area.set_transition_duration(125); // 125ms
 		widget_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+		widget_area.vhomogeneous = false;
 
 		widget_area.add_titled(apps_area, "apps", _("Apps"));
 		widget_area.add_titled(devices_list, "devices", _("Devices"));
@@ -198,12 +196,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		settings.changed.connect(settings_updated);
 		settings_updated("allow-volume-overdrive");
 
-		//  header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, volume_slider);
 		content.pack_start(widget_area, false, false, 0);
 		content.pack_start(widget_area_switch, true, false, 0);
-
-		listening_box_revealer.set_reveal_child(false); // Don't initially show
-		apps_list_revealer.set_reveal_child(false); // Don't initially show
 
 		mixer.open();
 
@@ -212,8 +206,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		 */
 
 		show_all();
-
-		toggle_start_listening();
 	}
 
 	/**
@@ -248,14 +240,22 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		}
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		var label = new Gtk.Label("%s - %s".printf(device.description, card.name));
-		label.justify = Gtk.Justification.LEFT;
-		label.max_width_chars = 30;
-		label.set_ellipsize(Pango.EllipsizeMode.END);
+		box.margin_start = 6;
+		box.margin_end = 6;
+		box.margin_top = 3;
+		box.margin_bottom = 3;
+
+		var label = new Gtk.Label(null) {
+			valign = Gtk.Align.CENTER,
+			xalign = 0.0f,
+			max_width_chars = 1,
+			ellipsize = Pango.EllipsizeMode.END,
+			hexpand = true,
+		};
+		label.set_markup("<span size='small'>%s - %s</span>".printf(device.description, card.name));
 		box.pack_start(label, false, true, 0);
 
 		Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
-		list_item.height_request = 32;
 		list_item.add(box);
 
 		list_item.set_data("device_id", id);
@@ -361,7 +361,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			return;
 		}
 
-		if (primary_stream.set_volume((uint32)volume_slider.get_value())) {
+		if (primary_stream.set_volume((uint32) volume_slider.get_value())) {
 			Gvc.push_volume(primary_stream);
 		}
 	}
@@ -384,8 +384,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 						apps.steal(id);
 					}
 				}
-
-				toggle_start_listening();
 			}
 		}
 
@@ -444,12 +442,13 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 			if (control != null) {
 				var list_row = new Gtk.ListBoxRow();
+				list_row.activatable = false;
 				list_row.add(control); // Add our control
 
 				apps_listbox.insert(list_row, -1); // Add our control
 				apps.insert(id, list_row); // Add to apps
+				apps_area.remove(apps_placeholder_label);
 				apps_listbox.show_all();
-				toggle_start_listening();
 
 				Gvc.ChannelMap channel_map = stream.get_channel_map(); // Get the channel map for this stream
 
@@ -474,7 +473,10 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			}
 
 			apps.steal(id); // Remove the apps
-			toggle_start_listening();
+
+			if (apps_listbox.get_children().length() == 0) {
+				apps_area.add(apps_placeholder_label);
+			}
 		}
 	}
 
@@ -502,15 +504,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		}
 
 		this.update_input_draw_markers();
-	}
-
-	/**
-	 * toggle_start_listening will handle showing or hiding our Start Listening box if needed
-	 */
-	private void toggle_start_listening() {
-		bool apps_exist = (apps.length != 0);
-		listening_box_revealer.set_reveal_child(!apps_exist); // Show if no apps, hide if apps
-		apps_list_revealer.set_reveal_child(apps_exist); // Show if apps, hide if no apps
 	}
 
 	/**
