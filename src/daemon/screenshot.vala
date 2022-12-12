@@ -43,7 +43,7 @@ namespace BudgieScr {
 		public signal void buttonpos_changed();
 
 		public CurrentState() {
-			screenshot_settings = new GLib.Settings("org.buddiesofbudgie.screenshot");
+			screenshot_settings = new GLib.Settings("org.buddiesofbudgie.budgie-desktop.screenshot");
 
 			buttonplacement = new GLib.Settings("com.solus-project.budgie-wm");
 

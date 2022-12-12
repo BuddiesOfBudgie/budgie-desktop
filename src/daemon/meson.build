@@ -106,7 +106,7 @@ executable(
     vala_args: daemon_vala_args,
 )
 
-install_data('schema/org.buddiesofbudgie.screenshot.gschema.xml',
+install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
 

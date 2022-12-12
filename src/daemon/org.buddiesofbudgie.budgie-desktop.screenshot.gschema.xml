@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <schema path="/org/buddiesofbudgie/screenshot/"
-            id="org.buddiesofbudgie.screenshot">
+    <schema path="/org/buddiesofbudgie/budgie-desktop/screenshot/"
+            id="org.buddiesofbudgie.budgie-desktop.screenshot">
         <key type="i" name="delay">
             <summary>Screenshot delay</summary>
             <description>Number of seconds to wait before taking a screenshot</description>
