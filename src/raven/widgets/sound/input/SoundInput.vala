@@ -133,8 +133,6 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		mixer.input_removed.connect(on_device_removed);
 
 		content.pack_start(devices_list, false, false, 0); // Add devices directly to layout
-		devices_list.margin_top = 10;
-		devices_list.margin_bottom = 10;
 
 		mixer.open();
 
@@ -173,14 +171,22 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		var card = device.card as Gvc.MixerCard;
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		var label = new Gtk.Label("%s - %s".printf(device.description, card.name));
-		label.justify = Gtk.Justification.LEFT;
-		label.max_width_chars = 30;
-		label.set_ellipsize(Pango.EllipsizeMode.END);
+		box.margin_start = 6;
+		box.margin_end = 6;
+		box.margin_top = 3;
+		box.margin_bottom = 3;
+
+		var label = new Gtk.Label(null) {
+			valign = Gtk.Align.CENTER,
+			xalign = 0.0f,
+			max_width_chars = 1,
+			ellipsize = Pango.EllipsizeMode.END,
+			hexpand = true,
+		};
+		label.set_markup("<span size='small'>%s - %s</span>".printf(device.description, card.name));
 		box.pack_start(label, false, true, 0);
 
 		Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
-		list_item.height_request = 32;
 		list_item.add(box);
 
 		list_item.set_data("device_id", id);
