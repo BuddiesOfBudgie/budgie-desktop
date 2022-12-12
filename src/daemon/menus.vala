@@ -119,7 +119,7 @@ namespace Budgie {
 				if (desktop_menu.get_visible()) {
 					desktop_menu.hide();
 				} else {
-					desktop_menu.popup_at_pointer(null);
+					popup_menu(desktop_menu, button, timestamp);
 				}
 				return false;
 			});
@@ -138,11 +138,15 @@ namespace Budgie {
 			Idle.add(() => {
 				action_menu = new Wnck.ActionMenu(active_window);
 				action_menu.show_all();
-				action_menu.popup(null,null,null,0,Gtk.get_current_event_time());
+				popup_menu(action_menu, button, timestamp);
 				return false;
 			});
 
 			this.xid = xid;
+		}
+
+		private void popup_menu(Gtk.Menu menu, uint button, uint32 timestamp) {
+			menu.popup(null, null, null, button, timestamp == 0 ? Gdk.CURRENT_TIME : timestamp);
 		}
 	}
 }
