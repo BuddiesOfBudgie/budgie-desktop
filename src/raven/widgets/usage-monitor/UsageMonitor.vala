@@ -15,7 +15,7 @@ public class UsageMonitorRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	}
 
 	public bool supports_settings() {
-		return false;
+		return true;
 	}
 }
 
@@ -69,21 +69,34 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		});
 		header.pack_end(header_reveal_button, false, false, 0);
 
-		var rows = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+		var rows = new Gtk.Grid();
+		rows.hexpand = true;
 		rows.margin_start = 12;
 		rows.margin_end = 12;
 		rows.margin_top = 8;
 		rows.margin_bottom = 8;
+		rows.set_column_spacing(8);
 		content.add(rows);
 
-		cpu = new UsageMonitorRow(_("CPU"));
-		rows.add(cpu);
+		cpu = new UsageMonitorRow(_("CPU"), 0);
+		rows.attach(cpu.label, 0, cpu.index, 1, 1);
+		rows.attach(cpu.bar, 1, cpu.index, 1, 1);
+		rows.attach(cpu.percentage, 2, cpu.index, 1, 1);
 
-		ram = new UsageMonitorRow(_("RAM"));
-		rows.add(ram);
+		ram = new UsageMonitorRow(_("RAM"), 1);
+		rows.attach(ram.label, 0, ram.index, 1, 1);
+		rows.attach(ram.bar, 1, ram.index, 1, 1);
+		rows.attach(ram.percentage, 2, ram.index, 1, 1);
 
-		swap = new UsageMonitorRow(_("Swap"));
-		rows.add(swap);
+		swap = new UsageMonitorRow(_("Swap"), 2);
+		rows.attach(swap.label, 0, swap.index, 1, 1);
+		rows.attach(swap.bar, 1, swap.index, 1, 1);
+		rows.attach(swap.percentage, 2, swap.index, 1, 1);
+
+		show_all();
+
+		settings.changed.connect(settings_updated);
+		settings_updated("show-swap-usage");
 
 		update_cpu();
 		update_ram_and_swap();
@@ -93,8 +106,15 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 			update_ram_and_swap();
 			return GLib.Source.CONTINUE;
 		});
+	}
 
-		show_all();
+	private void settings_updated(string key) {
+		if (key == "show-swap-usage") {
+			var should_show = get_instance_settings().get_boolean(key);
+			swap.stay_hidden = !should_show;
+
+			if (should_show) swap.show(); else swap.hide();
+		}
 	}
 
 	private void update_cpu() {
@@ -117,7 +137,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 			return;
 		}
 
-		if (meminfo.swap_total > 0) {
+		if (meminfo.swap_total > 0 && !swap.stay_hidden) {
 			var swap_used = meminfo.swap_total - meminfo.swap_free - meminfo.swap_cached;
 			swap.update((float) swap_used / (float) meminfo.swap_total);
 		} else {
@@ -207,6 +227,20 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 			return null;
 		}
 	}
+
+	public override Gtk.Widget build_settings_ui() {
+		return new UsageMonitorRavenWidgetSettings(get_instance_settings());
+	}
+}
+
+[GtkTemplate (ui="/org/buddiesofbudgie/budgie-desktop/raven/widget/UsageMonitor/settings.ui")]
+public class UsageMonitorRavenWidgetSettings : Gtk.Grid {
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_swap_usage;
+
+	public UsageMonitorRavenWidgetSettings(Settings? settings) {
+		settings.bind("show-swap-usage", switch_show_swap_usage, "active", SettingsBindFlags.DEFAULT);
+	}
 }
 
 private struct ProcMeminfoContents {
@@ -222,36 +256,59 @@ private struct ProcStatContents {
 	ulong busy;
 }
 
-private class UsageMonitorRow : Gtk.Box {
-	private Gtk.LevelBar bar;
-	private Gtk.Label percentage;
+private class UsageMonitorRow {
+	public Gtk.Label label;
+	public Gtk.LevelBar bar;
+	public Gtk.Label percentage;
+	public int index;
+	public bool stay_hidden = false;
 
-	public UsageMonitorRow(string name) {
-		Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 8);
+	public UsageMonitorRow(string name, int index) {
+		this.index = index;
 
-		var label = new Gtk.Label(null);
+		label = new Gtk.Label(null);
+		label.xalign = 0.0f;
+		label.width_chars = 5;
 		label.set_markup(name);
-		pack_start(label, false, false, 0);
 
 		bar = new Gtk.LevelBar();
 		bar.add_offset_value("low", 0.8);
 		bar.add_offset_value("high", 0.9);
 		bar.add_offset_value("full", 1.0);
 		bar.valign = Gtk.Align.CENTER;
-		bar.halign = Gtk.Align.END;
-		bar.set_size_request(150, 10);
-		set_center_widget(bar);
+		bar.halign = Gtk.Align.FILL;
+		bar.margin_top = 6;
+		bar.margin_bottom = 6;
+		bar.hexpand = true;
+		bar.set_size_request(-1, 10);
 
 		percentage = new Gtk.Label(null);
-		percentage.set_text("0%");
-		pack_end(percentage, false, false, 0);
+		percentage.xalign = 1.0f;
+		percentage.width_chars = 4;
+		percentage.set_markup("<span size='small'>0%</span>");
 	}
 
 	public void update(float new_value) {
 		bar.value = new_value;
 		bar.queue_draw();
-		percentage.set_text("%.0f%%".printf(new_value * 100));
+		percentage.set_markup("<span size='small'>%.0f%%</span>".printf(new_value * 100));
 		show();
+	}
+
+	public void show() {
+		if (stay_hidden) {
+			return;
+		}
+
+		label.show();
+		bar.show();
+		percentage.show();
+	}
+
+	public void hide() {
+		label.hide();
+		bar.hide();
+		percentage.hide();
 	}
 }
 
