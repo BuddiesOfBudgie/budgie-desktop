@@ -231,7 +231,7 @@ namespace Budgie {
 
 			image = new Cairo.ImageSurface(Cairo.Format.ARGB32, image_width, image_height);
 
-			var paint_flags = Clutter.PaintFlag.CLEAR | (include_cursor ? Clutter.PaintFlag.FORCE_CURSORS : Clutter.PaintFlag.NO_CURSORS);
+			var paint_flags = Clutter.PaintFlag.CLEAR | Clutter.PaintFlag.NO_CURSORS;
 
 			bool is_little_endian = GLib.ByteOrder.HOST == GLib.ByteOrder.LITTLE_ENDIAN;
 
