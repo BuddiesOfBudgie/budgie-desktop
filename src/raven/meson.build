@@ -29,7 +29,6 @@ libraven_sources = [
     'plugin_manager.vala',
     'powerstrip.vala',
     'raven.vala',
-    'start_listening.vala',
 ]
 
 libraven_deps = [
