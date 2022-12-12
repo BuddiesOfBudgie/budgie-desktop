@@ -29,7 +29,6 @@ raven_plugin_sound_output_deps = [
     dep_gtk3,
     dep_peas,
     link_libravenplugin,
-    link_raven_libsound,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: true),
 ]
