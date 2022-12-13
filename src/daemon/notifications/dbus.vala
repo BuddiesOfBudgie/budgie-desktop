@@ -271,12 +271,20 @@
 				notification.expire_timeout = 0;
 			}
 
+			var show_body_text = app_notification_settings.get_boolean("force-expanded");
+
 			// Add a new notification popup if we should show one
 			// If there is already a popup with this ID, replace it
 			if (this.popups.contains(id) && this.popups[id] != null) {
 				this.popups[id].replace(notification);
 			} else {
 				this.popups[id] = new Popup(this, notification);
+
+				if (!show_body_text) {
+					// Body text is shown by default
+					this.popups[id].toggle_body_text();
+				}
+
 				this.configure_window(this.popups[id]);
 				this.latest_popup_id = id;
 				this.popups[id].begin_decay(notification.expire_timeout);
@@ -596,4 +604,4 @@
 			}
 		}
 	}
- }
+}

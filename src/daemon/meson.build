@@ -127,3 +127,9 @@ custom_target('org.buddiesofbudgie.BudgieScreenshot',
     install : true,
     install_dir : join_paths(datadir, 'applications'),
 )
+
+# gschemas
+install_data(
+    files('notifications/20_buddiesofbudgie.budgie-desktop.notifications.gschema.override'),
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
+)

@@ -147,6 +147,8 @@ namespace Budgie.Notifications {
 
 		public bool did_interact { get; private set; default = false; }
 
+		private Body? body;
+
 		/**
 		 * Signal emitted when an action is clicked.
 		 */
@@ -177,10 +179,10 @@ namespace Budgie.Notifications {
 			var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
 				baseline_position = Gtk.BaselinePosition.CENTER
 			};
-			var contents = new Body(this.notification);
+			this.body = new Body(this.notification);
 
 			this.content_stack.add(content_box);
-			content_box.pack_start(contents, false, false, 0);
+			content_box.pack_start(body, false, false, 0);
 
 			// Add notification actions if any are present
 			if (this.notification.actions.length > 0) {
@@ -258,6 +260,10 @@ namespace Budgie.Notifications {
 			this.show_all();
 			this.begin_decay(new_notif.expire_timeout);
 		}
+
+		public void toggle_body_text() {
+			this.body.toggle_body_text();
+		}
 	}
 
 	/**
@@ -265,6 +271,8 @@ namespace Budgie.Notifications {
 	 */
 	private class Body: Gtk.Grid {
 		public Notification notification { get; construct; }
+
+		private Gtk.Revealer? body_revealer;
 
 		public Body(Notification notification) {
 			Object(notification: notification);
@@ -294,6 +302,12 @@ namespace Budgie.Notifications {
 			};
 			title_label.get_style_context().add_class("notification-title");
 
+			this.body_revealer = new Gtk.Revealer() {
+				transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN,
+				transition_duration = 250,
+				reveal_child = true
+      };
+
 			var body_label = new Gtk.Label(this.notification.body) {
 				ellipsize = Pango.EllipsizeMode.END,
 				use_markup = true,
@@ -309,10 +323,20 @@ namespace Budgie.Notifications {
 			body_label.set_size_request(33, -1); // This ensures that lines wrap at the desired place regardless of font-size
 			body_label.get_style_context().add_class("notification-body");
 
+			this.body_revealer.add(body_label);
+
 			// Attach the icon and labels to our grid
 			this.attach(app_icon, 0, 0, 1, 2);
 			this.attach(title_label, 1, 0);
-			this.attach(body_label, 1, 1);
+			this.attach(body_revealer, 1, 1);
+		}
+
+		public void toggle_body_text() {
+			if (body_revealer.get_reveal_child()) {
+				body_revealer.set_reveal_child(false);
+			} else {
+				body_revealer.set_reveal_child(true);
+			}
 		}
 	}
 
