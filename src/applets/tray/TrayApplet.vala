@@ -18,13 +18,33 @@ public class TrayPlugin : Budgie.Plugin, Peas.ExtensionBase {
 [GtkTemplate (ui="/com/solus-project/tray/settings.ui")]
 public class TraySettings : Gtk.Grid {
 	Settings? settings = null;
+	Settings? ibus_settings = null;
 
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
 
+	[GtkChild]
+	private unowned Gtk.Switch? ibusicon_switch;
+
+	[GtkChild]
+	private unowned Gtk.Label? ibusicon_label;
+
 	public TraySettings(Settings? settings) {
 		this.settings = settings;
 		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
+
+		var show_ibusicon = false;
+		if (Environment.find_program_in_path("ibus-daemon") != null) {
+			ibus_settings = new Settings("org.freedesktop.ibus.panel");
+			ibus_settings.bind("show-icon-on-systray", ibusicon_switch, "active", SettingsBindFlags.DEFAULT);
+			show_ibusicon = true;
+		}
+
+		ibusicon_switch.show();
+		ibusicon_label.show();
+		ibusicon_switch.set_visible(show_ibusicon);
+		ibusicon_label.set_visible(show_ibusicon);
+
 	}
 }
 
