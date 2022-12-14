@@ -46,5 +46,6 @@ shared_library(
 
 install_data(
     'com.solus-project.tray.gschema.xml',
+    '20_buddiesofbudgie.budgie.tray.gschema.override',
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )
