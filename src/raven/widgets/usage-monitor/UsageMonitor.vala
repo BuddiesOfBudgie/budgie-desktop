@@ -37,9 +37,9 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		main_box.add(header);
 
 		var icon = new Gtk.Image.from_icon_name("utilities-system-monitor", Gtk.IconSize.MENU);
-		icon.margin = 8;
-		icon.margin_start = 12;
-		icon.margin_end = 12;
+		icon.margin = 4;
+		icon.margin_start = 8;
+		icon.margin_end = 8;
 		header.add(icon);
 
 		var header_label = new Gtk.Label(_("Usage Monitor"));

@@ -52,9 +52,9 @@ public class MprisClientWidget : Gtk.Box {
 		add(header);
 
 		header_icon = new Gtk.Image.from_icon_name("emblem-music", Gtk.IconSize.MENU);
-		header_icon.margin = 8;
-		header_icon.margin_start = 12;
-		header_icon.margin_end = 12;
+		header_icon.margin = 4;
+		header_icon.margin_start = 8;
+		header_icon.margin_end = 8;
 		header.add(header_icon);
 
 		header_label = new Gtk.Label(client.player.identity);

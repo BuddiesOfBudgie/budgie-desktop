@@ -66,8 +66,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		header_icon = new Gtk.Button.from_icon_name("audio-volume-muted", Gtk.IconSize.MENU);
 		header_icon.get_style_context().add_class("flat");
 		header_icon.valign = Gtk.Align.CENTER;
-		header_icon.margin_start = 8;
-		header_icon.margin_end = 4;
+		header_icon.margin = 4;
+		header_icon.margin_end = 0;
 		header_icon.clicked.connect(() => {
 			if (primary_stream != null) {
 				primary_stream.change_is_muted(!primary_stream.get_is_muted());
