@@ -48,7 +48,7 @@
 				ellipsize = Pango.EllipsizeMode.END,
 				hexpand = true,
 			};
-			label.set_markup("<b>%s</b>".printf(info.get_name()));
+			label.set_markup("<b>%s</b>".printf(Markup.escape_text(info.get_name())));
 			label_box.add(label);
 
 			if (info.is_builtin()) {
@@ -123,8 +123,13 @@
 			selected_plugin_icon = new Gtk.Image();
 			selected_plugin_icon.pixel_size = 64;
 
-			selected_plugin_name = new Gtk.Label("");
-			selected_plugin_name.halign = Gtk.Align.START;
+			selected_plugin_name = new Gtk.Label("") {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
+			};
 
 			selected_plugin_description = new Gtk.Label("") {
 				xalign = 0.0f,
@@ -136,23 +141,40 @@
 			};
 			selected_plugin_description.margin_start = 4;
 
-			selected_plugin_authors = new Gtk.Label("");
-			selected_plugin_authors.halign = Gtk.Align.START;
+			selected_plugin_authors = new Gtk.Label("") {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
+			};
 
-			selected_plugin_website = new Gtk.Label("");
-			selected_plugin_website.halign = Gtk.Align.START;
+			selected_plugin_website = new Gtk.Label("") {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
+			};
 
-			selected_plugin_copyright = new Gtk.Label("");
+			selected_plugin_copyright = new Gtk.Label("") {
+				valign = Gtk.Align.CENTER,
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 1,
+				justify = Gtk.Justification.CENTER,
+				hexpand = true,
+			};
 
 			var upper_text_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			upper_text_box.valign = Gtk.Align.START;
-			upper_text_box.pack_start(selected_plugin_name, false, false, 0);
+			upper_text_box.add(selected_plugin_name);
 			upper_text_box.pack_start(selected_plugin_authors, false, false, 0);
 			upper_text_box.pack_start(selected_plugin_website, false, false, 0);
 
 			var upper_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 			upper_box.pack_start(selected_plugin_icon, false, false, 0);
-			upper_box.pack_start(upper_text_box, false, false, 0);
+			upper_box.pack_start(upper_text_box, true, true, 0);
 
 			var plugin_info_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
 			plugin_info_box.border_width = 8;
@@ -217,36 +239,39 @@
 			this.applet_id = use_applet_name ? plugin.get_name() : plugin.get_module_name();
 
 			selected_plugin_icon.set_from_icon_name(plugin.get_icon_name(), Gtk.IconSize.LARGE_TOOLBAR);
-			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(plugin.get_name()));
+			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(Markup.escape_text(plugin.get_name())));
 
 			if (plugin.get_description() != null) {
 				selected_plugin_description.set_text(plugin.get_description());
 			} else {
-				selected_plugin_description.set_text("No description.");
+				selected_plugin_description.set_text(_("No description."));
 			}
 
 			if (plugin.get_copyright() != null) {
-				selected_plugin_copyright.set_markup("<span alpha='50%'>%s</span>".printf(plugin.get_copyright()));
+				var copyright = Markup.escape_text(plugin.get_copyright());
+				selected_plugin_copyright.set_markup("<span alpha='50%'>%s</span>".printf(copyright));
 				selected_plugin_copyright.show();
 			} else {
 				selected_plugin_copyright.hide();
 			}
 
 			if (plugin.get_website() != null) {
-				selected_plugin_website.set_markup("<a href='%s'>%s</a>".printf(plugin.get_website(), plugin.get_website()));
+				var website = Markup.escape_text(plugin.get_website());
+				selected_plugin_website.set_markup("<a href='%s'>%s</a>".printf(website, website));
 				selected_plugin_website.show();
 			} else {
 				selected_plugin_website.hide();
 			}
 
 			if (plugin.get_authors() != null && plugin.get_authors().length > 0) {
-				var authors_string = "by ";
+				var authors_string = "";
 				var authors = plugin.get_authors();
 				for (int i = 0; i < authors.length - 1; i++) {
 					authors_string += authors[i] + ", ";
 				}
 				authors_string += authors[authors.length - 1];
-				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(authors_string));
+				var final_authors_string = Markup.escape_text(_("by %s").printf(authors_string));
+				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(final_authors_string));
 			} else {
 				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(_("No authors listed")));
 			}
