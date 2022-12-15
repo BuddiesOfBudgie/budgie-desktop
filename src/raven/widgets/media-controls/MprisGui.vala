@@ -97,13 +97,13 @@ public class MprisClientWidget : Gtk.Box {
 		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		controls.get_style_context().add_class("raven-mpris-controls");
 
-		row = create_row("Unknown Title", "emblem-music-symbolic");
+		row = create_row(_("Unknown Title"), "emblem-music-symbolic");
 		title_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("<span size='small'>Unknown Artist</span>", "user-info-symbolic");
+		row = create_row("<span size='small'>%s</span>".printf(_("Unknown Artist")), "user-info-symbolic");
 		artist_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("<span size='small'>Unknown Album</span>", "media-optical-symbolic");
+		row = create_row("<span size='small'>%s</span>".printf(_("Unknown Album")), "media-optical-symbolic");
 		album_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
 
@@ -414,16 +414,16 @@ public class MprisClientWidget : Gtk.Box {
 			update_art_fallback();
 		}
 
-		var title = get_meta_string("xesam:title", "Unknown Title");
+		var title = get_meta_string("xesam:title", _("Unknown Title"));
 		title_label.set_text(title);
 		title_label.set_tooltip_text(title);
 
-		var artist = get_meta_string("xesam:artist", "Unknown Artist");
-		artist_label.set_markup("<small>%s</small>".printf(artist));
+		var artist = get_meta_string("xesam:artist", _("Unknown Artist"));
+		artist_label.set_markup("<small>%s</small>".printf(Markup.escape_text(artist)));
 		artist_label.set_tooltip_text(artist);
 
-		var album = get_meta_string("xesam:album", "Unknown Album");
-		album_label.set_markup("<small>%s</small>".printf(album));
+		var album = get_meta_string("xesam:album", _("Unknown Album"));
+		album_label.set_markup("<small>%s</small>".printf(Markup.escape_text(album)));
 		album_label.set_tooltip_text(album);
 	}
 }
