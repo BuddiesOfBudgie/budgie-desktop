@@ -30,6 +30,8 @@ namespace Budgie {
 			sep.margin_bottom = 6;
 			this.pack_start(lab, false, false, 0);
 			this.pack_start(sep, false, false, 0);
+
+			show_all();
 		}
 
 		public override void add(Gtk.Widget widget) {
