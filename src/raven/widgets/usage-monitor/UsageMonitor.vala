@@ -272,9 +272,9 @@ private class UsageMonitorRow {
 		label.set_markup(name);
 
 		bar = new Gtk.LevelBar();
-		bar.add_offset_value("low", 0.8);
+		bar.add_offset_value("full", 0.8);
 		bar.add_offset_value("high", 0.9);
-		bar.add_offset_value("full", 1.0);
+		bar.add_offset_value("low", 1.0);
 		bar.valign = Gtk.Align.CENTER;
 		bar.halign = Gtk.Align.FILL;
 		bar.margin_top = 6;
