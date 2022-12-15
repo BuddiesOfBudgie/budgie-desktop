@@ -291,12 +291,12 @@ public class MprisClientWidget : Gtk.Box {
 		switch (client.player.playback_status) {
 			case "Playing":
 				header_icon.set_from_icon_name("media-playback-start", Gtk.IconSize.MENU);
-				header_label.set_text("%s - Playing".printf(client.player.identity));
+				header_label.set_text(_("%s - Playing").printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			case "Paused":
 				header_icon.set_from_icon_name("media-playback-pause", Gtk.IconSize.MENU);
-				header_label.set_text("%s - Paused".printf(client.player.identity));
+				header_label.set_text(_("%s - Paused").printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			default:
