@@ -217,7 +217,7 @@ namespace Budgie {
 		}
 
 		void add_widget() {
-			var dlg = new RavenWidgetChooser(this.get_toplevel() as Gtk.Window);
+			var dlg = new SettingsPluginChooser(this.get_toplevel() as Gtk.Window);
 			dlg.set_plugin_list(this.manager.get_raven_plugins());
 			string? widget_id = dlg.run();
 			dlg.destroy();

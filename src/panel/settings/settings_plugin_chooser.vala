@@ -9,12 +9,12 @@
  * (at your option) any later version.
  */
 
-namespace Budgie {
+ namespace Budgie {
 	/**
-	* RavenPluginItem is used to represent a plugin for the user to add to their
-	* panel through the Applet API
+	* SettingsPluginChooserItem is used to represent a plugin for the user to add to their
+	* panel or raven through the applet or widget API
 	*/
-	public class RavenPluginItem : Gtk.Box {
+	public class SettingsPluginChooserItem : Gtk.Box {
 		/**
 		* We're bound to the info
 		*/
@@ -24,9 +24,9 @@ namespace Budgie {
 		private Gtk.Label label;
 
 		/**
-		* Construct a new RavenPluginItem for the given widget
+		* Construct a new SettingsPluginChooserItem for the given widget
 		*/
-		public RavenPluginItem(Peas.PluginInfo? info) {
+		public SettingsPluginChooserItem(Peas.PluginInfo? info) {
 			Object(plugin: info);
 
 			get_style_context().add_class("plugin-item");
@@ -74,9 +74,9 @@ namespace Budgie {
 	}
 
 	/**
-	* RavenWidgetChooser provides a dialog to allow selection of an widget to be added to Raven
+	* SettingsPluginChooser provides a dialog to allow selection of an widget to be added to Raven
 	*/
-	public class RavenWidgetChooser : Gtk.Dialog {
+	public class SettingsPluginChooser : Gtk.Dialog {
 		private Gtk.ListBox applets;
 		private Gtk.Widget button_ok;
 
@@ -88,13 +88,16 @@ namespace Budgie {
 		private Gtk.Label? selected_plugin_website = null;
 
 		private string? applet_id = null;
+		private bool use_applet_name;
 
-		public RavenWidgetChooser(Gtk.Window parent) {
+		public SettingsPluginChooser(Gtk.Window parent, bool use_applet_name = false) {
 			Object(use_header_bar: 1,
 				modal: true,
-				title: _("Choose a widget"),
+				title: _("Choose a plugin"),
 				transient_for: parent,
 				resizable: false);
+
+			this.use_applet_name = use_applet_name;
 
 			Gtk.Box content_area = get_content_area() as Gtk.Box;
 			content_area.set_orientation(Gtk.Orientation.HORIZONTAL);
@@ -185,8 +188,8 @@ namespace Budgie {
 		* Super simple sorting of applets in alphabetical listing
 		*/
 		int sort_applets(Gtk.ListBoxRow? a, Gtk.ListBoxRow? b) {
-			Peas.PluginInfo? infoA = ((RavenPluginItem) a.get_child()).plugin;
-			Peas.PluginInfo? infoB = ((RavenPluginItem) b.get_child()).plugin;
+			Peas.PluginInfo? infoA = ((SettingsPluginChooserItem) a.get_child()).plugin;
+			Peas.PluginInfo? infoB = ((SettingsPluginChooserItem) b.get_child()).plugin;
 
 			if (infoA.is_builtin() == infoB.is_builtin()) {
 				return strcmp(infoA.get_name().down(), infoB.get_name().down());
@@ -210,8 +213,8 @@ namespace Budgie {
 
 			this.button_ok.set_sensitive(true);
 
-			var plugin = ((RavenPluginItem) row.get_child()).plugin;
-			this.applet_id = plugin.get_module_name();
+			var plugin = ((SettingsPluginChooserItem) row.get_child()).plugin;
+			this.applet_id = use_applet_name ? plugin.get_name() : plugin.get_module_name();
 
 			selected_plugin_icon.set_from_icon_name(plugin.get_icon_name(), Gtk.IconSize.LARGE_TOOLBAR);
 			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(plugin.get_name()));
@@ -278,7 +281,7 @@ namespace Budgie {
 		* Add a new plugin to our display area
 		*/
 		void add_plugin(Peas.PluginInfo? plugin) {
-			this.applets.add(new RavenPluginItem(plugin));
+			this.applets.add(new SettingsPluginChooserItem(plugin));
 		}
 	}
 }
