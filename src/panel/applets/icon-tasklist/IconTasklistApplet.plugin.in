@@ -1,8 +1,9 @@
 [Plugin]
 Module=icontasklistapplet.so
+Builtin=true
 Name=Icon Task List
-_Description=A configurable application task list
+_Description=A configurable application task list.
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2015-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=icon-task-list-symbolic
+Website=https://buddiesofbudgie.org/
+Icon=icon-task-list

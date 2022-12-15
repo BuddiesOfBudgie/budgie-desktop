@@ -1,8 +1,9 @@
 [Plugin]
 Module=statusapplet.so
+Builtin=true
 Name=Status Indicator
-_Description=Show system status indicators, like sound and battery
+_Description=Show system status indicators, like sound, battery, and Bluetooth.
 Authors=Budgie Desktop Developers
 Copyright=Copyright © 2015-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=avatar-default-symbolic
+Website=https://buddiesofbudgie.org/
+Icon=avatar-default
