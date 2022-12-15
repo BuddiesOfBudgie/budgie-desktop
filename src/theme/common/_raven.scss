@@ -11,7 +11,6 @@
     .raven-header {
         color: $fg_color;
         background-color: $raven_expander_bg;
-        padding: 4px 0;
     }
 
     > .vertical > stack > *:not(.raven-notifications-view) > .frame {
@@ -109,6 +108,6 @@
         color: $mpris_overlay_fg;
         background-color: $mpris_overlay_bg;
 
-        #{$button}.image-button { padding: 8px; }
+        #{$button}.image-button { padding: 6px; }
     }
 }

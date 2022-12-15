@@ -69,42 +69,45 @@ public class MprisClientWidget : Gtk.Box {
 
 		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-		background = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-		background.pixel_size = our_width;
+		background = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.DIALOG);
+		background.set_size_request(64, 64);
+		background.pixel_size = 48;
+		background.valign = Gtk.Align.START;
+		background.get_style_context().add_class("raven-mpris");
+
 		background_wrap = new Gtk.EventBox();
 		background_wrap.add(background);
 		background_wrap.button_release_event.connect(this.on_raise_player);
 
-		var layout = new Gtk.Overlay();
+		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		player_box.pack_start(layout, true, true, 0);
 
 		layout.add(background_wrap);
 
 		/* normal info */
 		var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		top_box.valign = Gtk.Align.END;
-		top_box.get_style_context().add_class("raven-mpris");
 
 		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
-		box.margin = 6;
-		box.margin_top = 12;
+		box.margin = 8;
+		box.margin_top = 5;
+		box.margin_bottom = 5;
+		box.valign = Gtk.Align.START;
 		top_box.pack_start(box, true, true, 0);
 
-		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		controls.get_style_context().add_class("raven-mpris-controls");
 
-		row = create_row("Unknown Artist", "user-info-symbolic");
-		artist_label = row.get_data("label_item");
-		box.pack_start(row, false, false, 0);
 		row = create_row("Unknown Title", "emblem-music-symbolic");
 		title_label = row.get_data("label_item");
+		box.pack_start(row, false, false, 0);
+		row = create_row("Unknown Artist", "user-info-symbolic");
+		artist_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
 		row = create_row("Unknown Album", "media-optical-symbolic");
 		album_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
 
-		box.pack_start(controls, false, false, 0);
-
+		player_box.pack_start(controls, false, false, 0);
 
 		var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 		btn.set_sensitive(false);
@@ -171,8 +174,8 @@ public class MprisClientWidget : Gtk.Box {
 
 
 		controls.set_halign(Gtk.Align.CENTER);
-		controls.set_valign(Gtk.Align.END);
-		layout.add_overlay(top_box);
+		controls.margin_bottom = 6;
+		layout.add(top_box);
 
 		update_from_meta();
 		update_play_status();
@@ -333,7 +336,7 @@ public class MprisClientWidget : Gtk.Box {
 			// local
 			string fname = uri.split("file://")[1];
 			try {
-				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, this.our_width, this.our_width);
+				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, 64, 64);
 				background.set_from_pixbuf(pbuf);
 				get_style_context().remove_class("no-album-art");
 			} catch (Error e) {
@@ -350,8 +353,6 @@ public class MprisClientWidget : Gtk.Box {
 	void update_art_fallback() {
 		get_style_context().add_class("no-album-art");
 		background.set_from_icon_name("emblem-music-symbolic", Gtk.IconSize.INVALID);
-		background.pixel_size = 168;
-		background.set_size_request(our_width, our_width);
 	}
 
 	/**
@@ -366,10 +367,8 @@ public class MprisClientWidget : Gtk.Box {
 			var art_file = File.new_for_uri(proper_uri);
 			// download the art
 			var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
-			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins,
-				this.our_width, this.our_width, true, cancel);
+			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 64, 64, true, cancel);
 			background.set_from_pixbuf(pbuf);
-			background.set_size_request(-1, -1);
 			get_style_context().remove_class("no-album-art");
 		} catch (Error e) {
 			update_art_fallback();
@@ -415,9 +414,19 @@ public class MprisClientWidget : Gtk.Box {
 			update_art_fallback();
 		}
 
-		title_label.set_text(get_meta_string("xesam:title", "Unknown Title"));
-		album_label.set_text(get_meta_string("xesam:album", "Unknown Album"));
-		artist_label.set_text(get_meta_string("xesam:artist", "Unknown Artist"));
+		var title = get_meta_string("xesam:title", "Unknown Title");
+		title_label.set_markup("%s".printf(title));
+		title_label.set_tooltip_text(title);
+
+		var artist = get_meta_string("xesam:artist", "Unknown Artist");
+		artist_label.set_markup("<small>%s</small>".printf(artist));
+		artist_label.set_tooltip_text(artist);
+
+		var album = get_meta_string("xesam:album", "Unknown Album");
+		album_label.set_markup("<small>%s</small>".printf(album));
+		album_label.set_tooltip_text(album);
+
+
 	}
 }
 
@@ -431,7 +440,7 @@ public class MprisClientWidget : Gtk.Box {
  * @return A Gtk.Box with the boilerplate cruft out of the way
  */
 public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = null) {
-	var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+	var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 	Gtk.Image img;
 
 	if (icon == null && gicon != null) {
@@ -440,13 +449,16 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
 		img = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU);
 	}
 
-	img.margin_start = 8;
-	img.margin_end = 8;
+	img.pixel_size = 12;
 	box.pack_start(img, false, false, 0);
-	var label = new Gtk.Label(name);
-	label.set_line_wrap(true);
-	label.set_line_wrap_mode(Pango.WrapMode.WORD);
-	label.halign = Gtk.Align.START;
+
+	var label = new Gtk.Label("<span size='small'>%s</span>".printf(name)) {
+		valign = Gtk.Align.START,
+		xalign = 0.0f,
+		max_width_chars = 1,
+		ellipsize = Pango.EllipsizeMode.END,
+		hexpand = true,
+	};
 	/* I truly don't care that this is deprecated, it's the only way
 	 * to actually fix the alignment on line wrap. */
 	label.set_alignment(0.0f, 0.5f);
