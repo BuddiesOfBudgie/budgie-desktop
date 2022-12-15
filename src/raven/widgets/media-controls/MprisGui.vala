@@ -100,10 +100,10 @@ public class MprisClientWidget : Gtk.Box {
 		row = create_row("Unknown Title", "emblem-music-symbolic");
 		title_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("Unknown Artist", "user-info-symbolic");
+		row = create_row("<span size='small'>Unknown Artist</span>", "user-info-symbolic");
 		artist_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("Unknown Album", "media-optical-symbolic");
+		row = create_row("<span size='small'>Unknown Album</span>", "media-optical-symbolic");
 		album_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
 
@@ -415,7 +415,7 @@ public class MprisClientWidget : Gtk.Box {
 		}
 
 		var title = get_meta_string("xesam:title", "Unknown Title");
-		title_label.set_markup("%s".printf(title));
+		title_label.set_text(title);
 		title_label.set_tooltip_text(title);
 
 		var artist = get_meta_string("xesam:artist", "Unknown Artist");
@@ -425,8 +425,6 @@ public class MprisClientWidget : Gtk.Box {
 		var album = get_meta_string("xesam:album", "Unknown Album");
 		album_label.set_markup("<small>%s</small>".printf(album));
 		album_label.set_tooltip_text(album);
-
-
 	}
 }
 
@@ -452,16 +450,18 @@ public static Gtk.Widget create_row(string name, string? icon, Icon? gicon = nul
 	img.pixel_size = 12;
 	box.pack_start(img, false, false, 0);
 
-	var label = new Gtk.Label("<span size='small'>%s</span>".printf(name)) {
+	var label = new Gtk.Label(name) {
 		valign = Gtk.Align.START,
 		xalign = 0.0f,
 		max_width_chars = 1,
 		ellipsize = Pango.EllipsizeMode.END,
 		hexpand = true,
 	};
-	/* I truly don't care that this is deprecated, it's the only way
-	 * to actually fix the alignment on line wrap. */
-	label.set_alignment(0.0f, 0.5f);
+
+	// I don't know why, but if this is omitted then the widget explodes in size when
+	// the placeholder is added
+	label.set_line_wrap(true);
+
 	box.pack_start(label, true, true, 0);
 
 	box.set_data("label_item", label);
