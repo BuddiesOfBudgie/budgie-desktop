@@ -21,6 +21,7 @@ if with_polkit == true
     subdir('polkit')
 endif
 
+subdir('powerdialog')
 subdir('rundialog')
 subdir('wm')
 subdir('panel')

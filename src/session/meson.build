@@ -144,3 +144,12 @@ custom_target('desktop-file-screensaver',
     install : true,
     install_dir : xdg_appdir,
 )
+
+# Merge + install power dialog
+custom_target('desktop-file-powerdialog',
+    input : 'budgie-desktop-powerdialog.desktop.in',
+    output : 'org.buddiesofbudgie.BudgiePowerDialog.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : xdg_appdir,
+)
