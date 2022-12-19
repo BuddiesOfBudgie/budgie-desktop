@@ -46,6 +46,7 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieWm',
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
+    'org.buddiesofbudgie.BudgiePowerDialog'
 ]
 
 if with_polkit == true
