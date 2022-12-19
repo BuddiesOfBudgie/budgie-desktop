@@ -29,6 +29,9 @@ namespace Budgie {
 	public const string LOGIND_DBUS_NAME = "org.freedesktop.login1";
 	public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 
+	public const string POWER_DIALOG_DBUS_NAME = "org.buddiesofbudgie.PowerDialog";
+	public const string POWER_DIALOG_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/PowerDialog";
+
 	/** Menu management */
 	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
 	public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
@@ -115,6 +118,11 @@ namespace Budgie {
 		public async abstract void StartFullScreenshot() throws GLib.Error;
 	}
 
+	[DBus (name="org.buddiesofbudgie.PowerDialog")]
+	public interface PowerDialog: GLib.Object {
+		public abstract async void Show() throws Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -158,6 +166,7 @@ namespace Budgie {
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		PowerDialog? power_proxy = null;
 
 		Settings? iface_settings = null;
 
@@ -288,6 +297,39 @@ namespace Budgie {
 			if (switcher_proxy == null) {
 				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_switcher_get);
 			}
+		}
+
+		void has_power_dialog() {
+			if (power_proxy == null) {
+				Bus.get_proxy.begin<PowerDialog>(BusType.SESSION, POWER_DIALOG_DBUS_NAME, POWER_DIALOG_DBUS_OBJECT_PATH, 0, null, on_power_dialog_get);
+			}
+		}
+
+		void on_power_dialog_get(Object? o, AsyncResult? res) {
+			try {
+				power_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get Power Dialog proxy: %s", e.message);
+			}
+		}
+
+		void lost_power_dialog() {
+			power_proxy= null;
+		}
+
+		/* Binding for showing the Power Dialog */
+		void on_show_power_dialog(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+			if (power_proxy == null) {
+				return;
+			}
+
+			power_proxy.Show.begin((obj, res) => {
+				try {
+					power_proxy.Show.end(res);
+				} catch (Error e) {
+					warning("Unable to show Power Dialog: %s", e.message);
+				}
+			});
 		}
 
 		/* Binding for take-full-screenshot */
@@ -561,6 +603,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("show-power-dialog", settings, Meta.KeyBindingFlags.NONE, on_show_power_dialog);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -578,6 +621,10 @@ namespace Budgie {
 			/* TabSwitcher */
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
+
+			/* Power Dialog */
+			Bus.watch_name(BusType.SESSION, POWER_DIALOG_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_power_dialog, lost_power_dialog);
 
 			/* ScreenshotControl */
 			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
