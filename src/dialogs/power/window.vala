@@ -52,7 +52,8 @@ namespace Budgie {
 				set_visual(visual);
 			}
 
-			get_style_context().add_class("budgie-dialog-background");
+			get_style_context().add_class("budgie-power-dialog");
+			get_style_context().remove_class("background");
 
 			theme_manager = new Budgie.ThemeManager();
 
@@ -64,8 +65,10 @@ namespace Budgie {
 			set_titlebar(header);
 
 			// Create our layout
-			var box = new Box(Orientation.HORIZONTAL, 0);
-			box.get_style_context().add_class("budgie-power-dialog");
+			var box = new Box(Orientation.HORIZONTAL, 0) {
+				halign = Align.CENTER,
+				valign = Align.CENTER
+			};
 
 			var button_grid = new Grid() {
 				column_homogeneous = true,
