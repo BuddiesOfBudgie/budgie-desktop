@@ -21,8 +21,8 @@ namespace Budgie {
 	 * a grid of buttons, and handles all of the necessary events.
 	 *
 	 * There are a few CSS classes to better fascilitate theming:
-	 * GtkWindow: budgie-power-dialog
-	 *   GtkBox
+	 * GtkWindow: budgie-dialog-background
+	 *   GtkBox: budgie-power-dialog
 	 *     GtkGrid: power-button-grid
 	 *       DialogButtons: power-dialog-button
 	 */
@@ -43,6 +43,7 @@ namespace Budgie {
 		Budgie.ThemeManager? theme_manager = null;
 
 		construct {
+			maximize(); // Try to prevent the dialog window from losing focus
 			set_keep_above(true);
 			set_position(WindowPosition.CENTER);
 
@@ -51,25 +52,31 @@ namespace Budgie {
 				set_visual(visual);
 			}
 
-			get_style_context().add_class("budgie-power-dialog");
+			get_style_context().add_class("budgie-dialog-background");
 
 			theme_manager = new Budgie.ThemeManager();
 
 			setup_dbus.begin();
 
-			// Create our layout
+			// Nuke the header
 			var header = new EventBox();
 			header.get_style_context().remove_class("titlebar");
 			set_titlebar(header);
 
+			// Create our layout
 			var box = new Box(Orientation.HORIZONTAL, 0);
+			box.get_style_context().add_class("budgie-power-dialog");
 
 			var button_grid = new Grid() {
 				column_homogeneous = true,
 				row_homogeneous = true,
 				column_spacing = 8,
 				row_spacing = 8,
-				margin = 12
+				margin = 12,
+				halign = Align.CENTER,
+				hexpand = false,
+				valign = Align.CENTER,
+				vexpand = false
 			};
 			button_grid.get_style_context().add_class("power-button-grid");
 
@@ -101,7 +108,7 @@ namespace Budgie {
 			button_grid.attach(shutdown_button, 2, 1);
 
 			// Attach our grid to the window
-			box.pack_start(button_grid, true, true, 0);
+			box.pack_start(button_grid, true, false, 0);
 			add(box);
 
 			// Connect events
