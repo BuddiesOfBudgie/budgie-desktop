@@ -70,6 +70,9 @@ namespace Budgie {
 				valign = Align.CENTER
 			};
 
+			box.get_style_context().add_class("background");
+			box.get_style_context().add_class("drop-shadow");
+
 			var button_grid = new Grid() {
 				column_homogeneous = true,
 				row_homogeneous = true,
