@@ -14,10 +14,13 @@ using GLib;
 namespace Budgie {
 	[DBus (name="org.buddiesofbudgie.PowerDialog")]
 	public class PowerDialog : Object {
-		public signal void show();
+		public bool is_showing { get; set; default = false; }
 
-		public void Show() throws DBusError, IOError {
-			show();
+		public signal void toggle(bool show);
+
+		public void Toggle() throws DBusError, IOError {
+			is_showing = !is_showing;
+			toggle(is_showing);
 		}
 	}
 

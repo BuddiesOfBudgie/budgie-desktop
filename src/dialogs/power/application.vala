@@ -24,6 +24,7 @@ namespace Budgie {
 		public override void activate() {
 			if (window == null) {
 				window = new PowerWindow(this);
+				window.hide.connect(on_hide);
 			}
 
 			if (power_dbus == null) {
@@ -40,20 +41,32 @@ namespace Budgie {
 			try {
 				power_dbus = new PowerDialog();
 				conn.register_object("/org/buddiesofbudgie/PowerDialog", power_dbus);
-				power_dbus.show.connect(on_show);
+				power_dbus.toggle.connect(on_toggle);
 			} catch (Error e) {
 				critical("Unable to register PowerDialog DBus: %s", e.message);
 			}
 		}
 
-		private void on_show() {
-			if (window == null) {
-				critical("Tried to show PowerDialog, but the window hasn't been initialized");
+		private void on_hide() {
+			if (power_dbus == null) {
 				return;
 			}
 
-			window.present();
-			window.show_all();
+			power_dbus.is_showing = false;
+		}
+
+		private void on_toggle(bool show) {
+			if (window == null) {
+				critical("Tried to toggle visibility of PowerDialog, but the window hasn't been initialized");
+				return;
+			}
+
+			if (show) {
+				window.present();
+				window.show_all();
+			} else {
+				window.hide();
+			}
 		}
 	}
 }

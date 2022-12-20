@@ -55,14 +55,14 @@ public class UserIndicatorApplet : Budgie.Applet {
 
 	private void on_button_clicked() {
 		if (power_dialog == null) {
-			warning("Attempted to open PowerDialog, but we don't have a DBus proxy!");
+			warning("Attempted to toggle PowerDialog, but we don't have a DBus proxy!");
 			return;
 		}
 
 		try {
-			power_dialog.Show();
+			power_dialog.Toggle();
 		} catch (Error e) {
-			critical("Error showing PowerDialog: %s", e.message);
+			critical("Error toggling PowerDialog: %s", e.message);
 		}
 	}
 }

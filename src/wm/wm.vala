@@ -118,9 +118,12 @@ namespace Budgie {
 		public async abstract void StartFullScreenshot() throws GLib.Error;
 	}
 
+	/**
+	 * Allows us to toggle the visibility of the Power Dialog
+	 */
 	[DBus (name="org.buddiesofbudgie.PowerDialog")]
 	public interface PowerDialog: GLib.Object {
-		public abstract async void Show() throws Error;
+		public abstract async void Toggle() throws Error;
 	}
 
 	public class MinimizeData {
@@ -323,11 +326,11 @@ namespace Budgie {
 				return;
 			}
 
-			power_proxy.Show.begin((obj, res) => {
+			power_proxy.Toggle.begin((obj, res) => {
 				try {
-					power_proxy.Show.end(res);
+					power_proxy.Toggle.end(res);
 				} catch (Error e) {
-					warning("Unable to show Power Dialog: %s", e.message);
+					warning("Unable to toggle Power Dialog: %s", e.message);
 				}
 			});
 		}

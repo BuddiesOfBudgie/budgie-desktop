@@ -11,5 +11,5 @@
 
 [DBus (name="org.buddiesofbudgie.PowerDialog")]
 interface PowerDialogInterface : Object {
-	public abstract void Show() throws DBusError, IOError;
+	public abstract void Toggle() throws DBusError, IOError;
 }
