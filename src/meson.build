@@ -17,12 +17,8 @@ subdir('raven')
 # Executable components
 subdir('daemon')
 
-if with_polkit == true
-    subdir('polkit')
-endif
+subdir('dialogs')
 
-subdir('powerdialog')
-subdir('rundialog')
 subdir('wm')
 subdir('panel')
 
