@@ -21,8 +21,8 @@ namespace Budgie {
 	 * a grid of buttons, and handles all of the necessary events.
 	 *
 	 * There are a few CSS classes to better fascilitate theming:
-	 * GtkWindow: budgie-dialog-background
-	 *   GtkBox: budgie-power-dialog
+	 * GtkWindow: budgie-power-dialog
+	 *   GtkBox: background, drop-shadow
 	 *     GtkGrid: power-button-grid
 	 *       DialogButtons: power-dialog-button
 	 */
@@ -118,6 +118,29 @@ namespace Budgie {
 			add(box);
 
 			// Connect events
+			button_release_event.connect((event) => {
+				// We only care about primary mouse clicks
+				if (event.button != BUTTON_PRIMARY) {
+					return EVENT_PROPAGATE;
+				}
+
+				// Get the allocation of the button box
+				Allocation allocation;
+				box.get_allocation(out allocation);
+
+				// Check if the click was inside the box
+				if (event.x >= allocation.x && event.x <= (allocation.x + allocation.width)) {
+					if (event.y >= allocation.y && event.y <= (allocation.y + allocation.height)) {
+						return EVENT_PROPAGATE;
+					}
+				}
+
+				// The event was not inside the box, hide the window
+				debug("hiding due to button_release_event");
+				hide();
+				return EVENT_STOP;
+			});
+
 			focus_out_event.connect(() => {
 				debug("hiding due to focus_out_event");
 				hide();
