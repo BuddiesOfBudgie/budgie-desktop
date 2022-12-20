@@ -67,9 +67,9 @@ namespace Budgie {
 			var button_grid = new Grid() {
 				column_homogeneous = true,
 				row_homogeneous = true,
-				column_spacing = 4,
-				row_spacing = 4,
-				margin = 6
+				column_spacing = 8,
+				row_spacing = 8,
+				margin = 12
 			};
 			button_grid.get_style_context().add_class("power-button-grid");
 
@@ -99,7 +99,7 @@ namespace Budgie {
 			button_grid.attach(hibernate_button, 0, 1);
 			button_grid.attach(reboot_button, 1, 1);
 			button_grid.attach(shutdown_button, 2, 1);
-			
+
 			// Attach our grid to the window
 			box.pack_start(button_grid, true, true, 0);
 			add(box);

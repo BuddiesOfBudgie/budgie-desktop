@@ -45,9 +45,10 @@ namespace Budgie {
 			set_image(image_source);
 			set_label(label_text);
 
-			menu_item = new Box(Orientation.VERTICAL, 4);
-			menu_item.pack_start(button_image, false, false, 6);
-			menu_item.pack_end(button_label, true, true, 0);
+			menu_item = new Box(Orientation.VERTICAL, 12);
+			menu_item.pack_start(button_image, false, false, 0);
+			menu_item.pack_end(button_label, false, false, 0);
+			menu_item.margin = 8;
 
 			add(menu_item);
 		}
@@ -55,8 +56,6 @@ namespace Budgie {
 		construct {
 			get_style_context().add_class("flat");
 			get_style_context().add_class("power-dialog-button");
-
-			set_size_request(128, 128);
 
 			show_all();
 		}
@@ -79,12 +78,12 @@ namespace Budgie {
 			_label_text = text.dup();
 
 			if (button_label == null) {
-				button_label = new Label(_label_text) {
+				button_label = new Label(null) {
 					halign = Align.CENTER
 				};
-			} else {
-				button_label.set_text(_label_text);
 			}
+
+			button_label.set_markup("<big>%s</big>".printf(_label_text));
 		}
 	}
 }

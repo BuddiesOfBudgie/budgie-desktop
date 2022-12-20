@@ -28,6 +28,7 @@ public class UserIndicatorApplet : Budgie.Applet {
 		Object(uuid: uuid);
 
 		button = new Gtk.Button.from_icon_name(USER_SYMBOLIC_ICON, Gtk.IconSize.MENU);
+		button.get_style_context().add_class("flat");
 
 		Bus.get_proxy.begin<PowerDialogInterface>(
 			GLib.BusType.SESSION,
