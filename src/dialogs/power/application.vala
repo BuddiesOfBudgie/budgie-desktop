@@ -10,6 +10,7 @@
  */
 
 using GLib;
+using Gdk;
 using Gtk;
 
 namespace Budgie {
@@ -62,7 +63,7 @@ namespace Budgie {
 			}
 
 			if (show) {
-				window.present();
+				window.present_with_time(CURRENT_TIME);
 				window.show_all();
 			} else {
 				window.hide();
