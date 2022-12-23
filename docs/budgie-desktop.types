@@ -6,3 +6,5 @@ budgie_plugin_get_type
 budgie_popover_position_policy_get_type
 budgie_popover_get_type
 budgie_popover_manager_get_type
+budgie_raven_plugin_get_type
+budgie_raven_widget_get_type
