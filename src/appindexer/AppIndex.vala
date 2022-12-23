@@ -258,6 +258,11 @@ namespace Budgie {
 			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
 			var directory_file = File.new_for_path(path);
 
+			// desktop-directories dir doesn't exist, skip custom categories
+			if (!directory_file.query_exists()) {
+				return;
+			}
+
 			try {
 				// Enumerate all of the files in the desktop-directories dir
 				var children = directory_file.enumerate_children(FileAttribute.STANDARD_NAME, FileQueryInfoFlags.NONE, null);
