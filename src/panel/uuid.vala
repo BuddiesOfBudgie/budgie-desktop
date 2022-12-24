@@ -28,7 +28,10 @@ namespace LibUUID {
 		} else if ((flags & LibUUID.UUIDFlags.TIME_TYPE) != 0) {
 			LibUUID.generate_time(time);
 		} else if ((flags & LibUUID.UUIDFlags.TIME_SAFE_TYPE) != 0) {
-			LibUUID.generate_time_safe(time);
+#if USE_OPENBSD
+#else
+				LibUUID.generate_time_safe(time);
+#endif
 		} else {
 			LibUUID.generate(time);
 		}

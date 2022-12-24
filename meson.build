@@ -99,6 +99,10 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
 
+if host_machine.system() == 'openbsd'
+  add_project_arguments('-D', 'USE_OPENBSD', language: 'vala')
+endif
+
 with_stateless = get_option('with-stateless')
 if with_stateless == true
     warning('Only use stateless option with a supported OS like Solus')

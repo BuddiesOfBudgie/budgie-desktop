@@ -26,6 +26,7 @@ applet_status_sources = [
     applet_status_resources
 ]
 
+if host_machine.system() != 'openbsd'
 applet_status_deps = [
     libplugin_vapi,
     dep_giounix,
@@ -38,6 +39,19 @@ applet_status_deps = [
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
+else
+applet_status_deps = [
+    libplugin_vapi,
+    dep_giounix,
+    dep_gtk3,
+    dep_peas,
+    dep_accountsservice,
+    dependency('upower-glib', version: '>= 0.99.0'),
+    link_libplugin,
+    gvc.get_variable('libgvc_dep'),
+    meson.get_compiler('c').find_library('m', required: false),
+]
+endif
 
 shared_library(
     'statusapplet',

@@ -21,7 +21,10 @@ public class BluetoothIndicator : Gtk.Bin {
 	public Gtk.Image? image = null;
 
 	public Gtk.EventBox? ebox = null;
+#if USE_OPENBSD
+#else
 	private Bluetooth.Client? client = null;
+#endif
 	private Gtk.TreeModel? model = null;
 	public Budgie.Popover? popover = null;
 
@@ -75,8 +78,11 @@ public class BluetoothIndicator : Gtk.Bin {
 		// Ensure all content is shown
 		box.show_all();
 
+#if USE_OPENBSD
+#else
 		client = new Bluetooth.Client();
 		model = client.get_model();
+#endif
 		model.row_changed.connect(() => { resync(); });
 		model.row_deleted.connect(() => { resync(); });
 		model.row_inserted.connect(() => { resync(); });
@@ -123,6 +129,8 @@ public class BluetoothIndicator : Gtk.Bin {
 			return false;
 		}
 
+#if USE_OPENBSD
+#else
 		while (true) {
 			bool is_default;
 			model.get(iter, Bluetooth.Column.DEFAULT, out is_default, -1);
@@ -134,6 +142,7 @@ public class BluetoothIndicator : Gtk.Bin {
 				break;
 			}
 		}
+#endif
 		return false;
 	}
 
@@ -150,8 +159,10 @@ public class BluetoothIndicator : Gtk.Bin {
 			return 0;
 		}
 
+#if USE_OPENBSD
+#else
 		while (true) {
-			bool con;
+			bool con = true;
 			model.get(iter, Bluetooth.Column.CONNECTED, out con, -1);
 			if (con) {
 				n_devices++;
@@ -160,6 +171,8 @@ public class BluetoothIndicator : Gtk.Bin {
 				break;
 			}
 		}
+
+#endif
 		return n_devices;
 	}
 
