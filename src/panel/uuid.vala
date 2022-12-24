@@ -27,12 +27,13 @@ namespace LibUUID {
 			LibUUID.generate_random(time);
 		} else if ((flags & LibUUID.UUIDFlags.TIME_TYPE) != 0) {
 			LibUUID.generate_time(time);
-		} else if ((flags & LibUUID.UUIDFlags.TIME_SAFE_TYPE) != 0) {
-#if USE_OPENBSD
-#else
+		}
+#if with_libuuid_time_safe
+		else if ((flags & LibUUID.UUIDFlags.TIME_SAFE_TYPE) != 0) {
 				LibUUID.generate_time_safe(time);
+		}
 #endif
-		} else {
+		else {
 			LibUUID.generate(time);
 		}
 

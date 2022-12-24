@@ -99,8 +99,14 @@ cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
 
-if host_machine.system() == 'openbsd'
-  add_project_arguments('-D', 'USE_OPENBSD', language: 'vala')
+with_bluetooth = get_option('with-bluetooth')
+if with_bluetooth == true
+  add_project_arguments('-D', 'with_bluetooth', language: 'vala')
+endif
+
+with_libuuid_time_safe = get_option('with-libuuid-time-safe')
+if with_libuuid_time_safe == true
+  add_project_arguments('-D', 'with_libuuid_time_safe', language: 'vala')
 endif
 
 with_stateless = get_option('with-stateless')

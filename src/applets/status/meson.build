@@ -26,20 +26,6 @@ applet_status_sources = [
     applet_status_resources
 ]
 
-if host_machine.system() != 'openbsd'
-applet_status_deps = [
-    libplugin_vapi,
-    dep_giounix,
-    dep_gtk3,
-    dep_peas,
-    dep_accountsservice,
-    dependency('gnome-bluetooth-1.0', version: '>= 3.34.0'),
-    dependency('upower-glib', version: '>= 0.99.0'),
-    link_libplugin,
-    gvc.get_variable('libgvc_dep'),
-    meson.get_compiler('c').find_library('m', required: false),
-]
-else
 applet_status_deps = [
     libplugin_vapi,
     dep_giounix,
@@ -51,6 +37,9 @@ applet_status_deps = [
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
+
+if with_bluetooth == true
+    applet_status_dep += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
 endif
 
 shared_library(

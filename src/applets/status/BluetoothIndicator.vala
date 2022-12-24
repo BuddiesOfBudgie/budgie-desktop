@@ -21,8 +21,7 @@ public class BluetoothIndicator : Gtk.Bin {
 	public Gtk.Image? image = null;
 
 	public Gtk.EventBox? ebox = null;
-#if USE_OPENBSD
-#else
+#if with_bluetooth
 	private Bluetooth.Client? client = null;
 #endif
 	private Gtk.TreeModel? model = null;
@@ -78,8 +77,7 @@ public class BluetoothIndicator : Gtk.Bin {
 		// Ensure all content is shown
 		box.show_all();
 
-#if USE_OPENBSD
-#else
+#if with_bluetooth
 		client = new Bluetooth.Client();
 		model = client.get_model();
 #endif
@@ -129,8 +127,7 @@ public class BluetoothIndicator : Gtk.Bin {
 			return false;
 		}
 
-#if USE_OPENBSD
-#else
+#if with_bluetooth
 		while (true) {
 			bool is_default;
 			model.get(iter, Bluetooth.Column.DEFAULT, out is_default, -1);
@@ -159,8 +156,7 @@ public class BluetoothIndicator : Gtk.Bin {
 			return 0;
 		}
 
-#if USE_OPENBSD
-#else
+#if with_bluetooth
 		while (true) {
 			bool con = true;
 			model.get(iter, Bluetooth.Column.CONNECTED, out con, -1);
