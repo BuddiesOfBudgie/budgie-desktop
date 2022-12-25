@@ -39,7 +39,7 @@ applet_status_deps = [
 ]
 
 if with_bluetooth == true
-    applet_status_dep += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
+    applet_status_deps += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
 endif
 
 shared_library(
