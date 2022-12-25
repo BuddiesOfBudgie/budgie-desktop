@@ -18,21 +18,28 @@ jobs:
     - run: meson build -Dwith-gnome-screensaver=true
     - run: meson compile -C build
 
-  aarch64:
+  extra-architectures:
     runs-on: ubuntu-22.04
+    name: ${{ matrix.arch }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [armv7, aarch64, riscv64]
+
     steps:
     - uses: actions/checkout@v3
     - uses: uraimo/run-on-arch-action@v2
       with:
-        arch: aarch64
+        arch: ${{ matrix.arch }}
         distro: ubuntu22.04
+        install: |
+          apt-get update -q -y
+          apt-get install -q -y git meson ninja-build gnome-screensaver gnome-settings-daemon-dev gtk-doc-tools intltool libaccountsservice-dev libasound2-dev libgee-0.8-dev libgnome-bluetooth-dev libgnome-desktop-3-dev libgnome-menu-3-dev libgtk-3-dev libibus-1.0-dev libmutter-10-dev libpeas-dev libpolkit-agent-1-dev libpulse-dev libupower-glib-dev libwnck-3-dev sassc uuid-dev valac
         run: |
-          apt update -qq -y
-          apt install -qq -y git
           git config --global --add safe.directory "$PWD"
           git submodule init
           git submodule update
 
-          apt install -qq -y meson ninja-build gnome-screensaver gnome-settings-daemon-dev gtk-doc-tools intltool libaccountsservice-dev libasound2-dev libgee-0.8-dev libgnome-bluetooth-dev libgnome-desktop-3-dev libgnome-menu-3-dev libgtk-3-dev libibus-1.0-dev libmutter-10-dev libpeas-dev libpolkit-agent-1-dev libpulse-dev libupower-glib-dev libwnck-3-dev sassc uuid-dev valac
           meson build -Dwith-gnome-screensaver=true
           meson compile -C build
