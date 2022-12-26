@@ -45,5 +45,10 @@ gboolean budgie_raven_plugin_supports_settings(BudgieRavenPlugin* self) {
 		return FALSE;
 	}
 
+	BudgieRavenPluginIface* iface = BUDGIE_RAVEN_PLUGIN_GET_IFACE(self);
+	if (iface->supports_settings == NULL) {
+		return FALSE;
+	}
+
 	return BUDGIE_RAVEN_PLUGIN_GET_IFACE(self)->supports_settings(self);
 }
