@@ -227,7 +227,35 @@ namespace Budgie {
 				return;
 			}
 
-			raven.create_widget_instance(widget_id);
+			var result = raven.create_widget_instance(widget_id);
+			if (result != RavenWidgetCreationResult.SUCCESS) {
+				string markup = null;
+				switch (result) {
+					case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
+						markup = "Failed to create the widget instance: No plugin info found.";
+						break;
+					case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
+						markup = "Failed to create the widget instance: Failed to load the plugin from disk.";
+						break;
+					case RavenWidgetCreationResult.SCHEMA_LOAD_FAILED:
+						markup = "Failed to create the widget instance. The plugin supports settings, but does not install a settings schema with the same name.";
+						break;
+					case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
+						markup = "Failed to create the widget instance due to an unknown failure.";
+						break;
+					default:
+						break;
+				}
+				var failure_dialog = new Gtk.MessageDialog.with_markup(
+					this.get_toplevel() as Gtk.Window,
+					Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
+					Gtk.MessageType.ERROR,
+					Gtk.ButtonsType.CLOSE,
+					markup
+				);
+				failure_dialog.run();
+				failure_dialog.destroy();
+			}
 		}
 
 		/**

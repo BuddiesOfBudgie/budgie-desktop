@@ -551,9 +551,17 @@ namespace Budgie {
 			widget_settings.set_strv("uuids", uuids);
 		}
 
-		public void create_widget_instance(string module_name) {
-			create_widget_instance_with_uuid(module_name, null);
-			update_uuids();
+		public RavenWidgetCreationResult create_widget_instance(string module_name) {
+			Budgie.RavenWidgetData? widget_data;
+			var result = plugin_manager.new_widget_instance_for_plugin(module_name, null, out widget_data);
+			if (result == RavenWidgetCreationResult.SUCCESS) {
+				widgets.append(widget_data);
+				main_view.add_widget_instance(widget_data.widget_instance);
+				on_widget_added(widget_data);
+				update_uuids();
+			}
+
+			return result;
 		}
 
 		private void create_widget_instance_with_uuid(string module_name, string? uuid) {
