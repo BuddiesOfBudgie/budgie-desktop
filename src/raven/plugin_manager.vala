@@ -13,6 +13,7 @@ namespace Budgie {
 	public enum RavenWidgetCreationResult {
 		SUCCESS,
 		PLUGIN_INFO_MISSING,
+		INVALID_MODULE_NAME,
 		PLUGIN_LOAD_FAILED,
 		SCHEMA_LOAD_FAILED,
 		INSTANCE_CREATION_FAILED
@@ -106,26 +107,31 @@ namespace Budgie {
 				return RavenWidgetCreationResult.PLUGIN_INFO_MISSING;
 			}
 
+			var instance_settings_schema_name = module_name_to_schema_name(module_name);
+			if (instance_settings_schema_name.split(".").length < 3) {
+				return RavenWidgetCreationResult.INVALID_MODULE_NAME;
+			}
+
 			if (!is_plugin_loaded(module_name)) {
 				if (!engine.try_load_plugin(plugin_info)) {
 					return RavenWidgetCreationResult.PLUGIN_LOAD_FAILED;
 				}
 			}
 			var extension = plugin_set.get_extension(plugin_info);
-
 			var plugin = extension as Budgie.RavenPlugin;
 
 			var uuid = existing_uuid != null ? existing_uuid : generate_uuid();
+
 			GLib.Settings? instance_settings = null;
 			if (plugin.supports_settings()) {
 				var instance_settings_path = "/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid);
-				var instance_settings_schema = module_name_to_schema_name(module_name);
 
-				if (!schema_exists(instance_settings_schema)) {
+				if (!schema_exists(instance_settings_schema_name)) {
+					warning(instance_settings_schema_name);
 					return RavenWidgetCreationResult.SCHEMA_LOAD_FAILED;
 				}
 
-				instance_settings = new GLib.Settings.with_path(instance_settings_schema, instance_settings_path);
+				instance_settings = new GLib.Settings.with_path(instance_settings_schema_name, instance_settings_path);
 				instance_settings.ref();
 			}
 
@@ -163,7 +169,8 @@ namespace Budgie {
 			if (module_name.has_suffix(".so")) {
 				schema_name = module_name.slice(0, module_name.last_index_of("."));
 			}
-			return schema_name;
+
+			return schema_name.replace("_", ".");
 		}
 
 		private static bool schema_exists(string schema_name) {

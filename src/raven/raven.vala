@@ -576,6 +576,12 @@ namespace Budgie {
 				case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
 					warning("Failed to create Raven widget instance with uuid %s: No plugin info found for module %s", uuid, module_name);
 					break;
+				case RavenWidgetCreationResult.INVALID_MODULE_NAME:
+					var builder = new StringBuilder();
+					builder.append("Failed to create Raven widget instance with uuid %s: Module name must be in reverse-DNS format.");
+					builder.append("(e.g. 'tld.domain.group.WidgetName.so' for C/Vala or 'tld_domain_group_WidgetName' for Python)");
+					warning(builder.str, uuid, module_name);
+					break;
 				case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
 					warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s failed to load", uuid, module_name);
 					break;
