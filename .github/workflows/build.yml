@@ -10,8 +10,9 @@ on:
     - v10.6.x
 
 jobs:
-  ubuntu-amd64:
+  ubuntu:
     runs-on: ubuntu-22.04
+    name: Ubuntu
     steps:
     - uses: actions/checkout@v3
     - run: sudo apt-get update -q -y
