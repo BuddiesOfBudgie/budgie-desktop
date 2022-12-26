@@ -426,6 +426,7 @@ namespace Budgie {
 		* show a chooser dialog
 		*/
 		void add_applet() {
+			this.manager.rescan_panel_plugins();
 			var dlg = new SettingsPluginChooser(this.get_toplevel() as Gtk.Window, true);
 			dlg.set_plugin_list(this.manager.get_panel_plugins());
 			string? applet_id = dlg.run();

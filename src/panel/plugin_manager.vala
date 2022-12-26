@@ -118,6 +118,11 @@ namespace Budgie {
 			return ret;
 		}
 
+		public void rescan_plugins() {
+			engine.garbage_collect();
+			engine.rescan_plugins();
+		}
+
 		/**
 		* PeasEngine.get_plugin_info == completely broken
 		*/
