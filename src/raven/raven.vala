@@ -571,6 +571,9 @@ namespace Budgie {
 				case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
 					warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s failed to load", uuid, module_name);
 					break;
+				case RavenWidgetCreationResult.SCHEMA_LOAD_FAILED:
+					warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s supports settings, but does not install a schema with the same name", uuid, module_name);
+					break;
 				case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
 					warning("Failed to create Raven widget instance with uuid %s: Unknown failure", uuid);
 					break;
