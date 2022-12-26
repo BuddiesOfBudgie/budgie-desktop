@@ -155,6 +155,11 @@ namespace Budgie {
 			return ret;
 		}
 
+		public void rescan_plugins() {
+			engine.garbage_collect();
+			engine.rescan_plugins();
+		}
+
 		public void modprobe(string module_name) {
 			Peas.PluginInfo? i = engine.get_plugin_info(module_name);
 			if (i == null) {

@@ -695,6 +695,10 @@ namespace Budgie {
 			return raven_plugin_manager.get_all_plugins();
 		}
 
+		public override void rescan_raven_plugins() {
+			raven_plugin_manager.rescan_plugins();
+		}
+
 		/**
 		* Find the next available position on the given monitor
 		*/

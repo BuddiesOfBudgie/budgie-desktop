@@ -33,5 +33,7 @@ namespace Budgie {
 
 		public abstract List<Peas.PluginInfo?> get_panel_plugins();
 		public abstract List<Peas.PluginInfo?> get_raven_plugins();
+
+		public abstract void rescan_raven_plugins();
 	}
 }
