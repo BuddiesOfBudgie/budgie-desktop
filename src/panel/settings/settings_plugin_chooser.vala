@@ -110,7 +110,7 @@
 			var scroll = new Gtk.ScrolledWindow(null, null);
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 			applets = new Gtk.ListBox();
-			applets.set_size_request(200, -1);
+			applets.set_size_request(225, -1);
 			applets.set_activate_on_single_click(false);
 			applets.set_sort_func(this.sort_applets);
 			scroll.add(applets);
