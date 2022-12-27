@@ -24,6 +24,7 @@ namespace Budgie {
 		 * Data / Logic
 		 */
 		private bool is_budgie_desktop_settings = false; // We need a special case handler for Budgie Desktop Settings since it is part of budgie-panel
+		private bool is_budgie_screenshot = false; // Special case intentional single-instance Budgie Screenshot
 		private ulong current_window_id = 0; // Current window selected in the popover
 		private int longest_label_length = 20; // longest_label_length is the longest length / max width chars we should allow for labels
 		public HashTable<ulong?,string?> window_id_to_name; // List of IDs to Names
@@ -133,6 +134,7 @@ namespace Budgie {
 
 			if (app_info != null) {
 				is_budgie_desktop_settings = app_info.get_startup_wm_class() == "budgie-desktop-settings";
+				is_budgie_screenshot = app_info.get_startup_wm_class() == "org.buddiesofbudgie.BudgieScreenshot";
 
 				if (is_budgie_desktop_settings) {
 					acquire_settings_remote();
@@ -207,43 +209,47 @@ namespace Budgie {
 		 * add_window will add a window to our list
 		 */
 		public void add_window(ulong xid, string name) {
-			if (!window_id_to_name.contains(xid)) {
-				var window = Wnck.Window.@get(xid); // Get the window just to ensure it exists
+			if (window_id_to_name.contains(xid)) return;
 
-				if (window == null) {
-					return;
-				}
+			var window = Wnck.Window.@get(xid); // Get the window just to ensure it exists
 
-				if (window.get_class_instance_name() == "budgie-panel") { // Likely a NORMAL type window of budgie-panel, which is Budgie Desktop Settings
-					is_budgie_desktop_settings = true;
-					acquire_settings_remote();
-				}
+			if (window == null) return;
 
-				Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(name, xid, longest_label_length);
-
-				item.actionable_label.clicked.connect(() => { // When we click on the window
-					this.toggle_window(item.xid); // Toggle the window state
-				});
-
-				item.close_button.clicked.connect(() => { // Create our close button click handler
-					this.close_window(item.xid); // Close this window if we can
-				});
-
-				item.window_controls_button.clicked.connect(() => { // Create our window controls button click handler
-					this.current_window_id = item.xid; // Change our current window id
-					this.update_actions_view(); // Update our actions view first
-					this.actions_view.show_all();
-					this.stack.set_visible_child_name("actions"); // Change to actions
-				});
-
-				window_id_to_name.insert(xid, name);
-				window_id_to_controls.insert(xid, item);
-
-				this.windows_list.pack_end(item, true, false, 0);
-				this.render();
-
-				added_window();
+			if (window.get_class_instance_name() == "budgie-panel") { // Likely a NORMAL type window of budgie-panel, which is Budgie Desktop Settings
+				is_budgie_desktop_settings = true;
+				acquire_settings_remote();
 			}
+
+			is_budgie_screenshot = window.get_class_instance_name() == "org.buddiesofbudgie.BudgieScreenshot";
+
+			Budgie.IconPopoverItem item = new Budgie.IconPopoverItem.with_xid(
+				is_budgie_screenshot ? _("Budgie Screenshot") : name, // Budgie Screensaver reports as budgie-daemon, so at the very least fix here as a workaround
+				xid,
+				longest_label_length
+			);
+
+			item.actionable_label.clicked.connect(() => { // When we click on the window
+				this.toggle_window(item.xid); // Toggle the window state
+			});
+
+			item.close_button.clicked.connect(() => { // Create our close button click handler
+				this.close_window(item.xid); // Close this window if we can
+			});
+
+			item.window_controls_button.clicked.connect(() => { // Create our window controls button click handler
+				this.current_window_id = item.xid; // Change our current window id
+				this.update_actions_view(); // Update our actions view first
+				this.actions_view.show_all();
+				this.stack.set_visible_child_name("actions"); // Change to actions
+			});
+
+			window_id_to_name.insert(xid, name);
+			window_id_to_controls.insert(xid, item);
+
+			this.windows_list.pack_end(item, true, false, 0);
+			this.render();
+
+			added_window();
 		}
 
 		/**
@@ -353,7 +359,7 @@ namespace Budgie {
 				if (window_id_to_name.length == 0) {
 					closed_all();
 
-					if (is_budgie_desktop_settings) { // Now have an instance of Budgie Desktop Settings
+					if (is_budgie_desktop_settings || is_budgie_screenshot) { // Now have an instance of Budgie Desktop Settings or Budgie Screenshot
 						this.launch_new_instance_button.sensitive = true; // Set to be sensitive again
 					}
 				}
@@ -416,6 +422,12 @@ namespace Budgie {
 			if (is_budgie_desktop_settings) { // Budgie Desktop Settings
 				pin_button.hide(); // Hide pin button
 				launch_new_instance_button.hide(); // Hide launch new instance
+			} else if (is_budgie_screenshot) { // Likely Budgie Screenshot. Allow pin but not new instance
+				if (this.window_id_to_controls.size() == 0) {
+					launch_new_instance_button.show();
+				} else {
+					launch_new_instance_button.hide(); // Hide launch new instance
+				}
 			} else {
 				pin_button.show();
 				launch_new_instance_button.show();
