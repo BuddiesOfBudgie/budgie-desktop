@@ -63,7 +63,7 @@ namespace BudgieScr {
 			// scenarios
 			string username = Environment.get_user_name();
 			string tmpdir = Environment.get_tmp_dir();
-			tempfile_path = tmpdir.concat("/", username, "_budgiescreenshot_tempfile");
+			tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, username + "_budgiescreenshot_tempfile");
 		}
 
 		private void fill_buttonpos() {
