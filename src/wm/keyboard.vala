@@ -77,23 +77,21 @@ namespace Budgie {
 		/* Guard ourselves from any future potential derps */
 		private bool is_keyboard_held = false;
 
-		public static void init (Budgie.BudgieWM? wm) {
-			if (instance != null) {
-				return;
-			}
+		public static void init(Budgie.BudgieWM? wm) {
+			if (instance != null) return;
 
-			instance = new KeyboardManager (wm);
+			instance = new KeyboardManager(wm);
 
 			var display = wm.get_display();
-			display.modifiers_accelerator_activated.connect (instance.handle_modifiers_accelerator_activated);
+			display.modifiers_accelerator_activated.connect(instance.handle_modifiers_accelerator_activated);
 		}
 
 		static construct {
-			sources_variant_type = new VariantType ("a(ss)");
+			sources_variant_type = new VariantType("a(ss)");
 		}
 
-		KeyboardManager (Budgie.BudgieWM? wm) {
-			Object ();
+		KeyboardManager(Budgie.BudgieWM? wm) {
+			Object();
 			this.wm = wm;
 
 			/* Hook into GNOME defaults */
@@ -109,15 +107,13 @@ namespace Budgie {
 		}
 
 		construct {
-			var schema = GLib.SettingsSchemaSource.get_default ().lookup ("org.gnome.desktop.input-sources", true);
-			if (schema == null) {
-				return;
-			}
+			var schema = GLib.SettingsSchemaSource.get_default().lookup("org.gnome.desktop.input-sources", true);
+			if (schema == null) return;
 
-			settings = new GLib.Settings.full (schema, null, null);
-			Signal.connect (settings, "changed", (Callback) set_keyboard_layout, this);
+			settings = new GLib.Settings.full(schema, null, null);
+			Signal.connect(settings, "changed", (Callback) set_keyboard_layout, this);
 
-			set_keyboard_layout ("current");
+			set_keyboard_layout("current");
 		}
 
 		[CCode (instance_pos = -1)]
@@ -148,9 +144,7 @@ namespace Budgie {
 		void switch_input_source(Meta.Display display,
 								Meta.Window? window, Clutter.KeyEvent? event,
 								Meta.KeyBinding binding) {
-			if (sources == null || sources.length == 0) {
-				return;
-			}
+			if (sources == null || sources.length == 0) return;
 
 			current_source = (current_source+1) % sources.length;
 			this.hold_keyboard();
@@ -162,9 +156,7 @@ namespace Budgie {
 		void switch_input_source_backward(Meta.Display display,
 										Meta.Window? window, Clutter.KeyEvent? event,
 										Meta.KeyBinding binding) {
-			if (sources == null || sources.length == 0) {
-				return;
-			}
+			if (sources == null || sources.length == 0) return;
 
 			current_source = (current_source-1) % sources.length;
 			this.hold_keyboard();
@@ -206,10 +198,7 @@ namespace Budgie {
 
 				if (id == "xkb") {
 					string[] spl = type.split("+");
-					string? variant = "";
-					if (spl.length > 1) {
-						variant = spl[1];
-					}
+					string? variant = (spl.length > 1) ? spl[1] : "";
 
 					try {
 						source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
@@ -276,7 +265,6 @@ namespace Budgie {
 			Meta.Backend.get_backend().lock_layout_group(idx);
 			/* Send this off to gsettings so that clients know what our idx is */
 			this.write_source_index(idx);
-
 		}
 
 		[CCode (instance_pos = -1)]
@@ -340,16 +328,8 @@ namespace Budgie {
 		*/
 		[CCode (instance_pos = -1)]
 		private void apply_ibus() {
-			string engine_name;
 			InputSource? current = sources.index(current_source);
-
-			if (current != null && current.ibus_engine != null) {
-				engine_name = current.ibus_engine;
-			} else {
-				engine_name = DEFAULT_ENGINE;
-			}
-
-			this.ibus_manager.set_engine(engine_name);
+			this.ibus_manager.set_engine((current != null && current.ibus_engine != null) ? current.ibus_engine : DEFAULT_ENGINE);
 		}
 
 		/**
@@ -357,9 +337,7 @@ namespace Budgie {
 		*/
 		[CCode (instance_pos = -1)]
 		public void release_keyboard() {
-			if (!is_keyboard_held) {
-				return;
-			}
+			if (!is_keyboard_held) return;
 
 			wm.get_display().ungrab_keyboard(wm.get_display().get_current_time());
 			is_keyboard_held = false;
@@ -370,9 +348,8 @@ namespace Budgie {
 		*/
 		[CCode (instance_pos = -1)]
 		public void hold_keyboard() {
-			if (is_keyboard_held) {
-				return;
-			}
+			if (is_keyboard_held) return;
+
 			wm.get_display().freeze_keyboard(wm.get_display().get_current_time());
 			is_keyboard_held = true;
 		}
@@ -381,21 +358,17 @@ namespace Budgie {
 		* Respond correctly to ALT+SHIFT_L
 		*/
 		[CCode (instance_pos = -1)]
-		bool handle_modifiers_accelerator_activated (Meta.Display display) {
-			display.ungrab_keyboard (display.get_current_time ());
+		bool handle_modifiers_accelerator_activated(Meta.Display display) {
+			display.ungrab_keyboard(display.get_current_time ());
 
 			var sources = settings.get_value ("sources");
-			if (!sources.is_of_type (sources_variant_type)) {
-				return true;
-			}
+			if (!sources.is_of_type(sources_variant_type)) return true;
 
-			var n_sources = (uint) sources.n_children ();
-			if (n_sources < 2) {
-				return true;
-			}
+			var n_sources = (uint) sources.n_children();
+			if (n_sources < 2) return true;
 
 			var current = settings.get_uint ("current");
-			settings.set_uint ("current", (current + 1) % n_sources);
+			settings.set_uint("current", (current + 1) % n_sources);
 
 			return true;
 		}
@@ -404,17 +377,13 @@ namespace Budgie {
 		* Called whenever  the keyboard layout needs to be set/reset
 		*/
 		[CCode (instance_pos = -1)]
-		void set_keyboard_layout (string key) {
-			if (!(key == "current" || key == "sources" || key == "xkb-options")) {
-				return;
-			}
+		void set_keyboard_layout(string key) {
+			if (!(key == "current" || key == "sources" || key == "xkb-options")) return;
 
 			string layout = DEFAULT_LAYOUT, variant = DEFAULT_VARIANT, options = "";
 
-			var sources = settings.get_value ("sources");
-			if (!sources.is_of_type (sources_variant_type)) {
-				return;
-			}
+			var sources = settings.get_value("sources");
+			if (!sources.is_of_type(sources_variant_type)) return;
 
 			var current = settings.get_uint ("current");
 			unowned string? type = null, name = null;
@@ -422,17 +391,15 @@ namespace Budgie {
 				sources.get_child (current, "(&s&s)", out type, out name);
 			}
 
-			if (type == "xkb") {
-				string[] arr = name.split ("+", 2);
-				layout = arr[0];
-				variant = arr[1] ?? "";
-			} else {
-				return;  //We do not want to change the current xkb layout here when using ibus.
-			}
+			if (type != "xkb") return; //We do not want to change the current xkb layout here when using ibus.
 
-			var xkb_options = settings.get_strv ("xkb-options");
+			string[] arr = name.split ("+", 2);
+			layout = arr[0];
+			variant = arr[1] ?? "";
+
+			var xkb_options = settings.get_strv("xkb-options");
 			if (xkb_options.length > 0) {
-				options = string.joinv (",", xkb_options);
+				options = string.joinv(",", xkb_options);
 			}
 
 			// Needed to make common keybindings work on non-latin layouts
@@ -441,7 +408,7 @@ namespace Budgie {
 				variant = variant + ",";
 			}
 
-			Meta.Backend.get_backend ().set_keymap (layout, variant, options);
+			Meta.Backend.get_backend().set_keymap(layout, variant, options);
 		}
 	}
 }

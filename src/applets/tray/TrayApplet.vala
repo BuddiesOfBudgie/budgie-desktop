@@ -33,18 +33,16 @@ public class TraySettings : Gtk.Grid {
 		this.settings = settings;
 		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
 
-		var show_ibusicon = false;
-		if (Environment.find_program_in_path("ibus-daemon") != null) {
+		var show_ibusicon = Environment.find_program_in_path("ibus-daemon") != null;
+		if (show_ibusicon) {
 			ibus_settings = new Settings("org.freedesktop.ibus.panel");
 			ibus_settings.bind("show-icon-on-systray", ibusicon_switch, "active", SettingsBindFlags.DEFAULT);
-			show_ibusicon = true;
 		}
 
 		ibusicon_switch.show();
 		ibusicon_label.show();
 		ibusicon_switch.set_visible(show_ibusicon);
 		ibusicon_label.set_visible(show_ibusicon);
-
 	}
 }
 
@@ -185,12 +183,7 @@ public class TrayApplet : Budgie.Applet {
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
-		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-			orient = Gtk.Orientation.VERTICAL;
-		} else {
-			orient = Gtk.Orientation.HORIZONTAL;
-		}
-
+		orient = (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) ? Gtk.Orientation.VERTICAL : Gtk.Orientation.HORIZONTAL;
 		reintegrate_tray();
 	}
 
