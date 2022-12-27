@@ -183,7 +183,7 @@
 			plugin_info_box.pack_start(upper_box, false, false, 0);
 			plugin_info_box.pack_start(selected_plugin_description, false, false, 0);
 			plugin_info_box.pack_end(selected_plugin_copyright, false, false, 0);
-			plugin_info_box.set_size_request(350, -1);
+			plugin_info_box.set_size_request(400, -1);
 
 			content_area.pack_start(plugin_info_box, true, true, 0);
 
