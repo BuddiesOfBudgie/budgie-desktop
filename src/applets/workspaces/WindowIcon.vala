@@ -29,6 +29,11 @@ namespace Workspaces {
 				this.set_tooltip_text(window.get_name());
 			});
 
+			window.icon_changed.connect(() => {
+				icon.set_from_pixbuf(window.get_mini_icon());
+				icon.queue_draw();
+			});
+
 			Gtk.drag_source_set(
 				this,
 				Gdk.ModifierType.BUTTON1_MASK,

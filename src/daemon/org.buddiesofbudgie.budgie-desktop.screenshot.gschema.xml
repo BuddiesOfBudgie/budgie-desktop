@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/org/buddiesofbudgie/budgie-desktop/screenshot/"
+            id="org.buddiesofbudgie.budgie-desktop.screenshot">
+        <key type="i" name="delay">
+            <summary>Screenshot delay</summary>
+            <description>Number of seconds to wait before taking a screenshot</description>
+            <default>0</default>
+	    <range min="0" max="30"/>
+        </key>
+            <key type="s" name="screenshot-mode">
+            <choices>
+       	        <choice value='Screen'/>
+                <choice value='Window'/>
+                <choice value='Selection'/>
+            </choices>
+            <summary>Screenshot type</summary>
+            <description>What to take a screenshot of; either screen, window or selection</description>
+            <default>"Screen"</default>
+        </key>
+        <key type="i" name="last-save-directory">
+            <summary>Index of the last used directory</summary>
+            <description>Index of the last used directory. If default user-dirs are there, index equals Enum from: UserDirectory https://valadoc.org/glib-2.0/GLib.UserDirectory.html. in case of index error, fallback is user home directory</description>
+            <default>4</default>
+	    <range min="0" max="7"/>
+        </key>
+        <key type="s" name="file-type">
+            <choices>
+       	        <choice value='jpeg'/>
+                <choice value='png'/>
+                <choice value='tiff'/>
+                <choice value='ico'/>
+                <choice value='bmp'/>
+            </choices>
+            <summary>File type to save the screenshot</summary>
+            <description>The filetype for the screenshot to be saved in</description>
+            <default>"png"</default>
+        </key>
+         <key type="b" name="include-frame">
+            <summary>Include window frame in the screenshot</summary>
+            <description>Wether to include the window frame in the screenshot or not</description>
+            <default>true</default>
+        </key>
+         <key type="b" name="showtooltips">
+            <summary>Wether to show tooltips</summary>
+            <description>Wether to show tooltips on headerbar buttons or not</description>
+            <default>true</default>
+        </key>
+        <key type="b" name="include-cursor">
+            <summary>Include the cursor in the screenshot</summary>
+            <description>Wether to include the cursor in the screenshot or not</description>
+            <default>false</default>
+        </key>
+    </schema>
+</schemalist>
+
+

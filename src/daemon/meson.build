@@ -27,6 +27,7 @@ daemon_sources = [
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
+    'screenshot.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
@@ -42,6 +43,8 @@ daemon_deps = [
     dep_gdkx11,
     dep_notify,
     dep_wnck,
+    dep_gst,
+    dep_cairo,
     link_libbudgieprivate,
     libplugin_vapi,
     link_libappsys,
@@ -49,7 +52,6 @@ daemon_deps = [
     link_libtheme,
     link_libsession,
 ]
-
 
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml')
@@ -87,4 +89,36 @@ executable(
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
+)
+
+main_sources = [
+  'screenshot_main.vala',
+]
+
+ScreenshotMainDependencies = [
+    dependency('gtk+-3.0'),
+]
+
+executable(
+    'org.buddiesofbudgie.BudgieScreenshot', main_sources,
+    dependencies: ScreenshotMainDependencies,
+    install: true,
+    vala_args: daemon_vala_args,
+)
+
+install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
+)
+
+install_data('icons/org.buddiesofbudgie.BudgieScreenshot.svg',
+    install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'apps')
+)
+
+# Now merge the translations of the .desktop.in to a .desktop
+custom_target('org.buddiesofbudgie.BudgieScreenshot',
+    input : 'org.buddiesofbudgie.BudgieScreenshot.desktop.in',
+    output : 'org.buddiesofbudgie.BudgieScreenshot.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : join_paths(datadir, 'applications'),
 )
