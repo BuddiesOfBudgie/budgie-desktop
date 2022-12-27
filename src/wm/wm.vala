@@ -36,6 +36,9 @@ namespace Budgie {
 	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
+	public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.BudgieScreenshotControl";
+	public const string SCREENSHOTCONTROL_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/ScreenshotControl";
+
 	[Flags]
 	public enum PanelAction {
 		NONE = 1 << 0,
@@ -101,6 +104,17 @@ namespace Budgie {
 		public abstract async void StopSwitcher() throws Error;
 	}
 
+	/**
+	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
+	*/
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshotControl")]
+	public interface ScreenshotControl : GLib.Object {
+		public async abstract void StartMainWindow() throws GLib.Error;
+		public async abstract void StartAreaSelect() throws GLib.Error;
+		public async abstract void StartWindowScreenshot() throws GLib.Error;
+		public async abstract void StartFullScreenshot() throws GLib.Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -136,6 +150,8 @@ namespace Budgie {
 		RavenRemote? raven_proxy = null;
 		ShellShim? shim = null;
 		BudgieWMDBUS? focus_interface = null;
+		ScreenshotManager? screenshot = null;
+		ScreenshotControl? screenshotcontrol_proxy = null;
 		PanelRemote? panel_proxy = null;
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
@@ -167,6 +183,15 @@ namespace Budgie {
 
 		bool have_logind() {
 			return FileUtils.test("/run/systemd/seats", FileTest.EXISTS);
+		}
+
+		/* Hold onto our ScreenshotControl proxy ref */
+		void on_screenshotcontrol_get(Object? o, AsyncResult? res) {
+			try {
+				screenshotcontrol_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to gain ScreenshotControl proxy: %s", e.message);
+			}
 		}
 
 		/* Hold onto our Raven proxy ref */
@@ -267,8 +292,18 @@ namespace Budgie {
 		void on_take_full_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("full-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartFullScreenshot.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartFullScreenshot.end(res);
+						} catch (Error e) {
+							message("Failed to StartFullScreenshot: %s", e.message);
+						}
+					});
+				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -278,8 +313,18 @@ namespace Budgie {
 		void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartAreaSelect.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartAreaSelect.end(res);
+						} catch (Error e) {
+							message("Failed to StartAreaSelect: %s", e.message);
+						}
+					});
+				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -289,8 +334,18 @@ namespace Budgie {
 		void on_take_window_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("take-window-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartWindowScreenshot.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartWindowScreenshot.end(res);
+						} catch (Error e) {
+							message("Failed to StartWindowScreenshot: %s", e.message);
+						}
+					});
+				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -348,6 +403,17 @@ namespace Budgie {
 					warning("Unable to ToggleNotificationsView() in Raven: %s", e.message);
 				}
 			});
+		}
+
+		/* Set up the proxy when screenshotcontrol appears */
+		void has_screenshotcontrol() {
+			if (screenshotcontrol_proxy == null) {
+				Bus.get_proxy.begin<ScreenshotControl>(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, SCREENSHOTCONTROL_DBUS_OBJECT_PATH, 0, null, on_screenshotcontrol_get);
+			}
+		}
+
+		void lost_screenshotcontrol() {
+			screenshotcontrol_proxy = null;
 		}
 
 		/* Set up the proxy when raven appears */
@@ -511,6 +577,10 @@ namespace Budgie {
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
 
+			/* ScreenshotControl */
+			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_screenshotcontrol, lost_screenshotcontrol);
+
 			/* Keep an eye out for systemd stuffs */
 			if (have_logind()) {
 				get_logind();
@@ -545,6 +615,9 @@ namespace Budgie {
 			KeyboardManager.init(this);
 
 			display.get_workspace_manager().override_workspace_layout(Meta.DisplayCorner.TOPLEFT, false, 1, -1);
+
+			screenshot = ScreenshotManager.init(this);
+			screenshot.setup_dbus();
 		}
 
 		/**
@@ -830,7 +903,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(minimize_done);
 
 			/* Save the minimize state for later restoration */
-			var scale_factor = Meta.Backend.get_backend ().get_settings ().get_ui_scaling_factor ();
+			var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
 			var scale_x = (float)((icon.width * scale_factor) / actor.width);
 			var scale_y = (float)((icon.height * scale_factor) / actor.height);
 			var place_x = (float)icon.x * scale_factor;
@@ -878,7 +951,7 @@ namespace Budgie {
 			finalize_animations(actor);
 
 			actor.set_pivot_point(0f, 0f);
-			actor.set_scale (d.scale_x, d.scale_y);
+			actor.set_scale(d.scale_x, d.scale_y);
 			actor.set_x(d.place_x);
 			actor.set_y(d.place_y);
 			actor.opacity = 0U;
@@ -889,7 +962,7 @@ namespace Budgie {
 			actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
 			actor.set_easing_duration(UNMINIMIZE_TIMEOUT);
 
-			actor.set_scale (1.0f, 1.0f);
+			actor.set_scale(1.0f, 1.0f);
 			actor.opacity = 255U;
 			actor.set_x(d.old_x);
 			actor.set_y(d.old_y);
