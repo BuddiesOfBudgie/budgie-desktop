@@ -233,27 +233,22 @@ namespace Budgie {
 				string markup = null;
 				switch (result) {
 					case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
-						markup = "Failed to create the widget instance: No plugin info found.";
+						markup = _("Failed to create the widget instance. The plugin engine could not find info for this plugin.");
 						break;
 					case RavenWidgetCreationResult.INVALID_MODULE_NAME:
-						var builder = new StringBuilder();
-						builder.append("Failed to create the widget instance. The module name must be in reverse-DNS format, ");
-						builder.append("such as 'tld.domain.group.WidgetName.so' for C/Vala or 'tld_domain_group_WidgetName' for Python.");
-						markup = builder.str;
+						markup = _("Failed to create the widget instance. The module name must be in reverse-DNS format, " +
+							"such as 'tld.domain.group.WidgetName.so' for C/Vala or 'tld_domain_group_WidgetName' for Python.");
 						break;
 					case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
-						markup = "Failed to create the widget instance: Failed to load the plugin from disk.";
+						markup = _("Failed to create the widget instance. The plugin engine failed to load the plugin from the disk.");
 						break;
 					case RavenWidgetCreationResult.SCHEMA_LOAD_FAILED:
-						var builder = new StringBuilder();
-						builder.append("Failed to create the widget instance. ");
-						builder.append("The plugin supports settings, but does not install a settings schema with the same name.\n\n");
-						builder.append("The schema name should be identical to the module name, but with no extension and ");
-						builder.append("(in the case of Python) the underscores replaced with periods.");
-						markup = builder.str;
+						markup = _("Failed to create the widget instance. The plugin supports settings, but does not install a " +
+							"settings schema with the same name.\n\nThe schema name should be identical to the module name, but " +
+							"with no extension and (in the case of Python) the underscores replaced with periods.");
 						break;
 					case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
-						markup = "Failed to create the widget instance due to an unknown failure.";
+						markup = _("Failed to create the widget instance due to an unknown failure.");
 						break;
 					default:
 						break;
