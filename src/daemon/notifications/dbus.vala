@@ -490,13 +490,6 @@
 				}
 			}
 
-			// TODO(emaddock): Do we want to skip sounds for certain apps
-			// such as Spotify and Discord? Some apps play their own sounds
-			// but don't set the `suppress-sound` hint. Spotify also doesn't
-			// set it, so you get noti sounds by default when the song changes.
-			// On the other hand, it's easy to go into the Control Center and
-			// disable noti sounds for an application.
-
 			// Play the sound
 			if (sound_name != null) {
 				Canberra.Proplist props;
