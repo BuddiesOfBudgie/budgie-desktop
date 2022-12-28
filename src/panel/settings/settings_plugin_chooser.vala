@@ -59,7 +59,7 @@
 					ellipsize = Pango.EllipsizeMode.END,
 					hexpand = true,
 				};
-				builtin.set_markup("<i>%s</i>".printf(_("Built-in")));
+				builtin.set_markup("<i><small>%s</small></i>".printf(_("Built-in")));
 				builtin.get_style_context().add_class("dim-label");
 				label_box.add(builtin);
 			} else {
@@ -189,7 +189,7 @@
 
 			content_area.show_all();
 
-			set_default_size(-1, 350);
+			set_default_size(-1, 400);
 		}
 
 		/**
@@ -213,14 +213,7 @@
 			Peas.PluginInfo? infoA = ((SettingsPluginChooserItem) a.get_child()).plugin;
 			Peas.PluginInfo? infoB = ((SettingsPluginChooserItem) b.get_child()).plugin;
 
-			if (infoA.is_builtin() == infoB.is_builtin()) {
-				return strcmp(infoA.get_name().down(), infoB.get_name().down());
-			} else if (infoA.is_builtin()) {
-				return -1;
-			} else {
-				return 1;
-			}
-
+			return strcmp(infoA.get_name().down(), infoB.get_name().down());
 		}
 
 		/**
