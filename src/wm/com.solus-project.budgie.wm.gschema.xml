@@ -117,9 +117,9 @@
 		</key>
 
 		<key type="s" name="full-screenshot-cmd">
-			<default>'gnome-screenshot'</default>
+			<default>''</default>
 			<summary>Take screenshot of all displays application</summary>
-			<description>Application that is run when taking a screenshot of all displays</description>
+			<description>Application that is run when taking a screenshot of all displays. The default is budgie screenshot.</description>
 		</key>
 
 		<key type="as" name="take-region-screenshot">
@@ -129,9 +129,9 @@
 		</key>
 
 		<key type="s" name="take-region-screenshot-cmd">
-			<default>'gnome-screenshot -a'</default>
+			<default>''</default>
 			<summary>Take screenshot of selectable region application</summary>
-			<description>Application that is run when taking a screenshot of a selectable region</description>
+			<description>Application that is run when taking a screenshot of a selectable region. The default is budgie screenshot.</description>
 		</key>
 
 		<key type="as" name="take-window-screenshot">
@@ -141,9 +141,9 @@
 		</key>
 
 		<key type="s" name="take-window-screenshot-cmd">
-			<default>'gnome-screenshot -w -b'</default>
+			<default>''</default>
 			<summary>Take screenshot of current window application</summary>
-			<description>Application that is run when taking a screenshot of the current window</description>
+			<description>Application that is run when taking a screenshot of the current window. The default is budgie screenshot.</description>
 		</key>
 
 		<key type="as" name="toggle-notifications">

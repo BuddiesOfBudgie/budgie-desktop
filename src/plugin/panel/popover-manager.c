@@ -51,7 +51,7 @@ static void budgie_popover_manager_ungrab(BudgiePopoverManager* self, BudgiePopo
  *
  * Return value: A pointer to a new #BudgiePopoverManager object.
  */
-BudgiePopoverManager* budgie_popover_manager_new() {
+BudgiePopoverManager* budgie_popover_manager_new(void) {
 	return g_object_new(BUDGIE_TYPE_POPOVER_MANAGER, NULL);
 }
 
