@@ -304,25 +304,7 @@
 			}
 
 			// Play a sound for the notification if desired
-			unowned Variant? variant = null;
-			bool suppress = (variant = notification.hints.lookup("suppress-sound")) != null && variant.is_of_type(VariantType.BOOLEAN) && variant.get_boolean();
-			bool should_play_sound = should_notify && should_show && app_notification_settings.get_boolean("enable-sound-alerts") && !suppress;
-
-			if (should_play_sound) {
-				string? sound_name = "dialog-information";
-
-				// Give critical notifications a special sound
-				if (notification.urgency == NotificationPriority.URGENT) {
-					sound_name = "dialog-warning";
-				}
-
-				// Look for a sound name in the hints
-				if ("sound-name" in hints) {
-					sound_name = hints.get("sound-name").get_string();
-				}
-
-				play_sound(notification, sound_name);
-			}
+			maybe_play_sound(notification, should_notify, should_show, app_notification_settings);
 
 			// We don't want to count our own noti's, or have them shown in Raven
 			if ("budgie-daemon" in app_name) {
@@ -445,6 +427,56 @@
 					}
 					break;
 			}
+		}
+
+		/**
+		 * Performs a bunch of checks and plays a sound if all checks pass.
+		 */
+		private void maybe_play_sound(Notification notification, bool notify, bool should_show, Settings settings) {
+			unowned Variant? variant = null;
+
+			// Check if notification sounds are suppressed for this notification
+			bool suppress = (variant = notification.hints.lookup("suppress-sound")) != null && variant.is_of_type(VariantType.BOOLEAN) && variant.get_boolean();
+			if (suppress) {
+				return;
+			}
+
+			// Try to get the DesktopAppInfo for the application that generated this notification
+			if (notification.app_info == null) {
+				return;
+			}
+
+			// Check if the application info has this key set. We check this because for now, we only
+			// want to play sounds if they can be disabled via BCC. This check is how the Control Center
+			// determines if an application should be shown in the Notification section.
+			if (!notification.app_info.get_boolean("X-GNOME-UsesNotifications")) {
+				return;
+			}
+
+			// Check if sound alerts are enabled for this appllication
+			if (!settings.get_boolean("enable-sound-alerts")) {
+				return;
+			}
+
+			// Don't play sounds if the notification wasn't shown
+			if (!notify || !should_show) {
+				return;
+			}
+
+			// Default sound name
+			string? sound_name = "dialog-information";
+
+			// Give critical notifications a special sound
+			if (notification.urgency == NotificationPriority.URGENT) {
+				sound_name = "dialog-warning";
+			}
+
+			// Look for a sound name in the hints
+			if ("sound-name" in notification.hints) {
+				sound_name = notification.hints.get("sound-name").get_string();
+			}
+
+			play_sound(notification, sound_name);
 		}
 
 		/**
