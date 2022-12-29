@@ -32,12 +32,15 @@ applet_status_deps = [
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
-    dependency('gnome-bluetooth-1.0', version: '>= 3.34.0'),
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libplugin,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
+
+if with_bluetooth == true
+    applet_status_deps += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
+endif
 
 shared_library(
     'statusapplet',

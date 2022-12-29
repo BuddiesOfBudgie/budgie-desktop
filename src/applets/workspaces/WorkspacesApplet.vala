@@ -223,6 +223,7 @@ namespace Workspaces {
 					Gtk.Revealer revealer = widget as Gtk.Revealer;
 					WorkspaceItem item = revealer.get_child() as WorkspaceItem;
 					item.set_size_multiplier(item_size_multiplier);
+					item.queue_resize();
 				}
 				Timeout.add(100, () => {
 					update_workspaces.begin();
