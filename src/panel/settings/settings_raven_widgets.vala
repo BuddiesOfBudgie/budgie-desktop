@@ -59,6 +59,7 @@ namespace Budgie {
 			this.manager = manager;
 			this.raven = Budgie.Raven.get_instance();
 
+			halign = Gtk.Align.CENTER;
 			valign = Gtk.Align.FILL;
 
 			var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
