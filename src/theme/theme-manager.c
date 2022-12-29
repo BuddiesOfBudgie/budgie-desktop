@@ -37,7 +37,7 @@ G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
  *
  * Construct a new BudgieThemeManager object
  */
-BudgieThemeManager* budgie_theme_manager_new() {
+BudgieThemeManager* budgie_theme_manager_new(void) {
 	return g_object_new(BUDGIE_TYPE_THEME_MANAGER, NULL);
 }
 
