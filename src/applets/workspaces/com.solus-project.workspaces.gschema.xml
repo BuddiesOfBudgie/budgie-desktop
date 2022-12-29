@@ -6,11 +6,11 @@
       <value nick="always" value="4" />
   </enum>
   <enum id="com.solus-project.workspaces.ItemSizeMultiplier">
-    <value nick="0.5" value="1" />
-    <value nick="0.75" value="2" />
-    <value nick="1.0" value="3" />
-    <value nick="1.5" value="4" />
-    <value nick="2.0" value="5" />
+    <value nick="0.5" value="2" />
+    <value nick="0.75" value="3" />
+    <value nick="1.0" value="4" />
+    <value nick="1.5" value="6" />
+    <value nick="2.0" value="8" />
   </enum>
   <schema id="com.solus-project.workspaces">
     <key enum="com.solus-project.workspaces.AddButtonVisibility" name="addbutton-visibility">
