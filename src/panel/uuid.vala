@@ -29,7 +29,7 @@ namespace LibUUID {
 			LibUUID.generate_time(time);
 #if with_libuuid_time_safe
 		} else if ((flags & LibUUID.UUIDFlags.TIME_SAFE_TYPE) != 0) {
-				LibUUID.generate_time_safe(time);
+			LibUUID.generate_time_safe(time);
 #endif
 		} else {
 			LibUUID.generate(time);
