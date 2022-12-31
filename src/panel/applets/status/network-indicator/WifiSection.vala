@@ -22,7 +22,7 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 	private uint wifi_recreate_timeout = 0;
 
 	public NetworkIndicatorWifiSection(NM.Client client) {
-		Object(margin_top: 6, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
 		this.client = client;
 
@@ -80,15 +80,17 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 			}
 		});
 
-		wifiSwitch.set_state(client.wireless_get_enabled());
-		wifiListRevealer.set_reveal_child(client.wireless_get_enabled());
+		on_wireless_state_changed();
 		client.notify["wireless-enabled"].connect(on_wireless_state_changed);
+		client.notify["networking-enabled"].connect(on_wireless_state_changed);
 		wifiSwitch.state_set.connect((state) => {
-			client.dbus_set_property.begin(
-				"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
-				"WirelessEnabled", state,
-				-1, null
-			);
+			if (client.networking_get_enabled()) {
+				client.dbus_set_property.begin(
+					"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
+					"WirelessEnabled", state,
+					-1, null
+				);
+			}
 
 			if (state) {
 				wifiPlaceholderBox.show();
@@ -103,7 +105,7 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 		if (client.wireless_get_enabled()) {
 			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
 				recreate_wifi_list();
-				return client.wireless_get_enabled();
+				return true;
 			});
 		}
 	}
@@ -125,17 +127,24 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 	}
 
 	private void on_wireless_state_changed() {
-		var state = client.wireless_get_enabled();
+		warning("On wireless state changed");
 
-		wifiSwitch.set_state(state);
-		if (state) {
-			wifiListRevealer.set_reveal_child(true);
+		var networking_state = client.networking_get_enabled();
+		var wireless_state = networking_state && client.wireless_get_enabled();
+
+		wifiSwitch.set_state(wireless_state);
+		wifiSwitch.set_sensitive(networking_state);
+		wifiListRevealer.set_reveal_child(wireless_state);
+
+		if (wifi_recreate_timeout != 0) {
+			Source.remove(wifi_recreate_timeout);
+		}
+
+		if (wireless_state) {
 			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
 				recreate_wifi_list();
-				return client.wireless_get_enabled();
+				return true;
 			});
-		} else if (wifi_recreate_timeout != 0) {
-			Source.remove(wifi_recreate_timeout);
 		}
 	}
 
