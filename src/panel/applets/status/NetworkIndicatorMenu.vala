@@ -81,17 +81,35 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			row.destroy();
 		});
 
-		var activeIds = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 		var table = new HashTable<string, NM.AccessPoint>(str_hash, str_equal);
 
 		wifiDevices.foreach((device) => {
 			var activeAP = device.get_active_access_point();
 			if (activeAP != null && activeAP.ssid != null) {
-				activeIds.insert(gen_ap_identifier(activeAP), activeAP);
+				var row_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
+				var icon = new Gtk.Image.from_icon_name(wireless_icon_name_from_state(device, activeAP), Gtk.IconSize.MENU);
+				var label = new Gtk.Label(NM.Utils.ssid_to_utf8(activeAP.ssid.get_data())) {
+					xalign = 0.0f,
+					max_width_chars = 1,
+					ellipsize = Pango.EllipsizeMode.END,
+					hexpand = true,
+				};
+				row_box.pack_start(icon, false, false, 0);
+				row_box.pack_start(label, true, true, 0);
+
+				string? connectedText = connected_string_from_state(device);
+				if (connectedText != null) {
+					var connectedLabel = new Gtk.Label(null);
+					connectedLabel.set_markup("<small><span alpha='50%'>%s</span></small>".printf(connectedText));
+					row_box.pack_end(connectedLabel, false, false, 0);
+				}
+
+				row_box.set_border_width(4);
+				wifiNetworkList.add(row_box);
 			}
 
 			device.get_access_points().foreach((ap) => {
-				if (ap.ssid != null) {
+				if (ap.ssid != null && ap != activeAP) {
 					var identifier = gen_ap_identifier(ap);
 
 					if (!table.contains(identifier)) {
@@ -101,29 +119,6 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 					}
 				}
 			});
-		});
-
-		activeIds.foreach((id, ap) => {
-			var bestAP = table.take(id);
-
-			var row_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
-			var icon = new Gtk.Image.from_icon_name(get_signal_icon_name_from_ap_strength(bestAP), Gtk.IconSize.MENU);
-			var label = new Gtk.Label(NM.Utils.ssid_to_utf8(bestAP.ssid.get_data())) {
-				xalign = 0.0f,
-				max_width_chars = 1,
-				ellipsize = Pango.EllipsizeMode.END,
-				hexpand = true,
-			};
-			row_box.pack_start(icon, false, false, 0);
-			row_box.pack_start(label, true, true, 0);
-
-			var connectedLabel = new Gtk.Label("<small><span alpha='50%'>%s</span></small>".printf(_("Connected"))) {
-				use_markup = true,
-			};
-			row_box.pack_end(connectedLabel, false, false, 0);
-
-			row_box.set_border_width(4);
-			wifiNetworkList.add(row_box);
 		});
 
 		var remainingAPs = new List<NM.AccessPoint>();
@@ -270,6 +265,14 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		}
 	}
 
+	private string wireless_icon_name_from_state(NM.DeviceWifi device, NM.AccessPoint ap) {
+		if (device.get_mode() == NM.@80211Mode.AP) {
+			return "network-wireless-hotspot-symbolic";
+		} else {
+			return get_signal_icon_name_from_ap_strength(ap);
+		}
+	}
+
 	private string get_signal_icon_name_from_ap_strength(NM.AccessPoint ap) {
 		var strength = ap.get_strength();
 		var iconStrength = "none";
@@ -290,6 +293,34 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		}
 
 		return "network-wireless" + infix + "-signal-" + iconStrength + "-symbolic";
+	}
+
+	private string? connected_string_from_state(NM.DeviceWifi device) {
+		if (device.get_mode() == NM.@80211Mode.AP) {
+			return _("Hotspot");
+		} else {
+			switch (device.get_state()) {
+				case NM.DeviceState.UNAVAILABLE:
+				case NM.DeviceState.UNKNOWN:
+				case NM.DeviceState.UNMANAGED:
+				case NM.DeviceState.DISCONNECTED:
+					return null;
+				case NM.DeviceState.ACTIVATED:
+					return _("Connected");
+				case NM.DeviceState.CONFIG:
+				case NM.DeviceState.IP_CHECK:
+				case NM.DeviceState.IP_CONFIG:
+				case NM.DeviceState.NEED_AUTH:
+				case NM.DeviceState.PREPARE:
+				case NM.DeviceState.SECONDARIES:
+					return _("Connecting...");
+				case NM.DeviceState.DEACTIVATING:
+				case NM.DeviceState.FAILED:
+					return _("Disconnecting...");
+			}
+		}
+
+		return null;
 	}
 
 	private void on_settings_activate(string desktopFile) {
