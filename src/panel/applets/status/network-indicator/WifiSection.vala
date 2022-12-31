@@ -9,30 +9,67 @@
  * (at your option) any later version.
  */
 
-public class NetworkIndicatorPopover : Budgie.Popover {
-	private NM.Client client = null;
+public class NetworkIndicatorWifiSection : Gtk.Box {
+	private unowned NM.Client client;
 
-	private Gtk.Box box;
-
-	private Gtk.Switch ethernetSwitch = null;
-
+	private List<NM.DeviceWifi> wifiDevices = null;
 	private Gtk.Switch wifiSwitch = null;
 	private Gtk.Revealer wifiListRevealer = null;
 	private Gtk.ListBox wifiNetworkList = null;
 	private Gtk.Box wifiPlaceholderBox = null;
 	private Gtk.Spinner wifiPlaceholderSpinner = null;
 
-	private List<NM.DeviceWifi> wifiDevices = null;
-
 	private uint wifi_recreate_timeout = 0;
 
-	public NetworkIndicatorPopover(Gtk.EventBox ebox, NM.Client client) {
-		Object(relative_to: ebox);
-
-		get_style_context().add_class("budgie-network-popover");
-		set_size_request(275, -1);
+	public NetworkIndicatorWifiSection(NM.Client client) {
+		Object(margin_top: 6, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
 		this.client = client;
+
+		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi"))) {
+			use_markup = true,
+			valign = Gtk.Align.CENTER,
+			margin_start = 4
+		};
+
+		var wifiSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
+		wifiSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+		wifiSettings.set_tooltip_text(_("Open Wi-Fi Settings"));
+		wifiSettings.clicked.connect(() => settings_activated());
+
+		wifiSwitch = new Gtk.Switch() {
+			halign = Gtk.Align.END,
+			valign = Gtk.Align.CENTER
+		};
+
+		var wifiHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
+		wifiHeaderBox.pack_start(wifiLabel, false, false, 0);
+		wifiHeaderBox.pack_end(wifiSwitch, false, false, 0);
+		wifiHeaderBox.pack_end(wifiSettings, false, false, 0);
+
+		wifiPlaceholderSpinner = new Gtk.Spinner();
+
+		wifiPlaceholderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+		wifiPlaceholderBox.add(wifiPlaceholderSpinner);
+		wifiPlaceholderBox.add(new Gtk.Label(_("Searching for networks...")));
+		wifiPlaceholderBox.set_halign(Gtk.Align.CENTER);
+		wifiPlaceholderBox.get_style_context().add_class("wifi-network-placeholder");
+		wifiPlaceholderBox.border_width = 4;
+
+		wifiNetworkList = new Gtk.ListBox();
+		wifiNetworkList.set_selection_mode(Gtk.SelectionMode.NONE);
+		wifiNetworkList.get_style_context().add_class("wifi-network-list");
+
+		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		wifiRevealerBox.get_style_context().add_class("wifi-network-revealer-box");
+		wifiRevealerBox.add(wifiPlaceholderBox);
+		wifiRevealerBox.add(wifiNetworkList);
+
+		wifiListRevealer = new Gtk.Revealer();
+		wifiListRevealer.add(wifiRevealerBox);
+
+		pack_start(wifiHeaderBox, false, false, 0);
+		pack_start(wifiListRevealer, false, false, 0);
 
 		wifiDevices = new List<NM.DeviceWifi>();
 		client.get_devices().foreach(on_device_added);
@@ -42,8 +79,6 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 				wifiDevices.remove(device as NM.DeviceWifi);
 			}
 		});
-
-		build_contents();
 
 		wifiSwitch.set_state(client.wireless_get_enabled());
 		wifiListRevealer.set_reveal_child(client.wireless_get_enabled());
@@ -71,9 +106,37 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 				return client.wireless_get_enabled();
 			});
 		}
+	}
 
-		box.show_all();
+	public void hide_placeholder() {
 		wifiPlaceholderBox.hide();
+	}
+
+	private void on_device_added(NM.Device device) {
+		if (device.device_type == NM.DeviceType.WIFI) {
+			var wifiDevice = device as NM.DeviceWifi;
+
+			wifiDevices.append(wifiDevice);
+			wifiDevice.access_point_added.connect((ap) => recreate_wifi_list());
+			wifiDevice.access_point_removed.connect((ap) => recreate_wifi_list());
+
+			wifiDevice.state_changed.connect(recreate_wifi_list);
+		}
+	}
+
+	private void on_wireless_state_changed() {
+		var state = client.wireless_get_enabled();
+
+		wifiSwitch.set_state(state);
+		if (state) {
+			wifiListRevealer.set_reveal_child(true);
+			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
+				recreate_wifi_list();
+				return client.wireless_get_enabled();
+			});
+		} else if (wifi_recreate_timeout != 0) {
+			Source.remove(wifi_recreate_timeout);
+		}
 	}
 
 	private void recreate_wifi_list() {
@@ -151,120 +214,6 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		}
 	}
 
-	private void build_contents() {
-		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		box.margin = 6;
-
-		// Ethernet
-		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet"))) {
-			use_markup = true,
-			valign = Gtk.Align.CENTER,
-			margin_start = 4
-		};
-
-		var ethernetSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
-		ethernetSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		ethernetSettings.set_tooltip_text(_("Open Network Settings"));
-		ethernetSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
-
-		ethernetSwitch = new Gtk.Switch() {
-			halign = Gtk.Align.END,
-			valign = Gtk.Align.CENTER
-		};
-
-		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-		ethernetHeaderBox.pack_start(ethernetLabel, false, false, 0);
-		ethernetHeaderBox.pack_end(ethernetSwitch, false, false, 0);
-		ethernetHeaderBox.pack_end(ethernetSettings, false, false, 0);
-		ethernetHeaderBox.margin_bottom = 6;
-
-		// Wifi
-		var wifiLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Wi-Fi"))) {
-			use_markup = true,
-			valign = Gtk.Align.CENTER,
-			margin_start = 4
-		};
-
-		var wifiSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
-		wifiSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		wifiSettings.set_tooltip_text(_("Open Wi-Fi Settings"));
-		wifiSettings.clicked.connect(() => on_settings_activate("budgie-wifi-panel.desktop"));
-
-		wifiSwitch = new Gtk.Switch() {
-			halign = Gtk.Align.END,
-			valign = Gtk.Align.CENTER
-		};
-
-		var wifiHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-		wifiHeaderBox.pack_start(wifiLabel, false, false, 0);
-		wifiHeaderBox.pack_end(wifiSwitch, false, false, 0);
-		wifiHeaderBox.pack_end(wifiSettings, false, false, 0);
-
-		wifiPlaceholderSpinner = new Gtk.Spinner();
-
-		wifiPlaceholderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
-		wifiPlaceholderBox.add(wifiPlaceholderSpinner);
-		wifiPlaceholderBox.add(new Gtk.Label(_("Searching for networks...")));
-		wifiPlaceholderBox.set_halign(Gtk.Align.CENTER);
-		wifiPlaceholderBox.get_style_context().add_class("wifi-network-placeholder");
-		wifiPlaceholderBox.border_width = 4;
-
-		wifiNetworkList = new Gtk.ListBox();
-		wifiNetworkList.set_selection_mode(Gtk.SelectionMode.NONE);
-		wifiNetworkList.get_style_context().add_class("wifi-network-list");
-
-		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		wifiRevealerBox.get_style_context().add_class("wifi-network-revealer-box");
-		wifiRevealerBox.add(wifiPlaceholderBox);
-		wifiRevealerBox.add(wifiNetworkList);
-
-		wifiListRevealer = new Gtk.Revealer();
-		wifiListRevealer.add(wifiRevealerBox);
-
-		var wifiBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		wifiBox.pack_start(wifiHeaderBox, false, false, 0);
-		wifiBox.pack_start(wifiListRevealer, false, false, 0);
-		wifiBox.margin_top = 6;
-
-		// Settings
-		var settingsLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Settings")));
-		settingsLabel.set_use_markup(true);
-		settingsLabel.margin_start = 4;
-
-		box.pack_start(ethernetHeaderBox);
-		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-		box.pack_start(wifiBox);
-
-		add(box);
-	}
-
-	private void on_device_added(NM.Device device) {
-		if (device.device_type == NM.DeviceType.WIFI) {
-			var wifiDevice = device as NM.DeviceWifi;
-
-			wifiDevices.append(wifiDevice);
-			wifiDevice.access_point_added.connect((ap) => recreate_wifi_list());
-			wifiDevice.access_point_removed.connect((ap) => recreate_wifi_list());
-
-			wifiDevice.state_changed.connect(recreate_wifi_list);
-		}
-	}
-
-	private void on_wireless_state_changed() {
-		var state = client.wireless_get_enabled();
-
-		wifiSwitch.set_state(state);
-		if (state) {
-			wifiListRevealer.set_reveal_child(true);
-			wifi_recreate_timeout = Timeout.add_seconds(10, () => {
-				recreate_wifi_list();
-				return client.wireless_get_enabled();
-			});
-		} else if (wifi_recreate_timeout != 0) {
-			Source.remove(wifi_recreate_timeout);
-		}
-	}
-
 	private string wireless_icon_name_from_state(NM.DeviceWifi device, NM.AccessPoint ap) {
 		if (device.get_mode() == NM.@80211Mode.AP) {
 			return "network-wireless-hotspot-symbolic";
@@ -323,20 +272,6 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		return null;
 	}
 
-	private void on_settings_activate(string desktopFile) {
-		hide();
-
-		var app_info = new DesktopAppInfo(desktopFile);
-		if (app_info == null) {
-			return;
-		}
-		try {
-			app_info.launch(null, null);
-		} catch (Error e) {
-			message("Unable to launch %s: %s", desktopFile, e.message);
-		}
-	}
-
 	private string gen_ap_identifier(NM.AccessPoint ap) {
 		return "%s-%u-%u-%u".printf(
 			NM.Utils.ssid_to_utf8(ap.ssid.get_data()),
@@ -345,4 +280,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			ap.get_wpa_flags()
 		);
 	}
+
+	public signal void settings_activated();
+
+
 }
