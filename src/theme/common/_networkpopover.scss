@@ -50,6 +50,10 @@
             border: none;
             box-shadow: none;
         }
+
+        &:disabled slider {
+            background-color: transparentize($button_fg, 0.6);
+        }
     }
 
     .wifi-network-list {
