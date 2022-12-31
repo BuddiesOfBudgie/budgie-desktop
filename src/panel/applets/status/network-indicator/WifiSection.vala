@@ -84,7 +84,7 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 		client.notify["wireless-enabled"].connect(on_wireless_state_changed);
 		client.notify["networking-enabled"].connect(on_wireless_state_changed);
 		wifiSwitch.state_set.connect((state) => {
-			if (client.networking_get_enabled()) {
+			if (client.networking_get_enabled() && state != client.wireless_get_enabled()) {
 				client.dbus_set_property.begin(
 					"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
 					"WirelessEnabled", state,
@@ -127,8 +127,6 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 	}
 
 	private void on_wireless_state_changed() {
-		warning("On wireless state changed");
-
 		var networking_state = client.networking_get_enabled();
 		var wireless_state = networking_state && client.wireless_get_enabled();
 
@@ -138,6 +136,7 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 
 		if (wifi_recreate_timeout != 0) {
 			Source.remove(wifi_recreate_timeout);
+			wifi_recreate_timeout = 0;
 		}
 
 		if (wireless_state) {

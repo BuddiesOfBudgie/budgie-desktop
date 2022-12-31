@@ -30,11 +30,13 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		networkingSwitch.set_state(client.networking_get_enabled());
 		client.notify["networking-enabled"].connect(() => networkingSwitch.set_state(client.networking_get_enabled()));
 		networkingSwitch.state_set.connect((state) => {
-			client.dbus_call.begin(
-				"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
-				"Enable", new Variant.tuple({state}),
-				null, -1, null
-			);
+			if (state != client.networking_get_enabled()) {
+				client.dbus_call.begin(
+					"/org/freedesktop/NetworkManager", "org.freedesktop.NetworkManager",
+					"Enable", new Variant.tuple({state}),
+					null, -1, null
+				);
+			}
 
 			return true;
 		});
