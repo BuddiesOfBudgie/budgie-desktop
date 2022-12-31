@@ -117,8 +117,9 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 			row_box.pack_start(icon, false, false, 0);
 			row_box.pack_start(label, true, true, 0);
 
-			var connectedLabel = new Gtk.Label("<span alpha='50%'>%s</span>".printf(_("Connected")));
-			connectedLabel.use_markup = true;
+			var connectedLabel = new Gtk.Label("<small><span alpha='50%'>%s</span></small>".printf(_("Connected"))) {
+				use_markup = true,
+			};
 			row_box.pack_end(connectedLabel, false, false, 0);
 
 			row_box.set_border_width(4);
