@@ -157,7 +157,11 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 
 		wifiDevices.foreach((device) => {
 			var activeAP = device.get_active_access_point();
+			string? activeID = null;
+
 			if (activeAP != null && activeAP.ssid != null) {
+				activeID = gen_ap_identifier(activeAP);
+
 				var row_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 				var icon = new Gtk.Image.from_icon_name(wireless_icon_name_from_state(device, activeAP), Gtk.IconSize.MENU);
 				var label = new Gtk.Label(NM.Utils.ssid_to_utf8(activeAP.ssid.get_data())) {
@@ -183,6 +187,10 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 			device.get_access_points().foreach((ap) => {
 				if (ap.ssid != null && ap != activeAP) {
 					var identifier = gen_ap_identifier(ap);
+
+					if (identifier == activeID) {
+						return;
+					}
 
 					if (!table.contains(identifier)) {
 						table.insert(identifier, ap);
