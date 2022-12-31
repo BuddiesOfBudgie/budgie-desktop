@@ -68,6 +68,7 @@ public class NetworkIndicator : Gtk.Bin {
 				devices_sorted.remove(device);
 			}
 		});
+		client.notify["networking-enabled"].connect(recreate_icons);
 
 		recreate_icons();
 		Timeout.add_seconds(5, () => {
@@ -122,7 +123,13 @@ public class NetworkIndicator : Gtk.Bin {
 
 		if (iconInfos.length() == 0) {
 			var image = iconBox.get_children().nth_data(0) as Gtk.Image;
-			image.set_from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU);
+			if (client.networking_get_enabled()) {
+				image.set_from_icon_name("network-offline-symbolic", Gtk.IconSize.MENU);
+				image.tooltip_markup = _("No networks are connected");
+			} else {
+				image.set_from_icon_name("airplane-mode-symbolic", Gtk.IconSize.MENU);
+				image.tooltip_markup = _("Networking is disabled");
+			}
 		}
 
 		iconBox.show_all();
