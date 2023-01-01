@@ -90,7 +90,7 @@ namespace Budgie {
 
 			var display = window.get_display();
 			var seat = display.get_default_seat();
-			var status = seat.grab(window.get_window(), ALL, false, null, null, null);
+			var status = seat.grab(window.get_window(), ALL, true, null, null, null);
 
 			if (status != SUCCESS) {
 				warning("Tried to grab seat, but failed: %s", status.to_string());
