@@ -12,6 +12,7 @@
  public class NetworkIndicatorEthernetSection : Gtk.Box {
 	private unowned NM.Client client;
 
+	private List<NM.DeviceEthernet> ethernetDevices = null;
 	private Gtk.Switch ethernetSwitch = null;
 
 	public NetworkIndicatorEthernetSection(NM.Client client) {
@@ -44,6 +45,22 @@
 
 		on_networking_state_changed();
 		client.notify["networking-enabled"].connect(on_networking_state_changed);
+		ethernetDevices = new List<NM.DeviceEthernet>();
+		client.get_devices().foreach(on_device_added);
+		client.device_added.connect(on_device_added);
+		client.device_removed.connect((device) => {
+			if (device.device_type == NM.DeviceType.ETHERNET) {
+				ethernetDevices.remove(device as NM.DeviceEthernet);
+			}
+		});
+	}
+
+	private void on_device_added(NM.Device device) {
+		if (device.device_type == NM.DeviceType.ETHERNET) {
+			var ethernetDevice = device as NM.DeviceEthernet;
+
+			ethernetDevices.append(ethernetDevice);
+		}
 	}
 
 	private void on_networking_state_changed() {
