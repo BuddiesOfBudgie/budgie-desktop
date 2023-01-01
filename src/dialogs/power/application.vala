@@ -18,6 +18,8 @@ namespace Budgie {
 		private PowerDialog? power_dbus = null;
 		private PowerWindow? window = null;
 
+		private bool grabbed = false;
+
 		public PowerApplication() {
 			Object(application_id: "org.buddiesofbudgie.PowerDialog", flags: 0);
 		}
@@ -63,11 +65,54 @@ namespace Budgie {
 			}
 
 			if (show) {
-				window.present_with_time(CURRENT_TIME);
-				window.show_all();
+				this.window.present_with_time(CURRENT_TIME);
+				this.window.show_all();
+
+				// We can't grab the seat for this window right after calling present/show
+				// because it happens too fast. The seat will fail to grab with `GDK_GRAB_STATUS_NOT_VIEWABLE`.
+				Timeout.add(250, () => {
+					grab_seat();
+					return Source.REMOVE;
+				});
 			} else {
+				ungrab_seat();
 				window.hide();
 			}
+		}
+
+		/**
+		 * Attempts to grab device input and send it to our dialog window.
+		 */
+		private void grab_seat() {
+			if (window == null) {
+				return;
+			}
+
+			var display = window.get_display();
+			var seat = display.get_default_seat();
+			var status = seat.grab(window.get_window(), ALL, false, null, null, null);
+
+			if (status != SUCCESS) {
+				warning("Tried to grab seat, but failed: %s", status.to_string());
+			}
+
+			grabbed = true;
+		}
+
+		/**
+		 * Releases a seat grab. If the seat hasn't been grabbed, this function
+		 * does nothing.
+		 */
+		private void ungrab_seat() {
+			if (!grabbed || window == null) {
+				return;
+			}
+
+			var display = window.get_display();
+			var seat = display.get_default_seat();
+
+			seat.ungrab();
+			grabbed = false;
 		}
 	}
 }
