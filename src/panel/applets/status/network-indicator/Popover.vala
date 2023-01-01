@@ -14,7 +14,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 	private Gtk.Box box;
 	private Gtk.Switch networkingSwitch = null;
-	private Gtk.Switch ethernetSwitch = null;
+	private NetworkIndicatorEthernetSection ethernetSection;
 	private NetworkIndicatorWifiSection wifiSection;
 
 	public NetworkIndicatorPopover(Gtk.EventBox ebox, NM.Client client) {
@@ -72,26 +72,8 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 		networkingHeaderBox.pack_end(networkingSettings, false, false, 0);
 
 		// Ethernet
-		var ethernetLabel = new Gtk.Label("<b><big>%s</big></b>".printf(_("Ethernet"))) {
-			use_markup = true,
-			valign = Gtk.Align.CENTER,
-			margin_start = 4
-		};
-
-		var ethernetSettings = new Gtk.Button.from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON);
-		ethernetSettings.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		ethernetSettings.set_tooltip_text(_("Open Network Settings"));
-		ethernetSettings.clicked.connect(() => on_settings_activate("budgie-network-panel.desktop"));
-
-		ethernetSwitch = new Gtk.Switch() {
-			halign = Gtk.Align.END,
-			valign = Gtk.Align.CENTER
-		};
-
-		var ethernetHeaderBox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-		ethernetHeaderBox.pack_start(ethernetLabel, false, false, 0);
-		ethernetHeaderBox.pack_end(ethernetSwitch, false, false, 0);
-		ethernetHeaderBox.pack_end(ethernetSettings, false, false, 0);
+		ethernetSection = new NetworkIndicatorEthernetSection(client);
+		ethernetSection.settings_activated.connect(() => on_settings_activate("budgie-network-panel.desktop"));
 
 		// Wifi
 		wifiSection = new NetworkIndicatorWifiSection(client);
@@ -104,7 +86,7 @@ public class NetworkIndicatorPopover : Budgie.Popover {
 
 		box.pack_start(networkingHeaderBox);
 		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
-		box.pack_start(ethernetHeaderBox);
+		box.pack_start(ethernetSection);
 		box.pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
 		box.pack_start(wifiSection);
 

@@ -22,6 +22,7 @@ applet_status_sources = [
     'BluetoothIndicator.vala',
     'NetworkIndicator.vala',
     'network-indicator/Popover.vala',
+    'network-indicator/EthernetSection.vala',
     'network-indicator/WifiSection.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
