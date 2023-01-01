@@ -21,6 +21,8 @@ public class BudgieMenuWindow : Budgie.Popover {
 	private Gtk.Button power_button;
 	private OverlayMenus overlay_menu;
 
+	private PowerDialogRemote? power_dialog = null;
+
 	public BudgieMenuWindow(Settings? settings, Gtk.Widget? leparent) {
 		Object(relative_to: leparent);
 		this.get_style_context().add_class("budgie-menu");
@@ -75,6 +77,15 @@ public class BudgieMenuWindow : Budgie.Popover {
 		footer.pack_end(this.budgie_desktop_prefs_button, false, false, 0);
 		this.main_layout.pack_end(footer, false, false, 0);
 
+		Bus.get_proxy.begin<PowerDialogRemote>(
+			BusType.SESSION,
+			"org.buddiesofbudgie.PowerDialog",
+			"/org/buddiesofbudgie/PowerDialog",
+			DBusProxyFlags.NONE,
+			null,
+			on_power_dialog_get
+		);
+
 		// Close the power menu on click if it is open
 		this.button_press_event.connect((event) => {
 			// Only care about left clicks
@@ -122,13 +133,18 @@ public class BudgieMenuWindow : Budgie.Popover {
 			}
 		});
 
-		// Open or close the session controls menu when
-		// the user indicator is clicked
+		// Show the Power Dialog when the user indicator is clicked
 		this.power_button.clicked.connect(() => {
-			if (this.overlay_menu.get_reveal_child()) {
-				this.reset(false);
-			} else {
-				this.open_overlay_menu("power");
+			if (power_dialog == null) {
+				return;
+			}
+
+			this.hide();
+
+			try {
+				power_dialog.Toggle();
+			} catch (Error e) {
+				warning("Error trying to show PowerDialog: %s", e.message);
 			}
 		});
 
@@ -137,6 +153,14 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		// We should go away when an app is launched from the menu
 		this.view.app_launched.connect(this.hide);
+	}
+
+	private void on_power_dialog_get(Object? obj, AsyncResult? res) {
+		try {
+			power_dialog = Bus.get_proxy.end(res);
+		} catch (Error e) {
+			critical("Unable to get PowerDialog DBus remote: %s", e.message);
+		}
 	}
 
 	private Gtk.Button create_icon_button(string icon_name) {

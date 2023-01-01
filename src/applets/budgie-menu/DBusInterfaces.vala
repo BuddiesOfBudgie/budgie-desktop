@@ -25,26 +25,12 @@ interface PropertiesRemote : Object {
 	public signal void properties_changed();
 }
 
-/* logind */
-[DBus (name="org.freedesktop.login1.Manager")]
-public interface LogindRemote : Object {
-	public abstract void suspend(bool interactive) throws DBusError, IOError;
-	public abstract void hibernate(bool interactive) throws DBusError, IOError;
-}
-
-[DBus (name="org.gnome.SessionManager")]
-public interface SessionManagerRemote : Object {
-	public abstract void Logout(uint mode) throws DBusError, IOError;
-	public abstract async void Reboot() throws Error;
-	public abstract async void Shutdown() throws Error;
-}
-
-[DBus (name="org.gnome.ScreenSaver")]
-public interface ScreenSaverRemote : GLib.Object {
-	public abstract void lock() throws Error;
-}
-
 /* Budgie */
+
+[DBus (name="org.buddiesofbudgie.PowerDialog")]
+interface PowerDialogRemote : Object {
+	public abstract void Toggle() throws DBusError, IOError;
+}
 
 [DBus (name="org.buddiesofbudgie.XDGDirTracker")]
 public interface XDGDirTrackerRemote : GLib.Object {
