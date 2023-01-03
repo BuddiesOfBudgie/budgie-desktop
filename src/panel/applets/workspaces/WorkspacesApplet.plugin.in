@@ -4,6 +4,12 @@ Builtin=true
 Name=Workspace Switcher
 _Description=Display workspaces and switch between them.
 Authors=Budgie Desktop Developers
+<<<<<<< HEAD:src/panel/applets/workspaces/WorkspacesApplet.plugin.in
 Copyright=Copyright © 2017-2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=workspace-switcher
+=======
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org
+Icon=workspace-switcher-symbolic
+>>>>>>> master:src/applets/workspaces/WorkspacesApplet.plugin.in

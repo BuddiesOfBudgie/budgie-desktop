@@ -4,6 +4,6 @@ Builtin=true
 Name=Show Desktop Button
 _Description=A button that toggles visibility of the desktop.
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2022 Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=user-desktop

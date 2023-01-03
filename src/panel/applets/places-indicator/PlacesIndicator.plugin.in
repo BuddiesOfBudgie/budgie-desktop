@@ -4,6 +4,12 @@ Builtin=true
 Name=Places
 _Description=Show drives and favorite folders.
 Authors=Budgie Desktop Developers
+<<<<<<< HEAD:src/panel/applets/places-indicator/PlacesIndicator.plugin.in
 Copyright=Copyright © 2016-2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=folder
+=======
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org
+Icon=folder-symbolic
+>>>>>>> master:src/applets/places-indicator/PlacesIndicator.plugin.in

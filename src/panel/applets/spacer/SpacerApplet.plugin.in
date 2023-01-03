@@ -4,6 +4,6 @@ Builtin=true
 Name=Spacer
 _Description=Adjustable spacer to put between other applets.
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2022 Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=spacer

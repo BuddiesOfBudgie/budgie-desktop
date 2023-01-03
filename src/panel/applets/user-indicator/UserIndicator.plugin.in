@@ -4,6 +4,12 @@ Builtin=true
 Name=User Indicator
 _Description=Indicator for logging out, restarting, suspending, etc.
 Authors=Budgie Desktop Developers
+<<<<<<< HEAD:src/panel/applets/user-indicator/UserIndicator.plugin.in
 Copyright=Copyright © 2016-2022 Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=system-users
+=======
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org
+Icon=system-users-symbolic
+>>>>>>> master:src/applets/user-indicator/UserIndicator.plugin.in
