@@ -4,6 +4,6 @@ Builtin=true
 _Name=Sound Input
 _Description=Allows adjustment of audio input volume, and displays a list of available audio input devices.
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2022 Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=audio-input-microphone

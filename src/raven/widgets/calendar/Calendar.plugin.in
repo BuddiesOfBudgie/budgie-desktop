@@ -4,6 +4,6 @@ Builtin=true
 _Name=Calendar
 _Description=A simple calendar with a month view, using the built-in Gtk.Calendar widget. The calendar shows the current date by default.
 Authors=Budgie Desktop Developers
-Copyright=Copyright © 2022 Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=calendar
