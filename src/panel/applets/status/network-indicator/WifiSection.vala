@@ -62,11 +62,22 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 
 		var wifiRevealerBox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		wifiRevealerBox.get_style_context().add_class("wifi-network-revealer-box");
+		wifiRevealerBox.set_center_widget(wifiPlaceholderBox);
 		wifiRevealerBox.add(wifiPlaceholderBox);
 		wifiRevealerBox.add(wifiNetworkList);
 
+		var wifiNetworkScroller = new Gtk.ScrolledWindow(null, null) {
+			overlay_scrolling = true,
+			propagate_natural_height = true,
+			hscrollbar_policy = Gtk.PolicyType.NEVER,
+			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
+			max_content_height = 175,
+		};
+		wifiNetworkScroller.get_style_context().add_class("wifi-network-viewport");
+		wifiNetworkScroller.add(wifiRevealerBox);
+
 		wifiListRevealer = new Gtk.Revealer();
-		wifiListRevealer.add(wifiRevealerBox);
+		wifiListRevealer.add(wifiNetworkScroller);
 
 		pack_start(wifiHeaderBox, false, false, 0);
 		pack_start(wifiListRevealer, false, false, 0);
