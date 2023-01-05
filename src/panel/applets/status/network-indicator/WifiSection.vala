@@ -74,6 +74,7 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 			max_content_height = 175,
 		};
 		wifiNetworkScroller.get_style_context().add_class("wifi-network-viewport");
+		wifiNetworkScroller.margin_top = 3;
 		wifiNetworkScroller.add(wifiRevealerBox);
 
 		wifiListRevealer = new Gtk.Revealer();
@@ -309,6 +310,4 @@ public class NetworkIndicatorWifiSection : Gtk.Box {
 	}
 
 	public signal void settings_activated();
-
-
 }
