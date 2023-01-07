@@ -4,12 +4,6 @@ Builtin=true
 Name=Icon Task List
 _Description=A configurable application task list.
 Authors=Budgie Desktop Developers
-<<<<<<< HEAD:src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in
-Copyright=Copyright © 2015-2022 Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
 Icon=icon-task-list
-=======
-Copyright=Copyright Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=icon-task-list-symbolic
->>>>>>> master:src/applets/icon-tasklist/IconTasklistApplet.plugin.in
