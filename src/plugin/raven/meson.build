@@ -35,6 +35,8 @@ ravenplugin_sources = [
     'raven-widget.c',
 ]
 
+ravenplugin_marshal_files = gnome.genmarshal('marshal', sources: 'marshal.list')
+
 ravenplugin_deps = [
     dep_gtk3,
     dep_peas,
@@ -43,7 +45,7 @@ ravenplugin_deps = [
 # build plugin
 libravenplugin = shared_library(
     'budgie-raven-plugin',
-    ravenplugin_sources,
+    ravenplugin_sources + ravenplugin_marshal_files,
     dependencies: [
         ravenplugin_deps,
         link_libravenenum,

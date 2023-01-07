@@ -13,6 +13,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
+#include <stdbool.h>
 
 G_BEGIN_DECLS
 
@@ -31,6 +32,7 @@ struct _BudgieRavenWidgetClass {
 	GtkBinClass parent_class;
 
 	GtkWidget* (*build_settings_ui)(BudgieRavenWidget* self);
+	void (*raven_expanded)(bool expanded);
 };
 
 struct _BudgieRavenWidgetPrivate {

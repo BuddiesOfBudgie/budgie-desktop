@@ -13,6 +13,12 @@
 #include "budgie-raven-enums.h"
 
 
+enum {
+	SIGNAL_RAVEN_STATE_CHANGED,
+	LAST_SIGNAL
+};
+
+
 G_DEFINE_TYPE_WITH_PRIVATE(BudgieRavenWidget, budgie_raven_widget, GTK_TYPE_BIN)
 
 
@@ -88,6 +94,14 @@ static void budgie_raven_widget_init(BudgieRavenWidget* self) {
 static void budgie_raven_widget_class_init(BudgieRavenWidgetClass* klass) {
 	GObjectClass* g_object_class = G_OBJECT_CLASS(klass);
 	g_object_class->dispose = budgie_raven_widget_dispose;
+
+	g_signal_new(
+		"raven-expanded",
+		G_OBJECT_CLASS_TYPE(klass),
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET(BudgieRavenWidgetClass, raven_expanded),
+		NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+		G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void budgie_raven_widget_dispose(GObject* g_object) {

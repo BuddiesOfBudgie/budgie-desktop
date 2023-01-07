@@ -135,5 +135,12 @@ namespace Budgie {
 		public void set_clean() {
 			main_stack.set_visible_child_name("widgets");
 		}
+
+		public void raven_expanded(bool expanded) {
+			box.get_children().foreach((child) => {
+				var widget = child as RavenWidget;
+				widget.raven_expanded(expanded);
+			});
+		}
 	}
 }

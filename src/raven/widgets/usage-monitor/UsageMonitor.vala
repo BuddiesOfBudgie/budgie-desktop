@@ -26,6 +26,8 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	private UsageMonitorRow? swap = null;
 	private ProcStatContents? prev = null;
 
+	private uint timeout_id = 0;
+
 	public UsageMonitorRavenWidget(string uuid, GLib.Settings? settings) {
 		initialize(uuid, settings);
 
@@ -101,10 +103,17 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		update_cpu();
 		update_ram_and_swap();
 
-		Timeout.add(1000, () => {
-			update_cpu();
-			update_ram_and_swap();
-			return GLib.Source.CONTINUE;
+		raven_expanded.connect((expanded) => {
+			if (!expanded && timeout_id != 0) {
+				Source.remove(timeout_id);
+				timeout_id = 0;
+			} else if (expanded && timeout_id == 0) {
+				timeout_id = Timeout.add(1000, () => {
+					update_cpu();
+					update_ram_and_swap();
+					return GLib.Source.CONTINUE;
+				});
+			}
 		});
 	}
 

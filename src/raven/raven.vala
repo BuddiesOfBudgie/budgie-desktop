@@ -490,6 +490,7 @@ namespace Budgie {
 			}
 
 			this.expanded = exp;
+			main_view.raven_expanded(this.expanded);
 			this.iface.ExpansionChanged(this.expanded);
 
 			if (!this.get_settings().gtk_enable_animations) {
