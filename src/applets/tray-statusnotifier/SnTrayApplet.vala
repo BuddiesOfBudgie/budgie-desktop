@@ -138,7 +138,8 @@ public class SnTrayApplet : Budgie.Applet {
 			BusType.SESSION,
 			host_name,
 			BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-			(conn,name)=>{
+			null,
+			(conn,name) => {
 				try {
 					watcher.register_status_notifier_host(host_name);
 				} catch (Error e) {
