@@ -153,7 +153,11 @@ public class SnTrayApplet : Budgie.Applet {
 		try {
 			var new_item = new SnTrayItem(name, object_path, panel_size);
 			items.set(object_path + name, new_item);
-			layout.pack_end(new_item);
+			if (object_path == "/org/ayatana/NotificationItem/nm_applet") {
+				layout.pack_end(new_item);
+			} else {
+				layout.pack_start(new_item);
+			}
 		} catch (Error e) {
 			warning("Failed to fetch dbus item info for name=%s and path=%s", name, object_path);
 		}
