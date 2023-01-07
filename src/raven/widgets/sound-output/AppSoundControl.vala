@@ -102,9 +102,6 @@ namespace Budgie {
 			app_label.margin_start = 10;
 
 			app_mute_button = new Gtk.Button();
-
-			set_mute_ui();
-
 			app_mute_button.get_style_context().add_class("flat");
 			app_mute_button.clicked.connect(toggle_mute_state);
 
@@ -118,6 +115,8 @@ namespace Budgie {
 			volume_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, max_vol, max_vol_step);
 			volume_slider.set_draw_value(false);
 			volume_slider.set_increments(max_vol_step, max_vol_step);
+
+			set_mute_ui();
 
 			volume = stream_volume;
 			volume_slider.set_value(stream_volume);
