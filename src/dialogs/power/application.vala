@@ -67,6 +67,7 @@ namespace Budgie {
 			if (show) {
 				this.window.present_with_time(CURRENT_TIME);
 				this.window.show_all();
+				this.window.reset_focus();
 
 				// We can't grab the seat for this window right after calling present/show
 				// because it happens too fast. The seat will fail to grab with `GDK_GRAB_STATUS_NOT_VIEWABLE`.

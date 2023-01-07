@@ -201,6 +201,13 @@ namespace Budgie {
 			hide();
 		}
 
+		/**
+		 * Gives keyboard focus back to the lock button.
+		 */
+		public void reset_focus() {
+			lock_button.grab_focus();
+		}
+
 		private void logout() {
 			hide();
 			if (session_manager == null) {
