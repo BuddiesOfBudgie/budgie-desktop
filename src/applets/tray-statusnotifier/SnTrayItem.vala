@@ -161,7 +161,7 @@ internal class SnTrayItem : Gtk.EventBox {
 		try {
 			if (icon_theme_path != null) {
 				var icon_theme = Gtk.IconTheme.get_default();
-				
+
 				if (icon_theme.has_icon(icon_name)) {
 					icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
 				} else {
@@ -217,40 +217,35 @@ internal class SnTrayItem : Gtk.EventBox {
 
 		context_menu = new Gtk.Menu();
 		bool wants_separator = false;
+		Gtk.RadioMenuItem? last_radio_item = null;
 
 		VariantIter it = children.iterator();
 		for (var child = it.next_value(); child != null; child = it.next_value()) {
 			child = child.get_variant();
 
 			int32 child_id = child.get_child_value(0).get_int32();
-			Variant child_properties = child.get_child_value(1);
-			HashTable<string, Variant?> props_table = new HashTable<string, Variant?>(str_hash, str_equal);
-
-			VariantIter prop_it = child_properties.iterator();
-			string key;
-			Variant value;
-			while (prop_it.next("{sv}", out key, out value)) {
-				props_table.set(key, value);
-			}
+			HashTable<string, Variant?> props_table = build_props_table(child.get_child_value(1));
 
 			if (props_table.contains("visible") && !props_table.get("visible").get_boolean()) {
 				continue;
 			}
 
 			Gtk.MenuItem item = null;
-			if (props_table.contains("type")) {
-				if (props_table.get("type").get_string() == "separator") {
-					wants_separator = true;
-					continue;
-				}
-			} else if (props_table.contains("toggle-type")) {
-				if (props_table.get("toggle-type").get_string() == "checkmark") {
-					Gtk.CheckMenuItem check_item = new Gtk.CheckMenuItem.with_mnemonic(props_table.get("label").get_string());
-					check_item.set_active(props_table.contains("toggle-state") && props_table.get("toggle-state").get_int32() != 0);
-					check_item.toggled.connect(() => {
-						dbus_menu.event(child_id, "clicked", new Variant.boolean(check_item.get_active()), (uint32) get_real_time());
-					});
-					item = check_item;
+
+			if (props_table.contains("type") && props_table.get("type").get_string() == "separator") {
+				wants_separator = true;
+				last_radio_item = null;
+				continue;
+			}
+
+			if (props_table.contains("toggle-type")) {
+				var toggle_type = props_table.get("toggle-type").get_string();
+
+				if (toggle_type == "checkmark") {
+					item = build_check_menu_item(props_table, child_id);
+				} else if (toggle_type == "radio") {
+					last_radio_item = build_radio_menu_item(props_table, child_id, last_radio_item);
+					item = last_radio_item;
 				}
 			} else {
 				item = new Gtk.MenuItem.with_mnemonic(props_table.get("label").get_string());
@@ -268,11 +263,53 @@ internal class SnTrayItem : Gtk.EventBox {
 				if (props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 					item.set_sensitive(false);
 				}
+
+				if (props_table.contains("disposition")) {
+					var disposition = props_table.get("disposition").get_string();
+					if (disposition == "informative") {
+						item.get_style_context().add_class("info");
+					} else if (disposition == "warning") {
+						item.get_style_context().add_class("warning");
+					} else if (disposition == "alert") {
+						item.get_style_context().add_class("error");
+					}
+				}
 				context_menu.add(item);
 			}
 		}
 
 		context_menu.show_all();
+	}
+
+	private static HashTable<string, Variant?> build_props_table(Variant properties) {
+		HashTable<string, Variant?> props_table = new HashTable<string, Variant?>(str_hash, str_equal);
+
+		VariantIter prop_it = properties.iterator();
+		string key;
+		Variant value;
+		while (prop_it.next("{sv}", out key, out value)) {
+			props_table.set(key, value);
+		}
+
+		return props_table;
+	}
+
+	private Gtk.CheckMenuItem build_check_menu_item(HashTable<string, Variant?> props_table, int32 child_id) {
+		Gtk.CheckMenuItem check_item = new Gtk.CheckMenuItem.with_mnemonic(props_table.get("label").get_string());
+		check_item.set_active(props_table.contains("toggle-state") && props_table.get("toggle-state").get_int32() == 1);
+		check_item.toggled.connect(() => {
+			dbus_menu.event(child_id, "clicked", new Variant.boolean(check_item.get_active()), (uint32) get_real_time());
+		});
+		return check_item;
+	}
+
+	private Gtk.RadioMenuItem build_radio_menu_item(HashTable<string, Variant?> props_table, int32 child_id, Gtk.RadioMenuItem? prev_radio_item) {
+		Gtk.RadioMenuItem radio_item = new Gtk.RadioMenuItem.with_mnemonic_from_widget(prev_radio_item, props_table.get("label").get_string());
+		radio_item.set_active(props_table.contains("toggle-state") && props_table.get("toggle-state").get_int32() == 1);
+		radio_item.toggled.connect(() => {
+			dbus_menu.event(child_id, "clicked", new Variant.boolean(radio_item.get_active()), (uint32) get_real_time());
+		});
+		return radio_item;
 	}
 
 	//  private Gtk.MenuItem build_menu_item(Variant layout) {
