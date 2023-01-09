@@ -55,7 +55,7 @@ public class SnTrayApplet : Budgie.Applet {
 	private HashTable<string, SnTrayItem> items;
 	private Gtk.Orientation orient;
 	private uint dbus_identifier;
-	private SnWatcherInterface? watcher;
+	private SnWatcherInterface? watcher = null;
 	private int panel_size;
 
 	public SnTrayApplet(string uuid) {
@@ -99,6 +99,10 @@ public class SnTrayApplet : Budgie.Applet {
 	}
 
 	private void on_dbus_get(Object? o, AsyncResult? res) {
+		if (watcher != null) {
+			return;
+		}
+
 		try {
 			watcher = Bus.get_proxy.end(res);
 		} catch (Error e) {
