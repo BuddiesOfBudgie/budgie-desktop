@@ -161,6 +161,7 @@ public class TrayApplet : Budgie.Applet {
 				layout.pack_end(new_item);
 			} else {
 				layout.pack_start(new_item);
+				layout.reorder_child(new_item, 0);
 			}
 		} catch (Error e) {
 			warning("Failed to fetch dbus item info for name=%s and path=%s", name, object_path);
