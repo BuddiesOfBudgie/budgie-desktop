@@ -12,29 +12,40 @@
 namespace Budgie.StatusNotifier {
 	public const string WATCHER_KDE_DBUS_NAME = "org.kde.StatusNotifierWatcher";
 
+	public const string WATCHER_FREEDESKTOP_DBUS_OBJECT_PATH = "/org/freedesktop/StatusNotifierWatcher";
 	public const string WATCHER_KDE_DBUS_OBJECT_PATH = "/org/kde/StatusNotifierWatcher";
 	public const string WATCHER_BASIC_DBUS_OBJECT_PATH = "/StatusNotifierWatcher";
 
-	public struct DBusPathName {
+	public struct DBusServiceInfo {
 		public string name;
 		public string object_path;
+		public string sender;
+		public string owner;
 	}
 
 	[DBus (name="org.kde.StatusNotifierWatcher")]
 	public class Watcher : Object {
-		public string[] registered_status_notifier_items {get; private set;}
+		public string[] registered_status_notifier_items {
+			owned get {
+				string[] ret = new string[host_services.size()];
+				for (int i = 0; i < host_services.size(); i++) {
+					ret[i] = host_services.get_keys().nth_data(i);
+				}
+				return ret;
+			}
+		}
 		public bool is_status_notifier_host_registered {get; private set; default = false;}
 		public int32 protocol_version {get; private set; default = 0;}
 
 		private uint dbus_identifier = 0;
 		private HashTable<string, uint> host_services;
-		private HashTable<string, uint> item_services;
-		private HashTable<string, DBusPathName?> item_pathnames;
+		private HashTable<string, uint> item_watchers;
+		private HashTable<string, DBusServiceInfo?> registered_services;
 
 		construct {
 			host_services = new HashTable<string, uint>(str_hash, str_equal);
-			item_services = new HashTable<string, uint>(str_hash, str_equal);
-			item_pathnames = new HashTable<string, DBusPathName?>(str_hash, str_equal);
+			item_watchers = new HashTable<string, uint>(str_hash, str_equal);
+			registered_services = new HashTable<string, DBusServiceInfo?>(str_hash, str_equal);
 
 			dbus_identifier = Bus.own_name(
 				BusType.SESSION,
@@ -53,14 +64,14 @@ namespace Budgie.StatusNotifier {
 			foreach (uint identifier in host_services.get_values()) {
 				Bus.unwatch_name(identifier);
 			}
-			foreach (string service in item_services.get_keys()) {
-				Bus.unwatch_name(item_services.get(service));
-				status_notifier_item_unregistered(service);
+			foreach (string service in item_watchers.get_keys()) {
+				Bus.unwatch_name(item_watchers.get(service));
 			}
 		}
 
 		private void on_dbus_acquired(DBusConnection conn) {
 			try {
+				conn.register_object(WATCHER_FREEDESKTOP_DBUS_OBJECT_PATH, this);
 				conn.register_object(WATCHER_KDE_DBUS_OBJECT_PATH, this);
 				conn.register_object(WATCHER_BASIC_DBUS_OBJECT_PATH, this);
 			} catch (Error e) {
@@ -69,40 +80,49 @@ namespace Budgie.StatusNotifier {
 		}
 
 		public void register_status_notifier_item(string service, BusName sender) throws DBusError, IOError {
-			string path, name;
+			string name, object_path;
 			if (service[0] == '/') {
 				name = (string) sender;
-				path = service;
+				object_path = service;
 			} else {
 				name = service;
-				path = "/StatusNotifierItem";
+				object_path = "/StatusNotifierItem";
 			}
 
-			// we already have this item; ignore the request
-			if (item_pathnames.contains(service)) {
+			// we already have this service; ignore the request
+			if (name in item_watchers) {
 				return;
 			}
 
+			var sender_str = (string) sender;
 			uint watch_identifier = Bus.watch_name(
 				BusType.SESSION,
 				name,
 				BusNameWatcherFlags.NONE,
-				(conn,name,owner)=>{
-					warning("Registered item with path=%s, name=%s", path, name);
-					status_notifier_item_registered(service);
-					status_notifier_item_registered_budgie(name, path);
+				(conn,name,owner) => {
+					var service_key = object_path + sender_str + name;
+					warning("Received register request for item with service=%s, path=%s, name=%s, sender=%s, owner=%s", service, object_path, name, sender_str, owner);
+					if (!registered_services.contains(service_key)) {
+						warning("Registering item with service=%s, path=%s, name=%s, sender=%s, owner=%s", service, object_path, name, sender_str, owner);
+						registered_services.set(service_key, {name, object_path, sender_str, owner});
+						status_notifier_item_registered(name);
+						status_notifier_item_registered_budgie(name, object_path, sender_str, owner);
+					}
 				},
-				(conn,name)=>{
-					warning("Unregistered item with path=%s, name=%s", path, name);
-					item_services.remove(service);
-					item_pathnames.remove(service);
-					status_notifier_item_unregistered(service);
-					status_notifier_item_unregistered_budgie(name, path);
+				(conn,name) => {
+					warning("Received unregister request for item with service=%s, path=%s, name=%s, sender=%s", service, object_path, name, sender_str);
+					var service_key = object_path + sender_str + name;
+					if (registered_services.contains(service_key)) {
+						warning("Unregistering item with service=%s, path=%s, name=%s, sender=%s", service, object_path, name, sender_str);
+						registered_services.remove(service_key);
+						status_notifier_item_unregistered(name);
+						status_notifier_item_unregistered_budgie(name, object_path, sender_str);
+					}
+
 				}
 			);
 
-			item_services.insert(service, watch_identifier);
-			item_pathnames.insert(service, {name, path});
+			item_watchers.insert(name, watch_identifier);
 		}
 
 		public void register_status_notifier_host(string service) throws DBusError, IOError {
@@ -110,12 +130,12 @@ namespace Budgie.StatusNotifier {
 				BusType.SESSION,
 				service,
 				BusNameWatcherFlags.NONE,
-				(conn,name,owner)=>{
+				(conn,name,owner) => {
 					warning("Registered status notifier host %s", service);
 					is_status_notifier_host_registered = true;
 					status_notifier_host_registered();
 				},
-				(conn,name)=>{
+				(conn,name) => {
 					host_services.remove(service);
 					warning("Unregistered status notifier host %s", service);
 
@@ -128,10 +148,10 @@ namespace Budgie.StatusNotifier {
 			host_services.insert(service, watch_identifier);
 		}
 
-		public DBusPathName[] get_registered_status_notifier_pathnames() throws DBusError, IOError {
-			DBusPathName[] ret = new DBusPathName[item_pathnames.size()];
-			for (int i = 0; i < item_pathnames.size(); i++) {
-				ret[i] = item_pathnames.get_values().nth_data(i);
+		public DBusServiceInfo[] get_registered_status_notifier_pathnames_budgie() throws DBusError, IOError {
+			DBusServiceInfo[] ret = new DBusServiceInfo[registered_services.size()];
+			for (int i = 0; i < registered_services.size(); i++) {
+				ret[i] = registered_services.get_values().nth_data(i);
 			}
 			return ret;
 		}
@@ -142,7 +162,7 @@ namespace Budgie.StatusNotifier {
 		public signal bool status_notifier_host_registered();
 
 		// these signals are specifically for use with budgie
-		public signal void status_notifier_item_registered_budgie(string name, string object_path);
-		public signal void status_notifier_item_unregistered_budgie(string name, string object_path);
+		public signal void status_notifier_item_registered_budgie(string name, string object_path, string sender, string owner);
+		public signal void status_notifier_item_unregistered_budgie(string name, string object_path, string owner);
 	}
 }

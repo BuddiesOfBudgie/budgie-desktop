@@ -28,9 +28,11 @@ public class TraySettings : Gtk.Grid {
 	}
 }
 
-internal struct DBusPathName {
+internal struct DBusServiceInfo {
 	public string name;
 	public string object_path;
+	public string sender;
+	public string owner;
 }
 
 [DBus (name="org.kde.StatusNotifierWatcher")]
@@ -40,11 +42,11 @@ private interface SnWatcherInterface : Object {
 	public abstract int32 protocol_version {owned get;}
 
 	public abstract void register_status_notifier_host(string service) throws DBusError, IOError;
-	public abstract DBusPathName[] get_registered_status_notifier_pathnames() throws DBusError, IOError;
 
-	// these signals are specifically for use with budgie
-	public signal void status_notifier_item_registered_budgie(string name, string object_path);
-	public signal void status_notifier_item_unregistered_budgie(string name, string object_path);
+	// these signals and methods are specifically for use with budgie
+	public abstract DBusServiceInfo[] get_registered_status_notifier_pathnames_budgie() throws DBusError, IOError;
+	public signal void status_notifier_item_registered_budgie(string name, string object_path, string sender, string owner);
+	public signal void status_notifier_item_unregistered_budgie(string name, string object_path, string sender);
 }
 
 public class TrayApplet : Budgie.Applet {
@@ -121,9 +123,9 @@ public class TrayApplet : Budgie.Applet {
 
 	private void on_watcher_init() {
 		try {
-			DBusPathName[] pathnames = watcher.get_registered_status_notifier_pathnames();
-			for (int i = 0; i < pathnames.length; i++) {
-				register_new_item(pathnames[i].name, pathnames[i].object_path);
+			DBusServiceInfo[] services = watcher.get_registered_status_notifier_pathnames_budgie();
+			for (int i = 0; i < services.length; i++) {
+				register_new_item(services[i].name, services[i].object_path, services[i].sender, services[i].owner);
 			}
 		} catch (Error e) {
 			critical("Unable to fetch existing status notifier items: %s", e.message);
@@ -131,9 +133,12 @@ public class TrayApplet : Budgie.Applet {
 
 		watcher.status_notifier_item_registered_budgie.connect(register_new_item);
 
-		watcher.status_notifier_item_unregistered_budgie.connect((name,path)=>{
-			layout.remove(items.get(path + name));
-			items.remove(path + name);
+		watcher.status_notifier_item_unregistered_budgie.connect((name,path,sender)=>{
+			var key = sender + name + path;
+			if (key in items) {
+				layout.remove(items.get(key));
+				items.remove(key);
+			}
 		});
 
 		string host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
@@ -153,10 +158,16 @@ public class TrayApplet : Budgie.Applet {
 		);
 	}
 
-	private void register_new_item(string name, string object_path) {
+	private void register_new_item(string name, string object_path, string sender, string owner) {
+		var key = sender + name + object_path;
+
+		if (key in items) {
+			return;
+		}
+
 		try {
 			var new_item = new TrayItem(name, object_path, panel_size);
-			items.set(object_path + name, new_item);
+			items.set(key, new_item);
 			if (object_path == "/org/ayatana/NotificationItem/nm_applet") {
 				layout.pack_end(new_item);
 			} else {
