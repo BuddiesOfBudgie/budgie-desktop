@@ -39,8 +39,16 @@ namespace Budgie {
 			}
 		}
 
+		/**
+		 * Creates a new [DialogButton].
+		 *
+		 * If characters in `label_text` are preceded by an underscore, they are underlined.
+		 * If you need a literal underscore character in a label, use '__' (two underscores).
+		 * The first underlined character represents a keyboard accelerator called a mnemonic.
+		 * The mnemonic key can be used to activate this button.
+		 */
 		public DialogButton(string label_text, string image_source) {
-			Object(can_focus: true);
+			Object(can_focus: true, use_underline: true);
 
 			set_image(image_source);
 			set_label(label_text);
@@ -73,17 +81,22 @@ namespace Budgie {
 
 		/**
 		 * Sets the label for this item.
+		 *
+		 * If characters in `text` are preceded by an underscore, they are underlined.
+		 * If you need a literal underscore character in a label, use '__' (two underscores).
+		 * The first underlined character represents a keyboard accelerator called a mnemonic.
+		 * The mnemonic key can be used to activate this button.
 		 */
 		public new void set_label(string text) {
 			_label_text = text.dup();
 
 			if (button_label == null) {
-				button_label = new Label(null) {
-					halign = Align.CENTER
+				button_label = new Label.with_mnemonic(null) {
+					halign = Align.CENTER,
 				};
 			}
 
-			button_label.set_markup("<big>%s</big>".printf(_label_text));
+			button_label.set_markup_with_mnemonic("<big>%s</big>".printf(_label_text));
 		}
 	}
 }

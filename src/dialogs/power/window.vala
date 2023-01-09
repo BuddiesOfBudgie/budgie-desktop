@@ -87,22 +87,22 @@ namespace Budgie {
 			button_grid.get_style_context().add_class("power-button-grid");
 
 			// Create our buttons
-			lock_button = new DialogButton(_("Lock"), "system-lock-screen-symbolic");
+			lock_button = new DialogButton(_("_Lock"), "system-lock-screen-symbolic");
 			lock_button.clicked.connect(lock_screen);
 
-			logout_button = new DialogButton(_("Log Out"), "system-log-out-symbolic");
+			logout_button = new DialogButton(_("L_og Out"), "system-log-out-symbolic");
 			logout_button.clicked.connect(logout);
 
-			suspend_button = new DialogButton(_("Suspend"), "system-suspend-symbolic");
+			suspend_button = new DialogButton(_("_Suspend"), "system-suspend-symbolic");
 			suspend_button.clicked.connect(suspend);
 
-			hibernate_button = new DialogButton(_("Hibernate"), "system-hibernate-symbolic");
+			hibernate_button = new DialogButton(_("_Hibernate"), "system-hibernate-symbolic");
 			hibernate_button.clicked.connect(hibernate);
 
-			reboot_button = new DialogButton(_("Reboot"), "system-restart-symbolic");
+			reboot_button = new DialogButton(_("_Reboot"), "system-restart-symbolic");
 			reboot_button.clicked.connect(reboot);
 
-			shutdown_button = new DialogButton(_("Shutdown"), "system-shutdown-symbolic");
+			shutdown_button = new DialogButton(_("Shut_down"), "system-shutdown-symbolic");
 			shutdown_button.clicked.connect(shutdown);
 
 			// Attach our buttons
