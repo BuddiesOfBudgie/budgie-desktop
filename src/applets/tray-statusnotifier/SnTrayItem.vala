@@ -168,7 +168,7 @@ internal class SnTrayItem : Gtk.EventBox {
 			show_context_menu(event);
 			return Gdk.EVENT_STOP;
 		} else if (event.button == 1 && !dbus_properties.item_is_menu) { // Left click
-			activate(event);
+			primary_activate(event);
 			return Gdk.EVENT_STOP;
 		} else if (event.button == 2) { // Middle click
 			secondary_activate(event);
@@ -178,7 +178,7 @@ internal class SnTrayItem : Gtk.EventBox {
 		return base.button_release_event(event);
 	}
 
-	private void activate(Gdk.EventButton event) {
+	private void primary_activate(Gdk.EventButton event) {
 		try {
 			dbus_item.activate((int) event.x_root, (int) event.y_root);
 		} catch (DBusError e) {
