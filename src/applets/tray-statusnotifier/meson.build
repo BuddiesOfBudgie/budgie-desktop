@@ -26,6 +26,7 @@ applet_sntray_deps = [
     libplugin_vapi,
     dep_gtk3,
     dep_peas,
+    dep_dbusmenugtk3,
     link_libplugin,
     meson.get_compiler('c').find_library('m', required: false)
 ]
@@ -35,6 +36,8 @@ shared_library(
     applet_sntray_sources,
     dependencies: applet_sntray_deps,
     vala_args: [
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--pkg', 'Dbusmenu-0.4',
         '--pkg', 'libpeas-1.0',
     ],
     install: true,
