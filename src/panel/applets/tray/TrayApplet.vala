@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright Budgie Desktop Developers
+ * Copyright © 2015-2022 Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,60 +28,35 @@ public class TraySettings : Gtk.Grid {
 	}
 }
 
-private class TrayErrorIcon {
-	public Budgie.PopoverManager manager;
-	public Budgie.Popover popover;
-	private Gtk.EventBox parent;
+internal struct DBusPathName {
+	public string name;
+	public string object_path;
+}
 
-	public TrayErrorIcon(Gtk.EventBox parent, string text) {
-		this.parent = parent;
+[DBus (name="org.kde.StatusNotifierWatcher")]
+private interface SnWatcherInterface : Object {
+	public abstract string[] registered_status_notifier_items {owned get;}
+	public abstract bool is_status_notifier_host_registered {owned get;}
+	public abstract int32 protocol_version {owned get;}
 
-		parent.add(new Gtk.Image.from_icon_name("gtk-dialog-error", Gtk.IconSize.LARGE_TOOLBAR));
+	public abstract void register_status_notifier_host(string service) throws DBusError, IOError;
+	public abstract DBusPathName[] get_registered_status_notifier_pathnames() throws DBusError, IOError;
 
-		popover = new Budgie.Popover(parent);
-		popover.get_style_context().add_class("system-tray-popover");
-
-		Gtk.Label label = new Gtk.Label(text);
-		label.show();
-		popover.add(label);
-		popover.hide();
-
-		parent.button_press_event.connect(on_button_press);
-	}
-
-	~TrayErrorIcon() {
-		parent.button_press_event.disconnect(on_button_press);
-	}
-
-	public void register(Budgie.PopoverManager newManager) {
-		manager = newManager;
-		manager.register_popover(parent, popover);
-	}
-
-	private bool on_button_press(Gdk.EventButton event) {
-		if (event.button != 1) {
-			return Gdk.EVENT_PROPAGATE;
-		}
-		if (popover.get_visible()) {
-			popover.hide();
-		} else {
-			manager.show_popover(parent);
-		}
-		return Gdk.EVENT_STOP;
-	}
+	// these signals are specifically for use with budgie
+	public signal void status_notifier_item_registered_budgie(string name, string object_path);
+	public signal void status_notifier_item_unregistered_budgie(string name, string object_path);
 }
 
 public class TrayApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
-	private Carbon.Tray tray;
-	private Gtk.EventBox box;
 	private Settings? settings;
+	private Gtk.EventBox box;
+	private Gtk.Box layout;
+	private HashTable<string, TrayItem> items;
 	private Gtk.Orientation orient;
-	private Gdk.X11.Screen screen;
-
-	// this property prevents the registration of more than one carbontray instance
-	private static string activeUuid = null;
-	private TrayErrorIcon errorIcon;
+	private uint dbus_identifier;
+	private SnWatcherInterface? watcher = null;
+	private int panel_size;
 
 	public TrayApplet(string uuid) {
 		Object(uuid: uuid);
@@ -91,91 +66,124 @@ public class TrayApplet : Budgie.Applet {
 		box = new Gtk.EventBox();
 		add(box);
 
-		settings_schema = "com.solus-project.tray";
-		settings_prefix = "/com/solus-project/budgie-panel/instance/tray";
+		settings_schema = "org.buddiesofbudgie.sntray";
+		settings_prefix = "/org/buddiesofbudgie/budgie-panel/instance/sntray";
 
 		settings = get_applet_settings(uuid);
 		settings.changed["spacing"].connect((key) => {
-			if (tray != null) tray.set_spacing(settings.get_int("spacing"));
+			layout.set_spacing(settings.get_int("spacing"));
 		});
 
-		if (activeUuid == null) {
-			activeUuid = uuid;
-			screen = (Gdk.X11.Screen) get_screen();
+		items = new HashTable<string, TrayItem>(str_hash, str_equal);
+		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, settings.get_int("spacing"));
+		box.add(layout);
 
-			screen.monitors_changed.connect(reintegrate_tray);
-			parent_set.connect((old_parent) => {
-				reintegrate_tray();
-			});
+		get_watcher_proxy();
 
-			maybe_integrate_tray();
-		} else {
-			// there's already an active tray, create an informative icon with a popover
-			errorIcon = new TrayErrorIcon(box, _("Only one instance of the System Tray can be active at a time."));
-			show_all();
-		}
+		show_all();
 	}
 
 	~TrayApplet() {
-		if (activeUuid == uuid) activeUuid = null;
+		Bus.unown_name(dbus_identifier);
 	}
 
-	private void reintegrate_tray() {
-		if (tray != null) {
-			tray.remove_from_container(box);
-			tray.dispose();
-			tray = null;
-		}
-
-		if (activeUuid == null || activeUuid == uuid) {
-			maybe_integrate_tray();
-		}
+	private void get_watcher_proxy() {
+		Bus.get_proxy.begin<SnWatcherInterface>(
+			BusType.SESSION,
+			"org.kde.StatusNotifierWatcher",
+			"/org/kde/StatusNotifierWatcher",
+			0,
+			null,
+			on_dbus_get
+		);
 	}
 
-	private void maybe_integrate_tray() {
-		tray = new Carbon.Tray(orient, 24, settings.get_int("spacing"));
-
-		if (tray == null) {
-			activeUuid = null;
-			errorIcon = new TrayErrorIcon(box, _("The System Tray failed to initialize."));
-			show_all();
+	private void on_dbus_get(Object? o, AsyncResult? res) {
+		if (watcher != null) {
 			return;
 		}
 
-		activeUuid = uuid;
-
-		switch (orient) {
-		case Gtk.Orientation.HORIZONTAL:
-			halign = Gtk.Align.START;
-			valign = Gtk.Align.FILL;
-			box.halign = Gtk.Align.START;
-			box.valign = Gtk.Align.FILL;
-			break;
-		case Gtk.Orientation.VERTICAL:
-			halign = Gtk.Align.FILL;
-			valign = Gtk.Align.START;
-			box.halign = Gtk.Align.FILL;
-			box.valign = Gtk.Align.START;
-			break;
+		try {
+			watcher = Bus.get_proxy.end(res);
+		} catch (Error e) {
+			critical("Unable to connect to status notifier watcher: %s", e.message);
+			return;
 		}
 
-		tray.add_to_container(box);
-		show_all();
-		tray.register(screen);
+		Bus.watch_name(
+			BusType.SESSION,
+			"org.kde.StatusNotifierWatcher",
+			0,
+			(conn,name,owner)=>{on_watcher_init();},
+			(conn,name)=>{get_watcher_proxy();}
+		);
+	}
+
+	private void on_watcher_init() {
+		try {
+			DBusPathName[] pathnames = watcher.get_registered_status_notifier_pathnames();
+			for (int i = 0; i < pathnames.length; i++) {
+				register_new_item(pathnames[i].name, pathnames[i].object_path);
+			}
+		} catch (Error e) {
+			critical("Unable to fetch existing status notifier items: %s", e.message);
+		}
+
+		watcher.status_notifier_item_registered_budgie.connect(register_new_item);
+
+		watcher.status_notifier_item_unregistered_budgie.connect((name,path)=>{
+			layout.remove(items.get(path + name));
+			items.remove(path + name);
+		});
+
+		string host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
+
+		dbus_identifier = Bus.own_name(
+			BusType.SESSION,
+			host_name,
+			BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
+			null,
+			(conn,name) => {
+				try {
+					watcher.register_status_notifier_host(host_name);
+				} catch (Error e) {
+					critical("Failed to register Status Notifier host: %s", e.message);
+				}
+			}
+		);
+	}
+
+	private void register_new_item(string name, string object_path) {
+		try {
+			var new_item = new TrayItem(name, object_path, panel_size);
+			items.set(object_path + name, new_item);
+			if (object_path == "/org/ayatana/NotificationItem/nm_applet") {
+				layout.pack_end(new_item);
+			} else {
+				layout.pack_start(new_item);
+			}
+		} catch (Error e) {
+			warning("Failed to fetch dbus item info for name=%s and path=%s", name, object_path);
+		}
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
 			orient = Gtk.Orientation.VERTICAL;
+			valign = Gtk.Align.BASELINE;
+			halign = Gtk.Align.FILL;
 		} else {
 			orient = Gtk.Orientation.HORIZONTAL;
+			valign = Gtk.Align.FILL;
+			halign = Gtk.Align.BASELINE;
 		}
-
-		reintegrate_tray();
 	}
 
-	public override void update_popovers(Budgie.PopoverManager? manager) {
-		if (errorIcon != null) errorIcon.register(manager);
+	public override void panel_size_changed(int panel, int icon, int small_icon) {
+		panel_size = panel;
+		items.get_values().foreach((item)=>{
+			item.resize(panel);
+		});
 	}
 
 	public override bool supports_settings() {

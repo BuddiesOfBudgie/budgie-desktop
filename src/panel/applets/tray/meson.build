@@ -1,7 +1,3 @@
-# Tray Applet build
-
-subdir('carbontray')
-
 applet_tray_dir = applets_dir + '.tray'
 
 custom_target('plugin-file-tray',
@@ -20,16 +16,19 @@ applet_tray_resources = gnome.compile_resources(
     c_name: 'budgie_tray',
 )
 
-applet_tray_sources = ['TrayApplet.vala', applet_tray_resources]
+applet_tray_sources = [
+    'TrayApplet.vala',
+    'TrayItem.vala',
+    applet_tray_resources,
+]
 
 applet_tray_deps = [
     libpanelplugin_vapi,
     dep_gtk3,
-    dependency('x11'),
-    dependency('gdk-x11-3.0'),
     dep_peas,
-    link_libcarbontray,
+    dep_dbusmenugtk3,
     link_libpanelplugin,
+    meson.get_compiler('c').find_library('m', required: false)
 ]
 
 shared_library(
@@ -37,8 +36,9 @@ shared_library(
     applet_tray_sources,
     dependencies: applet_tray_deps,
     vala_args: [
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--pkg', 'Dbusmenu-0.4',
         '--pkg', 'libpeas-1.0',
-        join_paths(meson.source_root(), 'src', 'panel', 'applets', 'tray', 'carbontray', 'carbontray-1.0.vapi'),
     ],
     install: true,
     install_dir: applet_tray_dir,

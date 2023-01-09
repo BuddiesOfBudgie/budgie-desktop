@@ -51,7 +51,7 @@ internal interface SnItemInterface : Object {
 	public abstract signal void new_status(string new_status);
 }
 
-internal class SnTrayItem : Gtk.EventBox {
+internal class TrayItem : Gtk.EventBox {
 	private SnItemInterface dbus_item;
 	private SnItemProperties dbus_properties;
 
@@ -65,7 +65,7 @@ internal class SnTrayItem : Gtk.EventBox {
 
 	public int target_icon_size = 8;
 
-	public SnTrayItem(string dbus_name, string dbus_object_path, int applet_size) throws DBusError, IOError {
+	public TrayItem(string dbus_name, string dbus_object_path, int applet_size) throws DBusError, IOError {
 		this.dbus_item = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 		this.dbus_properties = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 
