@@ -72,6 +72,8 @@ internal class TrayItem : Gtk.EventBox {
 		this.dbus_name = dbus_name;
 		this.dbus_object_path = dbus_object_path;
 
+		add_events(Gdk.EventMask.SCROLL_MASK);
+
 		reset_icon_theme();
 		icon = new Gtk.Image();
 		resize(applet_size);
@@ -178,6 +180,34 @@ internal class TrayItem : Gtk.EventBox {
 		return base.button_release_event(event);
 	}
 
+	public override bool scroll_event(Gdk.EventScroll event) {
+		switch (event.direction) {
+			case Gdk.ScrollDirection.UP:
+				send_scroll_event(1, "vertical");
+				return Gdk.EVENT_STOP;
+			case Gdk.ScrollDirection.DOWN:
+				send_scroll_event(-1, "vertical");
+				return Gdk.EVENT_STOP;
+			case Gdk.ScrollDirection.LEFT:
+				send_scroll_event(-1, "horizontal");
+				return Gdk.EVENT_STOP;
+			case Gdk.ScrollDirection.RIGHT:
+				send_scroll_event(1, "horizontal");
+				return Gdk.EVENT_STOP;
+			default: {
+				if (Math.fabs(event.delta_x) > 0.0) {
+					send_scroll_event((int) Math.ceil(event.delta_x), "horizontal");
+				}
+
+				if (Math.fabs(event.delta_y) > 0.0) {
+					send_scroll_event((int) Math.ceil(event.delta_y), "vertical");
+				}
+
+				return Gdk.EVENT_STOP;
+			}
+		}
+	}
+
 	private void primary_activate(Gdk.EventButton event) {
 		try {
 			dbus_item.activate((int) event.x_root, (int) event.y_root);
@@ -210,6 +240,17 @@ internal class TrayItem : Gtk.EventBox {
 			debug("Failed to show context menu on StatusNotifier item: %s", e.message);
 		} catch (IOError e) {
 			warning("Failed to show context menu on StatusNotifier item: %s", e.message);
+		}
+	}
+
+	private void send_scroll_event(int delta, string orientation) {
+		try {
+			dbus_item.scroll(delta, orientation);
+		} catch (DBusError e) {
+			// this happens if the application doesn't implement the scroll dbus method
+			debug("Failed to call scroll method on StatusNotifier item: %s", e.message);
+		} catch (IOError e) {
+			warning("Failed to call scroll method on StatusNotifier item: %s", e.message);
 		}
 	}
 
