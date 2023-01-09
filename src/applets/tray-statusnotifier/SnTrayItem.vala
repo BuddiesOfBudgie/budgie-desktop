@@ -11,12 +11,6 @@ internal struct ToolTip {
 	string markup;
 }
 
-private struct MenuItem {
-	string type;
-	bool enabled;
-	bool visible;
-}
-
 const int TARGET_ICON_PADDING = 18;
 const double TARGET_ICON_SCALE = 2.0 / 3.0;
 const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
@@ -216,7 +210,6 @@ internal class SnTrayItem : Gtk.EventBox {
 		Variant children = layout.get_child_value(2);
 
 		context_menu = new Gtk.Menu();
-		bool wants_separator = false;
 		Gtk.RadioMenuItem? last_radio_item = null;
 
 		VariantIter it = children.iterator();
@@ -233,12 +226,9 @@ internal class SnTrayItem : Gtk.EventBox {
 			Gtk.MenuItem item = null;
 
 			if (props_table.contains("type") && props_table.get("type").get_string() == "separator") {
-				wants_separator = true;
 				last_radio_item = null;
-				continue;
-			}
-
-			if (props_table.contains("toggle-type")) {
+				item = new Gtk.SeparatorMenuItem();
+			} else if (props_table.contains("toggle-type")) {
 				var toggle_type = props_table.get("toggle-type").get_string();
 
 				if (toggle_type == "checkmark") {
@@ -247,6 +237,19 @@ internal class SnTrayItem : Gtk.EventBox {
 					last_radio_item = build_radio_menu_item(props_table, child_id, last_radio_item);
 					item = last_radio_item;
 				}
+			} else if (props_table.contains("icon-name") && props_table.get("icon-name").get_string().size() == 0) {
+				var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+				box.add(new Gtk.Image.from_icon_name(props_table.get("icon-name").get_string(), Gtk.IconSize.MENU));
+				box.add(new Gtk.Label.with_mnemonic(props_table.get("label").get_string()));
+				item = new Gtk.MenuItem();
+				item.add(box);
+			} else if (props_table.contains("icon-data")) {
+				var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+				var input_stream = new MemoryInputStream.from_data(props_table.get("icon-data").get_data_as_bytes().get_data(), free);
+				box.add(new Gtk.Image.from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream)));
+				box.add(new Gtk.Label.with_mnemonic(props_table.get("label").get_string()));
+				item = new Gtk.MenuItem();
+				item.add(box);
 			} else {
 				item = new Gtk.MenuItem.with_mnemonic(props_table.get("label").get_string());
 				item.activate.connect(() => {
@@ -255,13 +258,16 @@ internal class SnTrayItem : Gtk.EventBox {
 			}
 
 			if (item != null) {
-				if (wants_separator) {
-					context_menu.add(new Gtk.SeparatorMenuItem());
-					wants_separator = false;
+				if (props_table.contains("children-display") && props_table.get("children-display").get_string() == "submenu") {
+					item.set_submenu(new Gtk.Menu());
 				}
 
 				if (props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 					item.set_sensitive(false);
+				}
+
+				if (props_table.contains("visible") && !props_table.get("visible").get_boolean()) {
+					item.set_visible(false);
 				}
 
 				if (props_table.contains("disposition")) {
