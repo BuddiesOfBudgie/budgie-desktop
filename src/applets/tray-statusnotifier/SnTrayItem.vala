@@ -80,6 +80,7 @@ internal class SnTrayItem : Gtk.EventBox {
 
 	private DBusMenuInterface? dbus_menu;
 	private Gtk.Menu? context_menu;
+	private HashTable<int32, uint32> revisions = null;
 
 	private string? icon_theme_path = null;
 	private Gtk.Image icon;
@@ -104,10 +105,24 @@ internal class SnTrayItem : Gtk.EventBox {
 			try {
 				dbus_menu = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_properties.menu);
 
-				build_menu();
+				context_menu = build_menu(0);
+				context_menu.map.connect(() => {
+					dbus_menu.event(0, "opened", new Variant.int32(0), (uint32) get_real_time());
+				});
+				context_menu.unmap.connect(() => {
+					dbus_menu.event(0, "closed", new Variant.int32(0), (uint32) get_real_time());
+				});
+				context_menu.show_all();
 
 				dbus_menu.layout_updated.connect((revision, parent_id) => {
-					build_menu();
+					context_menu = build_menu(0);
+					context_menu.map.connect(() => {
+						dbus_menu.event(0, "opened", new Variant.int32(0), (uint32) get_real_time());
+					});
+					context_menu.unmap.connect(() => {
+						dbus_menu.event(0, "closed", new Variant.int32(0), (uint32) get_real_time());
+					});
+					context_menu.show_all();
 				});
 			} catch (Error e) {
 				warning("Failed to get a proxy object for tray item menu: %s", e.message);
@@ -194,22 +209,22 @@ internal class SnTrayItem : Gtk.EventBox {
 		}
 	}
 
-	private void build_menu() {
+	private Gtk.Menu? build_menu(int32 parent_id) {
 		uint32 revision;
 		Variant layout;
 
 		try {
-			dbus_menu.get_layout(0, -1, null, out revision, out layout);
+			dbus_menu.get_layout(parent_id, -1, {}, out revision, out layout);
 		} catch (Error e) {
-			warning("Failed to get layout for dbus menu: %s", e.message);
-			return;
+			debug("Failed to get layout for dbus menu: %s", e.message);
+			return null;
 		}
 
 		int32 id = layout.get_child_value(0).get_int32();
 		Variant properties = layout.get_child_value(1);
 		Variant children = layout.get_child_value(2);
 
-		context_menu = new Gtk.Menu();
+		var menu = new Gtk.Menu();
 		Gtk.RadioMenuItem? last_radio_item = null;
 
 		VariantIter it = children.iterator();
@@ -243,6 +258,9 @@ internal class SnTrayItem : Gtk.EventBox {
 				box.add(new Gtk.Label.with_mnemonic(props_table.get("label").get_string()));
 				item = new Gtk.MenuItem();
 				item.add(box);
+				item.activate.connect(() => {
+					dbus_menu.event(child_id, "clicked", new Variant.int32(0), (uint32) get_real_time());
+				});
 			} else if (props_table.contains("icon-data")) {
 				var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
 				var input_stream = new MemoryInputStream.from_data(props_table.get("icon-data").get_data_as_bytes().get_data(), free);
@@ -250,6 +268,9 @@ internal class SnTrayItem : Gtk.EventBox {
 				box.add(new Gtk.Label.with_mnemonic(props_table.get("label").get_string()));
 				item = new Gtk.MenuItem();
 				item.add(box);
+				item.activate.connect(() => {
+					dbus_menu.event(child_id, "clicked", new Variant.int32(0), (uint32) get_real_time());
+				});
 			} else {
 				item = new Gtk.MenuItem.with_mnemonic(props_table.get("label").get_string());
 				item.activate.connect(() => {
@@ -259,15 +280,20 @@ internal class SnTrayItem : Gtk.EventBox {
 
 			if (item != null) {
 				if (props_table.contains("children-display") && props_table.get("children-display").get_string() == "submenu") {
-					item.set_submenu(new Gtk.Menu());
+					var submenu = build_menu(child_id);
+					if (submenu != null) {
+						submenu.map.connect(() => {
+							dbus_menu.event(child_id, "opened", new Variant.int32(0), (uint32) get_real_time());
+						});
+						submenu.unmap.connect(() => {
+							dbus_menu.event(child_id, "closed", new Variant.int32(0), (uint32) get_real_time());
+						});
+						item.set_submenu(submenu);
+					}
 				}
 
 				if (props_table.contains("enabled") && !props_table.get("enabled").get_boolean()) {
 					item.set_sensitive(false);
-				}
-
-				if (props_table.contains("visible") && !props_table.get("visible").get_boolean()) {
-					item.set_visible(false);
 				}
 
 				if (props_table.contains("disposition")) {
@@ -280,11 +306,11 @@ internal class SnTrayItem : Gtk.EventBox {
 						item.get_style_context().add_class("error");
 					}
 				}
-				context_menu.add(item);
+				menu.add(item);
 			}
 		}
 
-		context_menu.show_all();
+		return menu;
 	}
 
 	private static HashTable<string, Variant?> build_props_table(Variant properties) {
