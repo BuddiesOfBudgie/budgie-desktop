@@ -1,7 +1,7 @@
 internal struct IconPixmap {
 	int width;
 	int height;
-	char[] data;
+	uint8[] data;
 }
 
 internal struct ToolTip {
@@ -116,32 +116,47 @@ internal class TrayItem : Gtk.EventBox {
 	}
 
 	private void reset_icon(string? status = null) {
-		string icon_name;
+		string? icon_name = null;
+		IconPixmap[] icon_pixmaps = {};
 		if ((status ?? dbus_properties.status) == "NeedsAttention") {
 			icon_name = dbus_properties.attention_icon_name;
+			icon_pixmaps = dbus_properties.attention_icon_pixmap;
 		} else {
 			icon_name = dbus_properties.icon_name;
+			icon_pixmaps = dbus_properties.icon_pixmap;
 		}
 
-		try {
-			if (icon_theme_path != null) {
-				var icon_theme = Gtk.IconTheme.get_default();
-
-				if (icon_theme.has_icon(icon_name)) {
-					icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
-				} else {
-					icon_theme.prepend_search_path(icon_theme_path);
-					icon.set_from_pixbuf(icon_theme.load_icon(icon_name, target_icon_size, Gtk.IconLookupFlags.FORCE_SIZE));
-				}
-			} else {
-				icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID);
+		IconPixmap? icon_pixmap = null;
+		for (int i = 0; i < icon_pixmaps.length; i++) {
+			icon_pixmap = icon_pixmaps[i];
+			if (icon_pixmap.width >= target_icon_size && icon_pixmap.height >= target_icon_size) {
+				break;
 			}
-		} catch (Error e) {
-			warning("Failed to get icon from theme: %s", e.message);
+		}
+
+		if (icon_name != null) {
+			var icon_theme = Gtk.IconTheme.get_default();
+			if (icon_theme_path != null && !icon_theme.has_icon(icon_name)) {
+				icon_theme.prepend_search_path(icon_theme_path);
+			}
+			icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+		} else if (icon_pixmap != null) {
+			// ARGB32 to RGBA32
+			var array = icon_pixmap.data.copy();
+			for (var i = 0; i < 4 * icon_pixmap.width * icon_pixmap.height; i += 4) {
+				array[i] = icon_pixmap.data[i + 1];
+				array[i + 1] = icon_pixmap.data[i + 2];
+				array[i + 2] = icon_pixmap.data[i + 3];
+				array[i + 3] = icon_pixmap.data[i];
+			}
+
+			var pixbuf = new Gdk.Pixbuf.from_data(array, Gdk.Colorspace.RGB, true, 8, icon_pixmap.width, icon_pixmap.height, icon_pixmap.width * 4);
+			pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
+			icon.set_from_pixbuf(pixbuf);
 		}
 
 		if (target_icon_size > 0) {
-			this.icon.pixel_size = target_icon_size;
+			icon.pixel_size = target_icon_size;
 		}
 	}
 
@@ -166,14 +181,14 @@ internal class TrayItem : Gtk.EventBox {
 	}
 
 	public override bool button_release_event(Gdk.EventButton event) {
-		if (event.button == 3) { // Right click
+		if (event.button == 2) { // Middle click
+			secondary_activate(event);
+			return Gdk.EVENT_STOP;
+		} else if (event.button == 3 || dbus_properties.item_is_menu) { // Right click
 			show_context_menu(event);
 			return Gdk.EVENT_STOP;
-		} else if (event.button == 1 && !dbus_properties.item_is_menu) { // Left click
+		} else if (event.button == 1) { // Left click
 			primary_activate(event);
-			return Gdk.EVENT_STOP;
-		} else if (event.button == 2) { // Middle click
-			secondary_activate(event);
 			return Gdk.EVENT_STOP;
 		}
 
