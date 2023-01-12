@@ -61,7 +61,8 @@ internal class TrayItem : Gtk.EventBox {
 	private DbusmenuGtk.Menu? context_menu;
 
 	private string? icon_theme_path = null;
-	private Gtk.Image icon;
+	private Gtk.Image primary_icon;
+	private Gtk.Image overlay_icon;
 
 	public int target_icon_size = 8;
 
@@ -75,9 +76,16 @@ internal class TrayItem : Gtk.EventBox {
 		add_events(Gdk.EventMask.SCROLL_MASK);
 
 		reset_icon_theme();
-		icon = new Gtk.Image();
+
+		primary_icon = new Gtk.Image();
+		overlay_icon = new Gtk.Image();
+
+		var overlay = new Gtk.Overlay();
+		overlay.add(primary_icon);
+		overlay.add_overlay(overlay_icon);
+
 		resize(applet_size);
-		add(icon);
+		add(overlay);
 
 		reset_tooltip();
 
@@ -126,6 +134,16 @@ internal class TrayItem : Gtk.EventBox {
 			icon_pixmaps = dbus_properties.icon_pixmap;
 		}
 
+		update_icon(primary_icon, icon_name, icon_pixmaps);
+		update_icon(overlay_icon, dbus_properties.overlay_icon_name, dbus_properties.overlay_icon_pixmap);
+
+		if (target_icon_size > 0) {
+			primary_icon.pixel_size = target_icon_size;
+			overlay_icon.pixel_size = target_icon_size;
+		}
+	}
+
+	private void update_icon(Gtk.Image icon, string? icon_name, IconPixmap[] icon_pixmaps) {
 		IconPixmap? icon_pixmap = null;
 		for (int i = 0; i < icon_pixmaps.length; i++) {
 			icon_pixmap = icon_pixmaps[i];
@@ -140,6 +158,7 @@ internal class TrayItem : Gtk.EventBox {
 				icon_theme.prepend_search_path(icon_theme_path);
 			}
 			icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+			icon.visible = true;
 		} else if (icon_pixmap != null) {
 			// ARGB32 to RGBA32
 			var array = icon_pixmap.data.copy();
@@ -153,10 +172,9 @@ internal class TrayItem : Gtk.EventBox {
 			var pixbuf = new Gdk.Pixbuf.from_data(array, Gdk.Colorspace.RGB, true, 8, icon_pixmap.width, icon_pixmap.height, icon_pixmap.width * 4);
 			pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
 			icon.set_from_pixbuf(pixbuf);
-		}
-
-		if (target_icon_size > 0) {
-			icon.pixel_size = target_icon_size;
+			icon.visible = true;
+		} else {
+			icon.visible = false;
 		}
 	}
 
