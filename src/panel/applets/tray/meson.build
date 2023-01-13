@@ -17,6 +17,8 @@ applet_tray_resources = gnome.compile_resources(
 )
 
 applet_tray_sources = [
+    'DBusMenu.vala',
+    'DBusMenuNode.vala',
     'TrayApplet.vala',
     'TrayItem.vala',
     applet_tray_resources,
@@ -26,7 +28,6 @@ applet_tray_deps = [
     libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
-    dep_dbusmenugtk3,
     link_libpanelplugin,
     meson.get_compiler('c').find_library('m', required: false)
 ]
@@ -37,7 +38,6 @@ shared_library(
     dependencies: applet_tray_deps,
     vala_args: [
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
-        '--pkg', 'Dbusmenu-0.4',
         '--pkg', 'libpeas-1.0',
     ],
     install: true,

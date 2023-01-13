@@ -40,7 +40,6 @@ dep_libuuid = dependency('uuid')
 dep_vala = dependency('vapigen', version: '>= 0.52.5')
 dep_gst = dependency('gstreamer-1.0')
 dep_cairo = dependency('cairo')
-dep_dbusmenugtk3 = dependency('dbusmenu-gtk3-0.4')
 
 # Needed for Budgie Menu
 dep_cairo = dependency('cairo', version: '>= 1.15.10')

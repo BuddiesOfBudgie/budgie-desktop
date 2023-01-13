@@ -58,7 +58,7 @@ internal class TrayItem : Gtk.EventBox {
 	private string dbus_name;
 	private string dbus_object_path;
 
-	private DbusmenuGtk.Menu? context_menu;
+	private DBusMenu context_menu;
 
 	private string? icon_theme_path = null;
 	private Gtk.Image primary_icon;
@@ -90,7 +90,7 @@ internal class TrayItem : Gtk.EventBox {
 		reset_tooltip();
 
 		if (dbus_properties.menu != null) {
-			context_menu = new DbusmenuGtk.Menu(dbus_name, dbus_properties.menu);
+			context_menu = new DBusMenu(dbus_name, dbus_properties.menu);
 		}
 
 		dbus_item.new_icon.connect(() => {
