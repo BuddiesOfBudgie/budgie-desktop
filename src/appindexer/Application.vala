@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ namespace Budgie {
 			if (desktop_icon != null) {
 				// Make sure we have a usable icon
 				unowned var theme = Gtk.IconTheme.get_default();
-				if (theme.lookup_by_gicon(this.icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
+				if (theme.lookup_by_gicon(desktop_icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
 					this.icon = desktop_icon;
 				}
 			}
