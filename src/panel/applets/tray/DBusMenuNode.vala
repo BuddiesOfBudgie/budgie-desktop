@@ -158,18 +158,15 @@ public class DBusMenuNode : Object {
 			return;
 		}
 
-		item = new Gtk.CheckMenuItem.with_mnemonic(properties.label);
-		if (properties.toggle_type == "checkmark") {
-			item = new Gtk.CheckMenuItem.with_mnemonic(properties.label) {
+		if (properties.toggle_type != "") {
+			var check_item = new Gtk.CheckMenuItem.with_mnemonic(properties.label) {
 				active = properties.toggle_state ?? false,
+				draw_as_radio = properties.toggle_type == "radio",
 			};
-		} else if (properties.toggle_type == "radio") {
-			item = new Gtk.CheckMenuItem.with_mnemonic(properties.label) {
-				active = properties.toggle_state ?? false,
-				draw_as_radio = true
-			};
+			check_item.activate.connect(() => clicked(new Variant.boolean(check_item.active)));
 		} else {
 			item = new Gtk.MenuItem.with_mnemonic(properties.label);
+			item.activate.connect(() => clicked(null));
 		}
 
 		item.set_visible(properties.visible);
@@ -214,4 +211,9 @@ public class DBusMenuNode : Object {
 				break;
 		}
 	}
+
+	public signal void clicked(Variant? data);
+	public signal void hovered();
+	public signal void opened();
+	public signal void closed();
 }

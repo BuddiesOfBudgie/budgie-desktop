@@ -59,10 +59,14 @@ public class DBusMenu : Object {
 			Variant child_props = v_child.get_child_value(1);
 			Variant child_children = v_child.get_child_value(2);
 
-			var item = new DBusMenuNode(child_id, child_props, child_children);
+			var node = new DBusMenuNode(child_id, child_props, child_children);
+			node.clicked.connect((data) => send_event(node.id, "clicked", data));
+			node.hovered.connect((event) => send_event(node.id, "hovered"));
+			node.opened.connect((event) => send_event(node.id, "opened"));
+			node.closed.connect((event) => send_event(node.id, "closed"));
 			children.append(child_id);
-			all_nodes.set(child_id, item);
-			menu.add(item.item);
+			all_nodes.set(child_id, node);
+			menu.add(node.item);
 		}
 	}
 
@@ -95,6 +99,14 @@ public class DBusMenu : Object {
 					node.update_property(key, value);
 				}
 			}
+		}
+	}
+
+	private void send_event(int32 node_id, string type, Variant? data = null) {
+		try {
+			iface.event(node_id, type, data ?? new Variant.int32(0), (uint32) get_real_time());
+		} catch (Error e) {
+			warning("Failed to send %s event to node %d: %s", type, node_id, e.message);
 		}
 	}
 
