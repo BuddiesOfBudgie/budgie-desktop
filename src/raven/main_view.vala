@@ -71,7 +71,7 @@ namespace Budgie {
 			audio_output_widget = new Budgie.SoundOutputWidget("output");
 			box.pack_start(audio_output_widget, false, false, 0);
 
-			audio_input_widget = new Budgie.SoundInputWidget("input");
+			audio_input_widget = new Budgie.SoundInputWidget();
 			box.pack_start(audio_input_widget, false, false, 0);
 
 			mpris = new MprisWidget();
