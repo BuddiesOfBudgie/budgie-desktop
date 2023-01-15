@@ -10,7 +10,7 @@
  */
 
 namespace Budgie {
-	public class SoundWidget : RavenWidget {
+	public class SoundOutputWidget : RavenWidget {
 		/**
 		 * Logic and Mixer variables
 		 */
@@ -48,7 +48,7 @@ namespace Budgie {
 		private Gtk.StackSwitcher? widget_area_switch = null;
 		private Gtk.Scale? volume_slider = null;
 
-		public SoundWidget(string c_widget_type) {
+		public SoundOutputWidget(string c_widget_type) {
 			Object(orientation: Gtk.Orientation.VERTICAL);
 			get_style_context().add_class("audio-widget");
 			widget_type = c_widget_type;

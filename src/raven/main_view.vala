@@ -14,8 +14,8 @@ namespace Budgie {
 		private Gtk.Box? box = null; // Holds our content
 		private MprisWidget? mpris = null;
 		private CalendarWidget? cal = null;
-		private Budgie.SoundWidget? audio_input_widget = null;
-		private Budgie.SoundWidget? audio_output_widget = null;
+		private Budgie.SoundInputWidget? audio_input_widget = null;
+		private Budgie.SoundOutputWidget? audio_output_widget = null;
 		private Settings? raven_settings = null;
 
 		private Gtk.Stack? main_stack = null;
@@ -68,10 +68,10 @@ namespace Budgie {
 			cal = new CalendarWidget(raven_settings);
 			box.pack_start(cal, false, false, 0);
 
-			audio_output_widget = new Budgie.SoundWidget("output");
+			audio_output_widget = new Budgie.SoundOutputWidget("output");
 			box.pack_start(audio_output_widget, false, false, 0);
 
-			audio_input_widget = new Budgie.SoundWidget("input");
+			audio_input_widget = new Budgie.SoundInputWidget("input");
 			box.pack_start(audio_input_widget, false, false, 0);
 
 			mpris = new MprisWidget();
