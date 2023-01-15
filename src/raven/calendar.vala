@@ -37,8 +37,8 @@ public class CalendarWidget : RavenWidget {
 
 		var icon = new Gtk.Image.from_icon_name("calendar", Gtk.IconSize.MENU);
 		icon.margin = 4;
-		icon.margin_start = 8;
-		icon.margin_end = 8;
+		icon.margin_start = 12;
+		icon.margin_end = 10;
 		header.add(icon);
 
 		var time = new DateTime.now_local();
