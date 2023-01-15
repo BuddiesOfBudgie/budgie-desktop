@@ -18,52 +18,52 @@ public class UserIndicator : Budgie.Plugin, Peas.ExtensionBase {
 }
 
 public class UserIndicatorApplet : Budgie.Applet {
-	protected Gtk.EventBox? ebox;
-	protected UserIndicatorWindow? popover;
-	Gtk.Image image;
+	private Gtk.Button? button = null;
 
-	private unowned Budgie.PopoverManager? manager = null;
+	private PowerDialogInterface? power_dialog = null;
+
 	public string uuid { public set ; public get; }
 
 	public UserIndicatorApplet(string uuid) {
 		Object(uuid: uuid);
 
-		ebox = new Gtk.EventBox();
-		image = new Gtk.Image.from_icon_name(USER_SYMBOLIC_ICON, Gtk.IconSize.MENU);
-		ebox.add(image);
+		button = new Gtk.Button.from_icon_name(USER_SYMBOLIC_ICON, Gtk.IconSize.MENU);
+		button.get_style_context().add_class("flat");
 
-		popover = new UserIndicatorWindow(image);
+		Bus.get_proxy.begin<PowerDialogInterface>(
+			GLib.BusType.SESSION,
+			"org.buddiesofbudgie.PowerDialog",
+			"/org/buddiesofbudgie/PowerDialog",
+			GLib.DBusProxyFlags.NONE,
+			null,
+			on_dialog_acquired
+		);
 
-		ebox.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			Toggle();
-			return Gdk.EVENT_STOP;
-		});
+		button.clicked.connect(on_button_clicked);
 
-		popover.get_child().show_all();
-
-		add(ebox);
+		add(button);
 		show_all();
 	}
 
-	public void Toggle(){
-		if (popover.get_visible()) {
-			popover.hide();
-		} else {
-			popover.get_child().show_all();
-			this.manager.show_popover(ebox);
+	private void on_dialog_acquired(Object? obj, AsyncResult? res) {
+		try {
+			power_dialog = Bus.get_proxy.end<PowerDialogInterface>(res);
+		} catch (Error e) {
+			critical("Unable to get PowerDialog proxy: %s", e.message);
 		}
 	}
 
-	public override void invoke_action(Budgie.PanelAction action) {
-		Toggle();
-	}
+	private void on_button_clicked() {
+		if (power_dialog == null) {
+			warning("Attempted to toggle PowerDialog, but we don't have a DBus proxy!");
+			return;
+		}
 
-	public override void update_popovers(Budgie.PopoverManager? manager) {
-		this.manager = manager;
-		manager.register_popover(ebox, popover);
+		try {
+			power_dialog.Toggle();
+		} catch (Error e) {
+			critical("Error toggling PowerDialog: %s", e.message);
+		}
 	}
 }
 
