@@ -14,9 +14,19 @@ namespace Budgie.Notifications {
 
 	/**
 	 * This class is a notification popup with no content in it.
+	 *
+	 * Widget Structure & GTK Classes:
+	 * - GtkWindow (class: budgie-notification-window)
+	 *   - GtkRevealer
+	 *     - GtkBox (class: drop-shadow)
+	 *       - GtkOverlay
+	 *         - GtkStack (holds the notification body/content)
+	 *           - ...
+	 *         - GtkButton (class: close)
 	 */
 	public class PopupBase : Gtk.Window {
 		protected Gtk.Stack content_stack;
+		protected Gtk.Revealer revealer;
 
 		private uint expire_id { get; private set; }
 
@@ -29,9 +39,7 @@ namespace Budgie.Notifications {
 			this.skip_pager_hint = true;
 			this.skip_taskbar_hint = true;
 			this.set_decorated(false);
-
-			this.halign = Gtk.Align.FILL;
-			this.valign = Gtk.Align.FILL;
+			this.set_accept_focus(false);
 
 			var visual = this.screen.get_rgba_visual();
 			if (visual != null) {
@@ -43,14 +51,41 @@ namespace Budgie.Notifications {
 
 			this.content_stack = new Gtk.Stack() {
 				transition_type = Gtk.StackTransitionType.SLIDE_LEFT,
-				border_width = 8,
-				halign = Gtk.Align.FILL,
-				valign = Gtk.Align.FILL,
+				hexpand = true,
+				margin = 4,
 				vhomogeneous = false
 			};
-			this.content_stack.get_style_context().add_class("drop-shadow");
 
-			this.add(this.content_stack);
+			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
+				halign = Gtk.Align.END,
+				valign = Gtk.Align.START
+			};
+			close_button.get_style_context().add_class("close");
+
+			var overlay = new Gtk.Overlay();
+			overlay.get_style_context().add_class("btn");
+			overlay.add(content_stack);
+			overlay.add_overlay(close_button);
+
+			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			box.get_style_context().add_class("drop-shadow");
+			box.pack_start(overlay, true, true, 0);
+
+			// Add a revealer for open/close animation
+			this.revealer = new Gtk.Revealer() {
+				reveal_child = false,
+				transition_duration = 250,
+				transition_type = Gtk.RevealerTransitionType.CROSSFADE,
+			};
+			this.revealer.add(box);
+
+			this.add(revealer);
+
+			// Hook up the close button
+			close_button.clicked.connect(() => {
+				this.Closed(NotificationCloseReason.DISMISSED);
+				this.dismiss();
+			});
 		}
 
 		/**
@@ -58,18 +93,11 @@ namespace Budgie.Notifications {
 		 */
 		public void dismiss() {
 			this.destroying = true;
-			destroy();
-		}
-
-		/**
-		 * Close this notification when it expires.
-		 */
-		bool do_expire() {
-			this.expire_id = 0;
-
-			this.Closed(NotificationCloseReason.EXPIRED);
-			this.dismiss();
-			return false;
+			this.revealer.reveal_child = false;
+			GLib.Timeout.add(revealer.transition_duration, () => {
+				this.destroy();
+				return Source.REMOVE;
+			});
 		}
 
 		/**
@@ -80,7 +108,18 @@ namespace Budgie.Notifications {
 				Source.remove(this.expire_id);
 			}
 
-			this.expire_id = Timeout.add(timeout, do_expire, Priority.HIGH);
+			// Prevent popups being shown for a second if DND is enabled
+			// or an application is fullscreened
+			if (timeout > 0) {
+				this.revealer.reveal_child = true;
+			}
+
+			this.expire_id = GLib.Timeout.add(timeout, () => {
+				this.expire_id = 0;
+				this.Closed(NotificationCloseReason.EXPIRED);
+				this.dismiss();
+				return Source.REMOVE;
+			}, Priority.HIGH);
 		}
 
 		/**
@@ -107,6 +146,8 @@ namespace Budgie.Notifications {
 		public Notification notification { get; construct; }
 
 		public bool did_interact { get; private set; default = false; }
+
+		private Body? body;
 
 		/**
 		 * Signal emitted when an action is clicked.
@@ -138,15 +179,10 @@ namespace Budgie.Notifications {
 			var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
 				baseline_position = Gtk.BaselinePosition.CENTER
 			};
-			var contents = new Body(this.notification);
-			this.content_stack.add(content_box);
-			content_box.pack_start(contents, false, true, 0);
+			this.body = new Body(this.notification);
 
-			// Hook up the close button
-			contents.Closed.connect(() => {
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
-			});
+			this.content_stack.add(content_box);
+			content_box.pack_start(body, false, false, 0);
 
 			// Add notification actions if any are present
 			if (this.notification.actions.length > 0) {
@@ -155,18 +191,24 @@ namespace Budgie.Notifications {
 					this.ActionInvoked(action_key);
 					this.dismiss();
 				});
-				content_box.pack_start(actions, false, true, 0);
+				content_box.pack_start(actions, true, true, 0);
 			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
 			this.enter_notify_event.connect(() => {
 				this.stop_decay();
-				return Gdk.EVENT_STOP;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
-			this.leave_notify_event.connect(() => {
+			this.leave_notify_event.connect((event) => {
+				// This keeps the decay timer from restarting when the mouse enters another
+				// widget in the popup.
+				if (event.detail == Gdk.NotifyType.INFERIOR) {
+					return Gdk.EVENT_STOP;
+				}
+
 				this.begin_decay(this.notification.expire_timeout);
-				return Gdk.EVENT_STOP;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
 			// Handle interaction events
@@ -202,11 +244,6 @@ namespace Budgie.Notifications {
 			var new_contents = new Body(new_notif);
 			content_box.add(new_contents);
 
-			new_contents.Closed.connect(() => {
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
-			});
-
 			// Add notification actions if any are present
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
@@ -223,6 +260,10 @@ namespace Budgie.Notifications {
 			this.show_all();
 			this.begin_decay(new_notif.expire_timeout);
 		}
+
+		public void toggle_body_text() {
+			this.body.toggle_body_text();
+		}
 	}
 
 	/**
@@ -231,7 +272,7 @@ namespace Budgie.Notifications {
 	private class Body: Gtk.Grid {
 		public Notification notification { get; construct; }
 
-		public signal void Closed();
+		private Gtk.Revealer? body_revealer;
 
 		public Body(Notification notification) {
 			Object(notification: notification);
@@ -255,17 +296,23 @@ namespace Budgie.Notifications {
 				ellipsize = Pango.EllipsizeMode.END,
 				max_width_chars = 35,
 				margin_bottom = 5,
+				margin_right = 16,
 				halign = Gtk.Align.START,
 				hexpand = true
 			};
 			title_label.get_style_context().add_class("notification-title");
+
+			this.body_revealer = new Gtk.Revealer() {
+				transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN,
+				transition_duration = 250,
+				reveal_child = true
+      };
 
 			var body_label = new Gtk.Label(this.notification.body) {
 				ellipsize = Pango.EllipsizeMode.END,
 				use_markup = true,
 				wrap = true,
 				wrap_mode = Pango.WrapMode.WORD_CHAR,
-				width_chars = 33,
 				max_width_chars = 33,
 				lines = 2,
 				valign = Gtk.Align.START,
@@ -273,21 +320,19 @@ namespace Budgie.Notifications {
 				hexpand = true,
 				vexpand = true
 			};
+			body_label.set_size_request(33, -1); // This ensures that lines wrap at the desired place regardless of font-size
 			body_label.get_style_context().add_class("notification-body");
 
-			var close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON) {
-				halign = Gtk.Align.END,
-				valign = Gtk.Align.START
-			};
-			close_button.clicked.connect(() => {
-				this.Closed();
-			});
+			this.body_revealer.add(body_label);
 
 			// Attach the icon and labels to our grid
 			this.attach(app_icon, 0, 0, 1, 2);
 			this.attach(title_label, 1, 0);
-			this.attach(close_button, 2, 0);
-			this.attach(body_label, 1, 1);
+			this.attach(body_revealer, 1, 1);
+		}
+
+		public void toggle_body_text() {
+			body_revealer.set_reveal_child(!body_revealer.get_reveal_child());
 		}
 	}
 

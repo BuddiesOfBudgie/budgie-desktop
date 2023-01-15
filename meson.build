@@ -57,6 +57,10 @@ dep_wnck = dependency('libwnck-3.0', version: '>= 3.36.0')
 # accountsservice in multiple applets
 dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 
+# Needed for Daemon (notifications)
+dep_canberra = dependency('libcanberra')
+dep_canberra_gtk3 = dependency('libcanberra-gtk3')
+
 # Create config.h
 cdata = configuration_data()
 

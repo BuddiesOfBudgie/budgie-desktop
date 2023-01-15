@@ -35,22 +35,13 @@
 		BOTTOM_RIGHT = 4
 	}
 
-	/**
-	 * Enumeration of notification priorities.
-	 */
-	public enum NotificationUrgency {
-		LOW = 0,
-		NORMAL = 1,
-		CRITICAL = 2
-	}
-
 	 /**
 	 * This is our wrapper class for a FreeDesktop notification.
 	 */
 	public class Notification : Object {
 		public DesktopAppInfo? app_info { get; private set; default = null; }
 		public string app_id { get; private set; }
-		public NotificationUrgency urgency { get; private set; default = NotificationUrgency.NORMAL; }
+		public GLib.NotificationPriority urgency { get; private set; default = GLib.NotificationPriority.NORMAL; }
 
 		public uint32 id { get; construct; }
 
@@ -63,7 +54,7 @@
 		public string summary { get; construct set; }
 		public uint expire_timeout { get; construct set; }
 
-		public string category { get; construct set; }
+		public string? category { get; construct set; }
 		public int64 timestamp { get; construct set; }
 
 		/* Icon stuff */
@@ -109,7 +100,7 @@
 
 			// Set the priority
 			if ((variant = hints.lookup("urgency")) != null && variant.is_of_type(VariantType.BYTE)) {
-				this.urgency = (NotificationUrgency) variant.get_byte();
+				this.urgency = (GLib.NotificationPriority) variant.get_byte();
 			}
 
 			// Set the category
