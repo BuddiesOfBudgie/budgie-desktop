@@ -68,7 +68,7 @@ namespace Budgie {
 			cal = new CalendarWidget(raven_settings);
 			box.pack_start(cal, false, false, 0);
 
-			audio_output_widget = new Budgie.SoundOutputWidget("output");
+			audio_output_widget = new Budgie.SoundOutputWidget();
 			box.pack_start(audio_output_widget, false, false, 0);
 
 			audio_input_widget = new Budgie.SoundInputWidget();
