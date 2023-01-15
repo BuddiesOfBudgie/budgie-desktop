@@ -33,7 +33,6 @@ libraven_sources = [
     'raven.vala',
     'sound-input.vala',
     'sound-output.vala',
-    'start_listening.vala',
     'widget.vala',
 ]
 
