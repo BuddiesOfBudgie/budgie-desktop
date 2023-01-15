@@ -62,7 +62,10 @@ namespace Budgie {
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
 			/* Eventually these guys get dynamically loaded */
-			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+			box.margin_top = 8;
+			box.margin_bottom = 8;
+			box.set_size_request(250, -1);
 			scroll.add(box);
 
 			cal = new CalendarWidget(raven_settings);
