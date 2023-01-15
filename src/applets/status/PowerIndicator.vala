@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -213,6 +213,7 @@ public class PowerIndicator : Gtk.Bin {
 			icon.set_spacing(spacing);
 			icon.set_orientation(orient);
 		}
+		widget.set_orientation(orient);
 	}
 
 	private void update_labels() {
@@ -266,6 +267,7 @@ public class PowerIndicator : Gtk.Bin {
 		icon.label_visible = this.label_visible;
 		devices.insert(object_path, icon);
 		widget.pack_start(icon);
+		change_orientation(widget.get_orientation());
 		toggle_show();
 	}
 

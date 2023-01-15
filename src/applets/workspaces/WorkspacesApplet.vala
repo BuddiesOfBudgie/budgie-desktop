@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2017-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,11 +218,12 @@ namespace Workspaces {
 				button_visibility = (AddButtonVisibility)settings.get_enum(key);
 				add_button_revealer.set_reveal_child(((button_visibility == AddButtonVisibility.ALWAYS) && below_max_workspace_count()));
 			} else if (key == "item-size-multiplier") {
-				item_size_multiplier = float.parse(settings.get_string(key));
+				item_size_multiplier = (float) settings.get_enum(key) / 4;
 				foreach (Gtk.Widget widget in workspaces_layout.get_children()) {
 					Gtk.Revealer revealer = widget as Gtk.Revealer;
 					WorkspaceItem item = revealer.get_child() as WorkspaceItem;
 					item.set_size_multiplier(item_size_multiplier);
+					item.queue_resize();
 				}
 				Timeout.add(100, () => {
 					update_workspaces.begin();

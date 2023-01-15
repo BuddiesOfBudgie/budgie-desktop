@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop.
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,8 +27,10 @@ namespace LibUUID {
 			LibUUID.generate_random(time);
 		} else if ((flags & LibUUID.UUIDFlags.TIME_TYPE) != 0) {
 			LibUUID.generate_time(time);
+#if with_libuuid_time_safe
 		} else if ((flags & LibUUID.UUIDFlags.TIME_SAFE_TYPE) != 0) {
 			LibUUID.generate_time_safe(time);
+#endif
 		} else {
 			LibUUID.generate(time);
 		}

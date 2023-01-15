@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  * Copyright (C) 2015 Alberts Muktupāvels
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,9 @@ public class BluetoothIndicator : Gtk.Bin {
 	public Gtk.Image? image = null;
 
 	public Gtk.EventBox? ebox = null;
+#if with_bluetooth
 	private Bluetooth.Client? client = null;
+#endif
 	private Gtk.TreeModel? model = null;
 	public Budgie.Popover? popover = null;
 
@@ -75,8 +77,10 @@ public class BluetoothIndicator : Gtk.Bin {
 		// Ensure all content is shown
 		box.show_all();
 
+#if with_bluetooth
 		client = new Bluetooth.Client();
 		model = client.get_model();
+#endif
 		model.row_changed.connect(() => { resync(); });
 		model.row_deleted.connect(() => { resync(); });
 		model.row_inserted.connect(() => { resync(); });
@@ -123,6 +127,7 @@ public class BluetoothIndicator : Gtk.Bin {
 			return false;
 		}
 
+#if with_bluetooth
 		while (true) {
 			bool is_default;
 			model.get(iter, Bluetooth.Column.DEFAULT, out is_default, -1);
@@ -134,6 +139,7 @@ public class BluetoothIndicator : Gtk.Bin {
 				break;
 			}
 		}
+#endif
 		return false;
 	}
 
@@ -150,8 +156,9 @@ public class BluetoothIndicator : Gtk.Bin {
 			return 0;
 		}
 
+#if with_bluetooth
 		while (true) {
-			bool con;
+			bool con = true;
 			model.get(iter, Bluetooth.Column.CONNECTED, out con, -1);
 			if (con) {
 				n_devices++;
@@ -160,6 +167,8 @@ public class BluetoothIndicator : Gtk.Bin {
 				break;
 			}
 		}
+
+#endif
 		return n_devices;
 	}
 
