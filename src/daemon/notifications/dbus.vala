@@ -306,10 +306,7 @@
 			// Play a sound for the notification if desired
 			maybe_play_sound(notification, should_notify, should_show, app_notification_settings);
 
-			// We don't want to count our own noti's, or have them shown in Raven
-			if ("budgie-daemon" in app_name) {
-				return id;
-			}
+			if ("budgie-daemon" in app_name) return id; // We don't want to count our own noti's, or have them shown in Raven
 
 			this.paused_notifications++;
 
@@ -437,31 +434,17 @@
 
 			// Check if notification sounds are suppressed for this notification
 			bool suppress = (variant = notification.hints.lookup("suppress-sound")) != null && variant.is_of_type(VariantType.BOOLEAN) && variant.get_boolean();
-			if (suppress) {
-				return;
-			}
+			if (suppress) return;
 
-			// Try to get the DesktopAppInfo for the application that generated this notification
-			if (notification.app_info == null) {
-				return;
-			}
+			if (notification.app_info == null) return; // Try to get the DesktopAppInfo for the application that generated this notification
 
 			// Check if the application info has this key set. We check this because for now, we only
 			// want to play sounds if they can be disabled via BCC. This check is how the Control Center
 			// determines if an application should be shown in the Notification section.
-			if (!notification.app_info.get_boolean("X-GNOME-UsesNotifications")) {
-				return;
-			}
+			if (!notification.app_info.get_boolean("X-GNOME-UsesNotifications")) return;
 
-			// Check if sound alerts are enabled for this appllication
-			if (!settings.get_boolean("enable-sound-alerts")) {
-				return;
-			}
-
-			// Don't play sounds if the notification wasn't shown
-			if (!notify || !should_show) {
-				return;
-			}
+			// Check if sound alerts are enabled for this appllication, or if we should not notify or notification is not shown
+			if (!settings.get_boolean("enable-sound-alerts") || !notify || !should_show) return;
 
 			// Default sound name
 			string? sound_name = "dialog-information";
@@ -484,10 +467,8 @@
 		 */
 		private void play_sound(Notification notification, string? sound_name = "dialog-information") {
 			// Try to map the notification's category to a sound name to use
-			if (sound_name == "dialog-information") {
-				if (notification.category != null) {
-					sound_name = get_sound_for_category(notification.category);
-				}
+			if (sound_name == "dialog-information" && notification.category != null) {
+				sound_name = get_sound_for_category(notification.category);
 			}
 
 			// Play the sound
@@ -561,9 +542,7 @@
 		}
 
 		private void on_property_changed(ParamSpec p) {
-			if (p.name != "notifications-paused") {
-				return;
-			}
+			if (p.name != "notifications-paused") return;
 
 			// Only do stuff if notifications are no longer being paused
 			if (dispatcher.notifications_paused) {
@@ -572,9 +551,7 @@
 			}
 
 			// Do nothing if there were no held notifications
-			if (paused_notifications == 0) {
-				return;
-			}
+			if (paused_notifications == 0) return;
 
 			// translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
 			var summary = _("Unread Notifications");

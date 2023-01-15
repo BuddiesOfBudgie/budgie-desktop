@@ -332,11 +332,7 @@ namespace Budgie.Notifications {
 		}
 
 		public void toggle_body_text() {
-			if (body_revealer.get_reveal_child()) {
-				body_revealer.set_reveal_child(false);
-			} else {
-				body_revealer.set_reveal_child(true);
-			}
+			body_revealer.set_reveal_child(!body_revealer.get_reveal_child());
 		}
 	}
 

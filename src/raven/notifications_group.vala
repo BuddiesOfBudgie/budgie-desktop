@@ -55,13 +55,7 @@ namespace Budgie {
 				var noti_b = b.get_child() as NotificationWidget;
 
 				// Sort notifications from old -> new, descending
-				if (noti_a.notification.timestamp < noti_b.notification.timestamp) {
-					return -1;
-				} else if (noti_a.notification.timestamp > noti_b.notification.timestamp) {
-					return 1;
-				} else {
-					return 0;
-				}
+				return (int)(noti_a.notification.timestamp - noti_b.notification.timestamp);
 			});
 
 			/**
