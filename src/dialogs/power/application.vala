@@ -51,9 +51,7 @@ namespace Budgie {
 		}
 
 		private void on_hide() {
-			if (power_dbus == null) {
-				return;
-			}
+			if (power_dbus == null) return;
 
 			power_dbus.is_showing = false;
 		}
@@ -64,30 +62,29 @@ namespace Budgie {
 				return;
 			}
 
-			if (show) {
-				this.window.present_with_time(CURRENT_TIME);
-				this.window.show_all();
-				this.window.reset_focus();
-
-				// We can't grab the seat for this window right after calling present/show
-				// because it happens too fast. The seat will fail to grab with `GDK_GRAB_STATUS_NOT_VIEWABLE`.
-				Timeout.add(250, () => {
-					grab_seat();
-					return Source.REMOVE;
-				});
-			} else {
+			if (!show) {
 				ungrab_seat();
 				window.hide();
+				return;
 			}
+
+			this.window.present_with_time(CURRENT_TIME);
+			this.window.show_all();
+			this.window.reset_focus();
+
+			// We can't grab the seat for this window right after calling present/show
+			// because it happens too fast. The seat will fail to grab with `GDK_GRAB_STATUS_NOT_VIEWABLE`.
+			Timeout.add(250, () => {
+				grab_seat();
+				return Source.REMOVE;
+			});
 		}
 
 		/**
 		 * Attempts to grab device input and send it to our dialog window.
 		 */
 		private void grab_seat() {
-			if (window == null) {
-				return;
-			}
+			if (window == null) return;
 
 			var display = window.get_display();
 			var seat = display.get_default_seat();
@@ -105,9 +102,7 @@ namespace Budgie {
 		 * does nothing.
 		 */
 		private void ungrab_seat() {
-			if (!grabbed || window == null) {
-				return;
-			}
+			if (!grabbed || window == null) return;
 
 			var display = window.get_display();
 			var seat = display.get_default_seat();

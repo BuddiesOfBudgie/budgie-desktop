@@ -120,9 +120,7 @@ namespace Budgie {
 			// Connect events
 			button_release_event.connect((event) => {
 				// We only care about primary mouse clicks
-				if (event.button != BUTTON_PRIMARY) {
-					return EVENT_PROPAGATE;
-				}
+				if (event.button != BUTTON_PRIMARY) return EVENT_PROPAGATE;
 
 				// Get the allocation of the button box
 				Allocation allocation;
@@ -194,9 +192,7 @@ namespace Budgie {
 		 */
 		private void on_key_release(uint keyval, uint keycode, ModifierType state) {
 			// Right now, we only care about hiding when ESC is pressed
-			if (keyval != Key.Escape) {
-				return;
-			}
+			if (keyval != Key.Escape) return;
 
 			hide();
 		}
@@ -210,9 +206,7 @@ namespace Budgie {
 
 		private void logout() {
 			hide();
-			if (session_manager == null) {
-				return;
-			}
+			if (session_manager == null) return;
 
 			Idle.add(() => {
 				try {
@@ -226,9 +220,7 @@ namespace Budgie {
 
 		private void hibernate() {
 			hide();
-			if (logind == null) {
-				return;
-			}
+			if (logind == null) return;
 
 			Idle.add(() => {
 				try {
@@ -243,9 +235,7 @@ namespace Budgie {
 
 		private void reboot() {
 			hide();
-			if (session_manager == null) {
-				return;
-			}
+			if (session_manager == null) return;
 
 			Idle.add(() => {
 				session_manager.Reboot.begin();
@@ -255,9 +245,7 @@ namespace Budgie {
 
 		private void shutdown() {
 			hide();
-			if (session_manager == null) {
-				return;
-			}
+			if (session_manager == null) return;
 
 			Idle.add(() => {
 				session_manager.Shutdown.begin();
@@ -267,9 +255,7 @@ namespace Budgie {
 
 		private void suspend() {
 			hide();
-			if (logind == null) {
-				return;
-			}
+			if (logind == null) return;
 
 			Idle.add(() => {
 				try {

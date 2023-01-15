@@ -50,7 +50,7 @@
 }
 
 // Power Dialog
-@mixin budgie_power_dialog($button) {
+@mixin budgie_power_dialog() {
     @include budgie_dialog();
 
     .power-dialog-button {

@@ -259,10 +259,7 @@ namespace Budgie {
 		void on_logind_get(Object? o, AsyncResult? res) {
 			try {
 				logind_proxy = Bus.get_proxy.end(res);
-				if (logind_proxy == null) {
-					return;
-				}
-				if (this.is_nvidia()) {
+				if (logind_proxy != null && this.is_nvidia()) {
 					logind_proxy.PrepareForSleep.connect(prepare_for_sleep);
 				}
 			} catch (Error e) {
@@ -272,9 +269,7 @@ namespace Budgie {
 
 		/* Kudos to gnome-shell guys here: https://bugzilla.gnome.org/show_bug.cgi?id=739178 */
 		void prepare_for_sleep(bool suspending) {
-			if (suspending) {
-				return;
-			}
+			if (suspending) return;
 			Meta.Background.refresh_all();
 		}
 
@@ -317,14 +312,12 @@ namespace Budgie {
 		}
 
 		void lost_power_dialog() {
-			power_proxy= null;
+			power_proxy = null;
 		}
 
 		/* Binding for showing the Power Dialog */
 		void on_show_power_dialog(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
-			if (power_proxy == null) {
-				return;
-			}
+			if (power_proxy == null) return;
 
 			power_proxy.Toggle.begin((obj, res) => {
 				try {
@@ -392,7 +385,6 @@ namespace Budgie {
 						}
 					});
 				}
-
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -479,9 +471,7 @@ namespace Budgie {
 		}
 
 		void on_overlay_key() {
-			if (panel_proxy == null) {
-				return;
-			}
+			if (panel_proxy == null) return;
 			if (enabled_experimental_run_diag_as_menu) { // Use Budgie Run Dialog
 				try {
 					Process.spawn_command_line_async("budgie-run-dialog");
@@ -569,9 +559,7 @@ namespace Budgie {
 		private bool is_nvidia() {
 			var ptr = (GlQueryFunc)Cogl.get_proc_address("glGetString");
 
-			if (ptr == null) {
-				return false;
-			}
+			if (ptr == null) return false;
 
 			unowned string? ret = ptr(GL_VENDOR);
 			if (ret != null && "NVIDIA Corporation" in ret) {
@@ -704,9 +692,7 @@ namespace Budgie {
 			} else if (key == WM_FORCE_UNREDIRECT) {
 				bool enab = this.settings.get_boolean(key);
 
-				if (enab == this.force_unredirect) {
-					return;
-				}
+				if (enab == this.force_unredirect) return;
 
 				var display = this.get_display();
 				if (enab) {
@@ -719,12 +705,8 @@ namespace Budgie {
 		}
 
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {
-			if (type != Meta.WindowMenuType.WM) {
-				return;
-			}
-			if (menu_proxy == null) {
-				return;
-			}
+			if (type != Meta.WindowMenuType.WM) return;
+			if (menu_proxy == null) return;
 			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
 				menu_proxy.ShowWindowMenu.begin(xid, 3, 0, (obj, res) => {
@@ -839,9 +821,7 @@ namespace Budgie {
 		*/
 		public void store_focused() {
 			var workspace = get_display().get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
+			if (workspace == null) return;
 			foreach (var window in workspace.list_windows()) {
 				if (window.has_focus()) {
 					focused_window = window;
@@ -854,9 +834,7 @@ namespace Budgie {
 		* Restore the focused window
 		*/
 		public void restore_focused() {
-			if (focused_window == null) {
-				return;
-			}
+			if (focused_window == null) return;
 			focused_window.focus(get_display().get_current_time());
 			focused_window = null;
 		}

@@ -59,7 +59,7 @@
 // Power Dialog
 .budgie-power-dialog {
     @extend %widgets;
-    @include budgie_power_dialog(button);
+    @include budgie_power_dialog();
 }
 
 // Run Dialog
