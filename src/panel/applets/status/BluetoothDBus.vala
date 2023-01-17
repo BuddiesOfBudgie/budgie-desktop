@@ -15,19 +15,19 @@
  */
 [DBus (name="org.bluez.Adapter1")]
 public interface Adapter1 : GLib.Object {
-	public abstract string Address { get; }
-	public abstract string Name { get; }
-	public abstract string Alias { get; set; }
+	public abstract string Address { owned get; }
+	public abstract string Name { owned get; }
+	public abstract string Alias { owned get; set; }
 	public abstract uint32 Class { get; }
 	public abstract bool Powered { get; set; }
-	public abstract string PoweredState { get; }
+	public abstract string PoweredState { owned get; }
 	public abstract bool Discoverable { set; get; }
 	public abstract uint32 DiscoverableTimeout { get; set; }
 	public abstract bool Pairable { get; set; }
 	public abstract uint32 PairableTimeout { get; set; }
 	public abstract bool Discovering { get; set; }
-	public abstract string[] UUIDS { get; }
-	public abstract string Modalias { get; }
+	public abstract string[] UUIDS { owned get; }
+	public abstract string Modalias { owned get; }
 
 	public async abstract void StartDiscovery() throws GLib.DBusError, GLib.IOError;
 	public async abstract void StopDiscovery() throws GLib.DBusError, GLib.IOError;
@@ -40,21 +40,21 @@ public interface Adapter1 : GLib.Object {
  */
 [DBus (name = "org.bluez.Device1")]
 public interface Device1 : GLib.Object {
-	public abstract string Address { get; }
-	public abstract string Name { get; }
-	public abstract string Alias { get; set; }
+	public abstract string Address { owned get; }
+	public abstract string Name { owned get; }
+	public abstract string Alias { owned get; set; }
 	public abstract uint32 Class { get; }
 	public abstract uint16 Appearance { get; }
-	public abstract string Icon { get; }
+	public abstract string Icon { owned get; }
 	public abstract bool Paired { get; }
 	public abstract bool Trusted { get; set; }
 	public abstract bool Blocked { get; set; }
 	public abstract bool LegacyPairing { get; }
 	public abstract int16 RSSI { get; }
 	public abstract bool Connected { get; }
-	public abstract string[] UUIDs { get; }
-	public abstract string Modalias { get; }
-	public abstract GLib.ObjectPath Adapter { get; }
+	public abstract string[] UUIDs { owned get; }
+	public abstract string Modalias { owned get; }
+	public abstract GLib.ObjectPath Adapter { owned get; }
 
 	public async abstract void Connect() throws GLib.DBusError, GLib.IOError;
 	public async abstract void Disconnect() throws GLib.DBusError, GLib.IOError;

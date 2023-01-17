@@ -20,7 +20,7 @@ public class BluetoothDevice : Object {
 	public string address { get; set; }
 	public string alias { get; set; }
 	public string name { get; set; }
-	public BluetoothType type { get; set; default = BluetoothType.ANY; }
+	public BluetoothType device_type { get; set; default = BluetoothType.ANY; }
 	public string icon { get; set; }
 	public bool paired { get; set; default = false; }
 	public bool trusted { get; set; default = false; }
@@ -42,7 +42,7 @@ public class BluetoothDevice : Object {
 			address: device.Address,
 			alias: device.Alias,
 			name: device.Name,
-			type: type,
+			device_type: type,
 			icon: icon,
 			legacy_pairing: device.LegacyPairing,
 			uuids: device.UUIDs,
@@ -90,7 +90,7 @@ public class BluetoothDevice : Object {
 		}
 
 		battery_type = type;
-		battery_level = up_device.battery_level as DeviceLevel;
+		battery_level = (DeviceLevel) up_device.battery_level;
 		battery_percentage = up_device.percentage;
 	}
 }

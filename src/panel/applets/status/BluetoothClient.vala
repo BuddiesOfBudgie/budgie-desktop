@@ -105,7 +105,7 @@ class BluetoothClient : GLib.Object {
 		}
 	}
 
-	BluetoothClient() {
+	public BluetoothClient() {
 		Object();
 	}
 
@@ -302,12 +302,7 @@ class BluetoothClient : GLib.Object {
 	/**
 	 * Get the type of a Bluetooth device, and use that type to get an icon for it.
 	 */
-	private void get_type_and_icon_for_device(Device1 device, out BluetoothType? type, out string? icon) {
-		if (type != 0 || icon != null) {
-			warning("Attempted to get type and icon for device '%s', but type or icon is not 0 or null", device.Name);
-			return;
-		}
-
+	private void get_type_and_icon_for_device(Device1 device, out BluetoothType type, out string icon) {
 		// Special case these joypads
 		if (device.Name == "ION iCade Game Controller" || device.Name == "8Bitdo Zero GamePad") {
 			type = BluetoothType.JOYPAD;
@@ -316,9 +311,7 @@ class BluetoothClient : GLib.Object {
 		}
 
 		// First, try to match the appearance of the device
-		if (type == BluetoothType.ANY) {
-			type = appearance_to_type(device.Appearance);
-		}
+		type = appearance_to_type(device.Appearance);
 		// Match on the class if the appearance failed
 		if (type == BluetoothType.ANY) {
 			type = class_to_type(device.Class);
@@ -381,10 +374,12 @@ class BluetoothClient : GLib.Object {
 
 				get_type_and_icon_for_device(device1, out type, out icon);
 
-				device.type = type;
+				device.device_type = type;
 				device.icon = icon;
+				break;
 			default:
 				debug("Not handling property '%s'", property);
+				break;
 		}
 	}
 
@@ -667,15 +662,19 @@ class BluetoothClient : GLib.Object {
 		switch (property) {
 			case "alias":
 				default_adapter_name = adapter.Alias;
+				break;
 			case "discovering":
 				discovery_started = adapter.Discovering;
+				break;
 			case "powered":
 				default_adapter_powered = adapter.Powered;
 				if (!has_power_state) {
 					default_adapter_state = get_state();
 				}
+				break;
 			case "power-state":
 				default_adapter_state = get_state();
+				break;
 		}
 	}
 
@@ -975,7 +974,6 @@ class BluetoothClient : GLib.Object {
 				default:
 					return OTHER_AUDIO;
 				}
-				break;
 		}
 
 		return ANY;
@@ -1017,7 +1015,6 @@ class BluetoothClient : GLib.Object {
 					default:
 						return OTHER_AUDIO;
 				}
-				break;
 			case 0x05:
 				switch ((klass & 0xc0) >> 6) {
 					case 0x00:
