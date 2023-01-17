@@ -46,7 +46,7 @@ namespace Budgie {
 			header.get_style_context().add_class("raven-header");
 			main_box.add(header);
 
-			header_icon = new Gtk.Button.from_icon_name("microphone-sensitivity-muted", Gtk.IconSize.MENU);
+			header_icon = new Gtk.Button.from_icon_name("microphone-sensitivity-muted-symbolic", Gtk.IconSize.MENU);
 			header_icon.get_style_context().add_class("flat");
 			header_icon.valign = Gtk.Align.CENTER;
 			header_icon.margin = 4;

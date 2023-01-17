@@ -31,8 +31,8 @@ libraven_sources = [
     'notifications_view.vala',
     'powerstrip.vala',
     'raven.vala',
-    'sound-input.vala',
-    'sound-output.vala',
+    'sound_input.vala',
+    'sound_output.vala',
     'widget.vala',
 ]
 

@@ -35,7 +35,7 @@ public class CalendarWidget : RavenWidget {
 		header.get_style_context().add_class("raven-header");
 		main_box.add(header);
 
-		var icon = new Gtk.Image.from_icon_name("calendar", Gtk.IconSize.MENU);
+		var icon = new Gtk.Image.from_icon_name("x-office-calendar-symbolic", Gtk.IconSize.MENU);
 		icon.margin = 4;
 		icon.margin_start = 12;
 		icon.margin_end = 10;

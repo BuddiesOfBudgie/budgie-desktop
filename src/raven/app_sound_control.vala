@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
- namespace Budgie {
+namespace Budgie {
 	public class AppSoundControl : Gtk.Box {
 		private Gvc.MixerControl? mixer = null;
 		public Gvc.MixerStream? primary_stream = null;
@@ -88,9 +88,7 @@
 			 * Create initial elements
 			 */
 			audio_not_muted = new Gtk.Image.from_icon_name("audio-volume-high-symbolic", Gtk.IconSize.MENU);
-			audio_not_muted.pixel_size = 12;
 			audio_muted = new Gtk.Image.from_icon_name("audio-volume-muted-symbolic", Gtk.IconSize.MENU);
-			audio_muted.pixel_size = 12;
 
 			Gtk.Box app_info = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			app_info_header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
