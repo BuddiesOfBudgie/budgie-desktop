@@ -70,7 +70,7 @@ public class MprisClientWidget : Gtk.Box {
 		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
 		background = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.DIALOG);
-		background.set_size_request(96, 96);
+		background.set_size_request(80, 80);
 		background.pixel_size = 64;
 		background.valign = Gtk.Align.START;
 		background.get_style_context().add_class("raven-mpris");
@@ -339,7 +339,7 @@ public class MprisClientWidget : Gtk.Box {
 			// local
 			string fname = uri.split("file://")[1];
 			try {
-				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, 96, 96);
+				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, 80, 80);
 				background.set_from_pixbuf(pbuf);
 				get_style_context().remove_class("no-album-art");
 			} catch (Error e) {
@@ -370,7 +370,7 @@ public class MprisClientWidget : Gtk.Box {
 			var art_file = File.new_for_uri(proper_uri);
 			// download the art
 			var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
-			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 96, 96, true, cancel);
+			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 80, 80, true, cancel);
 			background.set_from_pixbuf(pbuf);
 			get_style_context().remove_class("no-album-art");
 		} catch (Error e) {

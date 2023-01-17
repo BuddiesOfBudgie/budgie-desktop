@@ -173,7 +173,7 @@ namespace Budgie {
 				ellipsize = Pango.EllipsizeMode.END,
 				hexpand = true,
 			};
-			label.set_markup("<span size='small'>%s - %s</span>".printf(device.description, card.name));
+			label.set_markup("%s - %s".printf(device.description, card.name));
 			box.pack_start(label, false, true, 0);
 
 			Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
@@ -290,7 +290,7 @@ namespace Budgie {
 			string image_name;
 
 			// Work out an icon
-			string icon_prefix = "microphone-sensitivity-";
+			string icon_prefix = "microphone-sensitivity";
 
 			if (primary_stream.get_is_muted() || vol <= 0) {
 				image_name = "muted";
@@ -309,7 +309,7 @@ namespace Budgie {
 			}
 
 			var header_image = (Gtk.Image?) header_icon.get_image();
-			header_image.set_from_icon_name(icon_prefix + image_name, Gtk.IconSize.MENU);
+			header_image.set_from_icon_name("%s-%s-symbolic".printf(icon_prefix, image_name), Gtk.IconSize.MENU);
 
 			/* Each scroll increments by 5%, much better than units..*/
 			var step_size = vol_max / 20;
@@ -320,13 +320,7 @@ namespace Budgie {
 
 			volume_slider.set_increments(step_size, step_size);
 			volume_slider.set_range(0, vol_max);
-			if (primary_stream.get_is_muted()) {
-				volume_slider.set_sensitive(false);
-				volume_slider.set_value(0);
-			} else {
-				volume_slider.set_sensitive(true);
-				volume_slider.set_value(vol);
-			}
+			volume_slider.set_value(vol);
 
 			if (scale_id > 0) {
 				SignalHandler.unblock(volume_slider, scale_id);
