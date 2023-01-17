@@ -14,8 +14,8 @@ namespace Budgie {
 		private Gtk.Box? box = null; // Holds our content
 		private MprisWidget? mpris = null;
 		private CalendarWidget? cal = null;
-		private Budgie.SoundWidget? audio_input_widget = null;
-		private Budgie.SoundWidget? audio_output_widget = null;
+		private Budgie.SoundInputWidget? audio_input_widget = null;
+		private Budgie.SoundOutputWidget? audio_output_widget = null;
 		private Settings? raven_settings = null;
 
 		private Gtk.Stack? main_stack = null;
@@ -62,16 +62,19 @@ namespace Budgie {
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
 			/* Eventually these guys get dynamically loaded */
-			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+			box.margin_top = 8;
+			box.margin_bottom = 8;
+			box.set_size_request(250, -1);
 			scroll.add(box);
 
 			cal = new CalendarWidget(raven_settings);
 			box.pack_start(cal, false, false, 0);
 
-			audio_output_widget = new Budgie.SoundWidget("output");
+			audio_output_widget = new Budgie.SoundOutputWidget();
 			box.pack_start(audio_output_widget, false, false, 0);
 
-			audio_input_widget = new Budgie.SoundWidget("input");
+			audio_input_widget = new Budgie.SoundInputWidget();
 			box.pack_start(audio_input_widget, false, false, 0);
 
 			mpris = new MprisWidget();

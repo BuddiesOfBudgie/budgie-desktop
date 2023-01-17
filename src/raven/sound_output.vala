@@ -10,11 +10,12 @@
  */
 
 namespace Budgie {
-	public class SoundWidget : RavenWidget {
+	public class SoundOutputWidget : RavenWidget {
 		/**
 		 * Logic and Mixer variables
 		 */
 		private const string MAX_KEY = "allow-volume-overdrive";
+		private Settings? gnome_sound_settings = null;
 		private Settings? budgie_settings;
 		private Settings? gnome_desktop_settings;
 		private Settings? raven_settings;
@@ -25,8 +26,6 @@ namespace Budgie {
 		private HashTable<uint,Gtk.ListBoxRow?> devices;
 		private ulong primary_notify_id = 0;
 		private Gvc.MixerStream? primary_stream = null;
-		private Settings settings = null;
-		private string widget_type = "";
 
 		/**
 		 * Signals
@@ -36,22 +35,52 @@ namespace Budgie {
 		/**
 		 * Widgets
 		 */
-		private Budgie.HeaderWidget? header = null;
+		private Gtk.Box? main_box = null;
 		private Gtk.Box? apps_area = null;
 		private Gtk.ListBox? apps_listbox = null;
-		private Gtk.Revealer? apps_list_revealer = null;
+		private Gtk.Label? apps_placeholder_label = null;
 		private Gtk.ListBox? devices_list = null;
-		private StartListening? listening_box = null;
-		private Gtk.Revealer? listening_box_revealer = null;
-		private Gtk.Box? main_layout = null;
+		private Gtk.Box? header = null;
+		private Gtk.Button? header_icon = null;
+		private Gtk.Button? header_reveal_button = null;
+		private Gtk.Revealer? content_revealer = null;
+		private Gtk.Box? content = null;
 		private Gtk.Stack? widget_area = null;
 		private Gtk.StackSwitcher? widget_area_switch = null;
 		private Gtk.Scale? volume_slider = null;
 
-		public SoundWidget(string c_widget_type) {
+		public SoundOutputWidget() {
 			Object(orientation: Gtk.Orientation.VERTICAL);
+
+			main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			add(main_box);
+
+			header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			header.get_style_context().add_class("raven-header");
+			main_box.add(header);
+
+			header_icon = new Gtk.Button.from_icon_name("audio-volume-high-symbolic", Gtk.IconSize.MENU);
+			header_icon.get_style_context().add_class("flat");
+			header_icon.valign = Gtk.Align.CENTER;
+			header_icon.margin = 4;
+			header_icon.margin_start = 8;
+			header_icon.margin_end = 4;
+			header_icon.clicked.connect(() => {
+				if (primary_stream != null) {
+					primary_stream.change_is_muted(!primary_stream.get_is_muted());
+				}
+			});
+			header.add(header_icon);
+
+			content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			content.get_style_context().add_class("raven-background");
+
+			content_revealer = new Gtk.Revealer();
+			content_revealer.add(content);
+			content_revealer.set_reveal_child(true);
+			main_box.add(content_revealer);
+
 			get_style_context().add_class("audio-widget");
-			widget_type = c_widget_type;
 
 			/**
 			 * Shared  Logic
@@ -80,98 +109,91 @@ namespace Budgie {
 			devices_list.selection_mode = Gtk.SelectionMode.SINGLE;
 			devices_list.row_selected.connect(on_device_selected);
 
-			main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			volume_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL, 0, 100, 10);
 			volume_slider.set_draw_value(false);
 			volume_slider.value_changed.connect(on_scale_change);
+			volume_slider.hexpand = true;
+			header.add(volume_slider);
+
+			header_reveal_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+			header_reveal_button.get_style_context().add_class("flat");
+			header_reveal_button.get_style_context().add_class("expander-button");
+			header_reveal_button.margin = 4;
+			header_reveal_button.margin_start = 2;
+			header_reveal_button.valign = Gtk.Align.CENTER;
+			header_reveal_button.clicked.connect(() => {
+				content_revealer.reveal_child = !content_revealer.child_revealed;
+				var image = (Gtk.Image?) header_reveal_button.get_image();
+				if (content_revealer.reveal_child) {
+					image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+				} else {
+					image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+				}
+			});
+			header.pack_end(header_reveal_button, false, false, 0);
+
+			gnome_sound_settings = new Settings("org.gnome.desktop.sound");
+			apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash, direct_equal);
+			budgie_settings = new Settings("com.solus-project.budgie-panel");
+			gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
+
+			mixer.default_sink_changed.connect(on_device_changed);
+			mixer.output_added.connect(on_device_added);
+			mixer.output_removed.connect(on_device_removed);
+			mixer.state_changed.connect(on_state_changed);
+			mixer.stream_added.connect(on_stream_added);
+			mixer.stream_removed.connect(on_stream_removed);
+			raven_settings.changed[MAX_KEY].connect(on_volume_safety_changed);
+
+			budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
+			gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
 
 			/**
-			 * Type-Specific Logic and Construction
+			 * Create our designated areas, our stack, and switcher
+			 * Proceed to add those items to our content
 			 */
-			if (widget_type == "input") { // Input
-				mixer.default_source_changed.connect(on_device_changed);
-				mixer.state_changed.connect(on_state_changed);
-				mixer.input_added.connect(on_device_added);
-				mixer.input_removed.connect(on_device_removed);
+			apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-				/**
-				 * Create our containers
-				 */
-				header = new Budgie.HeaderWidget("", "microphone-sensitivity-muted-symbolic", false, volume_slider);
-				main_layout.pack_start(devices_list, false, false, 0); // Add devices directly to layout
-				devices_list.margin_top = 10;
-				devices_list.margin_bottom = 10;
-			} else { // Output
-				settings = new Settings("org.gnome.desktop.sound");
-				apps = new HashTable<uint,Gtk.ListBoxRow?>(direct_hash, direct_equal);
-				budgie_settings = new Settings("com.solus-project.budgie-panel");
-				raven_settings = new Settings("com.solus-project.budgie-raven");
-				gnome_desktop_settings = new Settings("org.gnome.desktop.interface");
+			apps_listbox = new Gtk.ListBox();
+			apps_listbox.get_style_context().add_class("apps-list");
+			apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
+			apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
+			apps_listbox.margin_top = 10;
+			apps_listbox.margin_bottom = 10;
+			apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
+				var app_1 = ((Budgie.AppSoundControl) row1.get_child()).app_name;
+				var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
+				return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
+			});
 
-				mixer.default_sink_changed.connect(on_device_changed);
-				mixer.output_added.connect(on_device_added);
-				mixer.output_removed.connect(on_device_removed);
-				mixer.state_changed.connect(on_state_changed);
-				mixer.stream_added.connect(on_stream_added);
-				mixer.stream_removed.connect(on_stream_removed);
-				raven_settings.changed[MAX_KEY].connect(on_volume_safety_changed);
+			apps_placeholder_label = new Gtk.Label(_("No apps are playing audio.")) {
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 1,
+				justify = Gtk.Justification.CENTER,
+				margin_top = 8,
+				margin_bottom = 8,
+				hexpand = true,
+			};
+			apps_area.add(apps_placeholder_label);
 
-				budgie_settings.changed["builtin-theme"].connect(this.update_input_draw_markers);
-				gnome_desktop_settings.changed["gtk-theme"].connect(this.update_input_draw_markers);
+			widget_area = new Gtk.Stack();
+			widget_area.set_transition_duration(125); // 125ms
+			widget_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
+			widget_area.vhomogeneous = false;
 
-				/**
-				 * Create our designated areas, our stack, and switcher
-				 * Proceed to add those items to our main_layout
-				 */
-				apps_area = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-				apps_listbox = new Gtk.ListBox();
-				apps_listbox.get_style_context().add_class("apps-list");
-				apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
-				apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
+			widget_area.add_titled(apps_area, "apps", _("Apps"));
+			widget_area.add_titled(devices_list, "devices", _("Devices"));
 
-				apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
-					var app_1 = ((AppSoundControl) row1.get_child()).app_name;
-					var app_2 = ((AppSoundControl) row2.get_child()).app_name;
-					return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
-				});
+			widget_area_switch = new Gtk.StackSwitcher();
+			widget_area_switch.set_stack(widget_area);
+			widget_area_switch.set_homogeneous(true);
 
-				apps_list_revealer = new Gtk.Revealer();
-				apps_list_revealer.set_transition_duration(250);
-				apps_list_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
-				apps_list_revealer.add(apps_listbox);
+			// Add marks when sound slider can go beyond 100%
+			this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
 
-				listening_box_revealer = new Gtk.Revealer();
-				listening_box_revealer.set_transition_duration(250);
-				listening_box_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-				listening_box = new StartListening(); // Create our start listening box
-				listening_box_revealer.add(listening_box);
-
-				apps_area.pack_start(listening_box_revealer, true, true, 0);
-				apps_area.pack_end(apps_list_revealer, true, true, 0);
-
-				widget_area = new Gtk.Stack();
-				widget_area.margin_top = 10;
-				widget_area.margin_bottom = 10;
-				widget_area.set_transition_duration(125); // 125ms
-				widget_area.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
-
-				widget_area.add_titled(apps_area, "apps", _("Apps"));
-				widget_area.add_titled(devices_list, "devices", _("Devices"));
-
-				widget_area_switch = new Gtk.StackSwitcher();
-				widget_area_switch.set_stack(widget_area);
-				widget_area_switch.set_homogeneous(true);
-
-				// Add marks when sound slider can go beyond 100%
-				this.set_slider_range_on_max(raven_settings.get_boolean(MAX_KEY));
-
-				header = new Budgie.HeaderWidget("", "audio-volume-muted-symbolic", false, volume_slider);
-				main_layout.pack_start(widget_area, false, false, 0);
-				main_layout.pack_start(widget_area_switch, true, false, 0);
-
-				listening_box_revealer.set_reveal_child(false); // Don't initially show
-				apps_list_revealer.set_reveal_child(false); // Don't initially show
-			}
+			content.pack_start(widget_area, false, false, 0);
+			content.pack_start(widget_area_switch, true, false, 0);
 
 			mixer.open();
 
@@ -179,22 +201,9 @@ namespace Budgie {
 			 * Widget Expansion
 			 */
 
-			var expander = new Budgie.RavenExpander(header);
-			expander.expanded = (widget_type != "input");
-
-			pack_start(expander, true, true);
-
-			var ebox = new Gtk.EventBox();
-			ebox.get_style_context().add_class("raven-background");
-			expander.add(ebox);
-			ebox.add(main_layout);
-
 			show_all();
 
-			if (widget_type == "output") {
-				on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
-				toggle_start_listening();
-			}
+			on_volume_safety_changed(); // Immediately trigger our on_volume_safety_changed to ensure rest of volume_slider state is set
 		}
 
 		/**
@@ -212,7 +221,7 @@ namespace Budgie {
 				return;
 			}
 
-			var device = (widget_type == "input") ? this.mixer.lookup_input_id(id) : this.mixer.lookup_output_id(id);
+			var device = mixer.lookup_output_id(id);
 
 			if (device == null) {
 				return;
@@ -224,19 +233,25 @@ namespace Budgie {
 
 			var card = device.card as Gvc.MixerCard;
 
-			if ((this.widget_type == "output") && ("Digital Output" in device.description)) {
-				return; // Digital Output switching is really jank with Gvc. Don't support it.
-			}
+			if ("Digital Output" in device.description) return; // Digital Output switching is really jank with Gvc. Don't support it.
 
 			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-			var label = new Gtk.Label("%s - %s".printf(device.description, card.name));
-			label.justify = Gtk.Justification.LEFT;
-			label.max_width_chars = 30;
-			label.set_ellipsize(Pango.EllipsizeMode.END);
+			box.margin_start = 6;
+			box.margin_end = 6;
+			box.margin_top = 3;
+			box.margin_bottom = 3;
+
+			var label = new Gtk.Label(null) {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
+			};
+			label.set_markup("%s - %s".printf(device.description, card.name));
 			box.pack_start(label, false, true, 0);
 
 			Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
-			list_item.height_request = 32;
 			list_item.add(box);
 
 			list_item.set_data("device_id", id);
@@ -253,7 +268,7 @@ namespace Budgie {
 		 * on_device_changed will handle when a Gvc.MixerUIDevice has been changed
 		 */
 		private void on_device_changed(uint id) {
-			Gvc.MixerStream stream = (widget_type == "input") ? mixer.get_default_source() : mixer.get_default_sink(); // Set default_stream to the respective source or sink
+			Gvc.MixerStream stream = mixer.get_default_sink(); // Set default_stream to the respective source or sink
 
 			if (stream == null) { // Our default stream is null
 				return;
@@ -326,14 +341,10 @@ namespace Budgie {
 		private void on_device_selected(Gtk.ListBoxRow? list_item) {
 			SignalHandler.block_by_func((void*)devices_list, (void*)on_device_selected, this);
 			uint id = list_item.get_data("device_id");
-			var device = (widget_type == "input") ? mixer.lookup_input_id(id) : mixer.lookup_output_id(id);
+			var device = mixer.lookup_output_id(id);
 
 			if (device != null) {
-				if (widget_type == "input") { // Input
-					mixer.change_input(device);
-				} else { // Output
-					mixer.change_output(device);
-				}
+				mixer.change_output(device);
 			}
 			SignalHandler.unblock_by_func((void*)devices_list, (void*)on_device_selected, this);
 		}
@@ -342,11 +353,9 @@ namespace Budgie {
 		 * When our volume slider has changed
 		 */
 		private void on_scale_change() {
-			if (primary_stream == null) {
-				return;
-			}
+			if (primary_stream == null) return;
 
-			if (primary_stream.set_volume((uint32)volume_slider.get_value())) {
+			if (primary_stream.set_volume((uint32) volume_slider.get_value())) {
 				Gvc.push_volume(primary_stream);
 			}
 		}
@@ -355,23 +364,19 @@ namespace Budgie {
 		 * on_state_changed will handle when the state of our Mixer or its streams have changed
 		 */
 		private void on_state_changed(uint id) {
-			if (widget_type == "output") {
-				var stream = mixer.lookup_stream_id(id);
+			var stream = mixer.lookup_stream_id(id);
 
-				if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
-					if (apps.contains(id)) { // If our apps contains this stream
-						Budgie.AppSoundControl? control = get_control_for_app(id);
+			if ((stream != null) && (stream.get_card_index() == -1)) { // If this is a stream (and not a card)
+				if (apps.contains(id)) { // If our apps contains this stream
+					Budgie.AppSoundControl? control = get_control_for_app(id);
 
-						if (control != null) {
-							if (stream.is_running()) { // If running
-								control.refresh(); // Update our control
-							} else { // If not running
-								control.destroy();
-								apps.steal(id);
-							}
+					if (control != null) {
+						if (stream.is_running()) { // If running
+							control.refresh(); // Update our control
+						} else { // If not running
+							control.destroy();
+							apps.steal(id);
 						}
-
-						toggle_start_listening();
 					}
 				}
 			}
@@ -431,12 +436,14 @@ namespace Budgie {
 
 				if (control != null) {
 					var list_row = new Gtk.ListBoxRow();
+					list_row.activatable = false;
 					list_row.add(control); // Add our control
 
 					apps_listbox.insert(list_row, -1); // Add our control
 					apps.insert(id, list_row); // Add to apps
+					apps_area.remove(apps_placeholder_label);
+					apps_area.add(apps_listbox);
 					apps_listbox.show_all();
-					toggle_start_listening();
 
 					Gvc.ChannelMap channel_map = stream.get_channel_map(); // Get the channel map for this stream
 
@@ -461,7 +468,11 @@ namespace Budgie {
 				}
 
 				apps.steal(id); // Remove the apps
-				toggle_start_listening();
+
+				if (apps_listbox.get_children().length() == 0) {
+					apps_area.remove(apps_listbox);
+					apps_area.add(apps_placeholder_label);
+				}
 			}
 		}
 
@@ -474,8 +485,8 @@ namespace Budgie {
 		}
 
 		/*
-		* set_slider_range_on_max will set the slider range based on whether or not we are allowing overdrive
-		*/
+		 * set_slider_range_on_max will set the slider range based on whether or not we are allowing overdrive
+		 */
 		private void set_slider_range_on_max(bool allow_overdrive) {
 			var current_volume = volume_slider.get_value();
 			var vol_max = mixer.get_vol_max_norm();
@@ -500,24 +511,9 @@ namespace Budgie {
 		}
 
 		/**
-		 * toggle_start_listening will handle showing or hiding our Start Listening box if needed
-		 */
-		private void toggle_start_listening() {
-			if (widget_type == "output") { // Output
-				bool apps_exist = (apps.length != 0);
-				listening_box_revealer.set_reveal_child(!apps_exist); // Show if no apps, hide if apps
-				apps_list_revealer.set_reveal_child(apps_exist); // Show if apps, hide if no apps
-			}
-		}
-
-		/**
 		 * update_input_draw_markers will update our draw markers
 		 */
 		private void update_input_draw_markers() {
-			if (widget_type == "input") {
-				return;
-			}
-
 			bool builtin_enabled = budgie_settings.get_boolean("builtin-theme");
 			string current_theme = gnome_desktop_settings.get_string("gtk-theme");
 			bool supported_theme = (current_theme.index_of("Arc") == -1);
@@ -543,35 +539,36 @@ namespace Budgie {
 			var vol = primary_stream.get_volume();
 			var vol_max = mixer.get_vol_max_norm();
 
-			if ((widget_type == "output") && raven_settings.get_boolean(MAX_KEY)) { // Allowing max
+			if (raven_settings.get_boolean(MAX_KEY)) { // Allowing max
 				vol_max = mixer.get_vol_max_amplified();
 			}
 
 			/* Same maths as computed by volume.js in gnome-shell, carried over
-			* from C->Vala port of budgie-panel */
+			 * from C->Vala port of budgie-panel */
 			int n = (int) Math.floor(3*vol/vol_max)+1;
 			string image_name;
 
 			// Work out an icon
-			string icon_prefix = (widget_type == "input") ? "microphone-sensitivity-" : "audio-volume-";
+			string icon_prefix = "audio-volume";
 
 			if (primary_stream.get_is_muted() || vol <= 0) {
-				image_name = "muted-symbolic";
+				image_name = "muted";
 			} else {
 				switch (n) {
 					case 1:
-						image_name = "low-symbolic";
+						image_name = "low";
 						break;
 					case 2:
-						image_name = "medium-symbolic";
+						image_name = "medium";
 						break;
 					default:
-						image_name = "high-symbolic";
+						image_name = "high";
 						break;
 				}
 			}
 
-			header.icon_name = icon_prefix + image_name;
+			var header_image = (Gtk.Image?) header_icon.get_image();
+			header_image.set_from_icon_name("%s-%s-symbolic".printf(icon_prefix, image_name), Gtk.IconSize.MENU);
 
 			/* Each scroll increments by 5%, much better than units..*/
 			var step_size = vol_max / 20;

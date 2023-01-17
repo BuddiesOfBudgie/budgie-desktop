@@ -28,8 +28,11 @@ namespace Budgie {
 		private ulong scale_id;
 
 		public AppSoundControl(Gvc.MixerControl c_mixer, Gvc.MixerStream c_primary, Gvc.MixerStream c_stream, string c_icon, string c_name) {
-			Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 10);
+			Object(orientation: Gtk.Orientation.HORIZONTAL, margin: 4);
+
 			valign = Gtk.Align.START;
+			margin_start = 10;
+			margin_end = 10;
 
 			if (c_mixer == null) {
 				return;
@@ -97,9 +100,6 @@ namespace Budgie {
 			app_label.margin_start = 10;
 
 			app_mute_button = new Gtk.Button();
-
-			set_mute_ui();
-
 			app_mute_button.get_style_context().add_class("flat");
 			app_mute_button.clicked.connect(toggle_mute_state);
 
@@ -114,6 +114,8 @@ namespace Budgie {
 			volume_slider.set_draw_value(false);
 			volume_slider.set_increments(max_vol_step, max_vol_step);
 
+			set_mute_ui();
+
 			volume = stream_volume;
 			volume_slider.set_value(stream_volume);
 
@@ -125,7 +127,6 @@ namespace Budgie {
 			app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
 
 			if (app_image != null) {
-				app_image.margin_end = 10;
 				pack_start(app_image, false, false, 0);
 			}
 
@@ -193,8 +194,12 @@ namespace Budgie {
 		private void set_mute_ui() {
 			if (stream.get_is_muted()) {
 				app_mute_button.set_image(audio_muted);
+				volume_slider.set_sensitive(false);
+				volume_slider.set_value(0);
 			} else {
 				app_mute_button.set_image(audio_not_muted);
+				volume_slider.set_sensitive(true);
+				volume_slider.set_value(stream.get_volume());
 			}
 		}
 
