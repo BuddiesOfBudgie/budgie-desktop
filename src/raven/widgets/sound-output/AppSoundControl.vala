@@ -196,12 +196,8 @@ namespace Budgie {
 		private void set_mute_ui() {
 			if (stream.get_is_muted()) {
 				app_mute_button.set_image(audio_muted);
-				volume_slider.set_sensitive(false);
-				volume_slider.set_value(0);
 			} else {
 				app_mute_button.set_image(audio_not_muted);
-				volume_slider.set_sensitive(true);
-				volume_slider.set_value(stream.get_volume());
 			}
 		}
 
