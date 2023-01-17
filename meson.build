@@ -116,6 +116,11 @@ if with_bluetooth == true
   add_project_arguments('-D', 'with_bluetooth', language: 'vala')
 endif
 
+with_hibernate = get_option('with-hibernate')
+if with_hibernate == true
+  add_project_arguments('-D', 'WITH_HIBERNATE', language: 'vala')
+endif
+
 with_libuuid_time_safe = get_option('with-libuuid-time-safe')
 if with_libuuid_time_safe == true
   add_project_arguments('-D', 'with_libuuid_time_safe', language: 'vala')
