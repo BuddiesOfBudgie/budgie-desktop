@@ -119,7 +119,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		volume_slider.hexpand = true;
 		header.add(volume_slider);
 
-		header_reveal_button = new Gtk.Button.from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
 		header_reveal_button.get_style_context().add_class("flat");
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
