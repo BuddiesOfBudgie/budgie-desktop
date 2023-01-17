@@ -734,7 +734,11 @@ class BluetoothClient : GLib.Object {
 
 		// Handle a removal
 		if (change_type == REMOVED) {
-			// TODO: Clear the removed_devices queue
+			if (removed_devices_id != 0) {
+				Source.remove(removed_devices_id);
+				removed_devices_id = 0;
+			}
+			removed_devices.clear();
 		}
 
 		default_adapter_changed(new_default_adapter, change_type);
