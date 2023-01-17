@@ -1078,4 +1078,91 @@ class BluetoothClient : GLib.Object {
 
 		return true;
 	}
+
+	/**
+	 * Returns a ListStore representing the devices connected to the current adapter.
+	 */
+	public ListStore get_devices() {
+		return list_store;
+	}
+
+	/**
+	 * Starts pairing a Bluetooth device.
+	 */
+	public async void setup_device(string path) throws DBusError, IOError {
+		var device = get_device_for_path(path);
+
+		if (device == null) return;
+
+		var proxy = device.proxy;
+		var device1 = proxy as Device1;
+
+		yield device1.Pair();
+	}
+
+	/**
+	 * Cancels pairing a Bluetooth device.
+	 */
+	public async void cancel_setup_device(string path) throws DBusError, IOError {
+		var device = get_device_for_path(path);
+
+		if (device == null) return;
+
+		var proxy = device.proxy;
+		var device1 = proxy as Device1;
+
+		yield device1.CancelPairing();
+	}
+
+	/**
+	 * Sets whether or not a Bluetooth device is trusted.
+	 */
+	public void set_trusted(string path, bool trusted) {
+		var device = get_device_for_path(path);
+
+		if (device == null) return;
+
+		device.trusted = trusted;
+	}
+
+	/**
+	 * Starts connecting to one of the known-connectable services on a device.
+	 */
+	public async void connect_service(string path, bool connect) throws DBusError, IOError {
+		var device = get_device_for_path(path);
+
+		if (device == null) return;
+
+		var proxy = device.proxy;
+		var device1 = proxy as Device1;
+
+		if (connect) {
+			yield device1.Connect();
+		} else {
+			yield device1.Disconnect();
+		}
+	}
+
+	/**
+	 * Returns whether or not there are Bluetooth devices connected that have input capabilities.
+	 */
+	public bool has_connected_input_devices() {
+		var connected = false;
+		var num_items = list_store.get_n_items();
+
+		for (var i = 0; i < num_items; i++) {
+			var obj = list_store.get_item(i);
+			var device = obj as BluetoothDevice;
+
+			if (!device.connected) continue;
+			if (device.uuids == null || device.uuids.length == 0) continue;
+
+			if ("Human Interface Device" in device.uuids || "HumanInterfaceDeviceService" in device.uuids) {
+				connected = true;
+				break;
+			}
+		}
+
+		return connected;
+	}
 }
