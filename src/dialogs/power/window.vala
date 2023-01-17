@@ -145,6 +145,12 @@ namespace Budgie {
 				return Gdk.EVENT_STOP;
 			});
 
+			show.connect(() => {
+				var can_hibernate = can_hibernate();
+				hibernate_button.sensitive = can_hibernate;
+				hibernate_button.set_tooltip_markup(can_hibernate ? null : _("This system does not support hibernation."));
+			});
+
 			event_controller = new EventControllerKey(this);
 			event_controller.key_released.connect(on_key_release);
 		}
@@ -216,6 +222,16 @@ namespace Budgie {
 				}
 				return false;
 			});
+		}
+
+		private bool can_hibernate() {
+			var can_hibernate = true;
+			try {
+				can_hibernate = logind.can_hibernate() == "yes";
+			} catch (Error e) {
+				warning("Failed to check if hibernation is supported: %s", e.message);
+			}
+			return can_hibernate;
 		}
 
 		private void hibernate() {
