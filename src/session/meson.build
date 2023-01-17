@@ -46,6 +46,7 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieWm',
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
+    'org.buddiesofbudgie.BudgiePowerDialog'
 ]
 
 if with_polkit == true
@@ -140,6 +141,15 @@ endif
 custom_target('desktop-file-screensaver',
     input : session_screensaver,
     output : 'org.buddiesofbudgie.BudgieDesktopScreensaver.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : xdg_appdir,
+)
+
+# Merge + install power dialog
+custom_target('desktop-file-powerdialog',
+    input : 'budgie-desktop-powerdialog.desktop.in',
+    output : 'org.buddiesofbudgie.BudgiePowerDialog.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,

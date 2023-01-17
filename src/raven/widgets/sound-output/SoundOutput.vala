@@ -67,7 +67,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		header_icon.get_style_context().add_class("flat");
 		header_icon.valign = Gtk.Align.CENTER;
 		header_icon.margin = 4;
-		header_icon.margin_end = 0;
+		header_icon.margin_start = 8;
+		header_icon.margin_end = 4;
 		header_icon.clicked.connect(() => {
 			if (primary_stream != null) {
 				primary_stream.change_is_muted(!primary_stream.get_is_muted());
@@ -80,6 +81,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		content_revealer = new Gtk.Revealer();
 		content_revealer.add(content);
+		content_revealer.set_reveal_child(true);
 		main_box.add(content_revealer);
 
 		get_style_context().add_class("audio-widget");
@@ -159,15 +161,15 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		apps_listbox.get_style_context().add_class("apps-list");
 		apps_listbox.get_style_context().remove_class(Gtk.STYLE_CLASS_LIST); // Remove List styling
 		apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
-		apps_listbox.margin_top = 4;
-		apps_listbox.margin_bottom = 4;
+		apps_listbox.margin_top = 10;
+		apps_listbox.margin_bottom = 10;
 		apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
 			var app_1 = ((Budgie.AppSoundControl) row1.get_child()).app_name;
 			var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
 			return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
 		});
 
-		apps_placeholder_label = new Gtk.Label(null) {
+		apps_placeholder_label = new Gtk.Label(_("No apps are playing audio.")) {
 			wrap = true,
 			wrap_mode = Pango.WrapMode.WORD_CHAR,
 			max_width_chars = 1,
@@ -176,7 +178,6 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			margin_bottom = 8,
 			hexpand = true,
 		};
-		apps_placeholder_label.set_markup("<span alpha='70%'>%s</span>".printf(_("No apps are playing audio.")));
 		apps_area.add(apps_placeholder_label);
 
 		widget_area = new Gtk.Stack();
@@ -234,9 +235,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		var card = device.card as Gvc.MixerCard;
 
-		if ("Digital Output" in device.description) {
-			return; // Digital Output switching is really jank with Gvc. Don't support it.
-		}
+		if ("Digital Output" in device.description) return; // Digital Output switching is really jank with Gvc. Don't support it.
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		box.margin_start = 6;
@@ -251,7 +250,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			ellipsize = Pango.EllipsizeMode.END,
 			hexpand = true,
 		};
-		label.set_markup("<span size='small'>%s - %s</span>".printf(device.description, card.name));
+		label.set_markup("%s - %s".printf(device.description, card.name));
 		box.pack_start(label, false, true, 0);
 
 		Gtk.ListBoxRow list_item = new Gtk.ListBoxRow();
@@ -356,9 +355,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * When our volume slider has changed
 	 */
 	private void on_scale_change() {
-		if (primary_stream == null || primary_stream.get_is_muted()) {
-			return;
-		}
+		if (primary_stream == null) return;
 
 		if (primary_stream.set_volume((uint32) volume_slider.get_value())) {
 			Gvc.push_volume(primary_stream);
@@ -546,7 +543,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		string image_name;
 
 		// Work out an icon
-		string icon_prefix = "audio-volume-";
+		string icon_prefix = "audio-volume";
 
 		if (primary_stream.get_is_muted() || vol <= 0) {
 			image_name = "muted";
@@ -565,7 +562,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		}
 
 		var header_image = (Gtk.Image?) header_icon.get_image();
-		header_image.set_from_icon_name(icon_prefix + image_name, Gtk.IconSize.MENU);
+		header_image.set_from_icon_name("%s-%s-symbolic".printf(icon_prefix, image_name), Gtk.IconSize.MENU);
 
 		/* Each scroll increments by 5%, much better than units..*/
 		var step_size = vol_max / 20;
@@ -576,13 +573,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		volume_slider.set_increments(step_size, step_size);
 		volume_slider.set_range(0, vol_max);
-		if (primary_stream.get_is_muted()) {
-			volume_slider.set_sensitive(false);
-			volume_slider.set_value(0);
-		} else {
-			volume_slider.set_sensitive(true);
-			volume_slider.set_value(vol);
-		}
+		volume_slider.set_value(vol);
 
 		if (scale_id > 0) {
 			SignalHandler.unblock(volume_slider, scale_id);

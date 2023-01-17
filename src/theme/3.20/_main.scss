@@ -54,8 +54,12 @@
 .budgie-session-dialog {
     @extend %widgets;
     @include budgie_session_dialog(button);
+}
 
-    color: $fg_color;
+// Power Dialog
+.budgie-power-dialog {
+    @extend %widgets;
+    @include budgie_power_dialog();
 }
 
 // Run Dialog

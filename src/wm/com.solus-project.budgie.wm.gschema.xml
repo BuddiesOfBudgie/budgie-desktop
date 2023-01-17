@@ -152,6 +152,12 @@
 			<description>The binding to use to toggle Raven notifications</description>
 		</key>
 
+		<key type="as" name="show-power-dialog">
+			<default><![CDATA[['<Super><Shift>P']]]></default>
+			<summary>The binding to use to show the power dialog</summary>
+			<description>The binding to use to show the power dialog</description>
+		</key>
+
 		<key name="button-layout" type="s">
 			<default>'appmenu:minimize,maximize,close'</default>
 			<summary>Arrangement of buttons on the titlebar</summary>

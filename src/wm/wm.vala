@@ -29,6 +29,9 @@ namespace Budgie {
 	public const string LOGIND_DBUS_NAME = "org.freedesktop.login1";
 	public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 
+	public const string POWER_DIALOG_DBUS_NAME = "org.buddiesofbudgie.PowerDialog";
+	public const string POWER_DIALOG_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/PowerDialog";
+
 	/** Menu management */
 	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
 	public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
@@ -115,6 +118,14 @@ namespace Budgie {
 		public async abstract void StartFullScreenshot() throws GLib.Error;
 	}
 
+	/**
+	 * Allows us to toggle the visibility of the Power Dialog
+	 */
+	[DBus (name="org.buddiesofbudgie.PowerDialog")]
+	public interface PowerDialog: GLib.Object {
+		public abstract async void Toggle() throws Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -158,6 +169,7 @@ namespace Budgie {
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		PowerDialog? power_proxy = null;
 
 		Settings? iface_settings = null;
 
@@ -247,10 +259,7 @@ namespace Budgie {
 		void on_logind_get(Object? o, AsyncResult? res) {
 			try {
 				logind_proxy = Bus.get_proxy.end(res);
-				if (logind_proxy == null) {
-					return;
-				}
-				if (this.is_nvidia()) {
+				if (logind_proxy != null && this.is_nvidia()) {
 					logind_proxy.PrepareForSleep.connect(prepare_for_sleep);
 				}
 			} catch (Error e) {
@@ -260,9 +269,7 @@ namespace Budgie {
 
 		/* Kudos to gnome-shell guys here: https://bugzilla.gnome.org/show_bug.cgi?id=739178 */
 		void prepare_for_sleep(bool suspending) {
-			if (suspending) {
-				return;
-			}
+			if (suspending) return;
 			Meta.Background.refresh_all();
 		}
 
@@ -288,6 +295,37 @@ namespace Budgie {
 			if (switcher_proxy == null) {
 				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_switcher_get);
 			}
+		}
+
+		void has_power_dialog() {
+			if (power_proxy == null) {
+				Bus.get_proxy.begin<PowerDialog>(BusType.SESSION, POWER_DIALOG_DBUS_NAME, POWER_DIALOG_DBUS_OBJECT_PATH, 0, null, on_power_dialog_get);
+			}
+		}
+
+		void on_power_dialog_get(Object? o, AsyncResult? res) {
+			try {
+				power_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get Power Dialog proxy: %s", e.message);
+			}
+		}
+
+		void lost_power_dialog() {
+			power_proxy = null;
+		}
+
+		/* Binding for showing the Power Dialog */
+		void on_show_power_dialog(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+			if (power_proxy == null) return;
+
+			power_proxy.Toggle.begin((obj, res) => {
+				try {
+					power_proxy.Toggle.end(res);
+				} catch (Error e) {
+					warning("Unable to toggle Power Dialog: %s", e.message);
+				}
+			});
 		}
 
 		/* Binding for take-full-screenshot */
@@ -347,7 +385,6 @@ namespace Budgie {
 						}
 					});
 				}
-
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -434,9 +471,7 @@ namespace Budgie {
 		}
 
 		void on_overlay_key() {
-			if (panel_proxy == null) {
-				return;
-			}
+			if (panel_proxy == null) return;
 			if (enabled_experimental_run_diag_as_menu) { // Use Budgie Run Dialog
 				try {
 					Process.spawn_command_line_async("budgie-run-dialog");
@@ -524,9 +559,7 @@ namespace Budgie {
 		private bool is_nvidia() {
 			var ptr = (GlQueryFunc)Cogl.get_proc_address("glGetString");
 
-			if (ptr == null) {
-				return false;
-			}
+			if (ptr == null) return false;
 
 			unowned string? ret = ptr(GL_VENDOR);
 			if (ret != null && "NVIDIA Corporation" in ret) {
@@ -561,6 +594,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("show-power-dialog", settings, Meta.KeyBindingFlags.NONE, on_show_power_dialog);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -578,6 +612,10 @@ namespace Budgie {
 			/* TabSwitcher */
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
+
+			/* Power Dialog */
+			Bus.watch_name(BusType.SESSION, POWER_DIALOG_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_power_dialog, lost_power_dialog);
 
 			/* ScreenshotControl */
 			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
@@ -654,9 +692,7 @@ namespace Budgie {
 			} else if (key == WM_FORCE_UNREDIRECT) {
 				bool enab = this.settings.get_boolean(key);
 
-				if (enab == this.force_unredirect) {
-					return;
-				}
+				if (enab == this.force_unredirect) return;
 
 				var display = this.get_display();
 				if (enab) {
@@ -669,12 +705,8 @@ namespace Budgie {
 		}
 
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {
-			if (type != Meta.WindowMenuType.WM) {
-				return;
-			}
-			if (menu_proxy == null) {
-				return;
-			}
+			if (type != Meta.WindowMenuType.WM) return;
+			if (menu_proxy == null) return;
 			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
 				menu_proxy.ShowWindowMenu.begin(xid, 3, 0, (obj, res) => {
@@ -789,9 +821,7 @@ namespace Budgie {
 		*/
 		public void store_focused() {
 			var workspace = get_display().get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
+			if (workspace == null) return;
 			foreach (var window in workspace.list_windows()) {
 				if (window.has_focus()) {
 					focused_window = window;
@@ -804,9 +834,7 @@ namespace Budgie {
 		* Restore the focused window
 		*/
 		public void restore_focused() {
-			if (focused_window == null) {
-				return;
-			}
+			if (focused_window == null) return;
 			focused_window.focus(get_display().get_current_time());
 			focused_window = null;
 		}

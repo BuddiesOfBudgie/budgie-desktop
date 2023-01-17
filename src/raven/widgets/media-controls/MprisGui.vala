@@ -51,10 +51,10 @@ public class MprisClientWidget : Gtk.Box {
 		header.get_style_context().add_class("raven-header");
 		add(header);
 
-		header_icon = new Gtk.Image.from_icon_name("emblem-music", Gtk.IconSize.MENU);
+		header_icon = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.MENU);
 		header_icon.margin = 4;
-		header_icon.margin_start = 8;
-		header_icon.margin_end = 8;
+		header_icon.margin_start = 12;
+		header_icon.margin_end = 10;
 		header.add(header_icon);
 
 		header_label = new Gtk.Label(client.player.identity);
@@ -70,8 +70,8 @@ public class MprisClientWidget : Gtk.Box {
 		var player_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
 		background = new Gtk.Image.from_icon_name("emblem-music-symbolic", Gtk.IconSize.DIALOG);
-		background.set_size_request(64, 64);
-		background.pixel_size = 48;
+		background.set_size_request(96, 96);
+		background.pixel_size = 64;
 		background.valign = Gtk.Align.START;
 		background.get_style_context().add_class("raven-mpris");
 
@@ -80,38 +80,41 @@ public class MprisClientWidget : Gtk.Box {
 		background_wrap.button_release_event.connect(this.on_raise_player);
 
 		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		layout.margin_top = 12;
+		layout.margin_start = 12;
+		layout.margin_end = 12;
 		player_box.pack_start(layout, true, true, 0);
 
 		layout.add(background_wrap);
 
 		/* normal info */
-		var top_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-
 		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
-		box.margin = 8;
-		box.margin_top = 5;
-		box.margin_bottom = 5;
-		box.valign = Gtk.Align.START;
-		top_box.pack_start(box, true, true, 0);
+		box.margin_start = 12;
+		box.margin_end = 12;
+		box.valign = Gtk.Align.CENTER;
 
-		var controls = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
+		var controls = new Gtk.Grid();
 		controls.get_style_context().add_class("raven-mpris-controls");
+		controls.set_column_spacing(6);
+		controls.set_column_homogeneous(true);
 
 		row = create_row(_("Unknown Title"), "emblem-music-symbolic");
 		title_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("<span size='small'>%s</span>".printf(_("Unknown Artist")), "user-info-symbolic");
+		row = create_row(_("Unknown Artist"), "user-info-symbolic");
 		artist_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
-		row = create_row("<span size='small'>%s</span>".printf(_("Unknown Album")), "media-optical-symbolic");
+		row = create_row(_("Unknown Album"), "media-optical-symbolic");
 		album_label = row.get_data("label_item");
 		box.pack_start(row, false, false, 0);
 
-		player_box.pack_start(controls, false, false, 0);
+		player_box.pack_start(controls, true, false, 6);
 
-		var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		var btn = new Gtk.Button.from_icon_name("media-skip-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+		btn.set_size_request(Gtk.IconSize.DND, Gtk.IconSize.DND);
 		btn.set_sensitive(false);
 		btn.set_can_focus(false);
+
 		prev_btn = btn;
 		btn.clicked.connect(() => {
 			if (client.player.can_go_previous) {
@@ -129,9 +132,9 @@ public class MprisClientWidget : Gtk.Box {
 			}
 		});
 		btn.get_style_context().add_class("flat");
-		controls.pack_start(btn, false, false, 0);
+		controls.attach(btn, 0, 0);
 
-		btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
 		play_btn = btn;
 		btn.set_can_focus(false);
 		btn.clicked.connect(() => {
@@ -148,9 +151,9 @@ public class MprisClientWidget : Gtk.Box {
 			});
 		});
 		btn.get_style_context().add_class("flat");
-		controls.pack_start(btn, false, false, 0);
+		controls.attach_next_to(btn, prev_btn, Gtk.PositionType.RIGHT);
 
-		btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		btn = new Gtk.Button.from_icon_name("media-skip-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
 		btn.set_sensitive(false);
 		btn.set_can_focus(false);
 		next_btn = btn;
@@ -170,12 +173,11 @@ public class MprisClientWidget : Gtk.Box {
 			}
 		});
 		btn.get_style_context().add_class("flat");
-		controls.pack_start(btn, false, false, 0);
-
+		controls.attach_next_to(btn, play_btn, Gtk.PositionType.RIGHT);
 
 		controls.set_halign(Gtk.Align.CENTER);
 		controls.margin_bottom = 6;
-		layout.add(top_box);
+		layout.add(box);
 
 		update_from_meta();
 		update_play_status();
@@ -290,17 +292,17 @@ public class MprisClientWidget : Gtk.Box {
 	void update_play_status() {
 		switch (client.player.playback_status) {
 			case "Playing":
-				header_icon.set_from_icon_name("media-playback-start", Gtk.IconSize.MENU);
+				header_icon.set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.MENU);
 				header_label.set_text(_("%s - Playing").printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			case "Paused":
-				header_icon.set_from_icon_name("media-playback-pause", Gtk.IconSize.MENU);
+				header_icon.set_from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.MENU);
 				header_label.set_text(_("%s - Paused").printf(client.player.identity));
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
 			default:
-				header_icon.set_from_icon_name("media-playback-stop", Gtk.IconSize.MENU);
+				header_icon.set_from_icon_name("media-playback-stop-symbolic", Gtk.IconSize.MENU);
 				header_label.set_text(client.player.identity);
 				((Gtk.Image) play_btn.get_image()).set_from_icon_name("media-playback-start-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 				break;
@@ -336,7 +338,7 @@ public class MprisClientWidget : Gtk.Box {
 			// local
 			string fname = uri.split("file://")[1];
 			try {
-				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, 64, 64);
+				var pbuf = new Gdk.Pixbuf.from_file_at_size(fname, 96, 96);
 				background.set_from_pixbuf(pbuf);
 				get_style_context().remove_class("no-album-art");
 			} catch (Error e) {
@@ -367,7 +369,7 @@ public class MprisClientWidget : Gtk.Box {
 			var art_file = File.new_for_uri(proper_uri);
 			// download the art
 			var ins = yield art_file.read_async(Priority.DEFAULT, cancel);
-			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 64, 64, true, cancel);
+			Gdk.Pixbuf? pbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async(ins, 96, 96, true, cancel);
 			background.set_from_pixbuf(pbuf);
 			get_style_context().remove_class("no-album-art");
 		} catch (Error e) {
@@ -419,11 +421,11 @@ public class MprisClientWidget : Gtk.Box {
 		title_label.set_tooltip_text(title);
 
 		var artist = get_meta_string("xesam:artist", _("Unknown Artist"));
-		artist_label.set_markup("<small>%s</small>".printf(Markup.escape_text(artist)));
+		artist_label.set_markup("%s".printf(Markup.escape_text(artist)));
 		artist_label.set_tooltip_text(artist);
 
 		var album = get_meta_string("xesam:album", _("Unknown Album"));
-		album_label.set_markup("<small>%s</small>".printf(Markup.escape_text(album)));
+		album_label.set_markup("%s".printf(Markup.escape_text(album)));
 		album_label.set_tooltip_text(album);
 	}
 }

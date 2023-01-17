@@ -64,7 +64,7 @@ namespace Budgie {
 			if (desktop_icon != null) {
 				// Make sure we have a usable icon
 				unowned var theme = Gtk.IconTheme.get_default();
-				if (theme.lookup_by_gicon(this.icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
+				if (theme.lookup_by_gicon(desktop_icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
 					this.icon = desktop_icon;
 				}
 			}

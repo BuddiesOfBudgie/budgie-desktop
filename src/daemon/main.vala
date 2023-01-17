@@ -75,6 +75,9 @@ public static int main(string[] args) {
 		return false;
 	});
 
+	/* Initialize libnotify */
+	Notify.init("com.solus-project.budgie-daemon");
+
 	manager = new Budgie.ServiceManager(replace);
 	end_dialog = new Budgie.EndSessionDialog(replace);
 	settings = new Budgie.SettingsManager();

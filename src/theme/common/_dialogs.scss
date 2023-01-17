@@ -1,19 +1,24 @@
-// Session Dialog
-@mixin budgie_session_dialog($button) {
-    .dialog-title { font-size: 120%; }
-
+// Base class for dialogs
+@mixin budgie_dialog() {
     background-color: transparent;
     font-weight: normal;
 
     > decoration {
         box-shadow: 0 2px 4px $panel_shadow;
-        border-radius: 8px;
+        border-radius: 16px;
     }
 
     > box {
         background-color: $panel_bg;
-        border-radius: 8px;
+        border-radius: 16px;
     }
+}
+
+// Session Dialog
+@mixin budgie_session_dialog($button) {
+    @include budgie_dialog();
+
+    .dialog-title { font-size: 120%; }
 
     .linked.horizontal > #{$button} {
         @extend %reset_style;
@@ -40,6 +45,28 @@
 
             &:hover { background-color: saturate(lighten($destructive_color, 10%), 15%); }
             &:active { background-color: saturate(lighten($destructive_color, 20%), 30%); }
+        }
+    }
+}
+
+// Power Dialog
+@mixin budgie_power_dialog() {
+    @include budgie_dialog();
+
+    .power-dialog-button {
+        transition: background-color 170ms ease-out;
+        border-radius: 12px;
+        background: none;
+        color: $fg_color;
+
+        &:hover {
+            color: $fg_color;
+            background-color: transparentize($fg_color, 0.9);
+        }
+
+        &:active {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
         }
     }
 }
