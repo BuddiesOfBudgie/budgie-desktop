@@ -80,7 +80,7 @@ class BluetoothClient : GLib.Object {
 	private Queue<string> removed_devices;
 	private uint removed_devices_id = 0;
 
-	public signal void device_added(BluetoothDevice device);
+	public signal void device_added(string path);
 	public signal void device_removed(string path);
 
 	construct {
@@ -115,18 +115,18 @@ class BluetoothClient : GLib.Object {
 		}
 	}
 
+	[CCode (cname = "adapter1_proxy_get_type")]
+	extern static Type get_adapter_proxy_type();
+
+	[CCode (cname = "device1_proxy_get_type")]
+	extern static Type get_device_proxy_type();
+
 	private Type get_proxy_type_func(DBusObjectManagerClient manager, string object_path, string? interface_name) {
-		if (interface_name == null) {
-			return typeof(DBusObjectProxy);
-		}
+		if (interface_name == null) return typeof(DBusObjectProxy);
 
-		if (interface_name == BLUEZ_ADAPTER_INTERFACE) {
-			return typeof(Adapter1);
-		}
+		if (interface_name == BLUEZ_ADAPTER_INTERFACE) return get_adapter_proxy_type();
 
-		if (interface_name == BLUEZ_DEVICE_INTERFACE) {
-			return typeof(Device1);
-		}
+		if (interface_name == BLUEZ_DEVICE_INTERFACE) return get_device_proxy_type();
 
 		return typeof(DBusProxy);
 	}
@@ -405,6 +405,7 @@ class BluetoothClient : GLib.Object {
 			}
 
 			Device1 device = iface as Device1;
+			var device_proxy = device as DBusProxy;
 
 			if (device.Adapter != default_adapter_path) {
 				continue;
@@ -427,7 +428,7 @@ class BluetoothClient : GLib.Object {
 			list_store.append(device_obj);
 
 			// Emit device-added signal
-			device_added(device_obj);
+			device_added(device_proxy.get_object_path());
 		}
 
 		if (coldplug_upower) {
@@ -614,7 +615,7 @@ class BluetoothClient : GLib.Object {
 
 		device_object = new BluetoothDevice(device, type, icon);
 		list_store.append(device_object);
-		device_added(device_object);
+		device_added(device_proxy.get_object_path());
 	}
 
 	/**
