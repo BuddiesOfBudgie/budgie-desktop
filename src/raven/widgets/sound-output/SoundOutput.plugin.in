@@ -6,4 +6,4 @@ _Description=Allows global and per-app audio output volume control, and displays
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=audio-ready
+Icon=audio-volume-high
