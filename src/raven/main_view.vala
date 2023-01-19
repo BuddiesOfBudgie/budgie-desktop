@@ -65,7 +65,7 @@ namespace Budgie {
 				hexpand = true,
 				vexpand = true,
 			};
-			widget_placeholder.set_markup("<large>%s</large>".printf(_("No widgets added.")));
+			widget_placeholder.set_markup("<big>%s</big>".printf(_("No widgets added.")));
 			widget_placeholder.get_style_context().add_class("dim-label");
 
 			/* Eventually these guys get dynamically loaded */
