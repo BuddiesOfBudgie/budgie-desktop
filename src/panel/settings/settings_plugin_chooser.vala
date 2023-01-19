@@ -234,11 +234,7 @@
 			selected_plugin_icon.set_from_icon_name(plugin.get_icon_name(), Gtk.IconSize.LARGE_TOOLBAR);
 			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(Markup.escape_text(plugin.get_name())));
 
-			if (plugin.get_description() != null) {
-				selected_plugin_description.set_text(plugin.get_description());
-			} else {
-				selected_plugin_description.set_text(_("No description."));
-			}
+			selected_plugin_description((plugin.get_description() != null) ? plugin.get_description() : _("No description."));
 
 			if (plugin.get_copyright() != null) {
 				var copyright = Markup.escape_text(plugin.get_copyright());
@@ -257,12 +253,8 @@
 			}
 
 			if (plugin.get_authors() != null && plugin.get_authors().length > 0) {
-				var authors_string = "";
 				var authors = plugin.get_authors();
-				for (int i = 0; i < authors.length - 1; i++) {
-					authors_string += authors[i] + ", ";
-				}
-				authors_string += authors[authors.length - 1];
+				var authors_string = string.joinv(",", authors);
 				var final_authors_string = Markup.escape_text(_("by %s").printf(authors_string));
 				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(final_authors_string));
 			} else {
@@ -276,9 +268,8 @@
 		void row_activated(Gtk.ListBoxRow? row) {
 			this.row_selected(row);
 
-			if (this.applet_id != null) {
-				this.response(Gtk.ResponseType.ACCEPT);
-			}
+			if (this.applet_id == null) return;
+			this.response(Gtk.ResponseType.ACCEPT);
 		}
 
 		/**

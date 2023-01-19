@@ -70,9 +70,7 @@ namespace Budgie {
 		*/
 		private void on_plugin_loaded(Peas.PluginInfo? info) {
 			lock(plugins) {
-				if (plugins.contains(info.get_module_name())) {
-					return;
-				}
+				if (plugins.contains(info.get_module_name())) return;
 
 				plugins.insert(info.get_module_name(), info);
 			}
@@ -85,37 +83,28 @@ namespace Budgie {
 		}
 
 		public GLib.Settings? get_widget_info_from_uuid(string uuid) {
-			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
-			return new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, instance_info_path);
+			return new GLib.Settings.with_path(WIDGET_INSTANCE_INFO_SCHEMA, "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid));
 		}
 
 		public void clear_widget_instance_info(string uuid) {
-			var instance_info_path = "/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid);
-			reset_dconf_path(instance_info_path);
+			reset_dconf_path("/%s/%s/".printf(WIDGET_INSTANCE_INFO_PREFIX, uuid));
 		}
 
 		public void clear_widget_instance_settings(string uuid) {
-			var instance_settings_path = "/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid);
-			reset_dconf_path(instance_settings_path);
+			reset_dconf_path("/%s/%s/".printf(WIDGET_INSTANCE_SETTINGS_PREFIX, uuid));
 		}
 
 		public RavenWidgetCreationResult new_widget_instance_for_plugin(string module_name, string? existing_uuid, out RavenWidgetData? widget_data) {
 			widget_data = null;
 
 			Peas.PluginInfo? plugin_info = engine.get_plugin_info(module_name);
-			if (plugin_info == null) {
-				return RavenWidgetCreationResult.PLUGIN_INFO_MISSING;
-			}
+			if (plugin_info == null) return RavenWidgetCreationResult.PLUGIN_INFO_MISSING;
 
 			var instance_settings_schema_name = module_name_to_schema_name(module_name);
-			if (instance_settings_schema_name.split(".").length < 3) {
-				return RavenWidgetCreationResult.INVALID_MODULE_NAME;
-			}
+			if (instance_settings_schema_name.split(".").length < 3) return RavenWidgetCreationResult.INVALID_MODULE_NAME;
 
 			if (!is_plugin_loaded(module_name)) {
-				if (!engine.try_load_plugin(plugin_info)) {
-					return RavenWidgetCreationResult.PLUGIN_LOAD_FAILED;
-				}
+				if (!engine.try_load_plugin(plugin_info)) return RavenWidgetCreationResult.PLUGIN_LOAD_FAILED;
 			}
 			var extension = plugin_set.get_extension(plugin_info);
 			var plugin = extension as Budgie.RavenPlugin;
@@ -136,9 +125,7 @@ namespace Budgie {
 			}
 
 			var instance = plugin.new_widget_instance(uuid, instance_settings);
-			if (instance == null) {
-				return RavenWidgetCreationResult.INSTANCE_CREATION_FAILED;
-			}
+			if (instance == null) return RavenWidgetCreationResult.INSTANCE_CREATION_FAILED;
 
 			var instance_info = get_widget_info_from_uuid(uuid);
 			instance_info.set_string("module", module_name);

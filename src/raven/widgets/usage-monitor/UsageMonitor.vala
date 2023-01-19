@@ -163,9 +163,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 
 	private ProcStatContents? read_proc_stat() {
 		var stat_file = File.new_for_path("/proc/stat");
-		if (!stat_file.query_exists()) {
-			return null;
-		}
+		if (!stat_file.query_exists()) return null;
 
 		try {
 			var input_stream = new DataInputStream(stat_file.read());
@@ -305,9 +303,7 @@ private class UsageMonitorRow {
 	}
 
 	public void show() {
-		if (stay_hidden) {
-			return;
-		}
+		if (stay_hidden) return;
 
 		label.show();
 		bar.show();

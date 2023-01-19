@@ -699,9 +699,7 @@ namespace Budgie {
 
 			try {
 				f = File.new_for_uri(uri);
-				if (!f.query_exists()) {
-					return false;
-				}
+				if (!f.query_exists()) return false;
 
 				var dis = new DataInputStream(f.read());
 				while ((line = dis.read_line()) != null) {
