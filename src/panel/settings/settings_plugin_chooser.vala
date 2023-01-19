@@ -148,6 +148,7 @@
 				ellipsize = Pango.EllipsizeMode.END,
 				hexpand = true,
 			};
+			selected_plugin_authors.get_style_context().add_class("dim-label");
 
 			selected_plugin_website = new Gtk.Label("") {
 				valign = Gtk.Align.CENTER,
@@ -165,6 +166,7 @@
 				justify = Gtk.Justification.CENTER,
 				hexpand = true,
 			};
+			selected_plugin_copyright.get_style_context().add_class("dim-label");
 
 			var upper_text_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 			upper_text_box.valign = Gtk.Align.START;
@@ -234,11 +236,11 @@
 			selected_plugin_icon.set_from_icon_name(plugin.get_icon_name(), Gtk.IconSize.LARGE_TOOLBAR);
 			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(Markup.escape_text(plugin.get_name())));
 
-			selected_plugin_description((plugin.get_description() != null) ? plugin.get_description() : _("No description."));
+			selected_plugin_description.set_markup((plugin.get_description() != null) ? plugin.get_description() : _("No description."));
 
 			if (plugin.get_copyright() != null) {
 				var copyright = Markup.escape_text(plugin.get_copyright());
-				selected_plugin_copyright.set_markup("<span alpha='50%'>%s</span>".printf(copyright));
+				selected_plugin_copyright.set_markup(copyright);
 				selected_plugin_copyright.show();
 			} else {
 				selected_plugin_copyright.hide();
@@ -256,9 +258,9 @@
 				var authors = plugin.get_authors();
 				var authors_string = string.joinv(",", authors);
 				var final_authors_string = Markup.escape_text(_("by %s").printf(authors_string));
-				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(final_authors_string));
+				selected_plugin_authors.set_markup("<i>%s</i>".printf(final_authors_string));
 			} else {
-				selected_plugin_authors.set_markup("<i><span alpha='70%'>%s</span></i>".printf(_("No authors listed")));
+				selected_plugin_authors.set_markup("<i>%s</i>".printf(_("No authors listed")));
 			}
 		}
 

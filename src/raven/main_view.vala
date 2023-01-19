@@ -65,7 +65,8 @@ namespace Budgie {
 				hexpand = true,
 				vexpand = true,
 			};
-			widget_placeholder.set_markup("<span size='large' alpha='50%'>%s</span>".printf(_("No widgets added.")));
+			widget_placeholder.set_markup("<large>%s</large>".printf(_("No widgets added.")));
+			widget_placeholder.get_style_context().add_class("dim-label");
 
 			/* Eventually these guys get dynamically loaded */
 			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
