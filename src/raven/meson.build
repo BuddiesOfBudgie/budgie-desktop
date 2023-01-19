@@ -27,7 +27,6 @@ libraven_sources = [
     'notifications_group.vala',
     'notifications_view.vala',
     'plugin_manager.vala',
-    'powerstrip.vala',
     'raven.vala',
 ]
 

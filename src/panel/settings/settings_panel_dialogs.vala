@@ -52,7 +52,7 @@ namespace Budgie {
 	}
 
 	/**
-	* RemovePanelDialog is used to confirm whether the panel should *really* be
+	* RemoveAppletDialog is used to confirm whether the applet should *really* be
 	* removed
 	*/
 	public class RemoveAppletDialog : Gtk.Dialog {

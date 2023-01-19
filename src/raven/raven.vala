@@ -194,8 +194,6 @@ namespace Budgie {
 
 		public int required_size { public get ; protected set; }
 
-		private PowerStrip? strip = null;
-
 		private Budgie.MainView? main_view = null;
 
 		private uint n_count = 0;
@@ -285,7 +283,6 @@ namespace Budgie {
 			get_style_context().add_class("budgie-container");
 
 			settings = new Settings("com.solus-project.budgie-raven");
-			settings.changed["show-power-strip"].connect(on_power_strip_change);
 
 			widget_settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
 
@@ -338,9 +335,6 @@ namespace Budgie {
 				queue_draw();
 			});
 
-			strip = new PowerStrip(this);
-			main_box.pack_end(strip, false, false, 0);
-
 			resizable = false;
 			skip_taskbar_hint = true;
 			skip_pager_hint = true;
@@ -355,21 +349,6 @@ namespace Budgie {
 			this.get_child().show_all();
 
 			this.screen_edge = Gtk.PositionType.LEFT;
-
-			on_power_strip_change(); // Trigger our power strip change func immediately
-		}
-
-		/**
-		* on_power_strip_change will handle when the settings for Raven's Power Strip has changed
-		*/
-		private void on_power_strip_change() {
-			bool show_strip = settings.get_boolean("show-power-strip");
-
-			if (show_strip) { // If we should show the strip
-				strip.show_all();
-			} else { // If we should hide the strip
-				strip.hide();
-			}
 		}
 
 		public override void size_allocate(Gtk.Allocation rect) {
