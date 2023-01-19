@@ -168,6 +168,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
 			return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
 		});
+		apps_area.add(apps_listbox);
 
 		apps_placeholder_label = new Gtk.Label(_("No apps are playing audio.")) {
 			wrap = true,
@@ -206,6 +207,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		 */
 
 		show_all();
+		apps_listbox.hide();
 	}
 
 	/**
@@ -443,8 +445,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 				apps_listbox.insert(list_row, -1); // Add our control
 				apps.insert(id, list_row); // Add to apps
-				apps_area.remove(apps_placeholder_label);
-				apps_area.add(apps_listbox);
+				apps_placeholder_label.hide();
+				apps_listbox.show();
 				apps_listbox.show_all();
 
 				Gvc.ChannelMap channel_map = stream.get_channel_map(); // Get the channel map for this stream
@@ -472,8 +474,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			apps.steal(id); // Remove the apps
 
 			if (apps_listbox.get_children().length() == 0) {
-				apps_area.remove(apps_listbox);
-				apps_area.add(apps_placeholder_label);
+				apps_listbox.hide();
+				apps_area.show();
 			}
 		}
 	}
