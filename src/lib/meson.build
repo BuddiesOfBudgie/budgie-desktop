@@ -12,12 +12,12 @@ libbudgieprivate = shared_library(
     'budgie-private',
     libbudgieprivate_sources,
     dependencies: [
-        libplugin_vapi,
+        libpanelplugin_vapi,
         dep_peas,
         dep_giounix,
         dep_gtk3,
         meson.get_compiler('c').find_library('m', required: false),
-        link_libplugin,
+        link_libpanelplugin,
     ],
     vala_args: [
         '--pkg', 'gio-unix-2.0',
@@ -31,7 +31,7 @@ libbudgieprivate = shared_library(
 link_libbudgieprivate = declare_dependency(
     link_with: libbudgieprivate,
     dependencies: [
-        link_libplugin,
+        link_libpanelplugin,
     ],
     include_directories: [
         include_directories('.'),

@@ -59,6 +59,7 @@ namespace Budgie {
 
 		public Settings settings { construct set ; public get; }
 		private unowned Budgie.PanelManager? manager;
+		private unowned Budgie.PanelPluginManager? plugin_manager;
 
 		PopoverManager? popover_manager;
 
@@ -272,7 +273,7 @@ namespace Budgie {
 			Timeout.add(500, add_migratory);
 		}
 
-		public Panel(Budgie.PanelManager? manager, string? uuid, Settings? settings) {
+		public Panel(Budgie.PanelManager? manager, Budgie.PanelPluginManager? plugin_manager, string? uuid, Settings? settings) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
 			initial_config = new HashTable<string,Budgie.AppletInfo>(str_hash, str_equal);
@@ -280,6 +281,7 @@ namespace Budgie {
 			intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			intended_spacing = settings.get_int(Budgie.PANEL_KEY_SPACING);
 			this.manager = manager;
+			this.plugin_manager = plugin_manager;
 
 			skip_taskbar_hint = true;
 			skip_pager_hint = true;
@@ -370,7 +372,7 @@ namespace Budgie {
 			center_box.hide();
 			end_box.hide();
 
-			this.manager.extension_loaded.connect_after(this.on_extension_loaded);
+			this.plugin_manager.extension_loaded.connect_after(this.on_extension_loaded);
 
 			/* bit of a no-op. */
 			update_sizes();
@@ -473,7 +475,7 @@ namespace Budgie {
 
 				while (iter.next(out uuid, null)) {
 					string? uname = null;
-					Budgie.AppletInfo? info = this.manager.load_applet_instance(uuid, out uname);
+					Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(uuid, out uname);
 					if (info == null) {
 						critical("Failed to load applet when we know it exists: %s", uname);
 						return;
@@ -491,7 +493,7 @@ namespace Budgie {
 				string? uuid = null;
 
 				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = this.manager.create_new_applet(name, uuid);
+					Budgie.AppletInfo? info = this.plugin_manager.create_new_applet(name, uuid);
 					if (info == null) {
 						critical("Failed to load applet when we know it exists");
 						return;
@@ -529,7 +531,7 @@ namespace Budgie {
 
 				for (int i = 0; i < applets.length; i++) {
 					string? name = null;
-					Budgie.AppletInfo? info = this.manager.load_applet_instance(applets[i], out name);
+					Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(applets[i], out name);
 
 					if (info == null) {
 						if (name == null) {
@@ -890,7 +892,7 @@ namespace Budgie {
 			string? uuid = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.manager.is_extension_valid(plugin_name)) {
+			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
 				warning("Not loading invalid plugin: %s", plugin_name);
 				return;
 			}
@@ -900,7 +902,7 @@ namespace Budgie {
 				uuid = initial_uuid;
 			}
 
-			if (!this.manager.is_extension_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = creating.lookup(plugin_name);
 				if (table != null) {
@@ -913,11 +915,11 @@ namespace Budgie {
 				creating.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
 				table = creating.lookup(plugin_name);
 				table.insert(uuid, uuid);
-				this.manager.modprobe(plugin_name);
+				this.plugin_manager.modprobe(plugin_name);
 				return;
 			}
 			/* Already exists */
-			Budgie.AppletInfo? info = this.manager.create_new_applet(plugin_name, uuid);
+			Budgie.AppletInfo? info = this.plugin_manager.create_new_applet(plugin_name, uuid);
 			if (info == null) {
 				critical("Failed to load applet when we know it exists");
 				return;
@@ -930,12 +932,12 @@ namespace Budgie {
 			string? rname = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.manager.is_extension_valid(plugin_name)) {
+			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
 				return null;
 			}
 
-			if (!this.manager.is_extension_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = pending.lookup(plugin_name);
 				if (table != null) {
@@ -948,12 +950,12 @@ namespace Budgie {
 				pending.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
 				table = pending.lookup(plugin_name);
 				table.insert(uuid, uuid);
-				this.manager.modprobe(plugin_name);
+				this.plugin_manager.modprobe(plugin_name);
 				return null;
 			}
 
 			/* Already exists */
-			Budgie.AppletInfo? info = this.manager.load_applet_instance(uuid, out rname);
+			Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(uuid, out rname);
 			if (info == null) {
 				critical("Failed to load applet when we know it exists");
 				return null;

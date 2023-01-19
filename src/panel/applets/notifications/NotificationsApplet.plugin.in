@@ -1,0 +1,9 @@
+[Plugin]
+Module=notificationsapplet.so
+Builtin=true
+Name=Notifications
+_Description=Open the Raven notifications view.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=notifications-applet

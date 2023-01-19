@@ -90,7 +90,7 @@ namespace Budgie {
 
 		/* Used applet storage */
 		Gtk.ListBox listbox_applets;
-		HashTable<string,AppletItem?> items;
+		HashTable<string, AppletItem?> items;
 
 		/* Allow us to display settings when each item is selected */
 		Gtk.Stack settings_stack;
@@ -426,7 +426,8 @@ namespace Budgie {
 		* show a chooser dialog
 		*/
 		void add_applet() {
-			var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
+			this.manager.rescan_panel_plugins();
+			var dlg = new SettingsPluginChooser(this.get_toplevel() as Gtk.Window, true);
 			dlg.set_plugin_list(this.manager.get_panel_plugins());
 			string? applet_id = dlg.run();
 			dlg.destroy();

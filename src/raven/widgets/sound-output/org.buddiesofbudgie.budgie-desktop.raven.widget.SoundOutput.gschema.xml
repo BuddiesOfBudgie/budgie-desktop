@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widget.Calendar">
+    <key type="b" name="show-week-numbers">
+      <default>false</default>
+      <summary>Display week numbers</summary>
+      <description>This setting enables the display of week numbers in the calendar.</description>
+    </key>
+    <key type="b" name="show-day-names">
+      <default>true</default>
+      <summary>Display day names</summary>
+      <description>This setting enables the display of day-of-the-week names in the calendar.</description>
+    </key>
+  </schema>
+</schemalist>

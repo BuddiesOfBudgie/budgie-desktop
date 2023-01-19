@@ -8,7 +8,7 @@
   <bookinfo>
     <title>budgie-desktop Reference Manual</title>
     <releaseinfo>
-      Reference Manual for budgie-desktop 10.4
+      Reference Manual for budgie-desktop 10.7
       The latest version of this documentation can be found on-line at
       <ulink role="online-location" url="http://solus-project.github.io/budgie-desktop/index.html">http://solus-project.github.io/budgie-desktop/</ulink>.
     </releaseinfo>
@@ -21,7 +21,8 @@
     <xi:include href="xml/plugin.xml"/>
     <xi:include href="xml/popover.xml"/>
     <xi:include href="xml/popover-manager.xml"/>
-
+    <xi:include href="xml/raven-widget.xml"/>
+    <xi:include href="xml/raven-plugin.xml"/>
   </chapter>
   <chapter id="object-tree">
     <title>Object Hierarchy</title>

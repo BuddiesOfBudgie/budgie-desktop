@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widget.UsageMonitor">
+    <key type="b" name="show-swap-usage">
+      <default>true</default>
+      <summary>Show Swap usage</summary>
+      <description>If true, will show a Swap usage meter if Swap is present on the system and enabled.</description>
+    </key>
+  </schema>
+</schemalist>
