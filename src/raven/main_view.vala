@@ -98,19 +98,11 @@ namespace Budgie {
 			requested_draw();
 		}
 
-		public void move_widget_instance_up(Gtk.Bin? widget_instance) {
-			var current_index = box.get_children().index(widget_instance);
+		public void move_widget_instance_by_offset(Gtk.Bin? widget_instance, int offset) {
+			var new_index = box.get_children().index(widget_instance) + offset;
 
-			if (current_index > 0) {
-				box.reorder_child(widget_instance, current_index - 1);
-			}
-		}
-
-		public void move_widget_instance_down(Gtk.Bin? widget_instance) {
-			var current_index = box.get_children().index(widget_instance);
-
-			if (current_index < box.get_children().length() - 1) {
-				box.reorder_child(widget_instance, current_index + 1);
+			if (new_index < box.get_children().length() && new_index >= 0) {
+				box.reorder_child(widget_instance, new_index);
 			}
 		}
 

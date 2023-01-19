@@ -69,11 +69,11 @@ namespace Budgie {
 			move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 			button_move_widget_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
-			button_move_widget_up.clicked.connect(move_widget_up);
+			button_move_widget_up.clicked.connect(() => move_widget_by_offset(-1));
 			move_box.add(button_move_widget_up);
 
 			button_move_widget_down = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
-			button_move_widget_down.clicked.connect(move_widget_down);
+			button_move_widget_down.clicked.connect(() => move_widget_by_offset(1));
 			move_box.add(button_move_widget_down);
 
 			button_remove_widget = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
@@ -215,8 +215,8 @@ namespace Budgie {
 			}
 
 			button_remove_widget.set_sensitive(true);
-			button_move_widget_up.set_sensitive(can_move_row_up(selected_row));
-			button_move_widget_down.set_sensitive(can_move_row_down(selected_row));
+			button_move_widget_up.set_sensitive(selected_row.get_index() > 0);
+			button_move_widget_down.set_sensitive(selected_row.get_index() < listbox_widgets.get_children().length() - 1);
 		}
 
 		void add_widget() {
@@ -285,43 +285,21 @@ namespace Budgie {
 			}
 		}
 
-		private bool can_move_row_up(Gtk.ListBoxRow? row) {
-			return row == null ? false : row.get_index() > 0;
-		}
-
-		private bool can_move_row_down(Gtk.ListBoxRow? row) {
-			return row == null ? false : row.get_index() < listbox_widgets.get_children().length() - 1;
-		}
-
-		private void move_widget_up() {
+		private void move_widget_by_offset(int offset) {
 			Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
+			if (row == null) return;
 
-			if (can_move_row_up(row)) {
+			var new_index = row.get_index() + offset;
+
+			if (new_index < listbox_widgets.get_children().length() && new_index >= 0) {
 				listbox_widgets.unselect_row(row);
 
-				var new_index = row.get_index() - 1;
 				listbox_widgets.remove(row);
 				listbox_widgets.insert(row, new_index);
 
 				listbox_widgets.select_row(row);
 
-				raven.move_widget_up(((RavenWidgetItem) row.get_child()).widget_data);
-			}
-		}
-
-		private void move_widget_down() {
-			Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
-
-			if (can_move_row_down(row)) {
-				listbox_widgets.unselect_row(row);
-
-				var new_index = row.get_index() + 1;
-				listbox_widgets.remove(row);
-				listbox_widgets.insert(row, new_index);
-
-				listbox_widgets.select_row(row);
-
-				raven.move_widget_down(((RavenWidgetItem) row.get_child()).widget_data);
+				raven.move_widget_by_offset(((RavenWidgetItem) row.get_child()).widget_data, offset);
 			}
 		}
 

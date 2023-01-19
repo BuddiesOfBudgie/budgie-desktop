@@ -643,26 +643,14 @@ namespace Budgie {
 			update_uuids();
 		}
 
-		public void move_widget_up(RavenWidgetData widget_data) {
-			var current_index = widgets.index(widget_data);
+		public void move_widget_by_offset(RavenWidgetData widget_data, int offset) {
+			var new_index = widgets.index(widget_data) + offset;
 
-			if (current_index > 0) {
+			if (new_index < widgets.length() && new_index >= 0) {
 				widgets.remove(widget_data);
-				widgets.insert(widget_data, current_index - 1);
+				widgets.insert(widget_data, new_index);
 
-				main_view.move_widget_instance_up(widget_data.widget_instance);
-				update_uuids();
-			}
-		}
-
-		public void move_widget_down(RavenWidgetData widget_data) {
-			var current_index = widgets.index(widget_data);
-
-			if (current_index < widgets.length() - 1) {
-				widgets.remove(widget_data);
-				widgets.insert(widget_data, current_index + 1);
-
-				main_view.move_widget_instance_down(widget_data.widget_instance);
+				main_view.move_widget_instance_by_offset(widget_data.widget_instance, offset);
 				update_uuids();
 			}
 		}
