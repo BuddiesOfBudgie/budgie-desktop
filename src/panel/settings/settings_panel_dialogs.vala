@@ -111,7 +111,7 @@ namespace Budgie {
 	}
 
 	/**
-	* RemovePanelDialog is used to confirm whether the panel should *really* be
+	* RemoveRavenWidgetDialog is used to confirm whether the raven widget should *really* be
 	* removed
 	*/
 	public class RemoveRavenWidgetDialog : Gtk.Dialog {
