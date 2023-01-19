@@ -184,10 +184,9 @@ namespace Budgie {
 		* Attempt to create a fresh applet instance
 		*/
 		public Budgie.AppletInfo? create_new_applet(string name, string uuid) {
+			if (!plugins.contains(name)) return null;
 			string? unused = null;
-			if (!plugins.contains(name)) {
-				return null;
-			}
+
 			var path = this.create_applet_path(uuid);
 			var settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
 			settings.set_string(Budgie.APPLET_KEY_NAME, name);

@@ -47,6 +47,7 @@ shared_library(
     ],
     install: true,
     install_dir: raven_plugin_sound_output_dir,
+    install_rpath: rpath_libdir,
 )
 
 install_data(
