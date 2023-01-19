@@ -72,5 +72,5 @@ executable(
         '-Wno-overlength-strings', # gresource generates overlength strings...
     ],
     install: true,
-    install_dir: join_paths(libexecdir, 'budgie-desktop'),
+    install_dir: libexecdir,
 )

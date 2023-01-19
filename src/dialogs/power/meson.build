@@ -24,5 +24,5 @@ executable(
     '--pkg', 'theme'
     ],
     install: true,
-    install_dir: join_paths(libexecdir, 'budgie-desktop'),
+    install_dir: libexecdir,
 )
