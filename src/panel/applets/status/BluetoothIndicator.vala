@@ -64,11 +64,11 @@ public class BluetoothIndicator : Gtk.Bin {
 		// Create our Bluetooth client
 		client = new BluetoothClient();
 		client.device_added.connect((device) => {
-			message("Bluetooth device added: %s", device.Alias);
+			message("Bluetooth device added: %s", device.alias);
 		});
 
 		client.device_removed.connect((device) => {
-			message("Bluetooth device removed: %s", device.Alias);
+			message("Bluetooth device removed: %s", device.alias);
 		});
 
 		add(ebox);

@@ -196,17 +196,17 @@ class BluetoothClient : GLib.Object {
 	 */
 	private void get_type_and_icon_for_device(Device1 device, out BluetoothType type, out string icon) {
 		// Special case these joypads
-		if (device.Name == "ION iCade Game Controller" || device.Name == "8Bitdo Zero GamePad") {
+		if (device.name == "ION iCade Game Controller" || device.name == "8Bitdo Zero GamePad") {
 			type = BluetoothType.JOYPAD;
 			icon = "input-gaming";
 			return;
 		}
 
 		// First, try to match the appearance of the device
-		type = appearance_to_type(device.Appearance);
+		type = appearance_to_type(device.appearance);
 		// Match on the class if the appearance failed
 		if (type == BluetoothType.ANY) {
-			type = class_to_type(device.Class);
+			type = class_to_type(device.class);
 		}
 
 		// Try to get an icon now
@@ -214,7 +214,7 @@ class BluetoothClient : GLib.Object {
 
 		// Fallback to the device's specified icon
 		if (icon == null) {
-			icon = device.Icon;
+			icon = device.icon;
 		}
 
 		// Fallback to a generic icon
@@ -238,7 +238,7 @@ class BluetoothClient : GLib.Object {
 		} else if (iface is Device1) {
 			unowned Device1 device = iface as Device1;
 
-			if (device.Paired) device_added(device);
+			if (device.paired) device_added(device);
 
 			((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
 				var connected = changed.lookup_value("Connected", new VariantType("b"));
@@ -250,7 +250,7 @@ class BluetoothClient : GLib.Object {
 				if (paired == null) return;
 
 				// Add or remove the device if it is paired or not
-				if (device.Paired) {
+				if (device.paired) {
 					upower_devices[((DBusProxy) device).get_object_path()] = null;
 					device_added(device);
 				} else device_removed(device);
@@ -556,7 +556,7 @@ class BluetoothClient : GLib.Object {
 		var devices = get_devices();
 
 		foreach (var device in devices) {
-			if (device.Connected) return true;
+			if (device.connected) return true;
 		}
 
 		return false;
@@ -569,7 +569,7 @@ class BluetoothClient : GLib.Object {
 		var adapters = get_adapters();
 
 		foreach (var adapter in adapters) {
-			if (adapter.Powered) return true;
+			if (adapter.powered) return true;
 		}
 
 		return false;
@@ -612,7 +612,7 @@ class BluetoothClient : GLib.Object {
 		// Set the adapters' powered state
 		var adapters = get_adapters();
 		foreach (var adapter in adapters) {
-			adapter.Powered = powered;
+			adapter.powered = powered;
 		}
 
 		is_enabled = powered;
@@ -622,9 +622,9 @@ class BluetoothClient : GLib.Object {
 		// If the power is being turned off, disconnect from all devices
 		var devices = get_devices();
 		foreach (var device in devices) {
-			if (device.Connected) {
+			if (device.connected) {
 				try {
-					yield device.Disconnect();
+					yield device.disconnect();
 				} catch (Error e) {
 					warning("Error disconnecting Bluetooth device: %s", e.message);
 				}

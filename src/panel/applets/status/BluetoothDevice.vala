@@ -39,16 +39,16 @@ public class BluetoothDevice : Object {
 	public BluetoothDevice(Device1 device, BluetoothType type, string icon) {
 		Object(
 			proxy: device as DBusProxy,
-			address: device.Address,
-			alias: device.Alias,
-			name: device.Name,
+			address: device.address,
+			alias: device.alias,
+			name: device.name,
 			device_type: type,
 			icon: icon,
-			legacy_pairing: device.LegacyPairing,
+			legacy_pairing: device.legacy_pairing,
 			uuids: device.UUIDs,
-			paired: device.Paired,
-			connected: device.Connected,
-			trusted: device.Trusted
+			paired: device.paired,
+			connected: device.connected,
+			trusted: device.trusted
 		);
 	}
 
