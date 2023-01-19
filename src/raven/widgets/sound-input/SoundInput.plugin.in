@@ -6,4 +6,4 @@ _Description=Allows adjustment of audio input volume, and displays a list of ava
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=audio-input-microphone
+Icon=microphone-sensitivity-high
