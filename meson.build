@@ -83,6 +83,7 @@ add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
 # Globals that we need
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
+libexecdir = join_paths(prefix, get_option('libexecdir'))
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))

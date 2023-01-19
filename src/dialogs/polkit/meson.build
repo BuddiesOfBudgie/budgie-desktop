@@ -1,7 +1,16 @@
 # Provides budgie-polkit component
 
+polkit_config_data = configuration_data()
+polkit_config_data.set('libexecdir', libexecdir)
+
+polkit_dialog_desktop = configure_file(
+    input: 'budgie-polkit.desktop.in.in',
+    output: 'budgie-polkit.desktop.in',
+    configuration: polkit_config_data,
+)
+
 custom_target('desktop-file-polkit',
-    input : 'budgie-polkit.desktop.in',
+    input : polkit_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgiePolkit.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
@@ -63,4 +72,5 @@ executable(
         '-Wno-overlength-strings', # gresource generates overlength strings...
     ],
     install: true,
+    install_dir: join_paths(libexecdir, 'budgie-desktop'),
 )

@@ -23,5 +23,6 @@ executable(
     '--pkg', 'budgie-config',
     '--pkg', 'theme'
     ],
-    install: true
+    install: true,
+    install_dir: join_paths(libexecdir, 'budgie-desktop'),
 )
