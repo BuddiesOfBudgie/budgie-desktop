@@ -18,7 +18,7 @@ raven_plugin_calendar_resources = gnome.compile_resources(
 )
 
 raven_plugin_calendar_sources = [
-    'Calendar.vala',
+    'calendar.vala',
     raven_plugin_calendar_resources,
 ]
 

@@ -8,7 +8,7 @@ custom_target('raven-plugin-sound-input-file',
     install_dir : raven_plugin_sound_input_dir)
 
 raven_plugin_sound_input_sources = [
-    'SoundInput.vala',
+    'sound_input.vala',
 ]
 
 raven_plugin_sound_input_deps = [

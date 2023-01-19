@@ -18,7 +18,7 @@ raven_plugin_usage_monitor_resources = gnome.compile_resources(
 )
 
 raven_plugin_usage_monitor_sources = [
-    'UsageMonitor.vala',
+    'usage_monitor.vala',
     raven_plugin_usage_monitor_resources,
 ]
 

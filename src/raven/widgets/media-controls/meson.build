@@ -8,9 +8,9 @@ custom_target('raven-plugin-mediacontrols-file',
     install_dir : raven_plugin_mediacontrols_dir)
 
 raven_plugin_mediacontrols_sources = [
-    'MediaControls.vala',
-    'MprisClient.vala',
-    'MprisGui.vala',
+    'media_controls.vala',
+    'mpris_client.vala',
+    'mpris_gui.vala',
 ]
 
 raven_plugin_mediacontrols_deps = [

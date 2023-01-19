@@ -18,8 +18,8 @@ raven_plugin_sound_output_resources = gnome.compile_resources(
 )
 
 raven_plugin_sound_output_sources = [
-    'AppSoundControl.vala',
-    'SoundOutput.vala',
+    'app_sound_control.vala',
+    'sound_output.vala',
     raven_plugin_sound_output_resources,
 ]
 
