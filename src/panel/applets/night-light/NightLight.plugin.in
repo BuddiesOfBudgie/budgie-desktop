@@ -1,0 +1,9 @@
+[Plugin]
+Module=nightlightapplet.so
+Builtin=true
+Name=Night Light
+_Description=Toggle and modify Night Light settings.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=weather-clear-night

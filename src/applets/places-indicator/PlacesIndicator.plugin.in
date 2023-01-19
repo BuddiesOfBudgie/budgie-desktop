@@ -1,8 +1,0 @@
-[Plugin]
-Module=libplacesindicator.so
-Name=Places
-_Description=Show drives and favorite folders
-Authors=Budgie Desktop Developers
-Copyright=Copyright Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=folder-symbolic

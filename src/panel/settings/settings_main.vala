@@ -129,7 +129,7 @@ namespace Budgie {
 			this.add_page(new Budgie.FontPage());
 			this.add_page(new Budgie.WindowsPage());
 			this.add_page(new Budgie.AutostartPage());
-			this.add_page(new Budgie.RavenPage());
+			this.add_page(new Budgie.RavenPage(this.manager));
 		}
 
 		public void requested_close() throws DBusError, IOError {

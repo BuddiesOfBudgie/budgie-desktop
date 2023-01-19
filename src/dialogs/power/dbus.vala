@@ -27,6 +27,8 @@ namespace Budgie {
 	/* logind */
 	[DBus (name="org.freedesktop.login1.Manager")]
 	public interface LogindRemote : Object {
+		public abstract string can_hibernate() throws DBusError, IOError;
+
 		public abstract void suspend(bool interactive) throws DBusError, IOError;
 		public abstract void hibernate(bool interactive) throws DBusError, IOError;
 	}

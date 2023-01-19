@@ -1,0 +1,9 @@
+[Plugin]
+Module=libuserindicator.so
+Builtin=true
+Name=User Indicator
+_Description=Opens the power dialog.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=system-shutdown

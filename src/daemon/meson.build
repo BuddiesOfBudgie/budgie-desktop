@@ -48,7 +48,7 @@ daemon_deps = [
     dep_gst,
     dep_cairo,
     link_libbudgieprivate,
-    libplugin_vapi,
+    libpanelplugin_vapi,
     link_libappsys,
     link_libconfig,
     link_libtheme,

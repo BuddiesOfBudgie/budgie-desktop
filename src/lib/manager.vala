@@ -30,7 +30,11 @@ namespace Budgie {
 
 		public abstract void create_new_panel();
 		public abstract void delete_panel(string uuid);
-		public abstract List<Peas.PluginInfo?> get_panel_plugins();
 
+		public abstract List<Peas.PluginInfo?> get_panel_plugins();
+		public abstract List<Peas.PluginInfo?> get_raven_plugins();
+
+		public abstract void rescan_panel_plugins();
+		public abstract void rescan_raven_plugins();
 	}
 }

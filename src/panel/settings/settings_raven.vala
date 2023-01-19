@@ -14,16 +14,10 @@ namespace Budgie {
 	* RavenPage shows options for configuring Raven
 	*/
 	public class RavenPage : Budgie.SettingsPage {
-		private Gtk.ComboBox? raven_position;
-		private Gtk.Switch? enable_week_numbers;
-		private Gtk.Switch? show_calendar_widget;
-		private Gtk.Switch? show_sound_output_widget;
-		private Gtk.Switch? show_mic_input_widget;
-		private Gtk.Switch? show_mpris_widget;
-		private Gtk.Switch? show_powerstrip;
-		private Settings raven_settings;
+		private Gtk.Stack stack;
+		private Gtk.StackSwitcher switcher;
 
-		public RavenPage() {
+		public RavenPage(Budgie.DesktopManager? manager) {
 			Object(group: SETTINGS_GROUP_APPEARANCE,
 				content_id: "raven",
 				title: "Raven",
@@ -31,80 +25,29 @@ namespace Budgie {
 				icon_name: "preferences-calendar-and-tasks" // Subject to change
 			);
 
-			var grid = new SettingsGrid();
-			this.add(grid);
+			border_width = 0;
+			margin_top = 8;
+			margin_bottom = 8;
+			halign = Gtk.Align.FILL;
 
-			raven_position = new Gtk.ComboBox();
+			var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			pack_start(swbox, false, false, 0);
 
-			// Add options for Raven position
-			var render = new Gtk.CellRendererText();
-			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(RavenPosition));
-			Gtk.TreeIter iter;
-			const RavenPosition[] positions = {
-				RavenPosition.AUTOMATIC,
-				RavenPosition.LEFT,
-				RavenPosition.RIGHT
-			};
+			/* Main layout bits */
+			switcher = new Gtk.StackSwitcher();
+			switcher.halign = Gtk.Align.CENTER;
+			stack = new Gtk.Stack();
+			stack.margin_top = 12;
+			stack.margin_bottom = 12;
+			stack.set_homogeneous(false);
+			switcher.set_stack(stack);
+			swbox.pack_start(switcher, true, true, 0);
+			pack_start(stack, true, true, 0);
 
-			foreach (var pos in positions) {
-				model.append(out iter);
-				model.set(iter, 0, pos.to_string(), 1, pos.get_display_name(), 2, pos, -1);
-			}
+			stack.add_titled(new Budgie.RavenWidgetsPage(manager), "widgets", _("Widgets"));
+			stack.add_titled(new Budgie.RavenSettingsPage(), "settings", _("Settings"));
 
-			raven_position.set_model(model);
-			raven_position.pack_start(render, true);
-			raven_position.add_attribute(render, "text", 1);
-			raven_position.set_id_column(0);
-
-			grid.add_row(new SettingsRow(raven_position,
-				_("Set Raven position"),
-				_("Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is.")
-			));
-
-			enable_week_numbers = new Gtk.Switch();
-			grid.add_row(new SettingsRow(enable_week_numbers,
-				_("Enable display of week numbers in Calendar"),
-				_("This setting enables the display of week numbers in the Calendar widget.")
-			));
-
-			show_calendar_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_calendar_widget,
-				_("Show Calendar Widget"),
-				_("Shows or hides the Calendar Widget in Raven's Applets section.")
-			));
-
-			show_sound_output_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_sound_output_widget,
-				_("Show Sound Output Widget"),
-				_("Shows or hides the Sound Output Widget in Raven's Applets section.")
-			));
-
-			show_mic_input_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_mic_input_widget,
-				_("Show Microphone Input Widget"),
-				_("Shows or hides the Microphone Input Widget in Raven's Applets section.")
-			));
-
-			show_mpris_widget = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_mpris_widget,
-				_("Show Media Playback Controls Widget"),
-				_("Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section.")
-			));
-
-			show_powerstrip = new Gtk.Switch();
-			grid.add_row(new SettingsRow(show_powerstrip,
-				_("Show Power Strip"),
-				_("Shows or hides the Power Strip in the bottom of Raven.")
-			));
-
-			raven_settings = new Settings("com.solus-project.budgie-raven");
-			raven_settings.bind("raven-position", raven_position, "active-id", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("enable-week-numbers", enable_week_numbers, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-calendar-widget", show_calendar_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-sound-output-widget", show_sound_output_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-mic-input-widget", show_mic_input_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-mpris-widget", show_mpris_widget, "active", SettingsBindFlags.DEFAULT);
-			raven_settings.bind("show-power-strip", show_powerstrip, "active", SettingsBindFlags.DEFAULT);
+			show_all();
 		}
 	}
 }

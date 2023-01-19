@@ -83,6 +83,7 @@ add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
 # Globals that we need
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
+libexecdir = join_paths(prefix, get_option('libexecdir'), meson.project_name())
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
@@ -98,8 +99,14 @@ intltool = find_program('intltool-merge')
 plugin_libdir = join_paths(libdir, meson.project_name(), 'plugins')
 plugin_datadir = join_paths(datadir, meson.project_name(), 'plugins')
 
+# and raven widget builds
+raven_plugin_libdir = join_paths(libdir, meson.project_name(), 'raven-plugins')
+raven_plugin_datadir = join_paths(datadir, meson.project_name(), 'raven-plugins')
+
 cdata.set_quoted('MODULEDIR', plugin_libdir)
 cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
+cdata.set_quoted('RAVEN_PLUGIN_LIBDIR', raven_plugin_libdir)
+cdata.set_quoted('RAVEN_PLUGIN_DATADIR', raven_plugin_datadir)
 cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
@@ -108,6 +115,11 @@ cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
 with_bluetooth = get_option('with-bluetooth')
 if with_bluetooth == true
   add_project_arguments('-D', 'with_bluetooth', language: 'vala')
+endif
+
+with_hibernate = get_option('with-hibernate')
+if with_hibernate == true
+  add_project_arguments('-D', 'WITH_HIBERNATE', language: 'vala')
 endif
 
 with_libuuid_time_safe = get_option('with-libuuid-time-safe')

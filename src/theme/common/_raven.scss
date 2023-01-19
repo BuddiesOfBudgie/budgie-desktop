@@ -11,7 +11,6 @@
     .raven-header {
         color: $fg_color;
         background-color: $raven_expander_bg;
-        padding: 4px 0;
     }
 
     > .vertical > stack > *:not(.raven-notifications-view) > .frame {
@@ -65,6 +64,22 @@
     .option-subtitle {
         font-size: smaller;
     }
+
+    levelbar > trough {
+        background: transparentize(white, 0.9);
+
+        > block.filled {
+            background: #46ca72;
+
+            &.high {
+                background: #c9ca46;
+            }
+
+            &.low {
+                background: #ca5746;
+            }
+        }
+    }
 }
 
 .raven-frame > border {
@@ -93,6 +108,6 @@
         color: $mpris_overlay_fg;
         background-color: $mpris_overlay_bg;
 
-        #{$button}.image-button { padding: 8px; }
+        #{$button}.image-button { padding: 6px; }
     }
 }

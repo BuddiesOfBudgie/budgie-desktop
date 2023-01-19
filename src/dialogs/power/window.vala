@@ -29,7 +29,9 @@ namespace Budgie {
 	public class PowerWindow : Gtk.ApplicationWindow {
 		private DialogButton? lock_button = null;
 		private DialogButton? suspend_button = null;
+#if WITH_HIBERNATE
 		private DialogButton? hibernate_button = null;
+#endif
 		private DialogButton? reboot_button = null;
 		private DialogButton? shutdown_button = null;
 		private DialogButton? logout_button = null;
@@ -96,8 +98,10 @@ namespace Budgie {
 			suspend_button = new DialogButton(_("_Suspend"), "system-suspend-symbolic");
 			suspend_button.clicked.connect(suspend);
 
+#if WITH_HIBERNATE
 			hibernate_button = new DialogButton(_("_Hibernate"), "system-hibernate-symbolic");
 			hibernate_button.clicked.connect(hibernate);
+#endif
 
 			reboot_button = new DialogButton(_("_Reboot"), "system-restart-symbolic");
 			reboot_button.clicked.connect(reboot);
@@ -106,12 +110,17 @@ namespace Budgie {
 			shutdown_button.clicked.connect(shutdown);
 
 			// Attach our buttons
-			button_grid.attach(lock_button, 0, 0);
-			button_grid.attach(logout_button, 1, 0);
-			button_grid.attach(suspend_button, 2, 0);
-			button_grid.attach(hibernate_button, 0, 1);
-			button_grid.attach(reboot_button, 1, 1);
-			button_grid.attach(shutdown_button, 2, 1);
+			button_grid.attach(lock_button, 0, 0, 2, 2);
+			button_grid.attach(logout_button, 2, 0, 2, 2);
+			button_grid.attach(suspend_button, 4, 0, 2, 2);
+#if WITH_HIBERNATE
+			button_grid.attach(hibernate_button, 0, 2, 2, 2);
+			button_grid.attach(reboot_button, 2, 2, 2, 2);
+			button_grid.attach(shutdown_button, 4, 2, 2, 2);
+#else
+			button_grid.attach(reboot_button, 1, 2, 2, 2);
+			button_grid.attach(shutdown_button, 3, 2, 2, 2);
+#endif
 
 			// Attach our grid to the window
 			box.pack_start(button_grid, true, false, 0);
@@ -144,6 +153,14 @@ namespace Budgie {
 				hide();
 				return Gdk.EVENT_STOP;
 			});
+
+#if WITH_HIBERNATE
+			show.connect(() => {
+				var can_hibernate = can_hibernate();
+				hibernate_button.sensitive = can_hibernate;
+				hibernate_button.set_tooltip_markup(can_hibernate ? null : _("This system does not support hibernation."));
+			});
+#endif
 
 			event_controller = new EventControllerKey(this);
 			event_controller.key_released.connect(on_key_release);
@@ -218,6 +235,17 @@ namespace Budgie {
 			});
 		}
 
+#if WITH_HIBERNATE
+		private bool can_hibernate() {
+			var can_hibernate = true;
+			try {
+				can_hibernate = logind.can_hibernate() == "yes";
+			} catch (Error e) {
+				warning("Failed to check if hibernation is supported: %s", e.message);
+			}
+			return can_hibernate;
+		}
+
 		private void hibernate() {
 			hide();
 			if (logind == null) return;
@@ -232,6 +260,7 @@ namespace Budgie {
 				return false;
 			});
 		}
+#endif
 
 		private void reboot() {
 			hide();
