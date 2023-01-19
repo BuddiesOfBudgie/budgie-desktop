@@ -27,7 +27,7 @@ static void budgie_raven_plugin_default_init(__attribute__((unused)) BudgieRaven
  * Returns: (transfer full): A newly initialized Raven widget
  */
 BudgieRavenWidget* budgie_raven_plugin_new_widget_instance(BudgieRavenPlugin* self, gchar* uuid, GSettings* settings) {
-    if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
+	if (!BUDGIE_IS_RAVEN_PLUGIN(self)) {
 		return NULL;
 	}
 
