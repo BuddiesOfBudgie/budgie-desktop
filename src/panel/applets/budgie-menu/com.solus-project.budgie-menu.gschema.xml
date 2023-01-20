@@ -15,7 +15,7 @@
     </key>
 
     <key type="b" name="use-default-menu-icon">
-      <default>true</default>
+      <default>false</default>
       <summary>Use Default Menu Icon</summary>
       <description>Use the default icon for the menu button</description>
     </key>
