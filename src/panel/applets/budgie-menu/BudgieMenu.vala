@@ -36,6 +36,9 @@ public class BudgieMenuSettings : Gtk.Grid {
 	private unowned Gtk.Entry? entry_label;
 
 	[GtkChild]
+	private unowned Gtk.Switch? switch_use_default_icon;
+
+	[GtkChild]
 	private unowned Gtk.Entry? entry_icon_pick;
 
 	[GtkChild]
@@ -50,6 +53,7 @@ public class BudgieMenuSettings : Gtk.Grid {
 		settings.bind("menu-headers", switch_menu_headers, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-categories-hover", switch_menu_categories_hover, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-label", entry_label, "text", SettingsBindFlags.DEFAULT);
+		settings.bind("use-default-menu-icon", switch_use_default_icon, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-icon", entry_icon_pick, "text", SettingsBindFlags.DEFAULT);
 		settings.bind("menu-show-control-center-items", switch_menu_show_settings_items, "active", SettingsBindFlags.DEFAULT);
 
@@ -171,6 +175,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 		valign = Gtk.Align.FILL;
 		halign = Gtk.Align.FILL;
 		on_settings_changed("enable-menu-label");
+		on_settings_changed("use-default-menu-icon");
 		on_settings_changed("menu-icon");
 		on_settings_changed("menu-label");
 
@@ -213,15 +218,22 @@ public class BudgieMenuApplet : Budgie.Applet {
 		bool should_show = true;
 
 		switch (key) {
+			case "use-default-menu-icon":
 			case "menu-icon":
-				string? icon = settings.get_string(key);
+				string? icon;
+				if (settings.get_boolean("use-default-menu-icon")) {
+					icon = "budgie-menu-symbolic";
+				} else {
+					icon = settings.get_string("menu-icon");
+				}
+
 				if ("/" in icon) {
 					try {
 						Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file(icon);
 						img.set_from_pixbuf(pixbuf.scale_simple(this.pixel_size, this.pixel_size, Gdk.InterpType.BILINEAR));
 					} catch (Error e) {
 						warning("Failed to update Budgie Menu applet icon: %s", e.message);
-						img.set_from_icon_name("view-grid-symbolic", Gtk.IconSize.INVALID); // Revert to view-grid-symbolic
+						img.set_from_icon_name("start-here-symbolic", Gtk.IconSize.INVALID); // Revert to start-here-symbolic
 					}
 				} else if (icon == "") {
 					should_show = false;
