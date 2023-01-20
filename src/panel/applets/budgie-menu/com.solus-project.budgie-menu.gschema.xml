@@ -14,6 +14,12 @@
       <description>The menu label to display on the menu button</description>
     </key>
 
+    <key type="b" name="use-default-menu-icon">
+      <default>true</default>
+      <summary>Use Default Menu Icon</summary>
+      <description>Use the default icon for the menu button</description>
+    </key>
+
     <key type="s" name="menu-icon">
       <default>'start-here-symbolic'</default>
       <summary>Menu button icon</summary>
