@@ -257,6 +257,8 @@ class BluetoothClient : GLib.Object {
 
 				check_powered();
 			});
+
+			check_powered();
 		}
 	}
 
@@ -586,6 +588,11 @@ class BluetoothClient : GLib.Object {
 			// Get current state
 			var connected = get_connected();
 			var powered = get_powered();
+
+			debug("connected: %s new_connected: %s | powered: %s new_powered: %s",
+				is_connected ? "yes" : "no", connected ? "yes" : "no",
+				is_powered ? "yes" : "no", powered ? "yes" : "no"
+			);
 
 			// Do nothing if the state hasn't changed
 			if (connected == is_connected && powered == is_powered) return Source.REMOVE;

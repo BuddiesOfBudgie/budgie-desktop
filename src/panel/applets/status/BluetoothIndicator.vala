@@ -12,54 +12,78 @@
  * BluetoothIndicator is largely inspired by gnome-flashback.
  */
 
-public class BluetoothIndicator : Gtk.Bin {
-	public Gtk.Image? image = null;
-	public Gtk.EventBox? ebox = null;
+using Gdk;
+using Gtk;
+
+public class BluetoothIndicator : Bin {
+	public Image? image = null;
+	public EventBox? ebox = null;
 	public Budgie.Popover? popover = null;
 
-	private Gtk.CheckButton radio_airplane;
-	private ulong radio_id;
-	private Gtk.Button send_to;
+	private ListBox? devices_box = null;
+	private Stack? stack = null;
+	private Switch? bluetooth_switch = null;
 
 	private BluetoothClient client;
 
 	public BluetoothIndicator() {
-		image = new Gtk.Image.from_icon_name("bluetooth-active-symbolic", Gtk.IconSize.MENU);
+		image = new Image.from_icon_name("bluetooth-active-symbolic", IconSize.MENU);
 
-		ebox = new Gtk.EventBox();
+		ebox = new EventBox();
 		ebox.add(image);
-		ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
+		ebox.add_events(EventMask.BUTTON_RELEASE_MASK);
+		ebox.button_release_event.connect(on_button_released);
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
-		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
-		box.border_width = 6;
-		popover.add(box);
+
+		// Create our stack
+		stack = new Stack() {
+			border_width = 6,
+			hhomogeneous = true,
+			transition_duration = 250,
+			transition_type = SLIDE_LEFT_RIGHT
+		};
+
+		// Create the main stack page
+		var main_page = new Box(VERTICAL, 0);
+		stack.add_named(main_page, "main");
+
+		// Main header
+		var main_header = new Box(HORIZONTAL, 0);
+
+		// Header label
+		var switch_label = new Label(_("Bluetooth"));
+		switch_label.get_style_context().add_class("dim-label");
+		main_header.pack_start(switch_label);
 
 		// Settings button
-		var button = new Gtk.Button.with_label(_("Bluetooth Settings"));
-		button.get_child().set_halign(Gtk.Align.START);
-		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
+			tooltip_text = _("Bluetooth Settings")
+		};
+		button.get_style_context().add_class(STYLE_CLASS_FLAT);
 		button.clicked.connect(on_settings_activate);
-		box.pack_start(button, false, false, 0);
+		main_header.pack_end(button, false, false, 0);
 
-		// Send files button
-		send_to = new Gtk.Button.with_label(_("Send Files"));
-		send_to.get_child().set_halign(Gtk.Align.START);
-		send_to.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
-		//  send_to.clicked.connect(on_send_file);
-		box.pack_start(send_to, false, false, 0);
+		// Bluetooth switch
+		bluetooth_switch = new Switch() {
+			tooltip_text = _("Turn Bluetooth on or off")
+		};
+		bluetooth_switch.notify["active"].connect(on_switch_activate);
+		main_header.pack_end(bluetooth_switch);
 
-		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		box.pack_start(sep, false, false, 1);
+		main_page.pack_start(main_header);
+		main_page.pack_start(new Separator(HORIZONTAL), false, false, 1);
 
-		// Airplane mode
-		radio_airplane = new Gtk.CheckButton.with_label(_("Bluetooth Airplane Mode"));
-		radio_airplane.get_child().set_property("margin", 4);
-		box.pack_start(radio_airplane, false, false, 0);
-
-		// Ensure all content is shown
-		box.show_all();
+		// Devices
+		var scrolled_window = new ScrolledWindow(null, null) {
+			hscrollbar_policy = NEVER,
+			min_content_height = 250,
+			max_content_height = 250
+		};
+		devices_box = new ListBox();
+		scrolled_window.add(devices_box);
+		main_page.pack_start(scrolled_window);
 
 		// Create our Bluetooth client
 		client = new BluetoothClient();
@@ -71,21 +95,48 @@ public class BluetoothIndicator : Gtk.Bin {
 			message("Bluetooth device removed: %s", device.alias);
 		});
 
+		client.global_state_changed.connect(on_client_state_changed);
+
+		// Pack and show
 		add(ebox);
+		popover.add(stack);
+		stack.show_all();
+		stack.set_visible_child_name("main");
 		show_all();
 	}
 
-	void on_settings_activate() {
+	private bool on_button_released(EventButton e) {
+		if (e.button != BUTTON_MIDDLE) return EVENT_PROPAGATE;
+
+		// Disconnect all Bluetooth on middle click
+		client.set_all_powered.begin(!client.get_powered(), (obj, res) => {
+			client.check_powered();
+		});
+
+		return Gdk.EVENT_STOP;
+	}
+
+	private void on_client_state_changed(bool enabled, bool connected) {
+		bluetooth_switch.active = enabled;
+	}
+
+	private void on_settings_activate() {
 		this.popover.hide();
 
 		var app_info = new DesktopAppInfo("budgie-bluetooth-panel.desktop");
-		if (app_info == null) {
-			return;
-		}
+		if (app_info == null) return;
+
 		try {
 			app_info.launch(null, null);
 		} catch (Error e) {
 			message("Unable to launch budgie-bluetooth-panel.desktop: %s", e.message);
 		}
+	}
+
+	private void on_switch_activate() {
+		// Turn Bluetooth on or off
+		client.set_all_powered.begin(bluetooth_switch.active, (obj, res) => {
+			client.check_powered();
+		});
 	}
 }
