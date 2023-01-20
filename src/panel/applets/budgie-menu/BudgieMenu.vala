@@ -77,6 +77,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 	protected Gtk.ToggleButton widget;
 	protected BudgieMenuWindow? popover;
 	protected Settings settings;
+	private Settings ui_settings;
 	Gtk.Image img;
 	Gtk.Label label;
 	Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
@@ -103,8 +104,14 @@ public class BudgieMenuApplet : Budgie.Applet {
 		settings_prefix = "/com/solus-project/budgie-panel/instance/budgie-menu";
 
 		settings = this.get_applet_settings(uuid);
-
 		settings.changed.connect(on_settings_changed);
+
+		ui_settings = new Settings("org.gnome.desktop.interface");
+		ui_settings.changed.connect((key) => {
+			if (key == "icon-theme") {
+				on_settings_changed("menu-icon");
+			}
+		});
 
 		app_index = Budgie.AppIndex.@get();
 
@@ -221,7 +228,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 			case "use-default-menu-icon":
 			case "menu-icon":
 				string? icon;
-				if (settings.get_boolean("use-default-menu-icon")) {
+				if (settings.get_boolean("use-default-menu-icon") || start_here_icon_is_gnome_foot()) {
 					icon = "budgie-menu-symbolic";
 				} else {
 					icon = settings.get_string("menu-icon");
@@ -258,6 +265,12 @@ public class BudgieMenuApplet : Budgie.Applet {
 			default:
 				break;
 		}
+	}
+
+	private bool start_here_icon_is_gnome_foot() {
+		var theme_name = ui_settings.get_string("icon-theme");
+		return theme_name == "" || theme_name == "default" || theme_name == "Adwaita" ||
+			theme_name == "hicolor" || theme_name == "HighContrast";
 	}
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
