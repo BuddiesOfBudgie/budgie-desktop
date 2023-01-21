@@ -318,8 +318,10 @@ public class BluetoothDeviceWidget : Box {
 		// Device isn't paired
 		if (!device.paired) {
 			status_label.set_text(_("Not paired"));
-			connection_button.sensitive = false;
 		}
+
+		// Only make the (dis)connect button clickable if the device is paired
+		connection_button.sensitive = device.paired;
 
 		properties_updated();
 	}
