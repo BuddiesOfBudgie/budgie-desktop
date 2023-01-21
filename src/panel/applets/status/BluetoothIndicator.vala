@@ -26,7 +26,9 @@ public class BluetoothIndicator : Bin {
 
 	private BluetoothClient client;
 
-	public BluetoothIndicator() {
+	construct {
+		get_style_context().add_class("bluetooth-applet-popover");
+
 		image = new Image.from_icon_name("bluetooth-active-symbolic", IconSize.MENU);
 
 		ebox = new EventBox();
@@ -51,6 +53,7 @@ public class BluetoothIndicator : Bin {
 
 		// Main header
 		var main_header = new Box(HORIZONTAL, 0);
+		main_header.get_style_context().add_class("bluetooth-applet-header");
 
 		// Header label
 		var switch_label = new Label(_("Bluetooth"));
@@ -81,18 +84,32 @@ public class BluetoothIndicator : Bin {
 			min_content_height = 250,
 			max_content_height = 250
 		};
-		devices_box = new ListBox();
+		devices_box = new ListBox() {
+			selection_mode = NONE
+		};
+		devices_box.set_sort_func(sort_devices);
+		devices_box.get_style_context().add_class("bluetooth-devices-listbox");
+
+		devices_box.row_activated.connect((row) => {
+			var widget = row.get_child() as BluetoothDeviceWidget;
+			widget.toggle_revealer();
+		});
+
 		scrolled_window.add(devices_box);
 		main_page.pack_start(scrolled_window);
 
 		// Create our Bluetooth client
 		client = new BluetoothClient();
+
 		client.device_added.connect((device) => {
-			message("Bluetooth device added: %s", device.alias);
+			// Remove any existing rows for this device
+			remove_device(device);
+			// Add the new device to correctly update its status
+			add_device(device);
 		});
 
 		client.device_removed.connect((device) => {
-			message("Bluetooth device removed: %s", device.alias);
+			remove_device(device);
 		});
 
 		client.global_state_changed.connect(on_client_state_changed);
@@ -138,5 +155,177 @@ public class BluetoothIndicator : Bin {
 		client.set_all_powered.begin(bluetooth_switch.active, (obj, res) => {
 			client.check_powered();
 		});
+	}
+
+	private void add_device(Device1 device) {
+		debug("Bluetooth device added: %s", device.alias);
+
+		BluetoothType type = 0;
+		string? icon = null;
+		client.get_type_and_icon_for_device(device, out type, out icon);
+
+		var device_obj = new BluetoothDevice(device, type, icon);
+		var widget = new BluetoothDeviceWidget(device_obj);
+
+		widget.properties_updated.connect(() => {
+			client.check_powered();
+			devices_box.invalidate_sort();
+		});
+
+		devices_box.add(widget);
+		devices_box.invalidate_sort();
+	}
+
+	private void remove_device(Device1 device) {
+		debug("Bluetooth device removed: %s", device.alias);
+
+		devices_box.foreach((row) => {
+			var child = ((ListBoxRow) row).get_child() as BluetoothDeviceWidget;
+			var proxy = child.device.proxy as Device1;
+			if (proxy.address == device.address) {
+				row.destroy();
+			}
+		});
+
+		devices_box.invalidate_sort();
+	}
+
+	/**
+	 * Sorts items based on their names and connection status.
+	 *
+	 * Items are sorted alphabetically, with connected devices at the top of the list.
+	 */
+	private int sort_devices(ListBoxRow a, ListBoxRow b) {
+		var a_device = a.get_child() as BluetoothDeviceWidget;
+		var b_device = b.get_child() as BluetoothDeviceWidget;
+
+		if (((Device1) a_device.device.proxy).connected && ((Device1) b_device.device.proxy).connected) return strcmp(a_device.device.alias, b_device.device.alias);
+		else if (((Device1) a_device.device.proxy).connected) return -1; // A should go before B
+		else if (((Device1) b_device.device.proxy).connected) return 1; // B should go before A
+		else return strcmp(a_device.device.alias, b_device.device.alias);
+	}
+}
+
+public class BluetoothDeviceWidget : Box {
+	private Image? image = null;
+	private Label? name_label = null;
+	private Label? status_label = null;
+	private Revealer? revealer = null;
+	private Button? connection_button = null;
+
+	public BluetoothDevice device { get; construct; }
+
+	public signal void properties_updated();
+
+	construct {
+		get_style_context().add_class("bluetooth-widget");
+
+		// Body
+		var grid = new Grid();
+
+		image = new Image.from_icon_name(device.icon, LARGE_TOOLBAR) {
+			halign = START,
+			margin_end = 6
+		};
+
+		name_label = new Label(device.alias) {
+			valign = CENTER,
+			xalign = 0.0f,
+			max_width_chars = 1,
+			ellipsize = END,
+			hexpand = true,
+			tooltip_text = device.alias
+		};
+
+		status_label = new Label(null) {
+			halign = START,
+			hexpand = true
+		};
+		status_label.get_style_context().add_class("dim-label");
+
+		// Revealer stuff
+		revealer = new Revealer() {
+			reveal_child = false,
+			transition_duration = 250,
+			transition_type = RevealerTransitionType.SLIDE_DOWN
+		};
+		revealer.get_style_context().add_class("bluetooth-widget-revealer");
+
+		var revealer_body = new Box(HORIZONTAL, 0);
+		connection_button = new Button.with_label("");
+		connection_button.clicked.connect(on_connection_button_clicked);
+
+		revealer_body.pack_start(connection_button);
+		revealer.add(revealer_body);
+
+		// Signals
+		device.proxy.g_properties_changed.connect(update_status);
+
+		// Packing
+		grid.attach(image, 0, 0);
+		grid.attach(name_label, 1, 0);
+		grid.attach(status_label, 1, 1);
+
+		pack_start(grid);
+		pack_start(revealer);
+
+		update_status();
+		show_all();
+	}
+
+	public BluetoothDeviceWidget(BluetoothDevice device) {
+		Object(
+			device: device,
+			orientation: Orientation.VERTICAL,
+			spacing: 0
+		);
+	}
+
+	public void toggle_revealer() {
+		revealer.reveal_child = !revealer.reveal_child;
+	}
+
+	private void on_connection_button_clicked() {
+		connection_button.sensitive = false;
+
+		if (((Device1) device.proxy).connected) {
+			((Device1) device.proxy).disconnect.begin((obj, res) => {
+				try {
+					((Device1) device.proxy).disconnect.end(res);
+				} catch (Error e) {
+					warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
+				}
+
+				connection_button.sensitive = true;
+			});
+		} else {
+			((Device1) device.proxy).connect.begin((obj, res) => {
+				try {
+					((Device1) device.proxy).connect.end(res);
+				} catch (Error e) {
+					warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
+				}
+
+				connection_button.sensitive = true;
+			});
+		}
+	}
+
+	private void update_status() {
+		if (((Device1) device.proxy).connected) {
+			status_label.set_text(_("Connected"));
+			connection_button.label = _("Disconnect");
+		} else {
+			status_label.set_text(_("Disconnected"));
+			connection_button.label = _("Connect");
+		}
+
+		// Device isn't paired
+		if (!((Device1) device.proxy).paired) {
+			status_label.set_text(_("Not paired"));
+			connection_button.sensitive = false;
+		}
+
+		properties_updated();
 	}
 }

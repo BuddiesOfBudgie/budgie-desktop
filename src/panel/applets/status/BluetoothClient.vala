@@ -194,7 +194,7 @@ class BluetoothClient : GLib.Object {
 	/**
 	 * Get the type of a Bluetooth device, and use that type to get an icon for it.
 	 */
-	private void get_type_and_icon_for_device(Device1 device, out BluetoothType type, out string icon) {
+	public void get_type_and_icon_for_device(Device1 device, out BluetoothType type, out string icon) {
 		// Special case these joypads
 		if (device.name == "ION iCade Game Controller" || device.name == "8Bitdo Zero GamePad") {
 			type = BluetoothType.JOYPAD;
@@ -237,24 +237,9 @@ class BluetoothClient : GLib.Object {
 			});
 		} else if (iface is Device1) {
 			unowned Device1 device = iface as Device1;
-
-			if (device.paired) device_added(device);
+			device_added(device);
 
 			((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
-				var connected = changed.lookup_value("Connected", new VariantType("b"));
-				if (connected != null) {
-					check_powered();
-				}
-
-				var paired = changed.lookup_value("Paired", new VariantType("b"));
-				if (paired == null) return;
-
-				// Add or remove the device if it is paired or not
-				if (device.paired) {
-					upower_devices[((DBusProxy) device).get_object_path()] = null;
-					device_added(device);
-				} else device_removed(device);
-
 				check_powered();
 			});
 
