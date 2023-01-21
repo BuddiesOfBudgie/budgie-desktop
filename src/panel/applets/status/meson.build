@@ -21,7 +21,6 @@ applet_status_resources = gnome.compile_resources(
 applet_status_sources = [
     'BluetoothClient.vala',
     'BluetoothDBus.vala',
-    'BluetoothDevice.vala',
     'BluetoothEnums.vala',
     'BluetoothIndicator.vala',
     'StatusApplet.vala',

@@ -161,12 +161,7 @@ public class BluetoothIndicator : Bin {
 	private void add_device(Device1 device) {
 		debug("Bluetooth device added: %s", device.alias);
 
-		BluetoothType type = 0;
-		string? icon = null;
-		client.get_type_and_icon_for_device(device, out type, out icon);
-
-		var device_obj = new BluetoothDevice(device, type, icon);
-		var widget = new BluetoothDeviceWidget(device_obj);
+		var widget = new BluetoothDeviceWidget(device);
 
 		widget.properties_updated.connect(() => {
 			client.check_powered();
@@ -182,8 +177,7 @@ public class BluetoothIndicator : Bin {
 
 		devices_box.foreach((row) => {
 			var child = ((ListBoxRow) row).get_child() as BluetoothDeviceWidget;
-			var proxy = child.device.proxy as Device1;
-			if (proxy.address == device.address) {
+			if (child.device.address == device.address) {
 				row.destroy();
 			}
 		});
@@ -200,9 +194,9 @@ public class BluetoothIndicator : Bin {
 		var a_device = a.get_child() as BluetoothDeviceWidget;
 		var b_device = b.get_child() as BluetoothDeviceWidget;
 
-		if (((Device1) a_device.device.proxy).connected && ((Device1) b_device.device.proxy).connected) return strcmp(a_device.device.alias, b_device.device.alias);
-		else if (((Device1) a_device.device.proxy).connected) return -1; // A should go before B
-		else if (((Device1) b_device.device.proxy).connected) return 1; // B should go before A
+		if (a_device.device.connected && b_device.device.connected) return strcmp(a_device.device.alias, b_device.device.alias);
+		else if (a_device.device.connected) return -1; // A should go before B
+		else if (b_device.device.connected) return 1; // B should go before A
 		else return strcmp(a_device.device.alias, b_device.device.alias);
 	}
 }
@@ -214,7 +208,7 @@ public class BluetoothDeviceWidget : Box {
 	private Revealer? revealer = null;
 	private Button? connection_button = null;
 
-	public BluetoothDevice device { get; construct; }
+	public Device1 device { get; construct; }
 
 	public signal void properties_updated();
 
@@ -224,7 +218,7 @@ public class BluetoothDeviceWidget : Box {
 		// Body
 		var grid = new Grid();
 
-		image = new Image.from_icon_name(device.icon, LARGE_TOOLBAR) {
+		image = new Image.from_icon_name(device.icon ?? "bluetooth", LARGE_TOOLBAR) {
 			halign = START,
 			margin_end = 6
 		};
@@ -260,7 +254,7 @@ public class BluetoothDeviceWidget : Box {
 		revealer.add(revealer_body);
 
 		// Signals
-		device.proxy.g_properties_changed.connect(update_status);
+		((DBusProxy) device).g_properties_changed.connect(update_status);
 
 		// Packing
 		grid.attach(image, 0, 0);
@@ -274,7 +268,7 @@ public class BluetoothDeviceWidget : Box {
 		show_all();
 	}
 
-	public BluetoothDeviceWidget(BluetoothDevice device) {
+	public BluetoothDeviceWidget(Device1 device) {
 		Object(
 			device: device,
 			orientation: Orientation.VERTICAL,
@@ -289,10 +283,10 @@ public class BluetoothDeviceWidget : Box {
 	private void on_connection_button_clicked() {
 		connection_button.sensitive = false;
 
-		if (((Device1) device.proxy).connected) {
-			((Device1) device.proxy).disconnect.begin((obj, res) => {
+		if (device.connected) {
+			device.disconnect.begin((obj, res) => {
 				try {
-					((Device1) device.proxy).disconnect.end(res);
+					device.disconnect.end(res);
 				} catch (Error e) {
 					warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
 				}
@@ -300,9 +294,9 @@ public class BluetoothDeviceWidget : Box {
 				connection_button.sensitive = true;
 			});
 		} else {
-			((Device1) device.proxy).connect.begin((obj, res) => {
+			device.connect.begin((obj, res) => {
 				try {
-					((Device1) device.proxy).connect.end(res);
+					device.connect.end(res);
 				} catch (Error e) {
 					warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
 				}
@@ -313,7 +307,7 @@ public class BluetoothDeviceWidget : Box {
 	}
 
 	private void update_status() {
-		if (((Device1) device.proxy).connected) {
+		if (device.connected) {
 			status_label.set_text(_("Connected"));
 			connection_button.label = _("Disconnect");
 		} else {
@@ -322,7 +316,7 @@ public class BluetoothDeviceWidget : Box {
 		}
 
 		// Device isn't paired
-		if (!((Device1) device.proxy).paired) {
+		if (!device.paired) {
 			status_label.set_text(_("Not paired"));
 			connection_button.sensitive = false;
 		}
