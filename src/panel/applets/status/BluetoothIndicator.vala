@@ -58,7 +58,6 @@ public class BluetoothIndicator : Bin {
 		// Header label
 		var switch_label = new Label(_("Bluetooth"));
 		switch_label.get_style_context().add_class("dim-label");
-		main_header.pack_start(switch_label);
 
 		// Settings button
 		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
@@ -66,14 +65,16 @@ public class BluetoothIndicator : Bin {
 		};
 		button.get_style_context().add_class(STYLE_CLASS_FLAT);
 		button.clicked.connect(on_settings_activate);
-		main_header.pack_end(button, false, false, 0);
 
 		// Bluetooth switch
 		bluetooth_switch = new Switch() {
 			tooltip_text = _("Turn Bluetooth on or off")
 		};
 		bluetooth_switch.notify["active"].connect(on_switch_activate);
+
+		main_header.pack_start(switch_label);
 		main_header.pack_end(bluetooth_switch);
+		main_header.pack_end(button, false, false, 0);
 
 		main_page.pack_start(main_header);
 		main_page.pack_start(new Separator(HORIZONTAL), false, false, 1);
