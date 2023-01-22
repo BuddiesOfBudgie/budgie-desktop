@@ -90,7 +90,7 @@ public class BluetoothIndicator : Bin {
 
 		// Footer
 		var footer = new Box(HORIZONTAL, 0);
-		pairing_button = new Button.with_label(_("Pairing"));
+		pairing_button = new Button.with_label(_("Start Pairing"));
 		pairing_button.clicked.connect(on_pairing_clicked);
 		footer.pack_start(pairing_button);
 
@@ -194,7 +194,7 @@ public class BluetoothIndicator : Bin {
 
 						// Set the normal filter and update our state
 						devices_box.set_filter_func(filter_paired);
-						pairing_button.label = _("Pairing");
+						pairing_button.label = _("Start Pairing");
 						pairing = false;
 					} catch (Error e) {
 						warning("Error stopping discovery on adapter %s: %s", adapter.alias, e.message);
