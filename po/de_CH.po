@@ -2,22 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-07-21 14:48+0000\n"
-"Last-Translator: Girtablulu <flinux@vongellhorn.ch>\n"
-"Language-Team: German (Swiss High) <http://translate.getsol.us/projects/"
-"budgie-desktop/translations/de_CH/>\n"
-"Language: de_CH\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: German (Switzerland) (https://www.transifex.com/buddiesofbudgie/teams/129844/de_CH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: de_CH\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -62,7 +64,9 @@ msgstr "Entfernen der Leiste bestätigen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Soll wirklich diese Leiste entfernen werden? Dies kann nicht rückgängig gemacht werden."
+msgstr ""
+"Soll wirklich diese Leiste entfernen werden? Dies kann nicht rückgängig "
+"gemacht werden."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -77,8 +81,10 @@ msgid "Confirm applet removal"
 msgstr "Entfernen des Applets bestätigen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Wirklich dieses Applet entfernen? Dies kann nicht rückgängig gemacht werden."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Wirklich dieses Applet entfernen? Dies kann nicht rückgängig gemacht werden."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -122,8 +128,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Modale Dialoge an Fenster verankern"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Modale Dialoge werden am Hauptfenster verankert und bewegen sich gemeinsam, wenn diese verschoben werden."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Modale Dialoge werden am Hauptfenster verankert und bewegen sich gemeinsam, "
+"wenn diese verschoben werden."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -146,15 +156,22 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "Deaktiviere Nachtlicht falls Fenster im Vollbildmodus sind"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Deaktiviert Nachtlicht falls Fenster im Vollbildmodus sind. Reaktiviert wenn Vollbild verlassen wird."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Deaktiviert Nachtlicht falls Fenster im Vollbildmodus sind. Reaktiviert wenn"
+" Vollbild verlassen wird."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Deaktiviere Benachrichtigungen solange ein Fenster im Vollbildmodus ist"
+msgstr ""
+"Deaktiviere Benachrichtigungen solange ein Fenster im Vollbildmodus ist"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Deaktiviert Benachrichtigungen solange ein Fenster im Vollbildmodus ist. "
 "Diese werden angezeigt wenn Vollbildmodus verlassen wird."
@@ -164,15 +181,21 @@ msgid "Automatic tiling"
 msgstr "Automatisches Andocken"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Fenster passen sich automatisch ihre Grösse an, wenn sie zum oberen Rand des Bildschirms oder in die Ecken gezogen werden."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Fenster passen sich automatisch ihre Grösse an, wenn sie zum oberen Rand des"
+" Bildschirms oder in die Ecken gezogen werden."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "Wechselt Fensterfokus bei Mauskontakt"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr "Fokussiert automatisch das Fenster, das sich unter der Maus befindet."
 
 #: src/panel/settings/settings_wm.vala:83
@@ -180,16 +203,24 @@ msgid "Disable unredirection of windows"
 msgstr "Nicht-Weiterleitung von Fenstern deaktivieren"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Diese Option ist für erfahrene Benutzer. Verwenden, falls graphische oder Performance-Probleme mit dedizierten GPUs auftreten."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Diese Option ist für erfahrene Benutzer. Verwenden, falls graphische oder "
+"Performance-Probleme mit dedizierten GPUs auftreten."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Zeige alle Fenster im Anwendungsumschalter"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "Alle Tabs werden im Anwendungsumschalter angezeigt unabhängig vom verwendeten Arbeitsbereich."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Alle Tabs werden im Anwendungsumschalter angezeigt unabhängig vom "
+"verwendeten Arbeitsbereich."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -245,8 +276,10 @@ msgid "Built-in theme"
 msgstr "Eingebautes Thema"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Wenn aktiviert wird der integrierte Stil vom Desktop Thema überschrieben"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Wenn aktiviert wird der integrierte Stil vom Desktop Thema überschrieben"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -277,23 +310,33 @@ msgid "Set Raven position"
 msgstr "Raven-Position einstellen"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Lege fest, auf welcher Seite des Bildschirms sich Raven öffnen soll. Wenn auf Automatisch eingestellt, öffnet sich Raven dort, wo seine Hauptleiste ist."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Lege fest, auf welcher Seite des Bildschirms sich Raven öffnen soll. Wenn "
+"auf Automatisch eingestellt, öffnet sich Raven dort, wo seine Hauptleiste "
+"ist."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Lautstärke über 100% erlauben"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Ermöglicht es die Lautstärke über die Audioeinstellungen und das Sound Widget in Raven auf bis zu 150% zu erhöhen."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Ermöglicht es die Lautstärke über die Audioeinstellungen und das Sound "
+"Widget in Raven auf bis zu 150% zu erhöhen."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Wochennummern im Kalender anzeigen"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "Diese Einstellung zeigt oder versteckt Kalenderwochen im Kalender."
 
 #: src/panel/settings/settings_raven.vala:78
@@ -310,7 +353,8 @@ msgstr "Zeige Audio-Ausgang Widget"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Zeigt oder versteckt das Audio-Ausgang Widget in Ravens Applet Abschnitt."
+msgstr ""
+"Zeigt oder versteckt das Audio-Ausgang Widget in Ravens Applet Abschnitt."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -325,7 +369,9 @@ msgid "Show Media Playback Controls Widget"
 msgstr "Mediensteuerung Widget anzeigen"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr "Zeigt oder versteckt die Mediensteuerung in Ravens Applet Abschnitt."
 
 #: src/panel/settings/settings_raven.vala:102
@@ -360,7 +406,8 @@ msgstr "Desktop"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -370,7 +417,8 @@ msgstr "Desktop-Symbole"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Festlegen, ob Symbole auf dem Desktop zugelassen werden sollen."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -399,7 +447,8 @@ msgstr "Papierkorb"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Fügt eine Verknüpfung zum Papierkorb auf dem Desktop hinzu."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -415,8 +464,11 @@ msgid "Number of virtual desktops"
 msgstr "Anzahl an Virtuellen Desktops"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Anzahl an Virtuellen Desktops / Arbeitsplätze die automatisch bei Systemstart kreiert werden."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"Anzahl an Virtuellen Desktops / Arbeitsplätze die automatisch bei "
+"Systemstart kreiert werden."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -432,8 +484,11 @@ msgid "Click Policy"
 msgstr "Klick-Regel"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
-msgstr "Die Klick-Regel bestimmt, ob wir Objekte mit einem Einzel- oder Doppelklick öffnen sollen."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"Die Klick-Regel bestimmt, ob wir Objekte mit einem Einzel- oder Doppelklick "
+"öffnen sollen."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -554,7 +609,8 @@ msgstr "Grösse"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Lege die Grösse (Breite oder Höhe, je nach Ausrichtung) dieser Leiste fest"
+msgstr ""
+"Lege die Grösse (Breite oder Höhe, je nach Ausrichtung) dieser Leiste fest"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -562,7 +618,9 @@ msgstr "Automatisch verstecken"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Wenn aktiviert wird diese Leiste ausgeblendet, um die Bildschirmfläche zu maximieren"
+msgstr ""
+"Wenn aktiviert wird diese Leiste ausgeblendet, um die Bildschirmfläche zu "
+"maximieren"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -585,16 +643,24 @@ msgid "Stylize regions"
 msgstr "Regionen stilisieren"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Eine Hinweis zur Leiste hinzufügen, sodass jede der drei Hauptbereiche unterschiedlich aussehen können."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Eine Hinweis zur Leiste hinzufügen, sodass jede der drei Hauptbereiche "
+"unterschiedlich aussehen können."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Dock-Modus"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Im Dock-Modus wird die Leiste den kleinstmöglichen Platz einnehmen und so wertvollen Raum freigeben"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Im Dock-Modus wird die Leiste den kleinstmöglichen Platz einnehmen und so "
+"wertvollen Raum freigeben"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -693,7 +759,8 @@ msgstr "Monospace"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Schriftart mit festgelegter Breite für textbasierte Anwendungen festlegen."
+msgstr ""
+"Schriftart mit festgelegter Breite für textbasierte Anwendungen festlegen."
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -1139,7 +1206,8 @@ msgstr "Aus Favoriten entfernen"
 msgid "Favorite"
 msgstr "Zu Favoriten hinzufügen"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1327,8 +1395,12 @@ msgid "Budgie Panel"
 msgstr "Budgie Leiste"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Andere Anwendungen öffnen und Funktionalitäten hinzufügen wie z.B. Hilfsmittel, um Fenster zu verwalten oder die Uhrzeit anzuzeigen."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Andere Anwendungen öffnen und Funktionalitäten hinzufügen wie z.B. "
+"Hilfsmittel, um Fenster zu verwalten oder die Uhrzeit anzuzeigen."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

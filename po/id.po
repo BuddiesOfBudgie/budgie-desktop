@@ -1,26 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Abdul Rohman Wahid <the@wahwahid.com>, 2015-2016
-# Yurizal Susanto <rizal.sagi@gmail.com>, 2016
-# Yurizal Susanto <rizal.sagi@gmail.com>, 2016
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-02-19 11:12+0000\n"
-"Last-Translator: Andrian Roshandy <a.nomansky001@gmail.com>\n"
-"Language-Team: Indonesian <http://translate.getsol.us/projects/"
-"budgie-desktop/translations/id/>\n"
-"Language: id\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Indonesian (https://www.transifex.com/buddiesofbudgie/teams/129844/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.8\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -65,7 +64,9 @@ msgstr "Konfirmasi penghapusan panel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Apakah Anda yakin ingin menghapus panel ini? Tindakan ini tidak dapat diurungkan."
+msgstr ""
+"Apakah Anda yakin ingin menghapus panel ini? Tindakan ini tidak dapat "
+"diurungkan."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -80,8 +81,11 @@ msgid "Confirm applet removal"
 msgstr "Konfirmasi penghapusan applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Apakah Anda yakin ingin menghapus applet ini? Tindakan ini tidak dapat diurungkan."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Apakah Anda yakin ingin menghapus applet ini? Tindakan ini tidak dapat "
+"diurungkan."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -125,8 +129,11 @@ msgid "Attach modal dialogs to windows"
 msgstr "Lekatkan kotak dialog pada jendela"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Kotak dialog akan melekat pada jendela induk dan ikut bergerak saat diseret."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Kotak dialog akan melekat pada jendela induk dan ikut bergerak saat diseret."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -146,20 +153,25 @@ msgstr "Pusatkan jendela yang baru saja diluncurkan pada layar saat ini."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Nonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh"
+msgstr ""
+"Nonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr ""
-"Menonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh dan "
-"sebaliknya."
+"Menonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh dan"
+" sebaliknya."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
 msgstr "Jeda notifikasi saat jendela dalam keadaan layar penuh"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Mencegah notifikasi muncul saat jendela dalam keadaan layar penuh dan "
 "sebaliknya."
@@ -169,15 +181,21 @@ msgid "Automatic tiling"
 msgstr "Otomatis mengubin"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Jendela akan mengubin atau menempatkan diri secara otomatis saat diseret ke atas atau sudut layar."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Jendela akan mengubin atau menempatkan diri secara otomatis saat diseret ke "
+"atas atau sudut layar."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "Aktifkan peralihan fokus jendela saat kursor masuk dan keluar"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr ""
 "Memungkinkan fokus jendela akan aktif ketika kursor memasuki area jendela "
 "dan sebaliknya."
@@ -187,7 +205,9 @@ msgid "Disable unredirection of windows"
 msgstr "Nonaktifkan pengalihan jendela"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
 msgstr ""
 "Opsi ini untuk pengguna tingkat lanjut. Terapkan ini jika Anda mengalami "
 "kendala grafis atau performa dengan GPU tersendiri (dedicated)."
@@ -197,8 +217,12 @@ msgid "Show all windows in tab switcher"
 msgstr "Tampilkan seluruh jendela di pengalih tab"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "Seluruh tab akan ditampilkan di pengalih tab, terlepas dari ruang kerja yang digunakan."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Seluruh tab akan ditampilkan di pengalih tab, terlepas dari ruang kerja yang"
+" digunakan."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -254,7 +278,8 @@ msgid "Built-in theme"
 msgstr "Tema bawaan"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr "Saat diaktifkan, tema bawaan akan menggantikan gaya komponen desktop"
 
 #: src/panel/settings/settings_style.vala:86
@@ -286,23 +311,32 @@ msgid "Set Raven position"
 msgstr "Atur letak Raven"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Atur sisi layar sebelah manakah Raven akan terbuka. Jika diatur ke Otomatis, Raven akan terbuka di mana panel induknya berada."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Atur sisi layar sebelah manakah Raven akan terbuka. Jika diatur ke Otomatis,"
+" Raven akan terbuka di mana panel induknya berada."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Izinkan menaikkan volume melebihi 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Memungkinkan peningkatan volume melalui Pengaturan Suara maupun Widget Keluaran Suara pada Raven hingga 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Memungkinkan peningkatan volume melalui Pengaturan Suara maupun Widget "
+"Keluaran Suara pada Raven hingga 150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Munculkan tampilan nomor minggu pada Kalender"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "Pengaturan ini untuk menampilkan nomor minggu pada widget Kalender."
 
 #: src/panel/settings/settings_raven.vala:78
@@ -311,7 +345,8 @@ msgstr "Tampilkan Widget Kalender"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Menampilkan atau menyembunyikan Widget Kalender di bagian Applet Raven."
+msgstr ""
+"Menampilkan atau menyembunyikan Widget Kalender di bagian Applet Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -319,7 +354,9 @@ msgstr "Tampilkan Widget Keluaran Suara"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Menampilkan atau menyembunyikan Widget Keluaran Suara di bagian Applet Raven."
+msgstr ""
+"Menampilkan atau menyembunyikan Widget Keluaran Suara di bagian Applet "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -327,15 +364,21 @@ msgstr "Tampilkan Widget Masukan Mikrofon"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Menampilkan atau menyembunyikan Widget Masukan Mikrofon di bagian Applet Raven."
+msgstr ""
+"Menampilkan atau menyembunyikan Widget Masukan Mikrofon di bagian Applet "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Tampilkan Widget Kendali Pemutaran Media"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Menampilkan atau menyembunyikan Widget Kendali Pemutaran Media (MPRIS) di bagian Applet Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Menampilkan atau menyembunyikan Widget Kendali Pemutaran Media (MPRIS) di "
+"bagian Applet Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -369,7 +412,8 @@ msgstr "Desktop"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -379,7 +423,8 @@ msgstr "Ikon Desktop"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Atur apakah ikon pada desktop diperbolehkan."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -408,7 +453,8 @@ msgstr "Sampah"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Tambahkan pintasan ke direktori Sampah pada desktop."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -424,10 +470,11 @@ msgid "Number of virtual desktops"
 msgstr "Jumlah desktop virtual"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
-"Jumlah desktop virtual / ruang kerja yang akan dibuat secara otomatis ketika "
-"awal memulai."
+"Jumlah desktop virtual / ruang kerja yang akan dibuat secara otomatis ketika"
+" awal memulai."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -443,10 +490,11 @@ msgid "Click Policy"
 msgstr "Aturan Klik"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
-"Aturan Klik menentukan apakah membuka item harus dengan sekali atau dua kali "
-"klik."
+"Aturan Klik menentukan apakah membuka item harus dengan sekali atau dua kali"
+" klik."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -575,7 +623,9 @@ msgstr "Otomatis sembunyi"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Bila disetel, panel ini akan sembunyi dari pandangan untuk memaksimalkan ruang layar"
+msgstr ""
+"Bila disetel, panel ini akan sembunyi dari pandangan untuk memaksimalkan "
+"ruang layar"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -600,7 +650,9 @@ msgid "Stylize regions"
 msgstr "Corak bidang"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
 msgstr ""
 "Menambahkan sentuhan pada panel sehingga memungkinan area antar panel "
 "memiliki tema yang berbeda."
@@ -610,8 +662,12 @@ msgid "Dock mode"
 msgstr "Mode dok"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Saat dalam mode dok, panel akan menggunakan ruang seminimal mungkin, membebaskan lebih banyak ruang layar"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Saat dalam mode dok, panel akan menggunakan ruang seminimal mungkin, "
+"membebaskan lebih banyak ruang layar"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -964,7 +1020,8 @@ msgstr "Kata sandi yang Anda masukkan tidak tepat"
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Terjadi kesalahan yang tidak diketahui saat berusaha menambatkan volume ini"
+msgstr ""
+"Terjadi kesalahan yang tidak diketahui saat berusaha menambatkan volume ini"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1066,7 +1123,8 @@ msgstr "Timer (menit)"
 #. there's already an active tray, create an informative icon with a popover
 #: src/applets/tray/TrayApplet.vala:114
 msgid "Only one instance of the System Tray can be active at a time."
-msgstr "Hanya satu instansiasi dari Sistem Nampan yang dapat aktif dalam satu waktu."
+msgstr ""
+"Hanya satu instansiasi dari Sistem Nampan yang dapat aktif dalam satu waktu."
 
 #: src/applets/tray/TrayApplet.vala:140
 msgid "The System Tray failed to initialize."
@@ -1157,7 +1215,8 @@ msgstr "Batal Favorit"
 msgid "Favorite"
 msgstr "Favorit"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1345,8 +1404,12 @@ msgid "Budgie Panel"
 msgstr "Panel Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Luncurkan aplikasi lain dan sediakan berbagai utilitas untuk mengelola jendela, menunjukkan waktu, dll."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Luncurkan aplikasi lain dan sediakan berbagai utilitas untuk mengelola "
+"jendela, menunjukkan waktu, dll."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Andris Krišlauks <krislauks@gmail.com>, 2016
-# Zigmars Dzenis <zigmars@gmail.com>, 2016,2018
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-03-17 07:32+0000\n"
-"Last-Translator: Joshua Strobl <joshua@getsol.us>\n"
-"Language-Team: Latvian <http://translate.getsol.us/projects/budgie-desktop/translations/lv/>\n"
-"Language: lv\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Latvian (https://www.transifex.com/buddiesofbudgie/teams/129844/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"Language: lv\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -78,7 +79,8 @@ msgid "Confirm applet removal"
 msgstr ""
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
@@ -123,7 +125,9 @@ msgid "Attach modal dialogs to windows"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:46
@@ -147,7 +151,9 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:64
@@ -155,7 +161,9 @@ msgid "Pause notifications when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
@@ -163,7 +171,9 @@ msgid "Automatic tiling"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:76
@@ -171,7 +181,9 @@ msgid "Enable window focus change on mouse enter and leave"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
@@ -179,7 +191,9 @@ msgid "Disable unredirection of windows"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
@@ -187,7 +201,9 @@ msgid "Show all windows in tab switcher"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -228,9 +244,8 @@ msgid "Set the globally used mouse cursor theme"
 msgstr ""
 
 #: src/panel/settings/settings_style.vala:61
-#, fuzzy
 msgid "Notification Position"
-msgstr "Paziņojumi"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Set the location for notification popups"
@@ -245,7 +260,8 @@ msgid "Built-in theme"
 msgstr "Iebūvētā tēma"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr ""
 
 #: src/panel/settings/settings_style.vala:86
@@ -261,14 +277,12 @@ msgid "Top Left"
 msgstr ""
 
 #: src/panel/settings/settings_style.vala:206
-#, fuzzy
 msgid "Bottom Left"
-msgstr "Taustiņš"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:208
-#, fuzzy
 msgid "Bottom Right"
-msgstr "Taustiņš"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
@@ -279,7 +293,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -287,15 +303,20 @@ msgid "Allow raising volume above 100%"
 msgstr "Atļaut palielināt skaļumu virs 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Atļauj palielināt skaļumu skaņas iestatījumos un Raven skaņas izejas logrīkā līdz 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Atļauj palielināt skaļumu skaņas iestatījumos un Raven skaņas izejas logrīkā"
+" līdz 150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Rādīt nedēļu numurus kalendārā"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "Šis iestatījums ieslēdz nedēļas numuru rādīšanu kalendāra logrīkā."
 
 #: src/panel/settings/settings_raven.vala:78
@@ -327,7 +348,9 @@ msgid "Show Media Playback Controls Widget"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:102
@@ -362,7 +385,8 @@ msgstr ""
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -372,7 +396,8 @@ msgstr "Darbvirsmas ikonas"
 msgid "Control whether to allow icons on the desktop."
 msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -401,13 +426,13 @@ msgstr ""
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr ""
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Izmērs"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
@@ -418,7 +443,8 @@ msgid "Number of virtual desktops"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -435,7 +461,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -466,9 +493,8 @@ msgid "Settings"
 msgstr "Iestatījumi"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Noņemt"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -558,7 +584,8 @@ msgstr "Izmērs"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Uzstādiet šī paneļa izmēru (platumu vai augstumu, atkarībā no orientācijas)"
+msgstr ""
+"Uzstādiet šī paneļa izmēru (platumu vai augstumu, atkarībā no orientācijas)"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -566,7 +593,9 @@ msgstr "Automātiski paslēpt"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Kad iestatīts, šis panelis tiks paslēpts no skata, lai paplašinātu vietu uz ekrāna"
+msgstr ""
+"Kad iestatīts, šis panelis tiks paslēpts no skata, lai paplašinātu vietu uz "
+"ekrāna"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -582,14 +611,17 @@ msgstr "Ēna"
 
 #: src/panel/settings/settings_panel.vala:260
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Pievieno dekoratīvu krītošu ēnu, ideāli piemērota necaurredzamiem paneļiem"
+msgstr ""
+"Pievieno dekoratīvu krītošu ēnu, ideāli piemērota necaurredzamiem paneļiem"
 
 #: src/panel/settings/settings_panel.vala:266
 msgid "Stylize regions"
 msgstr "Stilizēt reģionus"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
 msgstr ""
 
 #: src/panel/settings/settings_panel.vala:274
@@ -597,7 +629,9 @@ msgid "Dock mode"
 msgstr "Doka režīms"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
 msgstr "Doka režīmā panelis izmantos pēc iespējas mazāk vietas uz ekrāna"
 
 #: src/panel/settings/settings_autostart.vala:134
@@ -716,9 +750,8 @@ msgid "Medium"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:83
-#, fuzzy
 msgid "Slight"
-msgstr "Pa labi"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Hinting"
@@ -798,9 +831,8 @@ msgid "Caffeine Mode"
 msgstr "Caffeine režīms"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Iestatījumi"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -1146,7 +1178,8 @@ msgstr "Izņemt no favorītiem"
 msgid "Favorite"
 msgstr "Pievienot favorītiem"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1232,9 +1265,8 @@ msgid "Always show"
 msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:1
-#, fuzzy
 msgid "Enable notification"
-msgstr "Nav jaunu ziņojumu"
+msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
@@ -1335,7 +1367,9 @@ msgid "Budgie Panel"
 msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
 msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2

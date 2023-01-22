@@ -1,26 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Seán Ó Séaghdha <sean.anseo@gmail.com>, 2018
-# Willow McCormack <willowmcc.ie@gmail.com>, 2016
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-03-21 19:28+0000\n"
-"Last-Translator: Seán Ó Séaghdha <sean.anseo@gmail.com>\n"
-"Language-Team: Irish <http://translate.getsol.us/projects/budgie-desktop/"
-"translations/ga/>\n"
-"Language: ga\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Irish (https://www.transifex.com/buddiesofbudgie/teams/129844/ga/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : "
-"4);\n"
-"X-Generator: Weblate 3.8\n"
+"Language: ga\n"
+"Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -82,7 +81,8 @@ msgid "Confirm applet removal"
 msgstr "Dearbhaigh baint feidhmchláirín"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
 "An bhfuil tú cinnte gur maith leat an feidhmchláirín seo a bhaint? \n"
 "Ní féidir an gníomh seo a chur ar ceal."
@@ -129,8 +129,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Ceangail dialóga módúla le fuinneoga"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Ceanglófar dialóga módúla lena máthairfhuinneoga is bogfaidh siad le chéile agus iad á tharraingt."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Ceanglófar dialóga módúla lena máthairfhuinneoga is bogfaidh siad le chéile "
+"agus iad á tharraingt."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -153,15 +157,21 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "Díchumasaigh mód Sholas Oíche nuair atá fuinneoga lánscáileáin ann"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Díchumasaítear mód Sholas Oíche nuair atá fuinneog i mód lánscáileáin. Cumasaítear arís é ag fágáil lánscáileán."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Díchumasaítear mód Sholas Oíche nuair atá fuinneog i mód lánscáileáin. "
+"Cumasaítear arís é ag fágáil lánscáileán."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
 msgstr "Cuir fógraí ar sos agus fuinneoga lánscáileáin ann"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Cuirtear cosc ar fhógraí agus fuinneog i mód lánscáileáin. Cuirtear i "
 "bhfeidhm iad arís ag fágáil lánscáileán."
@@ -171,31 +181,45 @@ msgid "Automatic tiling"
 msgstr "Tíliú uathoibríoch"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Tíleofar fuinneoga go huathoibríoch nuair a tharraingíonn tú iad go barr an scáileán nó chuig a chúinní."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Tíleofar fuinneoga go huathoibríoch nuair a tharraingíonn tú iad go barr an "
+"scáileán nó chuig a chúinní."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "Cumasaigh athrú fhócas fuinneoige ar dul isteach nó fágáil na luiche"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Cumasaítear fócas fuinneoige a bheith ann nuair a thagann an luch isteach san fhuinneog agus díchumasaítear é nuair a fhágann an luch an fhuinneog."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Cumasaítear fócas fuinneoige a bheith ann nuair a thagann an luch isteach "
+"san fhuinneog agus díchumasaítear é nuair a fhágann an luch an fhuinneog."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Díchumasaigh neamh-atreorú fuinneog (unredirection)"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Rogha le haghaidh ardúsáideoirí. Bain úsáid as seo má tá fadhbanna grafacha nó feidhmíochta agat maidir le GPUanna tiomnaithe."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Rogha le haghaidh ardúsáideoirí. Bain úsáid as seo má tá fadhbanna grafacha "
+"nó feidhmíochta agat maidir le GPUanna tiomnaithe."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Taispeáin gach fuinneog sa mhalartóir cluaisín"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr "Taispeánfar cluaisíní ó gach aon spás oibre."
 
 #: src/panel/settings/settings_wm.vala:97
@@ -252,7 +276,8 @@ msgid "Built-in theme"
 msgstr "Téama ionsuite"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr "Sáróidh an téama ionsuite an stíl do na comhpháirteanna deisce"
 
 #: src/panel/settings/settings_style.vala:86
@@ -284,7 +309,9 @@ msgid "Set Raven position"
 msgstr "Socraigh suíomh Raven"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 "Socraigh an taobh scáileáin ar a n-osclófar Raven. Más Uathoibríoch an "
 "rogha, osclóidh Raven san áit ina bhfuil a mháthairphainéal."
@@ -294,16 +321,23 @@ msgid "Allow raising volume above 100%"
 msgstr "Lig ardú fuaime os cionn 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Ligeann sé seo duit an fhuaim a ardú go 150% i Socruithe Fuaime agus sa Ghiuirléid Aschur Fuaime in Raven."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Ligeann sé seo duit an fhuaim a ardú go 150% i Socruithe Fuaime agus sa "
+"Ghiuirléid Aschur Fuaime in Raven."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Cumasaigh taispeáint uimhreacha na seachtainí san Fhéilire"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Cumasaíonn an socruithe seo taispeáint uimhreacha na seachtainí sa ghiuirléid Féilire."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Cumasaíonn an socruithe seo taispeáint uimhreacha na seachtainí sa "
+"ghiuirléid Féilire."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -311,7 +345,8 @@ msgstr "Taispeáin Giuirléid Féilire"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Taispeáin nó ceil an Ghiuirléid Féilire sa rannóg Feidhmchláiríní Raven."
+msgstr ""
+"Taispeáin nó ceil an Ghiuirléid Féilire sa rannóg Feidhmchláiríní Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -319,7 +354,9 @@ msgstr "Taispeáin Giuirléid Aschur Fuaime"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Taispeáin nó ceil an Ghiuirléid Aschur Fuaime sa rannóg Feidhmchláiríní Raven."
+msgstr ""
+"Taispeáin nó ceil an Ghiuirléid Aschur Fuaime sa rannóg Feidhmchláiríní "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -327,15 +364,21 @@ msgstr "Taispeáin Giuirléid Ionchur Micreafóin"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Taispeáin nó ceil an Ghiuirléid Ionchur Micreafóin sa rannóg Feidhmchláiríní Raven."
+msgstr ""
+"Taispeáin nó ceil an Ghiuirléid Ionchur Micreafóin sa rannóg Feidhmchláiríní"
+" Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Taispeáin Giuirléid Rialtáin Ilmheán"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Taispeáin nó ceil an Ghiuirléid Rialtáin Ilmheán (MPRIS) sa rannóg Feidhmchláiríní Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Taispeáin nó ceil an Ghiuirléid Rialtáin Ilmheán (MPRIS) sa rannóg "
+"Feidhmchláiríní Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -369,7 +412,8 @@ msgstr "Deasc"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -379,7 +423,8 @@ msgstr "Deilbhíní Deisce"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Rialaigh an mbeidh deilbhíní le feiceáil ar an deasc."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -408,7 +453,8 @@ msgstr "Bruscar"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Cuir aicearra chuig an fillteán Bruscair ar an deasc."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -424,8 +470,10 @@ msgid "Number of virtual desktops"
 msgstr "Líon na ndeasc fíorúil"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Líon na ndeasc fíorúil / spásanna oibre fíorúla le cruthú ar am tosaithe."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"Líon na ndeasc fíorúil / spásanna oibre fíorúla le cruthú ar am tosaithe."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -441,7 +489,8 @@ msgid "Click Policy"
 msgstr "Polasaí Cliceála"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 "Socraíonn an Polasaí Cliceála cé acu clic amháin nó déchliceáil a osclóidh "
 "míreanna."
@@ -565,7 +614,8 @@ msgstr "Méid"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Socraigh méid an phainéil seo (leithead nó airde, de réir a threoshuímh)"
+msgstr ""
+"Socraigh méid an phainéil seo (leithead nó airde, de réir a threoshuímh)"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -573,7 +623,9 @@ msgstr "Ceil go huathoibríoch"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "I bhfeidhm, ceilfear an painéal seo chun an méid is mó scáileáin a thaispeáint"
+msgstr ""
+"I bhfeidhm, ceilfear an painéal seo chun an méid is mó scáileáin a "
+"thaispeáint"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -596,16 +648,23 @@ msgid "Stylize regions"
 msgstr "Stíligh réigiúin"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Cuir leid leis an bpainéal sa chaoi gur féidir stíl ar leith a chur ar na trí réigiún sa phainéal."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Cuir leid leis an bpainéal sa chaoi gur féidir stíl ar leith a chur ar na "
+"trí réigiún sa phainéal."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Mód Duga"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Nuair atá mód duga i bhfeidhm, úsáideann an painéal an mhéid is lú scáileáin"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Nuair atá mód duga i bhfeidhm, úsáideann an painéal an mhéid is lú scáileáin"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -948,7 +1007,8 @@ msgstr "Feistigh agus oscail \"%s\""
 #: src/applets/places-indicator/VolumeItem.vala:73
 #: src/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Cuir isteach an pasfhrása criptiúcháin chun an t-imleabhar seo a dhíghlasáil"
+msgstr ""
+"Cuir isteach an pasfhrása criptiúcháin chun an t-imleabhar seo a dhíghlasáil"
 
 #: src/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
@@ -956,7 +1016,8 @@ msgstr "Níor chuir tú isteach an focal faire ceart"
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Tharla earráid anaithnid le linn iarracht ar fheistiú an imleabhair seo"
+msgstr ""
+"Tharla earráid anaithnid le linn iarracht ar fheistiú an imleabhair seo"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1153,7 +1214,8 @@ msgstr "Bain de na Ceanáin"
 msgid "Favorite"
 msgstr "Cuir leis na Ceanáin"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1341,8 +1403,12 @@ msgid "Budgie Panel"
 msgstr "Painéal Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Lainseáil feidhmchláir agus cuir áirgí ar fáil chun fuinneoga a bhainistiú, an t-am a thaispeáint, srl."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Lainseáil feidhmchláir agus cuir áirgí ar fáil chun fuinneoga a bhainistiú, "
+"an t-am a thaispeáint, srl."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
