@@ -132,11 +132,6 @@ if prefix == '/usr' or prefix == '/usr/local'
     cdata.set_quoted('RAVEN_PLUGIN_DATADIR_SECONDARY', join_paths(secondary_datadir_root, 'raven-plugins'))
 endif
 
-with_bluetooth = get_option('with-bluetooth')
-if with_bluetooth == true
-  add_project_arguments('-D', 'with_bluetooth', language: 'vala')
-endif
-
 with_hibernate = get_option('with-hibernate')
 if with_hibernate == true
   add_project_arguments('-D', 'WITH_HIBERNATE', language: 'vala')

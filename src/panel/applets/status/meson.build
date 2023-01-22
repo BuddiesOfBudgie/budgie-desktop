@@ -41,11 +41,6 @@ applet_status_deps = [
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
-# TODO: Nuke
-if with_bluetooth == true
-    applet_status_deps += dependency('gnome-bluetooth-1.0', version: '>= 3.34.0')
-endif
-
 shared_library(
     'statusapplet',
     sources: applet_status_sources,
