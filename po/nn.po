@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Anton Pletten, 2017-2018
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-07-21 14:48+0000\n"
-"Last-Translator: Anton Pletten <an1000kg@gmail.com>\n"
-"Language-Team: Norwegian Nynorsk <http://translate.getsol.us/projects/"
-"budgie-desktop/translations/nn/>\n"
-"Language: nn\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Norwegian Nynorsk (https://www.transifex.com/buddiesofbudgie/teams/129844/nn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: nn\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -64,7 +65,8 @@ msgstr "Stadfest fjerning av panelet"
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr ""
-"Er du sikker på at du vil fjerne panelet? Du kan ikkje angre denne handlinga."
+"Er du sikker på at du vil fjerne panelet? Du kan ikkje angre denne "
+"handlinga."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -79,7 +81,8 @@ msgid "Confirm applet removal"
 msgstr "Stadfest fjerning av miniprogrammet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
 "Er du sikker på at du vil fjerne miniprogrammet? Du kan ikkje angre denne "
 "handlinga."
@@ -126,7 +129,9 @@ msgid "Attach modal dialogs to windows"
 msgstr "Fest dialogvindauga til programvindauga"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr ""
 "Dialogvindauga vil vere festa på vindauga dei kjem i frå og flytte på seg "
 "når du flytter dei opphavlege vindauga."
@@ -154,7 +159,9 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "Slå av nattlys når eit vindauge er sett i fullskjermmodus"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr ""
 "Slår av nattlys når du opnar eit vindauge i fullskjermmodus. Nattlyset vert "
 "slått på igjen når du går ut av fullskjermmodus."
@@ -164,7 +171,9 @@ msgid "Pause notifications when windows are fullscreen"
 msgstr "Slå av varsel når eit vindauge er sett i fullskjermmodus"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Slår av varsel når du opnar eit vindauge i fullskjermmodus. Varslane vert "
 "slåtte på igjen når du går ut av fullskjermmodus."
@@ -174,7 +183,9 @@ msgid "Automatic tiling"
 msgstr "Automatisk festing av vindauge"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
 msgstr ""
 "Vindauge vil automatisk tilpasse formen sin når du dreg dei til toppen av "
 "skjermen eller ei av sidene."
@@ -184,7 +195,9 @@ msgid "Enable window focus change on mouse enter and leave"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
@@ -192,7 +205,9 @@ msgid "Disable unredirection of windows"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
@@ -200,7 +215,9 @@ msgid "Show all windows in tab switcher"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -257,7 +274,8 @@ msgid "Built-in theme"
 msgstr ""
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr ""
 
 #: src/panel/settings/settings_style.vala:86
@@ -289,7 +307,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -297,7 +317,9 @@ msgid "Allow raising volume above 100%"
 msgstr "Tillat lydstyrke over 100 %"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:72
@@ -305,7 +327,8 @@ msgid "Enable display of week numbers in Calendar"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:78
@@ -337,7 +360,9 @@ msgid "Show Media Playback Controls Widget"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:102
@@ -372,7 +397,8 @@ msgstr "Skrivebord"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -382,7 +408,8 @@ msgstr "Skrivebordsikon"
 msgid "Control whether to allow icons on the desktop."
 msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -411,13 +438,13 @@ msgstr ""
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr ""
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Storleik"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
@@ -428,7 +455,8 @@ msgid "Number of virtual desktops"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -445,7 +473,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -476,9 +505,8 @@ msgid "Settings"
 msgstr "Innstillingar"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Fjern panel"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -568,7 +596,9 @@ msgstr "Storleik"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Vel storleiken (breidd eller høgd, avhengig av orientering) til dette panelet"
+msgstr ""
+"Vel storleiken (breidd eller høgd, avhengig av orientering) til dette "
+"panelet"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -599,16 +629,24 @@ msgid "Stylize regions"
 msgstr "Stiliser panelregionar"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Gjer det mogleg å bruke forskjellige tema på dei tre ulike hovuddelene av panelet."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Gjer det mogleg å bruke forskjellige tema på dei tre ulike hovuddelene av "
+"panelet."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Ankermodus"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Når panelet er i ankermodus, vil det trekkje seg saman så mykje som mogleg for å frigjere skjermplass"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Når panelet er i ankermodus, vil det trekkje seg saman så mykje som mogleg "
+"for å frigjere skjermplass"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -666,14 +704,12 @@ msgid "Autostart apps"
 msgstr "Start program automatisk"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Applikasjonar"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Kommando"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -809,9 +845,8 @@ msgid "Caffeine Mode"
 msgstr "Vakenmodus"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Innstillingar"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -1156,7 +1191,8 @@ msgstr "Fjern frå favorittar"
 msgid "Favorite"
 msgstr "Legg til som favoritt"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1344,7 +1380,9 @@ msgid "Budgie Panel"
 msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
 msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2

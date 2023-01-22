@@ -2,21 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-01-06 16:58+0000\n"
-"Last-Translator: Manjot Singh <manjotsinghpunjab@gmail.com>\n"
-"Language-Team: Punjabi <http://translate.getsol.us/projects/budgie-desktop/translations/pa/>\n"
-"Language: pa\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Panjabi (Punjabi) (https://www.transifex.com/buddiesofbudgie/teams/129844/pa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: pa\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -61,7 +64,9 @@ msgstr "ਪੈਨਲ ਹਟਾਉਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "ਕੀ ਤੁਸੀਂ ਅਸਲ ਵਿੱਚ ਇਸ ਪੈਨਲ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਸ ਕੰਮ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ ਹੈ."
+msgstr ""
+"ਕੀ ਤੁਸੀਂ ਅਸਲ ਵਿੱਚ ਇਸ ਪੈਨਲ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਸ ਕੰਮ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ"
+" ਸਕਦਾ ਹੈ."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -76,8 +81,11 @@ msgid "Confirm applet removal"
 msgstr "ਐਪਲਿਟ ਹਟਾਉਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "ਕੀ ਤੁਸੀਂ ਅਸਲ ਵਿੱਚ ਇਸ ਐਪਲਿਟ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਸ ਕਿਰਿਆ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"ਕੀ ਤੁਸੀਂ ਅਸਲ ਵਿੱਚ ਇਸ ਐਪਲਿਟ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਸ ਕਿਰਿਆ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ"
+" ਜਾ ਸਕਦਾ."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -121,8 +129,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "ਵਿੰਡੋਜ਼ ਵਿੱਚ ਮਾਡਲ ਡਾਈਲਾਗ ਜੋੜੋ"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "ਮਾਡਲ ਡਾਈਲਾਗ ਪੇਰੈਂਟ ਵਿੰਡੋ ਨਾਲ ਜੁੜੇ ਹੋ ਜਾਣਗੇ ਅਤੇ ਵਿੰਡੋ ਨੂੰ ਏਧਰ ਓਧਰ ਖਿੱਚਣ 'ਤੇ ਇਕੱਠੇ ਚੱਲਣਗੇ."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"ਮਾਡਲ ਡਾਈਲਾਗ ਪੇਰੈਂਟ ਵਿੰਡੋ ਨਾਲ ਜੁੜੇ ਹੋ ਜਾਣਗੇ ਅਤੇ ਵਿੰਡੋ ਨੂੰ ਏਧਰ ਓਧਰ ਖਿੱਚਣ 'ਤੇ "
+"ਇਕੱਠੇ ਚੱਲਣਗੇ."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -145,50 +157,70 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "ਜਦੋਂ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਤੇ ਹੋਣ ਤਾਂ ਨਾਈਟ-ਲਾਈਟ ਮੋਡ ਨੂੰ ਬੰਦ ਕਰ ਦਵੋ"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "ਜਦੋਂ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਤੇ ਹੋਣ ਤਾਂ ਨਾਈਟ-ਲਾਈਟ ਮੋਡ ਨੂੰ ਬੰਦ ਕਰ ਦਿੰਦਾ ਹੈ ਅਤੇ ਦੁਬਾਰਾ ਚਾਲੂ ਕਰ ਦਿੰਦਾ ਹੈ  ਜਦੋ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਛੱਡ ਦੇਣ."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"ਜਦੋਂ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਤੇ ਹੋਣ ਤਾਂ ਨਾਈਟ-ਲਾਈਟ ਮੋਡ ਨੂੰ ਬੰਦ ਕਰ ਦਿੰਦਾ ਹੈ ਅਤੇ "
+"ਦੁਬਾਰਾ ਚਾਲੂ ਕਰ ਦਿੰਦਾ ਹੈ  ਜਦੋ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਛੱਡ ਦੇਣ."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "ਜਦੋਂ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਤੇ ਹੋਣ ਤਾਂ ਨਾਈਟ-ਲਾਈਟ ਮੋਡ ਨੂੰ ਬੰਦ ਕਰ ਦਵੋ"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "ਜਦੋਂ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਤੇ ਹੋਣ ਤਾਂ ਨਾਈਟ-ਲਾਈਟ ਮੋਡ ਨੂੰ ਬੰਦ ਕਰ ਦਿੰਦਾ ਹੈ ਅਤੇ ਦੁਬਾਰਾ ਚਾਲੂ ਕਰ ਦਿੰਦਾ ਹੈ  ਜਦੋ ਵਿੰਡੋਜ਼ ਪੂਰੀ ਸਕ੍ਰੀਨ ਛੱਡ ਦੇਣ."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "ਆਟੋਮੈਟਿਕ ਟਾਇਲਿੰਗ"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "ਵਿੰਡੋਜ਼ ਆਪਣੇ ਆਪ ਟਾਈਲ ਹੋ ਜਾਣਗੀਆਂ ਜਦੋਂ ਸਕ੍ਰੀਨ ਦੇ ਸਿਖਰ 'ਤੇ ਜਾਂ ਕੋਨੇ' ਚ ਖਿੱਚੀਆਂ ਗਈਆਂ."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"ਵਿੰਡੋਜ਼ ਆਪਣੇ ਆਪ ਟਾਈਲ ਹੋ ਜਾਣਗੀਆਂ ਜਦੋਂ ਸਕ੍ਰੀਨ ਦੇ ਸਿਖਰ 'ਤੇ ਜਾਂ ਕੋਨੇ' ਚ ਖਿੱਚੀਆਂ "
+"ਗਈਆਂ."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "ਮਾਯੂਸ ਦੇ ਵਿੰਡੋ ਵਿਚੋਂ ਅੰਦਰ ਬਾਹਰ ਹੋਣ ਤੇ ਫੋਕਸ ਵਿਚ ਬਦਲਾਵ ਨੂੰ ਚਾਲੂ ਕਰੋ"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "ਵਿੰਡੋ ਫੋਕਸ ਨੂੰ ਲਾਗੂ ਕਰਨ ਲਈ ਸਮਰੱਥ ਬਣਾਉਂਦਾ ਹੈ ਜਦੋਂ ਮਾਊਸ ਵਿੰਡੋ ਵਿੱਚ ਦਾਖਲ ਹੁੰਦਾ ਹੈ ਅਤੇ ਅਨਫੋਕਸ ਜਦੋ ਮਾਊਸ  ਵਿੰਡੋ ਨੂੰ ਛੱਡ ਦਿੰਦਾ ਹੈ."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"ਵਿੰਡੋ ਫੋਕਸ ਨੂੰ ਲਾਗੂ ਕਰਨ ਲਈ ਸਮਰੱਥ ਬਣਾਉਂਦਾ ਹੈ ਜਦੋਂ ਮਾਊਸ ਵਿੰਡੋ ਵਿੱਚ ਦਾਖਲ ਹੁੰਦਾ "
+"ਹੈ ਅਤੇ ਅਨਫੋਕਸ ਜਦੋ ਮਾਊਸ  ਵਿੰਡੋ ਨੂੰ ਛੱਡ ਦਿੰਦਾ ਹੈ."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "ਵਿੰਡੋਜ਼ ਦੀ ਅਣ-ਦਿਸ਼ਾ ਬੰਦ ਕਰੋ"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "ਇਹ ਵਿਕਲਪ ਅਡਵਾਂਸਡ ਯੂਜ਼ਰਸ ਲਈ ਹੈ. ਇਸ ਦੀ ਵਰਤੋਂ ਕਰੋ ਜੇ ਤੁਹਾਡੇ ਕੋਲ ਸਮਰਪਿਤ GPUs ਨਾਲ ਗ੍ਰਾਫਿਕਲ ਜਾਂ ਡਿਸਪਲੇਅ ਸੰਬੰਧੀ ਸਮੱਸਿਆਵਾਂ ਹਨ."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"ਇਹ ਵਿਕਲਪ ਅਡਵਾਂਸਡ ਯੂਜ਼ਰਸ ਲਈ ਹੈ. ਇਸ ਦੀ ਵਰਤੋਂ ਕਰੋ ਜੇ ਤੁਹਾਡੇ ਕੋਲ ਸਮਰਪਿਤ GPUs ਨਾਲ "
+"ਗ੍ਰਾਫਿਕਲ ਜਾਂ ਡਿਸਪਲੇਅ ਸੰਬੰਧੀ ਸਮੱਸਿਆਵਾਂ ਹਨ."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "ਟੈਬ ਸਵਿੱਚਰ ਵਿੱਚ ਸਾਰੀਆਂ ਵਿੰਡੋਜ਼ ਸ਼ੋਅ ਕਰੋ"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "ਸਾਰੀਆਂ ਟੈਬਾਂ ਵਰਕਸਪੇਸ ਦੀ ਪਰਵਾਹ ਕੀਤੇ ਬਿਨਾਂ ਟੈਬ ਸਵਿੱਚਰ ਵਿੱਚ ਪ੍ਰਦਰਸ਼ਿਤ ਕੀਤੀਆਂ ਜਾਣਗੀਆਂ."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"ਸਾਰੀਆਂ ਟੈਬਾਂ ਵਰਕਸਪੇਸ ਦੀ ਪਰਵਾਹ ਕੀਤੇ ਬਿਨਾਂ ਟੈਬ ਸਵਿੱਚਰ ਵਿੱਚ ਪ੍ਰਦਰਸ਼ਿਤ ਕੀਤੀਆਂ "
+"ਜਾਣਗੀਆਂ."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -244,8 +276,11 @@ msgid "Built-in theme"
 msgstr "ਬਿਲਟ-ਇਨ ਥੀਮ"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "ਜਦੋਂ ਇਹ ਲਾਗੂ ਹੁੰਦਾ ਹੈ, ਤਾਂ ਬਿਲਟ-ਇਨ ਥੀਮ ਡੈਸਕਟੌਪ ਕੰਪੋਨੈਂਟ ਸਟਾਈਲਿੰਗ ਦੇ ਉੱਪਰ ਦੀ ਹੋ ਕੇ ਅੱਪਲਾਈ ਹੋ ਜਾਵੇਗਾ"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"ਜਦੋਂ ਇਹ ਲਾਗੂ ਹੁੰਦਾ ਹੈ, ਤਾਂ ਬਿਲਟ-ਇਨ ਥੀਮ ਡੈਸਕਟੌਪ ਕੰਪੋਨੈਂਟ ਸਟਾਈਲਿੰਗ ਦੇ ਉੱਪਰ ਦੀ "
+"ਹੋ ਕੇ ਅੱਪਲਾਈ ਹੋ ਜਾਵੇਗਾ"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -276,24 +311,34 @@ msgid "Set Raven position"
 msgstr "ਰੇਵਨ ਦੀ ਜਗਾਹ ਨਿਰਧਾਰਤ ਕਰੋ"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "ਸੈਟ ਕਰੋ ਕਿ ਰੇਵਨ ਸਕ੍ਰੀਨ ਦੀ ਕਿਸ ਸਾਈਡ ਖੁੱਲ੍ਹਣਾ ਚਾਹੀਦਾ ਹੈ. ਜੇ ਆਟੋਮੈਟਿਕ ਤੇ ਸੈਟ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਰੇਵਨ ਉਥੇ ਖੁਲ ਜਾਵੇਗਾ ਜਿਥੇ ਇਸਦਾ ਮੁੱਖ ਪੈਨਲ ਹੈ."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"ਸੈਟ ਕਰੋ ਕਿ ਰੇਵਨ ਸਕ੍ਰੀਨ ਦੀ ਕਿਸ ਸਾਈਡ ਖੁੱਲ੍ਹਣਾ ਚਾਹੀਦਾ ਹੈ. ਜੇ ਆਟੋਮੈਟਿਕ ਤੇ ਸੈਟ "
+"ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਰੇਵਨ ਉਥੇ ਖੁਲ ਜਾਵੇਗਾ ਜਿਥੇ ਇਸਦਾ ਮੁੱਖ ਪੈਨਲ ਹੈ."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "ਅਵਾਜ ਨੂੰ 100% ਤੋਂ ਉੱਪਰ ਜਾਣ  ਦੀ ਆਗਯਾ ਦਵੋ"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "ਸਾਉੰਡ ਸੈਟਿੰਗਜ਼ ਦੇ ਨਾਲ-ਨਾਲ ਰੇਵਨ ਵਿਚ ਸਾਉੰਡ ਆਉਟਪੁੱਟ ਵਿਜੇਟ ਨੂੰ ਆਵਾਜ਼ 150% ਤੱਕ ਵਧਾਉਣ ਦੀ ਆਗਿਆ ਦਵੋ."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"ਸਾਉੰਡ ਸੈਟਿੰਗਜ਼ ਦੇ ਨਾਲ-ਨਾਲ ਰੇਵਨ ਵਿਚ ਸਾਉੰਡ ਆਉਟਪੁੱਟ ਵਿਜੇਟ ਨੂੰ ਆਵਾਜ਼ 150% ਤੱਕ "
+"ਵਧਾਉਣ ਦੀ ਆਗਿਆ ਦਵੋ."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "ਕੈਲੰਡਰ ਵਿਚ ਹਫ਼ਤੇ ਦੇ ਨੰਬਰਾਂ ਦੀ ਪ੍ਰਦਰਸ਼ਨੀ ਨੂੰ ਸਮਰੱਥ ਕਰੋ"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "ਇਹ ਸੈਟਿੰਗ ਕੈਲੰਡਰ ਵਿਜੇਟ ਵਿਚ ਹਫਤੇ ਦੇ ਨੰਬਰਾਂ ਦੇ ਪ੍ਰਦਰਸ਼ਨ ਨੂੰ ਸਮਰੱਥ ਬਣਾਉਂਦੀ ਹੈ."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"ਇਹ ਸੈਟਿੰਗ ਕੈਲੰਡਰ ਵਿਜੇਟ ਵਿਚ ਹਫਤੇ ਦੇ ਨੰਬਰਾਂ ਦੇ ਪ੍ਰਦਰਸ਼ਨ ਨੂੰ ਸਮਰੱਥ ਬਣਾਉਂਦੀ ਹੈ."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -309,7 +354,8 @@ msgstr "ਸਾਉੰਡ ਆਉਟਪੁੱਟ ਵਿਜੇਟ ਸ਼ੋਅ ਕ�
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਸਾਉੰਡ ਆਉਟਪੁੱਟ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ ਹੈ."
+msgstr ""
+"ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਸਾਉੰਡ ਆਉਟਪੁੱਟ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ ਹੈ."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -317,15 +363,20 @@ msgstr "ਮਾਈਕ੍ਰੋਫੋਨ ਇੰਪੁੱਟ ਵਿਜੇਟ ਸ਼
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਮਾਈਕ੍ਰੋਫੋਨ ਇਨਪੁਟ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ ਹੈ."
+msgstr ""
+"ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਮਾਈਕ੍ਰੋਫੋਨ ਇਨਪੁਟ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ ਹੈ."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "ਮੀਡੀਆ ਪਲੇਬੈਕ ਕੰਟਰੋਲ ਵਿਜੇਟ ਸ਼ੋਅ ਕਰੋ"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਮੀਡੀਆ ਪਲੇਬੈਕ ਕੰਟਰੋਲ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ ਹੈ."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"ਰੇਵਨ ਦੇ ਐਪਲਿਟ ਸੈਕਸ਼ਨ ਵਿਚ ਮੀਡੀਆ ਪਲੇਬੈਕ ਕੰਟਰੋਲ ਵਿਜੇਟ ਦਿਖਾਉਂਦਾ ਹੈ ਜਾਂ ਲੁਕਾਉਂਦਾ "
+"ਹੈ."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -359,7 +410,8 @@ msgstr "ਡੈਸਕਟਾਪ"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -369,7 +421,8 @@ msgstr "ਡੈਸਕਟਾਪ ਆਈਕਾਨ"
 msgid "Control whether to allow icons on the desktop."
 msgstr "ਕੰਟਰੋਲ ਕਰੋ ਕਿ ਡੈਸਕਟਾਪ ਉੱਤੇ ਆਈਕਾਨਾਂ ਨੂੰ ਆਗਿਆ ਦੇਣੀ ਹੈ ਜਾਂ ਨਹੀਂ."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -398,7 +451,8 @@ msgstr "ਕੂੜਾ"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "ਡੈਸਕਟਾਪ ਉੱਤੇ ਕੂੜਾ ਡਾਇਰੈਕਟਰੀ ਵਿੱਚ ਇੱਕ ਸ਼ਾਰਟਕੱਟ ਸ਼ਾਮਲ ਕਰੋ."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -414,8 +468,11 @@ msgid "Number of virtual desktops"
 msgstr "ਵਰਚੁਅਲ ਡੈਸਕਟਾਪਾਂ ਦੀ ਗਿਣਤੀ"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "ਸਿਸਟਮ ਦੇ ਸ਼ੁਰੂ ਹੋਣ ਤੇ ਆਪਣੇ ਆਪ ਬਣਾਉਣ ਲਈ ਵਰਚੁਅਲ ਡੈਸਕਟਾੱਪਾਂ / ਵਰਕਸਪੇਸਾਂ ਦੀ ਸੰਖਿਆ."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"ਸਿਸਟਮ ਦੇ ਸ਼ੁਰੂ ਹੋਣ ਤੇ ਆਪਣੇ ਆਪ ਬਣਾਉਣ ਲਈ ਵਰਚੁਅਲ ਡੈਸਕਟਾੱਪਾਂ / ਵਰਕਸਪੇਸਾਂ ਦੀ "
+"ਸੰਖਿਆ."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -431,8 +488,11 @@ msgid "Click Policy"
 msgstr "ਕਲਿਕ ਨੀਤੀ"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
-msgstr "ਕਲਿਕ ਨੀਤੀ ਨਿਰਧਾਰਤ ਕਰਦੀ ਹੈ ਕਿ ਕੀ ਸਾਨੂੰ ਇਕੱਲੇ ਜਾਂ ਡਬਲ ਕਲਿਕ ਤੇ ਚੀਜਾਂ ਨੂੰ ਖੋਲ੍ਣਾ ਚਾਹੀਦਾ ਹੈ."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"ਕਲਿਕ ਨੀਤੀ ਨਿਰਧਾਰਤ ਕਰਦੀ ਹੈ ਕਿ ਕੀ ਸਾਨੂੰ ਇਕੱਲੇ ਜਾਂ ਡਬਲ ਕਲਿਕ ਤੇ ਚੀਜਾਂ ਨੂੰ ਖੋਲ੍ਣਾ"
+" ਚਾਹੀਦਾ ਹੈ."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -561,7 +621,9 @@ msgstr "ਆਪਣੇ ਆਪ ਲੁਕਾਓ"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "ਜਦੋਂ ਸੈਟ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਸਕ੍ਰੀਨ ਦੀ ਜਿਆਦਾ ਤੋਂ ਜਿਆਦਾ ਜਗਾਹ ਵਰਤੋਂ ਲਈ ਪੈਨਲ ਆਪਣੇ ਆਪ ਦਿਖਣੋ ਹਟ ਜਾਵੇਗਾ"
+msgstr ""
+"ਜਦੋਂ ਸੈਟ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਸਕ੍ਰੀਨ ਦੀ ਜਿਆਦਾ ਤੋਂ ਜਿਆਦਾ ਜਗਾਹ ਵਰਤੋਂ ਲਈ ਪੈਨਲ "
+"ਆਪਣੇ ਆਪ ਦਿਖਣੋ ਹਟ ਜਾਵੇਗਾ"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -584,16 +646,24 @@ msgid "Stylize regions"
 msgstr "ਖੇਤਰਾਂ ਨੂੰ ਸਟਾਈਲਾਈਜ਼ ਕਰੋ"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "ਪੈਨਲ ਵਿਚ ਇਕ ਸੰਕੇਤ ਜੋੜਦਾ ਹੈ ਤਾਂ ਕਿ ਪੈਨਲ ਦੇ ਤਿੰਨ ਮੁੱਖ ਖੇਤਰਾਂ ਵਿਚੋਂ ਹਰ ਇਕ ਨੂੰ ਵੱਖਰੇ ਢੰਗ ਨਾਲ ਦਿੱਖ ਦਿੱਤੀ ਜਾ ਸਕੇ."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"ਪੈਨਲ ਵਿਚ ਇਕ ਸੰਕੇਤ ਜੋੜਦਾ ਹੈ ਤਾਂ ਕਿ ਪੈਨਲ ਦੇ ਤਿੰਨ ਮੁੱਖ ਖੇਤਰਾਂ ਵਿਚੋਂ ਹਰ ਇਕ ਨੂੰ "
+"ਵੱਖਰੇ ਢੰਗ ਨਾਲ ਦਿੱਖ ਦਿੱਤੀ ਜਾ ਸਕੇ."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "ਡੌਕ ਮੋਡ"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "ਜਦੋਂ ਡੌਕ ਵਾਲੇ ਰੂਪ ਵਿੱਚ ਹੁੰਦਾ ਹੈ, ਤਾਂ ਪੈਨਲ ਕੀਮਤੀ ਸਕ੍ਰੀਨ ਅਸਟੇਟ ਨੂੰ ਖਾਲੀ ਕਰਦਿਆਂ, ਘੱਟ ਤੋਂ ਘੱਟ ਥਾਂ ਦੀ ਵਰਤੋਂ ਕਰੇਗਾ"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"ਜਦੋਂ ਡੌਕ ਵਾਲੇ ਰੂਪ ਵਿੱਚ ਹੁੰਦਾ ਹੈ, ਤਾਂ ਪੈਨਲ ਕੀਮਤੀ ਸਕ੍ਰੀਨ ਅਸਟੇਟ ਨੂੰ ਖਾਲੀ "
+"ਕਰਦਿਆਂ, ਘੱਟ ਤੋਂ ਘੱਟ ਥਾਂ ਦੀ ਵਰਤੋਂ ਕਰੇਗਾ"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -944,7 +1014,8 @@ msgstr "ਤੁਹਾਡੇ ਦੁਆਰਾ ਦਿੱਤਾ ਗਿਆ ਪਾਸ�
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "ਇਸ ਵਾਲੀਅਮ ਨੂੰ ਮਾਂਊਂਟ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦਿਆਂ ਇੱਕ ਅਣਪਛਾਤੀ ਸਮੱਸਿਆ ਸਾਹਮਣੇ ਆਈ ਹੈ"
+msgstr ""
+"ਇਸ ਵਾਲੀਅਮ ਨੂੰ ਮਾਂਊਂਟ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦਿਆਂ ਇੱਕ ਅਣਪਛਾਤੀ ਸਮੱਸਿਆ ਸਾਹਮਣੇ ਆਈ ਹੈ"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1138,7 +1209,8 @@ msgstr "ਨਾਪਸੰਦ"
 msgid "Favorite"
 msgstr "ਮਨਪਸੰਦ"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1326,8 +1398,12 @@ msgid "Budgie Panel"
 msgstr "ਬੱਜੀ ਪੈਨਲ"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨਾਂ ਲਾਂਚ ਕਰੋ ਅਤੇ ਵਿੰਡੋਜ਼ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰਨ, ਸਮਾਂ ਦਰਸਾਉਣ ਆਦਿ ਲਈ ਕਈ ਸਹੂਲਤਾਂ ਪ੍ਰਦਾਨ ਕਰੋ."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"ਹੋਰ ਐਪਲੀਕੇਸ਼ਨਾਂ ਲਾਂਚ ਕਰੋ ਅਤੇ ਵਿੰਡੋਜ਼ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰਨ, ਸਮਾਂ ਦਰਸਾਉਣ ਆਦਿ ਲਈ ਕਈ "
+"ਸਹੂਲਤਾਂ ਪ੍ਰਦਾਨ ਕਰੋ."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

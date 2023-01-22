@@ -2,22 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5.1\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-10-10 14:42+0000\n"
-"Last-Translator: Algent Albrahimi <algent@protonmail.com>\n"
-"Language-Team: Albanian <http://translate.getsol.us/projects/budgie-desktop/"
-"translations/sq/>\n"
-"Language: sq\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Albanian (https://www.transifex.com/buddiesofbudgie/teams/129844/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: sq\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -77,7 +79,8 @@ msgid "Confirm applet removal"
 msgstr "Konfirmoni heqjen e apletit"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
 msgstr "A doni vërtet ta hiqni këtë aplet? Ky veprim nuk mund të zhbëhet."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
@@ -122,8 +125,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Bashkangjitni dialogët modalë në dritare"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Dialogët modalë do të bashkangjiten në dritaren prind dhe do të lëvizin së bashku kur tërhiqen."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Dialogët modalë do të bashkangjiten në dritaren prind dhe do të lëvizin së "
+"bashku kur tërhiqen."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -143,18 +150,25 @@ msgstr "Qendërso dritaret e sapohapura në ekranin aktual."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Çaktivizo modalitetin e Dritës së Natës kur dritaret janë në ekran të plotë"
+msgstr ""
+"Çaktivizo modalitetin e Dritës së Natës kur dritaret janë në ekran të plotë"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Çaktivizon modalitetin e Dritës së Natës kur një dritare është në ekran të plotë. Ri-aktivizon kur largoheni nga ekrani i plotë."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Çaktivizon modalitetin e Dritës së Natës kur një dritare është në ekran të "
+"plotë. Ri-aktivizon kur largoheni nga ekrani i plotë."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
 msgstr "Ndalo njoftimet kur dritaret janë në ekran të plotë"
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Parandalon shfaqjen e njoftimeve kur një dritare është në ekran të plotë. "
 "Shfaqja e njoftimeve rifillon kur largohet nga ekrani i plotë."
@@ -164,32 +178,49 @@ msgid "Automatic tiling"
 msgstr "Pllakëzim automatik"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Dritaret do të radhiten si pllaka automatikisht kur të tërhiqen në pjesën e sipërme të ekranit ose në cepat e largët."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Dritaret do të radhiten si pllaka automatikisht kur të tërhiqen në pjesën e "
+"sipërme të ekranit ose në cepat e largët."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "Aktivizoni ndryshimin e fokusit të dritares në hyrjen dhe largimin e mausit"
+msgstr ""
+"Aktivizoni ndryshimin e fokusit të dritares në hyrjen dhe largimin e mausit"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Aktivizon fokusimin e dritares të zbatohet kur miu hyn në dritare dhe zhvendoset kur miu largohet nga dritarja."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Aktivizon fokusimin e dritares të zbatohet kur miu hyn në dritare dhe "
+"zhvendoset kur miu largohet nga dritarja."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Çaktivizo mosdrejtimin e dritareve"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Ky opsion është për përdoruesit e përparuar. Përdoreni këtë nëse keni probleme grafike ose të performancës me GPU-të e dedikuara."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Ky opsion është për përdoruesit e përparuar. Përdoreni këtë nëse keni "
+"probleme grafike ose të performancës me GPU-të e dedikuara."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Shfaq të gjitha dritaret në ndërruesin e skedave"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "Të gjitha skedat do të shfaqen në ndërruesin e skedave, pavarësisht nga hapësira e punës në përdorim."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Të gjitha skedat do të shfaqen në ndërruesin e skedave, pavarësisht nga "
+"hapësira e punës në përdorim."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -245,8 +276,11 @@ msgid "Built-in theme"
 msgstr "Temë e integruar"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Kur aktivizohet, tema e integruar do të mbishkruajë stilimin e përbërësve të desktop"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Kur aktivizohet, tema e integruar do të mbishkruajë stilimin e përbërësve të"
+" desktop"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -277,24 +311,35 @@ msgid "Set Raven position"
 msgstr "Vendos pozicionin e Raven"
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Vendosni në cilën anë të ekranit Raven do të hapet. Nëse vendoset Automatike, Raven do të hapet aty ku është paneli i tij prind."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Vendosni në cilën anë të ekranit Raven do të hapet. Nëse vendoset "
+"Automatike, Raven do të hapet aty ku është paneli i tij prind."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Lejo ngritjen e volumit mbi 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Lejon ngritjen e volumit përmes Cilësimeve të Tingullit, si dhe Miniaplikacionit të Daljes së Tingullit në Raven deri në 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Lejon ngritjen e volumit përmes Cilësimeve të Tingullit, si dhe "
+"Miniaplikacionit të Daljes së Tingullit në Raven deri në 150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Aktivizo shfaqjen e numrave të javës në Kalendar"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Ky cilësim mundëson shfaqjen e numrave të javës në miniaplikacionin Calendar."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Ky cilësim mundëson shfaqjen e numrave të javës në miniaplikacionin "
+"Calendar."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -302,7 +347,8 @@ msgstr "Shfaq Miniaplikacionin e Kalendarit"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Kalendarit në seksionin Applets të Raven."
+msgstr ""
+"Shfaq ose fsheh Miniaplikacionin e Kalendarit në seksionin Applets të Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -310,7 +356,9 @@ msgstr "Shfaq Miniaplikacionin e Daljes së Tingullit"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Daljes së Tingullit në seksionin Applets të Raven."
+msgstr ""
+"Shfaq ose fsheh Miniaplikacionin e Daljes së Tingullit në seksionin Applets "
+"të Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -318,15 +366,21 @@ msgstr "Shfaq Miniaplikacionin e Hyrjes së Mikrofonit"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Hyrjes së Mikrofonit në seksionin Applets të Raven."
+msgstr ""
+"Shfaq ose fsheh Miniaplikacionin e Hyrjes së Mikrofonit në seksionin Applets"
+" të Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Shfaq Miniaplikacionin e Kontrolleve të Riprodhimit të Mediave"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Kontrolleve të Riprodhimit të Mediave (MPRIS) në seksionin Applets të Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Shfaq ose fsheh Miniaplikacionin e Kontrolleve të Riprodhimit të Mediave "
+"(MPRIS) në seksionin Applets të Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -334,7 +388,9 @@ msgstr "Shfaq Shiritin me Opsionet  e Energjisë"
 
 #: src/panel/settings/settings_raven.vala:103
 msgid "Shows or hides the Power Strip in the bottom of Raven."
-msgstr "Shfaq ose fsheh Shiritin me Opsionet e energjisë në pjesën e poshtme të Raven."
+msgstr ""
+"Shfaq ose fsheh Shiritin me Opsionet e energjisë në pjesën e poshtme të "
+"Raven."
 
 #: src/panel/settings/settings_applet_chooser.vala:74
 msgid "Choose an applet"
@@ -360,7 +416,8 @@ msgstr "Desktopi"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -370,7 +427,8 @@ msgstr "Ikonat e Desktopit"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Kontrolloni nëse do të lejoni ikona në desktop."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -399,7 +457,8 @@ msgstr "Kosh"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Shtoni një shkurtore të direktorisë Kosh në desktop."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -415,8 +474,11 @@ msgid "Number of virtual desktops"
 msgstr "Numri i desktopëve virtualë"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Numri i desktopëve / hapësirave të punës virtuale për t'u krijuar automatikisht gjatë nisjes së sistemit."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"Numri i desktopëve / hapësirave të punës virtuale për t'u krijuar "
+"automatikisht gjatë nisjes së sistemit."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -432,8 +494,11 @@ msgid "Click Policy"
 msgstr "Rregulli i klikimit"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
-msgstr "Rregulli i klikimit përcakton nëse duhet t'i hapim artikujt me një klik të vetëm ose të dyfishtë."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"Rregulli i klikimit përcakton nëse duhet t'i hapim artikujt me një klik të "
+"vetëm ose të dyfishtë."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -554,7 +619,9 @@ msgstr "Madhësia"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Vendosni madhësinë (gjerësinë ose lartësinë, në varësi të orientimit) të këtij paneli"
+msgstr ""
+"Vendosni madhësinë (gjerësinë ose lartësinë, në varësi të orientimit) të "
+"këtij paneli"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -562,7 +629,9 @@ msgstr "Fsheh automatikisht"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Kur të vendoset, ky panel do të fshihet nga pamja për të maksimizuar hapësirën e punës të ekranit"
+msgstr ""
+"Kur të vendoset, ky panel do të fshihet nga pamja për të maksimizuar "
+"hapësirën e punës të ekranit"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -585,16 +654,24 @@ msgid "Stylize regions"
 msgstr "Stilizoni rajonet"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Shton një shenjë ndihmëse në panel në mënyrë që secila prej tre fushave kryesore të panelit të mund të ketë tema të ndryshme."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Shton një shenjë ndihmëse në panel në mënyrë që secila prej tre fushave "
+"kryesore të panelit të mund të ketë tema të ndryshme."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Modaliteti Dok"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Kur është në modalitetin dok, paneli do të përdorë hapësirën minimale të mundshme, duke liruar pjesë hapësire të vlefshme të ekranit"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Kur është në modalitetin dok, paneli do të përdorë hapësirën minimale të "
+"mundshme, duke liruar pjesë hapësire të vlefshme të ekranit"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -669,7 +746,8 @@ msgstr "Titujt e Dritareve"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications."
-msgstr "Zgjidhni shkronjat që përdoren në shiritat e titujve të aplikacioneve."
+msgstr ""
+"Zgjidhni shkronjat që përdoren në shiritat e titujve të aplikacioneve."
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -685,7 +763,8 @@ msgstr "Ndërfaqja"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls."
-msgstr "Vendosni shkronjat kryesore që përdoren nga kontrollet e aplikacionit."
+msgstr ""
+"Vendosni shkronjat kryesore që përdoren nga kontrollet e aplikacionit."
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -1141,7 +1220,8 @@ msgstr "Hiq të preferuarën"
 msgid "Favorite"
 msgstr "I preferuar"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1329,8 +1409,12 @@ msgid "Budgie Panel"
 msgstr "Paneli Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Nisni aplikacione të tjera dhe siguroni shërbime të ndryshme për të menaxhuar dritaret, për të treguar kohën, etj."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Nisni aplikacione të tjera dhe siguroni shërbime të ndryshme për të "
+"menaxhuar dritaret, për të treguar kohën, etj."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

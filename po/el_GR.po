@@ -1,29 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Alexis Diavatis <alexis.diavatis@hotmail.com>, 2015
-# Dimitris Damtsas <ddamtsas@yahoo.gr>, 2017
-# Efstathios Iosifidis <iefstathios@gmail.com>, 2015-2016
-# Efthimios Malagrakis <makis_best@yahoo.com>, 2017
-# George Mantzouranis <gemantzu@gmail.com>, 2018
-# geost <george.stefanakis@gmail.com>, 2017
-# John Xtreme <jxftw2424@gmail.com>, 2016
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-11-26 09:18+0000\n"
-"Last-Translator: iason malkotsis <imalkotsis@gmail.com>\n"
-"Language-Team: Greek <http://translate.getsol.us/projects/budgie-desktop/translations/el/>\n"
-"Language: el_GR\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Greek (Greece) (https://www.transifex.com/buddiesofbudgie/teams/129844/el_GR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: el_GR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -68,7 +64,9 @@ msgstr "Επιβεβαίωση αφαίρεσης πάνελ"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Θέλετε σίγουρα να αφαιρέσετε αυτό το πάνελ; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+msgstr ""
+"Θέλετε σίγουρα να αφαιρέσετε αυτό το πάνελ; Αυτή η ενέργεια δεν μπορεί να "
+"αναιρεθεί."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -83,8 +81,11 @@ msgid "Confirm applet removal"
 msgstr "Επιβεβαίωση αφαίρεσης applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Θέλετε πραγματικά να καταργήσετε αυτό το applet; Αυτή η πράξη δε μπορεί να αναιρεθεί."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Θέλετε πραγματικά να καταργήσετε αυτό το applet; Αυτή η πράξη δε μπορεί να "
+"αναιρεθεί."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -128,8 +129,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Επισύναψη παραθύρου διαλόγου στα παράθυρα"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Τα παράθυρα διαλόγου θα προσαρτηθούν στο γονικό παράθυρο και θα μετακινηθούν μαζί όταν σύρονται."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Τα παράθυρα διαλόγου θα προσαρτηθούν στο γονικό παράθυρο και θα μετακινηθούν"
+" μαζί όταν σύρονται."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -149,53 +154,74 @@ msgstr "Κεντράρετε νέα τοποθετημένα παράθυρα σ
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Απενεργοποιήστε τη λειτουργία νυχτός όταν τα παράθυρα είναι σε πλήρης οθόνη"
+msgstr ""
+"Απενεργοποιήστε τη λειτουργία νυχτός όταν τα παράθυρα είναι σε πλήρης οθόνη"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Απενεργοποιεί τη λειτουργία νυχτός όταν ένα παράθυρο είναι σε πλήρης οθόνη. Ενεργοποιείται εκ νέου κατά την αναχώρηση ολόκληρης της οθόνης."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Απενεργοποιεί τη λειτουργία νυχτός όταν ένα παράθυρο είναι σε πλήρης οθόνη. "
+"Ενεργοποιείται εκ νέου κατά την αναχώρηση ολόκληρης της οθόνης."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Απενεργοποιήστε τη λειτουργία νυχτός όταν τα παράθυρα είναι σε πλήρης οθόνη"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "Απενεργοποιεί τη λειτουργία νυχτός όταν ένα παράθυρο είναι σε πλήρης οθόνη. Ενεργοποιείται εκ νέου κατά την αναχώρηση ολόκληρης της οθόνης."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "Αυτόματη ενσωμάτωση"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Τα παράθυρα θα ενσωματώνονται αυτόματα όταν μετακινούνται στην άνω πλευρά της οθόνης ή στης γωνίες αυτής."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Τα παράθυρα θα ενσωματώνονται αυτόματα όταν μετακινούνται στην άνω πλευρά "
+"της οθόνης ή στης γωνίες αυτής."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "Ενεργοποίηση αλλαγής εστίασης παραθύρου στο ποντίκι όταν εισάγετε και φεύγει"
+msgstr ""
+"Ενεργοποίηση αλλαγής εστίασης παραθύρου στο ποντίκι όταν εισάγετε και φεύγει"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Ενεργοποιεί την εστίαση του παραθύρου που εφαρμόζεται όταν το ποντίκι εισέρχεται στο παράθυρο και την απενεργοποιεί όταν το ποντίκι εγκαταλείπει το παράθυρο."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Ενεργοποιεί την εστίαση του παραθύρου που εφαρμόζεται όταν το ποντίκι "
+"εισέρχεται στο παράθυρο και την απενεργοποιεί όταν το ποντίκι εγκαταλείπει "
+"το παράθυρο."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Απενεργοποίηση αναπροσανατολισμού των παραθύρων"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Η συγκεκριμένη επιλογή προορίζεται για προχωρημένους χρήστες. Επιλέξτε το αν έχετε προβλήματα με τα γραφικά και τις επιδόσεις της πρόσθετης κάρτας γραφικών ."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Η συγκεκριμένη επιλογή προορίζεται για προχωρημένους χρήστες. Επιλέξτε το αν"
+" έχετε προβλήματα με τα γραφικά και τις επιδόσεις της πρόσθετης κάρτας "
+"γραφικών ."
 
 #: src/panel/settings/settings_wm.vala:89
-#, fuzzy
 msgid "Show all windows in tab switcher"
-msgstr "Εμφάνιση όλων των παραθύρων με κλικ"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -252,8 +278,11 @@ msgid "Built-in theme"
 msgstr "Ενσωματωμένο θέμα"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Όταν ενεργοποιηθεί, το ενσωματωμένο θέμα θα αντικαταστήσει αυτό της επιφάνειας εργασίας του στοιχείου"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Όταν ενεργοποιηθεί, το ενσωματωμένο θέμα θα αντικαταστήσει αυτό της "
+"επιφάνειας εργασίας του στοιχείου"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -261,7 +290,9 @@ msgstr "Εφέ κίνησης"
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Control whether windows and controls use animations"
-msgstr "Επιλέξατε εάν θέλετε τα παράθυρα και τα χειριστήρια να χρησιμοποιούν κινούμενες εικόνες"
+msgstr ""
+"Επιλέξατε εάν θέλετε τα παράθυρα και τα χειριστήρια να χρησιμοποιούν "
+"κινούμενες εικόνες"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
@@ -284,7 +315,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -292,16 +325,23 @@ msgid "Allow raising volume above 100%"
 msgstr "Επιτρέψτε την αύξηση της έντασης πάνω από το 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Επιτρέπει την αύξηση της έντασης του ήχου μέσω των ρυθμίσεων ήχου καθώς και του Widget ήχου εξόδου στο Raven έως 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Επιτρέπει την αύξηση της έντασης του ήχου μέσω των ρυθμίσεων ήχου καθώς και "
+"του Widget ήχου εξόδου στο Raven έως 150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Ενεργοποιήστε την εμφάνιση αριθμών εβδομάδων στο Ημερολόγιο"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Αυτή η ρύθμιση επιτρέπει την εμφάνιση αριθμών εβδομάδων στο γραφικό στοιχείο Ημερολογίου."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Αυτή η ρύθμιση επιτρέπει την εμφάνιση αριθμών εβδομάδων στο γραφικό στοιχείο"
+" Ημερολογίου."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -309,7 +349,9 @@ msgstr "Εμφάνιση Γραφικού Στοιχείου Ημερολογί�
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο ημερολογίου στο τμήμα Applets του Raven."
+msgstr ""
+"Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο ημερολογίου στο τμήμα Applets του"
+" Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -317,7 +359,9 @@ msgstr "Εμφάνιση του γραφικού στοιχείου για τη�
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο εξόδου ήχου στο τμήμα Applets της Raven."
+msgstr ""
+"Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο εξόδου ήχου στο τμήμα Applets της"
+" Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -325,15 +369,21 @@ msgstr "Εμφάνιση μικροεφαρμογής εισαγωγής μικ�
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο εισόδου μικροφώνου στο τμήμα Applets της Raven."
+msgstr ""
+"Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο εισόδου μικροφώνου στο τμήμα "
+"Applets της Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Εμφάνιση του γραφικού στοιχείου Controls Playback Media"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο του MPRIS (Media Playback Controls) στο τμήμα Applets της Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Εμφανίζει ή αποκρύπτει το γραφικό στοιχείο του MPRIS (Media Playback "
+"Controls) στο τμήμα Applets της Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -367,18 +417,19 @@ msgstr "Επιφάνεια εργασίας"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "Εικονίδια Επιφάνειας Εργασίας"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "Ελέγξτε εάν θα επιτρέψετε εκτοξευτές και εικονίδια στην επιφάνεια εργασίας."
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -386,9 +437,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "Ελέγξτε εάν θα επιτρέψετε εκτοξευτές και εικονίδια στην επιφάνεια εργασίας."
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -408,25 +458,25 @@ msgstr "Σκουπίδια"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Προσθήκη συντόμευσης του φακέλου Σκουπιδιών στην επιφάνεια εργασίας."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Μέγεθος"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "Ελέγξτε εάν θα επιτρέψετε εκτοξευτές και εικονίδια στην επιφάνεια εργασίας."
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr "Αριθμός εικονικών περιβαλλόντων"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr "Αριθμός εικονικών περιβαλλόντων για να δημιουργηθούν στο ξεκίνημα."
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -443,7 +493,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -474,9 +525,8 @@ msgid "Settings"
 msgstr "Ρυθμίσεις"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Αφαίρεση πάνελ"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -558,7 +608,8 @@ msgstr "Θέση"
 
 #: src/panel/settings/settings_panel.vala:229
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Ορίστε την άκρη της οθόνης ώστε ο πίνακας αυτός να παραμείνει αναμμένος"
+msgstr ""
+"Ορίστε την άκρη της οθόνης ώστε ο πίνακας αυτός να παραμείνει αναμμένος"
 
 #: src/panel/settings/settings_panel.vala:237
 msgid "Size"
@@ -566,7 +617,9 @@ msgstr "Μέγεθος"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Ρυθμίστε το μέγεθος (πλάτος ή ύψος, ανάλογα τον προσανατολισμό) αυτού του πάνελ"
+msgstr ""
+"Ρυθμίστε το μέγεθος (πλάτος ή ύψος, ανάλογα τον προσανατολισμό) αυτού του "
+"πάνελ"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -574,7 +627,9 @@ msgstr "Αυτόματη απόκρυψη"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Όταν ρυθμιστεί, αυτό το πάνελ θα κρύβεται για να μεγιστοποιηθεί ο διαθέσιμος χώρος οθόνης"
+msgstr ""
+"Όταν ρυθμιστεί, αυτό το πάνελ θα κρύβεται για να μεγιστοποιηθεί ο διαθέσιμος"
+" χώρος οθόνης"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -597,16 +652,24 @@ msgid "Stylize regions"
 msgstr "Στολισμένες περιοχές"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Προσθέτει έναν υπαινιγμό στον πίνακα έτσι ώστε κάθε μία από τις τρεις κύριες περιοχές του πίνακα να μπορεί να είναι διαφορετική."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Προσθέτει έναν υπαινιγμό στον πίνακα έτσι ώστε κάθε μία από τις τρεις κύριες"
+" περιοχές του πίνακα να μπορεί να είναι διαφορετική."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Κατάσταση μπάρας"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Όταν βρίσκεται σε κατάσταση μπάρας, ο πίνακας θα χρησιμοποιήσει το ελάχιστο δυνατό χώρο, απελευθερώνοντας πολύτιμο χώρο οθόνης"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Όταν βρίσκεται σε κατάσταση μπάρας, ο πίνακας θα χρησιμοποιήσει το ελάχιστο "
+"δυνατό χώρο, απελευθερώνοντας πολύτιμο χώρο οθόνης"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -664,14 +727,12 @@ msgid "Autostart apps"
 msgstr "Αυτόματη εκκίνηση εφαρμογών"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Εφαρμογές"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Εντολή"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -683,7 +744,9 @@ msgstr "Τίτλοι παραθύρων"
 
 #: src/panel/settings/settings_fonts.vala:44
 msgid "Set the font used in the titlebars of applications."
-msgstr "Ρυθμίστε τη γραμματοσειρά που θα χρησιμοποιείται στις μπάρες τίτλου εφαρμογών."
+msgstr ""
+"Ρυθμίστε τη γραμματοσειρά που θα χρησιμοποιείται στις μπάρες τίτλου "
+"εφαρμογών."
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
@@ -699,7 +762,9 @@ msgstr "Διεπαφή"
 
 #: src/panel/settings/settings_fonts.vala:58
 msgid "Set the primary font used by application controls."
-msgstr "Ρυθμίστε την κύρια γραμματοσειρά που θα χρησιμοποιείται από τα στοιχεία ελέγχου εφαρμογών."
+msgstr ""
+"Ρυθμίστε την κύρια γραμματοσειρά που θα χρησιμοποιείται από τα στοιχεία "
+"ελέγχου εφαρμογών."
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
@@ -707,7 +772,9 @@ msgstr "Monospace"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Ρυθμίστε τη γραμματοσειρά που θα χρησιμοποιείται στις μπάρες τίτλου εφαρμογών."
+msgstr ""
+"Ρυθμίστε τη γραμματοσειρά που θα χρησιμοποιείται στις μπάρες τίτλου "
+"εφαρμογών."
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -807,9 +874,8 @@ msgid "Caffeine Mode"
 msgstr "Κατάσταση Caffeine"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Ρυθμίσεις"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -952,7 +1018,8 @@ msgstr "Προσάρτηση και άνοιγμα \"%s\""
 #: src/applets/places-indicator/VolumeItem.vala:73
 #: src/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Πληκτρολογήστε τον κωδικό κρυπτογράφησης για να ξεκλειδώσετε αυτόν τον τόμο"
+msgstr ""
+"Πληκτρολογήστε τον κωδικό κρυπτογράφησης για να ξεκλειδώσετε αυτόν τον τόμο"
 
 #: src/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
@@ -960,7 +1027,8 @@ msgstr "Ο κωδικός που εισάγατε είναι λανθασμέν�
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Παρουσιάστηκε άγνωστο σφάλμα κατά την προσπάθεια προσάρτησης αυτού του τόμου"
+msgstr ""
+"Παρουσιάστηκε άγνωστο σφάλμα κατά την προσπάθεια προσάρτησης αυτού του τόμου"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1154,7 +1222,8 @@ msgstr "Αφαίρεση από τα αγαπημένα"
 msgid "Favorite"
 msgstr "Προσθήκη στα αγαπημένα"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1342,8 +1411,12 @@ msgid "Budgie Panel"
 msgstr "Budgie Πάνελ"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Εκτέλεση άλλων εφαρμογών και παροχή διάφορων εργαλείων για τη διαχείριση παραθύρων, εμφάνιση της ώρας, κλπ."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Εκτέλεση άλλων εφαρμογών και παροχή διάφορων εργαλείων για τη διαχείριση "
+"παραθύρων, εμφάνιση της ώρας, κλπ."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

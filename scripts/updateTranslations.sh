@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tx pull -a
+tx pull -af
 
 pushd po
     rm LINGUAS
