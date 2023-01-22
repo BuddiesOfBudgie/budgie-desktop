@@ -36,3 +36,4 @@ for file in `find src -name "*.in"`; do
 done
 
 mv budgie-desktop.po po/budgie-desktop.pot
+tx push -s
