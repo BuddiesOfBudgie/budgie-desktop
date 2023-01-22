@@ -167,22 +167,37 @@ public class BluetoothIndicator : Bin {
 		if (adapter == null) return;
 
 		if (!pairing) {
-			// Start Bluetooth discovery if we're on the main page
-			adapter.start_discovery.begin((obj, res) => {
+			// Set the discovery filter
+			var properties = new HashTable<string,Variant>(str_hash, str_equal);
+			properties["Discoverable"] = new Variant.boolean(true);
+			adapter.set_discovery_filter.begin(properties, (obj, res) => {
 				try {
-					adapter.start_discovery.end(res);
-					devices_box.set_filter_func(filter_unpaired);
-					pairing_button.label = _("Stop Pairing");
-					pairing = true;
+					adapter.set_discovery_filter.end(res);
+
+					// Start Bluetooth discovery
+					adapter.start_discovery.begin((obj, res) => {
+						try {
+							adapter.start_discovery.end(res);
+
+							// Set the pairing filter and update our state
+							devices_box.set_filter_func(filter_unpaired);
+							pairing_button.label = _("Stop Pairing");
+							pairing = true;
+						} catch (Error e) {
+							warning("Error beginning discovery on adapter %s: %s", adapter.alias, e.message);
+						}
+					});
 				} catch (Error e) {
-					warning("Error beginning discovery on adapter %s: %s", adapter.alias, e.message);
+					warning("Error setting discovery filter on %s: %s", adapter.alias, e.message);
 				}
 			});
 		} else {
-			// Stop Bluetooth discovery if we're on the pairing page
+			// Stop Bluetooth discovery
 			adapter.stop_discovery.begin((obj, res) => {
 				try {
 					adapter.stop_discovery.end(res);
+
+					// Set the normal filter and update our state
 					devices_box.set_filter_func(filter_paired);
 					pairing_button.label = _("Pairing");
 					pairing = false;
