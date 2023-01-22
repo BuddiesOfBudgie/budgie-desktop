@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Davidmp <medipas@gmail.com>, 2015-2017
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-03-20 07:59+0000\n"
-"Last-Translator: David M <medipas@gmail.com>\n"
-"Language-Team: Catalan <http://translate.getsol.us/projects/budgie-desktop/"
-"translations/ca/>\n"
-"Language: ca\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Catalan (https://www.transifex.com/buddiesofbudgie/teams/129844/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -78,8 +79,11 @@ msgid "Confirm applet removal"
 msgstr "Confirmeu la supressió de la miniaplicació."
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Realment voleu suprimir aquesta miniaplicació? Aquesta acció no es pot desfer."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Realment voleu suprimir aquesta miniaplicació? Aquesta acció no es pot "
+"desfer."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -123,8 +127,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Adjunta diàlegs modals a les finestres."
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Els diàlegs modals s'adjuntaran a la finestra mare i es mouran conjuntament quan s'arrosseguin."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Els diàlegs modals s'adjuntaran a la finestra mare i es mouran conjuntament "
+"quan s'arrosseguin."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -132,7 +140,8 @@ msgstr "Disposició dels botons"
 
 #: src/panel/settings/settings_wm.vala:47
 msgid "Change the layout of buttons in application titlebars."
-msgstr "Canvia la disposició dels botons a les barres de títol de les aplicacions."
+msgstr ""
+"Canvia la disposició dels botons a les barres de títol de les aplicacions."
 
 #: src/panel/settings/settings_wm.vala:52
 msgid "Center new windows on screen"
@@ -144,19 +153,28 @@ msgstr "Centra les finestres noves que s'obrin a la pantalla actual."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Inhabilita el mode de llum de nit quan les finestres estiguin en pantalla completa."
+msgstr ""
+"Inhabilita el mode de llum de nit quan les finestres estiguin en pantalla "
+"completa."
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Inhabilita el mode de llum de nit quan una finestra està en pantalla completa. Es torna a habilitar quan se'n surt."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Inhabilita el mode de llum de nit quan una finestra està en pantalla "
+"completa. Es torna a habilitar quan se'n surt."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
 msgstr ""
-"Interromp les notificacions quan les finestres estiguin en pantalla completa."
+"Interromp les notificacions quan les finestres estiguin en pantalla "
+"completa."
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 "Evita que apareguin notificacions quan una finestra està en pantalla "
 "completa. Es torna a habilitar quan se'n surt."
@@ -166,32 +184,50 @@ msgid "Automatic tiling"
 msgstr "Mosaic automàtic"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Les finestres faran automàticament un mosaic quan s'arrosseguin a dalt de tot de la pantalla o als cantons."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Les finestres faran automàticament un mosaic quan s'arrosseguin a dalt de "
+"tot de la pantalla o als cantons."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "Habilita el canvi del focus de la finestra en entrar-hi i sortir-ne amb el ratolí."
+msgstr ""
+"Habilita el canvi del focus de la finestra en entrar-hi i sortir-ne amb el "
+"ratolí."
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Habilita que la finestra tingui el focus quan s'hi entri amb el ratolí i que el deixi de tenir quan se'n surti."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Habilita que la finestra tingui el focus quan s'hi entri amb el ratolí i que"
+" el deixi de tenir quan se'n surti."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Inhabilita la no redirecció de les finestres."
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Aquesta opció és per a usuaris avançats. Useu-la si teniu problemes gràfics o de rendiment amb GPU dedicades."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Aquesta opció és per a usuaris avançats. Useu-la si teniu problemes gràfics "
+"o de rendiment amb GPU dedicades."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Mostra totes les finestres al canviador de pestanyes."
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "El canviador de pestanyes les mostrarà totes independentment de l'espai de treball en ús."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"El canviador de pestanyes les mostrarà totes independentment de l'espai de "
+"treball en ús."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
@@ -212,7 +248,8 @@ msgstr "Ginys"
 
 #: src/panel/settings/settings_style.vala:47
 msgid "Set the appearance of window decorations and controls"
-msgstr "Establiu l'aparença de les decoracions de les finestres i dels controls."
+msgstr ""
+"Establiu l'aparença de les decoracions de les finestres i dels controls."
 
 #: src/panel/settings/settings_style.vala:51
 msgid "Icons"
@@ -247,8 +284,11 @@ msgid "Built-in theme"
 msgstr "Tema integrat"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Quan estigui habilitat, l'estil de l'escriptori se substituirà per l'estil integrat."
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Quan estigui habilitat, l'estil de l'escriptori se substituirà per l'estil "
+"integrat."
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -279,24 +319,35 @@ msgid "Set Raven position"
 msgstr "Establiu la posició del Raven."
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Establiu a quin costat de la pantalla s'obrirà el Raven. Si s'estableix a automàtic, s'obrirà on sigui el plafó de què depengui."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Establiu a quin costat de la pantalla s'obrirà el Raven. Si s'estableix a "
+"automàtic, s'obrirà on sigui el plafó de què depengui."
 
 #: src/panel/settings/settings_raven.vala:67
 msgid "Allow raising volume above 100%"
 msgstr "Permet augmentar el volum a més del 100 %."
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Permet augmentar el volum a través dels paràmetres del so així com del giny de sortida de so del Raven fins al 150 %."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Permet augmentar el volum a través dels paràmetres del so així com del giny "
+"de sortida de so del Raven fins al 150 %."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Habilita mostrar els números de la setmana al calendari."
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Aquest paràmetre habilita mostrar els números de la setmana al giny del calendari."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Aquest paràmetre habilita mostrar els números de la setmana al giny del "
+"calendari."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -304,7 +355,9 @@ msgstr "Mostra el giny del calendari."
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Mostra o amaga el giny del calendari a la secció de miniaplicacions del Raven."
+msgstr ""
+"Mostra o amaga el giny del calendari a la secció de miniaplicacions del "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -312,7 +365,9 @@ msgstr "Mostra el giny de la sortida de so."
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Mostra o amaga el giny de la sortida de so a la secció de miniaplicacions del Raven."
+msgstr ""
+"Mostra o amaga el giny de la sortida de so a la secció de miniaplicacions "
+"del Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -320,15 +375,21 @@ msgstr "Mostra el giny de l'entrada del micròfon."
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Mostra o amaga el giny de l'entrada del micròfon a la secció de miniaplicacions del Raven."
+msgstr ""
+"Mostra o amaga el giny de l'entrada del micròfon a la secció de "
+"miniaplicacions del Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Mostra el giny de controls de reproducció multimèdia."
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Mostra o amaga el giny de controls de reproducció multimèdia (MPRIS) de la secció de miniaplicacions del Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Mostra o amaga el giny de controls de reproducció multimèdia (MPRIS) de la "
+"secció de miniaplicacions del Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -362,7 +423,8 @@ msgstr "Escriptori"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
@@ -372,7 +434,8 @@ msgstr "Icones de l'escriptori"
 msgid "Control whether to allow icons on the desktop."
 msgstr "Controleu si voleu permetre icones a l'escriptori."
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -401,7 +464,8 @@ msgstr "Paperera"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "Afegeix una drecera del directori de la paperera a l'escriptori."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
@@ -417,8 +481,11 @@ msgid "Number of virtual desktops"
 msgstr "Nombre d'escriptoris virtuals"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Nombre d'escriptoris virtuals / espais de treball per crear automàticament a l'engegada."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"Nombre d'escriptoris virtuals / espais de treball per crear automàticament a"
+" l'engegada."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -434,8 +501,11 @@ msgid "Click Policy"
 msgstr "Funcionament del clic"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
-msgstr "El funcionament del clic determina si s'han d'obrir els elements amb un clic únic o doble."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"El funcionament del clic determina si s'han d'obrir els elements amb un clic"
+" únic o doble."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -556,7 +626,8 @@ msgstr "Mida"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Establiu la mida (amplada o alçada, segons l'orientació) d'aquest plafó."
+msgstr ""
+"Establiu la mida (amplada o alçada, segons l'orientació) d'aquest plafó."
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -564,7 +635,9 @@ msgstr "Amaga'l automàticament."
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Quan estigui establert, aquest plafó s'amagarà per maximitzar l'espai de la pantalla."
+msgstr ""
+"Quan estigui establert, aquest plafó s'amagarà per maximitzar l'espai de la "
+"pantalla."
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -587,16 +660,24 @@ msgid "Stylize regions"
 msgstr "Estilitza les regions."
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Afegeix un suggeriment al plafó de manera que cada una de les tres àrees principals pugui tenir un tema diferent."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Afegeix un suggeriment al plafó de manera que cada una de les tres àrees "
+"principals pugui tenir un tema diferent."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Mode d'acoblador"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "En mode d'acoblador, el plafó usarà la mínima quantitat d'espai possible i alliberarà espai de pantalla valuós."
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"En mode d'acoblador, el plafó usarà la mínima quantitat d'espai possible i "
+"alliberarà espai de pantalla valuós."
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -695,7 +776,9 @@ msgstr "Monoespai"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Establiu la lletra d'amplada fixa usada per les aplicacions predominants en text."
+msgstr ""
+"Establiu la lletra d'amplada fixa usada per les aplicacions predominants en "
+"text."
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -947,7 +1030,8 @@ msgstr "La contrasenya que heu escrit no és correcta."
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Hi ha hagut un error desconegut mentre s'intentava muntar aquest volum."
+msgstr ""
+"Hi ha hagut un error desconegut mentre s'intentava muntar aquest volum."
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1141,7 +1225,8 @@ msgstr "No ho consideris preferit."
 msgid "Favorite"
 msgstr "Considera-ho preferit."
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1329,8 +1414,12 @@ msgid "Budgie Panel"
 msgstr "Plafó del Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Obre altres aplicacions i proporciona diverses utilitats per gestionar finestres, mostrar l'hora, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Obre altres aplicacions i proporciona diverses utilitats per gestionar "
+"finestres, mostrar l'hora, etc."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

@@ -1,24 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# John McCormack <john@twistedpixels.ie>, 2015-2016
-# Pablo Chere <pablo.foche@gmail.com>, 2017
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-09-28 16:21+0000\n"
-"Last-Translator: Victor Grousset/tuxayo <victor@tuxayo.net>\n"
-"Language-Team: Esperanto <http://translate.getsol.us/projects/budgie-desktop/translations/eo/>\n"
-"Language: eo\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Esperanto (https://www.transifex.com/buddiesofbudgie/teams/129844/eo/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: eo\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -63,7 +64,8 @@ msgstr "Konfirmi panelan forigon"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Ĉu vi vere volas forigi ĉi tiun panelon? Tiu ago ne povas esti malfarita."
+msgstr ""
+"Ĉu vi vere volas forigi ĉi tiun panelon? Tiu ago ne povas esti malfarita."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -78,8 +80,10 @@ msgid "Confirm applet removal"
 msgstr "Konfirmi apletan forigon"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Ĉu vi vere volas forigi tiun apleton? Tiu ago ne povas esti malfarita."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Ĉu vi vere volas forigi tiun apleton? Tiu ago ne povas esti malfarita."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -123,18 +127,18 @@ msgid "Attach modal dialogs to windows"
 msgstr "Kunligi dialogojn al fenestroj"
 
 #: src/panel/settings/settings_wm.vala:41
-#, fuzzy
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Dialogoj estos kunligitaj al la patra fenestro, ili moviĝos kune kiam ili estos trenitaj"
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
 msgstr "Butono-aranĝo"
 
 #: src/panel/settings/settings_wm.vala:47
-#, fuzzy
 msgid "Change the layout of buttons in application titlebars."
-msgstr "Ĝi ŝanĝas la buton-aranĝon en aplikaĵaj titolbretoj"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:52
 msgid "Center new windows on screen"
@@ -149,7 +153,9 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:64
@@ -157,7 +163,9 @@ msgid "Pause notifications when windows are fullscreen"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
@@ -165,16 +173,19 @@ msgid "Automatic tiling"
 msgstr "Aŭtomata kahelo"
 
 #: src/panel/settings/settings_wm.vala:71
-#, fuzzy
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Fenestroj estos aŭtomate kahelitaj kiam ili estos trenitaj al la ekran-supro aŭ al la ekran-anguloj"
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
@@ -182,16 +193,19 @@ msgid "Disable unredirection of windows"
 msgstr "Malŝalti la fenestran \"unredirection\""
 
 #: src/panel/settings/settings_wm.vala:84
-#, fuzzy
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Ĉi tiu elekto estas por avangardaj uzuloj. Uzu ĝin se vi havas grafikajn aŭ rendimentajn problemojn kun dediĉitaj grafik-kartojn"
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -232,9 +246,8 @@ msgid "Set the globally used mouse cursor theme"
 msgstr "Elekti la ĝeneralan kursor-temon"
 
 #: src/panel/settings/settings_style.vala:61
-#, fuzzy
 msgid "Notification Position"
-msgstr "Sciigoj"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Set the location for notification popups"
@@ -249,9 +262,9 @@ msgid "Built-in theme"
 msgstr "Integrita temo"
 
 #: src/panel/settings/settings_style.vala:79
-#, fuzzy
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Se ĝi estas ŝaltita, la labortabla komponanto-stilo estos transpasita fare de la integrita"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -262,31 +275,29 @@ msgid "Control whether windows and controls use animations"
 msgstr "Ĝi starigas ĉu fenestroj kaj kontroliloj uzas animaciojn"
 
 #: src/panel/settings/settings_style.vala:204
-#, fuzzy
 msgid "Top Left"
-msgstr "Maldekstra"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:206
-#, fuzzy
 msgid "Bottom Left"
-msgstr "Malsupro"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:208
-#, fuzzy
 msgid "Bottom Right"
-msgstr "Malsupro"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:211
-#, fuzzy
 msgid "Top Right"
-msgstr "Dekstra"
+msgstr ""
 
 #: src/panel/settings/settings_raven.vala:61
 msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -294,7 +305,9 @@ msgid "Allow raising volume above 100%"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:72
@@ -302,7 +315,8 @@ msgid "Enable display of week numbers in Calendar"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:78
@@ -334,7 +348,9 @@ msgid "Show Media Playback Controls Widget"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:102
@@ -369,18 +385,19 @@ msgstr "Labortablo"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "Labortablaj piktogramoj"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "Ĝi regas ĉu estas permesita la ĉeesto de lanĉiloj kaj piktogramoj en la labortablo"
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -388,9 +405,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "Ĝi regas ĉu estas permesita la ĉeesto de lanĉiloj kaj piktogramoj en la labortablo"
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -398,9 +414,8 @@ msgid "Home directory"
 msgstr "Hejma dosierujo"
 
 #: src/panel/settings/settings_desktop.vala:96
-#, fuzzy
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Ĝi aldonas simbolan ligilon al via hejma dosierujo en la labortablo"
+msgstr ""
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
@@ -408,29 +423,28 @@ msgid "Trash"
 msgstr "Rubujo"
 
 #: src/panel/settings/settings_desktop.vala:104
-#, fuzzy
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Ĝi aldonas simbolan ligilon al la rubuja dosierujo en la labortablo"
+msgstr ""
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Grandeco"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "Ĝi regas ĉu estas permesita la ĉeesto de lanĉiloj kaj piktogramoj en la labortablo"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -447,7 +461,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -478,9 +493,8 @@ msgid "Settings"
 msgstr "Agordoj"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Forigi panelon"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -570,7 +584,9 @@ msgstr "Grandeco"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Fiksi la grandon (larĝeco aŭ alteco, depende de la orientiĝo) de ĉi tiu panelo"
+msgstr ""
+"Fiksi la grandon (larĝeco aŭ alteco, depende de la orientiĝo) de ĉi tiu "
+"panelo"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -578,7 +594,9 @@ msgstr "Aŭtomate kaŝi"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Kiam ĝi estas aktiva, la panelo ne estos videbla por maksimumigi la ekranan spacon"
+msgstr ""
+"Kiam ĝi estas aktiva, la panelo ne estos videbla por maksimumigi la ekranan "
+"spacon"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -601,16 +619,24 @@ msgid "Stylize regions"
 msgstr "Stiligi regionojn"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Ĝi apartigas la tri ĉefajn areojn de la panelo por ke ili povu esti agorditaj malsammaniere."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Ĝi apartigas la tri ĉefajn areojn de la panelo por ke ili povu esti "
+"agorditaj malsammaniere."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Doka reĝimo"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Kiam doka reĝimo estas aktiva, la panelo uzos la minimuman eblan kvanton da spaco, liberigante tiel ekranan spacon"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Kiam doka reĝimo estas aktiva, la panelo uzos la minimuman eblan kvanton da "
+"spaco, liberigante tiel ekranan spacon"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -664,19 +690,16 @@ msgid "Autostart"
 msgstr "Aŭtolanĉo"
 
 #: src/panel/settings/settings_autostart.vala:464
-#, fuzzy
 msgid "Autostart apps"
-msgstr "Aŭtolanĉo"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Aplikaĵoj"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Komando"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -687,36 +710,32 @@ msgid "Window Titles"
 msgstr "Fenestraj titoloj"
 
 #: src/panel/settings/settings_fonts.vala:44
-#, fuzzy
 msgid "Set the font used in the titlebars of applications."
-msgstr "Elekti la fonton uzitan en la titol-breto de la aplikaĵoj"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Documents"
 msgstr "Dokumentoj"
 
 #: src/panel/settings/settings_fonts.vala:51
-#, fuzzy
 msgid "Set the display font used by for documents."
-msgstr "Elekti la fonton uzitan de dokumentoj"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Interface"
 msgstr "Interfaco"
 
 #: src/panel/settings/settings_fonts.vala:58
-#, fuzzy
 msgid "Set the primary font used by application controls."
-msgstr "Elekti la ĉefan fonton uzitan de aplikaĵ-agordiloj"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Monospace"
 msgstr "Egallarĝa"
 
 #: src/panel/settings/settings_fonts.vala:65
-#, fuzzy
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Ĝi starigas la fiksitan larĝecon uzotan de aplikaĵoj"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -735,9 +754,8 @@ msgid "Medium"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:83
-#, fuzzy
 msgid "Slight"
-msgstr "Dekstra"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Hinting"
@@ -817,9 +835,8 @@ msgid "Caffeine Mode"
 msgstr "Kafeino-modo"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Agordoj"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -843,15 +860,14 @@ msgid "Turned off Caffeine Boost"
 msgstr ""
 
 #: src/daemon/settings.vala:346
-#, fuzzy
 msgid "Will turn off in a minute"
-msgstr "Malŝaltiĝos post"
+msgstr ""
 
 #. use plural
 #: src/daemon/settings.vala:349
-#, fuzzy, c-format
+#, c-format
 msgid "Will turn off in %d minutes"
-msgstr "Malŝaltiĝos post"
+msgstr ""
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:99
@@ -1145,9 +1161,8 @@ msgid "Close All Windows"
 msgstr ""
 
 #: src/applets/icon-tasklist/IconPopover.vala:117
-#, fuzzy
 msgid "Always On Top"
-msgstr "Ĉiam"
+msgstr ""
 
 #: src/applets/icon-tasklist/IconPopover.vala:119
 #: src/applets/icon-tasklist/IconPopover.vala:545
@@ -1166,7 +1181,8 @@ msgstr ""
 msgid "Favorite"
 msgstr ""
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1180,14 +1196,12 @@ msgid "Unmaximize"
 msgstr ""
 
 #: src/applets/icon-tasklist/IconPopover.vala:604
-#, fuzzy
 msgid "Close Window"
-msgstr "Fenestroj"
+msgstr ""
 
 #: src/applets/icon-tasklist/IconPopover.vala:606
-#, fuzzy
 msgid "Show Window Controls"
-msgstr "Fenestraj titoloj"
+msgstr ""
 
 #: src/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1250,14 +1264,12 @@ msgid "Show on mouseover"
 msgstr ""
 
 #: src/applets/workspaces/settings.ui.h:4
-#, fuzzy
 msgid "Always show"
-msgstr "Ĉiam"
+msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:1
-#, fuzzy
 msgid "Enable notification"
-msgstr "Neniu nova sciigo"
+msgstr ""
 
 #: src/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
@@ -1358,13 +1370,16 @@ msgid "Budgie Panel"
 msgstr "Panelo de Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Ĝi lanĉas aliajn aplikaĵojn kaj havigas kelkajn utilaĵojn por mastrumi vindozojn, montri la tempon, ktp."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Ĝi lanĉas aliajn aplikaĵojn kaj havigas kelkajn utilaĵojn por mastrumi "
+"vindozojn, montri la tempon, ktp."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
-#, fuzzy
 msgid "Change desktop appearance and behavior"
-msgstr "Ĝi ŝanĝas labortablan aspekton kaj konduton"
+msgstr ""
 
 #: src/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "User Indicator"

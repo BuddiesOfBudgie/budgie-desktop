@@ -82,8 +82,7 @@ msgstr "Confirmar remoção da mini-aplicação"
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
-"Pretende mesmo remover esta mini-aplicação? Esta ação não pode ser desfeita."
+msgstr "Remover esta mini-aplicação? Esta ação não pode ser anulada."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -197,8 +196,8 @@ msgid ""
 "Enables window focus to apply when the mouse enters the window and unfocus "
 "when the mouse leaves the window."
 msgstr ""
-"Ativa o foco da janela aplicável quando o rato entra na mesma ou desabilita "
-"o foco quando o rato sai da janela."
+"Permite que o foco da janela se aplique quando o rato entra na janela e se "
+"desfoca quando o rato deixa a janela."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
@@ -209,8 +208,8 @@ msgid ""
 "This option is for advanced users. Use this if you are having graphical or "
 "performance issues with dedicated GPUs."
 msgstr ""
-"Esta opção é para utilizadores avançados. Use esta opção apenas se tiver "
-"problemas gráficos ou de performance gráfica em gráficas dedicadas."
+"Esta opção é para utilizadores avançados. Use isto se tiver problemas "
+"gráficos ou de performance com GPUs dedicadas."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"

@@ -1,29 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Bogdan Cuza <boghison22@gmail.com>, 2015
-# Catirau Mihail <ustmaestro@gmail.com>, 2016
-# Dexter Rufus, 2016
-# Dexter Rufus, 2017
-# Richard <richardbp85@gmail.com>, 2015
-# Richard <richardbp85@gmail.com>, 2015
-# Vladimir Voinea <voineavladimir@gmail.com>, 2016
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2019-03-17 09:05+0000\n"
-"Last-Translator: Joshua Strobl <joshua@getsol.us>\n"
-"Language-Team: Romanian <http://translate.getsol.us/projects/budgie-desktop/translations/ro/>\n"
-"Language: ro\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Romanian (https://www.transifex.com/buddiesofbudgie/teams/129844/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -68,7 +64,9 @@ msgstr "Confirmă îndepărtarea panoului"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Chiar doriți să îndepărtați acest panou? Această acțiune nu poate fi anulată ulterior."
+msgstr ""
+"Chiar doriți să îndepărtați acest panou? Această acțiune nu poate fi anulată"
+" ulterior."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
@@ -83,8 +81,11 @@ msgid "Confirm applet removal"
 msgstr "Confirmă îndepărtarea appletului"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Chiar doriți să îndepărtați acest applet? Această acțiune nu poate fi anulată ulterior."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Chiar doriți să îndepărtați acest applet? Această acțiune nu poate fi "
+"anulată ulterior."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -128,8 +129,12 @@ msgid "Attach modal dialogs to windows"
 msgstr "Atașează dialoguri modale la ferestre"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Modalitățile de dialog vor fi atașate la fereastra părinte și se vor deplasa împreună atunci când sunt trase."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Modalitățile de dialog vor fi atașate la fereastra părinte și se vor deplasa"
+" împreună atunci când sunt trase."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -149,53 +154,73 @@ msgstr "Centrează ferestrele nou lansate pe ecranul curent."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Dezactivați modul Lumină de Noapte atunci când ferestrele sunt ecran complet"
+msgstr ""
+"Dezactivați modul Lumină de Noapte atunci când ferestrele sunt ecran complet"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Dezactivează modul Lumină de Noapte atunci când o fereastră este afișată pe tot ecranul. Re-activează la părăsirea ecranului complet."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Dezactivează modul Lumină de Noapte atunci când o fereastră este afișată pe "
+"tot ecranul. Re-activează la părăsirea ecranului complet."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Dezactivați modul Lumină de Noapte atunci când ferestrele sunt ecran complet"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "Dezactivează modul Lumină de Noapte atunci când o fereastră este afișată pe tot ecranul. Re-activează la părăsirea ecranului complet."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "Dispunere automată"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Ferestrele vor fi automat aranjate când sunt trase în partea de sus a ecranului sau în colțurile îndepărtate."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Ferestrele vor fi automat aranjate când sunt trase în partea de sus a "
+"ecranului sau în colțurile îndepărtate."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "Activați modificarea focalizării ferestrei cu mouse-ul pe intrare și plecare"
+msgstr ""
+"Activați modificarea focalizării ferestrei cu mouse-ul pe intrare și plecare"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Permite focalizarea ferestrei să se aplice când mouse-ul intră în fereastră și se defocalizează atunci când mouse-ul părăsește fereastra."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Permite focalizarea ferestrei să se aplice când mouse-ul intră în fereastră "
+"și se defocalizează atunci când mouse-ul părăsește fereastra."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Disable unredirection of windows"
 msgstr "Dezactivează \"unredirect\" pentru ferestre"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Această opțiune este pentru utilizatorii avansați. Utilizați acest lucru dacă aveți probleme grafice sau de performanță cu Unitațile de Procesare Grafică (UPG-urile) dedicate."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Această opțiune este pentru utilizatorii avansați. Utilizați acest lucru "
+"dacă aveți probleme grafice sau de performanță cu Unitațile de Procesare "
+"Grafică (UPG-urile) dedicate."
 
 #: src/panel/settings/settings_wm.vala:89
-#, fuzzy
 msgid "Show all windows in tab switcher"
-msgstr "Afișați toate ferestrele prin clic"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -252,8 +277,11 @@ msgid "Built-in theme"
 msgstr "Tema integrată"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Când este activată, tema implicită va suprascrie styling-ul componentei desktop"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Când este activată, tema implicită va suprascrie styling-ul componentei "
+"desktop"
 
 #: src/panel/settings/settings_style.vala:86
 msgid "Animations"
@@ -284,7 +312,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -292,16 +322,22 @@ msgid "Allow raising volume above 100%"
 msgstr "Permiteți creșterea volumului peste 100%"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Permite creșterea volumului prin intermediul setărilor de sunet, precum și a Widgetului de ieșire a sunetului în Raven până la 150%."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"Permite creșterea volumului prin intermediul setărilor de sunet, precum și a"
+" Widgetului de ieșire a sunetului în Raven până la 150%."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "Activați afișarea numerelor de săptămâni în Calendar"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Această setare permite afișarea numerelor de săptămână în widgetul Calendar."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
+msgstr ""
+"Această setare permite afișarea numerelor de săptămână în widgetul Calendar."
 
 #: src/panel/settings/settings_raven.vala:78
 msgid "Show Calendar Widget"
@@ -309,7 +345,8 @@ msgstr "Afișați widgetul Calendar"
 
 #: src/panel/settings/settings_raven.vala:79
 msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Afișează sau ascunde widget-ul Calendar din secțiunea Aplicații Raven."
+msgstr ""
+"Afișează sau ascunde widget-ul Calendar din secțiunea Aplicații Raven."
 
 #: src/panel/settings/settings_raven.vala:84
 msgid "Show Sound Output Widget"
@@ -317,7 +354,9 @@ msgstr "Afișați widgetul pentru ieșirea sunetului"
 
 #: src/panel/settings/settings_raven.vala:85
 msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Afișează sau ascunde Widgetul de ieșire a sunetului în secțiunea Aplicații Raven."
+msgstr ""
+"Afișează sau ascunde Widgetul de ieșire a sunetului în secțiunea Aplicații "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:90
 msgid "Show Microphone Input Widget"
@@ -325,15 +364,20 @@ msgstr "Afișați widgetul pentru intrarea microfonului"
 
 #: src/panel/settings/settings_raven.vala:91
 msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Afișează sau ascunde Widgetul Intrare Microfon în secțiunea Aplicații Raven."
+msgstr ""
+"Afișează sau ascunde Widgetul Intrare Microfon în secțiunea Aplicații Raven."
 
 #: src/panel/settings/settings_raven.vala:96
 msgid "Show Media Playback Controls Widget"
 msgstr "Afișați widgetul pentru controlul redării media"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Afișează sau ascunde Widget-ul de control al redării media (MPRIS) din secțiunea Aplicații Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"Afișează sau ascunde Widget-ul de control al redării media (MPRIS) din "
+"secțiunea Aplicații Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -367,18 +411,19 @@ msgstr "Spațiul de lucru"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "Pictograme desktop"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "Determină dacă sunt permise lansatoare și pictograme pe desktop."
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -386,9 +431,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "Determină dacă sunt permise lansatoare și pictograme pe desktop."
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -406,27 +450,28 @@ msgstr "Gunoi"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Adăugați o comandă rapidă către directorul Coș de gunoi de pe desktop."
+msgstr ""
+"Adăugați o comandă rapidă către directorul Coș de gunoi de pe desktop."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "Mărime"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "Determină dacă sunt permise lansatoare și pictograme pe desktop."
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -443,7 +488,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -474,9 +520,8 @@ msgid "Settings"
 msgstr "Setări"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "Îndepărtează panoul"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -566,7 +611,8 @@ msgstr "Mărime"
 
 #: src/panel/settings/settings_panel.vala:238
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Alege mărimea acestui panou (lățimea sau înălțimea, în funcție de orientare)"
+msgstr ""
+"Alege mărimea acestui panou (lățimea sau înălțimea, în funcție de orientare)"
 
 #: src/panel/settings/settings_panel.vala:245
 msgid "Automatically hide"
@@ -574,7 +620,9 @@ msgstr "Ascundere automată"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Odată setat, acest panou se va ascunde pentru a maximaliza spațiul disponibil"
+msgstr ""
+"Odată setat, acest panou se va ascunde pentru a maximaliza spațiul "
+"disponibil"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Transparency"
@@ -597,16 +645,24 @@ msgid "Stylize regions"
 msgstr "Stilizare regiuni"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Adaugă o nuanță panoului, astfel încât fiecare dintre cele trei zone principale ale lui pot fi tematizate diferit."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Adaugă o nuanță panoului, astfel încât fiecare dintre cele trei zone "
+"principale ale lui pot fi tematizate diferit."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "Modul dock"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Atâta timp cât se află în modul dock, panoul va folosi spațiu minimal, lăsând mai mult disponibil"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Atâta timp cât se află în modul dock, panoul va folosi spațiu minimal, "
+"lăsând mai mult disponibil"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -664,14 +720,12 @@ msgid "Autostart apps"
 msgstr "Aplicații care rulează automat la pornire"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "Aplicații"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "Comandă"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -707,7 +761,8 @@ msgstr "Monospațiat"
 
 #: src/panel/settings/settings_fonts.vala:65
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Setați fontul cu lățime fixă utilizat de aplicațiile de text dominante."
+msgstr ""
+"Setați fontul cu lățime fixă utilizat de aplicațiile de text dominante."
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Text scaling"
@@ -726,18 +781,16 @@ msgid "Medium"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:83
-#, fuzzy
 msgid "Slight"
-msgstr "Dreapta"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Hinting"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:101
-#, fuzzy
 msgid "Set the type of hinting to use."
-msgstr "Setați factorul de scalare a textului."
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Subpixel (for LCD screens)"
@@ -752,9 +805,8 @@ msgid "Antialiasing"
 msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:126
-#, fuzzy
 msgid "Set the type of antialiasing to use."
-msgstr "Setați factorul de scalare a textului."
+msgstr ""
 
 #: src/raven/start_listening.vala:20
 msgid "No apps are currently playing audio."
@@ -810,9 +862,8 @@ msgid "Caffeine Mode"
 msgstr "Mod Cafeină"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "Setări"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -836,15 +887,14 @@ msgid "Turned off Caffeine Boost"
 msgstr "Caffeine Boost dezactivat"
 
 #: src/daemon/settings.vala:346
-#, fuzzy
 msgid "Will turn off in a minute"
-msgstr "Se va opri în"
+msgstr ""
 
 #. use plural
 #: src/daemon/settings.vala:349
-#, fuzzy, c-format
+#, c-format
 msgid "Will turn off in %d minutes"
-msgstr "Se va opri în"
+msgstr ""
 
 #. User Menu Creation
 #: src/applets/user-indicator/UserIndicatorWindow.vala:99
@@ -964,7 +1014,8 @@ msgstr "Parola introdusă este incorectă"
 
 #: src/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "S-a produs o eroare necunoscută în încercarea de montare a acestui volum"
+msgstr ""
+"S-a produs o eroare necunoscută în încercarea de montare a acestui volum"
 
 #: src/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -1159,7 +1210,8 @@ msgstr "Elimină din favorite"
 msgid "Favorite"
 msgstr "Favorit"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1347,8 +1399,12 @@ msgid "Budgie Panel"
 msgstr "Panou Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Lansează alte aplicații și furnizează utilități pentru administrarea ferestrelor, arătarea orei, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Lansează alte aplicații și furnizează utilități pentru administrarea "
+"ferestrelor, arătarea orei, etc."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"

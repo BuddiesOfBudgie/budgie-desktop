@@ -1,27 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
-#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 # Translators:
-# Ibrahim al-Darra <ibrahimaldarra@gmail.com>, 2016
-# Karim Jerbi <hanibell004@gmail.com>, 2016
-# mehdi alouane <pro4medo@gmail.com>, 2015
-# MUHAAB SHAAM <muhaab.org@gmail.com>, 2017
-# أبو سامي <ahmadjab1998@gmail.com>, 2017-2018
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Budgie Desktop\n"
+"Project-Id-Version: budgie-desktop 10.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2020-10-10 00:48+0000\n"
-"Last-Translator: Faisal almosbahi <faisal.almosbahi@gmail.com>\n"
-"Language-Team: Arabic <http://translate.getsol.us/projects/budgie-desktop/translations/ar/>\n"
-"Language: ar\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Arabic (https://www.transifex.com/buddiesofbudgie/teams/129844/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: src/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -81,8 +79,10 @@ msgid "Confirm applet removal"
 msgstr "تأكيد إزالة البريمج"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "هل أنت متأكد من رغبتك في إزالة هذا البريمح؟ لا يمكن التراجع عن هذه العملية."
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"هل أنت متأكد من رغبتك في إزالة هذا البريمح؟ لا يمكن التراجع عن هذه العملية."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 msgid "Don't ask me again"
@@ -126,7 +126,9 @@ msgid "Attach modal dialogs to windows"
 msgstr "ربط مربعات الحوار المنبثقة بالنوافذ"
 
 #: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
 msgstr "سترتبط نوافذ الحوار المنبثقة بالنافذة الأم وستتحرك معها عند سحبها."
 
 #: src/panel/settings/settings_wm.vala:46
@@ -150,33 +152,42 @@ msgid "Disable Night Light mode when windows are fullscreen"
 msgstr "تعطيل وضع الإضاءة الليلية عندما تكون النوافذ في وضع ملء الشاشة"
 
 #: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "تعطيل وضع الإضاءة الليلية عندما تكون النافذة في وضع ملء الشاشة، وإعادة التمكين عند مغادرة ملء الشاشة."
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"تعطيل وضع الإضاءة الليلية عندما تكون النافذة في وضع ملء الشاشة، وإعادة "
+"التمكين عند مغادرة ملء الشاشة."
 
 #: src/panel/settings/settings_wm.vala:64
-#, fuzzy
 msgid "Pause notifications when windows are fullscreen"
-msgstr "تعطيل وضع الإضاءة الليلية عندما تكون النوافذ في وضع ملء الشاشة"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:65
-#, fuzzy
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr "تعطيل وضع الإضاءة الليلية عندما تكون النافذة في وضع ملء الشاشة، وإعادة التمكين عند مغادرة ملء الشاشة."
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "ترتيب تلقائي"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "سيتم ترتيب النوافذ تلقائيًا عند سحبها لأعلى الشاشة أو أحد الزوايا البعيدة."
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"سيتم ترتيب النوافذ تلقائيًا عند سحبها لأعلى الشاشة أو أحد الزوايا البعيدة."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
 msgstr "تغيير تركيز النافذة عند تمرير مؤشر الفأرة بها"
 
 #: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
 msgstr "تمكين تركيز النافذة عند دخول مؤشر الفأرة بها، وإلغاؤه عند خروجه."
 
 #: src/panel/settings/settings_wm.vala:83
@@ -184,15 +195,21 @@ msgid "Disable unredirection of windows"
 msgstr "تعطيل إعادة توجيه النوافذ"
 
 #: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "هذا الخيار للمستخدمين المتقدمين. استخدمه إذا واجهت مشاكل رسومية أو مشاكل في الأداء مع كروت الشاشة المخصصة."
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"هذا الخيار للمستخدمين المتقدمين. استخدمه إذا واجهت مشاكل رسومية أو مشاكل في "
+"الأداء مع كروت الشاشة المخصصة."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "إظهار جميع النوافذ بمبدل علامات التبويب"
 
 #: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
@@ -249,7 +266,8 @@ msgid "Built-in theme"
 msgstr "المظهر الافتراضي"
 
 #: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr "عند تشغيله, سيُهيّمن المظهر الافتراضي على نمط مكونات سطح المكتب"
 
 #: src/panel/settings/settings_style.vala:86
@@ -281,7 +299,9 @@ msgid "Set Raven position"
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
 msgstr ""
 
 #: src/panel/settings/settings_raven.vala:67
@@ -289,15 +309,20 @@ msgid "Allow raising volume above 100%"
 msgstr "السماح برفع مستوى الصوت أعلى من 100٪"
 
 #: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "السماح برفع مستوى الصوت حتى 150٪ عبر إعدادات الصوت بالإضافة إلى أداة إخراج الصوت في Raven."
+msgid ""
+"Allows raising the volume via Sound Settings as well as the Sound Output "
+"Widget in Raven up to 150%."
+msgstr ""
+"السماح برفع مستوى الصوت حتى 150٪ عبر إعدادات الصوت بالإضافة إلى أداة إخراج "
+"الصوت في Raven."
 
 #: src/panel/settings/settings_raven.vala:72
 msgid "Enable display of week numbers in Calendar"
 msgstr "السماح بعرض رقم الأسبوع في التقويم"
 
 #: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
+msgid ""
+"This setting enables the display of week numbers in the Calendar widget."
 msgstr "يتيح هذا الإعداد عرض رقم الأسبوع في أداة التقويم."
 
 #: src/panel/settings/settings_raven.vala:78
@@ -329,8 +354,12 @@ msgid "Show Media Playback Controls Widget"
 msgstr "إظهار أداة مفاتيح التحكم في تشغيل الوسائط"
 
 #: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "إظهار أو إخفاء أداة مفاتيح التحكم في تشغيل الوسائط (MPRIS) من قسم بريمجات Raven."
+msgid ""
+"Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets"
+" section."
+msgstr ""
+"إظهار أو إخفاء أداة مفاتيح التحكم في تشغيل الوسائط (MPRIS) من قسم بريمجات "
+"Raven."
 
 #: src/panel/settings/settings_raven.vala:102
 msgid "Show Power Strip"
@@ -364,18 +393,19 @@ msgstr "سطح المكتب"
 #. Update our switches on change
 #. Nemo
 #. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
 msgstr "أيقونات سطح المكتب"
 
 #: src/panel/settings/settings_desktop.vala:78
-#, fuzzy
 msgid "Control whether to allow icons on the desktop."
-msgstr "السماح بإظهار اختصارات تشغيل البرامج و الأيقونات على سطح المكتب."
+msgstr ""
 
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
 #. DesktopType is the only one that doesn't support showing mounts
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
@@ -383,9 +413,8 @@ msgid "Active Mounts"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
-#, fuzzy
 msgid "Show all active mounts on the desktop."
-msgstr "السماح بإظهار اختصارات تشغيل البرامج و الأيقونات على سطح المكتب."
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -405,25 +434,25 @@ msgstr "المهملات"
 msgid "Add a shortcut to the Trash directory on the desktop."
 msgstr "إضافة اختصار لمجلد المهملات على سطح المكتب."
 
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
 #. Click Policy combo box
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
-#, fuzzy
 msgid "Icon Size"
-msgstr "الحجم"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
-#, fuzzy
 msgid "Set the desired size of icons on the desktop."
-msgstr "السماح بإظهار اختصارات تشغيل البرامج و الأيقونات على سطح المكتب."
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
 msgstr "عدد مساحات العمل"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr "عدد مساحات العمل لإنشائها عند بدأ التشغيل."
 
 #: src/panel/settings/settings_desktop.vala:217
@@ -440,7 +469,8 @@ msgid "Click Policy"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:289
@@ -471,9 +501,8 @@ msgid "Settings"
 msgstr "الإعدادات"
 
 #: src/panel/settings/settings_panel.vala:85
-#, fuzzy
 msgid "Remove Panel"
-msgstr "إزالة اللوحة"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:86
 msgid "Remove this panel from the screen"
@@ -594,16 +623,23 @@ msgid "Stylize regions"
 msgstr "تنسيق"
 
 #: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "إضافة تلميح للوحة حتى يتم تغير مظهر كل من المناطق الثلاثة الأساسية للوحة بشكل مختلف."
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"إضافة تلميح للوحة حتى يتم تغير مظهر كل من المناطق الثلاثة الأساسية للوحة "
+"بشكل مختلف."
 
 #: src/panel/settings/settings_panel.vala:274
 msgid "Dock mode"
 msgstr "وضع حامل البرامج"
 
 #: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "في وضع حامل البرامج، ستستخدم اللوحة أقل مساحة ممكنة، مما يحرر مساحة الشاشة"
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"في وضع حامل البرامج، ستستخدم اللوحة أقل مساحة ممكنة، مما يحرر مساحة الشاشة"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -661,14 +697,12 @@ msgid "Autostart apps"
 msgstr "تطبيقات البدء التلقائي"
 
 #: src/panel/settings/settings_autostart.vala:506
-#, fuzzy
 msgid "Add Application"
-msgstr "التطبيقات"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:508
-#, fuzzy
 msgid "Add Command"
-msgstr "أمر"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:32
 msgid "Fonts"
@@ -804,9 +838,8 @@ msgid "Caffeine Mode"
 msgstr "وضع كافيين"
 
 #: src/daemon/menus.vala:51
-#, fuzzy
 msgid "System Settings"
-msgstr "الإعدادات"
+msgstr ""
 
 #: src/daemon/endsession.vala:157
 msgid "Log out"
@@ -1155,7 +1188,8 @@ msgstr "إزالة من المفضلة"
 msgid "Favorite"
 msgstr "إضافة للمفضلة"
 
-#. If our current amount of workspaces is different than how many we have added
+#. If our current amount of workspaces is different than how many we have
+#. added
 #. We have items to add
 #. For workspaces we need to add
 #: src/applets/icon-tasklist/IconPopover.vala:445
@@ -1343,7 +1377,9 @@ msgid "Budgie Panel"
 msgstr "لوحة Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
 msgstr "تشغيل تطبيقات أخرى و توفير أدوات لإدارة النوافذ، إظهار الوقت، الخ."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
