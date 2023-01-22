@@ -71,7 +71,8 @@ public class BluetoothIndicator : Bin {
 		var scrolled_window = new ScrolledWindow(null, null) {
 			hscrollbar_policy = NEVER,
 			min_content_height = 250,
-			max_content_height = 250
+			max_content_height = 250,
+			propagate_natural_height = true
 		};
 		devices_box = new ListBox() {
 			selection_mode = NONE
