@@ -266,9 +266,25 @@
 							!this.dispatcher.notifications_paused && // notifications aren't paused, e.g. no fullscreen apps
 							(this.popups.size() < MAX_POPUPS_SHOWN || notification.urgency == NotificationPriority.URGENT); // below the number of max popups, or the noti is critical
 
-			// Set to expire immediately if a popup shouldn't be shown.
+			// Because of Raven, if a popup shouldn't be shown, tell the dispatcher that
+			// there's a new notification, and then immediately close it with reason
+			// EXPIRED.
 			if (!should_notify || !should_show) {
-				notification.expire_timeout = 0;
+				if ("budgie-daemon" in app_name) return id; // We don't want to count our own noti's, or have them shown in Raven
+				this.paused_notifications++;
+				this.dispatcher.NotificationAdded(
+					app_name,
+					id,
+					app_icon,
+					summary,
+					body,
+					actions,
+					hints,
+					expire_timeout
+				);
+				this.dispatcher.NotificationClosed(id, app_name, NotificationCloseReason.EXPIRED);
+				this.NotificationClosed(id, NotificationCloseReason.EXPIRED);
+				return id;
 			}
 
 			var show_body_text = app_notification_settings.get_boolean("force-expanded");
@@ -305,10 +321,6 @@
 
 			// Play a sound for the notification if desired
 			maybe_play_sound(notification, should_notify, should_show, app_notification_settings);
-
-			if ("budgie-daemon" in app_name) return id; // We don't want to count our own noti's, or have them shown in Raven
-
-			this.paused_notifications++;
 
 			this.dispatcher.NotificationAdded(
 				app_name,
