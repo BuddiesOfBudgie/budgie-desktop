@@ -56,7 +56,7 @@ namespace Budgie {
 			this.categories = app_info.get_categories();
 			this.generic_name = app_info.get_generic_name();
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
-			this.should_show = app_info.should_show();
+			this.should_show = app_info.should_show() && app_info.get_show_in("Budgie");
 			this.dbus_activatable = app_info.get_boolean("DBusActivatable");
 
 			// Try to get an icon from the desktop file
