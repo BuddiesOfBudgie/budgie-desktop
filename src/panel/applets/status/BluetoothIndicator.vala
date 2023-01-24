@@ -178,6 +178,7 @@ public class BluetoothIndicator : Bin {
 								devices_box.set_filter_func(filter_unpaired);
 								pairing_button.label = _("Stop Pairing");
 								pairing = true;
+								reset_revealers();
 							} catch (Error e) {
 								warning("Error beginning discovery on adapter %s: %s", adapter.alias, e.message);
 							}
@@ -196,6 +197,7 @@ public class BluetoothIndicator : Bin {
 						devices_box.set_filter_func(filter_paired);
 						pairing_button.label = _("Start Pairing");
 						pairing = false;
+						reset_revealers();
 					} catch (Error e) {
 						warning("Error stopping discovery on adapter %s: %s", adapter.alias, e.message);
 					}
@@ -271,6 +273,19 @@ public class BluetoothIndicator : Bin {
 		var widget = row.get_child() as BluetoothDeviceWidget;
 
 		return !widget.device.paired;
+	}
+
+	/**
+	 * Iterate over all devices in the list box and closes any open
+	 * revealers.
+	 */
+	private void reset_revealers() {
+		devices_box.foreach((row) => {
+			var widget = ((ListBoxRow) row).get_child() as BluetoothDeviceWidget;
+			if (widget.revealer_showing()) {
+				widget.toggle_revealer();
+			}
+		});
 	}
 }
 
@@ -357,6 +372,10 @@ public class BluetoothDeviceWidget : Box {
 		);
 	}
 
+	public bool revealer_showing() {
+		return revealer.reveal_child;
+	}
+
 	public void toggle_revealer() {
 		revealer.reveal_child = !revealer.reveal_child;
 	}
@@ -368,6 +387,8 @@ public class BluetoothDeviceWidget : Box {
 			device.disconnect.begin((obj, res) => {
 				try {
 					device.disconnect.end(res);
+
+					toggle_revealer();
 				} catch (Error e) {
 					warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
 				}
@@ -378,6 +399,8 @@ public class BluetoothDeviceWidget : Box {
 			device.connect.begin((obj, res) => {
 				try {
 					device.connect.end(res);
+
+					toggle_revealer();
 				} catch (Error e) {
 					warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
 				}
@@ -388,6 +411,8 @@ public class BluetoothDeviceWidget : Box {
 			device.pair.begin((obj, res) => {
 				try {
 					device.pair.end(res);
+
+					toggle_revealer();
 				} catch (Error e) {
 					warning("Error pairing Bluetooth device %s: %s", device.alias, e.message);
 				}
