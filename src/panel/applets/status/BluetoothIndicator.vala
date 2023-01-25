@@ -22,11 +22,8 @@ public class BluetoothIndicator : Bin {
 
 	private ListBox? devices_box = null;
 	private Switch? bluetooth_switch = null;
-	private Button? pairing_button = null;
 
 	private BluetoothClient client;
-
-	public bool pairing { get; private set; default = false; }
 
 	construct {
 		get_style_context().add_class("bluetooth-applet-popover");
@@ -78,7 +75,6 @@ public class BluetoothIndicator : Bin {
 			selection_mode = NONE
 		};
 		devices_box.set_sort_func(sort_devices);
-		devices_box.set_filter_func(filter_paired);
 		devices_box.get_style_context().add_class("bluetooth-devices-listbox");
 
 		devices_box.row_activated.connect((row) => {
@@ -87,12 +83,6 @@ public class BluetoothIndicator : Bin {
 		});
 
 		scrolled_window.add(devices_box);
-
-		// Footer
-		var footer = new Box(HORIZONTAL, 0);
-		pairing_button = new Button.with_label(_("Start Pairing"));
-		pairing_button.clicked.connect(on_pairing_clicked);
-		footer.pack_start(pairing_button);
 
 		// Create our Bluetooth client
 		client = new BluetoothClient();
@@ -115,7 +105,6 @@ public class BluetoothIndicator : Bin {
 		box.pack_start(new Separator(HORIZONTAL), false, false, 1);
 		box.pack_start(scrolled_window);
 		box.pack_start(new Separator(HORIZONTAL), false, false, 1);
-		box.pack_end(footer);
 		box.show_all();
 		popover.add(box);
 		show_all();
@@ -156,59 +145,6 @@ public class BluetoothIndicator : Bin {
 		});
 	}
 
-	private void on_pairing_clicked() {
-		// Iterate over all of the adapters, ignoring unpowered ones
-		client.get_adapters().foreach((adapter) => {
-			if (!adapter.powered) return;
-
-			if (!pairing) {
-				// Set the discovery filter
-				var properties = new HashTable<string,Variant>(str_hash, str_equal);
-				properties["Discoverable"] = new Variant.boolean(true);
-				adapter.set_discovery_filter.begin(properties, (obj, res) => {
-					try {
-						adapter.set_discovery_filter.end(res);
-
-						// Start Bluetooth discovery
-						adapter.start_discovery.begin((obj, res) => {
-							try {
-								adapter.start_discovery.end(res);
-
-								// Set the pairing filter and update our state
-								devices_box.set_filter_func(filter_unpaired);
-								pairing_button.label = _("Stop Pairing");
-								pairing = true;
-								reset_revealers();
-							} catch (Error e) {
-								warning("Error beginning discovery on adapter %s: %s", adapter.alias, e.message);
-							}
-						});
-					} catch (Error e) {
-						warning("Error setting discovery filter on %s: %s", adapter.alias, e.message);
-					}
-				});
-			} else {
-				// Stop Bluetooth discovery
-				adapter.stop_discovery.begin((obj, res) => {
-					try {
-						adapter.stop_discovery.end(res);
-
-						// Set the normal filter and update our state
-						devices_box.set_filter_func(filter_paired);
-						pairing_button.label = _("Start Pairing");
-						pairing = false;
-						reset_revealers();
-					} catch (Error e) {
-						warning("Error stopping discovery on adapter %s: %s", adapter.alias, e.message);
-					}
-				});
-			}
-		});
-
-		devices_box.invalidate_filter();
-		devices_box.invalidate_sort();
-	}
-
 	private void add_device(Device1 device) {
 		debug("Bluetooth device added: %s", device.alias);
 
@@ -225,12 +161,10 @@ public class BluetoothIndicator : Bin {
 
 		widget.properties_updated.connect(() => {
 			client.check_powered();
-			devices_box.invalidate_filter();
 			devices_box.invalidate_sort();
 		});
 
 		devices_box.add(widget);
-		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
 	}
 
@@ -244,7 +178,6 @@ public class BluetoothIndicator : Bin {
 			}
 		});
 
-		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
 	}
 
@@ -261,18 +194,6 @@ public class BluetoothIndicator : Bin {
 		else if (a_device.device.connected) return -1; // A should go before B
 		else if (b_device.device.connected) return 1; // B should go before A
 		else return strcmp(a_device.device.alias, b_device.device.alias);
-	}
-
-	private bool filter_paired(ListBoxRow row) {
-		var widget = row.get_child() as BluetoothDeviceWidget;
-
-		return widget.device.paired;
-	}
-
-	private bool filter_unpaired(ListBoxRow row) {
-		var widget = row.get_child() as BluetoothDeviceWidget;
-
-		return !widget.device.paired;
 	}
 
 	/**
@@ -468,20 +389,17 @@ public class BluetoothDeviceWidget : Box {
 	}
 
 	private void update_status() {
-		if (device.connected) {
-			status_label.set_text(_("Connected"));
-			connection_button.label = _("Disconnect");
-		} else {
-			status_label.set_text(_("Disconnected"));
-			connection_button.label = _("Connect");
-		}
-
-		// Device isn't paired
 		if (!device.paired) {
 			status_label.set_text(_("Not paired"));
 			connection_button.label = _("Pair Devices");
 			forget_button.hide();
+		} else if (device.connected) {
+			status_label.set_text(_("Connected"));
+			connection_button.label = _("Disconnect");
+			forget_button.show();
 		} else {
+			status_label.set_text(_("Disconnected"));
+			connection_button.label = _("Connect");
 			forget_button.show();
 		}
 

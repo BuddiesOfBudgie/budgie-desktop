@@ -166,6 +166,28 @@ class BluetoothClient : GLib.Object {
 				if (powered == null) return;
 				set_last_powered.begin();
 			});
+
+			if (!adapter.powered) return;
+
+			// Set the discovery filter
+			var properties = new HashTable<string,Variant>(str_hash, str_equal);
+			properties["Discoverable"] = new Variant.boolean(true);
+			adapter.set_discovery_filter.begin(properties, (obj, res) => {
+				try {
+					adapter.set_discovery_filter.end(res);
+
+					// Start Bluetooth discovery
+					adapter.start_discovery.begin((obj, res) => {
+						try {
+							adapter.start_discovery.end(res);
+						} catch (Error e) {
+							warning("Error beginning discovery on adapter %s: %s", adapter.alias, e.message);
+						}
+					});
+				} catch (Error e) {
+					warning("Error setting discovery filter on %s: %s", adapter.alias, e.message);
+				}
+			});
 		} else if (iface is Device1) {
 			unowned Device1 device = iface as Device1;
 			device_added(device);
