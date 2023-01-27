@@ -110,10 +110,12 @@ public class BudgieMenuWindow : Budgie.Popover {
 
 		this.system_settings_button.clicked.connect(() => {
 			this.open_desktop_entry("budgie-control-center.desktop");
+			this.hide();
 		});
 
 		this.budgie_desktop_prefs_button.clicked.connect(() => {
 			this.open_desktop_entry("org.buddiesofbudgie.BudgieDesktopSettings.desktop");
+			this.hide();
 		});
 
 		// Enabling activation by search entry
