@@ -110,7 +110,7 @@
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
 		/** Spacing between notification popups */
-		private const int BUFFER_ZONE = 10;
+		private const int BUFFER_ZONE = 0;
 		/** Spacing between the first notification and the edge of the screen */
 		private const int INITIAL_BUFFER_ZONE = 45;
 		/** Maximum number of popups to show on the screen at once */
