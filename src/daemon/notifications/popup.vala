@@ -67,7 +67,10 @@ namespace Budgie.Notifications {
 			overlay.add(content_stack);
 			overlay.add_overlay(close_button);
 
-			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+			var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0) {
+				margin = 8,
+				margin_top = 2,
+			};
 			box.get_style_context().add_class("drop-shadow");
 			box.pack_start(overlay, true, true, 0);
 
