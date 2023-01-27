@@ -176,8 +176,11 @@ subdir('po')
 # Now build Budgie proper
 subdir('src')
 
-# And lastly, data and documentation bits
+# Take care of documentation
 with_gtk_doc = get_option('with-gtk-doc')
+subdir('docs')
+
+# And lastly, data bits
 subdir('data')
 
 report = [

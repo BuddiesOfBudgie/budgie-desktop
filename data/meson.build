@@ -1,10 +1,5 @@
 subdir('backgrounds')
 subdir('icons')
-subdir('man')
-
-if with_gtk_doc == true
-    subdir('gtk-docs')
-endif
 
 # Leveraged in budgie-control-center
 version_data = configuration_data()
