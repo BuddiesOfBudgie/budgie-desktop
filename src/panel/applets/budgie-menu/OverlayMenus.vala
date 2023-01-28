@@ -75,7 +75,10 @@ public class OverlayMenus : Revealer {
 
 			val.set_data<UserDirectory>("user-directory", key); // Add the UserDirectory as the data for this button
 			this.folder_items.insert(val, -1); // Add each of the menu items
-			val.clicked.connect((val) => { this.handle_xdg_dir_clicked(val);});
+			val.clicked.connect((val) => {
+				this.handle_xdg_dir_clicked(val);
+				this.item_clicked();
+			});
 		});
 
 		this.setup_dbus.begin();
