@@ -209,7 +209,6 @@ namespace BudgieScr {
 			}
 		}
 
-
 		async void shoot_window() {
 			bool success = false;
 			string filename_used = "";
@@ -385,10 +384,10 @@ namespace BudgieScr {
 			maingrid.attach(areabuttonbox, 0, 0, 1, 1);;
 
 			// show pointer
-			windowstate.screenshot_settings.bind("include-cursor", showpointerswitch, "active",	SettingsBindFlags.GET|SettingsBindFlags.SET);
+			windowstate.screenshot_settings.bind("include-cursor", showpointerswitch, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
 			// screenshot capture sound
-			windowstate.screenshot_settings.bind("screenshot-capture-sound", screenshotcapturesoundswitch, "active",	SettingsBindFlags.GET|SettingsBindFlags.SET);
+			windowstate.screenshot_settings.bind("screenshot-capture-sound", screenshotcapturesoundswitch, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
 			// delay
 			windowstate.screenshot_settings.bind("delay", delayspin, "value", SettingsBindFlags.GET|SettingsBindFlags.SET);
