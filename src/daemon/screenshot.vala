@@ -36,6 +36,7 @@ namespace BudgieScr {
 		public GLib.Settings screenshot_settings {get; private set;}
 		public int newstate {get; private set; default = WindowState.NONE;}
 		public bool showtooltips {get; set; default = true;}
+		public bool emit_capture_sound { get; set; default = true; }
 		public int buttonpos {get; private set;}
 		public string tempfile_path {get; private set;}
 		public bool startedfromgui {get; private set; default = false;}
@@ -52,6 +53,11 @@ namespace BudgieScr {
 				buttonpos_changed();
 			});
 			fill_buttonpos();
+
+			emit_capture_sound = screenshot_settings.get_boolean("screenshot-capture-sound");
+			screenshot_settings.changed["screenshot-capture-sound"].connect(() => {
+				emit_capture_sound = screenshot_settings.get_boolean("screenshot-capture-sound");
+			});
 
 			showtooltips = screenshot_settings.get_boolean("showtooltips");
 			screenshot_settings.changed["showtooltips"].connect(() => {
@@ -157,6 +163,8 @@ namespace BudgieScr {
 		string screenshot_mode;
 		bool include_cursor;
 		bool include_frame;
+		bool emit_capture_sound;
+
 		CurrentState windowstate;
 		static ScreenshotClient? client = null;
 
@@ -174,6 +182,7 @@ namespace BudgieScr {
 			this.area = area;
 			scale = get_scaling();
 			delay = windowstate.screenshot_settings.get_int("delay");
+			emit_capture_sound = windowstate.screenshot_settings.get_boolean("screenshot-capture-sound");
 			screenshot_mode = windowstate.screenshot_settings.get_string("screenshot-mode");
 			include_cursor = windowstate.screenshot_settings.get_boolean("include-cursor");
 			include_frame = windowstate.screenshot_settings.get_boolean("include-frame");
@@ -264,6 +273,8 @@ namespace BudgieScr {
 		}
 
 		private void play_shuttersound(int timeout, string[]? args = null) {
+			if (!emit_capture_sound) return;
+
 			// todo: we should probably not hardcode the soundfile?
 			try {
 				var check = Gst.init_check(ref args);
@@ -312,6 +323,9 @@ namespace BudgieScr {
 
 		[GtkChild]
 		private unowned Gtk.Switch? showpointerswitch;
+
+		[GtkChild]
+		private unowned Gtk.Switch? screenshotcapturesoundswitch;
 
 		public ScreenshotHomeWindow() {
 			windowstate = new CurrentState();
@@ -370,7 +384,10 @@ namespace BudgieScr {
 			maingrid.attach(areabuttonbox, 0, 0, 1, 1);;
 
 			// show pointer
-			windowstate.screenshot_settings.bind("include-cursor", showpointerswitch, "active",	SettingsBindFlags.GET|SettingsBindFlags.SET);
+			windowstate.screenshot_settings.bind("include-cursor", showpointerswitch, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
+
+			// screenshot capture sound
+			windowstate.screenshot_settings.bind("screenshot-capture-sound", screenshotcapturesoundswitch, "active", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
 			// delay
 			windowstate.screenshot_settings.bind("delay", delayspin, "value", SettingsBindFlags.GET|SettingsBindFlags.SET);
