@@ -132,6 +132,13 @@ namespace Budgie {
 				}
 			}
 
+			// Check if the application is the default handler for its supported
+			// MIME types
+			if (app.name.ascii_down().has_prefix(name) && is_default_handler(app)) {
+				debug("Application '%s' is default handler", app.name);
+				score--;
+			}
+
 			// Set the score
 			scores.set(app.desktop_id, score);
 		}
@@ -191,6 +198,20 @@ namespace Budgie {
 					return true;
 				}
 			}
+			return false;
+		}
+
+		/**
+		 * Check if an application is the default handler for
+		 * any of its supported MIME types.
+		 */
+		private bool is_default_handler(Application app) {
+			foreach (var content_type in app.content_types) {
+				var default_app = AppInfo.get_default_for_type(content_type, false);
+				if (default_app == null) continue;
+				if (default_app.get_id() == app.desktop_id) return true;
+			}
+
 			return false;
 		}
 	}
