@@ -436,8 +436,8 @@ namespace BudgieScr {
 			Label[] shortcutnames = {
 				// Translators: be as brief as possible; popovers ar cut off if broader than the window
 				new Label(_("Screenshot entire screen") + ":\t"),
-				new Label(_("Screenshot selected area") + ":\t"),
 				new Label(_("Screenshot active window") + ":\t"),
+				new Label(_("Screenshot selected area") + ":\t"),
 			};
 
 			shortcutlabels = {};
