@@ -22,6 +22,7 @@ namespace Budgie {
 		public Icon icon { get; private set; default = new ThemedIcon.with_default_fallbacks("application-default-icon"); }
 		public string desktop_path { get; private set; }
 		public string categories { get; private set; }
+		public string[] content_types { get; private set; }
 		public string generic_name { get; private set; default = ""; }
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
@@ -54,6 +55,7 @@ namespace Budgie {
 			this.desktop_path = app_info.get_filename();
 			this.keywords = app_info.get_keywords();
 			this.categories = app_info.get_categories();
+			this.content_types = app_info.get_supported_types();
 			this.generic_name = app_info.get_generic_name();
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
 			this.should_show = app_info.should_show();

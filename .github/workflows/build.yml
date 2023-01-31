@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - main
-      - v10.6.x
+      - v10.7.x
   pull_request:
     branches:
       - main
-      - v10.6.x
+      - v10.7.x
 jobs:
   ubuntu:
     runs-on: ubuntu-22.04

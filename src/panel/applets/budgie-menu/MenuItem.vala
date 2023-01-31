@@ -41,8 +41,8 @@ public class MenuItem : Gtk.Button {
 		this.set_image(image_source);
 		this.set_label(label_text);
 
-		this.menu_item = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
-		this.menu_item.pack_start(this.button_image, false, false, 6);
+		this.menu_item = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+		this.menu_item.pack_start(this.button_image, false, false, 0);
 		this.menu_item.pack_end(this.button_label, true, true, 0);
 
 		this.add(this.menu_item);

@@ -7,7 +7,7 @@ body:
     attributes:
       label: Budgie version
       description: |
-        Version name of Budgie, i.e. Budgie 10.4 OR specific git commit.
+        Version name of Budgie, i.e. Budgie 10.7 OR specific git commit.
 
         To provide the exact version of your Budgie installation, run `budgie-desktop --version`.
     validations:
@@ -32,4 +32,3 @@ body:
     attributes:
       label: References
       description: Are there any other GitHub issues, whether open or closed, that are related to the problem you've described above or to the suggested solution? If so, please add them below.
-

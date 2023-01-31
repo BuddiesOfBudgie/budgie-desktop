@@ -1,4 +1,4 @@
-![main_desktop](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/MainDesktop.png)
+![main_desktop](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/MainDesktop.jpg)
 
 # Budgie Desktop
 
@@ -20,7 +20,7 @@ Budgie Desktop consists of a number of components to provide a more complete des
 
 The main Budgie menu provides a quick and easy to use menu, suitable for both mouse and keyboard driven users. Features search-as-you-type and category based filtering.
 
-![main_menu](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/MainMenu.png)
+![main_menu](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/BudgieMenu.png)
 
 ### Raven
 
@@ -30,7 +30,7 @@ When one of these players are running, such as VLC, Rhythmbox or even Spotify, a
 
 Raven also enables you to access missed notifications, with the ability to swipe away individual notifications, app notifications, and all notifications.
 
-![raven](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/Raven.png)
+![raven](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/Raven-WidgetView.jpg)
 
 #### Notifications
 
@@ -42,7 +42,7 @@ Budgie Desktop supports the freedesktop notifications specification, enabling ap
 
 The Budgie Run Dialog provides the means to quickly find an application in a popup window. This window by default is activated with the `ALT+F2` keyboard shortcut, providing keyboard driven launcher facilities.
 
-![run_dialog](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/RunDialog.png)
+![run_dialog](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/BudgieRunDialog.jpg)
 
 ### Other
 
@@ -72,7 +72,7 @@ budgie-desktop is available under a split license model. This enables developers
 
 The shared libraries are available under the terms of the LGPL-2.1, allowing developers to link against the API without any issue, and to use all exposed APIs without affecting their project license.
 
-The background shipped in data/backgrounds was originally shipped as part of [gnome-backgrounds](https://gitlab.gnome.org/GNOME/gnome-backgrounds), Copyright © 2012 Garrett LeSage and licensed under the Creative Commons Attribution-ShareAlike 3.0 License. [Source commit here](https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/commit/33c37ed6e55218210f6ad9877091f5849bea2d4d).
+The background shipped in data/backgrounds is shipped as part of [budgie-backgrounds](https://github.com/BuddiesOfBudgie/budgie-backgrounds) and is licensed under CC0-1.0 license.
 
 The remainder of the project (i.e. installed binaries) is available under the terms of the GPL 2.0 license. This is clarified in the headers of each source file.
 
