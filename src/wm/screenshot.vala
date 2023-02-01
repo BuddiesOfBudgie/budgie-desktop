@@ -133,6 +133,11 @@ namespace Budgie {
 				throw new DBusError.FAILED("Cannot find active window");
 			}
 
+			if (window.get_window_type() == Meta.WindowType.DESKTOP) {
+				yield screenshot(include_cursor, flash, filename, out success, out filename_used);
+				return;
+			}
+
 			var window_actor = (Meta.WindowActor) window.get_compositor_private();
 
 			float actor_x, actor_y;
