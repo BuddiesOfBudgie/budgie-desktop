@@ -9,6 +9,14 @@
  * (at your option) any later version.
  */
 
+[DBus (name="org.budgie_desktop.Raven")]
+public interface RavenToCalendarRemote : GLib.Object {
+	public signal void ExpansionChanged(bool is_expanded);
+}
+
+public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
+public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
+
 public class CalendarRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings? settings) {
 		return new CalendarRavenWidget(uuid, settings);
@@ -27,6 +35,7 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 	private Gtk.Label? header_label = null;
 	private Gtk.Box? main_box = null;
 	private Gtk.Calendar? cal = null;
+	RavenToCalendarRemote? raven_proxy = null;
 
 	private const string date_format = "%e %b %Y";
 
@@ -78,10 +87,8 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		cal.get_style_context().add_class("raven-calendar");
 		content.add(cal);
 
-		Timeout.add_seconds_full(Priority.LOW, 30, this.update_date);
-
 		cal.month_changed.connect(() => {
-			update_date();
+			update_selection();
 		});
 
 		settings.changed.connect(settings_updated);
@@ -89,6 +96,17 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		settings_updated("show-day-names");
 
 		show_all();
+		Bus.get_proxy.begin<RavenToCalendarRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
+	}
+
+	/* Hold onto our Raven proxy ref */
+	void on_raven_get(Object? o, AsyncResult? res) {
+		try {
+			raven_proxy = Bus.get_proxy.end(res);
+			raven_proxy.ExpansionChanged.connect((is_expanded) => on_visibility_changed(is_expanded));
+		} catch (Error e) {
+			warning("Failed to get Raven proxy: %s", e.message);
+		}
 	}
 
 	private void settings_updated(string key) {
@@ -99,7 +117,15 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		}
 	}
 
-	private bool update_date() {
+	private bool on_visibility_changed(bool is_expanded) {
+		if (!is_expanded) return true;
+		var time = new DateTime.now_local();
+		cal.select_month(time.get_month()-1, time.get_year());
+		cal.day = time.get_day_of_month();
+		return true;
+	}
+
+	private bool update_selection() {
 		var time = new DateTime.now_local();
 		var strf = time.format(date_format);
 		header_label.label = strf;
