@@ -81,7 +81,7 @@ public class NotificationsApplet : Budgie.Applet {
 			raven_proxy.ReadNotifications.connect(on_notifications_read);
 			raven_proxy.GetNotificationCount.begin(on_get_count);
 		} catch (Error e) {
-			warning("Failed to gain Raven proxy: %s", e.message);
+			warning("Failed to get Raven proxy: %s", e.message);
 		}
 	}
 
