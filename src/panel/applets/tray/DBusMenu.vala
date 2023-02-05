@@ -79,9 +79,11 @@ public class DBusMenu : Object {
 				var child_props = child.get_child_value(1);
 				var pit = child_props.iterator();
 				for (var prop = pit.next_value(); prop != null; prop = pit.next_value()) {
-					var key = prop.get_child_value(0).get_string();
-					var value = prop.get_child_value(1);
-					item.update_property(key, value);
+					if (prop.is_container() && prop.n_children() == 2) {
+						var key = prop.get_child_value(0).get_string();
+						var value = prop.get_child_value(1);
+						item.update_property(key, value);
+					}
 				}
 			}
 		}
@@ -94,9 +96,11 @@ public class DBusMenu : Object {
 				var child_props = child.get_child_value(1);
 				var pit = child_props.iterator();
 				for (var prop = pit.next_value(); prop != null; prop = pit.next_value()) {
-					var key = prop.get_child_value(0).get_string();
-					var value = prop.get_child_value(1);
-					node.update_property(key, value);
+					if (prop.is_container() && prop.n_children() == 2) {
+						var key = prop.get_child_value(0).get_string();
+						var value = prop.get_child_value(1);
+						node.update_property(key, value);
+					}
 				}
 			}
 		}
