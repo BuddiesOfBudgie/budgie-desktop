@@ -6,6 +6,8 @@
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # A. S., 2022
+# Yaroslav Popkov, 2023
+# Виктор, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-22 13:09+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: A. S., 2022\n"
+"Last-Translator: Виктор, 2023\n"
 "Language-Team: Russian (https://www.transifex.com/buddiesofbudgie/teams/129844/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,23 +30,23 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:557
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Непрочитанные уведомления"
 
 #: src/daemon/notifications/dbus.vala:561
 msgid "You received 1 notification while an application was fullscreened."
-msgstr ""
+msgstr "Вы получили 1 уведомление, когда приложение было полноэкранным."
 
 #: src/daemon/notifications/dbus.vala:563
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
-msgstr ""
+msgstr "Вы получили %d уведомлений, когда приложение было полноэкранным."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
-msgstr ""
+msgstr "Посмотреть уведомления"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -67,7 +69,7 @@ msgstr "Настройки рабочего стола Budgie"
 #: src/daemon/menus.vala:51
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "Настройки"
+msgstr "Настройки системы"
 
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
@@ -78,64 +80,64 @@ msgstr "Настройки"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Снимок экрана Budgie"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:421
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Снимок всего экрана"
 
 #: src/daemon/screenshot.vala:422
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Снимок выбранной области экран"
 
 #: src/daemon/screenshot.vala:423
 msgid "Screenshot active window"
-msgstr ""
+msgstr "Сделать снимок экрана активного окна"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:531
 msgid "Screen"
-msgstr ""
+msgstr "Экран"
 
 #: src/daemon/screenshot.vala:531
 msgid "Window"
-msgstr ""
+msgstr "Окно"
 
 #: src/daemon/screenshot.vala:531
 msgid "Selection"
-msgstr ""
+msgstr "Выбор"
 
 #. translate
 #: src/daemon/screenshot.vala:881
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Прекратить снимок экрана"
 
 #: src/daemon/screenshot.vala:882
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Сохранить снимок экрана в выбранном каталоге"
 
 #: src/daemon/screenshot.vala:883
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Скопировать снимок экрана в буфер обмена"
 
 #: src/daemon/screenshot.vala:884
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Открыть снимок экрана в стандартном приложении"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1158
 msgid "Other..."
-msgstr ""
+msgstr "Другие..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1242
 msgid "Open Folder"
-msgstr ""
+msgstr "Открыть папку"
 
 #: src/daemon/screenshot.vala:1243
 #: src/panel/settings/settings_autostart.vala:194
@@ -149,7 +151,7 @@ msgstr "Отмена"
 
 #: src/daemon/screenshot.vala:1243
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #. Should show a notification
 #: src/daemon/settings.vala:339
@@ -168,7 +170,7 @@ msgstr "Отключится через минуту"
 #: src/daemon/settings.vala:347
 #, c-format
 msgid "Will turn off in %d minutes"
-msgstr "Отключится через %d минут(ы,у)"
+msgstr "Отключится через %d минут"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -320,14 +322,14 @@ msgstr "Двойной"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr "Политика щелчков"
+msgstr "Политика нажатий"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
 "Click Policy determines if we should open items on a single or double click."
 msgstr ""
-"Политика щелчков определяет, следует ли открывать элементы одиночным или "
-"двойным щелчком мыши."
+"Политика нажатий определяет, следует ли открывать элементы одиночным или "
+"двойным нажатием."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -421,7 +423,7 @@ msgstr "Устанавливает тип используемого хинти�
 
 #: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
-msgstr "Субпиксельное (для ЖК дисплеев)"
+msgstr "Субпиксельное (для ЖК-экранов)"
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
@@ -556,11 +558,11 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "Spacing"
-msgstr ""
+msgstr "Интервал"
 
 #: src/panel/settings/settings_panel.vala:249
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "Установите интервал между апплетами для этой панели"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Automatically hide"
@@ -683,12 +685,14 @@ msgstr "Оставить апплет"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "Подтвердите удаление виджета"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
+"Вы действительно хотите удалить этот виджет? Это действие не может быть "
+"отменено."
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -697,24 +701,24 @@ msgstr "Удалить"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr ""
+msgstr "Встроенный"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "Выбрать плагин"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Нет описания."
 
 #: src/panel/settings/settings_plugin_chooser.vala:260
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "около %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:263
 msgid "No authors listed"
-msgstr ""
+msgstr "Нет списка артистов"
 
 #: src/panel/settings/settings_raven_settings.vala:45
 msgid "Set Raven position"
@@ -731,21 +735,23 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "Настройки виджета"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Добавить виджет"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "Выберите новый виджет для добавления просмотра виджетов"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
 msgstr ""
+"Ошибка сознания экземпляра виджета. Движок плагина не смог найти информацию "
+"для этого плагина."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -753,12 +759,17 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"Ошибка сознания экземпляра виджета. Имя модуля должно быть в формате "
+"обратного DNS. Например: 'tld.domain.group.WidgetName.so' для C/Vala или "
+"'tld_domain_group_WidgetName' для Python."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
 msgstr ""
+"Ошибка сознания экземпляра виджета. Движок плагина не смог загрузить плагин "
+"с диска."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -766,10 +777,13 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"Ошибка создания экземпляра виджета. Плагин поддерживает настройки, однако не устанавливает схему настроек с таким же именем.\n"
+"\n"
+"Имя схемы должно быть индетично имени модуля, но без расширения и (в случае Python) подчеркивания заменены точками."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "Ошибка создания экземпляра виджета из-за неизвестной ошибки."
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -962,7 +976,7 @@ msgstr "Все"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "Питание"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -998,7 +1012,7 @@ msgstr "Таймер (минуты)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "Настройки времени и даты"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1306,31 +1320,31 @@ msgstr "Играть музыку"
 #: src/raven/widgets/media-controls/mpris_gui.vala:101
 #: src/raven/widgets/media-controls/mpris_gui.vala:419
 msgid "Unknown Title"
-msgstr ""
+msgstr "Неизвестное Название"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:104
 #: src/raven/widgets/media-controls/mpris_gui.vala:423
 msgid "Unknown Artist"
-msgstr ""
+msgstr "Неизвестный Артист"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:427
 msgid "Unknown Album"
-msgstr ""
+msgstr "Неизвестный альбом"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:296
 #, c-format
 msgid "%s - Playing"
-msgstr ""
+msgstr "%s - Проигрывается"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:301
 #, c-format
 msgid "%s - Paused"
-msgstr ""
+msgstr "%s - Приостановлено"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "Никакие приложения не воспроизводят аудио."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1343,19 +1357,19 @@ msgstr "Устройства"
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr ""
+msgstr "Монитор использования"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr ""
+msgstr "ЦПУ"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr ""
+msgstr "ОЗУ"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr ""
+msgstr "Swap"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -1363,7 +1377,7 @@ msgstr "Уведомления"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "Виджеты не добавлены."
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -1376,7 +1390,7 @@ msgstr "Нет новых уведомлений"
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "Новая категория"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1385,51 +1399,51 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Аксессуары"
 
 #: src/appindexer/AppIndex.vala:170
 msgid "Education"
-msgstr ""
+msgstr "Образование"
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "Игры"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
-msgstr ""
+msgstr "Графика"
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "Интернет"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
-msgstr ""
+msgstr "Офис"
 
 #: src/appindexer/AppIndex.vala:197
 msgid "Programming"
-msgstr ""
+msgstr "Программирование"
 
 #: src/appindexer/AppIndex.vala:201
 msgid "Science"
-msgstr ""
+msgstr "Наука"
 
 #: src/appindexer/AppIndex.vala:207
 msgid "Sound & Video"
-msgstr ""
+msgstr "Звук и видео"
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "Системные инструменты"
 
 #: src/appindexer/AppIndex.vala:222
 msgid "Universal Access"
-msgstr ""
+msgstr "Универсальный доступ"
 
 #: src/appindexer/AppIndex.vala:226
 msgid "Utilities"
-msgstr ""
+msgstr "Утилиты"
 
 #: src/dialogs/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -1442,31 +1456,31 @@ msgstr "Группа:"
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
 msgid "_Lock"
-msgstr ""
+msgstr "_Заблокировать"
 
 #: src/dialogs/power/window.vala:95
 msgid "L_og Out"
-msgstr ""
+msgstr "В_ыйти"
 
 #: src/dialogs/power/window.vala:98
 msgid "_Suspend"
-msgstr ""
+msgstr "_Сон"
 
 #: src/dialogs/power/window.vala:102
 msgid "_Hibernate"
-msgstr ""
+msgstr "_Гибернация"
 
 #: src/dialogs/power/window.vala:106
 msgid "_Reboot"
-msgstr ""
+msgstr "_Перезагрузка"
 
 #: src/dialogs/power/window.vala:109
 msgid "Shut_down"
-msgstr ""
+msgstr "Выключить"
 
 #: src/dialogs/power/window.vala:161
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "Данная система не поддерживает гибернацию"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1482,7 +1496,7 @@ msgstr "Подпись меню"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "Использовать стандартную иконку меню"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1502,7 +1516,7 @@ msgstr "Активация при наведении мыши"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "Показать элементы настроек"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1530,20 +1544,20 @@ msgstr "Использовать 24-часовой формат"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "Свой формат"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%Ч:%М:%С %d.%м.%Г"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "Своя временная зона"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1628,7 +1642,7 @@ msgstr "Видимость кнопки \"Добавить\""
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr ""
+msgstr "Множитель размера элемента"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
@@ -1644,39 +1658,39 @@ msgstr "Всегда показывать"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75x"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1.0x"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2.0x"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Показывать номер недели"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "Показывать названия дней"
 
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr ""
+msgstr "Разрешить перегрузку громкости"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr ""
+msgstr "Посмотреть использование Swap"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1696,7 +1710,7 @@ msgstr "Аутентифицироваться"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
+msgstr "Снимок экрана Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1716,75 +1730,77 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "Поиск и запуск приложений."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr ""
+msgstr "Предотвратите переход системы и экрана в спящий режим."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "Цифровые часы с настраиваемым форматом. "
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr ""
+msgstr "Настраиваемый список задач приложения."
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr ""
+msgstr "Указывает, какая раскладка клавиатуры используется в данный момент."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "Посмотреть состояние кнопок lock."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr ""
+msgstr "Переключайте и изменяйте настройки ночного освещения."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr ""
+msgstr "Открыть Raven для показа уведомлений."
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "Показывать накопители и избранные папки."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr ""
+msgstr "Открыть боковую панель Raven."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "Визуальный разделитель между апплетами."
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr ""
+msgstr "Кнопка, которая переключает видимость рабочего стола."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr ""
+msgstr "Регулируемая прокладка для размещения между другими апплетами."
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
 msgstr ""
+"Показывать индикаторы состояния системы. К примеру: звук, батарею и "
+"Bluetooth."
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
+msgstr "Список задач приложения с пиктограммами и ярлыками."
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System tray using the XEMBED protocol."
-msgstr ""
+msgstr "Системный лоток использует XEMBED протокол."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "Открытие диалога окна питания."
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr ""
+msgstr "Отображение рабочих пространств и переключение между ними."
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
@@ -1795,42 +1811,53 @@ msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
+"Простой календарь с отображением месяца использует встроенный в Gtk.Calendar"
+" виджет. Календарь показывает текущую дату по умолчанию."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "Настройка медиа"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
+"Этот виджет использует Mpris API для отображения активно воспроизводимых "
+"медиа с метаданными и элементами управления воспроизведением, с поддержкой "
+"аудио и видео."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "Аудиовход"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
 msgstr ""
+"Позволяет регулировать громкость аудиовхода и отображает список доступных "
+"устройств аудиовхода."
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "Аудиовыход"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
 msgstr ""
+"Позволяет регулировать громкость аудиовыхода везде и для каждого приложения,"
+" а также отображает список доступных устройств вывода звука."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
 msgstr ""
+"Представление использования системных ресурсов в виде гистограммы. Включает "
+"использование ЦПУ, ОЗУ и Swap по умолчанию."
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

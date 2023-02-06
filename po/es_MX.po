@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# Evan Maddock, 2022
+# Evan Maddock, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-22 13:09+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Evan Maddock, 2022\n"
+"Last-Translator: Evan Maddock, 2023\n"
 "Language-Team: Spanish (Mexico) (https://www.transifex.com/buddiesofbudgie/teams/129844/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,23 +28,25 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:557
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Notificaciones no Leídos"
 
 #: src/daemon/notifications/dbus.vala:561
 msgid "You received 1 notification while an application was fullscreened."
 msgstr ""
+"Recibió 1 notificación mientras una aplicación era en pantalla completa."
 
 #: src/daemon/notifications/dbus.vala:563
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
 msgstr ""
+"Recibió %d notificaciones mientras una aplicación era en pantalla completa."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
-msgstr ""
+msgstr "Ver Notificaciones"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -84,58 +86,58 @@ msgstr ""
 #. the window
 #: src/daemon/screenshot.vala:421
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Captura de pantalla de todo la pantalla"
 
 #: src/daemon/screenshot.vala:422
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Área seleccionada de captura de pantalla"
 
 #: src/daemon/screenshot.vala:423
 msgid "Screenshot active window"
-msgstr ""
+msgstr "Captura de pantalla ventana activa"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:531
 msgid "Screen"
-msgstr ""
+msgstr "Pantalla"
 
 #: src/daemon/screenshot.vala:531
 msgid "Window"
-msgstr ""
+msgstr "Ventana"
 
 #: src/daemon/screenshot.vala:531
 msgid "Selection"
-msgstr ""
+msgstr "Selección"
 
 #. translate
 #: src/daemon/screenshot.vala:881
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Cancelar captura la pantalla"
 
 #: src/daemon/screenshot.vala:882
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Guardar captura de pantalla en el directorio seleccionado"
 
 #: src/daemon/screenshot.vala:883
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Copiar captura de pantalla en el portapapeles"
 
 #: src/daemon/screenshot.vala:884
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Abrir captura de pantalla en la aplicación por defecto"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1158
 msgid "Other..."
-msgstr ""
+msgstr "Otra..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1242
 msgid "Open Folder"
-msgstr ""
+msgstr "Abrir Carpeta"
 
 #: src/daemon/screenshot.vala:1243
 #: src/panel/settings/settings_autostart.vala:194
@@ -149,7 +151,7 @@ msgstr "Cancelar"
 
 #: src/daemon/screenshot.vala:1243
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #. Should show a notification
 #: src/daemon/settings.vala:339
@@ -560,11 +562,11 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "Spacing"
-msgstr ""
+msgstr "Espaciado"
 
 #: src/panel/settings/settings_panel.vala:249
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "Establecer el espaciado entre los applets en este panel"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Automatically hide"
@@ -688,12 +690,13 @@ msgstr "Mantener el applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "Confirmar eliminación del applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
+"¿Realmente quieres eliminar este applet? Esta acción no puede deshacerse."
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -702,24 +705,24 @@ msgstr "Quitar"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr ""
+msgstr "Incorporado"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "Elegir un plug-in"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Sin descripción."
 
 #: src/panel/settings/settings_plugin_chooser.vala:260
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "de %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:263
 msgid "No authors listed"
-msgstr ""
+msgstr "No autores listados"
 
 #: src/panel/settings/settings_raven_settings.vala:45
 msgid "Set Raven position"
@@ -735,21 +738,23 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "Ajustes del Widget"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Agregar widget"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "Elige un widget nuevo para agregar a la vista Widgets"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
 msgstr ""
+"Error al crear la instancia de widget. El motor de plug-in no puede "
+"encontrar información para este plug-in."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -757,12 +762,17 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"Error al crear la instancia de widget. El nombre de módulo tener que en el "
+"formato de DNS inverso, como 'tld.dominio.grupo.WidgetNombre.so' para C y "
+"Vala o 'tld_dominio_grupo_WidgetNombre' para Python."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
 msgstr ""
+"Error al crear la instancia de widget. El motor de plug-in no se puedo "
+"cargar desde el disco."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -770,10 +780,13 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"Error al crear la instancia de widget. El plug-in soporta la configuración, pero no instala un esquema de ajustes con el mismo nombre.\n"
+"\n"
+"El nombre de esquema tener que idéntico al nombre módulo, pero con no extensión y (en el caso de Python) los guiones bajos reemplazado por puntos."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "Error al crear la instancia de widget porque de un error desconocido."
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"

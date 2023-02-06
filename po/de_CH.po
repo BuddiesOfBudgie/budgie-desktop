@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Thomas Staudinger, 2023
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-22 13:09+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Last-Translator: Thomas Staudinger, 2023\n"
 "Language-Team: German (Switzerland) (https://www.transifex.com/buddiesofbudgie/teams/129844/de_CH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,23 +28,27 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:557
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Ungelesene Benachrichtigungen"
 
 #: src/daemon/notifications/dbus.vala:561
 msgid "You received 1 notification while an application was fullscreened."
 msgstr ""
+"Du hast 1 Benachrichtigung erhalten während die Anwendung im Vollbildmodus "
+"war"
 
 #: src/daemon/notifications/dbus.vala:563
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
 msgstr ""
+"Du hast %d Benachrichtigungen erhalten während die Anwendung im "
+"Vollbildmodus war"
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
-msgstr ""
+msgstr "Benachrichtigungen anzeigen"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -77,64 +82,64 @@ msgstr "Einstellungen"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Budgie Screenshot"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:421
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Gesamten Bildschirm fotografieren"
 
 #: src/daemon/screenshot.vala:422
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Ausgewählten Bereich fotografieren"
 
 #: src/daemon/screenshot.vala:423
 msgid "Screenshot active window"
-msgstr ""
+msgstr "Aktives Fenster fotografieren"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:531
 msgid "Screen"
-msgstr ""
+msgstr "Bildschirm"
 
 #: src/daemon/screenshot.vala:531
 msgid "Window"
-msgstr ""
+msgstr "Fenster"
 
 #: src/daemon/screenshot.vala:531
 msgid "Selection"
-msgstr ""
+msgstr "Auswahl"
 
 #. translate
 #: src/daemon/screenshot.vala:881
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Screenshot abbrechen"
 
 #: src/daemon/screenshot.vala:882
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Screenshot in ausgewähltem Ordner speichern"
 
 #: src/daemon/screenshot.vala:883
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Screenshot in die Zwischenablage kopieren"
 
 #: src/daemon/screenshot.vala:884
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Screenshot mit der Standardanwendung öffnen"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1158
 msgid "Other..."
-msgstr ""
+msgstr "Weitere..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1242
 msgid "Open Folder"
-msgstr ""
+msgstr "Ordner öffnen"
 
 #: src/daemon/screenshot.vala:1243
 #: src/panel/settings/settings_autostart.vala:194
@@ -148,7 +153,7 @@ msgstr "Abbrechen"
 
 #: src/daemon/screenshot.vala:1243
 msgid "Open"
-msgstr ""
+msgstr "Öffnen"
 
 #. Should show a notification
 #: src/daemon/settings.vala:339
@@ -706,7 +711,7 @@ msgstr ""
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Keine Beschreibung."
 
 #: src/panel/settings/settings_plugin_chooser.vala:260
 #, c-format
@@ -732,11 +737,11 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "Widget-Einstellungen"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Widget hinzufügen"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
@@ -1301,17 +1306,17 @@ msgstr "Spiele etwas Musik"
 #: src/raven/widgets/media-controls/mpris_gui.vala:101
 #: src/raven/widgets/media-controls/mpris_gui.vala:419
 msgid "Unknown Title"
-msgstr ""
+msgstr "Unbekannter Titel"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:104
 #: src/raven/widgets/media-controls/mpris_gui.vala:423
 msgid "Unknown Artist"
-msgstr ""
+msgstr "Unbekannter Interpret"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:427
 msgid "Unknown Album"
-msgstr ""
+msgstr "Unbekanntes Album"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:296
 #, c-format
@@ -1325,7 +1330,7 @@ msgstr ""
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "Keine Anwendung gibt Ton wieder."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1358,7 +1363,7 @@ msgstr "Benachrichtigungen"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "Keine Widgets hinzugefügt."
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -1371,7 +1376,7 @@ msgstr "Keine neuen Nachrichten"
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "Neue Kategorie"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1380,7 +1385,7 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Zubehör"
 
 #: src/appindexer/AppIndex.vala:170
 msgid "Education"
@@ -1388,15 +1393,15 @@ msgstr ""
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "Spiele"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
-msgstr ""
+msgstr "Grafik"
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
@@ -1416,7 +1421,7 @@ msgstr ""
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "Systemanwendungen"
 
 #: src/appindexer/AppIndex.vala:222
 msgid "Universal Access"
@@ -1461,7 +1466,7 @@ msgstr ""
 
 #: src/dialogs/power/window.vala:161
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "Dieses System unterstützt keinen Ruhezustand."
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1525,7 +1530,7 @@ msgstr "24 Stunden-Format verwenden"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "Benutzerdefiniertes Format"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
@@ -1534,11 +1539,11 @@ msgstr ""
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "Benutzerdefinierte Zeitzone"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1639,31 +1644,31 @@ msgstr "Immer anzeigen"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75x"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1,0x"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1,5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2,0x"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Kalenderwochen anzeigen"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "Wochentage anzeigen"
 
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
@@ -1711,7 +1716,7 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "Anwendungen suchen und starten"
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
@@ -1719,7 +1724,7 @@ msgstr ""
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "Digitale Uhr mit einstellbarem Format."
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
@@ -1751,7 +1756,7 @@ msgstr ""
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "Visueller Separator zwischen Applets"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
