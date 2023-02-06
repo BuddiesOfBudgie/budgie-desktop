@@ -18,7 +18,7 @@ namespace Budgie {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 
 			Gtk.Label lab = new Gtk.Label(null);
-			lab.set_markup("<big>%s</big>".printf(_("Widget Settings")));
+			lab.set_markup("<big>%s</big>".printf(_("Applet Settings")));
 			lab.halign = Gtk.Align.START;
 			lab.margin_bottom = 6;
 			valign = Gtk.Align.START;

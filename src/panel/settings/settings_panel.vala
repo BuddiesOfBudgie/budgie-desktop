@@ -228,8 +228,6 @@ namespace Budgie {
 			};
 			Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
-
-
 			/* Position */
 			combobox_position = new Gtk.ComboBox();
 			position_id = combobox_position.changed.connect(this.set_position);
