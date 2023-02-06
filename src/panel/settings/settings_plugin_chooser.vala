@@ -236,7 +236,8 @@
 			selected_plugin_icon.set_from_icon_name(plugin.get_icon_name(), Gtk.IconSize.LARGE_TOOLBAR);
 			selected_plugin_name.set_markup("<span size='x-large'>%s</span>".printf(Markup.escape_text(plugin.get_name())));
 
-			selected_plugin_description.set_markup((plugin.get_description() != null) ? plugin.get_description() : _("No description."));
+			var description = (plugin.get_description() != null) ? Markup.escape_text(plugin.get_description()) : _("No description.");
+			selected_plugin_description.set_markup(description);
 
 			if (plugin.get_copyright() != null) {
 				var copyright = Markup.escape_text(plugin.get_copyright());
