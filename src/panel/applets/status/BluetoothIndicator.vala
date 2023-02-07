@@ -78,7 +78,7 @@ public class BluetoothIndicator : Bin {
 		devices_box.get_style_context().add_class("bluetooth-devices-listbox");
 
 		devices_box.row_activated.connect((row) => {
-			var widget = row.get_child() as BluetoothDeviceWidget;
+			var widget = row as BluetoothDeviceWidget;
 			widget.toggle_revealer();
 		});
 
@@ -148,16 +148,7 @@ public class BluetoothIndicator : Bin {
 	private void add_device(Device1 device) {
 		debug("Bluetooth device added: %s", device.alias);
 
-		// Get the adapter that this device is paired with
-		Adapter1? adapter = null;
-		client.get_adapters().foreach((a) => {
-			if (((DBusProxy) a).get_object_path() == device.adapter) {
-				adapter = a;
-				return; // Exit the lambda
-			}
-		});
-
-		var widget = new BluetoothDeviceWidget(device, adapter);
+		var widget = new BluetoothDeviceWidget(device);
 
 		widget.properties_updated.connect(() => {
 			client.check_powered();
@@ -172,7 +163,7 @@ public class BluetoothIndicator : Bin {
 		debug("Bluetooth device removed: %s", device.alias);
 
 		devices_box.foreach((row) => {
-			var child = ((ListBoxRow) row).get_child() as BluetoothDeviceWidget;
+			var child = row as BluetoothDeviceWidget;
 			if (child.device.address == device.address) {
 				row.destroy();
 			}
@@ -187,8 +178,8 @@ public class BluetoothIndicator : Bin {
 	 * Items are sorted alphabetically, with connected devices at the top of the list.
 	 */
 	private int sort_devices(ListBoxRow a, ListBoxRow b) {
-		var a_device = a.get_child() as BluetoothDeviceWidget;
-		var b_device = b.get_child() as BluetoothDeviceWidget;
+		var a_device = a as BluetoothDeviceWidget;
+		var b_device = b as BluetoothDeviceWidget;
 
 		if (a_device.device.connected && b_device.device.connected) return strcmp(a_device.device.alias, b_device.device.alias);
 		else if (a_device.device.connected) return -1; // A should go before B
@@ -202,7 +193,7 @@ public class BluetoothIndicator : Bin {
 	 */
 	private void reset_revealers() {
 		devices_box.foreach((row) => {
-			var widget = ((ListBoxRow) row).get_child() as BluetoothDeviceWidget;
+			var widget = row as BluetoothDeviceWidget;
 			if (widget.revealer_showing()) {
 				widget.toggle_revealer();
 			}
@@ -210,14 +201,13 @@ public class BluetoothIndicator : Bin {
 	}
 }
 
-public class BluetoothDeviceWidget : Box {
+public class BluetoothDeviceWidget : ListBoxRow {
 	private Image? image = null;
 	private Label? name_label = null;
 	private Label? status_label = null;
 	private Revealer? revealer = null;
 	private Button? connection_button = null;
 
-	public Adapter1 adapter { get; construct; }
 	public Device1 device { get; construct; }
 
 	public signal void properties_updated();
@@ -226,6 +216,7 @@ public class BluetoothDeviceWidget : Box {
 		get_style_context().add_class("bluetooth-widget");
 
 		// Body
+		var box = new Box(Orientation.VERTICAL, 0);
 		var grid = new Grid();
 
 		image = new Image.from_icon_name(device.icon ?? "bluetooth", LARGE_TOOLBAR) {
@@ -271,20 +262,16 @@ public class BluetoothDeviceWidget : Box {
 		grid.attach(name_label, 1, 0);
 		grid.attach(status_label, 1, 1);
 
-		pack_start(grid);
-		pack_start(revealer);
+		box.pack_start(grid);
+		box.pack_start(revealer);
+		add(box);
 
 		update_status();
 		show_all();
 	}
 
-	public BluetoothDeviceWidget(Device1 device, Adapter1 adapter) {
-		Object(
-			device: device,
-			adapter: adapter,
-			orientation: Orientation.VERTICAL,
-			spacing: 0
-		);
+	public BluetoothDeviceWidget(Device1 device) {
+		Object(device: device);
 	}
 
 	public bool revealer_showing() {
