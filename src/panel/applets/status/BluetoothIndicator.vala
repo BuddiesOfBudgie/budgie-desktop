@@ -102,9 +102,9 @@ public class BluetoothIndicator : Bin {
 
 		add(ebox);
 		box.pack_start(header);
-		box.pack_start(new Separator(HORIZONTAL), false, false, 1);
+		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
 		box.pack_start(scrolled_window);
-		box.pack_start(new Separator(HORIZONTAL), false, false, 1);
+		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
 		box.show_all();
 		popover.add(box);
 		show_all();
