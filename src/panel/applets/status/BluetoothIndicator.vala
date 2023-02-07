@@ -216,7 +216,6 @@ public class BluetoothDeviceWidget : Box {
 	private Label? status_label = null;
 	private Revealer? revealer = null;
 	private Button? connection_button = null;
-	private Button? forget_button = null;
 
 	public Adapter1 adapter { get; construct; }
 	public Device1 device { get; construct; }
@@ -261,12 +260,7 @@ public class BluetoothDeviceWidget : Box {
 		connection_button = new Button.with_label("");
 		connection_button.clicked.connect(on_connection_button_clicked);
 
-		forget_button = new Button.with_label(_("Forget Device"));
-		forget_button.get_style_context().add_class(STYLE_CLASS_DESTRUCTIVE_ACTION);
-		forget_button.clicked.connect(on_forget_clicked);
-
 		revealer_body.pack_start(connection_button);
-		revealer_body.pack_end(forget_button);
 		revealer.add(revealer_body);
 
 		// Signals
@@ -329,51 +323,6 @@ public class BluetoothDeviceWidget : Box {
 				connection_button.sensitive = true;
 			});
 		}
-	}
-
-	/**
-	 * Handles when the forget device button is clicked.
-	 *
-	 * A dialog box will be shown to confirm that the user wishes to forget
-	 * the device, meaning it will be unpaired from the adapter and have to
-	 * be re-paired before being able to use it again.
-	 */
-	private void on_forget_clicked() {
-		var dialog = new MessageDialog(
-			null,
-			DialogFlags.MODAL,
-			MessageType.QUESTION,
-			ButtonsType.OK_CANCEL,
-			_("Are you sure you want to forget this device? You will have to pair it to use it again.")
-		);
-
-		// Register a handler for the response to the dialog
-		dialog.response.connect((response) => {
-			switch (response) {
-				case ResponseType.OK: // User confirmed removal of the device
-					// Get the path to this device
-					var path_str = ((DBusProxy) device).get_object_path();
-					var path = new ObjectPath(path_str);
-					// Remove the device from the adapter it's connected to
-					adapter.remove_device.begin(path, (obj, res) => {
-						try {
-							adapter.remove_device.end(res);
-						} catch (Error e) {
-							warning("Error forgetting device %s: %s", device.alias, e.message);
-						}
-					});
-					break;
-				default: // Any other response; do nothing
-					debug("Bluetooth forget dialog had result other than OK");
-					break;
-			}
-
-			// Destroy the dialog after a response has been received
-			dialog.destroy();
-		});
-
-		// Show the dialog
-		dialog.show();
 	}
 
 	private void update_status() {
