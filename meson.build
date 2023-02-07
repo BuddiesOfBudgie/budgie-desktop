@@ -23,9 +23,9 @@ else
     budgie_screensaver_vala_args = ['-D', 'HAVE_GNOME_SCREENSAVER']
 endif
 
-git = find_program('git', required: false)
-
 meson.add_install_script('scripts/mesonPostInstall.sh')
+
+fs = import('fs')
 
 # Budgie needs a minimum GNOME 40 stack with GTK 3.24+
 gnome_minimum_version = '>= 40.0'
@@ -67,11 +67,10 @@ cdata = configuration_data()
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
 
-if git.found()
-    git_version = run_command('git', ['rev-parse', 'HEAD'], check: false)
-    if git_version.returncode() == 0
-        package_version += ' (git-'+git_version.stdout().strip()+')'
-    endif
+if fs.exists('.git')
+    git = find_program('git')
+    git_version = run_command('git', ['rev-parse', 'HEAD'], check: true)
+    package_version += ' (git-'+git_version.stdout().strip()+')'
 endif
 
 cdata.set_quoted('PACKAGE_VERSION', package_version)
