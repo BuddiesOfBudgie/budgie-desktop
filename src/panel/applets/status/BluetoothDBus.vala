@@ -63,13 +63,3 @@ public interface Device1 : GLib.Object {
 	public async abstract void pair() throws GLib.DBusError, GLib.IOError;
 	public async abstract void cancel_pairing() throws GLib.DBusError, GLib.IOError;
 }
-
-/**
- * Definition of the Bluez AgentManager1 interface.
- */
-[DBus (name = "org.bluez.AgentManager1")]
-public interface AgentManager1 : GLib.Object {
-	public async abstract void register_agent(GLib.ObjectPath agent, string capability) throws GLib.DBusError, GLib.IOError;
-	public async abstract void unregister_agent(GLib.ObjectPath agent) throws GLib.DBusError, GLib.IOError;
-	public async abstract void request_default_agent(GLib.ObjectPath agent) throws GLib.DBusError, GLib.IOError;
-}

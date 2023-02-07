@@ -328,18 +328,6 @@ public class BluetoothDeviceWidget : Box {
 
 				connection_button.sensitive = true;
 			});
-		} else if (!device.paired) { // Device isn't paired; pair it
-			device.pair.begin((obj, res) => {
-				try {
-					device.pair.end(res);
-
-					toggle_revealer();
-				} catch (Error e) {
-					warning("Error pairing Bluetooth device %s: %s", device.alias, e.message);
-				}
-
-				connection_button.sensitive = true;
-			});
 		}
 	}
 
@@ -389,18 +377,12 @@ public class BluetoothDeviceWidget : Box {
 	}
 
 	private void update_status() {
-		if (!device.paired) {
-			status_label.set_text(_("Not paired"));
-			connection_button.label = _("Pair Devices");
-			forget_button.hide();
-		} else if (device.connected) {
+		if (device.connected) {
 			status_label.set_text(_("Connected"));
 			connection_button.label = _("Disconnect");
-			forget_button.show();
 		} else {
 			status_label.set_text(_("Disconnected"));
 			connection_button.label = _("Connect");
-			forget_button.show();
 		}
 
 		properties_updated();
