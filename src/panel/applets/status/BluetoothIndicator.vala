@@ -37,15 +37,21 @@ public class BluetoothIndicator : Bin {
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
+		popover.set_size_request(200, -1);
+		popover.hide.connect(() => {
+			reset_revealers();
+		});
 		var box = new Box(VERTICAL, 0);
 
 		// Header
 		var header = new Box(HORIZONTAL, 0);
-		header.get_style_context().add_class("bluetooth-applet-header");
+		header.get_style_context().add_class("bluetooth-popover-header");
 
 		// Header label
-		var switch_label = new Label(_("Bluetooth"));
-		switch_label.get_style_context().add_class("dim-label");
+		var switch_label = new Label(_("Bluetooth")) {
+			halign = START,
+		};
+		switch_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
 		// Settings button
 		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
@@ -61,8 +67,8 @@ public class BluetoothIndicator : Bin {
 		bluetooth_switch.notify["active"].connect(on_switch_activate);
 
 		header.pack_start(switch_label);
-		header.pack_end(bluetooth_switch);
-		header.pack_end(button, false, false, 0);
+		header.pack_end(bluetooth_switch, false, false);
+		header.pack_end(button, false, false);
 
 		// Devices
 		var scrolled_window = new ScrolledWindow(null, null) {
@@ -75,7 +81,7 @@ public class BluetoothIndicator : Bin {
 			selection_mode = NONE
 		};
 		devices_box.set_sort_func(sort_devices);
-		devices_box.get_style_context().add_class("bluetooth-devices-listbox");
+		devices_box.get_style_context().add_class("bluetooth-device-listbox");
 
 		devices_box.row_activated.connect((row) => {
 			var widget = row as BluetoothDeviceWidget;
@@ -213,16 +219,15 @@ public class BluetoothDeviceWidget : ListBoxRow {
 	public signal void properties_updated();
 
 	construct {
-		get_style_context().add_class("bluetooth-widget");
+		get_style_context().add_class("bluetooth-device-row");
 
 		// Body
 		var box = new Box(Orientation.VERTICAL, 0);
-		var grid = new Grid();
-
-		image = new Image.from_icon_name(device.icon ?? "bluetooth", LARGE_TOOLBAR) {
-			halign = START,
-			margin_end = 6
+		var grid = new Grid() {
+			column_spacing = 6,
 		};
+
+		image = new Image.from_icon_name(device.icon ?? "bluetooth", LARGE_TOOLBAR);
 
 		name_label = new Label(device.alias) {
 			valign = CENTER,
@@ -235,9 +240,8 @@ public class BluetoothDeviceWidget : ListBoxRow {
 
 		status_label = new Label(null) {
 			halign = START,
-			hexpand = true
 		};
-		status_label.get_style_context().add_class("dim-label");
+		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
 		// Revealer stuff
 		revealer = new Revealer() {
@@ -245,7 +249,7 @@ public class BluetoothDeviceWidget : ListBoxRow {
 			transition_duration = 250,
 			transition_type = RevealerTransitionType.SLIDE_DOWN
 		};
-		revealer.get_style_context().add_class("bluetooth-widget-revealer");
+		revealer.get_style_context().add_class("bluetooth-device-row-revealer");
 
 		var revealer_body = new Box(HORIZONTAL, 0);
 		connection_button = new Button.with_label("");
@@ -258,9 +262,9 @@ public class BluetoothDeviceWidget : ListBoxRow {
 		((DBusProxy) device).g_properties_changed.connect(update_status);
 
 		// Packing
-		grid.attach(image, 0, 0);
-		grid.attach(name_label, 1, 0);
-		grid.attach(status_label, 1, 1);
+		grid.attach(image, 0, 0, 2, 2);
+		grid.attach(name_label, 2, 0, 2, 1);
+		grid.attach(status_label, 2, 1, 2, 1);
 
 		box.pack_start(grid);
 		box.pack_start(revealer);
