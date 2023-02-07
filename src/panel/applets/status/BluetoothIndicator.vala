@@ -80,6 +80,7 @@ public class BluetoothIndicator : Bin {
 		devices_box = new ListBox() {
 			selection_mode = NONE
 		};
+		devices_box.set_filter_func(filter_paired_devices);
 		devices_box.set_sort_func(sort_devices);
 		devices_box.get_style_context().add_class("bluetooth-device-listbox");
 
@@ -191,6 +192,13 @@ public class BluetoothIndicator : Bin {
 		else if (a_device.device.connected) return -1; // A should go before B
 		else if (b_device.device.connected) return 1; // B should go before A
 		else return strcmp(a_device.device.alias, b_device.device.alias);
+	}
+
+	/**
+	 * Filters out any unpaired devices from our listbox.
+	 */
+	private bool filter_paired_devices(ListBoxRow row) {
+		return ((BluetoothDeviceWidget) row).device.paired;
 	}
 
 	/**
