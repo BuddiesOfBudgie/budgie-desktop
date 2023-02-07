@@ -10,6 +10,7 @@
  */
 
 namespace Budgie.StatusNotifier {
+	public const string WATCHER_FREEDESKTOP_DBUS_NAME = "org.freedesktop.StatusNotifierWatcher";
 	public const string WATCHER_KDE_DBUS_NAME = "org.kde.StatusNotifierWatcher";
 
 	public const string WATCHER_FREEDESKTOP_DBUS_OBJECT_PATH = "/org/freedesktop/StatusNotifierWatcher";
@@ -23,8 +24,8 @@ namespace Budgie.StatusNotifier {
 		public string owner;
 	}
 
-	[DBus (name="org.kde.StatusNotifierWatcher")]
-	public class Watcher : Object {
+	[DBus (name="org.freedesktop.StatusNotifierWatcher")]
+	public class FreedesktopWatcher : Object {
 		public string[] registered_status_notifier_items {
 			owned get {
 				string[] ret = new string[host_services.size()];
@@ -37,7 +38,8 @@ namespace Budgie.StatusNotifier {
 		public bool is_status_notifier_host_registered {get; private set; default = false;}
 		public int32 protocol_version {get; private set; default = 0;}
 
-		private uint dbus_identifier = 0;
+		private KdeWatcher kde_watcher;
+		private uint freedesktop_dbus_identifier = 0;
 		private HashTable<string, uint> host_services;
 		private HashTable<string, uint> item_watchers;
 		private HashTable<string, DBusServiceInfo?> registered_services;
@@ -47,19 +49,21 @@ namespace Budgie.StatusNotifier {
 			item_watchers = new HashTable<string, uint>(str_hash, str_equal);
 			registered_services = new HashTable<string, DBusServiceInfo?>(str_hash, str_equal);
 
-			dbus_identifier = Bus.own_name(
+			freedesktop_dbus_identifier = Bus.own_name(
 				BusType.SESSION,
-				WATCHER_KDE_DBUS_NAME,
+				WATCHER_FREEDESKTOP_DBUS_NAME,
 				BusNameOwnerFlags.NONE,
 				null,
 				on_dbus_acquired
 			);
+
+			kde_watcher = new KdeWatcher(this);
 		}
 
-		~Watcher() {
-			if (dbus_identifier != 0) {
-				Bus.unown_name(dbus_identifier);
-			}
+		~FreedesktopWatcher() {
+			kde_watcher.unref();
+
+			if (freedesktop_dbus_identifier != 0) Bus.unown_name(freedesktop_dbus_identifier);
 
 			foreach (uint identifier in host_services.get_values()) {
 				Bus.unwatch_name(identifier);
@@ -72,7 +76,6 @@ namespace Budgie.StatusNotifier {
 		private void on_dbus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object(WATCHER_FREEDESKTOP_DBUS_OBJECT_PATH, this);
-				conn.register_object(WATCHER_KDE_DBUS_OBJECT_PATH, this);
 				conn.register_object(WATCHER_BASIC_DBUS_OBJECT_PATH, this);
 			} catch (Error e) {
 				critical("Unable to register status notifier watcher: %s", e.message);
@@ -164,5 +167,61 @@ namespace Budgie.StatusNotifier {
 		// these signals are specifically for use with budgie
 		public signal void status_notifier_item_registered_budgie(string name, string object_path, string sender, string owner);
 		public signal void status_notifier_item_unregistered_budgie(string name, string object_path, string owner);
+	}
+
+	[DBus (name="org.kde.StatusNotifierWatcher")]
+	public class KdeWatcher : Object {
+		private unowned FreedesktopWatcher parent;
+		private uint kde_dbus_identifier = 0;
+
+		public string[] registered_status_notifier_items {
+			owned get { return parent.registered_status_notifier_items; }
+		}
+		public bool is_status_notifier_host_registered {
+			get { return parent.is_status_notifier_host_registered; }
+		}
+		public int32 protocol_version {
+			get { return parent.protocol_version; }
+		}
+
+		public KdeWatcher(FreedesktopWatcher parent) {
+			this.parent = parent;
+			parent.status_notifier_item_registered.connect((item) => status_notifier_item_registered(item));
+			parent.status_notifier_item_unregistered.connect((item) => status_notifier_item_unregistered(item));
+			parent.status_notifier_host_registered.connect(() => status_notifier_host_registered());
+
+			kde_dbus_identifier = Bus.own_name(
+				BusType.SESSION,
+				WATCHER_KDE_DBUS_NAME,
+				BusNameOwnerFlags.NONE,
+				null,
+				on_dbus_acquired
+			);
+		}
+
+		~KdeWatcher() {
+			if (kde_dbus_identifier != 0) Bus.unown_name(kde_dbus_identifier);
+		}
+
+		private void on_dbus_acquired(DBusConnection conn) {
+			try {
+				conn.register_object(WATCHER_KDE_DBUS_OBJECT_PATH, this);
+				conn.register_object(WATCHER_BASIC_DBUS_OBJECT_PATH, this);
+			} catch (Error e) {
+				critical("Unable to register status notifier watcher: %s", e.message);
+			}
+		}
+
+		public void register_status_notifier_item(string service, BusName sender) throws DBusError, IOError {
+			parent.register_status_notifier_item(service, sender);
+		}
+
+		public void register_status_notifier_host(string service) throws DBusError, IOError {
+			parent.register_status_notifier_host(service);
+		}
+
+		public signal bool status_notifier_item_registered(string item);
+		public signal bool status_notifier_item_unregistered(string item);
+		public signal bool status_notifier_host_registered();
 	}
 }

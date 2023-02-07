@@ -35,7 +35,7 @@ internal struct DBusServiceInfo {
 	public string owner;
 }
 
-[DBus (name="org.kde.StatusNotifierWatcher")]
+[DBus (name="org.freedesktop.StatusNotifierWatcher")]
 private interface SnWatcherInterface : Object {
 	public abstract string[] registered_status_notifier_items {owned get;}
 	public abstract bool is_status_notifier_host_registered {owned get;}
@@ -92,8 +92,8 @@ public class TrayApplet : Budgie.Applet {
 	private void get_watcher_proxy() {
 		Bus.get_proxy.begin<SnWatcherInterface>(
 			BusType.SESSION,
-			"org.kde.StatusNotifierWatcher",
-			"/org/kde/StatusNotifierWatcher",
+			"org.freedesktop.StatusNotifierWatcher",
+			"/org/freedesktop/StatusNotifierWatcher",
 			0,
 			null,
 			on_dbus_get
@@ -114,7 +114,7 @@ public class TrayApplet : Budgie.Applet {
 
 		Bus.watch_name(
 			BusType.SESSION,
-			"org.kde.StatusNotifierWatcher",
+			"org.freedesktop.StatusNotifierWatcher",
 			0,
 			(conn,name,owner)=>{on_watcher_init();},
 			(conn,name)=>{get_watcher_proxy();}
