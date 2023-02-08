@@ -222,6 +222,7 @@ public class BTDeviceRow : ListBoxRow {
 	private Image? image = null;
 	private Label? name_label = null;
 	private Label? status_label = null;
+	private Image? expand_icon = null;
 	private Revealer? revealer = null;
 	private Button? connection_button = null;
 
@@ -257,6 +258,8 @@ public class BTDeviceRow : ListBoxRow {
 		status_label.get_style_context().add_class("bluetooth-device-status");
 		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
+		expand_icon = new Image.from_icon_name("pan-end-symbolic", BUTTON);
+
 		// Revealer stuff
 		revealer = new Revealer() {
 			reveal_child = false,
@@ -279,6 +282,7 @@ public class BTDeviceRow : ListBoxRow {
 		grid.attach(image, 0, 0, 2, 2);
 		grid.attach(name_label, 2, 0, 2, 1);
 		grid.attach(status_label, 2, 1, 2, 1);
+		grid.attach(expand_icon, 4, 0, 2, 2);
 
 		box.pack_start(grid);
 		box.pack_start(revealer);
@@ -298,6 +302,11 @@ public class BTDeviceRow : ListBoxRow {
 
 	public void toggle_revealer() {
 		revealer.reveal_child = !revealer.reveal_child;
+		if (revealer.reveal_child) {
+			expand_icon.set_from_icon_name("pan-down-symbolic", BUTTON);
+		} else {
+			expand_icon.set_from_icon_name("pan-end-symbolic", BUTTON);
+		}
 	}
 
 	private void on_connection_button_clicked() {
