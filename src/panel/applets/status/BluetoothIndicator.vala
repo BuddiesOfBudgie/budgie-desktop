@@ -198,7 +198,7 @@ public class BluetoothIndicator : Bin {
 	 * Filters out any unpaired devices from our listbox.
 	 */
 	private bool filter_paired_devices(ListBoxRow row) {
-		return ((BTDeviceRow) row).device.paired;
+		return ((BTDeviceRow) row).device.paired || ((BTDeviceRow) row).device.connected;
 	}
 
 	/**
