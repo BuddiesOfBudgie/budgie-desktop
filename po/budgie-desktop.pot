@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-06 21:14+0200\n"
+"POT-Creation-Date: 2023-02-09 21:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -415,22 +415,6 @@ msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
 msgstr ""
 
 #: src/panel/settings/settings_panel.vala:85
@@ -877,6 +861,22 @@ msgstr ""
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
 msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
@@ -1390,6 +1390,26 @@ msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
+msgstr ""
+
+#: src/daemon/aftershot.ui.h:1
+msgid "Name:"
+msgstr ""
+
+#: src/daemon/aftershot.ui.h:2
+msgid "Folder:"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:1
+msgid "Delay in seconds"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:2
+msgid "Show Pointer"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:3
+msgid "Play sound when capturing"
 msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1

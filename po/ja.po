@@ -6,16 +6,16 @@
 # Translators:
 # rexhent 1, 2022
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# Green, 2022
+# Green, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5.2\n"
+"Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-22 13:09+0200\n"
+"POT-Creation-Date: 2023-02-09 21:45+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Green, 2022\n"
+"Last-Translator: Green, 2023\n"
 "Language-Team: Japanese (https://www.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,25 +27,25 @@ msgstr ""
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:557
+#: src/daemon/notifications/dbus.vala:569
 msgid "Unread Notifications"
-msgstr ""
+msgstr "未読の通知"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
-msgstr ""
+msgstr "アプリケーションを検証したところ、1 件の通知がありました。"
 
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
-msgstr ""
+msgstr "アプリケーションを検証したところ、%d 件の通知がありました。"
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:587
 msgid "View Notifications"
-msgstr ""
+msgstr "通知の表示"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -70,88 +70,6 @@ msgstr "Budgie デスクトップの設定"
 msgid "System Settings"
 msgstr "システム設定"
 
-#. If we have valid windows open
-#. Only one window and a valid AbominationRunningApp for it
-#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
-#. as a workaround
-#: src/daemon/screenshot.vala:319 src/daemon/screenshot.vala:827
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
-#: src/panel/applets/icon-tasklist/IconPopover.vala:226
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
-msgid "Budgie Screenshot"
-msgstr ""
-
-#. Translators: be as brief as possible; popovers ar cut off if broader than
-#. the window
-#: src/daemon/screenshot.vala:421
-msgid "Screenshot entire screen"
-msgstr ""
-
-#: src/daemon/screenshot.vala:422
-msgid "Screenshot selected area"
-msgstr ""
-
-#: src/daemon/screenshot.vala:423
-msgid "Screenshot active window"
-msgstr ""
-
-#. we cannot use areabuttons_labels, since these will be translated
-#. don't translate, internal use
-#. translate! These are the interface names
-#: src/daemon/screenshot.vala:531
-msgid "Screen"
-msgstr ""
-
-#: src/daemon/screenshot.vala:531
-msgid "Window"
-msgstr ""
-
-#: src/daemon/screenshot.vala:531
-msgid "Selection"
-msgstr ""
-
-#. translate
-#: src/daemon/screenshot.vala:881
-msgid "Cancel screenshot"
-msgstr ""
-
-#: src/daemon/screenshot.vala:882
-msgid "Save screenshot to the selected directory"
-msgstr ""
-
-#: src/daemon/screenshot.vala:883
-msgid "Copy screenshot to the clipboard"
-msgstr ""
-
-#: src/daemon/screenshot.vala:884
-msgid "Open screenshot in default application"
-msgstr ""
-
-#. Other -> call Filebrowser (path = null)
-#. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1158
-msgid "Other..."
-msgstr ""
-
-#. set custom dir to found dir
-#: src/daemon/screenshot.vala:1242
-msgid "Open Folder"
-msgstr ""
-
-#: src/daemon/screenshot.vala:1243
-#: src/panel/settings/settings_autostart.vala:194
-#: src/panel/settings/settings_autostart.vala:359
-#: src/panel/settings/settings_panel_dialogs.vala:158
-#: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: src/daemon/screenshot.vala:1243
-msgid "Open"
-msgstr ""
-
 #. Should show a notification
 #: src/daemon/settings.vala:339
 msgid "Turned on Caffeine Boost"
@@ -170,6 +88,88 @@ msgstr "１分以内に電源が切れます"
 #, c-format
 msgid "Will turn off in %d minutes"
 msgstr "%d 分以内で電源が切れます"
+
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
+#. as a workaround
+#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
+msgstr "Budgie スクリーンショット"
+
+#. Translators: be as brief as possible; popovers ar cut off if broader than
+#. the window
+#: src/daemon/screenshot.vala:438
+msgid "Screenshot entire screen"
+msgstr "全画面を撮影します"
+
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot active window"
+msgstr "アクティブな画面のみ撮影"
+
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot selected area"
+msgstr "選択部分を撮影します"
+
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:548
+msgid "Screen"
+msgstr "画面"
+
+#: src/daemon/screenshot.vala:548
+msgid "Window"
+msgstr "ウィンドウ"
+
+#: src/daemon/screenshot.vala:548
+msgid "Selection"
+msgstr "選択"
+
+#. translate
+#: src/daemon/screenshot.vala:898
+msgid "Cancel screenshot"
+msgstr "スクリーンショットの取り消し"
+
+#: src/daemon/screenshot.vala:899
+msgid "Save screenshot to the selected directory"
+msgstr "スクリーンショットを選択したディレクトリへ保存"
+
+#: src/daemon/screenshot.vala:900
+msgid "Copy screenshot to the clipboard"
+msgstr "スクリーンショットをクリップボードへ貼り付け"
+
+#: src/daemon/screenshot.vala:901
+msgid "Open screenshot in default application"
+msgstr "スクリーンショットを既定のアプリケーションで開く"
+
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1175
+msgid "Other..."
+msgstr "その他..."
+
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1259
+msgid "Open Folder"
+msgstr "フォルダを開く"
+
+#: src/daemon/screenshot.vala:1260
+#: src/panel/settings/settings_autostart.vala:194
+#: src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: src/daemon/screenshot.vala:1260
+msgid "Open"
+msgstr "開く"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -432,22 +432,6 @@ msgstr "アンチエイリアス"
 msgid "Set the type of antialiasing to use."
 msgstr "アンチエイリアスの処理方法を設定します。"
 
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "外観"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "パネル"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "セッション"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "新しいパネルの作成"
-
 #: src/panel/settings/settings_panel.vala:85
 msgid "Applets"
 msgstr "アプレット"
@@ -552,11 +536,11 @@ msgstr "パネルの大きさ（幅か高さかは向きによります）を設
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "Spacing"
-msgstr ""
+msgstr "余白"
 
 #: src/panel/settings/settings_panel.vala:249
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "パネル上のアプレット同士の間隔を設定"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Automatically hide"
@@ -671,38 +655,17 @@ msgstr "アプレットを保持する"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "アプリ削除の確認"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr ""
+msgstr "本当にこのアプリを削除しますか？この操作は元に戻せません。"
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
 msgid "Remove"
 msgstr "削除"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:260
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:263
-msgid "No authors listed"
-msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:45
 msgid "Set Raven position"
@@ -716,21 +679,21 @@ msgstr "Raven を画面のどちら側で開くかを設定します。自動に
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "アプリの設定"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "アプリの追加"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "アプリ一覧に追加する新しいアプリを選択してください"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
-msgstr ""
+msgstr "アプリ追加の作成に失敗しました。プラグインエンジンは、このプラグイン情報を見つけることができません。"
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -924,13 +887,46 @@ msgstr "利用中のワークスペースが何であっても、タブスイッ
 msgid "Right (standard)"
 msgstr "右（標準）"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "外観"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "パネル"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "セッション"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "新しいパネルの作成"
+
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
 msgstr "すべて"
-
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
-msgid "Power"
-msgstr ""
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -952,6 +948,10 @@ msgstr "アイコンの設定"
 #: src/panel/applets/budgie-menu/views/ListView.vala:101
 msgid "Sorry, no items found"
 msgstr "アイテムが見つかりませんでした"
+
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+msgid "Power"
+msgstr ""
 
 #. Prepare label widget
 #. Caffeine Notification
@@ -1435,6 +1435,26 @@ msgstr ""
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr "本当にこのセッションを終了しますか？"
+
+#: src/daemon/aftershot.ui.h:1
+msgid "Name:"
+msgstr ""
+
+#: src/daemon/aftershot.ui.h:2
+msgid "Folder:"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:1
+msgid "Delay in seconds"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:2
+msgid "Show Pointer"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:3
+msgid "Play sound when capturing"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"

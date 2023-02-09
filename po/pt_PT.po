@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5.2\n"
+"Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-22 13:09+0200\n"
+"POT-Creation-Date: 2023-02-09 21:45+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2023\n"
 "Language-Team: Portuguese (Portugal) (https://www.transifex.com/buddiesofbudgie/teams/129844/pt_PT/)\n"
@@ -26,15 +26,15 @@ msgstr ""
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:557
+#: src/daemon/notifications/dbus.vala:569
 msgid "Unread Notifications"
 msgstr "Notificações não lidas"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
 msgstr "Recebeu 1 notificação enquanto uma aplicação estava em ecrã inteiro."
 
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
 msgstr "Recebeu %d notificação enquanto uma aplicação estava em ecrã inteiro."
@@ -42,7 +42,7 @@ msgstr "Recebeu %d notificação enquanto uma aplicação estava em ecrã inteir
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:587
 msgid "View Notifications"
 msgstr "Ver notificações"
 
@@ -69,88 +69,6 @@ msgstr "Definições do Budgie"
 msgid "System Settings"
 msgstr "Definições do Sistema"
 
-#. If we have valid windows open
-#. Only one window and a valid AbominationRunningApp for it
-#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
-#. as a workaround
-#: src/daemon/screenshot.vala:319 src/daemon/screenshot.vala:827
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
-#: src/panel/applets/icon-tasklist/IconPopover.vala:226
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
-msgid "Budgie Screenshot"
-msgstr "Captura de ecrã Budgie"
-
-#. Translators: be as brief as possible; popovers ar cut off if broader than
-#. the window
-#: src/daemon/screenshot.vala:421
-msgid "Screenshot entire screen"
-msgstr "Capturar ecrã inteiro"
-
-#: src/daemon/screenshot.vala:422
-msgid "Screenshot selected area"
-msgstr "Capturar área selecionada"
-
-#: src/daemon/screenshot.vala:423
-msgid "Screenshot active window"
-msgstr "Capturar janela ativa"
-
-#. we cannot use areabuttons_labels, since these will be translated
-#. don't translate, internal use
-#. translate! These are the interface names
-#: src/daemon/screenshot.vala:531
-msgid "Screen"
-msgstr "Ecrã"
-
-#: src/daemon/screenshot.vala:531
-msgid "Window"
-msgstr "Janela"
-
-#: src/daemon/screenshot.vala:531
-msgid "Selection"
-msgstr "Seleção"
-
-#. translate
-#: src/daemon/screenshot.vala:881
-msgid "Cancel screenshot"
-msgstr "Cancelar captura de ecrã"
-
-#: src/daemon/screenshot.vala:882
-msgid "Save screenshot to the selected directory"
-msgstr "Guarde a captura de ecrã para o diretório selecionado"
-
-#: src/daemon/screenshot.vala:883
-msgid "Copy screenshot to the clipboard"
-msgstr "Copiar a captura de ecrã para a área de transferência"
-
-#: src/daemon/screenshot.vala:884
-msgid "Open screenshot in default application"
-msgstr "Abrir captura de ecrã na aplicação predefinida"
-
-#. Other -> call Filebrowser (path = null)
-#. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1158
-msgid "Other..."
-msgstr "Outros..."
-
-#. set custom dir to found dir
-#: src/daemon/screenshot.vala:1242
-msgid "Open Folder"
-msgstr "Abrir pasta"
-
-#: src/daemon/screenshot.vala:1243
-#: src/panel/settings/settings_autostart.vala:194
-#: src/panel/settings/settings_autostart.vala:359
-#: src/panel/settings/settings_panel_dialogs.vala:158
-#: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: src/daemon/screenshot.vala:1243
-msgid "Open"
-msgstr "Abrir"
-
 #. Should show a notification
 #: src/daemon/settings.vala:339
 msgid "Turned on Caffeine Boost"
@@ -169,6 +87,88 @@ msgstr "Desligar-se-á num minuto"
 #, c-format
 msgid "Will turn off in %d minutes"
 msgstr "Desligar-se-á em %d minutos"
+
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
+#. as a workaround
+#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
+msgstr "Captura de ecrã Budgie"
+
+#. Translators: be as brief as possible; popovers ar cut off if broader than
+#. the window
+#: src/daemon/screenshot.vala:438
+msgid "Screenshot entire screen"
+msgstr "Capturar ecrã inteiro"
+
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot active window"
+msgstr "Capturar janela ativa"
+
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot selected area"
+msgstr "Capturar área selecionada"
+
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:548
+msgid "Screen"
+msgstr "Ecrã"
+
+#: src/daemon/screenshot.vala:548
+msgid "Window"
+msgstr "Janela"
+
+#: src/daemon/screenshot.vala:548
+msgid "Selection"
+msgstr "Seleção"
+
+#. translate
+#: src/daemon/screenshot.vala:898
+msgid "Cancel screenshot"
+msgstr "Cancelar captura de ecrã"
+
+#: src/daemon/screenshot.vala:899
+msgid "Save screenshot to the selected directory"
+msgstr "Guarde a captura de ecrã para o diretório selecionado"
+
+#: src/daemon/screenshot.vala:900
+msgid "Copy screenshot to the clipboard"
+msgstr "Copiar a captura de ecrã para a área de transferência"
+
+#: src/daemon/screenshot.vala:901
+msgid "Open screenshot in default application"
+msgstr "Abrir captura de ecrã na aplicação predefinida"
+
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1175
+msgid "Other..."
+msgstr "Outros..."
+
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1259
+msgid "Open Folder"
+msgstr "Abrir pasta"
+
+#: src/daemon/screenshot.vala:1260
+#: src/panel/settings/settings_autostart.vala:194
+#: src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/daemon/screenshot.vala:1260
+msgid "Open"
+msgstr "Abrir"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -438,22 +438,6 @@ msgstr "Suavização"
 msgid "Set the type of antialiasing to use."
 msgstr "Defina o tipo de suavização a utilizar."
 
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Aparência"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Painéis"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Sessão"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Criar novo painel"
-
 #: src/panel/settings/settings_panel.vala:85
 msgid "Applets"
 msgstr "Mini-aplicações"
@@ -695,27 +679,6 @@ msgstr "Quer mesmo remover este widget? Esta ação não pode ser anulada."
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
 msgid "Remove"
 msgstr "Remover"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr "Incorporado"
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr "Escolha um plugin"
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr "Sem descrição."
-
-#: src/panel/settings/settings_plugin_chooser.vala:260
-#, c-format
-msgid "by %s"
-msgstr "por %s"
-
-#: src/panel/settings/settings_plugin_chooser.vala:263
-msgid "No authors listed"
-msgstr "Nenhum autor listado"
 
 #: src/panel/settings/settings_raven_settings.vala:45
 msgid "Set Raven position"
@@ -967,13 +930,46 @@ msgstr ""
 msgid "Right (standard)"
 msgstr "Direita (padrão)"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr "Incorporado"
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr "Escolha um plugin"
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr "Sem descrição."
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr "por %s"
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr "Nenhum autor listado"
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Aparência"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Painéis"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sessão"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Criar novo painel"
+
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
 msgstr "Tudo"
-
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
-msgid "Power"
-msgstr "Energia"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -995,6 +991,10 @@ msgstr "Definir ícone"
 #: src/panel/applets/budgie-menu/views/ListView.vala:101
 msgid "Sorry, no items found"
 msgstr "Desculpe, nenhum item encontrado"
+
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+msgid "Power"
+msgstr "Energia"
 
 #. Prepare label widget
 #. Caffeine Notification
@@ -1482,6 +1482,26 @@ msgstr "Este sistema não suporta hibernação."
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr "Terminar a sua sessão?"
+
+#: src/daemon/aftershot.ui.h:1
+msgid "Name:"
+msgstr ""
+
+#: src/daemon/aftershot.ui.h:2
+msgid "Folder:"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:1
+msgid "Delay in seconds"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:2
+msgid "Show Pointer"
+msgstr ""
+
+#: src/daemon/screenshothome.ui.h:3
+msgid "Play sound when capturing"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
