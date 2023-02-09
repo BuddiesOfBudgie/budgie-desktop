@@ -19,16 +19,13 @@ const string BLUEZ_DBUS_NAME = "org.bluez";
 const string BLUEZ_MANAGER_PATH = "/";
 const string BLUEZ_ADAPTER_INTERFACE = "org.bluez.Adapter1";
 const string BLUEZ_DEVICE_INTERFACE = "org.bluez.Device1";
+const string BLUETOOTH_ADDRESS_PREFIX = "/org/bluez/";
 
 class BluetoothClient : GLib.Object {
 	private Cancellable cancellable;
 
 	private DBusObjectManagerClient object_manager;
 	private Client upower_client;
-
-	private HashTable<string, Up.Device?> upower_devices;
-
-	private bool bluez_devices_coldplugged = false;
 
 	public bool has_adapter { get; private set; default = false; }
 	public bool is_connected { get; private set; default = false; }
@@ -40,12 +37,15 @@ class BluetoothClient : GLib.Object {
 	public signal void device_added(Device1 device);
 	/** Signal emitted when a Bluetooth device has been removed. */
 	public signal void device_removed(Device1 device);
+	/** Signal emitted when a UPower device for a Bluetooth device has been detected. */
+	public signal void upower_device_added(Up.Device up_device);
+	/** Signal emitted when a UPower device for a Bluetooth device has been removed. */
+	public signal void upower_device_removed(string object_path);
 	/** Signal emitted when our powered or connected state changes. */
 	public signal void global_state_changed(bool enabled, bool connected);
 
 	construct {
 		cancellable = new Cancellable();
-		upower_devices = new HashTable<string, Up.Device?>(str_hash, str_equal);
 
 		// Set up our UPower client
 		create_upower_client.begin();
@@ -87,10 +87,7 @@ class BluetoothClient : GLib.Object {
 		upower_client.device_added.connect(upower_device_added_cb);
 		upower_client.device_removed.connect(upower_device_removed_cb);
 
-		// Maybe coldplug UPower devices
-		if (bluez_devices_coldplugged) {
-			coldplug_client();
-		}
+		coldplug_client();
 		} catch (Error e) {
 			critical("Error creating UPower client: %s", e.message);
 		}
@@ -131,28 +128,6 @@ class BluetoothClient : GLib.Object {
 
 		retrieve_finished = true;
 	}
-
-	//  private BluetoothDevice? get_device_with_address(string address) {
-	//  	var num_items = devices.get_n_items();
-
-	//  	for (var i = 0; i < num_items; i++) {
-	//  		var device = devices.get_item(i) as BluetoothDevice;
-	//  		if (device.address == address) return device;
-	//  	}
-
-	//  	return null;
-	//  }
-
-	//  private BluetoothDevice? get_device_with_object_path(string object_path) {
-	//  	var num_items = devices.get_n_items();
-
-	//  	for (var i = 0; i < num_items; i++) {
-	//  		var device = devices.get_item(i) as BluetoothDevice;
-	//  		if (device.get_object_path() == object_path) return device;
-	//  	}
-
-	//  	return null;
-	//  }
 
 	/**
 	 * Handles the addition of a DBus object interface.
@@ -196,32 +171,13 @@ class BluetoothClient : GLib.Object {
 	 */
 	private void upower_device_added_cb(Device up_device) {
 		var serial = up_device.serial;
-		message("upower_device_added_cb");
 
 		// Make sure the device has a valid Bluetooth address
-		if (serial == null || !is_valid_address(serial)) {
-			return;
-		}
+		if (serial == null || !is_valid_address(serial)) return;
 
-		// Get the device with the address
-		string? key = null;
-		Device? value = null;
-		var found = upower_devices.lookup_extended(up_device.get_object_path(), out key, out value);
-		if (found) message("Key in HashTable found: %s", key);
-		else message("Key not found. Sadge :(");
+		if (!up_device.native_path.has_prefix(BLUETOOTH_ADDRESS_PREFIX)) return;
 
-		//  if (device == null) {
-		//  	warning("Could not find Bluetooth device for UPower device with serial '%s'", serial);
-		//  	return;
-		//  }
-
-		//  // Connect signals
-		//  up_device.notify["battery-level"].connect(() => device.update_battery(up_device));
-		//  up_device.notify["percentage"].connect(() => device.update_battery(up_device));
-
-		//  // Update the power properties
-		//  device.set_upower_device(up_device);
-		//  device.update_battery(up_device);
+		upower_device_added(up_device);
 	}
 
 	/**
@@ -231,19 +187,9 @@ class BluetoothClient : GLib.Object {
 	 * association removed, and its battery properties reset.
 	 */
 	private void upower_device_removed_cb(string object_path) {
-		//  var device = get_device_with_object_path(object_path);
+		if (!object_path.has_prefix(BLUETOOTH_ADDRESS_PREFIX)) return;
 
-		//  if (device == null) {
-		//  	return;
-		//  }
-
-		//  debug("Removing Upower Device '%s' for Bluetooth device '%s'", object_path, device.get_object_path());
-
-		//  // Reset device power properties
-		//  device.set_upower_device(null);
-		//  device.battery_type = BatteryType.NONE;
-		//  device.battery_level = DeviceLevel.NONE;
-		//  device.battery_percentage = 0.0f;
+		upower_device_removed(object_path);
 	}
 
 	/**
@@ -252,25 +198,20 @@ class BluetoothClient : GLib.Object {
 	 * devices.
 	 */
 	private void upower_get_devices_cb(Object? obj, AsyncResult? res) {
-		GenericArray<Up.Device> devices = null;
-
 		try {
-			devices = upower_client.get_devices_async.end(res);
+			GenericArray<Up.Device> devices = upower_client.get_devices_async.end(res);
+
+			if (devices == null) {
+				warning("No UPower devices found");
+				return;
+			}
+
+			// Add each UPower device
+			foreach (var device in devices) {
+				upower_device_added_cb(device);
+			}
 		} catch (Error e) {
 			warning("Error getting UPower devices: %s", e.message);
-			return;
-		}
-
-		if (devices == null) {
-			warning("No UPower devices found");
-			return;
-		}
-
-		debug("Found %d UPower devices", devices.length);
-
-		// Add each UPower device
-		foreach (var device in devices) {
-			upower_device_added_cb(device);
 		}
 	}
 

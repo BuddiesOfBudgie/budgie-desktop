@@ -105,6 +105,26 @@ public class BluetoothIndicator : Bin {
 			remove_device(device);
 		});
 
+		// Handle when a UPower device has been added
+		client.upower_device_added.connect((up_device) => {
+			devices_box.foreach((row) => {
+				var device_row = row as BTDeviceRow;
+				if (device_row.device.address == up_device.serial) {
+					device_row.up_device = up_device;
+				}
+			});
+		});
+
+		// Handle when a UPower device has been removed
+		client.upower_device_removed.connect((path) => {
+			devices_box.foreach((row) => {
+				var device_row = row as BTDeviceRow;
+				if (((DBusProxy) device_row.device).get_object_path() == path) {
+					device_row.up_device = null;
+				}
+			});
+		});
+
 		client.global_state_changed.connect(on_client_state_changed);
 
 		add(ebox);
@@ -222,11 +242,26 @@ public class BTDeviceRow : ListBoxRow {
 	private Image? image = null;
 	private Label? name_label = null;
 	private Label? status_label = null;
+	private Revealer? battery_revealer = null;
+	private Image? battery_icon = null;
+	private Label? battery_label = null;
 	private Image? expand_icon = null;
 	private Revealer? revealer = null;
 	private Button? connection_button = null;
 
 	public Device1 device { get; construct; }
+
+	private Up.Device? _up_device;
+	public Up.Device? up_device {
+		get { return _up_device; }
+		set {
+			_up_device = value;
+			_up_device.notify.connect(() => {
+				update_battery();
+			});
+			update_battery();
+		}
+	}
 
 	public signal void properties_updated();
 
@@ -258,6 +293,25 @@ public class BTDeviceRow : ListBoxRow {
 		status_label.get_style_context().add_class("bluetooth-device-status");
 		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
+		battery_revealer = new Revealer() {
+			reveal_child = false,
+			transition_duration = 250,
+			transition_type = RevealerTransitionType.SLIDE_DOWN,
+		};
+
+		var battery_box = new Box(Orientation.HORIZONTAL, 0);
+
+		battery_icon = new Image();
+		battery_label = new Label(null) {
+			halign = START,
+		};
+		battery_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+
+		battery_box.pack_start(battery_label, false, false, 2);
+		battery_box.pack_start(battery_icon, false, false, 2);
+
+		battery_revealer.add(battery_box);
+
 		expand_icon = new Image.from_icon_name("pan-end-symbolic", BUTTON);
 
 		// Revealer stuff
@@ -282,7 +336,8 @@ public class BTDeviceRow : ListBoxRow {
 		grid.attach(image, 0, 0, 2, 2);
 		grid.attach(name_label, 2, 0, 2, 1);
 		grid.attach(status_label, 2, 1, 2, 1);
-		grid.attach(expand_icon, 4, 0, 2, 2);
+		grid.attach(battery_revealer, 2, 2, 1, 1);
+		grid.attach(expand_icon, 4, 0, 2, 3);
 
 		box.pack_start(grid);
 		box.pack_start(revealer);
@@ -337,6 +392,57 @@ public class BTDeviceRow : ListBoxRow {
 				connection_button.sensitive = true;
 			});
 		}
+	}
+
+	private void update_battery() {
+		if (up_device == null) {
+			battery_revealer.reveal_child = false;
+			return;
+		}
+
+		string? fallback_icon_name = null;
+		string? icon_name = null;
+
+		// round to nearest 10
+		int rounded = (int) Math.round(up_device.percentage / 10) * 10;
+
+		// Calculate our icon fallback if we don't have stepped battery icons
+		if (up_device.percentage <= 10) {
+			fallback_icon_name = "battery-empty";
+		} else if (up_device.percentage <= 25) {
+			fallback_icon_name = "battery-critical";
+		} else if (up_device.percentage <= 50) {
+			fallback_icon_name = "battery-low";
+		} else if (up_device.percentage <= 75) {
+			fallback_icon_name = "battery-good";
+		} else {
+			fallback_icon_name = "battery-full";
+		}
+
+		icon_name = "battery-level-%d".printf(rounded);
+
+		// Fully charged or charging
+		if (up_device.state == 4) {
+			icon_name = "battery-full-charged";
+		} else if (up_device.state == 1) {
+			icon_name += "-charging-symbolic";
+			fallback_icon_name += "-charging-symbolic";
+		} else {
+			icon_name += "-symbolic";
+		}
+
+		var theme = IconTheme.get_default();
+		var icon_info = theme.lookup_icon(icon_name, IconSize.MENU, 0);
+
+		if (icon_info == null) {
+			battery_icon.set_from_icon_name(fallback_icon_name, IconSize.MENU);
+		} else {
+			battery_icon.set_from_icon_name(icon_name, IconSize.MENU);
+		}
+
+		battery_label.label = "%d%%".printf((int) up_device.percentage);
+
+		battery_revealer.reveal_child = true;
 	}
 
 	private void update_status() {
