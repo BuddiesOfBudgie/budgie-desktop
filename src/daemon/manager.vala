@@ -32,6 +32,7 @@ namespace Budgie {
 		*/
 		public ServiceManager(bool replace) {
 			theme_manager = new Budgie.ThemeManager();
+			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
 			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
@@ -42,7 +43,6 @@ namespace Budgie {
 			osd.setup_dbus(replace);
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
-			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
 			menus = new Budgie.MenuManager();
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
