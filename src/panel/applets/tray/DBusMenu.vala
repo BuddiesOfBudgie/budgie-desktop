@@ -39,14 +39,26 @@ public class DBusMenu : Object {
 		iface = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 		menu = new Gtk.Menu();
 
-		uint32 revision;
-		Variant layout;
-		iface.get_layout(0, -1, {}, out revision, out layout);
-		parse_layout(layout);
-
-		iface.items_properties_updated.connect(on_items_properties_updated);
+		update_layout();
+		iface.items_properties_updated.connect((updated_props, removed_props) => {
+			on_items_properties_updated(updated_props);
+			on_items_properties_updated(removed_props);
+		});
 
 		menu.show();
+	}
+
+	private void update_layout() {
+		uint32 revision;
+		Variant layout;
+		try {
+			iface.get_layout(0, -1, {}, out revision, out layout);
+		} catch (Error e) {
+			warning("Failed to update layout: %s", e.message);
+			return;
+		}
+
+		parse_layout(layout);
 	}
 
 	private void parse_layout(Variant layout) {
@@ -70,7 +82,7 @@ public class DBusMenu : Object {
 		}
 	}
 
-	private void on_items_properties_updated(Variant updated_props, Variant removed_props) {
+	private void on_items_properties_updated(Variant updated_props) {
 		VariantIter it = updated_props.iterator();
 		for (var child = it.next_value(); child != null; child = it.next_value()) {
 			var child_id = child.get_child_value(0).get_int32();
@@ -83,23 +95,6 @@ public class DBusMenu : Object {
 						var key = prop.get_child_value(0).get_string();
 						var value = prop.get_child_value(1);
 						item.update_property(key, value);
-					}
-				}
-			}
-		}
-
-		it = removed_props.iterator();
-		for (var child = it.next_value(); child != null; child = it.next_value()) {
-			var child_id = child.get_child_value(0).get_int32();
-			var node = all_nodes.get(child_id);
-			if (node != null) {
-				var child_props = child.get_child_value(1);
-				var pit = child_props.iterator();
-				for (var prop = pit.next_value(); prop != null; prop = pit.next_value()) {
-					if (prop.is_container() && prop.n_children() == 2) {
-						var key = prop.get_child_value(0).get_string();
-						var value = prop.get_child_value(1);
-						node.update_property(key, value);
 					}
 				}
 			}
