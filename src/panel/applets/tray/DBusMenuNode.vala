@@ -9,6 +9,145 @@
  * (at your option) any later version.
  */
 
+public class DBusMenuNode : Object {
+	public int32 id;
+	public Gtk.MenuItem item;
+
+	private Properties properties;
+	private List<int32> children = new List<int32>();
+
+	public DBusMenuNode(int32 id, Variant props, Variant children, bool is_root = false) {
+		this.id = id;
+		properties = new Properties(props);
+		if (is_root) return;
+
+		if (properties.type == "separator") {
+			item = new Gtk.SeparatorMenuItem();
+			item.visible = properties.visible;
+			item.sensitive = properties.enabled;
+			return;
+		}
+
+		var dbus_item = new DBusMenuItem(properties);
+		dbus_item.activate.connect(() => {
+			clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
+		});
+		item = dbus_item;
+	}
+
+	public void update_property(string key, Variant? value) {
+		properties.set_property(key, value);
+
+		switch (key) {
+			case "visible":
+				item.set_visible(properties.visible);
+				break;
+			case "enabled":
+				item.set_sensitive(properties.enabled);
+				break;
+			default:
+				break;
+		}
+
+		if (item is DBusMenuItem) {
+			((DBusMenuItem) item).property_updated(properties, key);
+		}
+	}
+
+	public signal void clicked(Variant? data);
+	public signal void hovered();
+	public signal void opened();
+	public signal void closed();
+}
+
+private class DBusMenuItem : Gtk.CheckMenuItem {
+	public bool should_draw_indicator = false;
+	private Gtk.Box box;
+	private new Gtk.AccelLabel label;
+	private Gtk.Image icon;
+
+	public DBusMenuItem(Properties properties) {
+		active = properties.toggle_state ?? false;
+		update_toggle_type(properties.toggle_type);
+
+		box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
+		icon = new Gtk.Image();
+		if (properties.icon_name != "" || properties.icon_data.length > 0) {
+			if (properties.icon_name != "") {
+				icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
+			} else if (properties.icon_data.length > 0) {
+				var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
+				icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
+			}
+			box.pack_start(icon, false, false, 2);
+		}
+
+		label = new Gtk.AccelLabel("");
+		label.set_text_with_mnemonic(properties.label);
+		box.add(label);
+		box.show_all();
+
+		add(box);
+		set_visible(properties.visible);
+		set_sensitive(properties.enabled);
+	}
+
+	public void property_updated(Properties properties, string key) {
+		switch (key) {
+			case "label":
+				label.set_text_with_mnemonic(properties.label);
+				break;
+			case "type":
+				warning("Attempted to change the type of an existing item");
+				break;
+			case "disposition":
+				break; // TODO make this do something
+			case "children-display":
+				break; // TODO make this do something
+			case "toggle-type":
+				update_toggle_type(properties.toggle_type);
+				break;
+			case "toggle-state":
+				active = properties.toggle_state ?? false;
+				break;
+			case "icon-name":
+				if (properties.icon_name == "" && icon.parent == box) {
+					box.remove(icon);
+				} else if (properties.icon_name != "") {
+					icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
+					box.pack_start(icon, false, false, 2);
+				}
+
+				break;
+			case "icon-data":
+				if (properties.icon_name != "") return;
+
+				if (properties.icon_data.length == 0 && icon.parent == box) {
+					box.remove(icon);
+				} else if (properties.icon_data.length > 0) {
+					var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
+					icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
+					box.pack_start(icon, false, false, 2);
+				}
+
+				break;
+			case "shortcut":
+				break; // TODO make this do something
+			default:
+				break;
+		}
+	}
+
+	public void update_toggle_type(string new_toggle_type) {
+		draw_as_radio = new_toggle_type == "radio";
+		should_draw_indicator = new_toggle_type != "";
+	}
+
+	protected override void draw_indicator(Cairo.Context cr) {
+		if (should_draw_indicator) base.draw_indicator(cr);
+	}
+}
+
 private class Properties {
 	public bool visible;
 	public bool enabled;
@@ -138,125 +277,4 @@ private class Properties {
 
 		return ret;
 	}
-}
-
-public class DBusMenuNode : Object {
-	public int32 id;
-	public Gtk.MenuItem item;
-
-	private Gtk.Box box;
-	private Gtk.AccelLabel label;
-	private Gtk.Image icon;
-
-	private Properties properties;
-	private List<int32> children;
-
-	public DBusMenuNode(int32 id, Variant props, Variant children) {
-		this.id = id;
-		properties = new Properties(props);
-
-		if (properties.type == "separator") {
-			item = new Gtk.SeparatorMenuItem();
-			item.visible = properties.visible;
-			item.set_sensitive(properties.enabled);
-			return;
-		}
-
-		if (properties.toggle_type != "") {
-			var check_item = new Gtk.CheckMenuItem() {
-				active = properties.toggle_state ?? false,
-				draw_as_radio = properties.toggle_type == "radio",
-			};
-			check_item.activate.connect(() => clicked(new Variant.boolean(check_item.active)));
-			item = check_item;
-		} else {
-			item = new Gtk.MenuItem();
-			item.activate.connect(() => clicked(null));
-		}
-
-		box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-
-		icon = new Gtk.Image() {
-			pixel_size = 16,
-		};
-		if (properties.icon_name != "" || properties.icon_data.length > 0) {
-			if (properties.icon_name != "") {
-				icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
-			} else if (properties.icon_data.length > 0) {
-				var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
-				icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
-			}
-			box.pack_start(icon, false, false, 2);
-		}
-
-		label = new Gtk.AccelLabel("");
-		label.set_text_with_mnemonic(properties.label);
-		box.add(label);
-		box.show_all();
-
-		item.add(box);
-		item.set_visible(properties.visible);
-		item.set_sensitive(properties.enabled);
-	}
-
-	public void update_property(string key, Variant? value) {
-		properties.set_property(key, value);
-
-		switch (key) {
-			case "visible":
-				item.set_visible(properties.visible);
-				break;
-			case "enabled":
-				item.set_sensitive(properties.enabled);
-				break;
-			case "label":
-				label.set_text_with_mnemonic(properties.label);
-				break;
-			case "type":
-				warning("Attempted to change the type of an existing item");
-				break;
-			case "disposition":
-				break; // TODO make this do something
-			case "children-display":
-				break; // TODO make this do something
-			case "toggle-type":
-				warning("Attempted to change the toggle type of an existing item");
-				break;
-			case "toggle-state":
-				if (item is Gtk.CheckMenuItem) {
-					((Gtk.CheckMenuItem) item).active = properties.toggle_state ?? false;
-				}
-				break;
-			case "icon-name":
-				if (properties.icon_name == "" && icon.parent == box) {
-					box.remove(icon);
-				} else if (properties.icon_name != "") {
-					icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
-					box.pack_start(icon, false, false, 2);
-				}
-
-				break;
-			case "icon-data":
-				if (properties.icon_name != "") return;
-
-				if (properties.icon_data.length == 0 && icon.parent == box) {
-					box.remove(icon);
-				} else if (properties.icon_data.length > 0) {
-					var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
-					icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
-					box.pack_start(icon, false, false, 2);
-				}
-
-				break;
-			case "shortcut":
-				break; // TODO make this do something
-			default:
-				break;
-		}
-	}
-
-	public signal void clicked(Variant? data);
-	public signal void hovered();
-	public signal void opened();
-	public signal void closed();
 }
