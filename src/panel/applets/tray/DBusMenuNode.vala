@@ -84,6 +84,7 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 
 		label = new Gtk.AccelLabel("");
 		label.set_text_with_mnemonic(properties.label);
+		update_shortcut(properties.shortcut);
 		box.add(label);
 		box.show_all();
 
@@ -132,7 +133,8 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 
 				break;
 			case "shortcut":
-				break; // TODO make this do something
+				update_shortcut(properties.shortcut);
+				break;
 			default:
 				break;
 		}
@@ -141,6 +143,38 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 	public void update_toggle_type(string new_toggle_type) {
 		draw_as_radio = new_toggle_type == "radio";
 		should_draw_indicator = new_toggle_type != "";
+	}
+
+	private void update_shortcut(List<string>? new_shortcut) {
+		if (new_shortcut == null) {
+			label.set_accel(0, 0);
+			return;
+		}
+
+		uint key = 0;
+		Gdk.ModifierType modifier = 0;
+		new_shortcut.foreach((it) => {
+			switch (it) {
+				case "Control":
+					modifier |= Gdk.ModifierType.CONTROL_MASK;
+					break;
+				case "Alt":
+					modifier |= Gdk.ModifierType.MOD1_MASK;
+					break;
+				case "Shift":
+					modifier |= Gdk.ModifierType.SHIFT_MASK;
+					break;
+				case "Super":
+					modifier |= Gdk.ModifierType.SUPER_MASK;
+					break;
+				default:
+					Gdk.ModifierType temp_modifier;
+					Gtk.accelerator_parse(it, out key, out temp_modifier);
+					break;
+			}
+		});
+
+		label.set_accel(key, modifier);
 	}
 
 	protected override void draw_indicator(Cairo.Context cr) {
@@ -162,7 +196,7 @@ private class Properties {
 	public string? icon_name;
 	public uint8[] icon_data;
 
-	public List<List<string>> shortcut;
+	public List<string>? shortcut;
 
 	public Properties(Variant props) {
 		HashTable<string, Variant?> props_table = new HashTable<string, Variant?>(str_hash, str_equal);
@@ -258,8 +292,8 @@ private class Properties {
 			variant.get_data_as_bytes().get_data() : default;
 	}
 
-	private static List<List<string>> parse_shortcuts(Variant? variant) {
-		var ret = new List<List<string>>();
+	private static List<string>? parse_shortcuts(Variant? variant) {
+		List<string>? ret = null;
 		if (variant == null) {
 			return ret;
 		}
@@ -267,12 +301,11 @@ private class Properties {
 		VariantIter prop_it = variant.iterator();
 		string key;
 		string[] value;
-		while (prop_it.next("{as}", out key, out value)) {
-			var shortcut = new List<string>();
+		if (prop_it.next("{as}", out key, out value)) {
+			ret = new List<string>();
 			for (int i = 0; i < value.length; i++) {
-				shortcut.append(value[i]);
+				ret.append(value[i]);
 			}
-			ret.append((owned) shortcut);
 		}
 
 		return ret;
