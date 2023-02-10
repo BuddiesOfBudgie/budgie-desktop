@@ -274,7 +274,7 @@ public class BTDeviceRow : ListBoxRow {
 			column_spacing = 6,
 		};
 
-		image = new Image.from_icon_name(device.icon ?? "bluetooth", LARGE_TOOLBAR);
+		image = new Image.from_icon_name(device.icon ?? "bluetooth-active", LARGE_TOOLBAR);
 		image.get_style_context().add_class("bluetooth-device-image");
 
 		name_label = new Label(device.alias) {
