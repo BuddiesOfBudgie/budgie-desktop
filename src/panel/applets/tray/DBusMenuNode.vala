@@ -69,6 +69,7 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 	public DBusMenuItem(Properties properties) {
 		active = properties.toggle_state ?? false;
 		update_toggle_type(properties.toggle_type);
+		update_disposition(properties.disposition);
 
 		box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 		icon = new Gtk.Image();
@@ -102,7 +103,8 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 				warning("Attempted to change the type of an existing item");
 				break;
 			case "disposition":
-				break; // TODO make this do something
+				update_disposition(properties.disposition);
+				break;
 			case "children-display":
 				break; // TODO make this do something
 			case "toggle-type":
@@ -140,9 +142,24 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		}
 	}
 
-	public void update_toggle_type(string new_toggle_type) {
+	private void update_toggle_type(string new_toggle_type) {
 		draw_as_radio = new_toggle_type == "radio";
 		should_draw_indicator = new_toggle_type != "";
+	}
+
+	private void update_disposition(string new_disposition) {
+		var style_context = get_style_context();
+		style_context.remove_class("info");
+		style_context.remove_class("warning");
+		style_context.remove_class("error");
+
+		if (new_disposition == "informative") {
+			style_context.add_class("info");
+		} else if (new_disposition == "warning") {
+			style_context.add_class("warning");
+		} else if (new_disposition == "alert") {
+			style_context.add_class("error");
+		}
 	}
 
 	private void update_shortcut(List<string>? new_shortcut) {
