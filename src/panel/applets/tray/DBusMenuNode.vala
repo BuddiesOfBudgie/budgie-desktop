@@ -70,18 +70,11 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		active = properties.toggle_state ?? false;
 		update_toggle_type(properties.toggle_type);
 		update_disposition(properties.disposition);
+		update_submenu(properties.children_display);
 
 		box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 		icon = new Gtk.Image();
-		if (properties.icon_name != "" || properties.icon_data.length > 0) {
-			if (properties.icon_name != "") {
-				icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
-			} else if (properties.icon_data.length > 0) {
-				var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
-				icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
-			}
-			box.pack_start(icon, false, false, 2);
-		}
+		update_icon(properties.icon_name, properties.icon_data);
 
 		label = new Gtk.AccelLabel("");
 		label.set_text_with_mnemonic(properties.label);
@@ -106,7 +99,8 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 				update_disposition(properties.disposition);
 				break;
 			case "children-display":
-				break; // TODO make this do something
+				update_submenu(properties.children_display);
+				break;
 			case "toggle-type":
 				update_toggle_type(properties.toggle_type);
 				break;
@@ -114,25 +108,8 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 				active = properties.toggle_state ?? false;
 				break;
 			case "icon-name":
-				if (properties.icon_name == "" && icon.parent == box) {
-					box.remove(icon);
-				} else if (properties.icon_name != "") {
-					icon.set_from_icon_name(properties.icon_name, Gtk.IconSize.MENU);
-					box.pack_start(icon, false, false, 2);
-				}
-
-				break;
 			case "icon-data":
-				if (properties.icon_name != "") return;
-
-				if (properties.icon_data.length == 0 && icon.parent == box) {
-					box.remove(icon);
-				} else if (properties.icon_data.length > 0) {
-					var input_stream = new MemoryInputStream.from_data(properties.icon_data, free);
-					icon.set_from_pixbuf(new Gdk.Pixbuf.from_stream(input_stream));
-					box.pack_start(icon, false, false, 2);
-				}
-
+				update_icon(properties.icon_name, properties.icon_data);
 				break;
 			case "shortcut":
 				update_shortcut(properties.shortcut);
@@ -160,6 +137,31 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		} else if (new_disposition == "alert") {
 			style_context.add_class("error");
 		}
+	}
+
+	private void update_submenu(string new_children_display) {
+		if (new_children_display == "submenu") {
+			submenu = new Gtk.Menu();
+		} else {
+			submenu = null;
+		}
+	}
+
+	private void update_icon(string icon_name, Bytes icon_data) {
+		if (icon_name == "" && icon_data.get_size() == 0) {
+			if (icon.parent == box) box.remove(icon);
+			return;
+		}
+
+		Icon gicon;
+		if (icon_name != "") {
+			gicon = new ThemedIcon.with_default_fallbacks(icon_name);
+		} else {
+			gicon = new BytesIcon(icon_data);
+		}
+		icon.set_from_gicon(gicon, Gtk.IconSize.MENU);
+		icon.set_pixel_size(16);
+		box.pack_start(icon, false, false, 2);
 	}
 
 	private void update_shortcut(List<string>? new_shortcut) {
@@ -194,6 +196,19 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		label.set_accel(key, modifier);
 	}
 
+	protected override void toggle_size_request(void* request) {
+		if (should_draw_indicator || icon.parent == null) {
+			base.toggle_size_request(request);
+		} else {
+			int* request_int = request;
+			*request_int = 0;
+		}
+	}
+
+	protected override void toggle_size_allocate(int alloc) {
+		base.toggle_size_allocate(should_draw_indicator || icon.parent == null ? alloc : 0);
+	}
+
 	protected override void draw_indicator(Cairo.Context cr) {
 		if (should_draw_indicator) base.draw_indicator(cr);
 	}
@@ -202,16 +217,16 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 private class Properties {
 	public bool visible;
 	public bool enabled;
-	public string? label;
-	public string? type;
-	public string? disposition;
-	public string? children_display;
+	public string label;
+	public string type;
+	public string disposition;
+	public string children_display;
 
-	public string? toggle_type;
+	public string toggle_type;
 	public bool? toggle_state;
 
-	public string? icon_name;
-	public uint8[] icon_data;
+	public string icon_name;
+	public Bytes icon_data;
 
 	public List<string>? shortcut;
 
@@ -236,7 +251,7 @@ private class Properties {
 		toggle_state = Properties.parse_int32_bool(props_table.get("toggle-state"), null);
 
 		icon_name = Properties.parse_string(props_table.get("icon-name"), "");
-		icon_data = Properties.parse_bytes(props_table.get("icon-data"), {});
+		icon_data = Properties.parse_bytes(props_table.get("icon-data"), new Bytes({}));
 
 		shortcut = Properties.parse_shortcuts(props_table.get("shortcut"));
 	}
@@ -271,7 +286,7 @@ private class Properties {
 				icon_name = Properties.parse_string(value, "");
 				break;
 			case "icon-data":
-				icon_data = Properties.parse_bytes(value, {});
+				icon_data = Properties.parse_bytes(value, new Bytes({}));
 				break;
 			case "shortcut":
 				shortcut = Properties.parse_shortcuts(value);
@@ -304,9 +319,9 @@ private class Properties {
 			variant.get_string() : default;
 	}
 
-	private static uint8[] parse_bytes(Variant? variant, uint8[] default) {
+	private static Bytes parse_bytes(Variant? variant, Bytes default) {
 		return variant != null && variant.is_of_type(VariantType.BYTESTRING) ?
-			variant.get_data_as_bytes().get_data() : default;
+			variant.get_data_as_bytes() : default;
 	}
 
 	private static List<string>? parse_shortcuts(Variant? variant) {
