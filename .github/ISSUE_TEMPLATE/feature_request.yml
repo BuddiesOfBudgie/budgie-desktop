@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest a new feature or other enhancement.
-title: "[Request]: "
+title: "[Request] "
 body:
   - type: input
     id: version

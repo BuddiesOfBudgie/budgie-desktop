@@ -6,8 +6,8 @@
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # A. S., 2022
-# Yaroslav Popkov, 2023
 # Виктор, 2023
+# Yaroslav Popkov, 2023
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-09 21:45+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Виктор, 2023\n"
+"Last-Translator: Yaroslav Popkov, 2023\n"
 "Language-Team: Russian (https://www.transifex.com/buddiesofbudgie/teams/129844/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -128,7 +128,7 @@ msgstr "Окно"
 
 #: src/daemon/screenshot.vala:548
 msgid "Selection"
-msgstr "Выбор"
+msgstr "Область"
 
 #. translate
 #: src/daemon/screenshot.vala:898
@@ -787,7 +787,7 @@ msgstr "Устанавливает местоположение всплываю
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
-msgstr "Темная тема"
+msgstr "Тёмная тема"
 
 #: src/panel/settings/settings_style.vala:79
 msgid "Built-in theme"
@@ -1488,23 +1488,23 @@ msgstr "Вы уверены, что хотите завершить сессию
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Имя:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Папка:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "Задержка в секундах"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "Показать курсор"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "Проигрывать звук при захвате"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
