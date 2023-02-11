@@ -89,7 +89,7 @@
 		<key type="b" name="enable-unredirect">
 			<default>true</default>
 			<summary>Enable unredirection of fullscreen applications</summary>
-			<description>Enable unredirection which will allow frames to bypass compositing for fullscreen application.</description>
+			<description>Enable unredirection which will allow frames to bypass compositing for fullscreen applications.</description>
 		</key>
 
 		<key type="b" name="show-all-windows-tabswitcher">

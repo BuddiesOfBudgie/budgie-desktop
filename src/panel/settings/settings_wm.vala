@@ -81,7 +81,7 @@ namespace Budgie {
 			switch_unredirect = new Gtk.Switch();
 			grid.add_row(new SettingsRow(switch_unredirect,
 				_("Enable unredirection"),
-				_("Enable unredirection which will allow frames to bypass compositing for fullscreen application. This option is for advanced users and recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs.")
+				_("Enable unredirection which will allow frames to bypass compositing for fullscreen applications. This option is for advanced users and recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs.")
 			));
 
 			switch_all_windows_tabswitcher = new Gtk.Switch();
