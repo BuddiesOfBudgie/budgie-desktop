@@ -173,7 +173,7 @@ namespace Budgie {
 
 		Settings? iface_settings = null;
 
-		private bool force_unredirect = false;
+		public bool force_unredirect = false;
 
 		HashTable<Meta.WindowActor?, AnimationState?> state_map;
 		Clutter.Actor? display_group;
@@ -690,18 +690,18 @@ namespace Budgie {
 			if (key == EXPERIMENTAL_DIALOG) { // Key changed was the experimental enable
 				enabled_experimental_run_diag_as_menu = this.settings.get_boolean(key);
 			} else if (key == WM_FORCE_UNREDIRECT) {
-				bool enab = this.settings.get_boolean(key);
-
-				if (enab == this.force_unredirect) return;
-
-				var display = this.get_display();
-				if (enab) {
-					Meta.Compositor.enable_unredirect_for_display(display);
-				} else {
-					Meta.Compositor.disable_unredirect_for_display(display);
-				}
-				this.force_unredirect = enab;
+				set_redirection_mode(this.settings.get_boolean(key));
 			}
+		}
+
+		public void set_redirection_mode(bool enable) {
+			var display = this.get_display();
+			if (enable) {
+				Meta.Compositor.enable_unredirect_for_display(display);
+			} else {
+				Meta.Compositor.disable_unredirect_for_display(display);
+			}
+			this.force_unredirect = enable;
 		}
 
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {
