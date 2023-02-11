@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,13 @@ namespace Budgie {
 			list.can_focus = false; // Disable focus to prevent scroll on click
 			list.focus_on_click = false;
 			list.set_selection_mode(Gtk.SelectionMode.NONE);
+			list.set_sort_func((a, b) => {
+				var noti_a = a.get_child() as NotificationWidget;
+				var noti_b = b.get_child() as NotificationWidget;
+
+				// Sort notifications from old -> new, descending
+				return (int)(noti_a.notification.timestamp - noti_b.notification.timestamp);
+			});
 
 			/**
 			 * Header creation

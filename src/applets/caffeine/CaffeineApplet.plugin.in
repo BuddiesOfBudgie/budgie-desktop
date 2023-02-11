@@ -1,8 +1,0 @@
-[Plugin]
-Module=caffeineapplet.so
-Name=Caffeine
-_Description=Prevent the system and screen from sleeping
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2018-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org/
-Icon=my-caffeine-on-symbolic

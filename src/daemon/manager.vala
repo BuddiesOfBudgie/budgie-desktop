@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2016-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ namespace Budgie {
 		Budgie.Notifications.Server? notifications;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
+		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
 
 		/**
@@ -44,6 +45,13 @@ namespace Budgie {
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
 			switcher.setup_dbus(replace);
+
+			try {
+				screenshotcontrol = new BudgieScr.ScreenshotServer();
+				screenshotcontrol.setup_dbus();
+			} catch (Error e) {
+				warning("ServiceManager %s\n", e.message);
+			}
 			xdg_tracker = new Budgie.XDGDirTracker();
 			xdg_tracker.setup_dbus(replace);
 		}

@@ -1,0 +1,9 @@
+[Plugin]
+Module=separatorapplet.so
+Builtin=true
+Name=Separator
+_Description=Visual separator between applets.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=separator

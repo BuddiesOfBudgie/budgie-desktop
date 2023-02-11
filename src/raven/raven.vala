@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,6 +147,8 @@ namespace Budgie {
 
 		private Gtk.PositionType _screen_edge = Gtk.PositionType.RIGHT;
 
+		private List<Budgie.RavenWidgetData>? widgets = null;
+
 		/* Anchor to the right by default */
 		public Gtk.PositionType screen_edge {
 			public set {
@@ -181,6 +183,7 @@ namespace Budgie {
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
 		private Settings? settings = null;
+		private Settings? widget_settings = null;
 
 		bool expanded = false;
 
@@ -191,13 +194,13 @@ namespace Budgie {
 
 		public int required_size { public get ; protected set; }
 
-		private PowerStrip? strip = null;
-
 		private Budgie.MainView? main_view = null;
 
 		private uint n_count = 0;
 
 		public Budgie.DesktopManager? manager { public set; public get; }
+
+		private unowned Budgie.RavenPluginManager? plugin_manager;
 
 		public double nscale {
 			public set {
@@ -224,6 +227,8 @@ namespace Budgie {
 			try {
 				iface = new RavenIface(this);
 				conn.register_object(Budgie.RAVEN_DBUS_OBJECT_PATH, iface);
+				plugin_manager.setup_plugins();
+				load_existing_widgets();
 			} catch (Error e) {
 				stderr.printf("Error registering Raven: %s\n", e.message);
 				Process.exit(1);
@@ -273,14 +278,18 @@ namespace Budgie {
 			}
 		}
 
-		public Raven(Budgie.DesktopManager? manager) {
+		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
 			get_style_context().add_class("budgie-container");
 
 			settings = new Settings("com.solus-project.budgie-raven");
-			settings.changed["show-power-strip"].connect(on_power_strip_change);
+
+			widget_settings = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
 
 			Raven._instance = this;
+
+			this.widgets = new List<RavenWidgetData>();
+			this.plugin_manager = plugin_manager;
 
 			var vis = screen.get_rgba_visual();
 			if (vis == null) {
@@ -326,9 +335,6 @@ namespace Budgie {
 				queue_draw();
 			});
 
-			strip = new PowerStrip(this);
-			main_box.pack_end(strip, false, false, 0);
-
 			resizable = false;
 			skip_taskbar_hint = true;
 			skip_pager_hint = true;
@@ -343,21 +349,6 @@ namespace Budgie {
 			this.get_child().show_all();
 
 			this.screen_edge = Gtk.PositionType.LEFT;
-
-			on_power_strip_change(); // Trigger our power strip change func immediately
-		}
-
-		/**
-		* on_power_strip_change will handle when the settings for Raven's Power Strip has changed
-		*/
-		private void on_power_strip_change() {
-			bool show_strip = settings.get_boolean("show-power-strip");
-
-			if (show_strip) { // If we should show the strip
-				strip.show_all();
-			} else { // If we should hide the strip
-				strip.hide();
-			}
 		}
 
 		public override void size_allocate(Gtk.Allocation rect) {
@@ -478,6 +469,7 @@ namespace Budgie {
 			}
 
 			this.expanded = exp;
+			main_view.raven_expanded(this.expanded);
 			this.iface.ExpansionChanged(this.expanded);
 
 			if (!this.get_settings().gtk_enable_animations) {
@@ -529,9 +521,200 @@ namespace Budgie {
 			return this.expanded;
 		}
 
+		public void update_uuids() {
+			string[] uuids = null;
+
+			widgets.foreach((widget_data) => {
+				uuids += widget_data.uuid;
+			});
+
+			widget_settings.set_strv("uuids", uuids);
+		}
+
+		public RavenWidgetCreationResult create_widget_instance(string module_name) {
+			Budgie.RavenWidgetData? widget_data;
+			var result = plugin_manager.new_widget_instance_for_plugin(module_name, null, out widget_data);
+			if (result == RavenWidgetCreationResult.SUCCESS) {
+				widgets.append(widget_data);
+				main_view.add_widget_instance(widget_data.widget_instance);
+				on_widget_added(widget_data);
+				update_uuids();
+			}
+
+			return result;
+		}
+
+		private void create_widget_instance_with_uuid(string module_name, string? uuid) {
+			Budgie.RavenWidgetData? widget_data;
+			var result = plugin_manager.new_widget_instance_for_plugin(module_name, uuid, out widget_data);
+			switch (result) {
+				case RavenWidgetCreationResult.SUCCESS:
+					widgets.append(widget_data);
+					main_view.add_widget_instance(widget_data.widget_instance);
+					on_widget_added(widget_data);
+					break;
+				case RavenWidgetCreationResult.PLUGIN_INFO_MISSING:
+					warning("Failed to create Raven widget instance with uuid %s: No plugin info found for module %s", uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.INVALID_MODULE_NAME:
+					var builder = new StringBuilder();
+					builder.append("Failed to create Raven widget instance with uuid %s: Module name must be in reverse-DNS format.");
+					builder.append("(e.g. 'tld.domain.group.WidgetName.so' for C/Vala or 'tld_domain_group_WidgetName' for Python)");
+					warning(builder.str, uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.PLUGIN_LOAD_FAILED:
+					warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s failed to load", uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.SCHEMA_LOAD_FAILED:
+					warning("Failed to create Raven widget instance with uuid %s: Plugin with module %s supports settings, but does not install a schema with the same name", uuid, module_name);
+					break;
+				case RavenWidgetCreationResult.INSTANCE_CREATION_FAILED:
+					warning("Failed to create Raven widget instance with uuid %s: Unknown failure", uuid);
+					break;
+			}
+		}
+
+		private void load_existing_widgets() {
+			string[] stored_uuids = widget_settings.get_strv("uuids");
+
+			if (stored_uuids.length == 0 && !widget_settings.get_boolean("initialized")) {
+				update_uuids();
+
+				/**
+				* Try in order, and load the first one that exists:
+				* - /etc/budgie-desktop/raven/widgets.ini
+				* - /usr/share/budgie-desktop/raven/widgets.ini
+				* - Built in widgets.ini
+				*/
+				string[] system_configs = {
+					@"file://$(Budgie.CONFDIR)/budgie-desktop/raven/widgets.ini",
+					@"file://$(Budgie.DATADIR)/budgie-desktop/raven/widgets.ini",
+					"resource:///org/buddiesofbudgie/budgie-desktop/raven/widgets.ini"
+				};
+
+				foreach (string? filepath in system_configs) {
+					if (load_default_from_config(filepath)) {
+						update_uuids();
+						widget_settings.set_boolean("initialized", true);
+						break;
+					}
+				}
+
+				return;
+			}
+
+			widget_settings.set_boolean("initialized", true);
+
+			unowned string uuid;
+			GLib.Settings? widget_info;
+
+			for (int i = 0; i < stored_uuids.length; i++) {
+				uuid = stored_uuids[i];
+				widget_info = plugin_manager.get_widget_info_from_uuid(uuid);
+
+				if (widget_info == null) {
+					warning("Widget info for uuid %s is null", uuid);
+					continue;
+				}
+
+				string? module_name = widget_info.get_string("module");
+				if (module_name == null) {
+					warning("Module name of widget instance %s is null", uuid);
+					continue;
+				}
+
+				create_widget_instance_with_uuid(module_name, uuid);
+			}
+
+			update_uuids();
+		}
+
+		public List<unowned RavenWidgetData> get_existing_widgets() {
+			return widgets.copy();
+		}
+
+		public void remove_widget(RavenWidgetData widget_data) {
+			widgets.remove(widget_data);
+			main_view.remove_widget_instance(widget_data.widget_instance);
+			plugin_manager.clear_widget_instance_info(widget_data.uuid);
+			if (widget_data.supports_settings) {
+				plugin_manager.clear_widget_instance_settings(widget_data.uuid);
+			}
+			update_uuids();
+		}
+
+		public void move_widget_by_offset(RavenWidgetData widget_data, int offset) {
+			var new_index = widgets.index(widget_data) + offset;
+
+			if (new_index < widgets.length() && new_index >= 0) {
+				widgets.remove(widget_data);
+				widgets.insert(widget_data, new_index);
+
+				main_view.move_widget_instance_by_offset(widget_data.widget_instance, offset);
+				update_uuids();
+			}
+		}
+
+		/**
+		* Attempt to load the configuration from the given URL
+		*/
+		private bool load_default_from_config(string uri) {
+			File f = null;
+			KeyFile config_file = new KeyFile();
+			StringBuilder builder = new StringBuilder();
+			string? line = null;
+
+			try {
+				f = File.new_for_uri(uri);
+				if (!f.query_exists()) return false;
+
+				var dis = new DataInputStream(f.read());
+				while ((line = dis.read_line()) != null) {
+					builder.append_printf("%s\n", line);
+				}
+				config_file.load_from_data(builder.str, builder.len, KeyFileFlags.NONE);
+			} catch (Error e) {
+				warning("Failed to load default Raven widget config: %s", e.message);
+				return false;
+			}
+
+			try {
+				if (!config_file.has_key("Widgets", "Widgets")) {
+					warning("widgets.ini is missing required Widgets section");
+					return false;
+				}
+
+				var widgets = config_file.get_string_list("Widgets", "Widgets");
+
+				foreach (string widget in widgets) {
+					widget = widget.strip();
+
+					if (!config_file.has_group(widget)) {
+						warning("Raven widget %s missing from widgets.ini", widget);
+						continue;
+					}
+
+					if (!config_file.has_key(widget, "Module")) {
+						warning("Raven widget %s is missing Module key in widgets.ini", widget);
+						continue;
+					}
+
+					var module_name = config_file.get_string(widget, "Module").strip();
+					create_widget_instance_with_uuid(module_name, null);
+				}
+			} catch (Error e) {
+				warning("Error configuring Raven widgets from raven-widget.ini: %s", e.message);
+				return false;
+			}
+
+			return true;
+		}
+
 		/* As cheap as it looks. The DesktopManager responds to this signal and
 		* will show the Settings UI
 		*/
 		public signal void request_settings_ui();
+
+		public signal void on_widget_added(Budgie.RavenWidgetData widget_data);
 	}
 }

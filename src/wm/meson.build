@@ -13,6 +13,7 @@ budgie_wm_sources = [
     'main.vala',
     'shim.vala',
     'wm.vala',
+    'screenshot.vala',
 ]
 
 budgie_wm_status_vala_args = []
@@ -33,6 +34,7 @@ endif
 
 budgie_wm_deps = [
     link_libconfig,
+    dep_giounix,
     dep_mutter,
     dep_gnomedesktop,
     dep_gsettings,

@@ -3,4 +3,8 @@
         <gresource prefix="/com/solus-project/budgie/raven">
                 <file preprocess="xml-stripblanks">notification.ui</file>
         </gresource>
+
+        <gresource prefix="/org/buddiesofbudgie/budgie-desktop/raven">
+                <file>widgets.ini</file>
+        </gresource>
 </gresources>

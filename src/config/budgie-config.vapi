@@ -16,6 +16,12 @@ namespace Budgie {
     [CCode (cheader_filename="budgie-config.h")]
     public extern const string MODULE_DATA_DIRECTORY;
 
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const string RAVEN_PLUGIN_LIBDIR;
+
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const string RAVEN_PLUGIN_DATADIR;
+
     [CCode (cheader_filename="budgie-config.h")]
     public extern const string DATADIR;
 

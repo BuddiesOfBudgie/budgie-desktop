@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,10 +129,12 @@ namespace Budgie {
 
 		/* Proxy off the OSD Calls */
 		private BudgieOSD? osd_proxy = null;
+		private unowned BudgieWM? wm = null;
 
 		[DBus (visible=false)]
-		public ShellShim(Budgie.BudgieWM? wm) {
+		public ShellShim(Budgie.BudgieWM? _wm) {
 			grabs = new HashTable<string,uint?>(str_hash, str_equal);
+			wm = _wm;
 
 			display = wm.get_display();
 			display.accelerator_activated.connect(on_accelerator_activated);

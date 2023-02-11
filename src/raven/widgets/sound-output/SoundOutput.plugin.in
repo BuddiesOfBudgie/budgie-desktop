@@ -1,0 +1,9 @@
+[Plugin]
+Module=org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput.so
+Builtin=true
+_Name=Sound Output
+_Description=Allows global and per-app audio output volume control, and displays a list of available audio output devices.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=audio-volume-high

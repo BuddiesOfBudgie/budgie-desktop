@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Buddies of Budgie
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ namespace Budgie {
 				UserDirectory xdg_dir = xdg_dirs[i];
 				unowned string? path = Environment.get_user_special_dir(xdg_dir);
 
-				if (path == null) {
+				if (path == null || path == home_dir_file.get_path()) {
 					continue; // Skip this since the logical ID does not exist
 				}
 

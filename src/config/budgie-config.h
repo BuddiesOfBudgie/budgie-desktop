@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,12 @@ extern const char* BUDGIE_MODULE_DIRECTORY;
 
 /* i.e. /usr/share/budgie-desktop/plugins */
 extern const char* BUDGIE_MODULE_DATA_DIRECTORY;
+
+/* i.e. /usr/lib/budgie-desktop/raven-plugins */
+extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR;
+
+/* i.e. /usr/share/budgie-desktop/raven-plugins */
+extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR;
 
 /* i.e. /usr/share/ */
 extern const char* BUDGIE_DATADIR;

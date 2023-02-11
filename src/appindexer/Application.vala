@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,28 @@ namespace Budgie {
 		public string desktop_id { get; construct set; }
 		public string exec { get; private set; }
 		public string[] keywords { get; private set;}
-		public Icon icon { get; private set; default = new ThemedIcon("application-default-icon"); }
+		public Icon icon { get; private set; default = new ThemedIcon.with_default_fallbacks("application-default-icon"); }
 		public string desktop_path { get; private set; }
 		public string categories { get; private set; }
+		public string[] content_types { get; private set; }
 		public string generic_name { get; private set; default = ""; }
 		public bool prefers_default_gpu { get; private set; default = false; }
+		public bool should_show { get; private set; default = true; }
+		public bool dbus_activatable { get; private set; default = false; }
+
+		/**
+		 * Emitted when the application is launched.
+		 *
+		 * See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launched.html
+		 */
+		public signal void launched(AppInfo info, Variant platform_data);
+
+		/**
+		 * Emitted when the application fails to launch.
+		 *
+		 * See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launch_failed.html
+		 */
+		public signal void launch_failed(string startup_notify_id);
 
 		private Switcheroo switcheroo;
 
@@ -38,15 +55,18 @@ namespace Budgie {
 			this.desktop_path = app_info.get_filename();
 			this.keywords = app_info.get_keywords();
 			this.categories = app_info.get_categories();
+			this.content_types = app_info.get_supported_types();
 			this.generic_name = app_info.get_generic_name();
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
+			this.should_show = app_info.should_show();
+			this.dbus_activatable = app_info.get_boolean("DBusActivatable");
 
 			// Try to get an icon from the desktop file
 			var desktop_icon = app_info.get_icon();
 			if (desktop_icon != null) {
 				// Make sure we have a usable icon
 				unowned var theme = Gtk.IconTheme.get_default();
-				if (theme.lookup_by_gicon(this.icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
+				if (theme.lookup_by_gicon(desktop_icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
 					this.icon = desktop_icon;
 				}
 			}
@@ -99,6 +119,16 @@ namespace Budgie {
 					// No pkexec, use the DesktopAppInfo to launch the app
 					// Create a launch context and try to apply a GPU profile
 					var context = new AppLaunchContext();
+
+					// Hook up our signals for rebroadcast
+					context.launched.connect((info, data) => {
+						this.launched(info, data);
+					});
+					context.launch_failed.connect((startup_id) => {
+						this.launch_failed(startup_id);
+					});
+
+					// Try to apply a GPU profile if necessary for multiple GPU setups
 					switcheroo.apply_gpu_profile(context, this.prefers_default_gpu);
 
 					// Launch the application

@@ -21,8 +21,8 @@ panel_sources = [
     'main.vala',
     'manager.vala',
     'panel.vala',
+    'plugin_manager.vala',
     'uuid.vala',
-    'settings/settings_applet_chooser.vala',
     'settings/settings_autostart.vala',
     'settings/settings_desktop.vala',
     'settings/settings_fonts.vala',
@@ -32,7 +32,10 @@ panel_sources = [
     'settings/settings_panel_applets.vala',
     'settings/settings_panel_dialogs.vala',
     'settings/settings_panel.vala',
+    'settings/settings_plugin_chooser.vala',
     'settings/settings_raven.vala',
+    'settings/settings_raven_settings.vala',
+    'settings/settings_raven_widgets.vala',
     'settings/settings_style.vala',
     'settings/settings_wm.vala',
     'settings/themes.vala',
@@ -40,7 +43,8 @@ panel_sources = [
 ]
 
 panel_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
+    dep_giounix,
     dep_gtk3,
     dep_peas,
     dep_libuuid,
@@ -49,7 +53,9 @@ panel_deps = [
     link_libsession,
     link_libbudgieprivate,
     link_libtheme,
-    link_libplugin,
+    link_libpanelplugin,
+    link_libravenplugin,
+    libravenplugin_vapi,
     link_libraven,
     gvc.get_variable('libgvc_dep'),
 ]
@@ -112,3 +118,5 @@ install_data(
     'com.solus-project.budgie-panel.gschema.xml',
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
 )
+
+subdir('applets')

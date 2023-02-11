@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,13 +151,12 @@ namespace Budgie {
 		int primary_monitor = 0;
 		Settings settings;
 		Settings raven_settings;
-		Peas.Engine engine;
-		Peas.ExtensionSet extensions;
-
-		HashTable<string,Peas.PluginInfo?> plugins;
 
 		private Budgie.Raven? raven = null;
 		RavenPosition raven_position;
+
+		private Budgie.RavenPluginManager? raven_plugin_manager = null;
+		private Budgie.PanelPluginManager? panel_plugin_manager = null;
 
 		private Budgie.ThemeManager theme_manager;
 
@@ -168,11 +167,6 @@ namespace Budgie {
 		List<unowned Wnck.Window> window_list;
 
 		private string default_layout = "default";
-
-		/**
-		* Updated when specific names are queried
-		*/
-		private bool migrate_load_requirements_met = false;
 
 		public void activate_action(int action) {
 			unowned string? uuid = null;
@@ -223,7 +217,6 @@ namespace Budgie {
 			this.reset = reset;
 			screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
-			plugins = new HashTable<string,Peas.PluginInfo?>(str_hash, str_equal);
 		}
 
 		/**
@@ -365,16 +358,24 @@ namespace Budgie {
 		/**
 		* Determine if the window is on the primary screen, i.e. where the main
 		* budgie panels will show
+		* note wnck window geometry includes scale factors
 		*/
 		bool window_on_primary(Wnck.Window? window) {
 			Gdk.Rectangle area = Gdk.Rectangle();
 			window.get_geometry(out area.x, out area.y, out area.width, out area.height);
 			var primary = screens.lookup(this.primary_monitor);
-			return area.intersect(primary.area, null);
+
+			// get the geometry of the primary monitor including the scale factor
+			var scr = Gdk.Screen.get_default();
+			var dis = scr.get_display();
+
+			int scale = dis.get_monitor(this.primary_monitor).get_scale_factor();
+			Gdk.Rectangle calc = {primary.area.x * scale, primary.area.y * scale, primary.area.width *scale, primary.area.height * scale};
+			return area.intersect(calc, null);
 		}
 
 		/*
-		* Decide wether or not the panel should be opaque
+		* Decide whether or not the panel should be opaque
 		* The panel should be opaque when:
 		* - Raven is open
 		* - a window fills these requirements:
@@ -391,6 +392,7 @@ namespace Budgie {
 
 			window_list.foreach((window) => {
 				bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
+
 				if (window.get_workspace() != wnck_screen.get_active_workspace()) {
 					return;
 				}
@@ -453,11 +455,6 @@ namespace Budgie {
 
 		string create_panel_path(string uuid) {
 			return "%s/{%s}/".printf(Budgie.TOPLEVEL_PREFIX, uuid);
-		}
-
-		string create_applet_path(string uuid) {
-			return "%s/{%s}/".printf(Budgie.APPLET_PREFIX, uuid);
-
 		}
 
 		/**
@@ -612,7 +609,11 @@ namespace Budgie {
 
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
-			raven = new Budgie.Raven(this);
+
+			raven_plugin_manager = new Budgie.RavenPluginManager();
+			panel_plugin_manager = new Budgie.PanelPluginManager();
+
+			raven = new Budgie.Raven(this, raven_plugin_manager);
 			raven.request_settings_ui.connect(this.on_settings_requested);
 
 			/* Ensure we only have wnck initialised once otherwise everything goes cranky */
@@ -622,8 +623,6 @@ namespace Budgie {
 
 			/* Some applets might want raven */
 			raven.setup_dbus();
-
-			setup_plugins();
 
 			int current_migration_level = settings.get_int(PANEL_KEY_MIGRATION);
 			if (!load_panels()) {
@@ -662,7 +661,7 @@ namespace Budgie {
 			}
 
 			/* Manual configuration from user met the expected migration path. Proceed as normal. */
-			if (migrate_load_requirements_met) {
+			if (panel_plugin_manager.migrate_load_requirements_met) {
 				message("Budgie Migration skipped due to user meeting migration requirements");
 				return;
 			}
@@ -688,167 +687,20 @@ namespace Budgie {
 			((Budgie.Panel) last).perform_migration(current_migration_level);
 		}
 
-		/**
-		* Initialise the plugin engine, paths, loaders, etc.
-		*/
-		void setup_plugins() {
-			engine = Peas.Engine.get_default();
-			engine.enable_loader("python3");
-
-			/* Ensure libpeas doesn't freak the hell out for Python extensions */
-			try {
-				var repo = GI.Repository.get_default();
-				repo.require("Peas", "1.0", 0);
-				repo.require("PeasGtk", "1.0", 0);
-				repo.require("Budgie", "1.0", 0);
-			} catch (Error e) {
-				message("Error loading typelibs: %s", e.message);
-			}
-
-			/* System path */
-			var dir = Environment.get_user_data_dir();
-			engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
-
-			/* User path */
-			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "plugins");
-			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
-			engine.add_search_path(user_mod, hdata);
-
-			/* Legacy path */
-			var hmod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "modules");
-			if (FileUtils.test(hmod, FileTest.EXISTS)) {
-				warning("Using legacy path %s, please migrate to %s", hmod, user_mod);
-				message("Legacy %s path will not be supported in next major version", hmod);
-				engine.add_search_path(hmod, hdata);
-			}
-			engine.rescan_plugins();
-
-			extensions = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
-
-			extensions.extension_added.connect(on_extension_added);
-			engine.load_plugin.connect_after((i) => {
-				Peas.Extension? e = extensions.get_extension(i);
-				if (e == null) {
-					critical("Failed to find extension for: %s", i.get_name());
-					return;
-				}
-				on_extension_added(i, e);
-			});
-		}
-
-		/**
-		* Indicate that a plugin that was being waited for, is now available
-		*/
-		public signal void extension_loaded(string name);
-
-		/**
-		* Handle extension loading
-		*/
-		void on_extension_added(Peas.PluginInfo? info, Object p) {
-			if (plugins.contains(info.get_name())) {
-				return;
-			}
-			plugins.insert(info.get_name(), info);
-			extension_loaded(info.get_name());
-		}
-
-		public bool is_extension_loaded(string name) {
-			if (name in MIGRATION_1_APPLETS) {
-				migrate_load_requirements_met = true;
-			}
-			return plugins.contains(name);
-		}
-
-		/**
-		* Determine if the extension is known to be valid
-		*/
-		public bool is_extension_valid(string name) {
-			if (name in MIGRATION_1_APPLETS) {
-				migrate_load_requirements_met = true;
-			}
-			if (this.get_plugin_info(name) == null) {
-				return false;
-			}
-			return true;
-		}
-
 		public override List<Peas.PluginInfo?> get_panel_plugins() {
-			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
-			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
-				ret.append(info);
-			}
-			return ret;
+			return panel_plugin_manager.get_all_plugins();
 		}
 
-		/**
-		* PeasEngine.get_plugin_info == completely broken
-		*/
-		private unowned Peas.PluginInfo? get_plugin_info(string name) {
-			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
-				if (info.get_name() == name) {
-					return info;
-				}
-			}
-			return null;
+		public override List<Peas.PluginInfo?> get_raven_plugins() {
+			return raven_plugin_manager.get_all_plugins();
 		}
 
-		public void modprobe(string name) {
-			Peas.PluginInfo? i = this.get_plugin_info(name);
-			if (i == null) {
-				warning("budgie_panel_modprobe called for non existent module: %s", name);
-				return;
-			}
-			this.engine.try_load_plugin(i);
+		public override void rescan_panel_plugins() {
+			panel_plugin_manager.rescan_plugins();
 		}
 
-		/**
-		* Attempt to load plugin, will set the plugin-name on failure
-		*/
-		public Budgie.AppletInfo? load_applet_instance(string? uuid, out string name, Settings? psettings = null) {
-			var path = this.create_applet_path(uuid);
-			Settings? settings = null;
-			if (psettings == null) {
-				settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
-			} else {
-				settings = psettings;
-			}
-			var pname = settings.get_string(Budgie.APPLET_KEY_NAME);
-			Peas.PluginInfo? pinfo = plugins.lookup(pname);
-
-			/* Not yet loaded */
-			if (pinfo == null) {
-				pinfo = this.get_plugin_info(pname);
-				if (pinfo == null) {
-					warning("Trying to load invalid plugin: %s %s", pname, uuid);
-					name = null;
-					return null;
-				}
-				engine.try_load_plugin(pinfo);
-				name = pname;
-				return null;
-			}
-			var extension = extensions.get_extension(pinfo);
-			if (extension == null) {
-				name = pname;
-				return null;
-			}
-			name = null;
-			Budgie.Applet applet = ((Budgie.Plugin) extension).get_panel_widget(uuid);
-			return new Budgie.AppletInfo(pinfo, uuid, applet, settings);
-		}
-
-		/**
-		* Attempt to create a fresh applet instance
-		*/
-		public Budgie.AppletInfo? create_new_applet(string name, string uuid) {
-			string? unused = null;
-			if (!plugins.contains(name)) {
-				return null;
-			}
-			var path = this.create_applet_path(uuid);
-			var settings = new Settings.with_path(Budgie.APPLET_SCHEMA, path);
-			settings.set_string(Budgie.APPLET_KEY_NAME, name);
-			return this.load_applet_instance(uuid, out unused, settings);
+		public override void rescan_raven_plugins() {
+			raven_plugin_manager.rescan_plugins();
 		}
 
 		/**
@@ -904,7 +756,7 @@ namespace Budgie {
 			int size, spacing;
 
 			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
-			Budgie.Panel? panel = new Budgie.Panel(this, uuid, settings);
+			Budgie.Panel? panel = new Budgie.Panel(this, panel_plugin_manager, uuid, settings);
 			panels.insert(uuid, panel);
 
 			if (!configure) {

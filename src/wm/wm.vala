@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,12 +29,18 @@ namespace Budgie {
 	public const string LOGIND_DBUS_NAME = "org.freedesktop.login1";
 	public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
 
+	public const string POWER_DIALOG_DBUS_NAME = "org.buddiesofbudgie.PowerDialog";
+	public const string POWER_DIALOG_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/PowerDialog";
+
 	/** Menu management */
 	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
 	public const string MENU_DBUS_OBJECT_PATH = "/org/budgie_desktop/MenuManager";
 
 	public const string SWITCHER_DBUS_NAME = "org.budgie_desktop.TabSwitcher";
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
+
+	public const string SCREENSHOTCONTROL_DBUS_NAME = "org.buddiesofbudgie.BudgieScreenshotControl";
+	public const string SCREENSHOTCONTROL_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/ScreenshotControl";
 
 	[Flags]
 	public enum PanelAction {
@@ -101,6 +107,25 @@ namespace Budgie {
 		public abstract async void StopSwitcher() throws Error;
 	}
 
+	/**
+	* Allows us to invoke the screenshot client without directly using GTK+ ourselves
+	*/
+	[DBus (name = "org.buddiesofbudgie.BudgieScreenshotControl")]
+	public interface ScreenshotControl : GLib.Object {
+		public async abstract void StartMainWindow() throws GLib.Error;
+		public async abstract void StartAreaSelect() throws GLib.Error;
+		public async abstract void StartWindowScreenshot() throws GLib.Error;
+		public async abstract void StartFullScreenshot() throws GLib.Error;
+	}
+
+	/**
+	 * Allows us to toggle the visibility of the Power Dialog
+	 */
+	[DBus (name="org.buddiesofbudgie.PowerDialog")]
+	public interface PowerDialog: GLib.Object {
+		public abstract async void Toggle() throws Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -138,10 +163,13 @@ namespace Budgie {
 		RavenRemote? raven_proxy = null;
 		ShellShim? shim = null;
 		BudgieWMDBUS? focus_interface = null;
+		ScreenshotManager? screenshot = null;
+		ScreenshotControl? screenshotcontrol_proxy = null;
 		PanelRemote? panel_proxy = null;
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		PowerDialog? power_proxy = null;
 
 		Settings? iface_settings = null;
 
@@ -169,6 +197,15 @@ namespace Budgie {
 
 		bool have_logind() {
 			return FileUtils.test("/run/systemd/seats", FileTest.EXISTS);
+		}
+
+		/* Hold onto our ScreenshotControl proxy ref */
+		void on_screenshotcontrol_get(Object? o, AsyncResult? res) {
+			try {
+				screenshotcontrol_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to gain ScreenshotControl proxy: %s", e.message);
+			}
 		}
 
 		/* Hold onto our Raven proxy ref */
@@ -222,10 +259,7 @@ namespace Budgie {
 		void on_logind_get(Object? o, AsyncResult? res) {
 			try {
 				logind_proxy = Bus.get_proxy.end(res);
-				if (logind_proxy == null) {
-					return;
-				}
-				if (this.is_nvidia()) {
+				if (logind_proxy != null && this.is_nvidia()) {
 					logind_proxy.PrepareForSleep.connect(prepare_for_sleep);
 				}
 			} catch (Error e) {
@@ -235,9 +269,7 @@ namespace Budgie {
 
 		/* Kudos to gnome-shell guys here: https://bugzilla.gnome.org/show_bug.cgi?id=739178 */
 		void prepare_for_sleep(bool suspending) {
-			if (suspending) {
-				return;
-			}
+			if (suspending) return;
 			Meta.Background.refresh_all();
 		}
 
@@ -265,12 +297,53 @@ namespace Budgie {
 			}
 		}
 
+		void has_power_dialog() {
+			if (power_proxy == null) {
+				Bus.get_proxy.begin<PowerDialog>(BusType.SESSION, POWER_DIALOG_DBUS_NAME, POWER_DIALOG_DBUS_OBJECT_PATH, 0, null, on_power_dialog_get);
+			}
+		}
+
+		void on_power_dialog_get(Object? o, AsyncResult? res) {
+			try {
+				power_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get Power Dialog proxy: %s", e.message);
+			}
+		}
+
+		void lost_power_dialog() {
+			power_proxy = null;
+		}
+
+		/* Binding for showing the Power Dialog */
+		void on_show_power_dialog(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+			if (power_proxy == null) return;
+
+			power_proxy.Toggle.begin((obj, res) => {
+				try {
+					power_proxy.Toggle.end(res);
+				} catch (Error e) {
+					warning("Unable to toggle Power Dialog: %s", e.message);
+				}
+			});
+		}
+
 		/* Binding for take-full-screenshot */
 		void on_take_full_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("full-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartFullScreenshot.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartFullScreenshot.end(res);
+						} catch (Error e) {
+							message("Failed to StartFullScreenshot: %s", e.message);
+						}
+					});
+				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -280,8 +353,18 @@ namespace Budgie {
 		void on_take_region_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("take-region-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartAreaSelect.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartAreaSelect.end(res);
+						} catch (Error e) {
+							message("Failed to StartAreaSelect: %s", e.message);
+						}
+					});
+				}
+
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -291,8 +374,17 @@ namespace Budgie {
 		void on_take_window_screenshot(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
 			try {
 				string cmd=this.settings.get_string("take-window-screenshot-cmd");
-				if (cmd != "")
+				if (cmd != "") {
 					Process.spawn_command_line_async(cmd);
+				} else {
+					screenshotcontrol_proxy.StartWindowScreenshot.begin((obj,res) => {
+						try {
+							screenshotcontrol_proxy.StartWindowScreenshot.end(res);
+						} catch (Error e) {
+							message("Failed to StartWindowScreenshot: %s", e.message);
+						}
+					});
+				}
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -352,6 +444,17 @@ namespace Budgie {
 			});
 		}
 
+		/* Set up the proxy when screenshotcontrol appears */
+		void has_screenshotcontrol() {
+			if (screenshotcontrol_proxy == null) {
+				Bus.get_proxy.begin<ScreenshotControl>(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, SCREENSHOTCONTROL_DBUS_OBJECT_PATH, 0, null, on_screenshotcontrol_get);
+			}
+		}
+
+		void lost_screenshotcontrol() {
+			screenshotcontrol_proxy = null;
+		}
+
 		/* Set up the proxy when raven appears */
 		void has_raven() {
 			if (raven_proxy == null) {
@@ -368,9 +471,7 @@ namespace Budgie {
 		}
 
 		void on_overlay_key() {
-			if (panel_proxy == null) {
-				return;
-			}
+			if (panel_proxy == null) return;
 			if (enabled_experimental_run_diag_as_menu) { // Use Budgie Run Dialog
 				try {
 					Process.spawn_command_line_async("budgie-run-dialog");
@@ -458,9 +559,7 @@ namespace Budgie {
 		private bool is_nvidia() {
 			var ptr = (GlQueryFunc)Cogl.get_proc_address("glGetString");
 
-			if (ptr == null) {
-				return false;
-			}
+			if (ptr == null) return false;
 
 			unowned string? ret = ptr(GL_VENDOR);
 			if (ret != null && "NVIDIA Corporation" in ret) {
@@ -495,6 +594,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("show-power-dialog", settings, Meta.KeyBindingFlags.NONE, on_show_power_dialog);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -512,6 +612,14 @@ namespace Budgie {
 			/* TabSwitcher */
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
+
+			/* Power Dialog */
+			Bus.watch_name(BusType.SESSION, POWER_DIALOG_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_power_dialog, lost_power_dialog);
+
+			/* ScreenshotControl */
+			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_screenshotcontrol, lost_screenshotcontrol);
 
 			/* Keep an eye out for systemd stuffs */
 			if (have_logind()) {
@@ -548,6 +656,9 @@ namespace Budgie {
 			keyboard.hook_extra();
 
 			display.get_workspace_manager().override_workspace_layout(Meta.DisplayCorner.TOPLEFT, false, 1, -1);
+
+			screenshot = ScreenshotManager.init(this);
+			screenshot.setup_dbus();
 		}
 
 		/**
@@ -581,9 +692,7 @@ namespace Budgie {
 			} else if (key == WM_FORCE_UNREDIRECT) {
 				bool enab = this.settings.get_boolean(key);
 
-				if (enab == this.force_unredirect) {
-					return;
-				}
+				if (enab == this.force_unredirect) return;
 
 				var display = this.get_display();
 				if (enab) {
@@ -596,12 +705,8 @@ namespace Budgie {
 		}
 
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {
-			if (type != Meta.WindowMenuType.WM) {
-				return;
-			}
-			if (menu_proxy == null) {
-				return;
-			}
+			if (type != Meta.WindowMenuType.WM) return;
+			if (menu_proxy == null) return;
 			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
 				menu_proxy.ShowWindowMenu.begin(xid, 3, 0, (obj, res) => {
@@ -716,9 +821,7 @@ namespace Budgie {
 		*/
 		public void store_focused() {
 			var workspace = get_display().get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
+			if (workspace == null) return;
 			foreach (var window in workspace.list_windows()) {
 				if (window.has_focus()) {
 					focused_window = window;
@@ -731,9 +834,7 @@ namespace Budgie {
 		* Restore the focused window
 		*/
 		public void restore_focused() {
-			if (focused_window == null) {
-				return;
-			}
+			if (focused_window == null) return;
 			focused_window.focus(get_display().get_current_time());
 			focused_window = null;
 		}
@@ -833,7 +934,7 @@ namespace Budgie {
 			actor.transitions_completed.connect(minimize_done);
 
 			/* Save the minimize state for later restoration */
-			var scale_factor = Meta.Backend.get_backend ().get_settings ().get_ui_scaling_factor ();
+			var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
 			var scale_x = (float)((icon.width * scale_factor) / actor.width);
 			var scale_y = (float)((icon.height * scale_factor) / actor.height);
 			var place_x = (float)icon.x * scale_factor;
@@ -881,7 +982,7 @@ namespace Budgie {
 			finalize_animations(actor);
 
 			actor.set_pivot_point(0f, 0f);
-			actor.set_scale (d.scale_x, d.scale_y);
+			actor.set_scale(d.scale_x, d.scale_y);
 			actor.set_x(d.place_x);
 			actor.set_y(d.place_y);
 			actor.opacity = 0U;
@@ -892,7 +993,7 @@ namespace Budgie {
 			actor.set_easing_mode(Clutter.AnimationMode.EASE_OUT_QUAD);
 			actor.set_easing_duration(UNMINIMIZE_TIMEOUT);
 
-			actor.set_scale (1.0f, 1.0f);
+			actor.set_scale(1.0f, 1.0f);
 			actor.opacity = 255U;
 			actor.set_x(d.old_x);
 			actor.set_y(d.old_y);

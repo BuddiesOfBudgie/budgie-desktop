@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace Budgie {
 		public static string? searchable_string(string input) {
 			/* Force dup in vala */
 			string mod = "" + input;
-			return mod.replace("\u00AD", "").ascii_down().strip();
+			return mod.replace("\u00AD", "").casefold().strip();
 		}
 
 		/**
@@ -103,12 +103,13 @@ namespace Budgie {
 			}
 
 			string name = searchable_string(app.name);
+			string _term = term.casefold();
 			var score = 0;
 
 			// If we don't have a match on the name...
-			if (!term.match_string(name, true)) {
+			if (!name.match_string(_term, true) && !name.contains(_term)) {
 				// Calculate our Levenshtein distance
-				score = this.get_levenshtein_distance(name, term);
+				score = this.get_levenshtein_distance(name, _term);
 			}
 
 			string?[] fields = {
@@ -119,7 +120,7 @@ namespace Budgie {
 
 			// Check the various fields, and decrease the score
 			// for every match
-			if (array_contains(fields, term)) {
+			if (array_contains(fields, _term)) {
 				score--;
 			}
 
@@ -127,9 +128,16 @@ namespace Budgie {
 			var keywords = app.keywords;
 			if (keywords != null && keywords.length > 0) {
 				// Decrease the score for every match
-				if (array_contains(keywords, term)) {
+				if (array_contains(keywords, _term)) {
 					score--;
 				}
+			}
+
+			// Check if the application is the default handler for its supported
+			// MIME types
+			if (name.contains(_term) && is_default_handler(app)) {
+				debug("Application '%s' is default handler", app.name);
+				score--;
 			}
 
 			// Set the score
@@ -191,6 +199,20 @@ namespace Budgie {
 					return true;
 				}
 			}
+			return false;
+		}
+
+		/**
+		 * Check if an application is the default handler for
+		 * any of its supported MIME types.
+		 */
+		private bool is_default_handler(Application app) {
+			foreach (var content_type in app.content_types) {
+				var default_app = AppInfo.get_default_for_type(content_type, false);
+				if (default_app == null) continue;
+				if (default_app.get_id() == app.desktop_id) return true;
+			}
+
 			return false;
 		}
 	}

@@ -27,6 +27,7 @@ daemon_sources = [
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
+    'screenshot.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
@@ -37,18 +38,22 @@ daemon_sources = [
 ]
 
 daemon_deps = [
+    dep_canberra,
+    dep_canberra_gtk3,
+    dep_giounix,
     dep_gtk3,
     dep_gdkx11,
     dep_notify,
     dep_wnck,
+    dep_gst,
+    dep_cairo,
     link_libbudgieprivate,
-    libplugin_vapi,
+    libpanelplugin_vapi,
     link_libappsys,
     link_libconfig,
     link_libtheme,
     link_libsession,
 ]
-
 
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml')
@@ -61,6 +66,8 @@ if dep_gsd.found()
     message('Found GNOME Settings Daemon >= 3.33.90')
 endif
 
+top_vapidir = join_paths(meson.source_root(), 'vapi')
+
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
@@ -71,6 +78,7 @@ executable(
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
         '--vapidir', dir_libappsys,
+        '--vapidir', top_vapidir,
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gio-unix-2.0',
@@ -86,4 +94,42 @@ executable(
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
+)
+
+main_sources = [
+  'screenshot_main.vala',
+]
+
+ScreenshotMainDependencies = [
+    dependency('gtk+-3.0'),
+]
+
+executable(
+    'org.buddiesofbudgie.BudgieScreenshot', main_sources,
+    dependencies: ScreenshotMainDependencies,
+    install: true,
+    vala_args: daemon_vala_args,
+)
+
+install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
+)
+
+install_data('icons/org.buddiesofbudgie.BudgieScreenshot.svg',
+    install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'apps')
+)
+
+# Now merge the translations of the .desktop.in to a .desktop
+custom_target('org.buddiesofbudgie.BudgieScreenshot',
+    input : 'org.buddiesofbudgie.BudgieScreenshot.desktop.in',
+    output : 'org.buddiesofbudgie.BudgieScreenshot.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : join_paths(datadir, 'applications'),
+)
+
+# gschemas
+install_data(
+    files('notifications/20_buddiesofbudgie.budgie-desktop.notifications.gschema.override'),
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )

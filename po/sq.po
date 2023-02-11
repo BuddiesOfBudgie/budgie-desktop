@@ -2,599 +2,172 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5.1\n"
+"Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-28 19:37+0200\n"
-"PO-Revision-Date: 2021-10-10 14:42+0000\n"
-"Last-Translator: Algent Albrahimi <algent@protonmail.com>\n"
-"Language-Team: Albanian <http://translate.getsol.us/projects/budgie-desktop/"
-"translations/sq/>\n"
-"Language: sq\n"
+"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Language-Team: Albanian (https://www.transifex.com/buddiesofbudgie/teams/129844/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"Language: sq\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/polkit/polkitdialog.vala:126
-msgid "Authentication failed"
-msgstr "Vërtetimi dështoi"
+#. Do nothing if there were no held notifications
+#. translators: This is the title of a notification that is shown after
+#. notifications have been blocked because an application was in fullscreen
+#. mode
+#: src/daemon/notifications/dbus.vala:569
+msgid "Unread Notifications"
+msgstr ""
 
-#: src/polkit/polkitdialog.vala:215
-msgid "Group:"
-msgstr "Grupi:"
+#: src/daemon/notifications/dbus.vala:573
+msgid "You received 1 notification while an application was fullscreened."
+msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:19
-msgid "Configure applet"
-msgstr "Konfiguro apletin"
+#: src/daemon/notifications/dbus.vala:575
+#, c-format
+msgid "You received %d notifications while an application was fullscreened."
+msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:233
-#: src/panel/settings/settings_applet_chooser.vala:80
-msgid "Add applet"
-msgstr "Shto aplete"
+#. No existing ref, make a new notification
+#. translators: Text for a button on the notification to open Raven to the
+#. notifications view
+#: src/daemon/notifications/dbus.vala:587
+msgid "View Notifications"
+msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:234
-msgid "Choose a new applet to add to this panel"
-msgstr "Zgjidhni një aplet të ri për ta shtuar në këtë panel"
+#: src/daemon/endsession.vala:154
+msgid "Log out"
+msgstr "Shkyçu"
 
-#: src/panel/settings/settings_panel_applets.vala:248
-msgid "No settings available"
-msgstr "Nuk ka cilësime të disponueshme"
+#: src/daemon/endsession.vala:158
+msgid "Restart device"
+msgstr "Rinisni pajisjen"
 
-#: src/panel/settings/settings_panel_applets.vala:401
-msgid "Start"
-msgstr "Fillim"
+#: src/daemon/endsession.vala:170 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Fikeni"
 
-#: src/panel/settings/settings_panel_applets.vala:404
-msgid "Center"
-msgstr "Qëndër"
-
-#: src/panel/settings/settings_panel_applets.vala:407
-msgid "End"
-msgstr "Fund"
-
-#: src/panel/settings/settings_panel_dialogs.vala:24
-msgid "Confirm panel removal"
-msgstr "Konfirmoni heqjen e panelit"
-
-#: src/panel/settings/settings_panel_dialogs.vala:31
-msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Dëshiron vërtet ta heqësh këtë panel? Ky veprim nuk mund të zhbëhet."
-
-#: src/panel/settings/settings_panel_dialogs.vala:42
-msgid "Remove panel"
-msgstr "Hiq panelin"
-
-#: src/panel/settings/settings_panel_dialogs.vala:43
-msgid "Keep panel"
-msgstr "Mbaj panelin"
-
-#: src/panel/settings/settings_panel_dialogs.vala:67
-msgid "Confirm applet removal"
-msgstr "Konfirmoni heqjen e apletit"
-
-#: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr "A doni vërtet ta hiqni këtë aplet? Ky veprim nuk mund të zhbëhet."
-
-#: src/panel/settings/settings_panel_dialogs.vala:89
-msgid "Don't ask me again"
-msgstr "Mos më pyet më"
-
-#: src/panel/settings/settings_panel_dialogs.vala:98
-msgid "Remove applet"
-msgstr "Hiq apletin"
-
-#: src/panel/settings/settings_panel_dialogs.vala:99
-msgid "Keep applet"
-msgstr "Mbani apletin"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Paraqitje"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panele"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Seancë"
-
-#: src/panel/settings/settings_main.vala:68 src/daemon/menus.vala:46
+#: src/daemon/menus.vala:46 src/panel/settings/settings_main.vala:68
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr "Cilësimet e Desktopit Budgie"
 
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Krijoni panel të ri"
+#: src/daemon/menus.vala:51
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+msgid "System Settings"
+msgstr "Cilësimet e sistemit"
 
-#: src/panel/settings/settings_wm.vala:31
-msgid "Windows"
-msgstr "Dritaret"
+#. Should show a notification
+#: src/daemon/settings.vala:339
+msgid "Turned on Caffeine Boost"
+msgstr "Modaliteti Kafeinë aktivizohet"
 
-#: src/panel/settings/settings_wm.vala:40
-msgid "Attach modal dialogs to windows"
-msgstr "Bashkangjitni dialogët modalë në dritare"
+#: src/daemon/settings.vala:339
+msgid "Turned off Caffeine Boost"
+msgstr "Modaliteti Kafeinë çaktivizohet"
 
-#: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
-msgstr "Dialogët modalë do të bashkangjiten në dritaren prind dhe do të lëvizin së bashku kur tërhiqen."
+#: src/daemon/settings.vala:344
+msgid "Will turn off in a minute"
+msgstr "Do të fiket për një minutë"
 
-#: src/panel/settings/settings_wm.vala:46
-msgid "Button layout"
-msgstr "Paraqitja e butonit"
+#. use plural
+#: src/daemon/settings.vala:347
+#, c-format
+msgid "Will turn off in %d minutes"
+msgstr "Do të fiket pas %d minutash"
 
-#: src/panel/settings/settings_wm.vala:47
-msgid "Change the layout of buttons in application titlebars."
-msgstr "Ndryshoni paraqitjen e butonave në shiritat e aplikacioneve."
-
-#: src/panel/settings/settings_wm.vala:52
-msgid "Center new windows on screen"
-msgstr "Qendërso dritaret e reja në ekran"
-
-#: src/panel/settings/settings_wm.vala:53
-msgid "Center newly launched windows on the current screen."
-msgstr "Qendërso dritaret e sapohapura në ekranin aktual."
-
-#: src/panel/settings/settings_wm.vala:58
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Çaktivizo modalitetin e Dritës së Natës kur dritaret janë në ekran të plotë"
-
-#: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr "Çaktivizon modalitetin e Dritës së Natës kur një dritare është në ekran të plotë. Ri-aktivizon kur largoheni nga ekrani i plotë."
-
-#: src/panel/settings/settings_wm.vala:64
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Ndalo njoftimet kur dritaret janë në ekran të plotë"
-
-#: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
+#. as a workaround
+#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
 msgstr ""
-"Parandalon shfaqjen e njoftimeve kur një dritare është në ekran të plotë. "
-"Shfaqja e njoftimeve rifillon kur largohet nga ekrani i plotë."
 
-#: src/panel/settings/settings_wm.vala:70
-msgid "Automatic tiling"
-msgstr "Pllakëzim automatik"
+#. Translators: be as brief as possible; popovers ar cut off if broader than
+#. the window
+#: src/daemon/screenshot.vala:438
+msgid "Screenshot entire screen"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr "Dritaret do të radhiten si pllaka automatikisht kur të tërhiqen në pjesën e sipërme të ekranit ose në cepat e largët."
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot active window"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:76
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "Aktivizoni ndryshimin e fokusit të dritares në hyrjen dhe largimin e mausit"
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot selected area"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr "Aktivizon fokusimin e dritares të zbatohet kur miu hyn në dritare dhe zhvendoset kur miu largohet nga dritarja."
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:548
+msgid "Screen"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Çaktivizo mosdrejtimin e dritareve"
+#: src/daemon/screenshot.vala:548
+msgid "Window"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr "Ky opsion është për përdoruesit e përparuar. Përdoreni këtë nëse keni probleme grafike ose të performancës me GPU-të e dedikuara."
+#: src/daemon/screenshot.vala:548
+msgid "Selection"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:89
-msgid "Show all windows in tab switcher"
-msgstr "Shfaq të gjitha dritaret në ndërruesin e skedave"
+#. translate
+#: src/daemon/screenshot.vala:898
+msgid "Cancel screenshot"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr "Të gjitha skedat do të shfaqen në ndërruesin e skedave, pavarësisht nga hapësira e punës në përdorim."
+#: src/daemon/screenshot.vala:899
+msgid "Save screenshot to the selected directory"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:97
-msgid "Right (standard)"
-msgstr "Djathtas (standard)"
+#: src/daemon/screenshot.vala:900
+msgid "Copy screenshot to the clipboard"
+msgstr ""
 
-#: src/panel/settings/settings_wm.vala:99
-#: src/panel/settings/settings_panel.vala:181 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Majtas"
+#: src/daemon/screenshot.vala:901
+msgid "Open screenshot in default application"
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:32
-msgid "Style"
-msgstr "Stilizo"
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1175
+msgid "Other..."
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:46
-msgid "Widgets"
-msgstr "Miniaplikacione"
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1259
+msgid "Open Folder"
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:47
-msgid "Set the appearance of window decorations and controls"
-msgstr "Vendosni pamjen e dekorimeve dhe kontrolleve të dritareve"
-
-#: src/panel/settings/settings_style.vala:51
-msgid "Icons"
-msgstr "Ikonat"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Set the globally used icon theme"
-msgstr "Vendosni temën e ikonës të përdorur globalisht"
-
-#: src/panel/settings/settings_style.vala:56
-msgid "Cursors"
-msgstr "Kursorët"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Set the globally used mouse cursor theme"
-msgstr "Vendosni temën e kursorit të mausit të përdorur globalisht"
-
-#: src/panel/settings/settings_style.vala:61
-msgid "Notification Position"
-msgstr "Pozicioni i njoftimit"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Set the location for notification popups"
-msgstr "Vendosni vendndodhjen për dritaret e reja të njoftimit"
-
-#: src/panel/settings/settings_style.vala:71
-msgid "Dark theme"
-msgstr "Temë e errët"
-
-#: src/panel/settings/settings_style.vala:78
-msgid "Built-in theme"
-msgstr "Temë e integruar"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Kur aktivizohet, tema e integruar do të mbishkruajë stilimin e përbërësve të desktop"
-
-#: src/panel/settings/settings_style.vala:86
-msgid "Animations"
-msgstr "Animacione"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Control whether windows and controls use animations"
-msgstr "Kontrolloni nëse dritaret dhe kontrollet përdorin animacione"
-
-#: src/panel/settings/settings_style.vala:204
-msgid "Top Left"
-msgstr "Lart majtas"
-
-#: src/panel/settings/settings_style.vala:206
-msgid "Bottom Left"
-msgstr "Poshtë majtas"
-
-#: src/panel/settings/settings_style.vala:208
-msgid "Bottom Right"
-msgstr "Poshtë djathtas"
-
-#: src/panel/settings/settings_style.vala:211
-msgid "Top Right"
-msgstr "Lart djathtas"
-
-#: src/panel/settings/settings_raven.vala:61
-msgid "Set Raven position"
-msgstr "Vendos pozicionin e Raven"
-
-#: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr "Vendosni në cilën anë të ekranit Raven do të hapet. Nëse vendoset Automatike, Raven do të hapet aty ku është paneli i tij prind."
-
-#: src/panel/settings/settings_raven.vala:67
-msgid "Allow raising volume above 100%"
-msgstr "Lejo ngritjen e volumit mbi 100%"
-
-#: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr "Lejon ngritjen e volumit përmes Cilësimeve të Tingullit, si dhe Miniaplikacionit të Daljes së Tingullit në Raven deri në 150%."
-
-#: src/panel/settings/settings_raven.vala:72
-msgid "Enable display of week numbers in Calendar"
-msgstr "Aktivizo shfaqjen e numrave të javës në Kalendar"
-
-#: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr "Ky cilësim mundëson shfaqjen e numrave të javës në miniaplikacionin Calendar."
-
-#: src/panel/settings/settings_raven.vala:78
-msgid "Show Calendar Widget"
-msgstr "Shfaq Miniaplikacionin e Kalendarit"
-
-#: src/panel/settings/settings_raven.vala:79
-msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Kalendarit në seksionin Applets të Raven."
-
-#: src/panel/settings/settings_raven.vala:84
-msgid "Show Sound Output Widget"
-msgstr "Shfaq Miniaplikacionin e Daljes së Tingullit"
-
-#: src/panel/settings/settings_raven.vala:85
-msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Daljes së Tingullit në seksionin Applets të Raven."
-
-#: src/panel/settings/settings_raven.vala:90
-msgid "Show Microphone Input Widget"
-msgstr "Shfaq Miniaplikacionin e Hyrjes së Mikrofonit"
-
-#: src/panel/settings/settings_raven.vala:91
-msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Hyrjes së Mikrofonit në seksionin Applets të Raven."
-
-#: src/panel/settings/settings_raven.vala:96
-msgid "Show Media Playback Controls Widget"
-msgstr "Shfaq Miniaplikacionin e Kontrolleve të Riprodhimit të Mediave"
-
-#: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr "Shfaq ose fsheh Miniaplikacionin e Kontrolleve të Riprodhimit të Mediave (MPRIS) në seksionin Applets të Raven."
-
-#: src/panel/settings/settings_raven.vala:102
-msgid "Show Power Strip"
-msgstr "Shfaq Shiritin me Opsionet  e Energjisë"
-
-#: src/panel/settings/settings_raven.vala:103
-msgid "Shows or hides the Power Strip in the bottom of Raven."
-msgstr "Shfaq ose fsheh Shiritin me Opsionet e energjisë në pjesën e poshtme të Raven."
-
-#: src/panel/settings/settings_applet_chooser.vala:74
-msgid "Choose an applet"
-msgstr "Zgjidhni një aplet"
-
-#: src/panel/settings/settings_applet_chooser.vala:79
+#: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
-#: src/applets/budgie-menu/IconChooser.vala:52 src/polkit/dialog.ui.h:4
-#: src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
 msgid "Cancel"
 msgstr "Anulo"
 
-#: src/panel/settings/settings_desktop.vala:52
-msgid "Desktop"
-msgstr "Desktopi"
-
-#. Budgie native implementation
-#. Get the settings for Budgie Desktop View
-#. Update our switches on change
-#. Desktop Folder
-#. Get the settings for DesktopType
-#. Update our switches on change
-#. Nemo
-#. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-specific
-#. Universal show
-#: src/panel/settings/settings_desktop.vala:77
-msgid "Desktop Icons"
-msgstr "Ikonat e Desktopit"
-
-#: src/panel/settings/settings_desktop.vala:78
-msgid "Control whether to allow icons on the desktop."
-msgstr "Kontrolloni nëse do të lejoni ikona në desktop."
-
-#. DesktopFolder doesn't support fancy options like showing home folder, trash, or active mounts
-#. DesktopType is the only one that doesn't support showing mounts
-#. Switcher to show or hide active mounts
-#: src/panel/settings/settings_desktop.vala:87
-msgid "Active Mounts"
-msgstr "Montimet aktive"
-
-#: src/panel/settings/settings_desktop.vala:88
-msgid "Show all active mounts on the desktop."
-msgstr "Shfaq të gjitha montimet aktive në desktop."
-
-#. Switcher to show or hide our Home folder
-#: src/panel/settings/settings_desktop.vala:95
-msgid "Home directory"
-msgstr "Direktoria kryesore"
-
-#: src/panel/settings/settings_desktop.vala:96
-msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Shtoni një shkurtore të direktorisë tuaj kryesore në desktop."
-
-#. Switcher to show or hide a shortcut to Trash
-#: src/panel/settings/settings_desktop.vala:103
-msgid "Trash"
-msgstr "Kosh"
-
-#: src/panel/settings/settings_desktop.vala:104
-msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Shtoni një shkurtore të direktorisë Kosh në desktop."
-
-#. DesktopType doesn't support icon size changing. Nemo might but needs validation.
-#. Click Policy combo box
-#. Icon Size combo box
-#: src/panel/settings/settings_desktop.vala:116
-msgid "Icon Size"
-msgstr "Madhësia e Ikonave"
-
-#: src/panel/settings/settings_desktop.vala:117
-msgid "Set the desired size of icons on the desktop."
-msgstr "Vendosni madhësinë e dëshiruar të ikonave në desktop."
-
-#: src/panel/settings/settings_desktop.vala:148
-msgid "Number of virtual desktops"
-msgstr "Numri i desktopëve virtualë"
-
-#: src/panel/settings/settings_desktop.vala:149
-msgid "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Numri i desktopëve / hapësirave të punës virtuale për t'u krijuar automatikisht gjatë nisjes së sistemit."
-
-#: src/panel/settings/settings_desktop.vala:217
-msgid "Single"
-msgstr "I vetëm"
-
-#. If the click policy is to double click
-#: src/panel/settings/settings_desktop.vala:221
-msgid "Double"
-msgstr "I dyfishtë"
-
-#: src/panel/settings/settings_desktop.vala:236
-msgid "Click Policy"
-msgstr "Rregulli i klikimit"
-
-#: src/panel/settings/settings_desktop.vala:237
-msgid "Click Policy determines if we should open items on a single or double click."
-msgstr "Rregulli i klikimit përcakton nëse duhet t'i hapim artikujt me një klik të vetëm ose të dyfishtë."
-
-#: src/panel/settings/settings_desktop.vala:289
-msgid "Normal"
-msgstr "Normale"
-
-#. Small
-#: src/panel/settings/settings_desktop.vala:292
-msgid "Small"
-msgstr "Vogël"
-
-#. Large
-#: src/panel/settings/settings_desktop.vala:294
-msgid "Large"
-msgstr "Gjërë"
-
-#. Massive
-#: src/panel/settings/settings_desktop.vala:296
-msgid "Massive"
-msgstr "Masive"
-
-#: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
-msgid "Applets"
-msgstr "Applete"
-
-#: src/panel/settings/settings_panel.vala:83
-msgid "Settings"
-msgstr "Cilësimet"
-
-#: src/panel/settings/settings_panel.vala:85
-msgid "Remove Panel"
-msgstr "Hiq Panelin"
-
-#: src/panel/settings/settings_panel.vala:86
-msgid "Remove this panel from the screen"
-msgstr "Hiqni këtë panel nga ekrani"
-
-#: src/panel/settings/settings_panel.vala:123
-msgid "Top Dock"
-msgstr "Dok i Sipërm"
-
-#: src/panel/settings/settings_panel.vala:125
-msgid "Right Dock"
-msgstr "Dok i Djathtë"
-
-#: src/panel/settings/settings_panel.vala:127
-msgid "Left Dock"
-msgstr "Dok i Majtë"
-
-#: src/panel/settings/settings_panel.vala:129
-msgid "Bottom Dock"
-msgstr "Dok i Poshtëm"
-
-#: src/panel/settings/settings_panel.vala:134
-msgid "Top Panel"
-msgstr "Paneli Lart"
-
-#: src/panel/settings/settings_panel.vala:136
-msgid "Right Panel"
-msgstr "Paneli i Djathë"
-
-#: src/panel/settings/settings_panel.vala:138
-msgid "Left Panel"
-msgstr "Paneli i Majtë"
-
-#: src/panel/settings/settings_panel.vala:140
-msgid "Bottom Panel"
-msgstr "Paneli Poshtë"
-
-#: src/panel/settings/settings_panel.vala:177
-msgid "Top"
-msgstr "Lart"
-
-#: src/panel/settings/settings_panel.vala:179 src/raven/raven.vala:35
-msgid "Right"
-msgstr "Djathtë"
-
-#: src/panel/settings/settings_panel.vala:183
-msgid "Bottom"
-msgstr "Poshtë"
-
-#: src/panel/settings/settings_panel.vala:193
-msgid "Always"
-msgstr "Gjithmonë"
-
-#: src/panel/settings/settings_panel.vala:195
-msgid "Dynamic"
-msgstr "Dinamike"
-
-#: src/panel/settings/settings_panel.vala:198
-#: src/panel/settings/settings_fonts.vala:84
-#: src/panel/settings/settings_fonts.vala:110
-msgid "None"
-msgstr "Asnjë"
-
-#: src/panel/settings/settings_panel.vala:208 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "Automatike"
-
-#: src/panel/settings/settings_panel.vala:210
-msgid "Intelligent"
-msgstr "Inteligjent"
-
-#: src/panel/settings/settings_panel.vala:213
-msgid "Never"
-msgstr "Asnjëherë"
-
-#: src/panel/settings/settings_panel.vala:228
-msgid "Position"
-msgstr "Pozicioni"
-
-#: src/panel/settings/settings_panel.vala:229
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Vendosni skajin e ekranit në të cilin do të qëndrojë ky panel"
-
-#: src/panel/settings/settings_panel.vala:237
-msgid "Size"
-msgstr "Madhësia"
-
-#: src/panel/settings/settings_panel.vala:238
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Vendosni madhësinë (gjerësinë ose lartësinë, në varësi të orientimit) të këtij paneli"
-
-#: src/panel/settings/settings_panel.vala:245
-msgid "Automatically hide"
-msgstr "Fsheh automatikisht"
-
-#: src/panel/settings/settings_panel.vala:246
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Kur të vendoset, ky panel do të fshihet nga pamja për të maksimizuar hapësirën e punës të ekranit"
-
-#: src/panel/settings/settings_panel.vala:253
-msgid "Transparency"
-msgstr "Transparenca"
-
-#: src/panel/settings/settings_panel.vala:254
-msgid "Control when this panel should have a solid background"
-msgstr "Kontrolloni kur ky panel duhet të ketë një sfond të fortë"
-
-#: src/panel/settings/settings_panel.vala:259
-msgid "Shadow"
-msgstr "Hije"
-
-#: src/panel/settings/settings_panel.vala:260
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Shton një rënie-hije dekorative, ideale për panelet e errëta"
-
-#: src/panel/settings/settings_panel.vala:266
-msgid "Stylize regions"
-msgstr "Stilizoni rajonet"
-
-#: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr "Shton një shenjë ndihmëse në panel në mënyrë që secila prej tre fushave kryesore të panelit të mund të ketë tema të ndryshme."
-
-#: src/panel/settings/settings_panel.vala:274
-msgid "Dock mode"
-msgstr "Modaliteti Dok"
-
-#: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr "Kur është në modalitetin dok, paneli do të përdorë hapësirën minimale të mundshme, duke liruar pjesë hapësire të vlefshme të ekranit"
+#: src/daemon/screenshot.vala:1260
+msgid "Open"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -614,6 +187,7 @@ msgstr "Aplikacionet"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_plugin_chooser.vala:106
 msgid "Add"
 msgstr "Shto"
 
@@ -659,739 +233,1629 @@ msgstr "Shto Aplikacion"
 msgid "Add Command"
 msgstr "Shto Komandë"
 
-#: src/panel/settings/settings_fonts.vala:32
+#: src/panel/settings/settings_desktop.vala:52
+msgid "Desktop"
+msgstr "Desktopi"
+
+#. Budgie native implementation
+#. Get the settings for Budgie Desktop View
+#. Update our switches on change
+#. Desktop Folder
+#. Get the settings for DesktopType
+#. Update our switches on change
+#. Nemo
+#. Update our switches on change
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
+#. Universal show
+#: src/panel/settings/settings_desktop.vala:77
+msgid "Desktop Icons"
+msgstr "Ikonat e Desktopit"
+
+#: src/panel/settings/settings_desktop.vala:78
+msgid "Control whether to allow icons on the desktop."
+msgstr "Kontrolloni nëse do të lejoni ikona në desktop."
+
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
+#. DesktopType is the only one that doesn't support showing mounts
+#. Switcher to show or hide active mounts
+#: src/panel/settings/settings_desktop.vala:87
+msgid "Active Mounts"
+msgstr "Montimet aktive"
+
+#: src/panel/settings/settings_desktop.vala:88
+msgid "Show all active mounts on the desktop."
+msgstr "Shfaq të gjitha montimet aktive në desktop."
+
+#. Switcher to show or hide our Home folder
+#: src/panel/settings/settings_desktop.vala:95
+msgid "Home directory"
+msgstr "Direktoria kryesore"
+
+#: src/panel/settings/settings_desktop.vala:96
+msgid "Add a shortcut to your home directory on the desktop."
+msgstr "Shtoni një shkurtore të direktorisë tuaj kryesore në desktop."
+
+#. Switcher to show or hide a shortcut to Trash
+#: src/panel/settings/settings_desktop.vala:103
+msgid "Trash"
+msgstr "Kosh"
+
+#: src/panel/settings/settings_desktop.vala:104
+msgid "Add a shortcut to the Trash directory on the desktop."
+msgstr "Shtoni një shkurtore të direktorisë Kosh në desktop."
+
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
+#. Click Policy combo box
+#. Icon Size combo box
+#: src/panel/settings/settings_desktop.vala:116
+msgid "Icon Size"
+msgstr "Madhësia e Ikonave"
+
+#: src/panel/settings/settings_desktop.vala:117
+msgid "Set the desired size of icons on the desktop."
+msgstr "Vendosni madhësinë e dëshiruar të ikonave në desktop."
+
+#: src/panel/settings/settings_desktop.vala:148
+msgid "Number of virtual desktops"
+msgstr "Numri i desktopëve virtualë"
+
+#: src/panel/settings/settings_desktop.vala:149
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr ""
+"Numri i desktopëve / hapësirave të punës virtuale për t'u krijuar "
+"automatikisht gjatë nisjes së sistemit."
+
+#: src/panel/settings/settings_desktop.vala:217
+msgid "Single"
+msgstr "I vetëm"
+
+#. If the click policy is to double click
+#: src/panel/settings/settings_desktop.vala:221
+msgid "Double"
+msgstr "I dyfishtë"
+
+#: src/panel/settings/settings_desktop.vala:236
+msgid "Click Policy"
+msgstr "Rregulli i klikimit"
+
+#: src/panel/settings/settings_desktop.vala:237
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"Rregulli i klikimit përcakton nëse duhet t'i hapim artikujt me një klik të "
+"vetëm ose të dyfishtë."
+
+#: src/panel/settings/settings_desktop.vala:289
+msgid "Normal"
+msgstr "Normale"
+
+#. Small
+#: src/panel/settings/settings_desktop.vala:292
+msgid "Small"
+msgstr "Vogël"
+
+#. Large
+#: src/panel/settings/settings_desktop.vala:294
+msgid "Large"
+msgstr "Gjërë"
+
+#. Massive
+#: src/panel/settings/settings_desktop.vala:296
+msgid "Massive"
+msgstr "Masive"
+
+#: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
 msgstr "Shkronjat"
 
-#: src/panel/settings/settings_fonts.vala:43
+#: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
 msgstr "Titujt e Dritareve"
 
-#: src/panel/settings/settings_fonts.vala:44
+#: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
-msgstr "Zgjidhni shkronjat që përdoren në shiritat e titujve të aplikacioneve."
+msgstr ""
+"Zgjidhni shkronjat që përdoren në shiritat e titujve të aplikacioneve."
 
-#: src/panel/settings/settings_fonts.vala:50
+#: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
 msgstr "Dokumentet"
 
-#: src/panel/settings/settings_fonts.vala:51
+#: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
 msgstr "Vendosni shkronjat e ekranit që përdoren nga dokumentet."
 
-#: src/panel/settings/settings_fonts.vala:57
+#: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
 msgstr "Ndërfaqja"
 
-#: src/panel/settings/settings_fonts.vala:58
+#: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
-msgstr "Vendosni shkronjat kryesore që përdoren nga kontrollet e aplikacionit."
+msgstr ""
+"Vendosni shkronjat kryesore që përdoren nga kontrollet e aplikacionit."
 
-#: src/panel/settings/settings_fonts.vala:64
+#: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
 msgstr "Hapësira fikse"
 
-#: src/panel/settings/settings_fonts.vala:65
+#: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
 msgstr ""
 "Vendosni shkronjat me gjerësi fikse që përdoren nga aplikacionet "
 "mbizotëruese të tekstit."
 
-#: src/panel/settings/settings_fonts.vala:71
+#: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
 msgstr "Shkallëzimi i tekstit"
 
-#: src/panel/settings/settings_fonts.vala:72
+#: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
 msgstr "Vendosni faktorin e shkallëzimit të tekstit."
 
-#: src/panel/settings/settings_fonts.vala:81
+#: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
 msgstr "Plot"
 
-#: src/panel/settings/settings_fonts.vala:82
+#: src/panel/settings/settings_fonts.vala:81
 msgid "Medium"
 msgstr "Mesatare"
 
-#: src/panel/settings/settings_fonts.vala:83
+#: src/panel/settings/settings_fonts.vala:82
 msgid "Slight"
 msgstr "Lehtë"
 
-#: src/panel/settings/settings_fonts.vala:100
+#: src/panel/settings/settings_fonts.vala:83
+#: src/panel/settings/settings_fonts.vala:109
+#: src/panel/settings/settings_panel.vala:201
+msgid "None"
+msgstr "Asnjë"
+
+#: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
 msgstr "Sugjerime"
 
-#: src/panel/settings/settings_fonts.vala:101
+#: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
 msgstr "Vendosni llojin e sugjerimit për t'u përdorur."
 
-#: src/panel/settings/settings_fonts.vala:108
+#: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
 msgstr "Nënpixel (për ekranet LCD)"
 
-#: src/panel/settings/settings_fonts.vala:109
+#: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
 msgstr "Standard (shkallë gri)"
 
-#: src/panel/settings/settings_fonts.vala:125
+#: src/panel/settings/settings_fonts.vala:124
 msgid "Antialiasing"
 msgstr "Antialising"
 
-#: src/panel/settings/settings_fonts.vala:126
+#: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "Vendosni llojin e antialiasing për t'u përdorur."
 
-#: src/raven/start_listening.vala:20
-msgid "No apps are currently playing audio."
-msgstr "Asnjë aplikacion nuk po luan audio."
+#: src/panel/settings/settings_panel.vala:85
+msgid "Applets"
+msgstr "Applete"
 
-#: src/raven/start_listening.vala:28
-msgid "Play some music"
-msgstr "Luaj disa muzikë"
+#: src/panel/settings/settings_panel.vala:86
+#: src/panel/settings/settings_raven.vala:48
+msgid "Settings"
+msgstr "Cilësimet"
 
-#: src/raven/notifications_view.vala:101
-msgid "Nothing to see here"
-msgstr "Asgjë për të parë këtu"
+#: src/panel/settings/settings_panel.vala:88
+msgid "Remove Panel"
+msgstr "Hiq Panelin"
 
-#: src/raven/notifications_view.vala:654
-#: src/applets/notifications/NotificationsApplet.vala:106
+#: src/panel/settings/settings_panel.vala:89
+msgid "Remove this panel from the screen"
+msgstr "Hiqni këtë panel nga ekrani"
+
+#: src/panel/settings/settings_panel.vala:126
+msgid "Top Dock"
+msgstr "Dok i Sipërm"
+
+#: src/panel/settings/settings_panel.vala:128
+msgid "Right Dock"
+msgstr "Dok i Djathtë"
+
+#: src/panel/settings/settings_panel.vala:130
+msgid "Left Dock"
+msgstr "Dok i Majtë"
+
+#: src/panel/settings/settings_panel.vala:132
+msgid "Bottom Dock"
+msgstr "Dok i Poshtëm"
+
+#: src/panel/settings/settings_panel.vala:137
+msgid "Top Panel"
+msgstr "Paneli Lart"
+
+#: src/panel/settings/settings_panel.vala:139
+msgid "Right Panel"
+msgstr "Paneli i Djathë"
+
+#: src/panel/settings/settings_panel.vala:141
+msgid "Left Panel"
+msgstr "Paneli i Majtë"
+
+#: src/panel/settings/settings_panel.vala:143
+msgid "Bottom Panel"
+msgstr "Paneli Poshtë"
+
+#: src/panel/settings/settings_panel.vala:180
+msgid "Top"
+msgstr "Lart"
+
+#: src/panel/settings/settings_panel.vala:182 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Djathtë"
+
+#: src/panel/settings/settings_panel.vala:184
+#: src/panel/settings/settings_wm.vala:99 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Majtas"
+
+#: src/panel/settings/settings_panel.vala:186
+msgid "Bottom"
+msgstr "Poshtë"
+
+#: src/panel/settings/settings_panel.vala:196
+msgid "Always"
+msgstr "Gjithmonë"
+
+#: src/panel/settings/settings_panel.vala:198
+msgid "Dynamic"
+msgstr "Dinamike"
+
+#: src/panel/settings/settings_panel.vala:211 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Automatike"
+
+#: src/panel/settings/settings_panel.vala:213
+msgid "Intelligent"
+msgstr "Inteligjent"
+
+#: src/panel/settings/settings_panel.vala:216
+msgid "Never"
+msgstr "Asnjëherë"
+
+#: src/panel/settings/settings_panel.vala:231
+msgid "Position"
+msgstr "Pozicioni"
+
+#: src/panel/settings/settings_panel.vala:232
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Vendosni skajin e ekranit në të cilin do të qëndrojë ky panel"
+
+#: src/panel/settings/settings_panel.vala:240
+msgid "Size"
+msgstr "Madhësia"
+
+#: src/panel/settings/settings_panel.vala:241
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+"Vendosni madhësinë (gjerësinë ose lartësinë, në varësi të orientimit) të "
+"këtij paneli"
+
+#: src/panel/settings/settings_panel.vala:248
+msgid "Spacing"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:249
+msgid "Set the spacing between applets for this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:256
+msgid "Automatically hide"
+msgstr "Fsheh automatikisht"
+
+#: src/panel/settings/settings_panel.vala:257
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+"Kur të vendoset, ky panel do të fshihet nga pamja për të maksimizuar "
+"hapësirën e punës të ekranit"
+
+#: src/panel/settings/settings_panel.vala:264
+msgid "Transparency"
+msgstr "Transparenca"
+
+#: src/panel/settings/settings_panel.vala:265
+msgid "Control when this panel should have a solid background"
+msgstr "Kontrolloni kur ky panel duhet të ketë një sfond të fortë"
+
+#: src/panel/settings/settings_panel.vala:270
+msgid "Shadow"
+msgstr "Hije"
+
+#: src/panel/settings/settings_panel.vala:271
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "Shton një rënie-hije dekorative, ideale për panelet e errëta"
+
+#: src/panel/settings/settings_panel.vala:277
+msgid "Stylize regions"
+msgstr "Stilizoni rajonet"
+
+#: src/panel/settings/settings_panel.vala:278
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Shton një shenjë ndihmëse në panel në mënyrë që secila prej tre fushave "
+"kryesore të panelit të mund të ketë tema të ndryshme."
+
+#: src/panel/settings/settings_panel.vala:285
+msgid "Dock mode"
+msgstr "Modaliteti Dok"
+
+#: src/panel/settings/settings_panel.vala:286
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Kur është në modalitetin dok, paneli do të përdorë hapësirën minimale të "
+"mundshme, duke liruar pjesë hapësire të vlefshme të ekranit"
+
+#: src/panel/settings/settings_panel_applets.vala:19
+msgid "Configure applet"
+msgstr "Konfiguro apletin"
+
+#: src/panel/settings/settings_panel_applets.vala:233
+msgid "Add applet"
+msgstr "Shto aplete"
+
+#: src/panel/settings/settings_panel_applets.vala:234
+msgid "Choose a new applet to add to this panel"
+msgstr "Zgjidhni një aplet të ri për ta shtuar në këtë panel"
+
+#: src/panel/settings/settings_panel_applets.vala:248
+#: src/panel/settings/settings_raven_widgets.vala:164
+msgid "No settings available"
+msgstr "Nuk ka cilësime të disponueshme"
+
+#: src/panel/settings/settings_panel_applets.vala:401
+msgid "Start"
+msgstr "Fillim"
+
+#: src/panel/settings/settings_panel_applets.vala:404
+msgid "Center"
+msgstr "Qëndër"
+
+#: src/panel/settings/settings_panel_applets.vala:407
+msgid "End"
+msgstr "Fund"
+
+#: src/panel/settings/settings_panel_dialogs.vala:24
+msgid "Confirm panel removal"
+msgstr "Konfirmoni heqjen e panelit"
+
+#: src/panel/settings/settings_panel_dialogs.vala:31
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr "Dëshiron vërtet ta heqësh këtë panel? Ky veprim nuk mund të zhbëhet."
+
+#: src/panel/settings/settings_panel_dialogs.vala:42
+msgid "Remove panel"
+msgstr "Hiq panelin"
+
+#: src/panel/settings/settings_panel_dialogs.vala:43
+msgid "Keep panel"
+msgstr "Mbaj panelin"
+
+#: src/panel/settings/settings_panel_dialogs.vala:67
+msgid "Confirm applet removal"
+msgstr "Konfirmoni heqjen e apletit"
+
+#: src/panel/settings/settings_panel_dialogs.vala:74
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr "A doni vërtet ta hiqni këtë aplet? Ky veprim nuk mund të zhbëhet."
+
+#: src/panel/settings/settings_panel_dialogs.vala:89
+#: src/panel/settings/settings_panel_dialogs.vala:148
+msgid "Don't ask me again"
+msgstr "Mos më pyet më"
+
+#: src/panel/settings/settings_panel_dialogs.vala:98
+msgid "Remove applet"
+msgstr "Hiq apletin"
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid "Keep applet"
+msgstr "Mbani apletin"
+
+#: src/panel/settings/settings_panel_dialogs.vala:126
+msgid "Confirm widget removal"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:133
+msgid ""
+"Do you really want to remove this widget? This action cannot be undone."
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:157
+#: src/panel/applets/workspaces/WorkspaceItem.vala:80
+msgid "Remove"
+msgstr "Hiq"
+
+#: src/panel/settings/settings_raven_settings.vala:45
+msgid "Set Raven position"
+msgstr "Vendos pozicionin e Raven"
+
+#: src/panel/settings/settings_raven_settings.vala:46
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Vendosni në cilën anë të ekranit Raven do të hapet. Nëse vendoset "
+"Automatike, Raven do të hapet aty ku është paneli i tij prind."
+
+#: src/panel/settings/settings_raven_widgets.vala:21
+msgid "Widget Settings"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:149
+msgid "Add widget"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:150
+msgid "Choose a new widget to add to the Widgets view"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:237
+msgid ""
+"Failed to create the widget instance. The plugin engine could not find info "
+"for this plugin."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:240
+msgid ""
+"Failed to create the widget instance. The module name must be in reverse-DNS"
+" format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
+"'tld_domain_group_WidgetName' for Python."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:244
+msgid ""
+"Failed to create the widget instance. The plugin engine failed to load the "
+"plugin from the disk."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:247
+msgid ""
+"Failed to create the widget instance. The plugin supports settings, but does not install a settings schema with the same name.\n"
+"\n"
+"The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:252
+msgid "Failed to create the widget instance due to an unknown failure."
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:33
+msgid "Style"
+msgstr "Stilizo"
+
+#: src/panel/settings/settings_style.vala:47
+#: src/panel/settings/settings_raven.vala:47 src/raven/main_view.vala:53
+msgid "Widgets"
+msgstr "Miniaplikacione"
+
+#: src/panel/settings/settings_style.vala:48
+msgid "Set the appearance of window decorations and controls"
+msgstr "Vendosni pamjen e dekorimeve dhe kontrolleve të dritareve"
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Icons"
+msgstr "Ikonat"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the globally used icon theme"
+msgstr "Vendosni temën e ikonës të përdorur globalisht"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Cursors"
+msgstr "Kursorët"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used mouse cursor theme"
+msgstr "Vendosni temën e kursorit të mausit të përdorur globalisht"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Notification Position"
+msgstr "Pozicioni i njoftimit"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the location for notification popups"
+msgstr "Vendosni vendndodhjen për dritaret e reja të njoftimit"
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Dark theme"
+msgstr "Temë e errët"
+
+#: src/panel/settings/settings_style.vala:79
+msgid "Built-in theme"
+msgstr "Temë e integruar"
+
+#: src/panel/settings/settings_style.vala:80
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Kur aktivizohet, tema e integruar do të mbishkruajë stilimin e përbërësve të"
+" desktop"
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Animations"
+msgstr "Animacione"
+
+#: src/panel/settings/settings_style.vala:88
+msgid "Control whether windows and controls use animations"
+msgstr "Kontrolloni nëse dritaret dhe kontrollet përdorin animacione"
+
+#: src/panel/settings/settings_style.vala:205
+msgid "Top Left"
+msgstr "Lart majtas"
+
+#: src/panel/settings/settings_style.vala:207
+msgid "Bottom Left"
+msgstr "Poshtë majtas"
+
+#: src/panel/settings/settings_style.vala:209
+msgid "Bottom Right"
+msgstr "Poshtë djathtas"
+
+#: src/panel/settings/settings_style.vala:212
+msgid "Top Right"
+msgstr "Lart djathtas"
+
+#: src/panel/settings/settings_wm.vala:31
+msgid "Windows"
+msgstr "Dritaret"
+
+#: src/panel/settings/settings_wm.vala:40
+msgid "Attach modal dialogs to windows"
+msgstr "Bashkangjitni dialogët modalë në dritare"
+
+#: src/panel/settings/settings_wm.vala:41
+msgid ""
+"Modal dialogs will become attached to the parent window and move together "
+"when dragged."
+msgstr ""
+"Dialogët modalë do të bashkangjiten në dritaren prind dhe do të lëvizin së "
+"bashku kur tërhiqen."
+
+#: src/panel/settings/settings_wm.vala:46
+msgid "Button layout"
+msgstr "Paraqitja e butonit"
+
+#: src/panel/settings/settings_wm.vala:47
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Ndryshoni paraqitjen e butonave në shiritat e aplikacioneve."
+
+#: src/panel/settings/settings_wm.vala:52
+msgid "Center new windows on screen"
+msgstr "Qendërso dritaret e reja në ekran"
+
+#: src/panel/settings/settings_wm.vala:53
+msgid "Center newly launched windows on the current screen."
+msgstr "Qendërso dritaret e sapohapura në ekranin aktual."
+
+#: src/panel/settings/settings_wm.vala:58
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr ""
+"Çaktivizo modalitetin e Dritës së Natës kur dritaret janë në ekran të plotë"
+
+#: src/panel/settings/settings_wm.vala:59
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Çaktivizon modalitetin e Dritës së Natës kur një dritare është në ekran të "
+"plotë. Ri-aktivizon kur largoheni nga ekrani i plotë."
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Ndalo njoftimet kur dritaret janë në ekran të plotë"
+
+#: src/panel/settings/settings_wm.vala:65
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
+"Parandalon shfaqjen e njoftimeve kur një dritare është në ekran të plotë. "
+"Shfaqja e njoftimeve rifillon kur largohet nga ekrani i plotë."
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Automatic tiling"
+msgstr "Pllakëzim automatik"
+
+#: src/panel/settings/settings_wm.vala:71
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Dritaret do të radhiten si pllaka automatikisht kur të tërhiqen në pjesën e "
+"sipërme të ekranit ose në cepat e largët."
+
+#: src/panel/settings/settings_wm.vala:76
+msgid "Enable window focus change on mouse enter and leave"
+msgstr ""
+"Aktivizoni ndryshimin e fokusit të dritares në hyrjen dhe largimin e mausit"
+
+#: src/panel/settings/settings_wm.vala:77
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Aktivizon fokusimin e dritares të zbatohet kur miu hyn në dritare dhe "
+"zhvendoset kur miu largohet nga dritarja."
+
+#: src/panel/settings/settings_wm.vala:83
+msgid "Disable unredirection of windows"
+msgstr "Çaktivizo mosdrejtimin e dritareve"
+
+#: src/panel/settings/settings_wm.vala:84
+msgid ""
+"This option is for advanced users. Use this if you are having graphical or "
+"performance issues with dedicated GPUs."
+msgstr ""
+"Ky opsion është për përdoruesit e përparuar. Përdoreni këtë nëse keni "
+"probleme grafike ose të performancës me GPU-të e dedikuara."
+
+#: src/panel/settings/settings_wm.vala:89
+msgid "Show all windows in tab switcher"
+msgstr "Shfaq të gjitha dritaret në ndërruesin e skedave"
+
+#: src/panel/settings/settings_wm.vala:90
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Të gjitha skedat do të shfaqen në ndërruesin e skedave, pavarësisht nga "
+"hapësira e punës në përdorim."
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Right (standard)"
+msgstr "Djathtas (standard)"
+
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Paraqitje"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panele"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Seancë"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Krijoni panel të ri"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
+msgid "All"
+msgstr "Të gjitha"
+
+#: src/panel/applets/budgie-menu/IconChooser.vala:24
+msgid "Set menu icon from file"
+msgstr "Vendosni ikonën e menusë nga skedari"
+
+#: src/panel/applets/budgie-menu/IconChooser.vala:34
+msgid "Image files"
+msgstr "Skedarët e imazheve"
+
+#: src/panel/applets/budgie-menu/IconChooser.vala:40
+msgid "Any file"
+msgstr "Çdo skedar"
+
+#: src/panel/applets/budgie-menu/IconChooser.vala:53
+msgid "Set icon"
+msgstr "Vendos ikonën"
+
+#. placeholder in case of no results
+#: src/panel/applets/budgie-menu/views/ListView.vala:101
+msgid "Sorry, no items found"
+msgstr "Na vjen keq, nuk u gjet asnjë artikull"
+
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+msgid "Power"
+msgstr ""
+
+#. Prepare label widget
+#. Caffeine Notification
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+#: src/raven/notifications_group.vala:45
+msgid "Caffeine Mode"
+msgstr "Modaliteti Kafeinë"
+
+#: src/panel/applets/caffeine/CaffeineWindow.vala:39
+msgid "Timer (minutes)"
+msgstr "Kohëmatësi (minuta)"
+
+#: src/panel/applets/clock/ClockApplet.vala:122
+msgid "System time and date settings"
+msgstr ""
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:107
+msgid "Launch New Instance"
+msgstr "Nisni një instancë të re"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:110
+msgid "Close All Windows"
+msgstr "Mbyllni Të Gjitha Dritaret"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:118
+msgid "Always On Top"
+msgstr "Gjithmonë Në Krye"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:120
+#: src/panel/applets/icon-tasklist/IconPopover.vala:557
+msgid "Maximize"
+msgstr "Maksimizo"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:121
+msgid "Minimize"
+msgstr "Minimizo"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:445
+msgid "Unfavorite"
+msgstr "Hiq të preferuarën"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:445
+msgid "Favorite"
+msgstr "I preferuar"
+
+#. If our current amount of workspaces is different than how many we have
+#. added
+#. We have items to add
+#. For workspaces we need to add
+#: src/panel/applets/icon-tasklist/IconPopover.vala:457
+#, c-format
+msgid "Move To Workspace %i"
+msgstr "Lëviz në Hapësirën e Punës %i"
+
+#. Update our always on top button
+#: src/panel/applets/icon-tasklist/IconPopover.vala:557
+msgid "Unmaximize"
+msgstr "Hiq maksimizimin"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:616
+msgid "Close Window"
+msgstr "Mbyll Dritaren"
+
+#: src/panel/applets/icon-tasklist/IconPopover.vala:618
+msgid "Show Window Controls"
+msgstr "Shfaq Kontrollet e Dritareve"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:68
+msgid "Caps lock is active"
+msgstr "Kyçi i kapitaleve është aktiv"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:71
+msgid "Caps lock is not active"
+msgstr "Kyçi i kapitaleve nuk është aktiv"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:80
+msgid "Num lock is active"
+msgstr "Kyçi i numrave është aktiv"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:83
+msgid "Num lock is not active"
+msgstr "Kyçi i numrave nuk është aktiv"
+
+#: src/panel/applets/notifications/NotificationsApplet.vala:121
+#: src/raven/notifications_view.vala:322
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u njoftime të palexuara"
 
-#: src/raven/notifications_view.vala:656
-#: src/applets/notifications/NotificationsApplet.vala:108
+#: src/panel/applets/notifications/NotificationsApplet.vala:123
+#: src/raven/notifications_view.vala:324
 msgid "1 unread notification"
 msgstr "1 njoftim i palexuar"
 
-#: src/raven/notifications_view.vala:658
-#: src/applets/notifications/NotificationsApplet.vala:110
+#: src/panel/applets/notifications/NotificationsApplet.vala:125
+#: src/raven/notifications_view.vala:326
 msgid "No unread notifications"
 msgstr "Asnjë njoftim i palexuar"
 
-#: src/raven/notifications_view.vala:889
-msgid "No new notifications"
-msgstr "Asnjë njoftim i ri"
+#: src/panel/applets/places-indicator/MountHelper.vala:35
+msgid "Volume is in use by other processes"
+msgstr "Volumi është në përdorim nga proceset e tjera"
 
-#. 125ms
-#: src/raven/sound.vala:158
-msgid "Apps"
-msgstr "Aplikacionet"
+#: src/panel/applets/places-indicator/MountHelper.vala:40
+msgid "Operation aborted"
+msgstr "Operacioni u ndërpre"
 
-#: src/raven/sound.vala:159
-msgid "Devices"
-msgstr "Pajisjet"
+#: src/panel/applets/places-indicator/MountHelper.vala:51
+msgid "Type your password"
+msgstr "Shtypni fjalëkalimin tuaj"
 
-#: src/raven/main_view.vala:60
-#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
-msgid "Notifications"
-msgstr "Njoftimet"
-
-#. Caffeine Notification
-#. Prepare label widget
-#: src/raven/notifications_group.vala:47
-#: src/applets/caffeine/CaffeineWindow.vala:37
-msgid "Caffeine Mode"
-msgstr "Modaliteti Kafeinë"
-
-#: src/daemon/menus.vala:51
-msgid "System Settings"
-msgstr "Cilësimet e sistemit"
-
-#: src/daemon/endsession.vala:157
-msgid "Log out"
-msgstr "Shkyçu"
-
-#: src/daemon/endsession.vala:161
-msgid "Restart device"
-msgstr "Rinisni pajisjen"
-
-#: src/daemon/endsession.vala:173 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Fikeni"
-
-#. Should show a notification
-#: src/daemon/settings.vala:341
-msgid "Turned on Caffeine Boost"
-msgstr "Modaliteti Kafeinë aktivizohet"
-
-#: src/daemon/settings.vala:341
-msgid "Turned off Caffeine Boost"
-msgstr "Modaliteti Kafeinë çaktivizohet"
-
-#: src/daemon/settings.vala:346
-msgid "Will turn off in a minute"
-msgstr "Do të fiket për një minutë"
-
-#. use plural
-#: src/daemon/settings.vala:349
-#, c-format
-msgid "Will turn off in %d minutes"
-msgstr "Do të fiket pas %d minutash"
-
-#. User Menu Creation
-#: src/applets/user-indicator/UserIndicatorWindow.vala:99
-msgid "User"
-msgstr "Përdorues"
-
-#. Default to "User" and symbolic icon
-#. The rest
-#: src/applets/user-indicator/UserIndicatorWindow.vala:105
-msgid "Lock"
-msgstr "Kyç"
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:106
-msgid "Suspend"
-msgstr "Pezullo"
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:107
-msgid "Hibernate"
-msgstr "Letargji"
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:108
-#: src/daemon/endsession.ui.h:5
-msgid "Restart"
-msgstr "Rinisni"
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:109
-#: src/daemon/endsession.ui.h:6
-msgid "Shutdown"
-msgstr "Fike"
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:208
-#: src/daemon/endsession.ui.h:4
-msgid "Logout"
-msgstr "Shkyç"
-
-#: src/applets/lock-keys/LockKeysApplet.vala:55
-msgid "Caps lock is active"
-msgstr "Kyçi i kapitaleve është aktiv"
-
-#: src/applets/lock-keys/LockKeysApplet.vala:58
-msgid "Caps lock is not active"
-msgstr "Kyçi i kapitaleve nuk është aktiv"
-
-#: src/applets/lock-keys/LockKeysApplet.vala:67
-msgid "Num lock is active"
-msgstr "Kyçi i numrave është aktiv"
-
-#: src/applets/lock-keys/LockKeysApplet.vala:70
-msgid "Num lock is not active"
-msgstr "Kyçi i numrave nuk është aktiv"
-
-#: src/applets/places-indicator/MountItem.vala:23
-#: src/applets/places-indicator/VolumeItem.vala:25
+#: src/panel/applets/places-indicator/MountItem.vala:23
+#: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
 msgstr "Pajisjet e lëvizshme"
 
-#: src/applets/places-indicator/MountItem.vala:25
-#: src/applets/places-indicator/VolumeItem.vala:27
+#: src/panel/applets/places-indicator/MountItem.vala:25
+#: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
 msgstr "Disqet lokale"
 
-#: src/applets/places-indicator/MountItem.vala:29
-#: src/applets/places-indicator/VolumeItem.vala:31
+#: src/panel/applets/places-indicator/MountItem.vala:29
+#: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
 msgstr "Dosjet e rrjetit"
 
-#: src/applets/places-indicator/MountItem.vala:32
-#: src/applets/places-indicator/VolumeItem.vala:34
+#. Create our misc category, but don't add it to the list until it actually
+#. has apps in it
+#: src/panel/applets/places-indicator/MountItem.vala:32
+#: src/panel/applets/places-indicator/VolumeItem.vala:34
+#: src/appindexer/AppIndex.vala:44
 msgid "Other"
 msgstr "Tjetër"
 
-#: src/applets/places-indicator/MountItem.vala:58
-#: src/applets/places-indicator/VolumeItem.vala:55
+#: src/panel/applets/places-indicator/MountItem.vala:58
+#: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
 msgstr "Nxjerr"
 
-#: src/applets/places-indicator/MountItem.vala:60
+#: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
 msgstr "Çmontoni"
 
-#: src/applets/places-indicator/MountItem.vala:63
-#: src/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/MountItem.vala:63
+#: src/panel/applets/places-indicator/PlaceItem.vala:36
 #, c-format
 msgid "Open \"%s\""
 msgstr "Hap \"%s\""
 
-#: src/applets/places-indicator/MountItem.vala:75
-#: src/applets/places-indicator/VolumeItem.vala:83
+#: src/panel/applets/places-indicator/MountItem.vala:75
+#: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
 msgstr "Tani mund ta hiqni në mënyrë të sigurt"
 
-#: src/applets/places-indicator/MountItem.vala:76
+#: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
 msgstr "Pajisje e panjohur"
 
-#: src/applets/places-indicator/MountItem.vala:84
+#: src/panel/applets/places-indicator/MountItem.vala:84
 msgid "Error while ejecting device"
 msgstr "Gabim gjatë nxjerrjes së pajisjes"
 
-#: src/applets/places-indicator/MountItem.vala:100
+#: src/panel/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
 msgstr "Gabim gjatë çmontimit së diskut"
 
-#: src/applets/places-indicator/VolumeItem.vala:41
+#: src/panel/applets/places-indicator/PlacesIndicator.vala:80
+#: src/panel/applets/places-indicator/PlacesSection.vala:22
+#: src/panel/applets/places-indicator/PlacesSection.vala:44
+msgid "Places"
+msgstr "Vendet"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "Asgjë për të shfaqur tani"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "Montoni disa pajisje"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Aktivizo më shumë seksione"
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
 msgstr "Montoni dhe hapni \"%s\""
 
-#: src/applets/places-indicator/VolumeItem.vala:73
-#: src/applets/places-indicator/VolumeItem.vala:114
+#: src/panel/applets/places-indicator/VolumeItem.vala:73
+#: src/panel/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
 msgstr "Futni frazën e kalimit të kriptimit për të zhbllokuar këtë disk"
 
-#: src/applets/places-indicator/VolumeItem.vala:112
+#: src/panel/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
 msgstr "Fjalëkalimi që keni futur është i pasaktë"
 
-#: src/applets/places-indicator/VolumeItem.vala:116
+#: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "Ndodhi një gabim i panjohur gjatë përpjekjes për të montuar këtë disk"
 
-#: src/applets/places-indicator/MountHelper.vala:35
-msgid "Volume is in use by other processes"
-msgstr "Volumi është në përdorim nga proceset e tjera"
-
-#: src/applets/places-indicator/MountHelper.vala:40
-msgid "Operation aborted"
-msgstr "Operacioni u ndërpre"
-
-#: src/applets/places-indicator/MountHelper.vala:51
-msgid "Type your password"
-msgstr "Shtypni fjalëkalimin tuaj"
-
-#: src/applets/places-indicator/PlacesIndicator.vala:80
-#: src/applets/places-indicator/PlacesSection.vala:22
-#: src/applets/places-indicator/PlacesSection.vala:44
-#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
-msgid "Places"
-msgstr "Vendet"
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "Asgjë për të shfaqur tani"
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "Montoni disa pajisje"
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "Aktivizo më shumë seksione"
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+msgid "Toggle the desktop"
+msgstr "Ndërro desktopin"
 
 #. Settings button
-#: src/applets/status/BluetoothIndicator.vala:53
+#: src/panel/applets/status/BluetoothIndicator.vala:55
 msgid "Bluetooth Settings"
 msgstr "Cilësimet e Bluetooth"
 
 #. Send files button
-#: src/applets/status/BluetoothIndicator.vala:60
+#: src/panel/applets/status/BluetoothIndicator.vala:62
 msgid "Send Files"
 msgstr "Dërgo Skedarë"
 
 #. Airplane mode
-#: src/applets/status/BluetoothIndicator.vala:70
+#: src/panel/applets/status/BluetoothIndicator.vala:72
 msgid "Bluetooth Airplane Mode"
 msgstr "Modaliteti Aeroplan në Bluetooth"
 
-#: src/applets/status/BluetoothIndicator.vala:173
+#: src/panel/applets/status/BluetoothIndicator.vala:182
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth është çaktivizuar"
 
-#: src/applets/status/BluetoothIndicator.vala:177
+#: src/panel/applets/status/BluetoothIndicator.vala:186
 msgid "Bluetooth is active"
 msgstr "Bluetooth është aktiv"
 
-#: src/applets/status/BluetoothIndicator.vala:182
+#: src/panel/applets/status/BluetoothIndicator.vala:191
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
 msgstr[0] "Lidhur me pajisjen %d"
 msgstr[1] "Lidhur me %d pajisje"
 
-#: src/applets/status/PowerIndicator.vala:93
+#: src/panel/applets/status/PowerIndicator.vala:105
 msgid "Battery fully charged."
 msgstr "Bateria është plotësisht e ngarkuar."
 
-#: src/applets/status/PowerIndicator.vala:96
+#: src/panel/applets/status/PowerIndicator.vala:109
 msgid "Unknown"
 msgstr "E panjohur"
 
 #. Set inner charging duration to hours:minutes
-#: src/applets/status/PowerIndicator.vala:105
+#: src/panel/applets/status/PowerIndicator.vala:118
 msgid "Battery charging"
 msgstr "Karikimi i baterisë"
 
-#: src/applets/status/PowerIndicator.vala:110
+#: src/panel/applets/status/PowerIndicator.vala:123
 msgid "Battery remaining"
 msgstr "Bateria e mbetur"
 
-#: src/applets/status/PowerIndicator.vala:161
+#: src/panel/applets/status/PowerIndicator.vala:182
 msgid "Show battery percentage"
 msgstr "Shfaq përqindjen e baterisë"
 
-#: src/applets/status/PowerIndicator.vala:169
+#: src/panel/applets/status/PowerIndicator.vala:190
 msgid "Power settings"
 msgstr "Cilësimet e energjisë"
 
-#: src/applets/workspaces/WorkspaceItem.vala:69
-msgid "Rename"
-msgstr "Riemërto"
-
-#: src/applets/workspaces/WorkspaceItem.vala:77
-msgid "Remove"
-msgstr "Hiq"
-
-#: src/applets/caffeine/CaffeineWindow.vala:39
-msgid "Timer (minutes)"
-msgstr "Kohëmatësi (minuta)"
-
 #. there's already an active tray, create an informative icon with a popover
-#: src/applets/tray/TrayApplet.vala:114
+#: src/panel/applets/tray/TrayApplet.vala:114
 msgid "Only one instance of the System Tray can be active at a time."
 msgstr "Vetëm një instancë e Shiritit të Sistemit mund të jetë aktiv."
 
-#: src/applets/tray/TrayApplet.vala:140
+#: src/panel/applets/tray/TrayApplet.vala:140
 msgid "The System Tray failed to initialize."
 msgstr "Shiriti i Sistemit dështoi të fillojë."
 
-#: src/applets/show-desktop/ShowDesktopApplet.vala:30
-msgid "Toggle the desktop"
-msgstr "Ndërro desktopin"
+#. User Menu Creation
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "User"
+msgstr "Përdorues"
 
-#. Special case, "All"
-#: src/applets/budgie-menu/BudgieMenuButtons.vala:25
-msgid "All"
-msgstr "Të gjitha"
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:109
+msgid "Lock"
+msgstr "Kyç"
 
-#: src/applets/budgie-menu/IconChooser.vala:24
-msgid "Set menu icon from file"
-msgstr "Vendosni ikonën e menusë nga skedari"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:110
+msgid "Suspend"
+msgstr "Pezullo"
 
-#: src/applets/budgie-menu/IconChooser.vala:34
-msgid "Image files"
-msgstr "Skedarët e imazheve"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:111
+msgid "Hibernate"
+msgstr "Letargji"
 
-#: src/applets/budgie-menu/IconChooser.vala:40
-msgid "Any file"
-msgstr "Çdo skedar"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:112
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "Rinisni"
 
-#: src/applets/budgie-menu/IconChooser.vala:53
-msgid "Set icon"
-msgstr "Vendos ikonën"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:113
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Fike"
 
-#. placeholder in case of no results
-#: src/applets/budgie-menu/BudgieMenuWindow.vala:123
-msgid "Sorry, no items found"
-msgstr "Na vjen keq, nuk u gjet asnjë artikull"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:212
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "Shkyç"
 
-#: src/applets/clock/ClockApplet.vala:143
-msgid "Time and date settings"
-msgstr "Cilësimet e orës dhe datës"
+#: src/panel/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr "Riemërto"
 
-#: src/applets/clock/ClockApplet.vala:144
-msgid "Calendar"
-msgstr "Kalendar"
+#: src/raven/widgets/media-controls/media_controls.vala:155
+msgid "No apps are currently playing audio."
+msgstr "Asnjë aplikacion nuk po luan audio."
 
-#. pack page2
-#: src/applets/clock/ClockApplet.vala:151
-#: src/applets/clock/ClockApplet.vala:182
-msgid "Preferences"
-msgstr "Preferencat"
+#: src/raven/widgets/media-controls/media_controls.vala:164
+msgid "Play some music"
+msgstr "Luaj disa muzikë"
 
-#: src/applets/clock/ClockApplet.vala:161
-msgid "Show date"
-msgstr "Shfaq datën"
+#: src/raven/widgets/media-controls/mpris_gui.vala:101
+#: src/raven/widgets/media-controls/mpris_gui.vala:419
+msgid "Unknown Title"
+msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:166
-msgid "Show seconds"
-msgstr "Shfaq sekondat"
+#: src/raven/widgets/media-controls/mpris_gui.vala:104
+#: src/raven/widgets/media-controls/mpris_gui.vala:423
+msgid "Unknown Artist"
+msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:172
-msgid "Use 24 hour time"
-msgstr "Përdorni formatin me 24 orë"
+#: src/raven/widgets/media-controls/mpris_gui.vala:107
+#: src/raven/widgets/media-controls/mpris_gui.vala:427
+msgid "Unknown Album"
+msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:106
-msgid "Launch New Instance"
-msgstr "Nisni një instancë të re"
-
-#: src/applets/icon-tasklist/IconPopover.vala:109
-msgid "Close All Windows"
-msgstr "Mbyllni Të Gjitha Dritaret"
-
-#: src/applets/icon-tasklist/IconPopover.vala:117
-msgid "Always On Top"
-msgstr "Gjithmonë Në Krye"
-
-#: src/applets/icon-tasklist/IconPopover.vala:119
-#: src/applets/icon-tasklist/IconPopover.vala:545
-msgid "Maximize"
-msgstr "Maksimizo"
-
-#: src/applets/icon-tasklist/IconPopover.vala:120
-msgid "Minimize"
-msgstr "Minimizo"
-
-#: src/applets/icon-tasklist/IconPopover.vala:433
-msgid "Unfavorite"
-msgstr "Hiq të preferuarën"
-
-#: src/applets/icon-tasklist/IconPopover.vala:433
-msgid "Favorite"
-msgstr "I preferuar"
-
-#. If our current amount of workspaces is different than how many we have added
-#. We have items to add
-#. For workspaces we need to add
-#: src/applets/icon-tasklist/IconPopover.vala:445
+#: src/raven/widgets/media-controls/mpris_gui.vala:296
 #, c-format
-msgid "Move To Workspace %i"
-msgstr "Lëviz në Hapësirën e Punës %i"
+msgid "%s - Playing"
+msgstr ""
 
-#. Update our always on top button
-#: src/applets/icon-tasklist/IconPopover.vala:545
-msgid "Unmaximize"
-msgstr "Hiq maksimizimin"
+#: src/raven/widgets/media-controls/mpris_gui.vala:301
+#, c-format
+msgid "%s - Paused"
+msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:604
-msgid "Close Window"
-msgstr "Mbyll Dritaren"
+#: src/raven/widgets/sound-output/sound_output.vala:173
+msgid "No apps are playing audio."
+msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:606
-msgid "Show Window Controls"
-msgstr "Shfaq Kontrollet e Dritareve"
+#: src/raven/widgets/sound-output/sound_output.vala:189
+msgid "Apps"
+msgstr "Aplikacionet"
 
-#: src/polkit/dialog.ui.h:1
-msgid "Authentication Required"
-msgstr "Kërkohet vërtetimi"
+#: src/raven/widgets/sound-output/sound_output.vala:190
+msgid "Devices"
+msgstr "Pajisjet"
 
-#: src/polkit/dialog.ui.h:2
-msgid "Password:"
-msgstr "Fjalëkalimi:"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
+msgid "Usage Monitor"
+msgstr ""
 
-#: src/polkit/dialog.ui.h:3
-msgid "Authentication is required"
-msgstr "Kërkohet vërtetimi"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+msgid "CPU"
+msgstr ""
 
-#: src/polkit/dialog.ui.h:5
-msgid "Authenticate"
-msgstr "Vërtetoni"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+msgid "RAM"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+msgid "Swap"
+msgstr ""
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "Njoftimet"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr ""
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "Asgjë për të parë këtu"
+
+#: src/raven/notifications_view.vala:116
+msgid "No new notifications"
+msgstr "Asnjë njoftim i ri"
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr ""
+
+#. * Add our categories, adhearing to the Freedesktop Menu spec.
+#. *
+#. * Inclusions and exclusions are sourced from multiple places,
+#. * including the UbuntuBudgie fork of applications-menu, gnome-menus,
+#. * the Freedeskop Menus spec, and by ourselves.
+#: src/appindexer/AppIndex.vala:142
+msgid "Accessories"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:170
+msgid "Education"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:175
+msgid "Games"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:179
+msgid "Graphics"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:187
+msgid "Internet"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:192
+msgid "Office"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:197
+msgid "Programming"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:201
+msgid "Science"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:207
+msgid "Sound & Video"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:211
+msgid "System Tools"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:222
+msgid "Universal Access"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:226
+msgid "Utilities"
+msgstr ""
+
+#: src/dialogs/polkit/polkitdialog.vala:126
+msgid "Authentication failed"
+msgstr "Vërtetimi dështoi"
+
+#: src/dialogs/polkit/polkitdialog.vala:215
+msgid "Group:"
+msgstr "Grupi:"
+
+#. Create our buttons
+#: src/dialogs/power/window.vala:92
+msgid "_Lock"
+msgstr ""
+
+#: src/dialogs/power/window.vala:95
+msgid "L_og Out"
+msgstr ""
+
+#: src/dialogs/power/window.vala:98
+msgid "_Suspend"
+msgstr ""
+
+#: src/dialogs/power/window.vala:102
+msgid "_Hibernate"
+msgstr ""
+
+#: src/dialogs/power/window.vala:106
+msgid "_Reboot"
+msgstr ""
+
+#: src/dialogs/power/window.vala:109
+msgid "Shut_down"
+msgstr ""
+
+#: src/dialogs/power/window.vala:161
+msgid "This system does not support hibernation."
+msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr "Je i sigurt që dëshiron ta përfundosh seancën tënde?"
 
-#: src/applets/places-indicator/settings.ui.h:1
-msgid "Show label"
-msgstr "Shfaq etiketën"
+#: src/daemon/aftershot.ui.h:1
+msgid "Name:"
+msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:2
-msgid "Show places"
-msgstr "Shfaq vendet"
+#: src/daemon/aftershot.ui.h:2
+msgid "Folder:"
+msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:3
-msgid "Show network folders"
-msgstr "Shfaq dosjet e rrjetit"
+#: src/daemon/screenshothome.ui.h:1
+msgid "Delay in seconds"
+msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:4
-msgid "Show removable drives"
-msgstr "Shfaq disqet e lëvizshme"
+#: src/daemon/screenshothome.ui.h:2
+msgid "Show Pointer"
+msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:5
-msgid "Always expand places"
-msgstr "Gjithmonë zgjeroni vendet"
+#: src/daemon/screenshothome.ui.h:3
+msgid "Play sound when capturing"
+msgstr ""
 
-#: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
-msgid "Icon Spacing"
-msgstr "Ndarja në hapësirë e ikonave"
-
-#: src/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr "Madhësia e Distancuesit"
-
-#: src/applets/workspaces/settings.ui.h:1
-msgid "\"Add\" button visibility"
-msgstr "Dukshmëria e butonit \"Shto\""
-
-#: src/applets/workspaces/settings.ui.h:2
-msgid "Don't show"
-msgstr "Mos shfaq"
-
-#: src/applets/workspaces/settings.ui.h:3
-msgid "Show on mouseover"
-msgstr "Shfaq me vendosjen e mausit sipër"
-
-#: src/applets/workspaces/settings.ui.h:4
-msgid "Always show"
-msgstr "Shfaq gjithmonë"
-
-#: src/applets/caffeine/settings.ui.h:1
-msgid "Enable notification"
-msgstr "Aktivizo njoftimin"
-
-#: src/applets/caffeine/settings.ui.h:2
-msgid "Maximize brightness"
-msgstr "Maksimizoni shkëlqimin"
-
-#: src/applets/caffeine/settings.ui.h:3
-msgid "Brightness Level"
-msgstr "Niveli i shkëlqimit"
-
-#: src/applets/night-light/indicator_window.ui.h:1
-#: src/applets/night-light/NightLight.plugin.in.h:1
-msgid "Night Light"
-msgstr "Dritë Nate"
-
-#: src/applets/night-light/indicator_window.ui.h:2
-msgid "Temperature"
-msgstr "Temperatura"
-
-#: src/applets/night-light/indicator_window.ui.h:3
-msgid "Schedule"
-msgstr "Planifikimi"
-
-#: src/applets/night-light/indicator_window.ui.h:4
-msgid "Sunset to Sunrise"
-msgstr "Nga Perëndimi në Agim"
-
-#: src/applets/night-light/indicator_window.ui.h:5
-msgid "Manual"
-msgstr "Udhëzues"
-
-#: src/applets/night-light/indicator_window.ui.h:6
-msgid "Display Settings"
-msgstr "Cilësimet e Ekranit"
-
-#: src/applets/budgie-menu/settings.ui.h:1
+#: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
 msgstr "Shfaq Etiketën e Menusë"
 
-#: src/applets/budgie-menu/settings.ui.h:2
-msgid "Compact Mode"
-msgstr "Modaliteti Kompakt"
-
-#: src/applets/budgie-menu/settings.ui.h:3
-msgid "Show Headers"
-msgstr "Shfaq Krerët"
-
-#: src/applets/budgie-menu/settings.ui.h:4
+#: src/panel/applets/budgie-menu/settings.ui.h:2
 msgid "Menu Label"
 msgstr "Etiketa e Menusë"
 
-#: src/applets/budgie-menu/settings.ui.h:5
-msgid "Roll-over mouse"
-msgstr "Përmbys mausin"
+#: src/panel/applets/budgie-menu/settings.ui.h:3
+msgid "Use Default Menu Icon"
+msgstr ""
 
-#: src/applets/budgie-menu/settings.ui.h:6
+#: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
 msgstr "Ikona e Menusë"
 
-#: src/applets/icon-tasklist/settings.ui.h:1
+#: src/panel/applets/budgie-menu/settings.ui.h:5
+msgid "Compact Mode"
+msgstr "Modaliteti Kompakt"
+
+#: src/panel/applets/budgie-menu/settings.ui.h:6
+msgid "Show Headers"
+msgstr "Shfaq Krerët"
+
+#: src/panel/applets/budgie-menu/settings.ui.h:7
+msgid "Roll-over mouse"
+msgstr "Përmbys mausin"
+
+#: src/panel/applets/budgie-menu/settings.ui.h:8
+msgid "Show settings items"
+msgstr ""
+
+#: src/panel/applets/caffeine/settings.ui.h:1
+msgid "Enable notification"
+msgstr "Aktivizo njoftimin"
+
+#: src/panel/applets/caffeine/settings.ui.h:2
+msgid "Maximize brightness"
+msgstr "Maksimizoni shkëlqimin"
+
+#: src/panel/applets/caffeine/settings.ui.h:3
+msgid "Brightness Level"
+msgstr "Niveli i shkëlqimit"
+
+#: src/panel/applets/clock/settings.ui.h:1
+msgid "Show date"
+msgstr "Shfaq datën"
+
+#: src/panel/applets/clock/settings.ui.h:2
+msgid "Show seconds"
+msgstr "Shfaq sekondat"
+
+#: src/panel/applets/clock/settings.ui.h:3
+msgid "Use 24 hour time"
+msgstr "Përdorni formatin me 24 orë"
+
+#: src/panel/applets/clock/settings.ui.h:4
+msgid "Custom Format"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:6
+#, no-c-format
+msgid "%H:%M:%S %d.%m.%Y"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:7
+msgid "Custom Timezone"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:8
+msgid "UTC"
+msgstr ""
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
 msgstr "Shfaq të gjitha dritaret me klikim"
 
-#: src/applets/icon-tasklist/settings.ui.h:2
+#: src/panel/applets/icon-tasklist/settings.ui.h:2
 msgid "Only show favorited"
 msgstr "Shfaq vetëm të favorizuarat"
 
-#: src/applets/icon-tasklist/settings.ui.h:3
+#: src/panel/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
 msgstr "Kyç ikonat"
 
-#: src/applets/icon-tasklist/settings.ui.h:4
+#: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
 msgstr "Kufizo në hapësirën e punës"
 
-#: src/applets/icon-tasklist/settings.ui.h:5
-msgid "Window grouping"
-msgstr "Grupimi i dritareve"
-
-#: src/applets/icon-tasklist/settings.ui.h:6
+#: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
 msgstr "Klikoni butonin e mesit për të hapur një dritare të re"
 
-#: src/applets/icon-tasklist/settings.ui.h:7
+#: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
 msgstr "Kërkohet një klikim të dyfishtë për të filluar një dritare të re"
 
-#: src/session/budgie-desktop.session.in.in.h:1
-#: src/session/budgie-desktop.desktop.in.in.h:1
-msgid "Budgie Desktop"
-msgstr "Desktopi i Budgie"
+#: src/panel/applets/night-light/indicator_window.ui.h:1
+msgid "Night Light"
+msgstr "Dritë Nate"
 
-#: src/session/budgie-desktop.desktop.in.in.h:2
-msgid "This session logs you into the Budgie Desktop"
-msgstr "Ky sesion ju regjistron në Desktopin Budgie"
+#: src/panel/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: src/panel/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr "Planifikimi"
+
+#: src/panel/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr "Nga Perëndimi në Agim"
+
+#: src/panel/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr "Udhëzues"
+
+#: src/panel/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr "Cilësimet e Ekranit"
+
+#: src/panel/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr "Shfaq etiketën"
+
+#: src/panel/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr "Shfaq vendet"
+
+#: src/panel/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr "Shfaq dosjet e rrjetit"
+
+#: src/panel/applets/places-indicator/settings.ui.h:4
+msgid "Show removable drives"
+msgstr "Shfaq disqet e lëvizshme"
+
+#: src/panel/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr "Gjithmonë zgjeroni vendet"
+
+#: src/panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Madhësia e Distancuesit"
+
+#: src/panel/applets/status/settings.ui.h:1
+#: src/panel/applets/tray/settings.ui.h:1
+msgid "Icon Spacing"
+msgstr "Ndarja në hapësirë e ikonave"
+
+#: src/panel/applets/workspaces/settings.ui.h:1
+msgid "\"Add\" button visibility"
+msgstr "Dukshmëria e butonit \"Shto\""
+
+#: src/panel/applets/workspaces/settings.ui.h:2
+msgid "Item Size Multiplier"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:3
+msgid "Don't show"
+msgstr "Mos shfaq"
+
+#: src/panel/applets/workspaces/settings.ui.h:4
+msgid "Show on mouseover"
+msgstr "Shfaq me vendosjen e mausit sipër"
+
+#: src/panel/applets/workspaces/settings.ui.h:5
+msgid "Always show"
+msgstr "Shfaq gjithmonë"
+
+#: src/panel/applets/workspaces/settings.ui.h:6
+msgid "0.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:7
+msgid "0.75x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:8
+msgid "1.0x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:9
+msgid "1.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:10
+msgid "2.0x"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:1
+msgid "Show Week Numbers"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:2
+msgid "Show Day Names"
+msgstr ""
+
+#: src/raven/widgets/sound-output/settings.ui.h:1
+msgid "Allow Volume Overdrive"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/settings.ui.h:1
+msgid "Show Swap Usage"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr "Kërkohet vërtetimi"
+
+#: src/dialogs/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr "Fjalëkalimi:"
+
+#: src/dialogs/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr "Kërkohet vërtetimi"
+
+#: src/dialogs/polkit/dialog.ui.h:5
+msgid "Authenticate"
+msgstr "Vërtetoni"
+
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
+msgid "Budgie screenshot app"
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behavior"
+msgstr "Ndryshoni pamjen dhe sjelljen e desktopit"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
 msgstr "Paneli Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
-msgstr "Nisni aplikacione të tjera dhe siguroni shërbime të ndryshme për të menaxhuar dritaret, për të treguar kohën, etj."
+msgid ""
+"Launch other applications and provide various utilities to manage windows, "
+"show the time, etc."
+msgstr ""
+"Nisni aplikacione të tjera dhe siguroni shërbime të ndryshme për të "
+"menaxhuar dritaret, për të treguar kohën, etj."
 
-#: src/panel/budgie-desktop-settings.desktop.in.h:2
-msgid "Change desktop appearance and behavior"
-msgstr "Ndryshoni pamjen dhe sjelljen e desktopit"
+#: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Search for and start up applications."
+msgstr ""
 
-#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
-msgid "User Indicator"
-msgstr "Treguesi i Përdoruesit"
+#: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
+msgid "Prevent the system and screen from sleeping."
+msgstr ""
 
-#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Lock Keys Indicator"
-msgstr "Treguesi i Kyçjes së Çelësave"
+#: src/panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "A digital clock with a customizable format."
+msgstr ""
 
-#: src/applets/status/StatusApplet.plugin.in.h:1
-msgid "Status Indicator"
-msgstr "Treguesi i Statusit"
+#: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "A configurable application task list."
+msgstr ""
 
-#: src/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Spacer"
-msgstr "Distancues"
+#: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Indicates which keyboard layout is currently in use."
+msgstr ""
 
-#: src/applets/separator/SeparatorApplet.plugin.in.h:1
-msgid "Separator"
-msgstr "Ndarës"
+#: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Show status of lock keys."
+msgstr ""
 
-#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Workspace Switcher"
-msgstr "Ndërruesi i Hapësirës së Punës"
+#: src/panel/applets/night-light/NightLight.plugin.in.h:1
+msgid "Toggle and modify Night Light settings."
+msgstr ""
 
-#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
-msgid "Keyboard Layout Indicator"
-msgstr "Treguesi i Paraqitjes së Tastierës"
+#: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Open the Raven notifications view."
+msgstr ""
 
-#: src/applets/caffeine/CaffeineApplet.plugin.in.h:1
-msgid "Caffeine"
-msgstr "Kafeina"
+#: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Show drives and favorite folders."
+msgstr ""
 
-#: src/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System Tray"
-msgstr "Shiriti i Sistemit"
+#: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Open the Raven sidebar."
+msgstr ""
 
-#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
-msgid "Raven Sidebar Control"
-msgstr "Kontrolli i Shiritit të Raven"
+#: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Visual separator between applets."
+msgstr ""
 
-#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
-msgid "Show Desktop Button"
-msgstr "Shfaq Butonin Desktop"
+#: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "A button that toggles visibility of the desktop."
+msgstr ""
 
-#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
-msgid "Budgie Menu"
-msgstr "Menuja e Budgie"
+#: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Adjustable spacer to put between other applets."
+msgstr ""
 
-#: src/applets/clock/ClockApplet.plugin.in.h:1
-msgid "Clock"
-msgstr "Ora"
+#: src/panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Show system status indicators, like sound, battery, and Bluetooth."
+msgstr ""
 
-#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
-msgid "Task List"
-msgstr "Task Lista"
+#: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "An application task list with icons and labels."
+msgstr ""
 
-#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
-msgid "Icon Task List"
-msgstr "Task Lista e Ikonave"
+#: src/panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System tray using the XEMBED protocol."
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "Opens the power dialog."
+msgstr ""
+
+#: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Display workspaces and switch between them."
+msgstr ""
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:1
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:2
+msgid ""
+"A simple calendar with a month view, using the built-in Gtk.Calendar widget."
+" The calendar shows the current date by default."
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
+msgid "Media Controls"
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
+msgid ""
+"This widget uses the Mpris API to show actively playing media with metadata "
+"and playback controls, with support for audio and video."
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
+msgid "Sound Input"
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
+msgid ""
+"Allows adjustment of audio input volume, and displays a list of available "
+"audio input devices."
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
+msgid "Sound Output"
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
+msgid ""
+"Allows global and per-app audio output volume control, and displays a list "
+"of available audio output devices."
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
+msgid ""
+"A view for system resource usage in bar graph form. Includes CPU, RAM, and "
+"Swap usage by default."
+msgstr ""
+
+#: src/session/budgie-desktop.desktop.in.in.h:1
+#: src/session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Desktopi i Budgie"
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
+msgstr "Ky sesion ju regjistron në Desktopin Budgie"

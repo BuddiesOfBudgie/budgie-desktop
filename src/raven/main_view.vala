@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,16 +12,12 @@
 namespace Budgie {
 	public class MainView : Gtk.Box {
 		private Gtk.Box? box = null; // Holds our content
-		private MprisWidget? mpris = null;
-		private CalendarWidget? cal = null;
-		private Budgie.SoundWidget? audio_input_widget = null;
-		private Budgie.SoundWidget? audio_output_widget = null;
+		private Gtk.Label? widget_placeholder = null;
 		private Settings? raven_settings = null;
+		private Gtk.ScrolledWindow? scroll = null;
 
 		private Gtk.Stack? main_stack = null;
 		private Gtk.StackSwitcher? switcher = null;
-		private string SHOW_SOUND_OUTPUT_WIDGET = "show-sound-output-widget";
-		private string SHOW_MIC_INPUT_WIDGET = "show-mic-input-widget";
 
 		public signal void requested_draw(); // Request the window to redraw itself
 
@@ -53,29 +49,32 @@ namespace Budgie {
 
 			pack_start(main_stack, true, true, 0);
 
-			var scroll = new Gtk.ScrolledWindow(null, null);
-			main_stack.add_titled(scroll, "applets", _("Applets"));
+			scroll = new Gtk.ScrolledWindow(null, null);
+			main_stack.add_titled(scroll, "widgets", _("Widgets"));
 			/* Dummy - no notifications right now */
 			var not = new NotificationsView();
 			main_stack.add_titled(not, "notifications", _("Notifications"));
 
 			scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
+			widget_placeholder = new Gtk.Label(null) {
+				wrap = true,
+				wrap_mode = Pango.WrapMode.WORD_CHAR,
+				max_width_chars = 1,
+				justify = Gtk.Justification.CENTER,
+				hexpand = true,
+				vexpand = true,
+			};
+			widget_placeholder.set_markup("<big>%s</big>".printf(_("No widgets added.")));
+			widget_placeholder.get_style_context().add_class("dim-label");
+
 			/* Eventually these guys get dynamically loaded */
-			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			box = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
+			box.margin_top = 8;
+			box.margin_bottom = 8;
+			box.set_size_request(250, -1);
+			box.add(widget_placeholder);
 			scroll.add(box);
-
-			cal = new CalendarWidget(raven_settings);
-			box.pack_start(cal, false, false, 0);
-
-			audio_output_widget = new Budgie.SoundWidget("output");
-			box.pack_start(audio_output_widget, false, false, 0);
-
-			audio_input_widget = new Budgie.SoundWidget("input");
-			box.pack_start(audio_input_widget, false, false, 0);
-
-			mpris = new MprisWidget();
-			box.pack_start(mpris, false, false, 0);
 
 			// Make sure everything is shown. Not having this can cause
 			// silent failures when switching stack pages or opening Raven.
@@ -83,17 +82,28 @@ namespace Budgie {
 
 			main_stack.notify["visible-child-name"].connect(on_name_change);
 			set_clean();
-			set_sound_widget_events();
 		}
 
-		private void set_sound_widget_events() {
-			audio_output_widget.devices_state_changed.connect(() => { // When the Sound Output widget has devices
-				on_raven_settings_changed(SHOW_SOUND_OUTPUT_WIDGET);
-			});
+		public void add_widget_instance(Gtk.Bin? widget_instance) {
+			box.add(widget_instance);
+			box.remove(widget_placeholder);
+			requested_draw();
+		}
 
-			audio_input_widget.devices_state_changed.connect(() => { // When the Sound Input widget has devices
-				on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
-			});
+		public void remove_widget_instance(Gtk.Bin? widget_instance) {
+			box.remove(widget_instance);
+			if (box.get_children().length() == 0) {
+				box.add(widget_placeholder);
+			}
+			requested_draw();
+		}
+
+		public void move_widget_instance_by_offset(Gtk.Bin? widget_instance, int offset) {
+			var new_index = box.get_children().index(widget_instance) + offset;
+
+			if (new_index < box.get_children().length() && new_index >= 0) {
+				box.reorder_child(widget_instance, new_index);
+			}
 		}
 
 		void on_name_change() {
@@ -112,39 +122,18 @@ namespace Budgie {
 				return;
 			}
 
-			bool show_widget = raven_settings.get_boolean(key);
-
-			/**
-			* You're probably wondering why I'm not just setting a visible value here, and that's typically a good idea.
-			* However, it causes weird focus and rendering issues even when has_visible_focus is set to false. I don't get it either, so we're doing this.
-			*/
-			if (key == "show-calendar-widget") { // Calendar
-				cal.set_show(show_widget);
-			} else if (key == SHOW_SOUND_OUTPUT_WIDGET) { // Sound Output
-				if (audio_output_widget.has_devices()) { // If output has devices, so there's a point to showing in the first place
-					audio_output_widget.set_show(show_widget);
-				} else {
-					audio_output_widget.set_show(false);
-				}
-			} else if (key == SHOW_MIC_INPUT_WIDGET) { // Sound Input
-				if (audio_input_widget.has_devices()) { // If the input has devices
-					audio_input_widget.set_show(show_widget);
-				} else {
-					audio_input_widget.set_show(false);
-				}
-			} else if (key == "show-mpris-widget") { // MPRIS
-				mpris.set_show(show_widget);
-			}
-
 			requested_draw();
 		}
 
 		public void set_clean() {
-			on_raven_settings_changed("show-calendar-widget");
-			on_raven_settings_changed(SHOW_SOUND_OUTPUT_WIDGET);
-			on_raven_settings_changed(SHOW_MIC_INPUT_WIDGET);
-			on_raven_settings_changed("show-mpris-widget");
-			main_stack.set_visible_child_name("applets");
+			main_stack.set_visible_child_name("widgets");
+		}
+
+		public void raven_expanded(bool expanded) {
+			box.get_children().foreach((child) => {
+				var widget = child as RavenWidget;
+				widget.raven_expanded(expanded);
+			});
 		}
 	}
 }

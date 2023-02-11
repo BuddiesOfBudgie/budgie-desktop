@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2018-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,9 +12,16 @@
  namespace Budgie.Notifications {
 	public const string NOTIFICATION_DBUS_NAME = "org.budgie_desktop.Notifications";
 	public const string NOTIFICATION_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
+	public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
+	public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
 	const int32 MINIMUM_EXPIRY = 6000;
 	const int32 MAXIMUM_EXPIRY = 12000;
+
+	[DBus (name="org.budgie_desktop.Raven")]
+	public interface RavenProxy : Object {
+		public abstract async void ToggleNotificationsView() throws Error;
+	}
 
 	[DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 	public class Dispatcher : Object {
@@ -103,20 +110,29 @@
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
 		/** Spacing between notification popups */
-		private const int BUFFER_ZONE = 10;
+		private const int BUFFER_ZONE = 0;
 		/** Spacing between the first notification and the edge of the screen */
 		private const int INITIAL_BUFFER_ZONE = 45;
+		/** Maximum number of popups to show on the screen at once */
+		private const int MAX_POPUPS_SHOWN = 3;
 
 		private uint32 notif_id = 0;
 
 		private Dispatcher dispatcher { get; private set; default = null; }
+		private RavenProxy raven { get; private set; default = null; }
 		private HashTable<uint32, Popup> popups;
 		private Settings panel_settings { private get; private set; default = null; }
 
 		private uint32 latest_popup_id { private get; private set; default = 0; }
+		private int paused_notifications { private get; private set; default = 0; }
+
+		private Notify.Notification unpaused_noti = null;
 
 		construct {
 			this.dispatcher = new Dispatcher();
+			this.dispatcher.notify.connect(on_property_changed);
+
+			Bus.get_proxy.begin<RavenProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
@@ -137,6 +153,14 @@
 				conn.register_object("/org/freedesktop/Notifications", this);
 			} catch (Error e) {
 				warning("Unable to register notification DBus: %s", e.message);
+			}
+		}
+
+		private void on_raven_get(Object? o, AsyncResult? res) {
+			try {
+				this.raven = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				critical("Failed to get Raven proxy: %s", e.message);
 			}
 		}
 
@@ -168,7 +192,8 @@
 				"action-icons",
 				"actions",
 				"body",
-				"body-markup"
+				"body-markup",
+				"sound"
 			};
 		}
 
@@ -193,7 +218,8 @@
 		 *
 		 * If replaces_id is not 0, the returned value is the same value as replaces_id.
 		 */
-		public uint32 Notify(
+		[DBus (name="Notify")]
+		public uint32 notication_received(
 			string app_name,
 			uint32 replaces_id,
 			string app_icon,
@@ -230,15 +256,38 @@
 				"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
 			);
 
-			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationUrgency.CRITICAL;
-			should_show = app_notification_settings.get_boolean("enable") &&
-							app_notification_settings.get_boolean("show-banners") &&
-							!this.dispatcher.notifications_paused;
-
-			// Set to expire immediately if a popup shouldn't be shown.
-			if (!should_notify || !should_show) {
-				notification.expire_timeout = 0;
+			// Check if notifications are enabled for this app
+			if (!app_notification_settings.get_boolean("enable")) {
+				return id;
 			}
+
+			var should_notify = !this.dispatcher.get_do_not_disturb() || notification.urgency == NotificationPriority.URGENT;
+			should_show = app_notification_settings.get_boolean("show-banners") && // notification popups for this app are enabled
+							!this.dispatcher.notifications_paused && // notifications aren't paused, e.g. no fullscreen apps
+							(this.popups.size() < MAX_POPUPS_SHOWN || notification.urgency == NotificationPriority.URGENT); // below the number of max popups, or the noti is critical
+
+			// Because of Raven, if a popup shouldn't be shown, tell the dispatcher that
+			// there's a new notification, and then immediately close it with reason
+			// EXPIRED.
+			if (!should_notify || !should_show) {
+				if ("budgie-daemon" in app_name) return id; // We don't want to count our own noti's, or have them shown in Raven
+				this.paused_notifications++;
+				this.dispatcher.NotificationAdded(
+					app_name,
+					id,
+					app_icon,
+					summary,
+					body,
+					actions,
+					hints,
+					expire_timeout
+				);
+				this.dispatcher.NotificationClosed(id, app_name, NotificationCloseReason.EXPIRED);
+				this.NotificationClosed(id, NotificationCloseReason.EXPIRED);
+				return id;
+			}
+
+			var show_body_text = app_notification_settings.get_boolean("force-expanded");
 
 			// Add a new notification popup if we should show one
 			// If there is already a popup with this ID, replace it
@@ -246,6 +295,12 @@
 				this.popups[id].replace(notification);
 			} else {
 				this.popups[id] = new Popup(this, notification);
+
+				if (!show_body_text) {
+					// Body text is shown by default
+					this.popups[id].toggle_body_text();
+				}
+
 				this.configure_window(this.popups[id]);
 				this.latest_popup_id = id;
 				this.popups[id].begin_decay(notification.expire_timeout);
@@ -263,6 +318,9 @@
 					this.NotificationClosed(id, reason);
 				});
 			}
+
+			// Play a sound for the notification if desired
+			maybe_play_sound(notification, should_notify, should_show, app_notification_settings);
 
 			this.dispatcher.NotificationAdded(
 				app_name,
@@ -379,5 +437,185 @@
 					break;
 			}
 		}
+
+		/**
+		 * Performs a bunch of checks and plays a sound if all checks pass.
+		 */
+		private void maybe_play_sound(Notification notification, bool notify, bool should_show, Settings settings) {
+			unowned Variant? variant = null;
+
+			// Check if notification sounds are suppressed for this notification
+			bool suppress = (variant = notification.hints.lookup("suppress-sound")) != null && variant.is_of_type(VariantType.BOOLEAN) && variant.get_boolean();
+			if (suppress) return;
+
+			if (notification.app_info == null) return; // Try to get the DesktopAppInfo for the application that generated this notification
+
+			// Check if the application info has this key set. We check this because for now, we only
+			// want to play sounds if they can be disabled via BCC. This check is how the Control Center
+			// determines if an application should be shown in the Notification section.
+			if (!notification.app_info.get_boolean("X-GNOME-UsesNotifications")) return;
+
+			// Check if sound alerts are enabled for this appllication, or if we should not notify or notification is not shown
+			if (!settings.get_boolean("enable-sound-alerts") || !notify || !should_show) return;
+
+			// Default sound name
+			string? sound_name = "dialog-information";
+
+			// Give critical notifications a special sound
+			if (notification.urgency == NotificationPriority.URGENT) {
+				sound_name = "dialog-warning";
+			}
+
+			// Look for a sound name in the hints
+			if ("sound-name" in notification.hints) {
+				sound_name = notification.hints.get("sound-name").get_string();
+			}
+
+			play_sound(notification, sound_name);
+		}
+
+		/**
+		 * Play a sound for a notification.
+		 */
+		private void play_sound(Notification notification, string? sound_name = "dialog-information") {
+			// Try to map the notification's category to a sound name to use
+			if (sound_name == "dialog-information" && notification.category != null) {
+				sound_name = get_sound_for_category(notification.category);
+			}
+
+			// Play the sound
+			if (sound_name != null) {
+				Canberra.Proplist props;
+				Canberra.Proplist.create(out props);
+
+				props.sets(Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
+				props.sets(Canberra.PROP_EVENT_ID, sound_name);
+
+				CanberraGtk.context_get().play_full(0, props);
+			}
+		}
+
+		/**
+		 * Gets the sound name to use for a notification category.
+		 *
+		 * See categories: https://specifications.freedesktop.org/notification-spec/latest/ar01s06.html
+		 * See sound naming: https://0pointer.de/public/sound-naming-spec.html#names
+		 */
+		private unowned string? get_sound_for_category(string category) {
+			unowned string? sound = null;
+
+			switch (category) {
+				case "device.added":
+					sound = "device-added";
+					break;
+				case "device.removed":
+					sound = "device-removed";
+					break;
+				case "email.arrived":
+					sound = "message-new-email";
+					break;
+				case "im":
+					sound = "message";
+					break;
+				case "im.received":
+					sound = "message-new-instant";
+					break;
+				case "network.connected":
+					sound = "network-connectivity-established";
+					break;
+				case "network.disconnected":
+					sound = "network-connectivity-lost";
+					break;
+				case "presence.online":
+					sound = "service-login";
+					break;
+				case "presence.offline":
+					sound = "service-logout";
+					break;
+				// No sound for song changes
+				case "x-gnome-music":
+					sound = null;
+					break;
+				// Error sounds
+				case "device.error":
+				case "email.bounced":
+				case "im.error":
+				case "network.error":
+				case "transfer.error":
+					sound = "dialog-error";
+					break;
+				// Default sound
+				default:
+					sound = "dialog-information";
+					break;
+			}
+
+			return sound;
+		}
+
+		private void on_property_changed(ParamSpec p) {
+			if (p.name != "notifications-paused") return;
+
+			// Only do stuff if notifications are no longer being paused
+			if (dispatcher.notifications_paused) {
+				this.paused_notifications = 0;
+				return;
+			}
+
+			// Do nothing if there were no held notifications
+			if (paused_notifications == 0) return;
+
+			// translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
+			var summary = _("Unread Notifications");
+
+			string? body = null;
+			if (paused_notifications == 1) {
+				body = _("You received 1 notification while an application was fullscreened.");
+			} else {
+				body = _("You received %d notifications while an application was fullscreened.".printf(this.paused_notifications));
+			}
+
+			var icon = "dialog-information";
+
+			// If we have an existing noti for some reason, update it
+			if (this.unpaused_noti != null) {
+				this.unpaused_noti.update(summary, body, icon);
+			} else {
+				// No existing ref, make a new notification
+				unpaused_noti = new Notify.Notification(summary, body, icon);
+				// translators: Text for a button on the notification to open Raven to the notifications view
+				unpaused_noti.add_action("view-notifications", _("View Notifications"), (notification, action) => {
+					// Open Raven to notifications view
+					this.raven.ToggleNotificationsView.begin((obj, res) => {
+						try {
+							this.raven.ToggleNotificationsView.end(res);
+						} catch (Error e) {
+							warning("Unable to open Raven notification view: %s", e.message);
+						}
+					});
+				});
+
+				// Remove our reference to the noti when it's closed
+				unpaused_noti.closed.connect(() => {
+					this.unpaused_noti = null;
+				});
+			}
+
+			// Show the noti. It has to be in another thread because otherwise
+			// it just times out and doesn't show.
+			try {
+				new Thread<void*>.try("budgie-daemon-notification", () => {
+					try {
+						unpaused_noti.show();
+					} catch (Error e) {
+						critical("error sending unpause notification: %s", e.message);
+					}
+
+					return null;
+				});
+			} catch (Error e) {
+				critical("Error starting notification thread: %s", e.message);
+			}
+		}
 	}
- }
+}

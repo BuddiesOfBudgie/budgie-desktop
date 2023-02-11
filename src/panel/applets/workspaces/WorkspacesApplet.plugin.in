@@ -1,0 +1,9 @@
+[Plugin]
+Module=workspacesapplet.so
+Builtin=true
+Name=Workspace Switcher
+_Description=Display workspaces and switch between them.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=workspace-switcher

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2016-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,7 +39,7 @@ G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
  *
  * Construct a new BudgieThemeManager object
  */
-BudgieThemeManager* budgie_theme_manager_new() {
+BudgieThemeManager* budgie_theme_manager_new(void) {
 	return g_object_new(BUDGIE_TYPE_THEME_MANAGER, NULL);
 }
 

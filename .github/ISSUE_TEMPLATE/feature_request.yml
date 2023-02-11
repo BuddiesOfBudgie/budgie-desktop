@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest a new feature or other enhancement.
+title: "[Request]: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Budgie version
+      description: |
+        Version name of Budgie, i.e. Budgie 10.7 OR specific git commit.
+
+        To provide the exact version of your Budgie installation, run `budgie-desktop --version`.
+    validations:
+      required: true
+
+  - type: textarea
+    id: cases
+    attributes:
+      label: Use-cases
+      description: In order to properly evaluate a feature request, it is necessary to understand the use-cases for it. Please describe below the end goal you are trying to achieve that has led you to request this feature.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: If you have any idea on how it could be addressed, please note it below.
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Are there any other GitHub issues, whether open or closed, that are related to the problem you've described above or to the suggested solution? If so, please add them below.

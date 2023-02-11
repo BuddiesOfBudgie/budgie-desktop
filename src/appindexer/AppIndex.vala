@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,6 +257,11 @@ namespace Budgie {
 		private void create_custom_categories() {
 			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
 			var directory_file = File.new_for_path(path);
+
+			// desktop-directories dir doesn't exist, skip custom categories
+			if (!directory_file.query_exists()) {
+				return;
+			}
 
 			try {
 				// Enumerate all of the files in the desktop-directories dir
