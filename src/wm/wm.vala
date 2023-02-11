@@ -14,7 +14,7 @@ namespace Budgie {
 	public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 	public const string MUTTER_BUTTON_LAYOUT = "button-layout";
 	public const string EXPERIMENTAL_DIALOG = "experimental-enable-run-dialog-as-menu";
-	public const string WM_FORCE_UNREDIRECT = "force-unredirect";
+	public const string WM_ENABLE_UNREDIRECT = "enable-unredirect";
 	public const string WM_SCHEMA = "com.solus-project.budgie-wm";
 
 	public const bool CLUTTER_EVENT_PROPAGATE = false;
@@ -173,7 +173,7 @@ namespace Budgie {
 
 		Settings? iface_settings = null;
 
-		public bool force_unredirect = false;
+		public bool enable_unredirect = true;
 
 		HashTable<Meta.WindowActor?, AnimationState?> state_map;
 		Clutter.Actor? display_group;
@@ -582,7 +582,7 @@ namespace Budgie {
 			gnome_desktop_prefs = new Settings("org.gnome.desktop.wm.preferences");
 			this.settings.changed.connect(this.on_wm_schema_changed);
 			this.on_wm_schema_changed(EXPERIMENTAL_DIALOG);
-			this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
+			this.on_wm_schema_changed(WM_ENABLE_UNREDIRECT);
 
 			this.update_workspace_count(); // Update (create if necessary) our workspaces
 			gnome_desktop_prefs.changed["num-workspaces"].connect(this.update_workspace_count);
@@ -689,7 +689,7 @@ namespace Budgie {
 		private void on_wm_schema_changed(string key) {
 			if (key == EXPERIMENTAL_DIALOG) { // Key changed was the experimental enable
 				enabled_experimental_run_diag_as_menu = this.settings.get_boolean(key);
-			} else if (key == WM_FORCE_UNREDIRECT) {
+			} else if (key == WM_ENABLE_UNREDIRECT) {
 				set_redirection_mode(this.settings.get_boolean(key));
 			}
 		}
@@ -701,7 +701,7 @@ namespace Budgie {
 			} else {
 				Meta.Compositor.disable_unredirect_for_display(display);
 			}
-			this.force_unredirect = enable;
+			this.enable_unredirect = enable;
 		}
 
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {

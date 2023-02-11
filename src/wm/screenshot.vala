@@ -95,7 +95,7 @@ namespace Budgie {
 		}
 
 		public async void screenshot_area(int x, int y, int width, int height, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
-			var existing_unredirect = wm.force_unredirect;
+			var existing_unredirect = wm.enable_unredirect;
 			wm.set_redirection_mode(false); // Force the disabling of unredirect for clutter capture
 			yield wait_stage_repaint();
 
@@ -120,7 +120,7 @@ namespace Budgie {
 		}
 
 		public async void screenshot_window(bool include_frame, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
-			var existing_unredirect = wm.force_unredirect;
+			var existing_unredirect = wm.enable_unredirect;
 			wm.set_redirection_mode(false); // Force the disabling of unredirect for clutter capture
 			yield wait_stage_repaint();
 
