@@ -1486,23 +1486,23 @@ msgstr "Tem certeza que deseja encerrar sua sessão?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Nome:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Pasta:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "Atraso em segundos"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "Mostrar cursor"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "Reproduzir som ao capturar"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
