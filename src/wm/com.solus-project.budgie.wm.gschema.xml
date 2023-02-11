@@ -88,7 +88,7 @@
 
 		<key type="b" name="enable-unredirect">
 			<default>true</default>
-			<summary>Enable unredirection</summary>
+			<summary>Enable unredirection of fullscreen applications</summary>
 			<description>Enable unredirection which will allow frames to bypass compositing for fullscreen application.</description>
 		</key>
 
