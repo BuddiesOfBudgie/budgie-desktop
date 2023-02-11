@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Campbell Jones, 2023\n"
 "Language-Team: English (United States) (https://www.transifex.com/buddiesofbudgie/teams/129844/en_US/)\n"
@@ -815,6 +815,43 @@ msgstr "Bottom Right"
 msgid "Top Right"
 msgstr "Top Right"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr "Built-in"
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr "Choose a plugin"
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr "No description."
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr "by %s"
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr "No authors listed"
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Appearance"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panels"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Session"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Create new panel"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Windows"
@@ -896,16 +933,16 @@ msgstr ""
 "when the mouse leaves the window."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Disable unredirection of windows"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -922,43 +959,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Right (standard)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr "Built-in"
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr "Choose a plugin"
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr "No description."
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr "by %s"
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr "No authors listed"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Appearance"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panels"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Session"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Create new panel"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Thomas Staudinger, 2023\n"
 "Language-Team: German (https://www.transifex.com/buddiesofbudgie/teams/129844/de/)\n"
@@ -827,6 +827,43 @@ msgstr "Unten rechts"
 msgid "Top Right"
 msgstr "Oben rechts"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr "Eingebaut"
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr "Plugin auswählen"
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr "Keine Beschreibung."
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr "von %s"
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr "Keine Urheber angeführt "
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Erscheinungsbild"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Leisten"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sitzung"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Neue Leiste"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Fenster"
@@ -906,16 +943,16 @@ msgid ""
 msgstr "Fokussiert automatisch das Fenster, das sich unter der Maus befindet."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Nicht-Weiterleitung von Fenstern deaktivieren"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"Diese Option ist für erfahrene Benutzer. Verwenden, falls graphische oder "
-"Performance-Probleme mit dedizierten GPUs auftreten."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -932,43 +969,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Rechts (Standard)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr "Eingebaut"
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr "Plugin auswählen"
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr "Keine Beschreibung."
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr "von %s"
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr "Keine Urheber angeführt "
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Erscheinungsbild"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Leisten"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Sitzung"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Neue Leiste"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

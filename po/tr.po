@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>, 2023\n"
 "Language-Team: Turkish (https://www.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
@@ -821,6 +821,43 @@ msgstr "Sağ Alt"
 msgid "Top Right"
 msgstr "Sağ Üst"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr "Dahili"
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr "Eklenti seç"
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr "Açıklama yok."
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr "%s tarafından"
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr "Yazar listelenmedi"
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Görünüm"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Paneller"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Oturum"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Yeni panel oluştur"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Pencereler"
@@ -902,16 +939,16 @@ msgstr ""
 "kaldırılmasına izin verir."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Pencere tekrar yönlendirmemelerini devre dışı bırak"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"Bu ayar ileri gelişmiş kullanıcılar içindir. Özel GPU'lar ile grafiksel veya"
-" performans sorunları yaşıyorsanız bunu kullanın."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -928,43 +965,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Sağ (standart)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr "Dahili"
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr "Eklenti seç"
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr "Açıklama yok."
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr "%s tarafından"
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr "Yazar listelenmedi"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Görünüm"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Paneller"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Oturum"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Yeni panel oluştur"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

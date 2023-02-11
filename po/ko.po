@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
 "Language-Team: Korean (https://www.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
@@ -793,6 +793,43 @@ msgstr "오른쪽 하단"
 msgid "Top Right"
 msgstr "오른쪽 상단"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "모양새"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "작업표시줄"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "세션"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "새 작업표시줄 만들기"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "창"
@@ -864,14 +901,16 @@ msgid ""
 msgstr "마우스 포인터가 창 내부로 이동하면 창이 활성화되고, 벗어나면 창이 비활성화됩니다."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "창의 역방향지정 비활성화"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
-msgstr "이 옵션은 고급 사용자를 위한 것입니다. 전용 GPU에 그래픽 또는 성능 문제가 있는 경우 이 옵션을 사용하십시오."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -886,43 +925,6 @@ msgstr "모든 탭은 사용 중인 작업공간에 관계없이 탭 전환도�
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "오른쪽 (기본값)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "모양새"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "작업표시줄"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "세션"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "새 작업표시줄 만들기"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

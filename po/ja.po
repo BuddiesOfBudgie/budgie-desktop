@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Green, 2023\n"
 "Language-Team: Japanese (https://www.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
@@ -793,6 +793,43 @@ msgstr "右下"
 msgid "Top Right"
 msgstr "右上"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "外観"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "パネル"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "セッション"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "新しいパネルの作成"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "ウィンドウ"
@@ -864,14 +901,16 @@ msgid ""
 msgstr "マウスがウィンドウの中に入るとウィンドウフォーカスを適用し、ウィンドウの外に出るとフォーカスを解除します。"
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "ウィンドウの非リダイレクトを無効化"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
-msgstr "このオプションは上級ユーザ向けです。専用の GPU でグラフィックやパフォーマンスに問題がある場合に使用します。"
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -886,43 +925,6 @@ msgstr "利用中のワークスペースが何であっても、タブスイッ
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "右（標準）"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "外観"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "パネル"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "セッション"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "新しいパネルの作成"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

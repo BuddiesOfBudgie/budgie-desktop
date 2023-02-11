@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Yaroslav Popkov, 2023\n"
 "Language-Team: Russian (https://www.transifex.com/buddiesofbudgie/teams/129844/ru/)\n"
@@ -824,6 +824,43 @@ msgstr "Внизу справа"
 msgid "Top Right"
 msgstr "Вверху справа"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr "Встроенный"
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr "Выбрать плагин"
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr "Нет описания."
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr "около %s"
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr "Нет списка артистов"
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Внешний вид"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Панели"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Сессия"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Создать новую панель"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Окна"
@@ -906,16 +943,16 @@ msgstr ""
 "освобождать фокус, когда курсор мыши выходит за пределы окна."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Включить перенаправление окон"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"Опция для продвинутых пользователей. Используйте при наличии проблем с "
-"графикой или производительностью с дискретными видеокартами."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -932,43 +969,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Справа (стандартное)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr "Встроенный"
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr "Выбрать плагин"
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr "Нет описания."
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr "около %s"
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr "Нет списка артистов"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Внешний вид"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Панели"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Сессия"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Создать новую панель"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

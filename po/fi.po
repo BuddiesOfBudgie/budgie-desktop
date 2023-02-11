@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
 "Language-Team: Finnish (https://www.transifex.com/buddiesofbudgie/teams/129844/fi/)\n"
@@ -806,6 +806,43 @@ msgstr "Oikea alakulma"
 msgid "Top Right"
 msgstr "Oikea yläkulma"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Ulkoasu"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Paneelit"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Istunto"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Luo uusi paneeli"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Ikkunat"
@@ -881,17 +918,16 @@ msgid ""
 msgstr "Kohdistaa ikkunaan kun osoitin on ikkunan sisällä."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Poista ikkunoiden uudelleenohjaus käytöstä"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"Tämä asetus on edistyneille käyttäjille. Käytä tätä, jos sinulla on "
-"graafisia tai suorituskykyyn liittyviä ongelmia erillisillä "
-"näytönohjaimilla."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -908,43 +944,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Oikea (standardi)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Ulkoasu"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Paneelit"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Istunto"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Luo uusi paneeli"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

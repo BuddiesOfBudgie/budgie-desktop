@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
 "Language-Team: Romanian (https://www.transifex.com/buddiesofbudgie/teams/129844/ro/)\n"
@@ -806,6 +806,43 @@ msgstr "Dreapta jos"
 msgid "Top Right"
 msgstr "Dreapta sus"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Aspect"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panouri"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sesiune"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Crează un nou panou"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Ferestre"
@@ -887,17 +924,16 @@ msgstr ""
 "și se defocalizează atunci când mouse-ul părăsește fereastra."
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Dezactivează \"unredirect\" pentru ferestre"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"Această opțiune este pentru utilizatorii avansați. Utilizați acest lucru "
-"dacă aveți probleme grafice sau de performanță cu Unitațile de Procesare "
-"Grafică (UPG-urile) dedicate."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -912,43 +948,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Dreapta (standard)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Aspect"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panouri"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Sesiune"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Crează un nou panou"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

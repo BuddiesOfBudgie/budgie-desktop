@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Yazi Tian, 2022\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/buddiesofbudgie/teams/129844/zh_TW/)\n"
@@ -794,6 +794,43 @@ msgstr "右下"
 msgid "Top Right"
 msgstr "右上"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "外觀"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "面板"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "会话"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "開創新面板"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "視窗"
@@ -865,14 +902,16 @@ msgid ""
 msgstr "当鼠标进入窗口时激活该窗口的焦点，并在鼠标离开该窗口时撤销对该窗口的焦点激活。"
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "禁用窗口的不重定向"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
-msgstr "此选项针对高级用户。如果您在使用独立显卡时遇到图形或性能问题可使用此选项。"
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -887,43 +926,6 @@ msgstr "所有选项卡都将显示在选项卡切换器中，无论使用的工
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "右（标准）"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "外觀"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "面板"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "会话"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "開創新面板"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

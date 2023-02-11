@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
 "Language-Team: Bengali (https://www.transifex.com/buddiesofbudgie/teams/129844/bn/)\n"
@@ -796,6 +796,43 @@ msgstr "নিচে ডানে"
 msgid "Top Right"
 msgstr "উপরে ডানে"
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "চেহারা"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "প্যানেলগুলো"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "সেশন"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "নতুন প্যানেল তৈরী করো"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "উইন্ডোগুলো"
@@ -873,16 +910,16 @@ msgstr ""
 " গেলে ফোকাস হারিয়ে যায়।"
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "উইন্ডোর আনরিডায়রেকশন বন্ধ করো"
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
-"এই অপশনটি এ্যাডভান্সড ইউজারদের জন্য। যদি ডেডিকেটেড GPU-এর পাফরম্যান্সে "
-"সমস্যা হয় তাহলে এটি ব্যবহার করুন।"
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -897,43 +934,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "ডানে (স্ট্যান্ডার্ড)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "চেহারা"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "প্যানেলগুলো"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "সেশন"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "নতুন প্যানেল তৈরী করো"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

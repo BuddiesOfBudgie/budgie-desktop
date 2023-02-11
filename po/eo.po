@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 21:45+0200\n"
+"POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
 "Language-Team: Esperanto (https://www.transifex.com/buddiesofbudgie/teams/129844/eo/)\n"
@@ -801,6 +801,43 @@ msgstr ""
 msgid "Top Right"
 msgstr ""
 
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Aspekto"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Paneloj"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Seanco"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Krei novan panelon"
+
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
 msgstr "Fenestroj"
@@ -872,13 +909,15 @@ msgid ""
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr "Malŝalti la fenestran \"unredirection\""
+msgid "Enable unredirection"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"This option is for advanced users. Use this if you are having graphical or "
-"performance issues with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for "
+"fullscreen applications. This option is for advanced users and recommended "
+"to keep enabled. Use this if you are having graphical or performance issues "
+"with dedicated GPUs."
 msgstr ""
 
 #: src/panel/settings/settings_wm.vala:89
@@ -894,43 +933,6 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Desktra (defaŭlte)"
-
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:261
-#, c-format
-msgid "by %s"
-msgstr ""
-
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Aspekto"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Paneloj"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Seanco"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Krei novan panelon"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"

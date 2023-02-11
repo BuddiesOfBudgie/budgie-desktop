@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -13,13 +13,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
-"Language-Team: Basque (https://www.transifex.com/buddiesofbudgie/teams/129844/eu/)\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2023\n"
+"Language-Team: Serbian (Cyrillic) (https://www.transifex.com/buddiesofbudgie/teams/129844/sr@Cyrl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: eu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sr@Cyrl\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
@@ -47,21 +47,21 @@ msgstr ""
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
-msgstr "Saiotik irten"
+msgstr "Одјави се"
 
 #: src/daemon/endsession.vala:158
 msgid "Restart device"
-msgstr "Gailua berrabiarazi"
+msgstr "Поново покрени уређај"
 
 #: src/daemon/endsession.vala:170 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Itzali"
+msgstr "Искључи рачунар"
 
 #: src/daemon/menus.vala:46 src/panel/settings/settings_main.vala:68
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr "Budgie Mahaigainaren Ezarpenak"
+msgstr "Подешавање Budgie радне површине"
 
 #: src/daemon/menus.vala:51
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
@@ -71,21 +71,21 @@ msgstr ""
 #. Should show a notification
 #: src/daemon/settings.vala:339
 msgid "Turned on Caffeine Boost"
-msgstr "Modu kafeina aktibatuta"
+msgstr "Радна кафа је укључена"
 
 #: src/daemon/settings.vala:339
 msgid "Turned off Caffeine Boost"
-msgstr "Modu kafeina desaktibatuta"
+msgstr "Радна кафа је искључена"
 
 #: src/daemon/settings.vala:344
 msgid "Will turn off in a minute"
-msgstr "Minutu batean itzaliko da"
+msgstr "Искључиће се за минут"
 
 #. use plural
 #: src/daemon/settings.vala:347
 #, c-format
 msgid "Will turn off in %d minutes"
-msgstr "%d minututan itzaliko da"
+msgstr "Искључиће се за %d минута"
 
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
@@ -163,7 +163,7 @@ msgstr ""
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
 msgid "Cancel"
-msgstr "Utzi"
+msgstr "Откажи"
 
 #: src/daemon/screenshot.vala:1260
 msgid "Open"
@@ -171,59 +171,59 @@ msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
-msgstr "Titulu gabea"
+msgstr "Неименовано"
 
 #: src/panel/settings/settings_autostart.vala:141
 msgid "No description"
-msgstr "Azalpenik ez"
+msgstr "Нема опис"
 
 #: src/panel/settings/settings_autostart.vala:164
 msgid "running"
-msgstr "exekutatzen"
+msgstr "u pokretu"
 
 #: src/panel/settings/settings_autostart.vala:185
 msgid "Applications"
-msgstr "Aplikazioak"
+msgstr "Програми"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_plugin_chooser.vala:106
 msgid "Add"
-msgstr "Gehitu"
+msgstr "Додај"
 
 #: src/panel/settings/settings_autostart.vala:354
 #: src/panel/settings/settings_autostart.vala:387
 msgid "Command"
-msgstr "Agindua"
+msgstr "Наредба"
 
 #: src/panel/settings/settings_autostart.vala:370
 msgid "An entry with that title already exists"
-msgstr "Titulu hori duen sarrera dagoeneko badago"
+msgstr "Унос са истим називом већ постоји"
 
 #: src/panel/settings/settings_autostart.vala:373
 msgid "Title"
-msgstr "Titulua"
+msgstr "Наслов"
 
 #: src/panel/settings/settings_autostart.vala:377
 #: src/panel/settings/settings_autostart.vala:391
 msgid "Required"
-msgstr "Beharrezkoa"
+msgstr "Обавезно"
 
 #: src/panel/settings/settings_autostart.vala:380
 msgid "Description"
-msgstr "Deskribapena"
+msgstr "Опис"
 
 #: src/panel/settings/settings_autostart.vala:384
 msgid "Optional"
-msgstr "Aukerazkoa"
+msgstr "Необавезно"
 
 #: src/panel/settings/settings_autostart.vala:446
 msgid "Autostart"
-msgstr "Auto-hasiera"
+msgstr "Почетни прибор"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr ""
+msgstr "Изабери почетни прибор"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
@@ -235,7 +235,7 @@ msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
-msgstr "Mahaigaina"
+msgstr "Радна површина"
 
 #. Budgie native implementation
 #. Get the settings for Budgie Desktop View
@@ -250,7 +250,7 @@ msgstr "Mahaigaina"
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
-msgstr "Mahaigaineko Ikonoak"
+msgstr "Иконице радне површине"
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
@@ -271,20 +271,20 @@ msgstr ""
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr "Karpeta nagusia"
+msgstr "Лична фасцикла"
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr ""
+msgstr "Додај пречицу Личне фасцикле на радну површину."
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
 msgid "Trash"
-msgstr "Zaborra"
+msgstr "Смеће"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr ""
+msgstr "Додај пречицу за Смеће на радну површину."
 
 #. DesktopType doesn't support icon size changing. Nemo might but needs
 #. validation.
@@ -300,12 +300,13 @@ msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr ""
+msgstr "Број виртуалних радних површина"
 
 #: src/panel/settings/settings_desktop.vala:149
 msgid ""
 "Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
+"Број виртуалних радних површина створених приликом покретању рачунара."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -346,19 +347,19 @@ msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
-msgstr "Letra tipoak"
+msgstr "Словолик"
 
 #: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
-msgstr "Leihoen Izenburuak"
+msgstr "Наслови прозора"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
-msgstr ""
+msgstr "Подесите словолик који се користи у наслову траке програма."
 
 #: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
-msgstr "Dokumentuak"
+msgstr "Документи"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
@@ -366,7 +367,7 @@ msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
-msgstr "Interfazea"
+msgstr "Интерфејс"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
@@ -374,7 +375,7 @@ msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
-msgstr "Monospace"
+msgstr "Моноспејс"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
@@ -404,7 +405,7 @@ msgstr ""
 #: src/panel/settings/settings_fonts.vala:109
 #: src/panel/settings/settings_panel.vala:201
 msgid "None"
-msgstr "Ezer ez"
+msgstr "Нема"
 
 #: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
@@ -432,12 +433,12 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:85
 msgid "Applets"
-msgstr "Applet-ak"
+msgstr "Прибори"
 
 #: src/panel/settings/settings_panel.vala:86
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
-msgstr "Ezarpenak"
+msgstr "Подешавања"
 
 #: src/panel/settings/settings_panel.vala:88
 msgid "Remove Panel"
@@ -445,93 +446,93 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:89
 msgid "Remove this panel from the screen"
-msgstr "Panel hau pantailatik kendu"
+msgstr "Уклони ову радну траку с екрана"
 
 #: src/panel/settings/settings_panel.vala:126
 msgid "Top Dock"
-msgstr "Goiko Dock-a"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:128
 msgid "Right Dock"
-msgstr "Eskuineko Dock-a"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:130
 msgid "Left Dock"
-msgstr "Ezkerreko Dock-a"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:132
 msgid "Bottom Dock"
-msgstr "Beheko Dock-a"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:137
 msgid "Top Panel"
-msgstr "Goiko Panela"
+msgstr "Горња радна трака"
 
 #: src/panel/settings/settings_panel.vala:139
 msgid "Right Panel"
-msgstr "Eskuineko Panela"
+msgstr "Десна радна трака"
 
 #: src/panel/settings/settings_panel.vala:141
 msgid "Left Panel"
-msgstr "Ezkerreko Panela"
+msgstr "Лева радна трака"
 
 #: src/panel/settings/settings_panel.vala:143
 msgid "Bottom Panel"
-msgstr "Beheko Panela"
+msgstr "Доња радна трака"
 
 #: src/panel/settings/settings_panel.vala:180
 msgid "Top"
-msgstr "Goian"
+msgstr "Врх"
 
 #: src/panel/settings/settings_panel.vala:182 src/raven/raven.vala:35
 msgid "Right"
-msgstr "Eskuin"
+msgstr "Десно"
 
 #: src/panel/settings/settings_panel.vala:184
 #: src/panel/settings/settings_wm.vala:99 src/raven/raven.vala:33
 msgid "Left"
-msgstr "Ezkerra"
+msgstr "Лево"
 
 #: src/panel/settings/settings_panel.vala:186
 msgid "Bottom"
-msgstr "Behean"
+msgstr "Дно"
 
 #: src/panel/settings/settings_panel.vala:196
 msgid "Always"
-msgstr "Beti"
+msgstr "Увек"
 
 #: src/panel/settings/settings_panel.vala:198
 msgid "Dynamic"
-msgstr "Dinamikoa"
+msgstr "Динамички"
 
 #: src/panel/settings/settings_panel.vala:211 src/raven/raven.vala:38
 msgid "Automatic"
-msgstr "Automatikoa"
+msgstr "Aутоматски"
 
 #: src/panel/settings/settings_panel.vala:213
 msgid "Intelligent"
-msgstr "Adimentsua"
+msgstr "Интелигентно"
 
 #: src/panel/settings/settings_panel.vala:216
 msgid "Never"
-msgstr "Inoiz"
+msgstr "Никад"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Position"
-msgstr "Kokalekua"
+msgstr "Позиција"
 
 #: src/panel/settings/settings_panel.vala:232
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Panela pantailaren zein ertzetan egongo den ezarri"
+msgstr "Одредите ивицу заслона на којој ће стајати радна трака"
 
 #: src/panel/settings/settings_panel.vala:240
 msgid "Size"
-msgstr "Tamaina"
+msgstr "Величина"
 
 #: src/panel/settings/settings_panel.vala:241
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
-"Panel honen neurria (zabalera edo altuera, orientazioaren arabera) ezarri"
+"Одредите димензије (ширину или висину, зависно од положаја) ове радне траке"
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "Spacing"
@@ -543,117 +544,122 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Automatically hide"
-msgstr "Automatikoki ezkutatu"
+msgstr "Аутоматски сакриј"
 
 #: src/panel/settings/settings_panel.vala:257
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
-"Ezarritakoan, panel hau pantailaren egoera maximizatzeko ezkutatuko da"
+"Када је постављена, радна трака се аутоматски сакрива, да би се добила "
+"максимална корисна површина заслона"
 
 #: src/panel/settings/settings_panel.vala:264
 msgid "Transparency"
-msgstr "Gardentasuna"
+msgstr "Провидност"
 
 #: src/panel/settings/settings_panel.vala:265
 msgid "Control when this panel should have a solid background"
-msgstr "Kontrolatu panel honek noiz edukiko duen atzealde solidoa"
+msgstr "Контролишите када би ова радна трака требало да буде непровидна"
 
 #: src/panel/settings/settings_panel.vala:270
 msgid "Shadow"
-msgstr "Itzala"
+msgstr "Сенка"
 
 #: src/panel/settings/settings_panel.vala:271
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
+msgstr "Додаје декоративну падајућу сенку, идеалну за непровидне радне траке"
 
 #: src/panel/settings/settings_panel.vala:277
 msgid "Stylize regions"
-msgstr "Estilizatu eskualdeak"
+msgstr "Стилизуј области"
 
 #: src/panel/settings/settings_panel.vala:278
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr ""
+"Додаје репер тамо где ће бити крај сваке, од три, главне области радне "
+"траке, тако да би сваки одељак могао да има посебну тему."
 
 #: src/panel/settings/settings_panel.vala:285
 msgid "Dock mode"
-msgstr "Dock modua"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:286
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
 msgstr ""
-"Dock moduan panelak gutxieneko espazio kopurua erabiliko du, pantailari ahal"
-" den leku libre gehien uzten"
 
 #: src/panel/settings/settings_panel_applets.vala:19
 msgid "Configure applet"
-msgstr "Appleta konfiguratu"
+msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:233
 msgid "Add applet"
-msgstr "Applet-a gehitu"
+msgstr "Додај прибор"
 
 #: src/panel/settings/settings_panel_applets.vala:234
 msgid "Choose a new applet to add to this panel"
-msgstr "Panel honetara gehitzeko applet berri bat aukeratu"
+msgstr "Изабери и додај нови прибор на радну траку"
 
 #: src/panel/settings/settings_panel_applets.vala:248
 #: src/panel/settings/settings_raven_widgets.vala:164
 msgid "No settings available"
-msgstr "Ezarpenik ez dago"
+msgstr "Podesavanje ne postoji"
 
 #: src/panel/settings/settings_panel_applets.vala:401
 msgid "Start"
-msgstr "Hasiera"
+msgstr "Почетак"
 
 #: src/panel/settings/settings_panel_applets.vala:404
 msgid "Center"
-msgstr "Erdia"
+msgstr "Средина"
 
 #: src/panel/settings/settings_panel_applets.vala:407
 msgid "End"
-msgstr "Amaiera"
+msgstr "Крај"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
-msgstr "Panelaren kentzea berretsi"
+msgstr "Потврди уклањање радне траке"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr "Benetan ezabatu nahi duzu panel hau? Ekintza hau ezin da desegin."
+msgstr ""
+"Да ли заиста желите уклонити ову радну траку? \n"
+"Ова одлука не може бити опозвана."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
-msgstr "Panela kendu"
+msgstr "Уклони радну траку"
 
 #: src/panel/settings/settings_panel_dialogs.vala:43
 msgid "Keep panel"
-msgstr "Panela mantendu"
+msgstr "Задржи радну траку"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "Applet-aren kentzea berretsi"
+msgstr "Потврди уклањање прибора"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "Benetan kendu nahi duzu applet hau? Ekintza hau ezin da desegin."
+msgstr ""
+"Да ли заиста желите уклонити овај прибор? \n"
+"Ова одлука не може бити опозвана."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 #: src/panel/settings/settings_panel_dialogs.vala:148
 msgid "Don't ask me again"
-msgstr "Ez galdetu berriro"
+msgstr "Не понављај ово питање"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
-msgstr "Appleta kendu"
+msgstr "Уклони прибор"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid "Keep applet"
-msgstr "Appleta mantendu"
+msgstr "Задржи прибор"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
@@ -667,7 +673,7 @@ msgstr ""
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
 msgid "Remove"
-msgstr "Ezabatu"
+msgstr "Уклони"
 
 #: src/panel/settings/settings_raven_settings.vala:45
 msgid "Set Raven position"
@@ -723,77 +729,77 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
-msgstr "Estiloa"
+msgstr "Budgie изглед"
 
 #: src/panel/settings/settings_style.vala:47
 #: src/panel/settings/settings_raven.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
-msgstr "Widgetak"
+msgstr "Изглед Budgie окружења"
 
 #: src/panel/settings/settings_style.vala:48
 msgid "Set the appearance of window decorations and controls"
-msgstr "Leihoen apaingarrien eta kontrolen itxura ezarri"
+msgstr "Подесите изглед украса и дугмади прозора"
 
 #: src/panel/settings/settings_style.vala:52
 msgid "Icons"
-msgstr "Ikonoak"
+msgstr "Иконице"
 
 #: src/panel/settings/settings_style.vala:53
 msgid "Set the globally used icon theme"
-msgstr "Ezarri orokorrean erabilitako ikono gaia"
+msgstr "Подесите изглед иконица"
 
 #: src/panel/settings/settings_style.vala:57
 msgid "Cursors"
-msgstr "Kurtsoreak"
+msgstr "Показивачи"
 
 #: src/panel/settings/settings_style.vala:58
 msgid "Set the globally used mouse cursor theme"
-msgstr "Ezarri orokorrean erabilitako sagu kurtsorearen gaia"
+msgstr "Подесите изглед показивача"
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Notification Position"
-msgstr ""
+msgstr "Позиција обавештења"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Set the location for notification popups"
-msgstr ""
+msgstr "Подесите место појаве обавештења"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
-msgstr "Gai iluna"
+msgstr "Тамна варијанта теме"
 
 #: src/panel/settings/settings_style.vala:79
 msgid "Built-in theme"
-msgstr "Built-in gaia"
+msgstr "Уграђена тема"
 
 #: src/panel/settings/settings_style.vala:80
 msgid ""
 "When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
+msgstr "Када је укључена, уграђена тема мења изглед радне површине"
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Animations"
-msgstr "Animazioak"
+msgstr "Анимације"
 
 #: src/panel/settings/settings_style.vala:88
 msgid "Control whether windows and controls use animations"
-msgstr "Leiho eta kontrolek animazioak erabiltzen dituzten kontrolatu"
+msgstr "Изабери да ли ће прозори и њихови дугмићи користити анимације"
 
 #: src/panel/settings/settings_style.vala:205
 msgid "Top Left"
-msgstr ""
+msgstr "Горе лево"
 
 #: src/panel/settings/settings_style.vala:207
 msgid "Bottom Left"
-msgstr ""
+msgstr "Доле лево"
 
 #: src/panel/settings/settings_style.vala:209
 msgid "Bottom Right"
-msgstr ""
+msgstr "Горе десно"
 
 #: src/panel/settings/settings_style.vala:212
 msgid "Top Right"
-msgstr ""
+msgstr "Горе десно"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
@@ -818,27 +824,27 @@ msgstr ""
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
-msgstr "Itxura"
+msgstr "Изглед"
 
 #: src/panel/settings/settings_main.vala:58
 msgid "Panels"
-msgstr "Panelak"
+msgstr "Радне траке"
 
 #: src/panel/settings/settings_main.vala:59
 msgid "Session"
-msgstr "Saioa"
+msgstr "Седница"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
-msgstr "Panel berria sortu"
+msgstr "Додај радну траку"
 
 #: src/panel/settings/settings_wm.vala:31
 msgid "Windows"
-msgstr "Lehioak"
+msgstr "Прозори"
 
 #: src/panel/settings/settings_wm.vala:40
 msgid "Attach modal dialogs to windows"
-msgstr "Modaleko elkarrizketak leihoetara erantsi"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:41
 msgid ""
@@ -848,7 +854,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
-msgstr "Botoien diseinua"
+msgstr "Распоред дугмади"
 
 #: src/panel/settings/settings_wm.vala:47
 msgid "Change the layout of buttons in application titlebars."
@@ -884,7 +890,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
-msgstr "Lauzatze automatikoa"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:71
 msgid ""
@@ -926,32 +932,32 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
-msgstr "Eskuina (arrunta)"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
-msgstr "Denak"
+msgstr "Све"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
-msgstr "Menu ikonoa fitxategitik ezarri"
+msgstr "Постави мени иконицу из фајла"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
-msgstr "Irudi fitxategiak"
+msgstr "Слике"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
-msgstr "Edozein fitxategi"
+msgstr "Било који фајл"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
-msgstr "Ikonoa ezarri"
+msgstr "Постави иконицу"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:101
 msgid "Sorry, no items found"
-msgstr "Barkatu, ezin izan dugu ezer aurkitu"
+msgstr "Нема нађених предмета"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
@@ -962,11 +968,11 @@ msgstr ""
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 #: src/raven/notifications_group.vala:45
 msgid "Caffeine Mode"
-msgstr "Cafeina modua"
+msgstr "Радна Кафа"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr "Tenporizadorea"
+msgstr "Одбројавање (минути)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
@@ -974,32 +980,32 @@ msgstr ""
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
-msgstr "Mahaigain berria ireki"
+msgstr "Покрени нови прозор"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:110
 msgid "Close All Windows"
-msgstr "Leiho guztiak itxi"
+msgstr "Затвори све прозоре"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:118
 msgid "Always On Top"
-msgstr "Beti gainean"
+msgstr "Увек на врху"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:120
 #: src/panel/applets/icon-tasklist/IconPopover.vala:557
 msgid "Maximize"
-msgstr "Handiagotu"
+msgstr "Подигни прозор на радну површину"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:121
 msgid "Minimize"
-msgstr "Txikiagotu"
+msgstr "Спусти прозор на радну траку"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:445
 msgid "Unfavorite"
-msgstr "Gustukoenetik kendu"
+msgstr "Искључи са радне траке"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:445
 msgid "Favorite"
-msgstr "Gustukoenetara gehitu"
+msgstr "Прикључи радној траци"
 
 #. If our current amount of workspaces is different than how many we have
 #. added
@@ -1008,79 +1014,79 @@ msgstr "Gustukoenetara gehitu"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:457
 #, c-format
 msgid "Move To Workspace %i"
-msgstr "%i mahaigainera mugi"
+msgstr "Премести на радну површину %i"
 
 #. Update our always on top button
 #: src/panel/applets/icon-tasklist/IconPopover.vala:557
 msgid "Unmaximize"
-msgstr "Ez handiagotu"
+msgstr "Одређени приказ прозора"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:616
 msgid "Close Window"
-msgstr "Leihoa itxi"
+msgstr "Затвори прозор"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:618
 msgid "Show Window Controls"
-msgstr "Leiho kontrolak erakutsi"
+msgstr "Прикажи управности прозора"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "Maius blokeoa aktibatuta dago"
+msgstr "Тастер за велика слова је активан"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "Maius blokeoa ez dago aktibatuta"
+msgstr "Тастер за велика слова није активан"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "Bloq Num aktibatuta dago"
+msgstr "Тастер за закључавање бројчане тастатуре је активан"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "Bloq Num ez dago aktibatuta"
+msgstr "Тастер за закључавање бројчане тастатуре није активан"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
 #: src/raven/notifications_view.vala:322
 #, c-format
 msgid "%u unread notifications"
-msgstr "%u irakurri gabeko jakinarazpen"
+msgstr "%u непрочитаних обавештења"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:324
 msgid "1 unread notification"
-msgstr "irakurri gabeko jakinarazpen 1"
+msgstr "1 непрочитано обавештење"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:125
 #: src/raven/notifications_view.vala:326
 msgid "No unread notifications"
-msgstr "Ez dago irakurri gabeko jakinarazpenik"
+msgstr "Нема непрочитаних обавештења"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr "Beste prozesuek ari dira bolumena erabiltzen"
+msgstr "Други процеси користе капацитет диска"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
-msgstr "Operazioa bertan behera utzita"
+msgstr "Задатак је отказан"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:51
 msgid "Type your password"
-msgstr "Zure pasahitza sartu"
+msgstr "Упиши лозинку"
 
 #: src/panel/applets/places-indicator/MountItem.vala:23
 #: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
-msgstr "Aldagarri gailuak"
+msgstr "Преносиви уређаји"
 
 #: src/panel/applets/places-indicator/MountItem.vala:25
 #: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
-msgstr "Tokiko bolumenak"
+msgstr "Локалне партиције"
 
 #: src/panel/applets/places-indicator/MountItem.vala:29
 #: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
-msgstr "Sareko fitxategiak"
+msgstr "Мрежни фолдери"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -1088,134 +1094,139 @@ msgstr "Sareko fitxategiak"
 #: src/panel/applets/places-indicator/VolumeItem.vala:34
 #: src/appindexer/AppIndex.vala:44
 msgid "Other"
-msgstr "Besteak"
+msgstr "Остало"
 
 #: src/panel/applets/places-indicator/MountItem.vala:58
 #: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
-msgstr "Egotzi"
+msgstr "Избаци"
 
 #: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
-msgstr "Desmontatu"
+msgstr "Одвоји"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
 #: src/panel/applets/places-indicator/PlaceItem.vala:36
 #, c-format
 msgid "Open \"%s\""
-msgstr "\"%s\" ireki"
+msgstr "Отвори \"%s\""
 
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
-msgstr "Era seguruan kendu dezakezu orain"
+msgstr "Можете сигурно уклонити"
 
 #: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
-msgstr "Gailu ezezaguna"
+msgstr "Непознат уређај"
 
 #: src/panel/applets/places-indicator/MountItem.vala:84
 msgid "Error while ejecting device"
-msgstr "Errorea gailua kanporatzean"
+msgstr "Грешка приликом уклањања уређаја"
 
 #: src/panel/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
-msgstr "Errorea bolumena desmuntatzean"
+msgstr "Грешка приликом демонтаже меморијског капацитета"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: src/panel/applets/places-indicator/PlacesSection.vala:22
 #: src/panel/applets/places-indicator/PlacesSection.vala:44
 msgid "Places"
-msgstr "Lekuak"
+msgstr "Локације"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
-msgstr "Erakusteko ezer ez dago orain"
+msgstr "Ништа за приказати тренутно"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Mount some drives"
-msgstr "Unitate batzuk muntatu"
+msgstr "Повежи дискове"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Enable more sections"
-msgstr "Atal gehiago gaitu"
+msgstr "Омогући још секција"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Muntatu eta ireki \"%s\""
+msgstr "Повежи и отвори \"%s\""
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:73
 #: src/panel/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Idatzi enkriptatze-pasahitza bolumen hau desblokeatzeko"
+msgstr ""
+"Овај уређај је заштићен шифром, да би сте приступили подацима укуцајте "
+"одговарајућу лозинку"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
-msgstr "Sartu duzun pasahitza okerra da"
+msgstr "Лозинка коју сте укуцали није тачна"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Errore ezezagun bat gertatu da bolumena muntatzen saiatzean"
+msgstr ""
+"Дошло је до непознате грешке, приликом покушаја монтаже овог меморијског "
+"капацитета"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
-msgstr "Mahaigaina erakutsi/ezkutatu"
+msgstr "Прикажи/Сакриј радну површину"
 
 #. Settings button
 #: src/panel/applets/status/BluetoothIndicator.vala:55
 msgid "Bluetooth Settings"
-msgstr "Bluetooth-aren ezarpenak"
+msgstr "Bluetooth подешавања"
 
 #. Send files button
 #: src/panel/applets/status/BluetoothIndicator.vala:62
 msgid "Send Files"
-msgstr "Fitxategiak Bidali"
+msgstr "Пошаљи датотеке"
 
 #. Airplane mode
 #: src/panel/applets/status/BluetoothIndicator.vala:72
 msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth Hegazkin Modua"
+msgstr "Bluetooth режим летења"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:182
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth-a desgaituta"
+msgstr "Bluetooth је искључен"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:186
 msgid "Bluetooth is active"
-msgstr "Bluetooth-a aktibatuta"
+msgstr "Bluetooth је укључен"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:191
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "Gailu %d -era konektatuta"
-msgstr[1] "%d gailuetara konektatuta"
+msgstr[0] "Повезан на %d уређај"
+msgstr[1] "Повезан на %d уређаја"
+msgstr[2] "Повезан на %d уређаја"
 
 #: src/panel/applets/status/PowerIndicator.vala:105
 msgid "Battery fully charged."
-msgstr "Bateria guztiz kargatuta."
+msgstr "Батерија је пуна."
 
 #: src/panel/applets/status/PowerIndicator.vala:109
 msgid "Unknown"
-msgstr "Ezezaguna"
+msgstr "Непознато"
 
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:118
 msgid "Battery charging"
-msgstr "Bateria kargatzen"
+msgstr "Батерија се пуни"
 
 #: src/panel/applets/status/PowerIndicator.vala:123
 msgid "Battery remaining"
-msgstr "Gainerako bateria"
+msgstr "Преостало батерије"
 
 #: src/panel/applets/status/PowerIndicator.vala:182
 msgid "Show battery percentage"
-msgstr "Bateriaren ehunekoa erakutsi"
+msgstr "Прикажи проценат батерије"
 
 #: src/panel/applets/status/PowerIndicator.vala:190
 msgid "Power settings"
-msgstr "Argi-indar ezarpenak"
+msgstr "Подешавање напајања"
 
 #. there's already an active tray, create an informative icon with a popover
 #: src/panel/applets/tray/TrayApplet.vala:114
@@ -1229,48 +1240,48 @@ msgstr ""
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "User"
-msgstr "Erabiltzailea"
+msgstr "Корисник"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:109
 msgid "Lock"
-msgstr "Blokeatu"
+msgstr "Закључај"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:110
 msgid "Suspend"
-msgstr "Eseki"
+msgstr "Суспендуј"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:111
 msgid "Hibernate"
-msgstr "Hibernatu"
+msgstr "Хибернација"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:112
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "Berrabiarazi"
+msgstr "Обнови"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:113
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Itzali"
+msgstr "Угаси"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:212
 #: src/daemon/endsession.ui.h:4
 msgid "Logout"
-msgstr "Saiotik atera"
+msgstr "Одјави се"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr "Izena aldatu"
+msgstr "Преименуј"
 
 #: src/raven/widgets/media-controls/media_controls.vala:155
 msgid "No apps are currently playing audio."
-msgstr "Inongo aplikaziorik ez da audioa erreproduzitzen ari."
+msgstr "Тренутно ниједан прозор не пушта звук."
 
 #: src/raven/widgets/media-controls/media_controls.vala:164
 msgid "Play some music"
-msgstr "Musika jarri"
+msgstr "Пусти музику"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:101
 #: src/raven/widgets/media-controls/mpris_gui.vala:419
@@ -1303,11 +1314,11 @@ msgstr ""
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
-msgstr "Aplikazioak"
+msgstr "Програми"
 
 #: src/raven/widgets/sound-output/sound_output.vala:190
 msgid "Devices"
-msgstr "Periferikoak"
+msgstr "Уређаји"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
@@ -1328,7 +1339,7 @@ msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
-msgstr "Jakinarazpenak"
+msgstr "Обавештења"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
@@ -1336,11 +1347,11 @@ msgstr ""
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
-msgstr "Ezer ez ikusteko hemen"
+msgstr "Ништа за приказати"
 
 #: src/raven/notifications_view.vala:116
 msgid "No new notifications"
-msgstr "Jakinarazpen berririk ez"
+msgstr "Нема нових обавештења"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1402,11 +1413,11 @@ msgstr ""
 
 #: src/dialogs/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
-msgstr "Autentifikazioak huts egin du"
+msgstr "Овера није важећа"
 
 #: src/dialogs/polkit/polkitdialog.vala:215
 msgid "Group:"
-msgstr "Taldea:"
+msgstr "Скупина:"
 
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
@@ -1439,7 +1450,7 @@ msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Zure saioa amaitu nahi duzula ziur zaude?"
+msgstr "Сигурни сте, да желите окончати тренутну седницу?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
@@ -1463,11 +1474,11 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "Menuko Etiketa Erakutsi"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:2
 msgid "Menu Label"
-msgstr "Menuaren Etiketa"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
@@ -1475,19 +1486,19 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
-msgstr "Menuaren Ikonoa"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:5
 msgid "Compact Mode"
-msgstr "Modu Trinkoa"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:6
 msgid "Show Headers"
-msgstr "Goiburuak Erakutsi"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:7
 msgid "Roll-over mouse"
-msgstr "Saguarekin biratu"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
@@ -1495,7 +1506,7 @@ msgstr ""
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
-msgstr ""
+msgstr "Омогући обавештења"
 
 #: src/panel/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
@@ -1507,15 +1518,15 @@ msgstr ""
 
 #: src/panel/applets/clock/settings.ui.h:1
 msgid "Show date"
-msgstr "Data erakutsi"
+msgstr "Покажи датум"
 
 #: src/panel/applets/clock/settings.ui.h:2
 msgid "Show seconds"
-msgstr "Segundoak erakutsi"
+msgstr "Покажи секунде"
 
 #: src/panel/applets/clock/settings.ui.h:3
 msgid "Use 24 hour time"
-msgstr "24 orduko erlojua erabili"
+msgstr "Користи 24 часовни формат"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
@@ -1560,51 +1571,51 @@ msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
-msgstr "Gaueko Argia"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr "Tenperatura"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "Ordutegia"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "Ilunabarretik Egunsentira"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "Eskuz"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "Pantaila Ezarpenak"
+msgstr ""
 
 #: src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Etiketa erakutsi"
+msgstr "Прикажи ознаку"
 
 #: src/panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Lekuak erakutsi"
+msgstr "Прикажи локације"
 
 #: src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "Sareko fitxategiak erakutsi"
+msgstr "Прикажи мрежне фолдере"
 
 #: src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
-msgstr "Aldagarri gailuak erakutsi"
+msgstr "Прикажи преносиве уређаје"
 
 #: src/panel/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "Beti hedatu lekuak"
+msgstr ""
 
 #: src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Banatzailearen tamaina"
+msgstr "Величина размакнице"
 
 #: src/panel/applets/status/settings.ui.h:1
 #: src/panel/applets/tray/settings.ui.h:1
@@ -1669,19 +1680,19 @@ msgstr ""
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Autentifikazioa Beharrezkoa"
+msgstr ""
 
 #: src/dialogs/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr "Pasahitza:"
+msgstr "Лозинка:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Authentication is required"
-msgstr "Autentifikazioa beharrezkoa da"
+msgstr ""
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Authenticate"
-msgstr "Autentifikatu"
+msgstr ""
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
@@ -1689,19 +1700,17 @@ msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
-msgstr ""
+msgstr "Мења изглед и понашање радне површине"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Budgie Panela"
+msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
 msgstr ""
-"Beste aplikazio batzuk abiarazi eta leihoak kudeatzeko, denbora erakusteko, "
-"etab. hainbat utilitate eskaini."
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
@@ -1777,7 +1786,7 @@ msgstr ""
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
-msgstr "Egutegia"
+msgstr "Календар"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:2
 msgid ""
@@ -1824,8 +1833,8 @@ msgstr ""
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie Mahaigaina"
+msgstr "Budgie радна површина"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid "This session logs you into the Budgie Desktop"
-msgstr "Saio honek Budgie Mahaigainera sartzen zaitu"
+msgstr "Ова седница те пријављује у Budgie радну површину"
