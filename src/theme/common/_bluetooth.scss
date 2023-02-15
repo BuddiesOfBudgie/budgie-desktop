@@ -1,0 +1,20 @@
+.bluetooth-popover {
+    .bluetooth-header {
+        > label {
+            font-weight: bold;
+        }
+    }
+
+    .bluetooth-device-row {
+        padding-top: 6px;
+        padding-bottom: 6px;
+
+        .bluetooth-device-name {
+            font-weight: bold;
+        }
+
+        .bluetooth-device-status {
+            font-size: small;
+        }
+    }
+}

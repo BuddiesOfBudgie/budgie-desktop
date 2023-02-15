@@ -35,8 +35,8 @@ public class BluetoothIndicator : Bin {
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
-		popover.set_size_request(200, -1);
-		popover.get_style_context().add_class("bluetooth-applet-popover");
+		popover.set_size_request(250, -1);
+		popover.get_style_context().add_class("bluetooth-popover");
 		popover.hide.connect(() => {
 			reset_revealers();
 		});
@@ -44,11 +44,12 @@ public class BluetoothIndicator : Bin {
 
 		// Header
 		var header = new Box(HORIZONTAL, 0);
-		header.get_style_context().add_class("bluetooth-popover-header");
+		header.get_style_context().add_class("bluetooth-header");
 
 		// Header label
 		var switch_label = new Label(_("Bluetooth")) {
 			halign = START,
+			margin_start = 4,
 		};
 		switch_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
@@ -73,8 +74,8 @@ public class BluetoothIndicator : Bin {
 		// Devices
 		var scrolled_window = new ScrolledWindow(null, null) {
 			hscrollbar_policy = NEVER,
-			min_content_height = 250,
-			max_content_height = 250,
+			min_content_height = 275,
+			max_content_height = 275,
 			propagate_natural_height = true
 		};
 		devices_box = new ListBox() {
@@ -161,7 +162,7 @@ public class BluetoothIndicator : Bin {
 		try {
 			app_info.launch(null, null);
 		} catch (Error e) {
-			message("Unable to launch budgie-bluetooth-panel.desktop: %s", e.message);
+			warning("Unable to launch budgie-bluetooth-panel.desktop: %s", e.message);
 		}
 	}
 
@@ -312,7 +313,9 @@ public class BTDeviceRow : ListBoxRow {
 
 		battery_revealer.add(battery_box);
 
-		expand_icon = new Image.from_icon_name("pan-end-symbolic", BUTTON);
+		expand_icon = new Image.from_icon_name("pan-end-symbolic", BUTTON) {
+			margin_end = 12, // Add margin so the scrollbar doesn't overlap it
+		};
 
 		// Revealer stuff
 		revealer = new Revealer() {
@@ -324,6 +327,7 @@ public class BTDeviceRow : ListBoxRow {
 
 		var revealer_body = new Box(HORIZONTAL, 0);
 		connection_button = new Button.with_label("");
+		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
 		connection_button.clicked.connect(on_connection_button_clicked);
 
 		revealer_body.pack_start(connection_button);
