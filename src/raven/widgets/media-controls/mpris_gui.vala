@@ -57,7 +57,12 @@ public class MprisClientWidget : Gtk.Box {
 		header_icon.margin_end = 10;
 		header.add(header_icon);
 
-		header_label = new Gtk.Label(client.player.identity);
+		header_label = new Gtk.Label(client.player.identity) {
+			xalign = 0.0f,
+			max_width_chars = 1,
+			ellipsize = Pango.EllipsizeMode.END,
+			hexpand = true,
+		};
 		header.add(header_label);
 
 		Gtk.Widget? row = null;
