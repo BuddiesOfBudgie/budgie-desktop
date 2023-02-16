@@ -214,8 +214,9 @@ namespace Budgie {
 			string? slayouts = string.joinv(",", layouts);
 			string? svariants = string.joinv(",", variants);
 			string? options = string.joinv(",", this.options);
-
-			Meta.Backend.get_backend().set_keymap(slayouts, svariants, options);
+			Meta.Display display = wm.get_display();
+			Meta.Context ctx = display.get_context();
+			ctx.get_backend().set_keymap(slayouts, svariants, options);
 		}
 
 		/* Apply an indexed layout, i.e. 0 for now */
@@ -224,7 +225,9 @@ namespace Budgie {
 				idx = 0;
 			}
 			this.current_source = idx;
-			Meta.Backend.get_backend().lock_layout_group(idx);
+			Meta.Display display = wm.get_display();
+			Meta.Context ctx = display.get_context();
+			ctx.get_backend().lock_layout_group(idx);
 			/* Send this off to gsettings so that clients know what our idx is */
 			this.write_source_index(idx);
 		}
