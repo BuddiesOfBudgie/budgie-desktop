@@ -29,7 +29,7 @@ namespace Budgie {
 		public signal void dismissed_group(string app_name);
 		public signal void dismissed_notification(uint32 id);
 
-		public NotificationGroup(string c_app_icon, string c_app_name) {
+		public NotificationGroup(string c_app_icon, string c_app_name, NotificationSort sort_mode) {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 4);
 			can_focus = false; // Disable focus to prevent scroll on click
 			focus_on_click = false;
@@ -50,13 +50,7 @@ namespace Budgie {
 			list.can_focus = false; // Disable focus to prevent scroll on click
 			list.focus_on_click = false;
 			list.set_selection_mode(Gtk.SelectionMode.NONE);
-			list.set_sort_func((a, b) => {
-				var noti_a = a.get_child() as NotificationWidget;
-				var noti_b = b.get_child() as NotificationWidget;
-
-				// Sort notifications from old -> new, descending
-				return (int)(noti_a.notification.timestamp - noti_b.notification.timestamp);
-			});
+			set_sort_mode(sort_mode);
 
 			/**
 			 * Header creation
@@ -102,7 +96,8 @@ namespace Budgie {
 			var widget = new NotificationWidget(notification);
 
 			notifications.insert(id, widget);
-			list.prepend(widget); // Most recent should be at the top
+			list.prepend(widget);
+			list.invalidate_sort();
 			update_count();
 
 			widget.closed_individually.connect(() => { // When this notification is closed
@@ -136,6 +131,7 @@ namespace Budgie {
 			if (notification != null) { // If this notification exists
 				notifications.steal(id);
 				list.remove(notification.get_parent());
+				list.invalidate_sort();
 				notification.destroy(); // Nuke the notification
 				update_count(); // Update our counter
 				dismissed_notification(id); // Notify anything listening
@@ -152,6 +148,39 @@ namespace Budgie {
 		public void update_count() {
 			count = (int) notifications.length;
 			app_label.set_markup("<b>%s (%i)</b>".printf(app_name, count));
+		}
+
+		/**
+		 * Set the sort mode for this notification group.
+		 */
+		public void set_sort_mode(NotificationSort sort_mode) {
+			switch (sort_mode) {
+				case OLD_NEW:
+					list.set_sort_func(sort_old_to_new);
+					break;
+				case NEW_OLD:
+				default:
+					list.set_sort_func(sort_new_to_old);
+					break;
+			}
+
+			list.invalidate_sort();
+		}
+
+		private int sort_new_to_old(Gtk.ListBoxRow a, Gtk.ListBoxRow b) {
+			var noti_a = a.get_child() as NotificationWidget;
+			var noti_b = b.get_child() as NotificationWidget;
+
+			// Sort notifications from new -> old, descending
+			return (int)(noti_b.notification.timestamp - noti_a.notification.timestamp);
+		}
+
+		private int sort_old_to_new(Gtk.ListBoxRow a, Gtk.ListBoxRow b) {
+			var noti_a = a.get_child() as NotificationWidget;
+			var noti_b = b.get_child() as NotificationWidget;
+
+			// Sort notifications from old -> new, descending
+			return (int)(noti_a.notification.timestamp - noti_b.notification.timestamp);
 		}
 	}
 }

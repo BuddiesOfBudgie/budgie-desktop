@@ -6,6 +6,11 @@
     <value nick="BUDGIE_RAVEN_POSITION_RIGHT" value="3" />
   </enum>
 
+  <enum id="com.solus-project.budgie-raven.NotificationSort">
+    <value nick="BUDGIE_NOTIFICATION_SORT_NEW_OLD" value="1" />
+    <value nick="BUDGIE_NOTIFICATION_SORT_OLD_NEW" value="2" />
+  </enum>
+
   <schema path="/org/buddiesofbudgie/budgie-desktop/raven/widgets/" id="org.buddiesofbudgie.budgie-desktop.raven.widgets">
     <key type="as" name="uuids">
       <default>[]</default>
@@ -39,6 +44,12 @@
       <default>'BUDGIE_RAVEN_POSITION_AUTOMATIC'</default>
       <summary>Set Raven position</summary>
       <description>Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is.</description>
+    </key>
+
+    <key enum="com.solus-project.budgie-raven.NotificationSort" name="notification-sort">
+      <default>'BUDGIE_NOTIFICATION_SORT_NEW_OLD'</default>
+      <summary>Set notification sort order</summary>
+      <description>Set whether notifications are sorted from oldest to newest, or newest to oldest.</description>
     </key>
 
     <key type="b" name="allow-volume-overdrive">
