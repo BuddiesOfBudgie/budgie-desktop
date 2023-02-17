@@ -69,6 +69,7 @@ namespace Budgie {
 			border_width = 0;
 			margin_top = 8;
 			margin_bottom = 8;
+			halign = Gtk.Align.FILL;
 
 			var swbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			this.pack_start(swbox, false, false, 0);
@@ -77,6 +78,8 @@ namespace Budgie {
 			switcher = new Gtk.StackSwitcher();
 			switcher.halign = Gtk.Align.CENTER;
 			stack = new Gtk.Stack();
+			stack.margin_top = 12;
+			stack.margin_bottom = 12;
 			stack.set_homogeneous(false);
 			switcher.set_stack(stack);
 			swbox.pack_start(switcher, true, true, 0);
@@ -218,10 +221,12 @@ namespace Budgie {
 		}
 
 		private Gtk.Widget? settings_page() {
-			SettingsGrid? ret = new SettingsGrid();
+			SettingsGrid? ret = new SettingsGrid() {
+				margin_top = 8,
+				margin_start = 20,
+				margin_end = 20,
+			};
 			Gtk.SizeGroup group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-
-			ret.border_width = 20;
 
 			/* Position */
 			combobox_position = new Gtk.ComboBox();
@@ -361,9 +366,7 @@ namespace Budgie {
 		}
 
 		private Gtk.Widget? applets_page() {
-			AppletsPage ret = new AppletsPage(this.manager, this.toplevel);
-			ret.border_width = 20;
-			return ret;
+			return new AppletsPage(this.manager, this.toplevel);
 		}
 
 		private void panel_notify(Object? o, ParamSpec ps) {
