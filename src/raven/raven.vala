@@ -40,6 +40,20 @@ namespace Budgie {
 		}
 	}
 
+	public enum NotificationSort {
+		NEW_OLD = 1,
+		OLD_NEW = 2;
+
+		public string get_display_name() {
+			switch (this) {
+				case OLD_NEW: return _("Oldest to newest");
+				case NEW_OLD:
+				default:
+					return _("Newest to oldest");
+			}
+		}
+	}
+
 	[DBus (name="org.budgie_desktop.Raven")]
 	public class RavenIface {
 		private Raven? parent = null;

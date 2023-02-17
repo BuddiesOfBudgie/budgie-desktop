@@ -70,6 +70,7 @@ namespace Budgie {
 
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
+		private const string BUDGIE_RAVEN_SCHEMA = "com.solus-project.budgie-raven";
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
 
@@ -82,16 +83,20 @@ namespace Budgie {
 
 		private bool do_not_disturb { get; private set; default = false; }
 		private bool performing_clear_all { get; private set; default = false; }
+		private NotificationSort sort_mode { get; private set; default = NEW_OLD; }
 
-		private Dispatcher dispatcher { private get; private set; default = null; }
-		private HashTable<uint32, Budgie.Notification> notifications { private get; private set; default = null; }
-		private HashTable<string, NotificationGroup> notification_groups { private get; private set; default = null; }
-		private Settings budgie_settings { private get; private set; default = null; }
+		private Dispatcher dispatcher;
+		private HashTable<uint32, Budgie.Notification> notifications;
+		private HashTable<string, NotificationGroup> notification_groups;
 
-		private RavenInterface raven { get; private set; default = null; }
+		private Settings budgie_settings;
+		private Settings raven_settings;
+
+		private RavenInterface raven;
 
 		construct {
 			this.budgie_settings = new Settings(BUDGIE_PANEL_SCHEMA);
+			this.raven_settings = new Settings(BUDGIE_RAVEN_SCHEMA);
 
 			this.orientation = Gtk.Orientation.VERTICAL;
 			this.spacing = 0;
@@ -135,6 +140,15 @@ namespace Budgie {
 			var placeholder = new NotificationPlaceholder();
 			listbox.set_placeholder(placeholder);
 			scrolledwindow.add(listbox);
+
+			raven_settings.changed["notification-sort"].connect((key) => {
+				sort_mode = (NotificationSort) raven_settings.get_enum(key);
+				listbox.foreach((row) => {
+					var group = ((Gtk.ListBoxRow) row).get_child() as NotificationGroup;
+					group.set_sort_mode(sort_mode);
+				});
+			});
+			sort_mode = (NotificationSort) raven_settings.get_enum("notification-sort");
 
 			show_all();
 			update_child_count();
@@ -271,7 +285,7 @@ namespace Budgie {
 					// Look for an existing group. If one doesn't exist, create it
 					var group = this.notification_groups.lookup(name);
 					if (group == null) {
-						group = new NotificationGroup(app_icon, name);
+						group = new NotificationGroup(app_icon, name, sort_mode);
 						this.listbox.add(group);
 
 						group.dismissed_group.connect((name) => { // When we dismiss the group
