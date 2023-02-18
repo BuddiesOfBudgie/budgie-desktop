@@ -180,8 +180,9 @@ namespace Budgie {
 				if (!used_filename.has_suffix(EXTENSION)) {
 					used_filename = used_filename.concat(EXTENSION);
 				}
-
-				var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
+				Meta.Display display = wm.get_display();
+				Meta.Context ctx = display.get_context();
+				var scale_factor = ctx.get_backend().get_settings().get_ui_scaling_factor();
 				if (scale_factor > 1) {
 					var scale_pos = -EXTENSION.length;
 					used_filename = used_filename.splice(scale_pos, scale_pos, "@%ix".printf(scale_factor));

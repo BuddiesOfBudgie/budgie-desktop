@@ -644,7 +644,9 @@ namespace Budgie {
 			display_group.insert_child_below(background_group, null);
 			background_group.button_release_event.connect(on_background_click);
 
-			var monitor_manager = Meta.MonitorManager.get();
+			Meta.Context ctx = display.get_context();
+
+			var monitor_manager = ctx.get_backend().get_monitor_manager();
 			monitor_manager.monitors_changed.connect(on_monitors_changed);
 			on_monitors_changed();
 
@@ -933,8 +935,11 @@ namespace Budgie {
 			actor.set_easing_duration(MINIMIZE_TIMEOUT);
 			actor.transitions_completed.connect(minimize_done);
 
+			Meta.Display display = this.get_display();
+			Meta.Context ctx = display.get_context();
+
 			/* Save the minimize state for later restoration */
-			var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
+			var scale_factor = ctx.get_backend().get_settings().get_ui_scaling_factor();
 			var scale_x = (float)((icon.width * scale_factor) / actor.width);
 			var scale_y = (float)((icon.height * scale_factor) / actor.height);
 			var place_x = (float)icon.x * scale_factor;
