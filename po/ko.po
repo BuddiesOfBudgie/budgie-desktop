@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# Junghee Lee <daemul72@gmail.com>, 2022
+# Junghee Lee <daemul72@gmail.com>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-11 18:30+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2022\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2023\n"
 "Language-Team: Korean (https://www.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,23 +28,23 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:569
 msgid "Unread Notifications"
-msgstr ""
+msgstr "읽지 않은 알림"
 
 #: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
-msgstr ""
+msgstr "응용프로그램이 전체화면으로 표시되는 동안 알림을 1건 받았습니다."
 
 #: src/daemon/notifications/dbus.vala:575
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
-msgstr ""
+msgstr "응용프로그램이 전체화면으로 표시되는 동안 %d개의 알림을 받았습니다."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:587
 msgid "View Notifications"
-msgstr ""
+msgstr "알림 보기"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -97,64 +97,64 @@ msgstr "%d분 후에 꺼집니다"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Budgie 스크린숏"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:438
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "스크린숏 전체 화면"
 
 #: src/daemon/screenshot.vala:439
 msgid "Screenshot active window"
-msgstr ""
+msgstr "스크린숏 활성 창"
 
 #: src/daemon/screenshot.vala:440
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "스크린숏 선택된 영역"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:548
 msgid "Screen"
-msgstr ""
+msgstr "화면"
 
 #: src/daemon/screenshot.vala:548
 msgid "Window"
-msgstr ""
+msgstr "창"
 
 #: src/daemon/screenshot.vala:548
 msgid "Selection"
-msgstr ""
+msgstr "선택영역"
 
 #. translate
 #: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "스크린숏 취소하기"
 
 #: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "선택한 디렉터리에 스크린숏 저장하기"
 
 #: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "스크린숏을 클립보드에 복사하기"
 
 #: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "기본 응용프로그램에서 스크린숏 열기"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1175
 msgid "Other..."
-msgstr ""
+msgstr "기타..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
-msgstr ""
+msgstr "폴더 열기"
 
 #: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
@@ -168,7 +168,7 @@ msgstr "취소하기"
 
 #: src/daemon/screenshot.vala:1260
 msgid "Open"
-msgstr ""
+msgstr "열기"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -535,11 +535,11 @@ msgstr "이 작업표시줄의 크기(방향에 따른 가로길이와 높이) �
 
 #: src/panel/settings/settings_panel.vala:248
 msgid "Spacing"
-msgstr ""
+msgstr "간격"
 
 #: src/panel/settings/settings_panel.vala:249
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "이 작업표시줄에 대한 애플릿 사이의 간격 설정하기"
 
 #: src/panel/settings/settings_panel.vala:256
 msgid "Automatically hide"
@@ -595,7 +595,7 @@ msgstr "애플릿 추가하기"
 
 #: src/panel/settings/settings_panel_applets.vala:234
 msgid "Choose a new applet to add to this panel"
-msgstr "이 작업표시줄에 추가할 새 애플릿 선택하세요"
+msgstr "이 작업표시줄에 추가할 새 애플릿을 선정합니다"
 
 #: src/panel/settings/settings_panel_applets.vala:248
 #: src/panel/settings/settings_raven_widgets.vala:164
@@ -654,12 +654,12 @@ msgstr "애플릿 유지하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "위젯 제거 확인하기"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr ""
+msgstr "이 위젯을 제거하시겠습니까? 이 작업은 취소할 수 없습니다."
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -679,15 +679,15 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "위젯 설정"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "위젯 추가하기"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "위젯 보기에 추가할 새 위젯을 선정합니다"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
@@ -799,11 +799,11 @@ msgstr ""
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "플러그인 선정하기"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "설명이 없습니다."
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
@@ -812,7 +812,7 @@ msgstr ""
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
-msgstr ""
+msgstr "나열된 작성자 없음"
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
@@ -902,7 +902,7 @@ msgstr "마우스 포인터가 창 내부로 이동하면 창이 활성화되고
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "리디렉션 해제 활성화"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -953,7 +953,7 @@ msgstr "검색 결과 없음"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "전원"
 
 #. Prepare label widget
 #. Caffeine Notification
@@ -968,7 +968,7 @@ msgstr "타이머 (분)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "시스템 시간 및 날짜 설정"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1272,12 +1272,12 @@ msgstr "음악 재생"
 #: src/raven/widgets/media-controls/mpris_gui.vala:101
 #: src/raven/widgets/media-controls/mpris_gui.vala:419
 msgid "Unknown Title"
-msgstr ""
+msgstr "알 수 없는 제목"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:104
 #: src/raven/widgets/media-controls/mpris_gui.vala:423
 msgid "Unknown Artist"
-msgstr ""
+msgstr "알 수 없는 아티스트"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:427
@@ -1287,12 +1287,12 @@ msgstr ""
 #: src/raven/widgets/media-controls/mpris_gui.vala:296
 #, c-format
 msgid "%s - Playing"
-msgstr ""
+msgstr "%s - 재생중"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:301
 #, c-format
 msgid "%s - Paused"
-msgstr ""
+msgstr "%s - 중지됨"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
@@ -1309,19 +1309,19 @@ msgstr "장치"
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr ""
+msgstr "사용량 모니터"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr ""
+msgstr "RAM"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr ""
+msgstr "스왑"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -1329,7 +1329,7 @@ msgstr "알림"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "추가된 위젯이 없습니다."
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -1342,7 +1342,7 @@ msgstr "새 알림 없음"
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "새 범주"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1408,31 +1408,31 @@ msgstr "그룹:"
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
 msgid "_Lock"
-msgstr ""
+msgstr "잠금(_L)"
 
 #: src/dialogs/power/window.vala:95
 msgid "L_og Out"
-msgstr ""
+msgstr "로그아웃(_O)"
 
 #: src/dialogs/power/window.vala:98
 msgid "_Suspend"
-msgstr ""
+msgstr "절전모드(_S)"
 
 #: src/dialogs/power/window.vala:102
 msgid "_Hibernate"
-msgstr ""
+msgstr "최대 절전모드(_H)"
 
 #: src/dialogs/power/window.vala:106
 msgid "_Reboot"
-msgstr ""
+msgstr "재부팅(_R)"
 
 #: src/dialogs/power/window.vala:109
 msgid "Shut_down"
-msgstr ""
+msgstr "컴퓨터 끄기(_D)"
 
 #: src/dialogs/power/window.vala:161
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "이 시스템은 최대 절전모드를 지원하지 않습니다."
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1440,23 +1440,23 @@ msgstr "정말로 세션을 종료하시겠습니까?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "이름:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "폴더:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "지연시간(초)"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "포인터 표시하기"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "캡처 시 사운드 재생하기"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1468,7 +1468,7 @@ msgstr "메뉴 레이블"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "기본 메뉴 아이콘 사용하기"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1529,7 +1529,7 @@ msgstr ""
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1614,7 +1614,7 @@ msgstr "\"추가하기\" 단추 가시성"
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr ""
+msgstr "아이템 크기 배율"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
@@ -1630,39 +1630,39 @@ msgstr "항상 표시하기"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75x"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1.0x"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2.0x"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "주 번호 표시하기"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "요일 이름 표시하기"
 
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr ""
+msgstr "볼륨 오버드라이브 허용하기"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr ""
+msgstr "스왑 사용량 표시하기"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1682,7 +1682,7 @@ msgstr "인증"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
+msgstr "Budgie 스크린숏 앱"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1700,7 +1700,7 @@ msgstr "창 관리, 시간 표시 등을 위한 유틸리티를 제공하고 다
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "응용프로그램을 검색하고 시작합니다."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
@@ -1792,7 +1792,7 @@ msgstr ""
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "사운드 입력"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
@@ -1802,7 +1802,7 @@ msgstr ""
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "사운드 출력"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
