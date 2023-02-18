@@ -448,6 +448,12 @@ public class BTDeviceRow : ListBoxRow {
 			status_label.set_text(_("Disconnected"));
 		}
 
+		// Update the name if changed
+		if (device.alias != name_label.label) {
+			name_label.label = device.alias;
+			name_label.tooltip_text = device.alias;
+		}
+
 		properties_updated();
 	}
 }
