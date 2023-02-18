@@ -35,11 +35,8 @@ public class BluetoothIndicator : Bin {
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
-		popover.set_size_request(250, -1);
+		popover.set_size_request(300, -1);
 		popover.get_style_context().add_class("bluetooth-popover");
-		popover.hide.connect(() => {
-			reset_revealers();
-		});
 		var box = new Box(VERTICAL, 0);
 
 		// Header
@@ -74,8 +71,8 @@ public class BluetoothIndicator : Bin {
 		// Devices
 		var scrolled_window = new ScrolledWindow(null, null) {
 			hscrollbar_policy = NEVER,
-			min_content_height = 275,
-			max_content_height = 275,
+			min_content_height = 250,
+			max_content_height = 250,
 			propagate_natural_height = true
 		};
 		devices_box = new ListBox() {
@@ -86,8 +83,7 @@ public class BluetoothIndicator : Bin {
 		devices_box.get_style_context().add_class("bluetooth-device-listbox");
 
 		devices_box.row_activated.connect((row) => {
-			var widget = row as BTDeviceRow;
-			widget.toggle_revealer();
+			((BTDeviceRow) row).try_connect_device();
 		});
 
 		scrolled_window.add(devices_box);
@@ -221,19 +217,6 @@ public class BluetoothIndicator : Bin {
 	private bool filter_paired_devices(ListBoxRow row) {
 		return ((BTDeviceRow) row).device.paired || ((BTDeviceRow) row).device.connected;
 	}
-
-	/**
-	 * Iterate over all devices in the list box and closes any open
-	 * revealers.
-	 */
-	private void reset_revealers() {
-		devices_box.foreach((row) => {
-			var widget = row as BTDeviceRow;
-			if (widget.revealer_showing()) {
-				widget.toggle_revealer();
-			}
-		});
-	}
 }
 
 /**
@@ -242,12 +225,12 @@ public class BluetoothIndicator : Bin {
 public class BTDeviceRow : ListBoxRow {
 	private Image? image = null;
 	private Label? name_label = null;
-	private Label? status_label = null;
 	private Revealer? battery_revealer = null;
 	private Image? battery_icon = null;
 	private Label? battery_label = null;
-	private Image? expand_icon = null;
 	private Revealer? revealer = null;
+	private Spinner? spinner = null;
+	private Label? status_label = null;
 	private Button? connection_button = null;
 
 	public Device1 device { get; construct; }
@@ -275,7 +258,9 @@ public class BTDeviceRow : ListBoxRow {
 			column_spacing = 6,
 		};
 
-		image = new Image.from_icon_name(device.icon ?? "bluetooth-active", LARGE_TOOLBAR);
+		var icon_name = device.icon ?? "bluetooth-active";
+		if (!icon_name.has_suffix("-symbolic")) icon_name += "-symbolic";
+		image = new Image.from_icon_name(icon_name, MENU);
 		image.get_style_context().add_class("bluetooth-device-image");
 
 		name_label = new Label(device.alias) {
@@ -287,12 +272,6 @@ public class BTDeviceRow : ListBoxRow {
 			tooltip_text = device.alias
 		};
 		name_label.get_style_context().add_class("bluetooth-device-name");
-
-		status_label = new Label(null) {
-			halign = START,
-		};
-		status_label.get_style_context().add_class("bluetooth-device-status");
-		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
 		battery_revealer = new Revealer() {
 			reveal_child = false,
@@ -307,15 +286,12 @@ public class BTDeviceRow : ListBoxRow {
 			halign = START,
 		};
 		battery_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+		battery_label.get_style_context().add_class("bluetooth-battery-label");
 
 		battery_box.pack_start(battery_label, false, false, 2);
 		battery_box.pack_start(battery_icon, false, false, 2);
 
 		battery_revealer.add(battery_box);
-
-		expand_icon = new Image.from_icon_name("pan-end-symbolic", BUTTON) {
-			margin_end = 12, // Add margin so the scrollbar doesn't overlap it
-		};
 
 		// Revealer stuff
 		revealer = new Revealer() {
@@ -326,12 +302,24 @@ public class BTDeviceRow : ListBoxRow {
 		revealer.get_style_context().add_class("bluetooth-device-revealer");
 
 		var revealer_body = new Box(HORIZONTAL, 0);
-		connection_button = new Button.with_label("");
-		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
-		connection_button.clicked.connect(on_connection_button_clicked);
 
-		revealer_body.pack_start(connection_button);
+		spinner = new Spinner();
+		status_label = new Label(null) {
+			halign = START,
+			margin_start = 6,
+		};
+		status_label.get_style_context().add_class("bluetooth-device-status");
+		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+
+		revealer_body.pack_start(spinner, false, false, 0);
+		revealer_body.pack_start(status_label);
 		revealer.add(revealer_body);
+
+		// Diconnect button
+		connection_button = new Button.with_label(_("Disconnect"));
+		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
+		connection_button.get_style_context().add_class("bluetooth-connection-button");
+		connection_button.clicked.connect(on_connection_button_clicked);
 
 		// Signals
 		((DBusProxy) device).g_properties_changed.connect(update_status);
@@ -339,63 +327,67 @@ public class BTDeviceRow : ListBoxRow {
 		// Packing
 		grid.attach(image, 0, 0, 2, 2);
 		grid.attach(name_label, 2, 0, 2, 1);
-		grid.attach(status_label, 2, 1, 2, 1);
+		grid.attach(connection_button, 4, 0, 1, 1);
 		grid.attach(battery_revealer, 2, 2, 1, 1);
-		grid.attach(expand_icon, 4, 0, 2, 3);
+		grid.attach(revealer, 2, 3, 1, 1);
 
 		box.pack_start(grid);
-		box.pack_start(revealer);
 		add(box);
 
 		update_status();
 		show_all();
+		if (!device.connected) connection_button.hide();
 	}
 
 	public BTDeviceRow(Device1 device) {
 		Object(device: device);
 	}
 
-	public bool revealer_showing() {
-		return revealer.reveal_child;
-	}
+	/**
+	 * Try to connect to the Bluetooth device.
+	 */
+	public void try_connect_device() {
+		if (device.connected) return;
+		if (spinner.active) return;
 
-	public void toggle_revealer() {
-		revealer.reveal_child = !revealer.reveal_child;
-		if (revealer.reveal_child) {
-			expand_icon.set_from_icon_name("pan-down-symbolic", BUTTON);
-		} else {
-			expand_icon.set_from_icon_name("pan-end-symbolic", BUTTON);
-		}
+		spinner.start();
+		status_label.label = _("Connecting…");
+		revealer.reveal_child = true;
+
+		device.connect.begin((obj, res) => {
+			try {
+				device.connect.end(res);
+				connection_button.show();
+				activatable = false;
+			} catch (Error e) {
+				warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
+			}
+
+			revealer.reveal_child = false;
+			spinner.stop();
+		});
 	}
 
 	private void on_connection_button_clicked() {
-		connection_button.sensitive = false;
+		if (!device.connected) return;
+		if (spinner.active) return;
 
-		if (device.connected) { // Device is connected; disconnect it
-			device.disconnect.begin((obj, res) => {
-				try {
-					device.disconnect.end(res);
+		spinner.start();
+		status_label.label = _("Disconnecting…");
+		revealer.reveal_child = true;
 
-					toggle_revealer();
-				} catch (Error e) {
-					warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
-				}
+		device.disconnect.begin((obj, res) => {
+			try {
+				device.disconnect.end(res);
+				connection_button.hide();
+				activatable = true;
+			} catch (Error e) {
+				warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
+			}
 
-				connection_button.sensitive = true;
-			});
-		} else if (!device.connected) { // Device isn't connected; connect it
-			device.connect.begin((obj, res) => {
-				try {
-					device.connect.end(res);
-
-					toggle_revealer();
-				} catch (Error e) {
-					warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
-				}
-
-				connection_button.sensitive = true;
-			});
-		}
+			revealer.reveal_child = false;
+			spinner.stop();
+		});
 	}
 
 	private void update_battery() {
@@ -452,10 +444,8 @@ public class BTDeviceRow : ListBoxRow {
 	private void update_status() {
 		if (device.connected) {
 			status_label.set_text(_("Connected"));
-			connection_button.label = _("Disconnect");
 		} else {
 			status_label.set_text(_("Disconnected"));
-			connection_button.label = _("Connect");
 		}
 
 		properties_updated();

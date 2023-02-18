@@ -1,20 +1,32 @@
 .bluetooth-popover {
     .bluetooth-header {
+        padding-left: 3px;
+        padding-right: 6px;
+
         > label {
             font-weight: bold;
         }
     }
 
     .bluetooth-device-row {
-        padding-top: 6px;
-        padding-bottom: 6px;
+        padding-left: 6px;
+        padding-right: 6px;
+        padding-top: 8px;
+        padding-bottom: 8px;
 
-        .bluetooth-device-name {
-            font-weight: bold;
+        .bluetooth-battery-label {
+            font-size: small;
         }
 
-        .bluetooth-device-status {
-            font-size: small;
+        .bluetooth-device-revealer {
+            padding-top: 4px;
+        }
+
+        .bluetooth-connection-button {
+            & label {
+                font-size: small;
+                opacity: 0.55; // Emulate .dim-label
+            }
         }
     }
 }
