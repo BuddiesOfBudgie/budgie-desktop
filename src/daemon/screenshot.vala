@@ -1029,7 +1029,7 @@ namespace BudgieScr {
 
 			// Create upload button
 			var uploadbutton = new Gtk.Button();
-			var uploadicon =  new ThemedIcon(name = "cloud-upload");
+			var uploadicon =  new ThemedIcon(name = "upload-shot-symbolic");
 			var uploadimage = new Gtk.Image.from_gicon(uploadicon,Gtk.IconSize.DND);
 			uploadimage.pixel_size = 16;
 			uploadimage.margin_start = padding;
