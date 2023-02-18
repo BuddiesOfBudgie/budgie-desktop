@@ -16,9 +16,8 @@ namespace BudgieScr {
 
 	public enum Providers {
 		IMGUR = 1,
-		IMAGEBIN = 2,
-		NULLPOINTER = 3, // 0x0
-		TMPFILES = 4,
+		NULLPOINTER = 2, // 0x0
+		TMPFILES = 3,
 	}
 
 	public class Uploader {
@@ -27,7 +26,6 @@ namespace BudgieScr {
 
 		public const BudgieScr.Providers[] provider = {
 			BudgieScr.Providers.IMGUR,
-			BudgieScr.Providers.IMAGEBIN,
 			BudgieScr.Providers.NULLPOINTER, // 0x0
 			BudgieScr.Providers.TMPFILES,
 		};
@@ -36,8 +34,6 @@ namespace BudgieScr {
 			switch (provider) {
 				case Providers.IMGUR:
 					return _("Imgur");
-				case Providers.IMAGEBIN:
-					return _("ImageBin");
 				case Providers.NULLPOINTER:
 					return _("0x0");
 				case Providers.TMPFILES:
@@ -54,9 +50,6 @@ namespace BudgieScr {
 			switch (chosenprovider) {
 				case "Imgur":
 					status = upload_image_imgur(path, out link);
-					break;
-				case "ImageBin":
-					status = upload_image_imagebin(path, out link);
 					break;
 				case "0x0":
 					status = upload_image_nullpointer(path, out link);
@@ -217,69 +210,6 @@ namespace BudgieScr {
 			link = payload.strip();
 
 			debug("0x0: link from response %s\n", link);
-
-			return true;
-		}
-
-		// Upload image to https://www.imagebin.ca/ web service
-		private static bool upload_image_imagebin(string uri, out string? link) {
-			link = null;
-
-			var session = new Soup.Session();
-
-			// Setup soup logger if we're debugging
-			if (GLib.Log.get_debug_enabled() == true) {
-				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
-				session.add_feature(logger);
-			}
-
-			// Read file into memory
-			uint8[] data;
-			try {
-				GLib.FileUtils.get_data(uri, out data);
-			} catch (GLib.FileError e) {
-				warning(e.message);
-				return false;
-			}
-
-			// Encode to Bytes
-			var imagebytes = new GLib.Bytes.take(data);
-
-			// Setup our multipart message
-			string mime_type = "application/octet-stream";
-			Soup.Multipart multipart = new Soup.Multipart(mime_type);
-			multipart.append_form_file("file", uri, mime_type, imagebytes);
-			var message = new Soup.Message.from_multipart("https://imagebin.ca/upload.php", multipart);
-
-			// get and set content type
-			GLib.HashTable<string, string> content_type_params;
-			message.request_headers.get_content_type(out content_type_params);
-			message.request_headers.set_content_type(Soup.FORM_MIME_TYPE_MULTIPART, content_type_params);
-
-			// Send message & get Bytes from response
-			// TODO: Async
-			GLib.Bytes? payloadbytes = null;
-			try {
-				payloadbytes = session.send_and_read(message);
-			} catch (GLib.Error e) {
-				stderr.printf(e.message);
-				return false;
-			}
-
-			// Encode back to string for parsing
-			string payload = (string)payloadbytes.get_data();
-			if (payload == null) {
-				return false;
-			}
-
-			// Get link from reponse
-			string? url = payload.split("url:")[1];
-			if (url == null || !url.has_prefix("http")) {
-				return false;
-			}
-			link = url.strip();
-
-			debug("imagebin: link from response %s\n", link);
 
 			return true;
 		}
