@@ -18,6 +18,7 @@ namespace BudgieScr {
 		IMGUR = 1,
 		IMAGEBIN = 2,
 		NULLPOINTER = 3, // 0x0
+		TMPFILES = 4,
 	}
 
 	public class Uploader {
@@ -28,6 +29,7 @@ namespace BudgieScr {
 			BudgieScr.Providers.IMGUR,
 			BudgieScr.Providers.IMAGEBIN,
 			BudgieScr.Providers.NULLPOINTER, // 0x0
+			BudgieScr.Providers.TMPFILES,
 		};
 
 		public static string provider_string_to_display(BudgieScr.Providers provider) {
@@ -38,6 +40,8 @@ namespace BudgieScr {
 					return _("ImageBin");
 				case Providers.NULLPOINTER:
 					return _("0x0");
+				case Providers.TMPFILES:
+					return _("tmpfiles.org");
 				default:
 					return _("0x0");
 			}
@@ -56,6 +60,9 @@ namespace BudgieScr {
 					break;
 				case "0x0":
 					status = upload_image_nullpointer(path, out link);
+					break;
+				case "tmpfiles.org":
+					status = upload_image_tmpfiles(path, out link);
 					break;
 				default:
 					status = upload_image_nullpointer(path, out link);
@@ -273,6 +280,87 @@ namespace BudgieScr {
 			link = url.strip();
 
 			debug("imagebin: link from response %s\n", link);
+
+			return true;
+		}
+
+		// Upload to https://tmpfiles.org
+		private static bool upload_image_tmpfiles(string uri, out string? link) {
+			link = null;
+
+			var session = new Soup.Session();
+
+			// Setup soup logger if we're debugging
+			if (GLib.Log.get_debug_enabled() == true) {
+				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
+				session.add_feature(logger);
+			}
+
+			// Read file into memory
+			uint8[] data;
+			try {
+				GLib.FileUtils.get_data(uri, out data);
+			} catch (GLib.FileError e) {
+				warning(e.message);
+				return false;
+			}
+			var databytes = new GLib.Bytes(data);
+
+			// Setup POST request
+			string mime_type = "application/octet-stream";
+			Soup.Multipart multipart = new Soup.Multipart(mime_type);
+			multipart.append_form_file("file", uri, mime_type, databytes);
+			Soup.Message message = new Soup.Message.from_multipart("https://tmpfiles.org/api/v1/upload", multipart);
+
+			// Set and get content type
+			GLib.HashTable<string, string> content_type_params;
+			message.request_headers.get_content_type(out content_type_params);
+			message.request_headers.set_content_type(Soup.FORM_MIME_TYPE_MULTIPART, content_type_params);
+
+			// Send message & get Bytes from response
+			// TODO: Async
+			GLib.Bytes? payloadbytes = null;
+			try {
+				payloadbytes = session.send_and_read(message);
+			} catch (GLib.Error e) {
+				stderr.printf(e.message);
+				return false;
+			}
+
+			// Encode back to string for parsing
+			string payload = (string)payloadbytes.get_data();
+			if (payload == null) {
+				return false;
+			}
+
+			// Setup json parser with our payload reponse
+			Json.Parser parser = new Json.Parser();
+			try {
+				int64 len = payload.length;
+				parser.load_from_data(payload, (ssize_t)len);
+			} catch (GLib.Error e) {
+				stderr.printf(e.message);
+			}
+
+			// Ensure we got a valid response
+			unowned Json.Object node_obj = parser.get_root().get_object();
+			if (node_obj == null) {
+				return false;
+			}
+			node_obj = node_obj.get_object_member("data");
+			if (node_obj == null) {
+				return false;
+			}
+
+			// Finally, get the link.
+			string? url = node_obj.get_string_member("url") ?? null;
+			if (url == null) {
+				warning("ERROR: %s\n", node_obj.get_string_member("error"));
+				return false;
+			}
+
+			link = url;
+			debug("tmpfiles.org: link from response: %s\n", link);
 
 			return true;
 		}
