@@ -255,12 +255,22 @@ public class BTDeviceRow : ListBoxRow {
 
 	public Device1 device { get; construct; }
 
+	private ulong up_handler_id = 0;
 	private Up.Device? _up_device;
 	public Up.Device? up_device {
 		get { return _up_device; }
 		set {
+			// Disconnect previous signal handler
+			if (up_handler_id != 0) {
+				_up_device.disconnect(up_handler_id);
+				up_handler_id = 0;
+			}
+			// Set new UPower device
 			_up_device = value;
-			_up_device.notify.connect(() => {
+			// Connect to signal and update state if the new device
+			// isn't null
+			if (_up_device == null) return;
+			up_handler_id = _up_device.notify.connect(() => {
 				update_battery();
 			});
 			update_battery();
