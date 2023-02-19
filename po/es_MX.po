@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-11 18:30+0200\n"
+"POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Evan Maddock, 2023\n"
 "Language-Team: Spanish (Mexico) (https://www.transifex.com/buddiesofbudgie/teams/129844/es_MX/)\n"
@@ -412,7 +412,7 @@ msgstr "Leve"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:204
 msgid "None"
 msgstr "Ninguno"
 
@@ -439,197 +439,6 @@ msgstr "Anti alias"
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "Establecer el tipo de anti-alias a usar."
-
-#: src/panel/settings/settings_panel.vala:85
-msgid "Applets"
-msgstr "Componentes"
-
-#: src/panel/settings/settings_panel.vala:86
-#: src/panel/settings/settings_raven.vala:48
-msgid "Settings"
-msgstr "Configuraciónes"
-
-#: src/panel/settings/settings_panel.vala:88
-msgid "Remove Panel"
-msgstr "Quitar panel"
-
-#: src/panel/settings/settings_panel.vala:89
-msgid "Remove this panel from the screen"
-msgstr "Quitar este panel de la pantalla"
-
-#: src/panel/settings/settings_panel.vala:126
-msgid "Top Dock"
-msgstr "Estante superior"
-
-#: src/panel/settings/settings_panel.vala:128
-msgid "Right Dock"
-msgstr "Estante derecho"
-
-#: src/panel/settings/settings_panel.vala:130
-msgid "Left Dock"
-msgstr "Estante izquierdo"
-
-#: src/panel/settings/settings_panel.vala:132
-msgid "Bottom Dock"
-msgstr "Estante inferior"
-
-#: src/panel/settings/settings_panel.vala:137
-msgid "Top Panel"
-msgstr "Panel Superior"
-
-#: src/panel/settings/settings_panel.vala:139
-msgid "Right Panel"
-msgstr "Panel Derecho"
-
-#: src/panel/settings/settings_panel.vala:141
-msgid "Left Panel"
-msgstr "Panel Izquierdo"
-
-#: src/panel/settings/settings_panel.vala:143
-msgid "Bottom Panel"
-msgstr "Panel Inferior"
-
-#: src/panel/settings/settings_panel.vala:180
-msgid "Top"
-msgstr "Arriba"
-
-#: src/panel/settings/settings_panel.vala:182 src/raven/raven.vala:35
-msgid "Right"
-msgstr "Derecha"
-
-#: src/panel/settings/settings_panel.vala:184
-#: src/panel/settings/settings_wm.vala:99 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Izquierda"
-
-#: src/panel/settings/settings_panel.vala:186
-msgid "Bottom"
-msgstr "Abajo"
-
-#: src/panel/settings/settings_panel.vala:196
-msgid "Always"
-msgstr "Siempre"
-
-#: src/panel/settings/settings_panel.vala:198
-msgid "Dynamic"
-msgstr "Dinámico"
-
-#: src/panel/settings/settings_panel.vala:211 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "Automático"
-
-#: src/panel/settings/settings_panel.vala:213
-msgid "Intelligent"
-msgstr "Inteligente"
-
-#: src/panel/settings/settings_panel.vala:216
-msgid "Never"
-msgstr "Nunca"
-
-#: src/panel/settings/settings_panel.vala:231
-msgid "Position"
-msgstr "Posición"
-
-#: src/panel/settings/settings_panel.vala:232
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Establecer la esquina de la pantalla en donde este panel se quedará"
-
-#: src/panel/settings/settings_panel.vala:240
-msgid "Size"
-msgstr "Tamaño"
-
-#: src/panel/settings/settings_panel.vala:241
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
-"Establecer el tamaño (ancho o alto, dependiendo de la orientación) de este "
-"panel"
-
-#: src/panel/settings/settings_panel.vala:248
-msgid "Spacing"
-msgstr "Espaciado"
-
-#: src/panel/settings/settings_panel.vala:249
-msgid "Set the spacing between applets for this panel"
-msgstr "Establecer el espaciado entre los applets en este panel"
-
-#: src/panel/settings/settings_panel.vala:256
-msgid "Automatically hide"
-msgstr "Ocultar automaticamente"
-
-#: src/panel/settings/settings_panel.vala:257
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
-"Cuando se activa, este panel se ocultara para maximizar el estado de la "
-"pantalla"
-
-#: src/panel/settings/settings_panel.vala:264
-msgid "Transparency"
-msgstr "Transparencia"
-
-#: src/panel/settings/settings_panel.vala:265
-msgid "Control when this panel should have a solid background"
-msgstr "Controla cuando este panel debe tener un fondo sólido"
-
-#: src/panel/settings/settings_panel.vala:270
-msgid "Shadow"
-msgstr "Sombra"
-
-#: src/panel/settings/settings_panel.vala:271
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Agrega una sombra decorativa, ideal para paneles opacos"
-
-#: src/panel/settings/settings_panel.vala:277
-msgid "Stylize regions"
-msgstr "Estilizar regiones"
-
-#: src/panel/settings/settings_panel.vala:278
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr ""
-"Agrega una distinción al panel para que las tres áreas principales puedan "
-"tener un tema diferente."
-
-#: src/panel/settings/settings_panel.vala:285
-msgid "Dock mode"
-msgstr "Modo estante"
-
-#: src/panel/settings/settings_panel.vala:286
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr ""
-"Cuando se pone en modo estante, el panel usará la menor cantidad de espacio "
-"posible, liberando espacio en la pantalla"
-
-#: src/panel/settings/settings_panel_applets.vala:19
-msgid "Configure applet"
-msgstr "Configurar applet"
-
-#: src/panel/settings/settings_panel_applets.vala:233
-msgid "Add applet"
-msgstr "Agregar applet"
-
-#: src/panel/settings/settings_panel_applets.vala:234
-msgid "Choose a new applet to add to this panel"
-msgstr "Escoge un nuevo applet para agregar a este panel"
-
-#: src/panel/settings/settings_panel_applets.vala:248
-#: src/panel/settings/settings_raven_widgets.vala:164
-msgid "No settings available"
-msgstr "No hay ajustes disponibles"
-
-#: src/panel/settings/settings_panel_applets.vala:401
-msgid "Start"
-msgstr "Inicio"
-
-#: src/panel/settings/settings_panel_applets.vala:404
-msgid "Center"
-msgstr "Centro"
-
-#: src/panel/settings/settings_panel_applets.vala:407
-msgid "End"
-msgstr "Final"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -687,18 +496,6 @@ msgstr ""
 msgid "Remove"
 msgstr "Quitar"
 
-#: src/panel/settings/settings_raven_settings.vala:45
-msgid "Set Raven position"
-msgstr "Establecer la posición de Raven"
-
-#: src/panel/settings/settings_raven_settings.vala:46
-msgid ""
-"Set which side of the screen Raven will open on. If set to Automatic, Raven "
-"will open where its parent panel is."
-msgstr ""
-"Establecer en qué lado de la pantalla se abrirá Raven. Si se establece en "
-"Automático, Raven se abrirá donde esté su panel padre."
-
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
 msgstr "Ajustes del Widget"
@@ -710,6 +507,11 @@ msgstr "Agregar widget"
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
 msgstr "Elige un widget nuevo para agregar a la vista Widgets"
+
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:250
+msgid "No settings available"
+msgstr "No hay ajustes disponibles"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
@@ -826,6 +628,11 @@ msgstr "Abaja Derecha"
 #: src/panel/settings/settings_style.vala:212
 msgid "Top Right"
 msgstr "Cima Derecha"
+
+#: src/panel/settings/settings_raven.vala:48
+#: src/panel/settings/settings_panel.vala:89
+msgid "Settings"
+msgstr "Configuraciónes"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
@@ -978,6 +785,209 @@ msgstr ""
 msgid "Right (standard)"
 msgstr "Derecha (estándar)"
 
+#: src/panel/settings/settings_wm.vala:99
+#: src/panel/settings/settings_panel.vala:187 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Izquierda"
+
+#: src/panel/settings/settings_panel.vala:88
+msgid "Applets"
+msgstr "Componentes"
+
+#: src/panel/settings/settings_panel.vala:91
+msgid "Remove Panel"
+msgstr "Quitar panel"
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Remove this panel from the screen"
+msgstr "Quitar este panel de la pantalla"
+
+#: src/panel/settings/settings_panel.vala:129
+msgid "Top Dock"
+msgstr "Estante superior"
+
+#: src/panel/settings/settings_panel.vala:131
+msgid "Right Dock"
+msgstr "Estante derecho"
+
+#: src/panel/settings/settings_panel.vala:133
+msgid "Left Dock"
+msgstr "Estante izquierdo"
+
+#: src/panel/settings/settings_panel.vala:135
+msgid "Bottom Dock"
+msgstr "Estante inferior"
+
+#: src/panel/settings/settings_panel.vala:140
+msgid "Top Panel"
+msgstr "Panel Superior"
+
+#: src/panel/settings/settings_panel.vala:142
+msgid "Right Panel"
+msgstr "Panel Derecho"
+
+#: src/panel/settings/settings_panel.vala:144
+msgid "Left Panel"
+msgstr "Panel Izquierdo"
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Bottom Panel"
+msgstr "Panel Inferior"
+
+#: src/panel/settings/settings_panel.vala:183
+msgid "Top"
+msgstr "Arriba"
+
+#: src/panel/settings/settings_panel.vala:185 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Derecha"
+
+#: src/panel/settings/settings_panel.vala:189
+msgid "Bottom"
+msgstr "Abajo"
+
+#: src/panel/settings/settings_panel.vala:199
+msgid "Always"
+msgstr "Siempre"
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Dynamic"
+msgstr "Dinámico"
+
+#: src/panel/settings/settings_panel.vala:214 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Automático"
+
+#: src/panel/settings/settings_panel.vala:216
+msgid "Intelligent"
+msgstr "Inteligente"
+
+#: src/panel/settings/settings_panel.vala:219
+msgid "Never"
+msgstr "Nunca"
+
+#: src/panel/settings/settings_panel.vala:236
+msgid "Position"
+msgstr "Posición"
+
+#: src/panel/settings/settings_panel.vala:237
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Establecer la esquina de la pantalla en donde este panel se quedará"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Size"
+msgstr "Tamaño"
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+"Establecer el tamaño (ancho o alto, dependiendo de la orientación) de este "
+"panel"
+
+#: src/panel/settings/settings_panel.vala:253
+msgid "Spacing"
+msgstr "Espaciado"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Set the spacing between applets for this panel"
+msgstr "Establecer el espaciado entre los applets en este panel"
+
+#: src/panel/settings/settings_panel.vala:261
+msgid "Automatically hide"
+msgstr "Ocultar automaticamente"
+
+#: src/panel/settings/settings_panel.vala:262
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+"Cuando se activa, este panel se ocultara para maximizar el estado de la "
+"pantalla"
+
+#: src/panel/settings/settings_panel.vala:269
+msgid "Transparency"
+msgstr "Transparencia"
+
+#: src/panel/settings/settings_panel.vala:270
+msgid "Control when this panel should have a solid background"
+msgstr "Controla cuando este panel debe tener un fondo sólido"
+
+#: src/panel/settings/settings_panel.vala:275
+msgid "Shadow"
+msgstr "Sombra"
+
+#: src/panel/settings/settings_panel.vala:276
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "Agrega una sombra decorativa, ideal para paneles opacos"
+
+#: src/panel/settings/settings_panel.vala:282
+msgid "Stylize regions"
+msgstr "Estilizar regiones"
+
+#: src/panel/settings/settings_panel.vala:283
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Agrega una distinción al panel para que las tres áreas principales puedan "
+"tener un tema diferente."
+
+#: src/panel/settings/settings_panel.vala:290
+msgid "Dock mode"
+msgstr "Modo estante"
+
+#: src/panel/settings/settings_panel.vala:291
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Cuando se pone en modo estante, el panel usará la menor cantidad de espacio "
+"posible, liberando espacio en la pantalla"
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:235
+msgid "Add applet"
+msgstr "Agregar applet"
+
+#: src/panel/settings/settings_panel_applets.vala:236
+msgid "Choose a new applet to add to this panel"
+msgstr "Escoge un nuevo applet para agregar a este panel"
+
+#: src/panel/settings/settings_panel_applets.vala:403
+msgid "Start"
+msgstr "Inicio"
+
+#: src/panel/settings/settings_panel_applets.vala:406
+msgid "Center"
+msgstr "Centro"
+
+#: src/panel/settings/settings_panel_applets.vala:409
+msgid "End"
+msgstr "Final"
+
+#: src/panel/settings/settings_raven_settings.vala:47
+msgid "Set Raven position"
+msgstr "Establecer la posición de Raven"
+
+#: src/panel/settings/settings_raven_settings.vala:48
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Establecer en qué lado de la pantalla se abrirá Raven. Si se establece en "
+"Automático, Raven se abrirá donde esté su panel padre."
+
+#: src/panel/settings/settings_raven_settings.vala:71
+msgid "Set notification sort order"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:72
+msgid ""
+"Set whether notifications are sorted from oldest to newest, or newest to "
+"oldest."
+msgstr ""
+
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
 msgstr "Todo"
@@ -1090,18 +1100,18 @@ msgid "Num lock is not active"
 msgstr "Bloqueo numérico desactivado"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
-#: src/raven/notifications_view.vala:322
+#: src/raven/notifications_view.vala:336
 #, c-format
 msgid "%u unread notifications"
 msgstr "%u notificaciones sin leer"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:324
+#: src/raven/notifications_view.vala:338
 msgid "1 unread notification"
 msgstr "1 notificación sin leer"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:125
-#: src/raven/notifications_view.vala:326
+#: src/raven/notifications_view.vala:340
 msgid "No unread notifications"
 msgstr "No hay notificaciones sin leer"
 
@@ -1324,29 +1334,29 @@ msgstr "No hay aplicaciones reproduciendo audio actualmente."
 msgid "Play some music"
 msgstr "Toca algo de música"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:101
-#: src/raven/widgets/media-controls/mpris_gui.vala:419
+#: src/raven/widgets/media-controls/mpris_gui.vala:107
+#: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
 msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:104
-#: src/raven/widgets/media-controls/mpris_gui.vala:423
+#: src/raven/widgets/media-controls/mpris_gui.vala:110
+#: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
 msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:107
-#: src/raven/widgets/media-controls/mpris_gui.vala:427
+#: src/raven/widgets/media-controls/mpris_gui.vala:113
+#: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
 msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:296
+#: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
-msgid "%s - Playing"
+msgid "Playing - %s"
 msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:301
+#: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
-msgid "%s - Paused"
+msgid "Paused - %s"
 msgstr ""
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
@@ -1390,9 +1400,17 @@ msgstr ""
 msgid "Nothing to see here"
 msgstr "Nada que ver aquí"
 
-#: src/raven/notifications_view.vala:116
+#: src/raven/notifications_view.vala:121
 msgid "No new notifications"
 msgstr "No hay notificaciones nuevas"
+
+#: src/raven/raven.vala:49
+msgid "Oldest to newest"
+msgstr ""
+
+#: src/raven/raven.vala:52
+msgid "Newest to oldest"
+msgstr ""
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
