@@ -326,7 +326,8 @@ public class BTDeviceRow : ListBoxRow {
 		revealer = new Revealer() {
 			reveal_child = false,
 			transition_duration = 250,
-			transition_type = RevealerTransitionType.SLIDE_DOWN
+			transition_type = RevealerTransitionType.SLIDE_DOWN,
+			margin_top = 4,
 		};
 		revealer.get_style_context().add_class("bluetooth-device-revealer");
 
