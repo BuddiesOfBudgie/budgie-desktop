@@ -86,6 +86,26 @@ public class BluetoothIndicator : Bin {
 			((BTDeviceRow) row).try_connect_device();
 		});
 
+		// Placeholder
+		var placeholder = new Box(Orientation.VERTICAL, 18) {
+			margin_top = 18,
+		};
+		var placeholder_label = new Label(_("No paired Bluetooth devices found.\n\nVisit Bluetooth settings to pair a device.")) {
+			justify = CENTER,
+		};
+		placeholder_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+		placeholder_label.get_style_context().add_class("bluetooth-placeholder");
+
+		var placeholder_button = new Button.with_label(_("Open Bluetooth Settings")) {
+			relief = HALF,
+		};
+		placeholder_button.get_style_context().add_class(STYLE_CLASS_SUGGESTED_ACTION);
+		placeholder_button.clicked.connect(on_settings_activate);
+
+		placeholder.pack_start(placeholder_label, false);
+		placeholder.pack_start(placeholder_button, false);
+		placeholder.show_all(); // Without this, it never shows. Because... reasons?
+		devices_box.set_placeholder(placeholder);
 		scrolled_window.add(devices_box);
 
 		// Create our Bluetooth client
@@ -315,7 +335,7 @@ public class BTDeviceRow : ListBoxRow {
 		revealer_body.pack_start(status_label);
 		revealer.add(revealer_body);
 
-		// Diconnect button
+		// Disconnect button
 		connection_button = new Button.with_label(_("Disconnect"));
 		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
 		connection_button.get_style_context().add_class("bluetooth-connection-button");
