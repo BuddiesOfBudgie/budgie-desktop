@@ -267,13 +267,12 @@ public class BTDeviceRow : ListBoxRow {
 			}
 			// Set new UPower device
 			_up_device = value;
-			// Connect to signal and update state if the new device
-			// isn't null
+			update_battery();
+			// Connect to signal if the new device isn't null
 			if (_up_device == null) return;
 			up_handler_id = _up_device.notify.connect(() => {
 				update_battery();
 			});
-			update_battery();
 		}
 	}
 
