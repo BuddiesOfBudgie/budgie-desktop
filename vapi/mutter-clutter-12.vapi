@@ -5416,9 +5416,11 @@ namespace Clutter {
 	[Compact]
 	public class Frame {
 		public int64 get_count ();
+		public Clutter.FrameHint get_hints ();
 		public bool get_target_presentation_time (int64 target_presentation_time_us);
 		public bool has_result ();
 		public unowned Clutter.Frame @ref ();
+		public void set_hint (Clutter.FrameHint hint);
 		public void set_result (Clutter.FrameResult result);
 		public void unref ();
 	}
@@ -5431,7 +5433,7 @@ namespace Clutter {
 		public float get_refresh_rate ();
 		public void inhibit ();
 		public void notify_ready ();
-		public void record_flip_time (int64 flip_time_us);
+		public void record_flip (int64 flip_time_us, Clutter.FrameHint hints);
 		public void remove_timeline (Clutter.Timeline timeline);
 		public void schedule_update ();
 		public void schedule_update_now ();
@@ -7061,6 +7063,12 @@ namespace Clutter {
 	public enum FlowOrientation {
 		HORIZONTAL,
 		VERTICAL
+	}
+	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_FRAME_HINT_", type_id = "clutter_frame_hint_get_type ()")]
+	[Flags]
+	public enum FrameHint {
+		NONE,
+		DIRECT_SCANOUT_ATTEMPTED
 	}
 	[CCode (cheader_filename = "clutter/clutter.h", cprefix = "CLUTTER_FRAME_INFO_FLAG_", type_id = "clutter_frame_info_flag_get_type ()")]
 	[Flags]
