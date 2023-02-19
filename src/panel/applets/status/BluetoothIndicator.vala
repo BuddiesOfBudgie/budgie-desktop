@@ -83,7 +83,7 @@ public class BluetoothIndicator : Bin {
 		devices_box.get_style_context().add_class("bluetooth-device-listbox");
 
 		devices_box.row_activated.connect((row) => {
-			((BTDeviceRow) row).try_connect_device();
+			((BTDeviceRow) row).toggle_connection.begin();
 		});
 
 		// Placeholder
@@ -331,12 +331,11 @@ public class BTDeviceRow : ListBoxRow {
 		};
 		revealer.get_style_context().add_class("bluetooth-device-revealer");
 
-		var revealer_body = new Box(HORIZONTAL, 0);
+		var revealer_body = new Box(HORIZONTAL, 6);
 
 		spinner = new Spinner();
 		status_label = new Label(null) {
 			halign = START,
-			margin_start = 6,
 		};
 		status_label.get_style_context().add_class("bluetooth-device-status");
 		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
@@ -349,7 +348,9 @@ public class BTDeviceRow : ListBoxRow {
 		connection_button = new Button.with_label(_("Disconnect"));
 		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
 		connection_button.get_style_context().add_class("bluetooth-connection-button");
-		connection_button.clicked.connect(on_connection_button_clicked);
+		connection_button.clicked.connect(() => {
+			toggle_connection.begin();
+		});
 
 		// Signals
 		((DBusProxy) device).g_properties_changed.connect(update_status);
@@ -374,50 +375,35 @@ public class BTDeviceRow : ListBoxRow {
 	}
 
 	/**
-	 * Try to connect to the Bluetooth device.
+	 * Attempts to either connect to or disconnect from the Bluetooth
+	 * device depending on its current connection state.
 	 */
-	public void try_connect_device() {
-		if (device.connected) return;
+	public async void toggle_connection() {
 		if (spinner.active) return;
 
-		spinner.start();
-		status_label.label = _("Connecting…");
+		spinner.active = true;
 		revealer.reveal_child = true;
 
-		device.connect.begin((obj, res) => {
-			try {
-				device.connect.end(res);
-				connection_button.show();
-				activatable = false;
-			} catch (Error e) {
-				warning("Failed to connect to Bluetooth device %s: %s", device.alias, e.message);
-			}
-
-			revealer.reveal_child = false;
-			spinner.stop();
-		});
-	}
-
-	private void on_connection_button_clicked() {
-		if (!device.connected) return;
-		if (spinner.active) return;
-
-		spinner.start();
-		status_label.label = _("Disconnecting…");
-		revealer.reveal_child = true;
-
-		device.disconnect.begin((obj, res) => {
-			try {
-				device.disconnect.end(res);
+		try {
+			if (device.connected) {
+				status_label.label = _("Disconnecting…");
+				yield device.disconnect();
 				connection_button.hide();
 				activatable = true;
-			} catch (Error e) {
-				warning("Failed to disconnect Bluetooth device %s: %s", device.alias, e.message);
+				revealer.reveal_child = false;
+			} else {
+				status_label.label = _("Connecting…");
+				yield device.connect();
+				connection_button.show();
+				activatable = false;
+				revealer.reveal_child = false;
 			}
+		} catch (Error e) {
+			warning("Failed to connect or disconnect Bluetooth device %s: %s", device.alias, e.message);
+			status_label.label = device.connected ? _("Failed to disconnect") : _("Failed to connect");
+		}
 
-			revealer.reveal_child = false;
-			spinner.stop();
-		});
+		spinner.active = false;
 	}
 
 	private void update_battery() {
