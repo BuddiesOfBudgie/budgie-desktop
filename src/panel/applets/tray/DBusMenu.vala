@@ -31,21 +31,16 @@ private interface DBusMenuInterface : Object {
 
 public class DBusMenu : Object {
 	private HashTable<int32, DBusMenuNode> all_nodes = new HashTable<int32, DBusMenuNode>(direct_hash, direct_equal);
-	private List<int32> children = new List<int32>();
 	private DBusMenuInterface iface;
-	private Gtk.Menu menu;
 
 	public DBusMenu(string dbus_name, ObjectPath dbus_object_path) throws DBusError, IOError {
 		iface = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
-		menu = new Gtk.Menu();
 
 		update_layout();
 		iface.items_properties_updated.connect((updated_props, removed_props) => {
 			on_items_properties_updated(updated_props);
 			on_items_properties_updated(removed_props);
 		});
-
-		menu.show();
 	}
 
 	private void update_layout() {
@@ -61,25 +56,27 @@ public class DBusMenu : Object {
 		parse_layout(layout);
 	}
 
-	private void parse_layout(Variant layout) {
+	private DBusMenuNode parse_layout(Variant layout) {
+		int32 id = layout.get_child_value(0).get_int32();
+		Variant v_props = layout.get_child_value(1);
 		Variant v_children = layout.get_child_value(2);
+
+		var node = new DBusMenuNode(id, v_props);
+		node.clicked.connect((data) => send_event(id, "clicked", data));
+		node.hovered.connect((event) => send_event(id, "hovered"));
+		node.opened.connect((event) => send_event(id, "opened"));
+		node.closed.connect((event) => send_event(id, "closed"));
+
+		all_nodes.set(id, node);
 
 		VariantIter it = v_children.iterator();
 		for (var v_child = it.next_value(); v_child != null; v_child = it.next_value()) {
 			v_child = v_child.get_variant();
-			int32 child_id = v_child.get_child_value(0).get_int32();
-			Variant child_props = v_child.get_child_value(1);
-			Variant child_children = v_child.get_child_value(2);
-
-			var node = new DBusMenuNode(child_id, child_props, child_children);
-			node.clicked.connect((data) => send_event(node.id, "clicked", data));
-			node.hovered.connect((event) => send_event(node.id, "hovered"));
-			node.opened.connect((event) => send_event(node.id, "opened"));
-			node.closed.connect((event) => send_event(node.id, "closed"));
-			children.append(child_id);
-			all_nodes.set(child_id, node);
-			menu.add(node.item);
+			var child_node = parse_layout(v_child);
+			node.add_child(child_node);
 		}
+
+		return node;
 	}
 
 	private void on_items_properties_updated(Variant updated_props) {
@@ -110,6 +107,6 @@ public class DBusMenu : Object {
 	}
 
 	public void popup_at_pointer(Gdk.Event event) {
-		menu.popup_at_pointer(event);
+		all_nodes.get(0).submenu.popup_at_pointer(event);
 	}
 }

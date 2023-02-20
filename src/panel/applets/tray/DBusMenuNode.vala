@@ -12,14 +12,13 @@
 public class DBusMenuNode : Object {
 	public int32 id;
 	public Gtk.MenuItem item;
-
+	public Gtk.Menu submenu;
+	public List<DBusMenuNode> children = new List<DBusMenuNode>();
 	private Properties properties;
-	private List<int32> children = new List<int32>();
 
-	public DBusMenuNode(int32 id, Variant props, Variant children, bool is_root = false) {
+	public DBusMenuNode(int32 id, Variant props) {
 		this.id = id;
 		properties = new Properties(props);
-		if (is_root) return;
 
 		if (properties.type == "separator") {
 			item = new Gtk.SeparatorMenuItem();
@@ -28,11 +27,18 @@ public class DBusMenuNode : Object {
 			return;
 		}
 
-		var dbus_item = new DBusMenuItem(properties);
+		submenu = new Gtk.Menu();
+
+		var dbus_item = new DBusMenuItem(properties, submenu);
 		dbus_item.activate.connect(() => {
 			clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
 		});
 		item = dbus_item;
+	}
+
+	public void add_child(DBusMenuNode node) {
+		children.append(node);
+		submenu.add(node.item);
 	}
 
 	public void update_property(string key, Variant? value) {
@@ -50,7 +56,36 @@ public class DBusMenuNode : Object {
 		}
 
 		if (item is DBusMenuItem) {
-			((DBusMenuItem) item).property_updated(properties, key);
+			var dbus_item = (DBusMenuItem) item;
+			switch (key) {
+				case "label":
+					dbus_item.update_label(properties.label);
+					break;
+				case "type":
+					warning("Attempted to change the type of an existing item");
+					break;
+				case "disposition":
+					dbus_item.update_disposition(properties.disposition);
+					break;
+				case "children-display":
+					dbus_item.update_submenu(properties.children_display, submenu);
+					break;
+				case "toggle-type":
+					dbus_item.update_toggle_type(properties.toggle_type);
+					break;
+				case "toggle-state":
+					dbus_item.active = properties.toggle_state ?? false;
+					break;
+				case "icon-name":
+				case "icon-data":
+					dbus_item.update_icon(properties.icon_name, properties.icon_data);
+					break;
+				case "shortcut":
+					dbus_item.update_shortcut(properties.shortcut);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -66,11 +101,11 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 	private new Gtk.AccelLabel label;
 	private Gtk.Image icon;
 
-	public DBusMenuItem(Properties properties) {
+	public DBusMenuItem(Properties properties, Gtk.Menu submenu) {
 		active = properties.toggle_state ?? false;
 		update_toggle_type(properties.toggle_type);
 		update_disposition(properties.disposition);
-		update_submenu(properties.children_display);
+		update_submenu(properties.children_display, submenu);
 
 		box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 		icon = new Gtk.Image();
@@ -87,44 +122,16 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		set_sensitive(properties.enabled);
 	}
 
-	public void property_updated(Properties properties, string key) {
-		switch (key) {
-			case "label":
-				label.set_text_with_mnemonic(properties.label);
-				break;
-			case "type":
-				warning("Attempted to change the type of an existing item");
-				break;
-			case "disposition":
-				update_disposition(properties.disposition);
-				break;
-			case "children-display":
-				update_submenu(properties.children_display);
-				break;
-			case "toggle-type":
-				update_toggle_type(properties.toggle_type);
-				break;
-			case "toggle-state":
-				active = properties.toggle_state ?? false;
-				break;
-			case "icon-name":
-			case "icon-data":
-				update_icon(properties.icon_name, properties.icon_data);
-				break;
-			case "shortcut":
-				update_shortcut(properties.shortcut);
-				break;
-			default:
-				break;
-		}
+	public void update_label(string new_mnemonic_text) {
+		label.set_text_with_mnemonic(new_mnemonic_text);
 	}
 
-	private void update_toggle_type(string new_toggle_type) {
+	public void update_toggle_type(string new_toggle_type) {
 		draw_as_radio = new_toggle_type == "radio";
 		should_draw_indicator = new_toggle_type != "";
 	}
 
-	private void update_disposition(string new_disposition) {
+	public void update_disposition(string new_disposition) {
 		var style_context = get_style_context();
 		style_context.remove_class("info");
 		style_context.remove_class("warning");
@@ -139,15 +146,15 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		}
 	}
 
-	private void update_submenu(string new_children_display) {
-		if (new_children_display == "submenu") {
-			submenu = new Gtk.Menu();
-		} else {
-			submenu = null;
+	public void update_submenu(string new_children_display, Gtk.Menu submenu) {
+		if (this.submenu == null && new_children_display == "submenu") {
+			this.submenu = submenu;
+		} else if (this.submenu != null && new_children_display != "submenu") {
+			this.submenu = null;
 		}
 	}
 
-	private void update_icon(string icon_name, Bytes icon_data) {
+	public void update_icon(string icon_name, Bytes icon_data) {
 		if (icon_name == "" && icon_data.get_size() == 0) {
 			if (icon.parent == box) box.remove(icon);
 			return;
@@ -164,7 +171,7 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		box.pack_start(icon, false, false, 2);
 	}
 
-	private void update_shortcut(List<string>? new_shortcut) {
+	public void update_shortcut(List<string>? new_shortcut) {
 		if (new_shortcut == null) {
 			label.set_accel(0, 0);
 			return;
