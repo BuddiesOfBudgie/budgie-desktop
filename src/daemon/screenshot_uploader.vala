@@ -105,15 +105,18 @@ namespace BudgieScr {
 			var finalreq = new GLib.Bytes(req.data);
 			message.set_request_body_from_bytes(Soup.FORM_MIME_TYPE_URLENCODED, finalreq);
 
-			// Send message & get Bytes from response
-			// TODO: Async
+			// Async send message & get Bytes from response
 			GLib.Bytes? payloadbytes = null;
-			try {
-				payloadbytes = session.send_and_read(message);
-			} catch (GLib.Error e) {
-				stderr.printf(e.message);
-				return false;
-			}
+			var loop = new MainLoop();
+			session.send_and_read_async.begin(message, 0, null, (obj,res) => {
+				try {
+					payloadbytes = session.send_and_read_async.end(res);
+				} catch (Error e) {
+					stderr.printf(e.message);
+				}
+				loop.quit();
+			});
+			loop.run();
 
 			// Encode back to string for json parsing
 			string payload = (string)payloadbytes.get_data();
@@ -190,14 +193,18 @@ namespace BudgieScr {
 			message.request_headers.get_content_type(out content_type_params);
 			message.request_headers.set_content_type(Soup.FORM_MIME_TYPE_MULTIPART, content_type_params);
 
-			// Send message & get Bytes from response
+			// Async send message & get Bytes from response
 			Bytes? payloadbytes = null;
-			try {
-				payloadbytes = session.send_and_read(message);
-			} catch (GLib.Error e) {
-				stderr.printf(e.message);
-				return false;
-			}
+			var loop = new MainLoop();
+			session.send_and_read_async.begin(message, 0, null, (obj,res) => {
+				try {
+					payloadbytes = session.send_and_read_async.end(res);
+				} catch (Error e) {
+					stderr.printf(e.message);
+				}
+				loop.quit();
+			});
+			loop.run();
 
 			// Encode back to string for parsing
 			string payload = (string)payloadbytes.get_data();
@@ -254,15 +261,18 @@ namespace BudgieScr {
 			message.request_headers.get_content_type(out content_type_params);
 			message.request_headers.set_content_type(Soup.FORM_MIME_TYPE_MULTIPART, content_type_params);
 
-			// Send message & get Bytes from response
-			// TODO: Async
+			// Async send message & get Bytes from response
 			GLib.Bytes? payloadbytes = null;
-			try {
-				payloadbytes = session.send_and_read(message);
-			} catch (GLib.Error e) {
-				stderr.printf(e.message);
-				return false;
-			}
+			var loop = new MainLoop();
+			session.send_and_read_async.begin(message, 0, null, (obj,res) => {
+				try {
+					payloadbytes = session.send_and_read_async.end(res);
+				} catch (Error e) {
+					stderr.printf(e.message);
+				}
+				loop.quit();
+			});
+			loop.run();
 
 			// Encode back to string for parsing
 			string payload = (string)payloadbytes.get_data();
@@ -330,15 +340,18 @@ namespace BudgieScr {
 			Soup.Message message = new Soup.Message("POST", "https://tempfiles.ninja/api/upload?filename=" + uri);
 			message.set_request_body_from_bytes("image/jpeg", databytes);
 
-			// Send message & get Bytes from response
-			// TODO: Async
+			// Async send message & get Bytes from response
 			GLib.Bytes? payloadbytes = null;
-			try {
-				payloadbytes = session.send_and_read(message);
-			} catch (GLib.Error e) {
-				stderr.printf(e.message);
-				return false;
-			}
+			var loop = new MainLoop();
+			session.send_and_read_async.begin(message, 0, null, (obj,res) => {
+				try {
+					payloadbytes = session.send_and_read_async.end(res);
+				} catch (Error e) {
+					stderr.printf(e.message);
+				}
+				loop.quit();
+			});
+			loop.run();
 
 			// Encode back to string for parsing
 			string payload = (string)payloadbytes.get_data();
