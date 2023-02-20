@@ -1014,6 +1014,8 @@ namespace BudgieScr {
 			var providerslabel = new Gtk.Label("Provider:");
 			providersbox.pack_start(providerslabel, true, false, padding);
 
+			var Uploader = new Uploader();
+
 			// Populate combobox with providers
 			var combobox = new Gtk.ComboBoxText();
 			foreach (var p in Uploader.provider) {
@@ -1048,6 +1050,7 @@ namespace BudgieScr {
 					var failed_label = new Gtk.Label("Failed to get a response");
 					urlsbox.add(failed_label);
 					warning("Failed to get response from provider: %s\n", chosenprovider);
+					providerspopover.show_all();
 				}
 				if (link != null) {
 					clp.set_text(link, link.length);

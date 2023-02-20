@@ -21,7 +21,26 @@ namespace BudgieScr {
 		TEMPFILES = 4,
 	}
 
-	public class Uploader {
+	public class Uploader : GLib.Object {
+
+		public const string imgur_str = "imgur.com";
+		public const string nullpointer_str = "0x0.st";
+		public const string tmpfiles_str = "tmpfiles.org";
+		public const string tempfiles_str = "tempfiles.ninja";
+
+		private Soup.Session session;
+		private Soup.Logger logger;
+		private Json.Parser parser;
+
+		public Uploader() {
+			session = new Soup.Session();
+			if (GLib.Log.get_debug_enabled() == true) {
+				logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
+				session.add_feature(logger);
+			}
+			parser = new Json.Parser();
+		}
+
 		public const BudgieScr.Providers[] provider = {
 			BudgieScr.Providers.IMGUR,
 			BudgieScr.Providers.NULLPOINTER, // 0x0
@@ -29,36 +48,36 @@ namespace BudgieScr {
 			BudgieScr.Providers.TEMPFILES,
 		};
 
-		public static string provider_string_to_display(BudgieScr.Providers provider) {
+		public string provider_string_to_display(BudgieScr.Providers provider) {
 			switch (provider) {
 				case Providers.IMGUR:
-					return _("imgur.com");
+					return _(imgur_str);
 				case Providers.NULLPOINTER:
-					return _("0x0.st");
+					return _(nullpointer_str);
 				case Providers.TMPFILES:
-					return _("tmpfiles.org");
+					return _(tmpfiles_str);
 				case Providers.TEMPFILES:
-					return _("tempfiles.ninja");
+					return _(tempfiles_str);
 				default:
-					return _("0x0.st");
+					return _(nullpointer_str);
 			}
 		}
 
 		// Choose uploader from provided string, return status and link
-		public static bool upload_to_provider(string chosenprovider, string path, out string? link) {
+		public bool upload_to_provider(string chosenprovider, string path, out string? link) {
 			bool status = false;
 			link = null;
 			switch (chosenprovider) {
-				case "Imgur":
+				case imgur_str:
 					status = upload_image_imgur(path, out link);
 					break;
-				case "0x0":
+				case nullpointer_str:
 					status = upload_image_nullpointer(path, out link);
 					break;
-				case "tmpfiles.org":
+				case tmpfiles_str:
 					status = upload_image_tmpfiles(path, out link);
 					break;
-				case "tempfiles.ninja":
+				case tempfiles_str:
 					status = upload_image_tempfilesninja(path, out link);
 					break;
 				default:
@@ -69,20 +88,12 @@ namespace BudgieScr {
 		}
 
 		// Upload image to https://imgur.com/ web service
-		private static bool upload_image_imgur(string uri, out string? link) {
+		private bool upload_image_imgur(string uri, out string? link) {
 			link = null;
 
 			// TODO: Provide your own via meson options
 			string imgur_clientid = "";
 			string imgur_apikey = "";
-
-			var session = new Soup.Session();
-
-			// Setup soup logger if we're debugging
-			if (GLib.Log.get_debug_enabled() == true) {
-				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
-				session.add_feature(logger);
-			}
 
 			// Read file into memory
 			uint8[] data;
@@ -124,10 +135,9 @@ namespace BudgieScr {
 				return false;
 			}
 
-			debug("imgur.com payload: %s\n", payload);
+			debug("%s payload: %s\n", imgur_str, payload);
 
-			// Setup json parser with our payload reponse
-			Json.Parser parser = new Json.Parser();
+			// parse the json payload response
 			try {
 				int64 len = payload.length;
 				parser.load_from_data(payload, (ssize_t)len);
@@ -153,22 +163,14 @@ namespace BudgieScr {
 			}
 
 			link = url;
-			debug("imgur: link from response: %s\n", link);
+			debug("%s: link from response: %s\n", imgur_str, link);
 
 			return true;
 		}
 
 		// Upload image to https://0x0.st/ web service
-		private static bool upload_image_nullpointer(string uri, out string? link) {
+		private bool upload_image_nullpointer(string uri, out string? link) {
 			link = null;
-
-			var session = new Soup.Session();
-
-			// Setup soup logger if we're debugging
-			if (GLib.Log.get_debug_enabled() == true) {
-				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
-				session.add_feature(logger);
-			}
 
 			// Read file into memory
 			uint8[] data;
@@ -212,7 +214,7 @@ namespace BudgieScr {
 				return false;
 			}
 
-			debug("0x0.st payload: %s\n", payload);
+			debug("%s payload: %s\n", nullpointer_str, payload);
 
 			// Get link from reponse
 			if (!payload.has_prefix("http")) {
@@ -220,22 +222,14 @@ namespace BudgieScr {
 			}
 			link = payload.strip();
 
-			debug("0x0: link from response %s\n", link);
+			debug("%s: link from response %s\n", nullpointer_str, link);
 
 			return true;
 		}
 
 		// Upload to https://tmpfiles.org
-		private static bool upload_image_tmpfiles(string uri, out string? link) {
+		private bool upload_image_tmpfiles(string uri, out string? link) {
 			link = null;
-
-			var session = new Soup.Session();
-
-			// Setup soup logger if we're debugging
-			if (GLib.Log.get_debug_enabled() == true) {
-				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
-				session.add_feature(logger);
-			}
 
 			// Read file into memory
 			uint8[] data;
@@ -280,10 +274,9 @@ namespace BudgieScr {
 				return false;
 			}
 
-			debug("tmpfiles.org payload: %s\n", payload);
+			debug("%s payload: %s\n", tmpfiles_str, payload);
 
-			// Setup json parser with our payload reponse
-			Json.Parser parser = new Json.Parser();
+			// parse the json payload response
 			try {
 				int64 len = payload.length;
 				parser.load_from_data(payload, (ssize_t)len);
@@ -309,22 +302,14 @@ namespace BudgieScr {
 			}
 
 			link = url;
-			debug("tmpfiles.org: link from response: %s\n", link);
+			debug("%s: link from response: %s\n", tmpfiles_str, link);
 
 			return true;
 		}
 
 		// Upload to https://tempfiles.ninja
-		private static bool upload_image_tempfilesninja(string uri, out string? link) {
+		private bool upload_image_tempfilesninja(string uri, out string? link) {
 			link = null;
-
-			var session = new Soup.Session();
-
-			// Setup soup logger if we're debugging
-			if (GLib.Log.get_debug_enabled() == true) {
-				Soup.Logger logger = new Soup.Logger(Soup.LoggerLogLevel.HEADERS);
-				session.add_feature(logger);
-			}
 
 			// Read file into memory
 			uint8[] data;
@@ -359,10 +344,9 @@ namespace BudgieScr {
 				return false;
 			}
 
-			debug("tempfiles.ninja payload: %s\n", payload);
+			debug("%s payload: %s\n", tempfiles_str, payload);
 
-			// Setup json parser with our payload reponse
-			Json.Parser parser = new Json.Parser();
+			// parse the json payload response
 			try {
 				int64 len = payload.length;
 				parser.load_from_data(payload, (ssize_t)len);
@@ -384,7 +368,7 @@ namespace BudgieScr {
 			}
 
 			link = url;
-			debug("tempfiles.ninja: link from response: %s\n", link);
+			debug("%s: link from response: %s\n", tempfiles_str, link);
 
 			return true;
 		}
