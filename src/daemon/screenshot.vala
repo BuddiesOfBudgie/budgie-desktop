@@ -1056,6 +1056,13 @@ namespace BudgieScr {
 					clp.set_text(link, link.length);
 					// TODO: Save the URLs for later incase popover is destroyed
 					var link_btn = new Gtk.LinkButton.with_label(link, link);
+
+					// Truncate link if neccessary to prevent label overflow
+					var maxstringlen = 45;
+					if (link.length > maxstringlen) {
+						link_btn = new Gtk.LinkButton.with_label(link, link.substring(0, maxstringlen) + "...");
+					}
+
 					urlsbox.add(link_btn);
 					providerspopover.show_all();
 				}
