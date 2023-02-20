@@ -110,6 +110,7 @@ namespace Budgie.StatusNotifier {
 						registered_services.set(service_key, {name, object_path, sender_str, owner});
 						status_notifier_item_registered(name);
 						status_notifier_item_registered_budgie(name, object_path, sender_str, owner);
+						kde_watcher.status_notifier_item_registered(name);
 					}
 				},
 				(conn,name) => {
@@ -120,6 +121,7 @@ namespace Budgie.StatusNotifier {
 						registered_services.remove(service_key);
 						status_notifier_item_unregistered(name);
 						status_notifier_item_unregistered_budgie(name, object_path, sender_str);
+						kde_watcher.status_notifier_item_unregistered(name);
 					}
 
 				}
