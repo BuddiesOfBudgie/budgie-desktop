@@ -146,6 +146,10 @@ msgstr ""
 msgid "Provider:"
 msgstr ""
 
+#: src/daemon/screenshot.vala:1038
+msgid "Upload screenshot"
+msgstr ""
+
 #: src/daemon/screenshot.vala:1048
 msgid "Failed to get a response"
 msgstr ""

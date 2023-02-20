@@ -1037,6 +1037,7 @@ namespace BudgieScr {
 			uploadimage.margin_start = padding;
 			uploadimage.margin_end = padding;
 			uploadbutton.add(uploadimage);
+			uploadbutton.set_tooltip_text("Upload screenshot");
 			uploadbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 			providersbox.pack_end(uploadbutton, false, false, padding);
 
