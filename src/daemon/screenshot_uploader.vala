@@ -40,7 +40,7 @@ namespace BudgieScr {
 				case Providers.TEMPFILES:
 					return _("tempfiles.ninja");
 				default:
-					return _("0x0");
+					return _("0x0.st");
 			}
 		}
 
@@ -104,10 +104,6 @@ namespace BudgieScr {
 			// Encode to Bytes and set message body
 			var finalreq = new GLib.Bytes(req.data);
 			message.set_request_body_from_bytes(Soup.FORM_MIME_TYPE_URLENCODED, finalreq);
-
-			/*message.wrote_body_data.connect((chunk) => {
-				progress_updated(message.request_body.length, chunk.length);
-			}); */
 
 			// Send message & get Bytes from response
 			// TODO: Async
