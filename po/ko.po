@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-11 18:30+0200\n"
+"POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2023\n"
 "Language-Team: Korean (https://www.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
@@ -403,7 +403,7 @@ msgstr "약간"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:204
 msgid "None"
 msgstr "없음"
 
@@ -430,189 +430,6 @@ msgstr "안티엘리어싱"
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "사용할 안티엘리어싱 유형을 설정합니다."
-
-#: src/panel/settings/settings_panel.vala:85
-msgid "Applets"
-msgstr "애플릿"
-
-#: src/panel/settings/settings_panel.vala:86
-#: src/panel/settings/settings_raven.vala:48
-msgid "Settings"
-msgstr "설정"
-
-#: src/panel/settings/settings_panel.vala:88
-msgid "Remove Panel"
-msgstr "작업표시줄 제거하기"
-
-#: src/panel/settings/settings_panel.vala:89
-msgid "Remove this panel from the screen"
-msgstr "화면에서 이 작업표시줄 제거하기"
-
-#: src/panel/settings/settings_panel.vala:126
-msgid "Top Dock"
-msgstr "위쪽 간소화된 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:128
-msgid "Right Dock"
-msgstr "오른쪽 간소화된 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:130
-msgid "Left Dock"
-msgstr "왼쪽 간소화된 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:132
-msgid "Bottom Dock"
-msgstr "아래쪽 간소화된 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:137
-msgid "Top Panel"
-msgstr "위쪽 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:139
-msgid "Right Panel"
-msgstr "오른쪽 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:141
-msgid "Left Panel"
-msgstr "왼쪽 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:143
-msgid "Bottom Panel"
-msgstr "아래쪽 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:180
-msgid "Top"
-msgstr "상단"
-
-#: src/panel/settings/settings_panel.vala:182 src/raven/raven.vala:35
-msgid "Right"
-msgstr "오른쪽"
-
-#: src/panel/settings/settings_panel.vala:184
-#: src/panel/settings/settings_wm.vala:99 src/raven/raven.vala:33
-msgid "Left"
-msgstr "왼쪽"
-
-#: src/panel/settings/settings_panel.vala:186
-msgid "Bottom"
-msgstr "하단"
-
-#: src/panel/settings/settings_panel.vala:196
-msgid "Always"
-msgstr "항상"
-
-#: src/panel/settings/settings_panel.vala:198
-msgid "Dynamic"
-msgstr "동적"
-
-#: src/panel/settings/settings_panel.vala:211 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "자동"
-
-#: src/panel/settings/settings_panel.vala:213
-msgid "Intelligent"
-msgstr "지능형"
-
-#: src/panel/settings/settings_panel.vala:216
-msgid "Never"
-msgstr "안함"
-
-#: src/panel/settings/settings_panel.vala:231
-msgid "Position"
-msgstr "위치"
-
-#: src/panel/settings/settings_panel.vala:232
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "이 작업표시줄이 위치할 화면의 가장자리 설정하기"
-
-#: src/panel/settings/settings_panel.vala:240
-msgid "Size"
-msgstr "크기"
-
-#: src/panel/settings/settings_panel.vala:241
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "이 작업표시줄의 크기(방향에 따른 가로길이와 높이) 설정하기"
-
-#: src/panel/settings/settings_panel.vala:248
-msgid "Spacing"
-msgstr "간격"
-
-#: src/panel/settings/settings_panel.vala:249
-msgid "Set the spacing between applets for this panel"
-msgstr "이 작업표시줄에 대한 애플릿 사이의 간격 설정하기"
-
-#: src/panel/settings/settings_panel.vala:256
-msgid "Automatically hide"
-msgstr "자동으로 숨기기"
-
-#: src/panel/settings/settings_panel.vala:257
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "설정하면 화면 공간을 최대화하기 위해 작업표시줄을 자동으로 숨깁니다"
-
-#: src/panel/settings/settings_panel.vala:264
-msgid "Transparency"
-msgstr "투명도"
-
-#: src/panel/settings/settings_panel.vala:265
-msgid "Control when this panel should have a solid background"
-msgstr "이 작업표시줄을 단일 색상으로 표시할는 경우 제어하기"
-
-#: src/panel/settings/settings_panel.vala:270
-msgid "Shadow"
-msgstr "그림자"
-
-#: src/panel/settings/settings_panel.vala:271
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "불투명한 작업표시줄에 잘 어울리는 가장자리 그림자 추가하기"
-
-#: src/panel/settings/settings_panel.vala:277
-msgid "Stylize regions"
-msgstr "지역 스타일 지정"
-
-#: src/panel/settings/settings_panel.vala:278
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr "작업표시줄의 세가지 주요 영역을 다르게 꾸밀 수 있도록 미리보기 보여줍니다."
-
-#: src/panel/settings/settings_panel.vala:285
-msgid "Dock mode"
-msgstr "간소화된 작업표시줄"
-
-#: src/panel/settings/settings_panel.vala:286
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
-
-#: src/panel/settings/settings_panel_applets.vala:19
-msgid "Configure applet"
-msgstr "애플릿 구성하기"
-
-#: src/panel/settings/settings_panel_applets.vala:233
-msgid "Add applet"
-msgstr "애플릿 추가하기"
-
-#: src/panel/settings/settings_panel_applets.vala:234
-msgid "Choose a new applet to add to this panel"
-msgstr "이 작업표시줄에 추가할 새 애플릿을 선정합니다"
-
-#: src/panel/settings/settings_panel_applets.vala:248
-#: src/panel/settings/settings_raven_widgets.vala:164
-msgid "No settings available"
-msgstr "사용 가능한 설정이 없습니다"
-
-#: src/panel/settings/settings_panel_applets.vala:401
-msgid "Start"
-msgstr "시작"
-
-#: src/panel/settings/settings_panel_applets.vala:404
-msgid "Center"
-msgstr "가운데"
-
-#: src/panel/settings/settings_panel_applets.vala:407
-msgid "End"
-msgstr "끝"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -666,17 +483,6 @@ msgstr "이 위젯을 제거하시겠습니까? 이 작업은 취소할 수 없�
 msgid "Remove"
 msgstr "제거하기"
 
-#: src/panel/settings/settings_raven_settings.vala:45
-msgid "Set Raven position"
-msgstr "Raven 위치 설정하기"
-
-#: src/panel/settings/settings_raven_settings.vala:46
-msgid ""
-"Set which side of the screen Raven will open on. If set to Automatic, Raven "
-"will open where its parent panel is."
-msgstr ""
-"Raven이 화면의 어느 쪽에서 열 것인지 설정합니다. 자동으로 설정하면, Raven은 상위 작업표시줄이 있는 위치에서 열립니다."
-
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
 msgstr "위젯 설정"
@@ -688,6 +494,11 @@ msgstr "위젯 추가하기"
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
 msgstr "위젯 보기에 추가할 새 위젯을 선정합니다"
+
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:250
+msgid "No settings available"
+msgstr "사용 가능한 설정이 없습니다"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
@@ -792,6 +603,11 @@ msgstr "오른쪽 하단"
 #: src/panel/settings/settings_style.vala:212
 msgid "Top Right"
 msgstr "오른쪽 상단"
+
+#: src/panel/settings/settings_raven.vala:48
+#: src/panel/settings/settings_panel.vala:89
+msgid "Settings"
+msgstr "설정"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
@@ -926,6 +742,200 @@ msgstr "모든 탭은 사용 중인 작업공간에 관계없이 탭 전환도�
 msgid "Right (standard)"
 msgstr "오른쪽 (기본값)"
 
+#: src/panel/settings/settings_wm.vala:99
+#: src/panel/settings/settings_panel.vala:187 src/raven/raven.vala:33
+msgid "Left"
+msgstr "왼쪽"
+
+#: src/panel/settings/settings_panel.vala:88
+msgid "Applets"
+msgstr "애플릿"
+
+#: src/panel/settings/settings_panel.vala:91
+msgid "Remove Panel"
+msgstr "작업표시줄 제거하기"
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Remove this panel from the screen"
+msgstr "화면에서 이 작업표시줄 제거하기"
+
+#: src/panel/settings/settings_panel.vala:129
+msgid "Top Dock"
+msgstr "위쪽 간소화된 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:131
+msgid "Right Dock"
+msgstr "오른쪽 간소화된 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:133
+msgid "Left Dock"
+msgstr "왼쪽 간소화된 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:135
+msgid "Bottom Dock"
+msgstr "아래쪽 간소화된 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:140
+msgid "Top Panel"
+msgstr "위쪽 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:142
+msgid "Right Panel"
+msgstr "오른쪽 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:144
+msgid "Left Panel"
+msgstr "왼쪽 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Bottom Panel"
+msgstr "아래쪽 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:183
+msgid "Top"
+msgstr "상단"
+
+#: src/panel/settings/settings_panel.vala:185 src/raven/raven.vala:35
+msgid "Right"
+msgstr "오른쪽"
+
+#: src/panel/settings/settings_panel.vala:189
+msgid "Bottom"
+msgstr "하단"
+
+#: src/panel/settings/settings_panel.vala:199
+msgid "Always"
+msgstr "항상"
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Dynamic"
+msgstr "동적"
+
+#: src/panel/settings/settings_panel.vala:214 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "자동"
+
+#: src/panel/settings/settings_panel.vala:216
+msgid "Intelligent"
+msgstr "지능형"
+
+#: src/panel/settings/settings_panel.vala:219
+msgid "Never"
+msgstr "안함"
+
+#: src/panel/settings/settings_panel.vala:236
+msgid "Position"
+msgstr "위치"
+
+#: src/panel/settings/settings_panel.vala:237
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "이 작업표시줄이 위치할 화면의 가장자리 설정하기"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Size"
+msgstr "크기"
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr "이 작업표시줄의 크기(방향에 따른 가로길이와 높이) 설정하기"
+
+#: src/panel/settings/settings_panel.vala:253
+msgid "Spacing"
+msgstr "간격"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Set the spacing between applets for this panel"
+msgstr "이 작업표시줄에 대한 애플릿 사이의 간격 설정하기"
+
+#: src/panel/settings/settings_panel.vala:261
+msgid "Automatically hide"
+msgstr "자동으로 숨기기"
+
+#: src/panel/settings/settings_panel.vala:262
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr "설정하면 화면 공간을 최대화하기 위해 작업표시줄을 자동으로 숨깁니다"
+
+#: src/panel/settings/settings_panel.vala:269
+msgid "Transparency"
+msgstr "투명도"
+
+#: src/panel/settings/settings_panel.vala:270
+msgid "Control when this panel should have a solid background"
+msgstr "이 작업표시줄을 단일 색상으로 표시할는 경우 제어하기"
+
+#: src/panel/settings/settings_panel.vala:275
+msgid "Shadow"
+msgstr "그림자"
+
+#: src/panel/settings/settings_panel.vala:276
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "불투명한 작업표시줄에 잘 어울리는 가장자리 그림자 추가하기"
+
+#: src/panel/settings/settings_panel.vala:282
+msgid "Stylize regions"
+msgstr "지역 스타일 지정"
+
+#: src/panel/settings/settings_panel.vala:283
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr "작업표시줄의 세가지 주요 영역을 다르게 꾸밀 수 있도록 미리보기 보여줍니다."
+
+#: src/panel/settings/settings_panel.vala:290
+msgid "Dock mode"
+msgstr "간소화된 작업표시줄"
+
+#: src/panel/settings/settings_panel.vala:291
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:235
+msgid "Add applet"
+msgstr "애플릿 추가하기"
+
+#: src/panel/settings/settings_panel_applets.vala:236
+msgid "Choose a new applet to add to this panel"
+msgstr "이 작업표시줄에 추가할 새 애플릿을 선정합니다"
+
+#: src/panel/settings/settings_panel_applets.vala:403
+msgid "Start"
+msgstr "시작"
+
+#: src/panel/settings/settings_panel_applets.vala:406
+msgid "Center"
+msgstr "가운데"
+
+#: src/panel/settings/settings_panel_applets.vala:409
+msgid "End"
+msgstr "끝"
+
+#: src/panel/settings/settings_raven_settings.vala:47
+msgid "Set Raven position"
+msgstr "Raven 위치 설정하기"
+
+#: src/panel/settings/settings_raven_settings.vala:48
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Raven이 화면의 어느 쪽에서 열 것인지 설정합니다. 자동으로 설정하면, Raven은 상위 작업표시줄이 있는 위치에서 열립니다."
+
+#: src/panel/settings/settings_raven_settings.vala:71
+msgid "Set notification sort order"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:72
+msgid ""
+"Set whether notifications are sorted from oldest to newest, or newest to "
+"oldest."
+msgstr ""
+
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
 msgstr "모두"
@@ -1038,18 +1048,18 @@ msgid "Num lock is not active"
 msgstr "Num lock 꺼짐"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
-#: src/raven/notifications_view.vala:322
+#: src/raven/notifications_view.vala:336
 #, c-format
 msgid "%u unread notifications"
 msgstr "읽지 않은 알림 %u개"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:324
+#: src/raven/notifications_view.vala:338
 msgid "1 unread notification"
 msgstr "읽지 않은 알림 1개"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:125
-#: src/raven/notifications_view.vala:326
+#: src/raven/notifications_view.vala:340
 msgid "No unread notifications"
 msgstr "읽지 않은 알림 없음"
 
@@ -1269,30 +1279,30 @@ msgstr "오디오를 재생 중인 앱이 없습니다."
 msgid "Play some music"
 msgstr "음악 재생"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:101
-#: src/raven/widgets/media-controls/mpris_gui.vala:419
+#: src/raven/widgets/media-controls/mpris_gui.vala:107
+#: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
 msgstr "알 수 없는 제목"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:104
-#: src/raven/widgets/media-controls/mpris_gui.vala:423
+#: src/raven/widgets/media-controls/mpris_gui.vala:110
+#: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
 msgstr "알 수 없는 아티스트"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:107
-#: src/raven/widgets/media-controls/mpris_gui.vala:427
+#: src/raven/widgets/media-controls/mpris_gui.vala:113
+#: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
 msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:296
+#: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
-msgid "%s - Playing"
-msgstr "%s - 재생중"
+msgid "Playing - %s"
+msgstr ""
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:301
+#: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
-msgid "%s - Paused"
-msgstr "%s - 중지됨"
+msgid "Paused - %s"
+msgstr ""
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
@@ -1335,9 +1345,17 @@ msgstr "추가된 위젯이 없습니다."
 msgid "Nothing to see here"
 msgstr "현재 표시할 알림이 없습니다"
 
-#: src/raven/notifications_view.vala:116
+#: src/raven/notifications_view.vala:121
 msgid "No new notifications"
 msgstr "새 알림 없음"
+
+#: src/raven/raven.vala:49
+msgid "Oldest to newest"
+msgstr ""
+
+#: src/raven/raven.vala:52
+msgid "Newest to oldest"
+msgstr ""
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
