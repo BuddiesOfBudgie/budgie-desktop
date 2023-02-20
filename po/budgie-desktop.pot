@@ -124,16 +124,30 @@ msgstr ""
 msgid "Cancel screenshot"
 msgstr ""
 
-#: src/daemon/screenshot.vala:899
+#: src/daemon/screenshot.vala:903
 msgid "Save screenshot to the selected directory"
 msgstr ""
 
-#: src/daemon/screenshot.vala:900
+#: src/daemon/screenshot.vala:904
 msgid "Copy screenshot to the clipboard"
 msgstr ""
 
-#: src/daemon/screenshot.vala:901
+#: src/daemon/screenshot.vala:905
 msgid "Open screenshot in default application"
+msgstr ""
+
+#: src/daemon/screenshot.vala:906
+msgid "Upload screenshot to a web service"
+msgstr ""
+
+# The 'provider' in this context is a web service
+# that allows the user to upload images to.
+#: src/daemon/screenshot.vala:1012
+msgid "Provider:"
+msgstr ""
+
+#: src/daemon/screenshot.vala:1048
+msgid "Failed to get a response"
 msgstr ""
 
 #. Other -> call Filebrowser (path = null)
