@@ -482,7 +482,7 @@ namespace BudgieScr {
 			*/
 			Gtk.Button shootbutton = new Gtk.Button();
 			if (windowstate.showtooltips) {
-				shootbutton.set_tooltip_text("Take a screenshot");
+				shootbutton.set_tooltip_text(_("Take a screenshot"));
 			}
 
 			var iconfile =  new ThemedIcon(name = "shootscreen-symbolic");
@@ -1011,7 +1011,7 @@ namespace BudgieScr {
 			containerbox.add(urlsbox);
 			providerspopover.add(containerbox);
 
-			var providerslabel = new Gtk.Label("Provider:");
+			var providerslabel = new Gtk.Label(_("Provider:"));
 			providersbox.pack_start(providerslabel, true, false, padding);
 
 			var Uploader = new Uploader();
@@ -1037,7 +1037,7 @@ namespace BudgieScr {
 			uploadimage.margin_start = padding;
 			uploadimage.margin_end = padding;
 			uploadbutton.add(uploadimage);
-			uploadbutton.set_tooltip_text("Upload screenshot");
+			uploadbutton.set_tooltip_text(_("Upload screenshot"));
 			uploadbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 			providersbox.pack_end(uploadbutton, false, false, padding);
 
@@ -1048,7 +1048,7 @@ namespace BudgieScr {
 				status = Uploader.upload_to_provider(chosenprovider, imagepath, out link);
 
 				if (link == null || status == false) {
-					var failed_label = new Gtk.Label("Failed to get a response");
+					var failed_label = new Gtk.Label(_("Failed to get a response"));
 					urlsbox.add(failed_label);
 					warning("Failed to get response from provider: %s\n", chosenprovider);
 					providerspopover.show_all();
@@ -1141,7 +1141,7 @@ namespace BudgieScr {
 				warning("save_tofile %s\n", e.message);
 				Button savebutton = decisionbuttons[1];
 				set_buttoncontent(savebutton, "saveshot-noaccess-symbolic");
-				savebutton.set_tooltip_text("A permission error on the directory occurred");
+				savebutton.set_tooltip_text(_("A permission error on the directory occurred"));
 
 				return "fail";
 			}
