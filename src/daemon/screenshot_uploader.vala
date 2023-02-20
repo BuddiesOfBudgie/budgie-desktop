@@ -88,7 +88,7 @@ namespace BudgieScr {
 		}
 
 		// Upload image to https://imgur.com/ web service
-		private bool upload_image_imgur(string uri, out string? link) {
+		private bool upload_image_imgur(string path, out string? link) {
 			link = null;
 
 			// TODO: Provide your own via meson options
@@ -98,7 +98,7 @@ namespace BudgieScr {
 			// Read file into memory
 			uint8[] data;
 			try {
-				GLib.FileUtils.get_data(uri, out data);
+				GLib.FileUtils.get_data(path, out data);
 			} catch (GLib.FileError e) {
 				warning(e.message);
 				return false;
@@ -169,13 +169,13 @@ namespace BudgieScr {
 		}
 
 		// Upload image to https://0x0.st/ web service
-		private bool upload_image_nullpointer(string uri, out string? link) {
+		private bool upload_image_nullpointer(string path, out string? link) {
 			link = null;
 
 			// Read file into memory
 			uint8[] data;
 			try {
-				GLib.FileUtils.get_data(uri, out data);
+				GLib.FileUtils.get_data(path, out data);
 			} catch (GLib.FileError e) {
 				warning(e.message);
 				return false;
@@ -187,7 +187,7 @@ namespace BudgieScr {
 			// Setup our multipart message
 			string mime_type = "application/octet-stream";
 			Soup.Multipart multipart = new Soup.Multipart(mime_type);
-			multipart.append_form_file("file", uri, mime_type, imagebytes);
+			multipart.append_form_file("file", path, mime_type, imagebytes);
 			Soup.Message message = new Soup.Message.from_multipart("https://0x0.st/", multipart);
 
 			// Set and get content type
@@ -228,13 +228,13 @@ namespace BudgieScr {
 		}
 
 		// Upload to https://tmpfiles.org
-		private bool upload_image_tmpfiles(string uri, out string? link) {
+		private bool upload_image_tmpfiles(string path, out string? link) {
 			link = null;
 
 			// Read file into memory
 			uint8[] data;
 			try {
-				GLib.FileUtils.get_data(uri, out data);
+				GLib.FileUtils.get_data(path, out data);
 			} catch (GLib.FileError e) {
 				warning(e.message);
 				return false;
@@ -308,13 +308,13 @@ namespace BudgieScr {
 		}
 
 		// Upload to https://tempfiles.ninja
-		private bool upload_image_tempfilesninja(string uri, out string? link) {
+		private bool upload_image_tempfilesninja(string path, out string? link) {
 			link = null;
 
 			// Read file into memory
 			uint8[] data;
 			try {
-				GLib.FileUtils.get_data(uri, out data);
+				GLib.FileUtils.get_data(path, out data);
 			} catch (GLib.FileError e) {
 				warning(e.message);
 				return false;
@@ -322,7 +322,7 @@ namespace BudgieScr {
 			var databytes = new GLib.Bytes(data);
 
 			// Setup POST request
-			Soup.Message message = new Soup.Message("POST", "https://tempfiles.ninja/api/upload?filename=" + uri);
+			Soup.Message message = new Soup.Message("POST", "https://tempfiles.ninja/api/upload?filename=" + path);
 			message.set_request_body_from_bytes("image/jpeg", databytes);
 
 			// Async send message & get Bytes from response
