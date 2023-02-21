@@ -158,9 +158,7 @@ public class BluetoothIndicator : Bin {
 		popover.add(box);
 
 		// Only show if we have an adapter present
-		if (client.has_adapter) {
-			show_all();
-		}
+		if (client.has_adapter) show_all();
 	}
 
 	private bool on_button_released(EventButton e) {
