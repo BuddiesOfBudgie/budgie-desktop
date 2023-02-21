@@ -144,6 +144,12 @@ public class BluetoothIndicator : Bin {
 
 		client.global_state_changed.connect(on_client_state_changed);
 
+		// Show or hide the panel widget if we have a Bluetooth adapter or not
+		client.notify["has-adapter"].connect(() => {
+			if (client.has_adapter) show_all();
+			else hide();
+		});
+
 		add(ebox);
 		box.pack_start(header);
 		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
@@ -151,7 +157,11 @@ public class BluetoothIndicator : Bin {
 		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
 		box.show_all();
 		popover.add(box);
-		show_all();
+
+		// Only show if we have an adapter present
+		if (client.has_adapter) {
+			show_all();
+		}
 	}
 
 	private bool on_button_released(EventButton e) {

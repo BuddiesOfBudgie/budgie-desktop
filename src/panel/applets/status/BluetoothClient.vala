@@ -141,6 +141,8 @@ class BluetoothClient : GLib.Object {
 				if (powered == null) return;
 				set_last_powered.begin();
 			});
+
+			has_adapter = true;
 		} else if (iface is Device1) {
 			unowned Device1 device = iface as Device1;
 			device_added(device);

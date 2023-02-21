@@ -106,7 +106,7 @@ public class StatusApplet : Budgie.Applet {
 
 		blue = new BluetoothIndicator();
 		widget.pack_start(blue, false, false, 0);
-		blue.show_all();
+		/* Bluetooth widget shows itself - we dont control that */
 		this.setup_popover(blue.ebox, blue.popover);
 	}
 
