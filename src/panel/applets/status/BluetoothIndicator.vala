@@ -35,7 +35,7 @@ public class BluetoothIndicator : Bin {
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
-		popover.set_size_request(300, -1);
+		popover.set_size_request(275, -1);
 		popover.get_style_context().add_class("bluetooth-popover");
 		var box = new Box(VERTICAL, 0);
 
@@ -71,8 +71,8 @@ public class BluetoothIndicator : Bin {
 		// Devices
 		var scrolled_window = new ScrolledWindow(null, null) {
 			hscrollbar_policy = NEVER,
-			min_content_height = 250,
-			max_content_height = 250,
+			min_content_height = 190,
+			max_content_height = 190,
 			propagate_natural_height = true
 		};
 		devices_box = new ListBox() {
