@@ -395,14 +395,10 @@ public class BTDeviceRow : ListBoxRow {
 			if (device.connected) {
 				status_label.label = _("Disconnecting…");
 				yield device.disconnect();
-				connection_button.hide();
-				activatable = true;
 				revealer.reveal_child = false;
 			} else {
 				status_label.label = _("Connecting…");
 				yield device.connect();
-				connection_button.show();
-				activatable = false;
 				revealer.reveal_child = false;
 			}
 		} catch (Error e) {
@@ -467,8 +463,12 @@ public class BTDeviceRow : ListBoxRow {
 	private void update_status() {
 		if (device.connected) {
 			status_label.set_text(_("Connected"));
+			connection_button.show();
+			activatable = false;
 		} else {
 			status_label.set_text(_("Disconnected"));
+			connection_button.hide();
+			activatable = true;
 		}
 
 		// Update the name if changed
