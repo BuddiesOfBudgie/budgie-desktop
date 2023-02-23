@@ -225,10 +225,7 @@ namespace Budgie {
 					continue;
 				}
 				string ct = searchable_string(field);
-				if (term.match_string(ct, true)) {
-					return true;
-				}
-				if (term in ct) {
+				if (ct.match_string(term, true)) {
 					return true;
 				}
 			}
