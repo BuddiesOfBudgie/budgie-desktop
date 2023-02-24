@@ -818,7 +818,6 @@ static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* b
 
 
 #if GTK_CHECK_VERSION(3, 24, 36)
-
 /**
  * Since Gtk version 3.24.36, there is a change in definition of gdk_x11_window_get_frame_extents
  *
@@ -826,11 +825,12 @@ static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* b
  */
 	x = x * scale_factor;
 	y = y * scale_factor;
+
 #endif
 
 	if (((root_x * scale_factor) >= x && (root_x * scale_factor) <= x + (w * scale_factor)) &&
-	((root_y * scale_factor) >= y && (root_y * scale_factor) <= y + (h * scale_factor))) {
-	return GDK_EVENT_PROPAGATE;
+		((root_y * scale_factor) >= y && (root_y * scale_factor) <= y + (h * scale_factor))) {
+		return GDK_EVENT_PROPAGATE;
 	}
 
 	/* Happened outside, we're done. */
