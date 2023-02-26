@@ -28,10 +28,16 @@ public class DBusMenuNode : Object {
 		}
 
 		submenu = new Gtk.Menu();
+		submenu.map.connect(() => opened());
+		submenu.unmap.connect(() => closed());
 
 		var dbus_item = new DBusMenuItem(properties, submenu);
 		activate_signal_handler = dbus_item.activate.connect(() => {
-			clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
+			if (dbus_item.submenu != null) {
+				hovered();
+			} else {
+				clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
+			}
 		});
 		dbus_item.notify["visible"].connect(() => dbus_item.visible = properties.visible);
 		item = dbus_item;
@@ -52,14 +58,18 @@ public class DBusMenuNode : Object {
 			var item = submenu.get_children().nth_data(i);
 			submenu.remove(item);
 		}
+
+		submenu.queue_resize();
 	}
 
 	public void update_property(string key, Variant? value) {
+		if (!properties.set_property(key, value)) {
+			return;
+		}
+
 		if (activate_signal_handler > 0 && item is DBusMenuItem) {
 			SignalHandler.block((DBusMenuItem) item, activate_signal_handler);
 		}
-
-		properties.set_property(key, value);
 
 		switch (key) {
 			case "visible":
@@ -282,43 +292,53 @@ private class Properties {
 		shortcut = Properties.parse_shortcuts(props_table.get("shortcut"));
 	}
 
-	public void set_property(string key, Variant? value) {
+	public bool set_property(string key, Variant? value) {
 		switch (key) {
 			case "visible":
+				var old_value = visible;
 				visible = Properties.parse_bool(value, true);
-				break;
+				return visible != old_value;
 			case "enabled":
+				var old_value = enabled;
 				enabled = Properties.parse_bool(value, true);
-				break;
+				return enabled != old_value;
 			case "label":
+				var old_value = label;
 				label = Properties.parse_string(value, "");
-				break;
+				return label != old_value;
 			case "type":
+				var old_value = type;
 				type = Properties.parse_string(value, "standard");
-				break;
+				return type != old_value;
 			case "disposition":
+				var old_value = disposition;
 				disposition = Properties.parse_string(value, "normal");
-				break;
+				return disposition != old_value;
 			case "children-display":
+				var old_value = children_display;
 				children_display = Properties.parse_string(value, "");
-				break;
+				return children_display != old_value;
 			case "toggle-type":
+				var old_value = toggle_type;
 				toggle_type = Properties.parse_string(value, "");
-				break;
+				return toggle_type != old_value;
 			case "toggle-state":
+				var old_value = toggle_state;
 				toggle_state = Properties.parse_int32_bool(value, null);
-				break;
+				return toggle_state != old_value;
 			case "icon-name":
+				var old_value = icon_name;
 				icon_name = Properties.parse_string(value, "");
-				break;
+				return icon_name != old_value;
 			case "icon-data":
+				var old_value = icon_data;
 				icon_data = Properties.parse_bytes(value, new Bytes({}));
-				break;
+				return icon_data != old_value;
 			case "shortcut":
 				shortcut = Properties.parse_shortcuts(value);
-				break;
+				return true;
 			default:
-				break;
+				return false;
 		}
 	}
 
