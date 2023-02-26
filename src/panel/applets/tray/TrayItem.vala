@@ -9,15 +9,15 @@
  * (at your option) any later version.
  */
 
-internal struct IconPixmap {
+public struct SnIconPixmap {
 	int width;
 	int height;
 	uint8[] data;
 }
 
-internal struct ToolTip {
+public struct SnToolTip {
 	string icon_name;
-	IconPixmap[] icon_data;
+	SnIconPixmap[] icon_data;
 	string title;
 	string markup;
 }
@@ -34,14 +34,14 @@ internal interface SnItemProperties : Object {
 	public abstract string status {owned get;}
 	public abstract uint32 window_id {get;}
 	public abstract string icon_name {owned get;}
-	public abstract IconPixmap[] icon_pixmap {owned get;}
+	public abstract SnIconPixmap[] icon_pixmap {owned get;}
 	public abstract string overlay_icon_name {owned get;}
-	public abstract IconPixmap[] overlay_icon_pixmap {owned get;}
+	public abstract SnIconPixmap[] overlay_icon_pixmap {owned get;}
 	public abstract string attention_icon_name {owned get;}
-	public abstract IconPixmap[] attention_icon_pixmap {owned get;}
+	public abstract SnIconPixmap[] attention_icon_pixmap {owned get;}
 	public abstract string attention_movie_name {owned get;}
 	public abstract string icon_theme_path {owned get;}
-	public abstract ToolTip? tool_tip {owned get;}
+	public abstract SnToolTip? tool_tip {owned get;}
 	public abstract bool item_is_menu {get;}
 	public abstract ObjectPath? menu {owned get;}
 }
@@ -136,7 +136,7 @@ internal class TrayItem : Gtk.EventBox {
 
 	private void reset_icon(string? status = null) {
 		string? icon_name = null;
-		IconPixmap[] icon_pixmaps = {};
+		SnIconPixmap[] icon_pixmaps = {};
 		if ((status ?? dbus_properties.status) == "NeedsAttention") {
 			icon_name = dbus_properties.attention_icon_name;
 			icon_pixmaps = dbus_properties.attention_icon_pixmap;
@@ -154,8 +154,8 @@ internal class TrayItem : Gtk.EventBox {
 		}
 	}
 
-	private void update_icon(Gtk.Image icon, string? icon_name, IconPixmap[] icon_pixmaps) {
-		IconPixmap? icon_pixmap = null;
+	private void update_icon(Gtk.Image icon, string? icon_name, SnIconPixmap[] icon_pixmaps) {
+		SnIconPixmap? icon_pixmap = null;
 		for (int i = 0; i < icon_pixmaps.length; i++) {
 			icon_pixmap = icon_pixmaps[i];
 			if (icon_pixmap.width >= target_icon_size && icon_pixmap.height >= target_icon_size) {
