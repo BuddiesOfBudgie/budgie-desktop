@@ -68,8 +68,8 @@ public class TrayApplet : Budgie.Applet {
 		box = new Gtk.EventBox();
 		add(box);
 
-		settings_schema = "org.buddiesofbudgie.sntray";
-		settings_prefix = "/org/buddiesofbudgie/budgie-panel/instance/sntray";
+		settings_schema = "com.solus-project.tray";
+		settings_prefix = "/com/solus-project/tray";
 
 		settings = get_applet_settings(uuid);
 		settings.changed["spacing"].connect((key) => {
