@@ -37,6 +37,7 @@ public class DBusMenu : Object {
 		iface = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 
 		update_layout();
+		iface.layout_updated.connect((revision, parent) => update_layout());
 		iface.items_properties_updated.connect((updated_props, removed_props) => {
 			on_items_properties_updated(updated_props);
 			on_items_properties_updated(removed_props);
@@ -54,6 +55,12 @@ public class DBusMenu : Object {
 		}
 
 		parse_layout(layout);
+
+		all_nodes.foreach_remove((id, node) => {
+			return id != 0 && node.item.parent == null;
+		});
+
+		all_nodes.get(0).submenu.show_all();
 	}
 
 	private DBusMenuNode parse_layout(Variant layout) {
@@ -61,19 +68,28 @@ public class DBusMenu : Object {
 		Variant v_props = layout.get_child_value(1);
 		Variant v_children = layout.get_child_value(2);
 
-		var node = new DBusMenuNode(id, v_props);
-		node.clicked.connect((data) => send_event(id, "clicked", data));
-		node.hovered.connect((event) => send_event(id, "hovered"));
-		node.opened.connect((event) => send_event(id, "opened"));
-		node.closed.connect((event) => send_event(id, "closed"));
+		var node = all_nodes.get(id);
+		if (node == null) {
+			node = new DBusMenuNode(id, v_props);
+			node.clicked.connect((data) => send_event(id, "clicked", data));
+			node.hovered.connect((event) => send_event(id, "hovered"));
+			node.opened.connect((event) => send_event(id, "opened"));
+			node.closed.connect((event) => send_event(id, "closed"));
 
-		all_nodes.set(id, node);
+			all_nodes.set(id, node);
+		}
 
-		VariantIter it = v_children.iterator();
-		for (var v_child = it.next_value(); v_child != null; v_child = it.next_value()) {
-			v_child = v_child.get_variant();
-			var child_node = parse_layout(v_child);
-			node.add_child(child_node);
+		if (v_children.is_container() && v_children.n_children() > 0) {
+			var new_children = new List<DBusMenuNode>();
+
+			VariantIter it = v_children.iterator();
+			for (var v_child = it.next_value(); v_child != null; v_child = it.next_value()) {
+				v_child = v_child.get_variant();
+				var child_node = parse_layout(v_child);
+				new_children.append(child_node);
+			}
+
+			node.update_children(new_children);
 		}
 
 		return node;
@@ -83,24 +99,25 @@ public class DBusMenu : Object {
 		VariantIter it = updated_props.iterator();
 		for (var child = it.next_value(); child != null; child = it.next_value()) {
 			var child_id = child.get_child_value(0).get_int32();
-			var item = all_nodes.get(child_id);
-			if (item != null) {
-				var child_props = child.get_child_value(1);
-				var pit = child_props.iterator();
-				for (var prop = pit.next_value(); prop != null; prop = pit.next_value()) {
-					if (prop.is_container() && prop.n_children() == 2) {
-						var key = prop.get_child_value(0).get_string();
-						var value = prop.get_child_value(1);
-						item.update_property(key, value);
-					}
-				}
+			var node = all_nodes.get(child_id);
+			if (node != null) update_node_properties(node, child.get_child_value(1));
+		}
+	}
+
+	private void update_node_properties(DBusMenuNode node, Variant props) {
+		var it = props.iterator();
+		for (var prop = it.next_value(); prop != null; prop = it.next_value()) {
+			if (prop.is_container() && prop.n_children() == 2) {
+				var key = prop.get_child_value(0).get_string();
+				var value = prop.get_child_value(1);
+				node.update_property(key, value);
 			}
 		}
 	}
 
 	private void send_event(int32 node_id, string type, Variant? data = null) {
 		try {
-			iface.event(node_id, type, data ?? new Variant.int32(0), (uint32) get_real_time());
+			iface.event(node_id, type, data ?? new Variant.int32(0), (uint32) Gtk.get_current_event_time());
 		} catch (Error e) {
 			warning("Failed to send %s event to node %d: %s", type, node_id, e.message);
 		}

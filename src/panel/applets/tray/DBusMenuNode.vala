@@ -13,8 +13,8 @@ public class DBusMenuNode : Object {
 	public int32 id;
 	public Gtk.MenuItem item;
 	public Gtk.Menu submenu;
-	public List<DBusMenuNode> children = new List<DBusMenuNode>();
 	private Properties properties;
+	private ulong activate_signal_handler = 0;
 
 	public DBusMenuNode(int32 id, Variant props) {
 		this.id = id;
@@ -30,18 +30,35 @@ public class DBusMenuNode : Object {
 		submenu = new Gtk.Menu();
 
 		var dbus_item = new DBusMenuItem(properties, submenu);
-		dbus_item.activate.connect(() => {
+		activate_signal_handler = dbus_item.activate.connect(() => {
 			clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
 		});
+		dbus_item.notify["visible"].connect(() => dbus_item.visible = properties.visible);
 		item = dbus_item;
 	}
 
-	public void add_child(DBusMenuNode node) {
-		children.append(node);
-		submenu.add(node.item);
+	public void update_children(List<DBusMenuNode> new_children) {
+		for (int i = 0; i < new_children.length(); i++) {
+			var item = new_children.nth_data(i).item;
+
+			if (item.parent != submenu) {
+				submenu.add(item);
+			}
+			submenu.reorder_child(item, i);
+		}
+
+		var old_children = submenu.get_children();
+		for (uint i = old_children.length() - 1; i > new_children.length() - 1; i--) {
+			var item = submenu.get_children().nth_data(i);
+			submenu.remove(item);
+		}
 	}
 
 	public void update_property(string key, Variant? value) {
+		if (activate_signal_handler > 0 && item is DBusMenuItem) {
+			SignalHandler.block((DBusMenuItem) item, activate_signal_handler);
+		}
+
 		properties.set_property(key, value);
 
 		switch (key) {
@@ -86,6 +103,8 @@ public class DBusMenuNode : Object {
 				default:
 					break;
 			}
+
+			if (activate_signal_handler > 0) SignalHandler.unblock(dbus_item, activate_signal_handler);
 		}
 	}
 
