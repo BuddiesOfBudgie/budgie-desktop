@@ -16,10 +16,13 @@ private interface DBusMenuInterface : Object {
 	public abstract string text_direction {owned get;}
 	public abstract string[] icon_theme_path {owned get;}
 
-	public abstract bool about_to_show(int32 id) throws DBusError, IOError;
+	public abstract bool about_to_show(int32 id, out bool need_update) throws DBusError, IOError;
+	public abstract void about_to_show_group(int32[] ids, out int32[] updates_needed, out int32[] id_errors) throws DBusError, IOError;
 	public abstract void event(int32 id, string event_id, Variant? data, uint32 timestamp) throws DBusError, IOError;
+	public abstract void event_group([DBus (signature="a(isvu)")] Variant events, out int32[] id_errors) throws DBusError, IOError;
 	public abstract void get_layout(int32 parent_id, int32 recursion_depth, string[] property_names, out uint32 revision, [DBus (signature="(ia{sv}av)")] out Variant? layout) throws DBusError, IOError;
 	public abstract Variant? get_property(int32 id, string name) throws DBusError, IOError;
+	public abstract void get_group_properties(int32[] ids, string[] property_names, [DBus (signature="a(ia{sv})")] out Variant? properties) throws DBusError, IOError;
 
 	public abstract signal void item_activation_requested(int32 id, uint32 timestamp);
 	public abstract signal void items_properties_updated(
@@ -69,7 +72,9 @@ public class DBusMenu : Object {
 		Variant v_children = layout.get_child_value(2);
 
 		var node = all_nodes.get(id);
-		if (node == null) {
+		if (node != null) {
+			update_node_properties(node, v_props);
+		} else {
 			node = new DBusMenuNode(id, v_props);
 			node.clicked.connect((data) => send_event(id, "clicked", data));
 			node.hovered.connect((event) => send_event(id, "hovered"));
@@ -105,21 +110,21 @@ public class DBusMenu : Object {
 	}
 
 	private void update_node_properties(DBusMenuNode node, Variant props) {
-		var it = props.iterator();
-		for (var prop = it.next_value(); prop != null; prop = it.next_value()) {
-			if (prop.is_container() && prop.n_children() == 2) {
-				var key = prop.get_child_value(0).get_string();
-				var value = prop.get_child_value(1);
-				node.update_property(key, value);
-			}
+		VariantIter prop_it = props.iterator();
+		string key;
+		Variant value;
+		while (prop_it.next("{sv}", out key, out value)) {
+			node.update_property(key, value);
 		}
 	}
 
 	private void send_event(int32 node_id, string type, Variant? data = null) {
-		try {
-			iface.event(node_id, type, data ?? new Variant.int32(0), (uint32) Gtk.get_current_event_time());
-		} catch (Error e) {
-			warning("Failed to send %s event to node %d: %s", type, node_id, e.message);
+		if (node_id in all_nodes) {
+			try {
+				iface.event(node_id, type, data ?? new Variant.int32(0), (uint32) Gtk.get_current_event_time());
+			} catch (Error e) {
+				warning("Failed to send %s event to node %d: %s", type, node_id, e.message);
+			}
 		}
 	}
 
