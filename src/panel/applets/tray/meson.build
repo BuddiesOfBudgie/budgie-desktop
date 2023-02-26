@@ -37,7 +37,6 @@ shared_library(
     applet_tray_sources,
     dependencies: applet_tray_deps,
     vala_args: [
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--pkg', 'libpeas-1.0',
     ],
     install: true,
