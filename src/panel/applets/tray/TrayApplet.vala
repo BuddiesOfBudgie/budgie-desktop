@@ -55,7 +55,6 @@ public class TrayApplet : Budgie.Applet {
 	private Gtk.EventBox box;
 	private Gtk.Box layout;
 	private HashTable<string, TrayItem> items;
-	private Gtk.Orientation orient;
 	private uint dbus_identifier;
 	private SnWatcherInterface? watcher = null;
 	private int panel_size;
@@ -181,11 +180,11 @@ public class TrayApplet : Budgie.Applet {
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-			orient = Gtk.Orientation.VERTICAL;
+			layout.orientation = Gtk.Orientation.VERTICAL;
 			valign = Gtk.Align.BASELINE;
 			halign = Gtk.Align.FILL;
 		} else {
-			orient = Gtk.Orientation.HORIZONTAL;
+			layout.orientation = Gtk.Orientation.HORIZONTAL;
 			valign = Gtk.Align.FILL;
 			halign = Gtk.Align.BASELINE;
 		}
