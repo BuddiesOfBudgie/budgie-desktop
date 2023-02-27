@@ -26,7 +26,7 @@ public class BluetoothIndicator : Bin {
 	private BluetoothClient client;
 
 	construct {
-		image = new Image.from_icon_name("bluetooth-active-symbolic", IconSize.MENU);
+		image = new Image();
 
 		ebox = new EventBox();
 		ebox.add(image);
@@ -150,6 +150,9 @@ public class BluetoothIndicator : Bin {
 			else hide();
 		});
 
+		// Make sure our starting icon is correct
+		update_tray_icon();
+
 		add(ebox);
 		box.pack_start(header);
 		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
@@ -193,6 +196,7 @@ public class BluetoothIndicator : Bin {
 		// Turn Bluetooth on or off
 		client.set_all_powered.begin(bluetooth_switch.active, (obj, res) => {
 			client.check_powered();
+			update_tray_icon();
 		});
 	}
 
@@ -243,6 +247,17 @@ public class BluetoothIndicator : Bin {
 	 */
 	private bool filter_paired_devices(ListBoxRow row) {
 		return ((BTDeviceRow) row).device.paired || ((BTDeviceRow) row).device.connected;
+	}
+
+	/**
+	 * Update the tray icon used depending on the current Bluetooth state.
+	 */
+	private void update_tray_icon() {
+		if (bluetooth_switch.active) {
+			image.set_from_icon_name("bluetooth-active", IconSize.MENU);
+		} else {
+			image.set_from_icon_name("bluetooth-disabled", IconSize.MENU);
+		}
 	}
 }
 
