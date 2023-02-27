@@ -313,6 +313,7 @@ public class BTDeviceRow : ListBoxRow {
 			reveal_child = false,
 			transition_duration = 250,
 			transition_type = RevealerTransitionType.SLIDE_DOWN,
+			margin_top = 2,
 		};
 
 		var battery_box = new Box(Orientation.HORIZONTAL, 0);
@@ -324,8 +325,8 @@ public class BTDeviceRow : ListBoxRow {
 		battery_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 		battery_label.get_style_context().add_class("bluetooth-battery-label");
 
-		battery_box.pack_start(battery_label, false, false, 2);
 		battery_box.pack_start(battery_icon, false, false, 2);
+		battery_box.pack_start(battery_label, false, false, 2);
 
 		battery_revealer.add(battery_box);
 
@@ -425,7 +426,7 @@ public class BTDeviceRow : ListBoxRow {
 		if (up_device.percentage <= 10) {
 			fallback_icon_name = "battery-empty";
 		} else if (up_device.percentage <= 25) {
-			fallback_icon_name = "battery-critical";
+			fallback_icon_name = "battery-caution";
 		} else if (up_device.percentage <= 50) {
 			fallback_icon_name = "battery-low";
 		} else if (up_device.percentage <= 75) {
