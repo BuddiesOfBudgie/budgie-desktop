@@ -174,43 +174,47 @@ namespace Budgie {
 		 *
 		 * @param text The text to compare to.
 		 * @param pattern The pattern to match against.
-		 * @param k The maximum distance between the strings to still be considered equal.
+		 * @param max_distance The maximum distance between the strings to still be considered equal.
 		 */
-		private int get_fuzzy_score(string text, string pattern, int k) {
+		private int get_fuzzy_score(string text, string pattern, int max_distance) {
 			var result = -1;
-			var m = pattern.length;
-			int[] R;
+			var pattern_length = pattern.length;
+			int[] bit_array;
 			int[] pattern_mask = new int[128];
 			int i, d;
 
 			if (pattern == "") return 0; // Pattern is empty
-			if (m > 31) return -1; // Error: pattern too long
+			if (pattern_length > 31) return -1; // Error: pattern too long
 
-			/* Initializations */
+			/* Initialize the bit array */
+			bit_array = new int[(max_distance + 1) * sizeof(int)];
 
-			R = new int[(k + 1) * sizeof(int)];
-			for (i = 0; i <= k; ++i) R[i] = ~1;
+			/* Initialize the pattern masks */
+			for (i = 0; i <= max_distance; ++i) bit_array[i] = ~1;
 
 			for (i = 0; i <= 127; ++i) pattern_mask[i] = ~0;
 
-			for (i = 0; i < m; ++i) pattern_mask[pattern[i]] &= ~(1 << i);
+			for (i = 0; i < pattern_length; ++i) pattern_mask[pattern[i]] &= ~(1 << i);
 
 			/* Calculating the score */
 
 			for (i = 0; i < text.length; ++i) {
-				var old_Rd1 = R[0];
+				/* Update the bit arrays */
+				var old_Rd1 = bit_array[0];
 
-				R[0] |= pattern_mask[text[i]];
-				R[0] <<= 1;
+				bit_array[0] |= pattern_mask[text[i]];
+				bit_array[0] <<= 1;
 
-				for (d = 1; d <= k; ++d) {
-					var tmp = R[d];
-					R[d] = (old_Rd1 & (R[d] | pattern_mask[text[i]])) << 1;
+				for (d = 1; d <= max_distance; ++d) {
+					var tmp = bit_array[d];
+
+					/* Only look for substitutions */
+					bit_array[d] = (old_Rd1 & (bit_array[d] | pattern_mask[text[i]])) << 1;
 					old_Rd1 = tmp;
 				}
 
-				if (0 == (R[k] & (1 << m))) {
-					result = (i - m) + 1;
+				if (0 == (bit_array[max_distance] & (1 << pattern_length))) {
+					result = (i - pattern_length) + 1;
 					break;
 				}
 			}
