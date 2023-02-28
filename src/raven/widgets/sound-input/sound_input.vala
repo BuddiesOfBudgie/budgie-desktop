@@ -15,14 +15,12 @@
 	}
 
 	public bool supports_settings() {
-		return false;
+		return true;
 	}
 }
 
 public class SoundInputRavenWidget : Budgie.RavenWidget {
-	/**
-	 * Logic and Mixer variables
-	 */
+	private Settings? budgie_settings = null;
 	private ulong scale_id = 0;
 	private Gvc.MixerControl mixer = null;
 	private HashTable<string,string?> derpers;
@@ -128,12 +126,18 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		});
 		header.pack_end(header_reveal_button, false, false, 0);
 
+		budgie_settings = new Settings("com.solus-project.budgie-panel");
+
 		mixer.default_source_changed.connect(on_device_changed);
 		mixer.state_changed.connect(on_state_changed);
 		mixer.input_added.connect(on_device_added);
 		mixer.input_removed.connect(on_device_removed);
 
 		content.pack_start(devices_list, false, false, 0); // Add devices directly to layout
+
+		// Add marks when sound slider can go beyond 100%
+		settings.changed.connect(settings_updated);
+		settings_updated("allow-volume-overdrive");
 
 		mixer.open();
 
@@ -321,20 +325,73 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		var header_image = (Gtk.Image?) header_icon.get_image();
 		header_image.set_from_icon_name("%s-%s-symbolic".printf(icon_prefix, image_name), Gtk.IconSize.MENU);
 
-		/* Each scroll increments by 5%, much better than units..*/
-		var step_size = vol_max / 20;
-
 		if (scale_id > 0) {
 			SignalHandler.block(volume_slider, scale_id);
 		}
 
-		volume_slider.set_increments(step_size, step_size);
-		volume_slider.set_range(0, vol_max);
-		volume_slider.set_value(vol);
-
 		if (scale_id > 0) {
 			SignalHandler.unblock(volume_slider, scale_id);
 		}
+	}
+
+	/*
+	 * set_slider_range_on_max will set the slider range based on whether or not we are allowing overdrive
+	 */
+	private void set_slider_range_on_max(bool allow_overdrive) {
+		var current_volume = volume_slider.get_value();
+		var vol_max = mixer.get_vol_max_norm();
+		var vol_max_above = mixer.get_vol_max_amplified();
+		var step_size = vol_max / 20;
+
+		int slider_start = 0;
+		int slider_end = 0;
+		volume_slider.get_slider_range(out slider_start, out slider_end);
+
+		if (allow_overdrive && (slider_end != vol_max_above)) { // If we're allowing higher than max and currently slider is not a max of 150
+			volume_slider.set_increments(step_size, step_size);
+			volume_slider.set_range(0, vol_max_above);
+			volume_slider.set_value(current_volume);
+		} else if (!allow_overdrive && (slider_end != vol_max)) { // If we're not allowing higher than max and slider is at max
+			volume_slider.set_increments(step_size, step_size);
+			volume_slider.set_range(0, vol_max);
+			volume_slider.set_value(current_volume);
+		}
+
+		update_input_draw_markers();
+	}
+
+	/**
+	 * update_input_draw_markers will update our draw markers
+	 */
+	private void update_input_draw_markers() {
+		bool allow_higher_than_max = get_instance_settings().get_boolean("allow-volume-overdrive");
+
+		if (allow_higher_than_max) { // If overdrive is enabled and thus should show mark
+			var vol_max = mixer.get_vol_max_norm();
+			volume_slider.add_mark(vol_max, Gtk.PositionType.BOTTOM, "");
+		} else { // If we should not show markets
+			volume_slider.clear_marks();
+		}
+	}
+
+	private void settings_updated(string key) {
+		if (key == "allow-volume-overdrive") {
+			set_slider_range_on_max(get_instance_settings().get_boolean(key));
+		}
+	}
+
+	public override Gtk.Widget build_settings_ui() {
+		return new SoundInputRavenWidgetSettings(get_instance_settings());
+	}
+}
+
+[GtkTemplate (ui="/org/buddiesofbudgie/budgie-desktop/raven/widget/SoundInput/settings.ui")]
+public class SoundInputRavenWidgetSettings : Gtk.Grid {
+	[GtkChild]
+	private unowned Gtk.Switch? switch_allow_volume_overdrive;
+
+	public SoundInputRavenWidgetSettings(Settings? settings) {
+		settings.bind("allow-volume-overdrive", switch_allow_volume_overdrive, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
