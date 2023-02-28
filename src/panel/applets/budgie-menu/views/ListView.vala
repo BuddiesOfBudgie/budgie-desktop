@@ -434,8 +434,10 @@ public class ApplicationListView : ApplicationView {
 				return -1;
 			} else if (sc1 > sc2) {
 				return 1;
+			} else {
+				// Scores are equal, so sort by name
+				return child1.app.name.collate(child2.app.name);
 			}
-			return 0;
 		}
 
 		// Only perform category grouping if headers are visible
