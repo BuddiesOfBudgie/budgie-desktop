@@ -19,7 +19,7 @@ namespace Budgie {
 		* Arbitrary threshold that scores have to be below to
 		* be considered "relevant."
 		*/
-		public const int THRESHOLD = 4;
+		public const int THRESHOLD = 16;
 
 		/** Static map of desktop IDs to scores. */
 		private static Gee.HashMap<string, int> scores;
@@ -63,7 +63,9 @@ namespace Budgie {
 				return false;
 			}
 
-			return this.get_score(app) < THRESHOLD;
+			var score = get_score(app);
+
+			return score >= 0 && score < THRESHOLD;
 		}
 
 		/**
@@ -104,12 +106,25 @@ namespace Budgie {
 
 			string name = searchable_string(app.name);
 			string _term = term.casefold();
-			var score = 0;
 
-			// If we don't have a match on the name...
-			if (!name.match_string(_term, true) && !name.contains(_term)) {
-				// Calculate our Levenshtein distance
-				score = this.get_levenshtein_distance(name, _term);
+			// Get a initial score based on the fuzzy match of the name
+			var score = get_fuzzy_score(name, _term, 1);
+
+			// If the term is considered to be an exact match, bail early
+			if (score == 0) {
+				// Prioritize matches where the name starts with the term
+				if (!name.has_prefix(_term)) {
+					score++;
+				}
+
+				scores.set(app.desktop_id, score);
+				return;
+			}
+
+			// Score is less than 0, disqualified
+			if (score < 0) {
+				scores.set(app.desktop_id, score);
+				return;
 			}
 
 			string?[] fields = {
@@ -141,48 +156,70 @@ namespace Budgie {
 			}
 
 			// Set the score
-			scores.set(app.desktop_id, score);
+			scores.set(app.desktop_id, int.max(score, 0));
 		}
 
 		/**
-		* Calculates the Levenshtein Distance between two strings.
-		*
-		* The lower the returned score, the closer the match.
-		*
-		* This was adapted from https://gist.github.com/Davidblkx/e12ab0bb2aff7fd8072632b396538560,
-		* an implementation in C#.
-		*/
-		private int get_levenshtein_distance(string s1, string s2) {
-			var matrix = new int[s1.length + 1, s2.length + 1];
+		 * Fuzzily matches two strings using the Fuzzy Bitap Algorithm.
+		 *
+		 * The algorithm tells whether a given text contains a substring
+		 * which is "approximately equal" to a given pattern, where approximate
+		 * equality is defined in terms of Levenshtein distance.
+		 *
+		 * The algorithm begins by precomputing a set of bitmasks containing one
+		 * bit for each element of the pattern. Then it is able to do most of the
+		 * work with bitwise operations, which are extremely fast.
+		 *
+		 * Adapted from here: https://www.programmingalgorithms.com/algorithm/fuzzy-bitap-algorithm/
+		 *
+		 * @param text The text to compare to.
+		 * @param pattern The pattern to match against.
+		 * @param max_distance The maximum distance between the strings to still be considered equal.
+		 */
+		private int get_fuzzy_score(string text, string pattern, int max_distance) {
+			var result = -1;
+			var pattern_length = pattern.length;
+			int[] bit_array;
+			int[] pattern_mask = new int[128];
+			int i, d;
 
-			// If either term is empty, return the full length of the other
-			if (s1.length == 0) {
-				return s2.length;
-			} else if (s2.length == 0) {
-				return s1.length;
-			}
+			if (pattern == "") return 0; // Pattern is empty
+			if (pattern_length > 31) return -1; // Error: pattern too long
 
-			// Initialization of matrix with row size s1.length and column size s2.length
-			for (int i = 0; i <= s1.length; matrix[i, 0] = i++) {}
-			for (int j = 0; j <= s2.length; matrix[0, j] = j++) {}
+			/* Initialize the bit array */
+			bit_array = new int[(max_distance + 1) * sizeof(int)];
 
-			// Calculate row and column distances
-			for (int i = 1; i <= s1.length; i++) {
-				for (int j = 1; j <= s2.length; j++) {
-					// If the chars at the current indices match, the cost is 0
-					// else, the cost is 1, thus increasing the score
-					var cost = (s2[j - 1] == s1[i - 1]) ? 0 : 1;
+			/* Initialize the pattern masks */
+			for (i = 0; i <= max_distance; ++i) bit_array[i] = ~1;
 
-					// Set the score in the matrix at the current indices
-					matrix[i, j] = int.min(
-						int.min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
-						matrix[i - 1, j - 1] + cost
-					);
+			for (i = 0; i <= 127; ++i) pattern_mask[i] = ~0;
+
+			for (i = 0; i < pattern_length; ++i) pattern_mask[pattern[i]] &= ~(1 << i);
+
+			/* Calculating the score */
+
+			for (i = 0; i < text.length; ++i) {
+				/* Update the bit arrays */
+				var old_Rd1 = bit_array[0];
+
+				bit_array[0] |= pattern_mask[text[i]];
+				bit_array[0] <<= 1;
+
+				for (d = 1; d <= max_distance; ++d) {
+					var tmp = bit_array[d];
+
+					/* Only look for substitutions */
+					bit_array[d] = (old_Rd1 & (bit_array[d] | pattern_mask[text[i]])) << 1;
+					old_Rd1 = tmp;
+				}
+
+				if (0 == (bit_array[max_distance] & (1 << pattern_length))) {
+					result = (i - pattern_length) + 1;
+					break;
 				}
 			}
 
-			// The final score is at the end of the matrix
-			return matrix[s1.length, s2.length];
+			return result;
 		}
 
 		/* Helper ported from Brisk */
@@ -192,10 +229,7 @@ namespace Budgie {
 					continue;
 				}
 				string ct = searchable_string(field);
-				if (term.match_string(ct, true)) {
-					return true;
-				}
-				if (term in ct) {
+				if (ct.match_string(term, true)) {
 					return true;
 				}
 			}
