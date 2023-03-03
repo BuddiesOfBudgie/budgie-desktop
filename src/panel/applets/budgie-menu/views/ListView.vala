@@ -132,6 +132,7 @@ public class ApplicationListView : ApplicationView {
 	*/
 	private void set_scaled_sizing(int scale) {
 		SCALED_HEIGHT = HEIGHT / scale;
+		SCALED_WIDTH = WIDTH / scale;
 		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 
 		this.categories_scroll.min_content_height = SCALED_HEIGHT;
