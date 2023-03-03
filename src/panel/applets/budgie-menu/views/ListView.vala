@@ -17,7 +17,9 @@
  */
 public class ApplicationListView : ApplicationView {
 	const int HEIGHT = 510;
+	const int WIDTH = 300;
 	private int SCALED_HEIGHT = HEIGHT;
+	private int SCALED_WIDTH = WIDTH;
 
 	private Gtk.Box categories;
 	private Gtk.ListBox applications;
@@ -46,10 +48,11 @@ public class ApplicationListView : ApplicationView {
 		);
 
 		SCALED_HEIGHT = HEIGHT / this.scale_factor;
+		SCALED_WIDTH = WIDTH / this.scale_factor;
 	}
 
 	construct {
-		this.set_size_request(300, SCALED_HEIGHT);
+		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 		this.icon_size = settings.get_int("menu-icons-size");
 
 		this.categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
@@ -129,7 +132,7 @@ public class ApplicationListView : ApplicationView {
 	*/
 	private void set_scaled_sizing(int scale) {
 		SCALED_HEIGHT = HEIGHT / scale;
-		this.set_size_request(300, SCALED_HEIGHT);
+		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 
 		this.categories_scroll.min_content_height = SCALED_HEIGHT;
 		this.content_scroll.min_content_height = SCALED_HEIGHT;
