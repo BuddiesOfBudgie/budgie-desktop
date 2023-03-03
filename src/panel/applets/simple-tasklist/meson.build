@@ -15,13 +15,13 @@ applet_simpletasklist_sources = [
 ]
 
 applet_simpletasklist_deps = [
-    libplugin_vapi,
+    libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
     dep_wnck, # via Abomination
     dep_gdkx11, # via Abomination
     link_libabomination,
-    link_libplugin,
+    link_libpanelplugin,
 ]
 
 shared_library(
