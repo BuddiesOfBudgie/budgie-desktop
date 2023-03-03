@@ -9,38 +9,45 @@
  * (at your option) any later version.
  */
 
+using Gdk;
+using Gtk;
+using Pango;
+
 private const int LABEL_MAX_WIDTH = 25;
 private const int BUTTON_PADDING = 4;
 
-public class Button : Gtk.ToggleButton {
-	private Gtk.Box container;
-	private Gtk.Label label;
-	private Gtk.Image icon;
+public class Button : ToggleButton {
+	private Label label;
+	private Image icon;
 
-	private Gtk.Allocation definite_allocation;
+	private Allocation definite_allocation;
 
-	public Budgie.Abomination.RunningApp? app { get; private set; }
+	public Budgie.Abomination.RunningApp app { get; construct; }
 
 	public Button(Budgie.Abomination.RunningApp app) {
-		this.container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		this.add(this.container);
+		Object(app: app);
+	}
 
-		this.icon = new Gtk.Image();
-		this.icon.get_style_context().add_class("icon");
-		this.icon.set_margin_start(BUTTON_PADDING);
-		this.icon.set_margin_end(BUTTON_PADDING);
-		this.icon.set_pixel_size(16); // TODO: We should be able to handle panel resize and icon only mode
+	construct {
+		var container = new Box(Orientation.HORIZONTAL, 0);
+		add(container);
 
-		this.label = new Gtk.Label(null);
-		this.label.set_ellipsize(Pango.EllipsizeMode.END);
-		this.label.set_max_width_chars(LABEL_MAX_WIDTH);
-		this.label.set_margin_start(BUTTON_PADDING);
-		this.label.set_margin_end(BUTTON_PADDING);
+		this.icon = new Image() {
+			margin_start = BUTTON_PADDING,
+			margin_end = BUTTON_PADDING,
+			pixel_size = 16, // TODO: We should be able to handle panel resize and icon only mode
+		};
+		this.icon.get_style_context().add_class("icon"); 
 
-		this.container.add(this.icon);
-		this.container.add(this.label);
+		this.label = new Label(null) {
+			ellipsize = EllipsizeMode.END,
+			max_width_chars = LABEL_MAX_WIDTH,
+			margin_start = BUTTON_PADDING,
+			margin_end = BUTTON_PADDING,
+		};
 
-		this.app = app;
+		container.add(this.icon);
+		container.add(this.label);
 
 		this.on_app_name_changed();
 		this.on_app_icon_changed();
@@ -79,7 +86,7 @@ public class Button : Gtk.ToggleButton {
 		this.destroy();
 	}
 
-	protected override bool button_release_event(Gdk.EventButton event) {
+	protected override bool button_release_event(EventButton event) {
 		if (event.button == 3) { // Right click
 			//  TODO: show popover
 			return Gdk.EVENT_STOP;
@@ -99,7 +106,7 @@ public class Button : Gtk.ToggleButton {
 		return base.button_release_event(event);
 	}
 
-	private void on_size_allocate(Gtk.Allocation allocation) {
+	private void on_size_allocate(Allocation allocation) {
 		if (this.definite_allocation == allocation) {
 			return;
 		}
@@ -122,9 +129,9 @@ public class Button : Gtk.ToggleButton {
 	}
 
 	private void on_app_icon_changed() {
-		Gdk.Pixbuf icon_pixbuf = this.app.get_icon();
+		Pixbuf icon_pixbuf = this.app.get_icon();
 
-		icon_pixbuf = icon_pixbuf.scale_simple(16, 16, Gdk.InterpType.BILINEAR);
+		icon_pixbuf = icon_pixbuf.scale_simple(16, 16, InterpType.BILINEAR);
 
 		this.icon.set_from_pixbuf(icon_pixbuf);
 	}
