@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+using Gtk;
+
 public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
 		return new SimpleTasklistApplet();
@@ -19,26 +21,25 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	public string uuid { public set; public get; }
 
-	private Gtk.ScrolledWindow? scroller;
-
-	private Gtk.Box? container;
+	private ScrolledWindow? scroller;
+	private Box? container;
 
 	private Budgie.Abomination.Abomination? abomination;
 	private HashTable<string, Button> buttons;
 
-	public SimpleTasklistApplet() {
+	construct {
 		this.buttons = new HashTable<string, Button>(str_hash, str_equal);
 
-		this.scroller = new Gtk.ScrolledWindow(null, null);
+		this.scroller = new ScrolledWindow(null, null) {
+			overlay_scrolling = true,
+			propagate_natural_height = true,
+			propagate_natural_width = true,
+			shadow_type = ShadowType.NONE,
+			hscrollbar_policy = PolicyType.EXTERNAL,
+			vscrollbar_policy = PolicyType.NEVER,
+		};
 
-		this.scroller.overlay_scrolling = true;
-		this.scroller.propagate_natural_height = true;
-		this.scroller.propagate_natural_width = true;
-		this.scroller.shadow_type = Gtk.ShadowType.NONE;
-		this.scroller.hscrollbar_policy = Gtk.PolicyType.EXTERNAL;
-		this.scroller.vscrollbar_policy = Gtk.PolicyType.NEVER;
-
-		this.container = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		this.container = new Box(Orientation.HORIZONTAL, 0);
 
 		this.scroller.add(this.container);
 
@@ -56,19 +57,19 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Update the tasklist orientation to match the panel direction
 	 */
 	public override void panel_position_changed(Budgie.PanelPosition position) {
-		Gtk.Orientation orientation = Gtk.Orientation.HORIZONTAL;
+		Orientation orientation = Orientation.HORIZONTAL;
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-			orientation = Gtk.Orientation.VERTICAL;
+			orientation = Orientation.VERTICAL;
 		}
 
 		this.container.set_orientation(orientation);
 
-		if (orientation == Gtk.Orientation.HORIZONTAL) {
-			this.scroller.hscrollbar_policy = Gtk.PolicyType.EXTERNAL;
-			this.scroller.vscrollbar_policy = Gtk.PolicyType.NEVER;
+		if (orientation == Orientation.HORIZONTAL) {
+			this.scroller.hscrollbar_policy = PolicyType.EXTERNAL;
+			this.scroller.vscrollbar_policy = PolicyType.NEVER;
 		} else {
-			this.scroller.hscrollbar_policy = Gtk.PolicyType.NEVER;
-			this.scroller.vscrollbar_policy = Gtk.PolicyType.EXTERNAL;
+			this.scroller.hscrollbar_policy = PolicyType.NEVER;
+			this.scroller.vscrollbar_policy = PolicyType.EXTERNAL;
 		}
 	}
 
@@ -76,9 +77,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Create a button for the newly opened app and add it to our tracking map.
 	 */
 	private void on_app_opened(Budgie.Abomination.RunningApp app) {
-		if (this.buttons.contains(app.id.to_string())) {
-			return;
-		}
+		if (this.buttons.contains(app.id.to_string())) return;
 
 		app.workspace_changed.connect(() => this.on_app_workspace_changed(app));
 
@@ -95,9 +94,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_closed(Budgie.Abomination.RunningApp app) {
 		var button = this.buttons.get(app.id.to_string());
-		if (button == null) {
-			return;
-		}
+		if (button == null) return;
 
 		button.gracefully_die();
 
@@ -111,16 +108,12 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	private void on_active_app_changed(Budgie.Abomination.RunningApp? previous_app, Budgie.Abomination.RunningApp? current_app) {
 		if (previous_app != null) {
 			var button = this.buttons.get(previous_app.id.to_string());
-			if (button == null) {
-				return;
-			}
+			if (button == null) return;
 			button.set_active(false);
 		}
 		if (current_app != null) {
 			var button = this.buttons.get(current_app.id.to_string());
-			if (button == null) {
-				return;
-			}
+			if (button == null) return;
 			button.set_active(true);
 		}
 	}
@@ -141,9 +134,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_workspace_changed(Budgie.Abomination.RunningApp app) {
 		var button = this.buttons.get(app.id.to_string());
-		if (button == null) {
-			return;
-		}
+		if (button == null) return;
 
 		if (app.workspace.get_number() == this.abomination.get_active_workspace().get_number()) {
 			button.show();
