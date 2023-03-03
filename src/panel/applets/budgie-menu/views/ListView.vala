@@ -61,7 +61,7 @@ public class ApplicationListView : ApplicationView {
 		};
 
 		notify["scale-factor"].connect(() => {
-			this.set_scaled_sizing(this.scale_factor);
+			this.set_scaled_sizing();
 		});
 
 		this.categories_scroll = new Gtk.ScrolledWindow(null, null) {
@@ -125,14 +125,16 @@ public class ApplicationListView : ApplicationView {
 		// management of our listbox
 		this.applications.set_filter_func(do_filter_list);
 		this.applications.set_sort_func(do_sort_list);
+
+		this.set_scaled_sizing();
 	}
 
 	/**
 	* Sets various widgets to use sizing based on current scale and our default HEIGHT
 	*/
-	private void set_scaled_sizing(int scale) {
-		SCALED_HEIGHT = HEIGHT / scale;
-		SCALED_WIDTH = WIDTH / scale;
+	private void set_scaled_sizing() {
+		SCALED_HEIGHT = HEIGHT / this.scale_factor;
+		SCALED_WIDTH = WIDTH / this.scale_factor;
 		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 
 		this.categories_scroll.min_content_height = SCALED_HEIGHT;
