@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="org.buddiesofbudgie.budgie-desktop.raven.widget.SoundInput">
+    <key type="b" name="allow-volume-overdrive">
+      <default>false</default>
+      <summary>Allow raising volume above 100%</summary>
+      <description>This setting allows increasing input volume above 100%.</description>
+    </key>
+  </schema>
+</schemalist>
