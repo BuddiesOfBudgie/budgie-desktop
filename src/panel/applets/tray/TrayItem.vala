@@ -22,9 +22,7 @@ public struct SnToolTip {
 	string markup;
 }
 
-const int TARGET_ICON_PADDING = 18;
 const double TARGET_ICON_SCALE = 2.0 / 3.0;
-const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
 
 [DBus (name="org.kde.StatusNotifierItem")]
 internal interface SnItemProperties : Object {
@@ -145,8 +143,8 @@ internal class TrayItem : Gtk.EventBox {
 			icon_pixmaps = dbus_properties.icon_pixmap;
 		}
 
-		update_icon(primary_icon, icon_name, icon_pixmaps);
-		update_icon(overlay_icon, dbus_properties.overlay_icon_name, dbus_properties.overlay_icon_pixmap);
+		update_icon(primary_icon, icon_name, icon_pixmaps, "application-default-icon");
+		update_icon(overlay_icon, dbus_properties.overlay_icon_name, dbus_properties.overlay_icon_pixmap, null);
 
 		if (target_icon_size > 0) {
 			primary_icon.pixel_size = target_icon_size;
@@ -154,7 +152,7 @@ internal class TrayItem : Gtk.EventBox {
 		}
 	}
 
-	private void update_icon(Gtk.Image icon, string? icon_name, SnIconPixmap[] icon_pixmaps) {
+	private void update_icon(Gtk.Image icon, string? icon_name, SnIconPixmap[] icon_pixmaps, string? fallback_icon_name) {
 		SnIconPixmap? icon_pixmap = null;
 		for (int i = 0; i < icon_pixmaps.length; i++) {
 			icon_pixmap = icon_pixmaps[i];
@@ -163,7 +161,7 @@ internal class TrayItem : Gtk.EventBox {
 			}
 		}
 
-		if (icon_name != null) {
+		if (icon_name != null && icon_name.length > 0) {
 			var icon_theme = Gtk.IconTheme.get_default();
 			if (icon_theme_path != null && !icon_theme.has_icon(icon_name)) {
 				icon_theme.prepend_search_path(icon_theme_path);
@@ -173,17 +171,26 @@ internal class TrayItem : Gtk.EventBox {
 		} else if (icon_pixmap != null) {
 			// ARGB32 to RGBA32
 			var array = icon_pixmap.data.copy();
-			for (var i = 0; i < 4 * icon_pixmap.width * icon_pixmap.height; i += 4) {
+			for (var i = 0; i < icon_pixmap.data.length; i += 4) {
 				array[i] = icon_pixmap.data[i + 1];
 				array[i + 1] = icon_pixmap.data[i + 2];
 				array[i + 2] = icon_pixmap.data[i + 3];
 				array[i + 3] = icon_pixmap.data[i];
 			}
 
-			var pixbuf = new Gdk.Pixbuf.from_data(array, Gdk.Colorspace.RGB, true, 8, icon_pixmap.width, icon_pixmap.height, icon_pixmap.width * 4);
+			var pixbuf = new Gdk.Pixbuf.from_data(
+				array,
+				Gdk.Colorspace.RGB,
+				true,
+				8,
+				icon_pixmap.width, icon_pixmap.height,
+				Cairo.Format.ARGB32.stride_for_width(icon_pixmap.width)
+			);
 			pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
 			icon.set_from_pixbuf(pixbuf);
 			icon.visible = true;
+		} else if (fallback_icon_name != null) {
+			icon.set_from_icon_name(fallback_icon_name, Gtk.IconSize.LARGE_TOOLBAR);
 		} else {
 			icon.visible = false;
 		}
@@ -299,12 +306,7 @@ internal class TrayItem : Gtk.EventBox {
 	}
 
 	public void resize(int applet_size) {
-		if (applet_size > FORMULA_SWAP_POINT) {
-			target_icon_size = applet_size - TARGET_ICON_PADDING;
-		} else {
-			target_icon_size = (int) Math.round(TARGET_ICON_SCALE * applet_size);
-		}
-
+		target_icon_size = (int) Math.round(TARGET_ICON_SCALE * applet_size);
 		reset_icon();
 	}
 }
