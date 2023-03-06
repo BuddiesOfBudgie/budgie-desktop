@@ -9,6 +9,7 @@
  * (at your option) any later version.
  */
 
+using Gdk;
 using Gtk;
 
 public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
@@ -18,7 +19,6 @@ public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 }
 
 public class SimpleTasklistApplet : Budgie.Applet {
-
 	public string uuid { public set; public get; }
 
 	private ScrolledWindow? scroller;
@@ -28,6 +28,8 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	private HashTable<string, Button> buttons;
 
 	construct {
+		this.hexpand = true;
+
 		this.buttons = new HashTable<string, Button>(str_hash, str_equal);
 
 		this.scroller = new ScrolledWindow(null, null) {
@@ -39,11 +41,12 @@ public class SimpleTasklistApplet : Budgie.Applet {
 			vscrollbar_policy = PolicyType.NEVER,
 		};
 
-		this.container = new Box(Orientation.HORIZONTAL, 0);
+		this.container = new Box(Orientation.HORIZONTAL, 4) {
+			homogeneous = true,
+		};
 
 		this.scroller.add(this.container);
-
-		this.add(this.scroller);
+		this.add(scroller);
 
 		this.abomination = new Budgie.Abomination.Abomination();
 
