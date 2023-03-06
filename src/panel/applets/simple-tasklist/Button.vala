@@ -13,7 +13,8 @@ using Gdk;
 using Gtk;
 using Pango;
 
-private const int LABEL_MAX_WIDTH = 25;
+private const int BUTTON_MAX_LENGTH = 232;
+private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 4;
 
 public class Button : ToggleButton {
@@ -40,14 +41,15 @@ public class Button : ToggleButton {
 		this.icon.get_style_context().add_class("icon"); 
 
 		this.label = new Label(null) {
-			ellipsize = EllipsizeMode.END,
+			halign = START,
+			valign = CENTER,
 			max_width_chars = LABEL_MAX_WIDTH,
-			margin_start = BUTTON_PADDING,
-			margin_end = BUTTON_PADDING,
+			ellipsize = EllipsizeMode.END,
+			hexpand = true,
 		};
 
-		container.add(this.icon);
-		container.add(this.label);
+		container.pack_start(this.icon, false);
+		container.pack_start(this.label);
 
 		this.on_app_name_changed();
 		this.on_app_icon_changed();
@@ -69,7 +71,7 @@ public class Button : ToggleButton {
 		// Also how to make it so that the parent scale this maximum size? i.e. that button takes the most it can when opened if it has room?
 
 		// TODO: How to set consistent default width w/out relying on that? If we set that we pretty much don't have the widget compression mechanism
-		//  this.set_size_request(232, 36); // FIXME: Need to be done better than that
+		//  this.set_size_request(BUTTON_MAX_LENGTH, -1);
 
 		// TODO: size request. We should respect parent max width and max height like a good citizen and properly set our size request
 	}
@@ -120,10 +122,6 @@ public class Button : ToggleButton {
 
 	private void on_app_name_changed() {
 		var name = this.app.name;
-		while (name.char_count() < LABEL_MAX_WIDTH - 1) { // Dirty way to ensure that button occupy it's max size when created
-			name = name.concat("\u2800");
-		} // FIXME: Find a better way, this is ugly when reaching size where we compress the button
-
 		this.label.set_label(name);
 		this.set_tooltip_text(name);
 	}
