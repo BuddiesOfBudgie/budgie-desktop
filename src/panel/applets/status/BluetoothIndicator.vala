@@ -348,27 +348,27 @@ public class BTDeviceRow : ListBoxRow {
 
 		battery_revealer.add(battery_box);
 
-		// Revealer stuff
+		// Status area stuff
+		var status_box = new Box(HORIZONTAL, 6);
+
 		revealer = new Revealer() {
 			reveal_child = false,
 			transition_duration = 250,
-			transition_type = RevealerTransitionType.SLIDE_DOWN,
-			margin_top = 4,
+			transition_type = RevealerTransitionType.CROSSFADE,
 		};
 		revealer.get_style_context().add_class("bluetooth-device-revealer");
 
-		var revealer_body = new Box(HORIZONTAL, 6);
-
 		spinner = new Spinner();
+
 		status_label = new Label(null) {
 			halign = START,
 		};
 		status_label.get_style_context().add_class("bluetooth-device-status");
 		status_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
-		revealer_body.pack_start(spinner, false, false, 0);
-		revealer_body.pack_start(status_label);
-		revealer.add(revealer_body);
+		revealer.add(spinner);
+		status_box.pack_start(status_label, false);
+		status_box.pack_start(revealer, false);
 
 		// Disconnect button
 		connection_button = new Button.with_label(_("Disconnect"));
@@ -384,9 +384,9 @@ public class BTDeviceRow : ListBoxRow {
 		// Packing
 		grid.attach(image, 0, 0, 2, 2);
 		grid.attach(name_label, 2, 0, 2, 1);
-		grid.attach(connection_button, 4, 0, 1, 1);
+		grid.attach(connection_button, 4, 0, 1, 2);
+		grid.attach(status_box, 2, 1, 2, 1);
 		grid.attach(battery_revealer, 2, 2, 1, 1);
-		grid.attach(revealer, 2, 3, 1, 1);
 
 		box.pack_start(grid);
 		add(box);
@@ -414,17 +414,16 @@ public class BTDeviceRow : ListBoxRow {
 			if (device.connected) {
 				status_label.label = _("Disconnecting…");
 				yield device.disconnect();
-				revealer.reveal_child = false;
 			} else {
 				status_label.label = _("Connecting…");
 				yield device.connect();
-				revealer.reveal_child = false;
 			}
 		} catch (Error e) {
 			warning("Failed to connect or disconnect Bluetooth device %s: %s", device.alias, e.message);
 			status_label.label = device.connected ? _("Failed to disconnect") : _("Failed to connect");
 		}
 
+		revealer.reveal_child = true;
 		spinner.active = false;
 	}
 

@@ -11,10 +11,11 @@
     .bluetooth-device-row {
         padding-left: 6px;
         padding-right: 6px;
-        padding-top: 8px;
-        padding-bottom: 8px;
+        padding-top: 2px;
+        padding-bottom: 2px;
 
-        .bluetooth-battery-label {
+        .bluetooth-battery-label,
+        .bluetooth-device-status {
             font-size: small;
         }
 
