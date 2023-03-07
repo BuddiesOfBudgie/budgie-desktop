@@ -207,10 +207,12 @@ public class BluetoothIndicator : Bin {
 
 		widget.properties_updated.connect(() => {
 			client.check_powered();
+			devices_box.invalidate_filter();
 			devices_box.invalidate_sort();
 		});
 
 		devices_box.add(widget);
+		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
 	}
 
@@ -224,6 +226,7 @@ public class BluetoothIndicator : Bin {
 			}
 		});
 
+		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
 	}
 
