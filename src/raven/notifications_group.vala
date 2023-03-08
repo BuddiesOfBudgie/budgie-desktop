@@ -143,19 +143,24 @@ namespace Budgie {
 		}
 
 		/**
-		 * too many notifications will choke raven and the desktop, so let's set a limit
+		 * too many notifications will choke raven and the desktop, so let's set a limit;
+		 * keep the latest n-notifications of current group, delete older ones
 		 */
-		private void limit_notifications (int tokeep) {
+		private void limit_notifications (uint tokeep) {
 			GLib.List<uint32> currnotifs = notifications.get_keys();
 			CompareFunc<int> intcmp = (a, b) => {
 				return (int) (a > b) - (int) (a < b);
 			};
 			currnotifs.sort(intcmp);
-			int n_remove = (int)currnotifs.length() - tokeep;
+			uint n_remove = currnotifs.length() - tokeep;
 			int count = 0;
 			foreach (uint n in currnotifs) {
-				if (count < n_remove) {remove_notification(n);}
-				else {break;}
+				if (count < n_remove) {
+					remove_notification(n);
+				}
+				else {
+					break;
+				}
 				count += 1;
 			}
 		}
@@ -164,10 +169,12 @@ namespace Budgie {
 		 * update_count updates our notifications count for this group
 		 */
 		public void update_count() {
-			/* tokeep is currently hardcoded, but preferably into BDS later? */
-			int tokeep = 12;
+			/* tokeep is currently hardcoded, but would preferably go into a gschema and into BDS later? */
+			uint tokeep = 12;
 			count = (int) notifications.length;
-			if (count > tokeep) {limit_notifications(tokeep);}
+			if (count > tokeep) {
+				limit_notifications(tokeep);
+			}
 			app_label.set_markup("<b>%s (%i)</b>".printf(app_name, count));
 		}
 
