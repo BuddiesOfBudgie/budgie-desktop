@@ -344,11 +344,7 @@ private class Properties {
 		if (variant == null || !variant.is_of_type(VariantType.INT32)) return default;
 
 		var value = variant.get_int32();
-		if (value == 0 || value == 1) {
-			return value == 1;
-		} else {
-			return default;
-		}
+		return (value == 0 || value == 1) ? value == 1 : default;
 	}
 
 	private static string? parse_string(Variant? variant, string default) {
