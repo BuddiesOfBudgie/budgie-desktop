@@ -93,9 +93,7 @@ namespace Budgie.StatusNotifier {
 			}
 
 			// we already have this service; ignore the request
-			if (name in item_watchers) {
-				return;
-			}
+			if (name in item_watchers) return;
 
 			var sender_str = (string) sender;
 			uint watch_identifier = Bus.watch_name(
