@@ -154,8 +154,8 @@ internal class TrayItem : Gtk.EventBox {
 
 	private void update_icon(Gtk.Image icon, string? icon_name, SnIconPixmap[] icon_pixmaps, string? fallback_icon_name) {
 		SnIconPixmap? icon_pixmap = null;
-		for (int i = 0; i < icon_pixmaps.length; i++) {
-			icon_pixmap = icon_pixmaps[i];
+		foreach (SnIconPixmap pixmap in icon_pixmaps) {
+			icon_pixmap = pixmap;
 			if (icon_pixmap.width >= target_icon_size && icon_pixmap.height >= target_icon_size) {
 				break;
 			}

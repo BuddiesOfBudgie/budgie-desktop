@@ -121,8 +121,8 @@ public class TrayApplet : Budgie.Applet {
 	private void on_watcher_init() {
 		try {
 			DBusServiceInfo[] services = watcher.get_registered_status_notifier_pathnames_budgie();
-			for (int i = 0; i < services.length; i++) {
-				register_new_item(services[i].name, services[i].object_path, services[i].sender, services[i].owner);
+			foreach (DBusServiceInfo service in services) {
+				register_new_item(service.name, service.object_path, service.sender, service.owner);
 			}
 		} catch (Error e) {
 			critical("Unable to fetch existing status notifier items: %s", e.message);
@@ -158,9 +158,7 @@ public class TrayApplet : Budgie.Applet {
 	private void register_new_item(string name, string object_path, string sender, string owner) {
 		var key = sender + name + object_path;
 
-		if (key in items) {
-			return;
-		}
+		if (key in items) return;
 
 		try {
 			var new_item = new TrayItem(name, object_path, panel_size);
