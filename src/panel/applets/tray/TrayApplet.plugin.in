@@ -2,7 +2,7 @@
 Module=trayapplet.so
 Builtin=true
 Name=System Tray
-_Description=System tray using the Status Notifier protocol
+_Description=System tray using the Status Notifier specification
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
