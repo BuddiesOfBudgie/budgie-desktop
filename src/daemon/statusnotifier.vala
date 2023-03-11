@@ -26,6 +26,15 @@ namespace Budgie.StatusNotifier {
 
 	[DBus (name="org.freedesktop.StatusNotifierWatcher")]
 	public class FreedesktopWatcher : Object {
+		public bool is_status_notifier_host_registered {get; private set; default = false;}
+		public int32 protocol_version {get; private set; default = 0;}
+
+		private KdeWatcher kde_watcher;
+		private uint freedesktop_dbus_identifier = 0;
+		private HashTable<string, uint> host_services;
+		private HashTable<string, uint> item_watchers;
+		private HashTable<string, DBusServiceInfo?> registered_services;
+
 		public string[] registered_status_notifier_items {
 			owned get {
 				string[] ret = new string[registered_services.size()];
@@ -35,14 +44,6 @@ namespace Budgie.StatusNotifier {
 				return ret;
 			}
 		}
-		public bool is_status_notifier_host_registered {get; private set; default = false;}
-		public int32 protocol_version {get; private set; default = 0;}
-
-		private KdeWatcher kde_watcher;
-		private uint freedesktop_dbus_identifier = 0;
-		private HashTable<string, uint> host_services;
-		private HashTable<string, uint> item_watchers;
-		private HashTable<string, DBusServiceInfo?> registered_services;
 
 		construct {
 			host_services = new HashTable<string, uint>(str_hash, str_equal);
