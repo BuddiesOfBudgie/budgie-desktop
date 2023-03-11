@@ -142,9 +142,7 @@ namespace Budgie.StatusNotifier {
 					host_services.remove(service);
 					warning("Unregistered status notifier host %s", service);
 
-					if (host_services.get_keys_as_array().length == 0) {
-						is_status_notifier_host_registered = false;
-					}
+					is_status_notifier_host_registered = host_services.get_keys_as_array().length != 0;
 				}
 			);
 
