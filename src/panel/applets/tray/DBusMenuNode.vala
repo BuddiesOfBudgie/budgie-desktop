@@ -359,9 +359,7 @@ private class Properties {
 
 	private static List<string>? parse_shortcuts(Variant? variant) {
 		List<string>? ret = null;
-		if (variant == null) {
-			return ret;
-		}
+		if (variant == null) return ret;
 
 		VariantIter prop_it = variant.iterator();
 		string key;
