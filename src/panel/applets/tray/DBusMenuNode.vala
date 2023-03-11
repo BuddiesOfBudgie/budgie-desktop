@@ -341,9 +341,7 @@ private class Properties {
 	}
 
 	private static bool? parse_int32_bool(Variant? variant, bool? default) {
-		if (variant == null || !variant.is_of_type(VariantType.INT32)) {
-			return default;
-		}
+		if (variant == null || !variant.is_of_type(VariantType.INT32)) return default;
 
 		var value = variant.get_int32();
 		if (value == 0 || value == 1) {
