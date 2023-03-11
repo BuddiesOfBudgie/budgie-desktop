@@ -364,11 +364,11 @@ private class Properties {
 
 		VariantIter prop_it = variant.iterator();
 		string key;
-		string[] value;
-		if (prop_it.next("{as}", out key, out value)) {
+		string[] values;
+		if (prop_it.next("{as}", out key, out values)) {
 			ret = new List<string>();
-			for (int i = 0; i < value.length; i++) {
-				ret.append(value[i]);
+			foreach (string val in values) {
+				ret.append(val);
 			}
 		}
 
