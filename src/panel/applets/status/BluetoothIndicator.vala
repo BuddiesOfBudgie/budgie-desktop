@@ -40,7 +40,10 @@ public class BluetoothIndicator : Bin {
 		var box = new Box(VERTICAL, 0);
 
 		// Header
-		var header = new Box(HORIZONTAL, 0);
+		var header = new Box(HORIZONTAL, 0) {
+			margin_start = 4,
+			margin_end = 4,
+		};
 		header.get_style_context().add_class("bluetooth-header");
 
 		// Header label
@@ -60,7 +63,7 @@ public class BluetoothIndicator : Bin {
 
 		// Bluetooth switch
 		bluetooth_switch = new Switch() {
-			tooltip_text = _("Turn Bluetooth on or off")
+			tooltip_text = _("Turn Bluetooth on or off"),
 		};
 		bluetooth_switch.notify["active"].connect(on_switch_activate);
 
@@ -314,7 +317,10 @@ public class BTDeviceRow : ListBoxRow {
 
 		var icon_name = device.icon ?? "bluetooth-active";
 		if (!icon_name.has_suffix("-symbolic")) icon_name += "-symbolic";
-		image = new Image.from_icon_name(icon_name, MENU);
+		image = new Image.from_icon_name(icon_name, MENU) {
+			margin_start = 4,
+			margin_end = 4,
+		};
 		image.get_style_context().add_class("bluetooth-device-image");
 
 		name_label = new Label(device.alias) {
@@ -371,8 +377,11 @@ public class BTDeviceRow : ListBoxRow {
 		status_box.pack_start(revealer, false);
 
 		// Disconnect button
-		connection_button = new Button.with_label(_("Disconnect"));
-		connection_button.get_style_context().add_class(STYLE_CLASS_FLAT);
+		connection_button = new Button.from_icon_name("bluetooth-disabled-symbolic", IconSize.BUTTON) {
+			relief = ReliefStyle.HALF,
+			tooltip_text = _("Disconnect"),
+		};
+		connection_button.get_style_context().add_class("circular");
 		connection_button.get_style_context().add_class("bluetooth-connection-button");
 		connection_button.clicked.connect(() => {
 			toggle_connection.begin();
