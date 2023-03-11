@@ -100,9 +100,7 @@ public class TrayApplet : Budgie.Applet {
 	}
 
 	private void on_dbus_get(Object? o, AsyncResult? res) {
-		if (watcher != null) {
-			return;
-		}
+		if (watcher != null) return;
 
 		try {
 			watcher = Bus.get_proxy.end(res);
