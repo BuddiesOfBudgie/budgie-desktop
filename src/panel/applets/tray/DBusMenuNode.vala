@@ -187,7 +187,8 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 			return;
 		}
 
-		Icon gicon = (icon_name != "") ? new ThemedIcon.with_default_fallbacks(icon_name) : new BytesIcon(icon_data);
+		Icon gicon;
+		gicon = (icon_name != "") ? new ThemedIcon.with_default_fallbacks(icon_name) : gicon = new BytesIcon(icon_data);
 		icon.set_from_gicon(gicon, Gtk.IconSize.MENU);
 		icon.set_pixel_size(16);
 		box.pack_start(icon, false, false, 2);

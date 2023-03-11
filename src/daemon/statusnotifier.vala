@@ -151,7 +151,7 @@ namespace Budgie.StatusNotifier {
 
 		public DBusServiceInfo[] get_registered_status_notifier_pathnames_budgie() throws DBusError, IOError {
 			DBusServiceInfo[] ret = {};
-			for (DBusServiceInfo val in registered_services.get_values()) {
+			foreach (DBusServiceInfo val in registered_services.get_values()) {
 				ret += val;
 			}
 			return ret;
