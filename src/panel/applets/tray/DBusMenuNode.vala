@@ -63,9 +63,7 @@ public class DBusMenuNode : Object {
 	}
 
 	public void update_property(string key, Variant? value) {
-		if (!properties.set_property(key, value)) {
-			return;
-		}
+		if (!properties.set_property(key, value)) return;
 
 		if (activate_signal_handler > 0 && item is DBusMenuItem) {
 			SignalHandler.block((DBusMenuItem) item, activate_signal_handler);
