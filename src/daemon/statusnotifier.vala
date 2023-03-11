@@ -29,8 +29,8 @@ namespace Budgie.StatusNotifier {
 		public string[] registered_status_notifier_items {
 			owned get {
 				string[] ret = new string[registered_services.size()];
-				for (int i = 0; i < registered_services.size(); i++) {
-					ret[i] = registered_services.get_values().nth_data(i).name;
+				foreach (DBusServiceInfo val in registered_services.get_values()) {
+				    ret += val.name;
 				}
 				return ret;
 			}
