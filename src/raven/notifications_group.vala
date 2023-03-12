@@ -22,6 +22,7 @@ namespace Budgie {
 		private Gtk.Label? app_label = null;
 		private string? app_name;
 		private Gtk.Button? dismiss_button = null;
+		private uint? tokeep;
 
 		/**
 		 * Signals
@@ -29,10 +30,11 @@ namespace Budgie {
 		public signal void dismissed_group(string app_name);
 		public signal void dismissed_notification(uint32 id);
 
-		public NotificationGroup(string c_app_icon, string c_app_name, NotificationSort sort_mode) {
+		public NotificationGroup(string c_app_icon, string c_app_name, NotificationSort sort_mode, uint keep) {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 4);
 			can_focus = false; // Disable focus to prevent scroll on click
 			focus_on_click = false;
+			tokeep = keep;
 
 			get_style_context().add_class("raven-notifications-group");
 
@@ -94,9 +96,9 @@ namespace Budgie {
 			}
 
 			var widget = new NotificationWidget(notification);
-
 			notifications.insert(id, widget);
 			list.prepend(widget);
+
 			list.invalidate_sort();
 			update_count();
 
@@ -135,7 +137,6 @@ namespace Budgie {
 				notification.destroy(); // Nuke the notification
 				update_count(); // Update our counter
 				dismissed_notification(id); // Notify anything listening
-
 				if (count == 0) { // This was the last notification
 					dismissed_group(app_name); // Dismiss the group
 				}
@@ -146,13 +147,23 @@ namespace Budgie {
 		 * too many notifications will choke raven and the desktop, so let's set a limit;
 		 * keep the latest n-notifications of current group, delete older ones
 		 */
-		private void limit_notifications (uint tokeep) {
+		public void limit_notifications () {
+
 			GLib.List<uint32> currnotifs = notifications.get_keys();
 			CompareFunc<int> intcmp = (a, b) => {
 				return (int) (a > b) - (int) (a < b);
 			};
 			currnotifs.sort(intcmp);
-			uint n_remove = currnotifs.length() - tokeep;
+			uint n_currnotifs = currnotifs.length();
+			/**
+			 * no need to reduce if the current number of notifications is below our threshold
+			 * and we shouldn't attempt to set a negative uint
+			 */
+			if (n_currnotifs <= tokeep) {
+				return;
+			}
+			uint n_remove = n_currnotifs - tokeep;
+			print(@"inside: count = $count, n_remove is $n_remove\n");
 			int count = 0;
 			foreach (uint n in currnotifs) {
 				if (count < n_remove) {
@@ -166,14 +177,21 @@ namespace Budgie {
 		}
 
 		/**
+		 * if the total number of notifications exceeds threshold, NotificationsView will
+		 * update the max number per group ('tokeep')
+		 */
+		public void set_group_maxnotifications(uint keep) {
+			tokeep = keep;
+			print(@"newtokeep set in group: $tokeep\n");
+		}
+
+		/**
 		 * update_count updates our notifications count for this group
 		 */
 		public void update_count() {
-			/* tokeep is currently hardcoded, but would preferably go into a gschema and into BDS later? */
-			uint tokeep = 12;
 			count = (int) notifications.length;
 			if (count > tokeep) {
-				limit_notifications(tokeep);
+				limit_notifications();
 			}
 			app_label.set_markup("<b>%s (%i)</b>".printf(app_name, count));
 		}
