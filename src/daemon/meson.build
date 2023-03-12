@@ -28,6 +28,7 @@ daemon_sources = [
     'notifications/dbus.vala',
     'notifications/popup.vala',
     'screenshot.vala',
+    'statusnotifier.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
