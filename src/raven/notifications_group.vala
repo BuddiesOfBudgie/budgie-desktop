@@ -150,10 +150,9 @@ namespace Budgie {
 		public void limit_notifications () {
 
 			GLib.List<uint32> currnotifs = notifications.get_keys();
-			CompareFunc<int> intcmp = (a, b) => {
+			currnotifs.sort((a, b) => {
 				return (int) (a > b) - (int) (a < b);
-			};
-			currnotifs.sort(intcmp);
+			});
 			uint n_currnotifs = currnotifs.length();
 			/**
 			 * no need to reduce if the current number of notifications is below our threshold
