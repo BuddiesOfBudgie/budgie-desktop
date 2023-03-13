@@ -172,7 +172,7 @@ namespace Budgie {
 				else {
 					break;
 				}
-				count += 1;
+				count++;
 			}
 		}
 
