@@ -340,8 +340,7 @@ namespace Budgie {
 			if (n_groups == 0) {
 				/* if no notifications left, set to DEFAULT_MAX_PERGROUP */
 				newmax = DEFAULT_MAX_PERGROUP;
-			}
-			else if (len > TOTAL_MAX_NOTIFICATIONS) {
+			} else if (len > TOTAL_MAX_NOTIFICATIONS) {
 				/* if totalmax is exceeded, reduce max per group */
 				newmax = (uint)((float)TOTAL_MAX_NOTIFICATIONS/(float)n_groups);
 				trim = true;
