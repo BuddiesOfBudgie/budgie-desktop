@@ -292,14 +292,16 @@ namespace Budgie {
 						this.listbox.add(group);
 
 						group.dismissed_group.connect((name) => { // When we dismiss the group
-							listbox.remove(group.get_parent()); // Remove this from the listbox
+							var parent = group.get_parent();
+							listbox.remove(parent);
+							parent.destroy();
 
 							/**
-							* If we're not performing a clear all, steal this entry from notifications list and update our child count
-							* Performing a steal seems to affect a .foreach call, so best to avoid this.
+							* If we're not performing a clear all, remove this entry from notifications list and update our child count
+							* Performing a remove seems to affect a .foreach call, so best to avoid this.
 							*/
 							if (!performing_clear_all) {
-								notification_groups.steal(name); // Remove notifications group from list
+								notification_groups.remove(name);
 								update_child_count();
 							}
 
@@ -388,8 +390,7 @@ namespace Budgie {
 				notification_group.dismiss_all();
 			});
 
-			notification_groups.steal_all(); // Ensure we're resetting notifications_list
-
+			notification_groups.remove_all(); // Ensure we're resetting notifications_list
 			performing_clear_all = false;
 			update_child_count();
 			Raven.get_instance().ReadNotifications();
