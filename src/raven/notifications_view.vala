@@ -324,9 +324,9 @@ namespace Budgie {
 			this.notifications.remove(id);
 		}
 
-		void adjust_max_per_group (uint newmax, bool trim) {
+		void adjust_max_per_group(uint newmax, bool trim) {
 			notification_groups.foreach((app_name, notification_group) => {
-				notification_group.set_group_maxnotifications(max_per_group);
+				notification_group.set_group_max_notifications(max_per_group);
 				if (trim) {
 					notification_group.limit_notifications();
 				}
@@ -344,8 +344,7 @@ namespace Budgie {
 				/* if totalmax is exceeded, reduce max per group */
 				newmax = (uint)((float)TOTAL_MAX_NOTIFICATIONS/(float)n_groups);
 				trim = true;
-			}
-			else if (
+			} else if (
 				max_per_group < DEFAULT_MAX_PERGROUP &&
 				(n_groups * (max_per_group + 1)) <= TOTAL_MAX_NOTIFICATIONS
 			) {
