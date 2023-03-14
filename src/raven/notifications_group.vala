@@ -148,7 +148,6 @@ namespace Budgie {
 		 * keep the latest n-notifications of current group, delete older ones
 		 */
 		public void limit_notifications () {
-
 			GLib.List<uint32> currnotifs = notifications.get_keys();
 			currnotifs.sort((a, b) => {
 				return (int) (a > b) - (int) (a < b);
@@ -158,17 +157,13 @@ namespace Budgie {
 			 * no need to reduce if the current number of notifications is below our threshold
 			 * and we shouldn't attempt to set a negative uint
 			 */
-			if (n_currnotifs <= tokeep) {
-				return;
-			}
+			if (n_currnotifs <= tokeep) return;
 			uint n_remove = n_currnotifs - tokeep;
-			print(@"inside: count = $count, n_remove is $n_remove\n");
 			int count = 0;
 			foreach (uint n in currnotifs) {
 				if (count < n_remove) {
 					remove_notification(n);
-				}
-				else {
+				} else {
 					break;
 				}
 				count++;
@@ -179,9 +174,8 @@ namespace Budgie {
 		 * if the total number of notifications exceeds threshold, NotificationsView will
 		 * update the max number per group ('tokeep')
 		 */
-		public void set_group_maxnotifications(uint keep) {
+		public void set_group_max_notifications(uint keep) {
 			tokeep = keep;
-			print(@"newtokeep set in group: $tokeep\n");
 		}
 
 		/**
