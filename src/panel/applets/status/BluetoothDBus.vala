@@ -63,3 +63,26 @@ public interface Device1 : GLib.Object {
 	public async abstract void pair() throws GLib.DBusError, GLib.IOError;
 	public async abstract void cancel_pairing() throws GLib.DBusError, GLib.IOError;
 }
+
+[DBus (name="org.bluez.obex.Transfer1")]
+public interface Transfer : GLib.Object {
+	public abstract string status { owned get; }
+	public abstract ObjectPath session { owned get; }
+	public abstract string name { owned get; }
+	public abstract string Type { owned get; }
+	public abstract uint64 time { owned get; }
+	public abstract uint64 size { owned get; }
+	public abstract uint64 transferred { owned get; }
+	public abstract string filename { owned get; }
+
+	public abstract void cancel() throws GLib.DBusError, GLib.Error;
+}
+
+[DBus (name="org.bluez.obex.Session1")]
+public interface Session : GLib.Object {
+	public abstract string source { owned get; }
+	public abstract string destination { owned get; }
+	public abstract uchar channel { owned get; }
+	public abstract string target { owned get; }
+	public abstract string root { owned get; }
+}

@@ -13,12 +13,5 @@
         .bluetooth-device-status {
             font-size: small;
         }
-
-        .bluetooth-connection-button {
-            & label {
-                font-size: small;
-                opacity: 0.55; // Emulate .dim-label
-            }
-        }
     }
 }

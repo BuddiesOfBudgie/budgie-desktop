@@ -279,9 +279,15 @@ public class BTDeviceRow : ListBoxRow {
 	private Revealer? revealer = null;
 	private Spinner? spinner = null;
 	private Label? status_label = null;
+	private Button? send_file_button = null;
 	private Button? connection_button = null;
+	private Revealer? progress_revealer = null;
+	private Label? file_label = null;
+	private Label? progress_label = null;
+	private ProgressBar? progress_bar = null;
 
 	public Device1 device { get; construct; }
+	public Transfer transfer;
 
 	private ulong up_handler_id = 0;
 	private Up.Device? _up_device;
@@ -308,6 +314,12 @@ public class BTDeviceRow : ListBoxRow {
 
 	construct {
 		get_style_context().add_class("bluetooth-device-row");
+
+		// Obex manager for file transfers
+		var obex_manager = new ObexManager();
+		obex_manager.transfer_active.connect(transfer_active);
+		obex_manager.transfer_added.connect(transfer_added);
+		obex_manager.transfer_removed.connect(transfer_removed);
 
 		// Body
 		var box = new Box(Orientation.VERTICAL, 0);
@@ -376,6 +388,8 @@ public class BTDeviceRow : ListBoxRow {
 		status_box.pack_start(status_label, false);
 		status_box.pack_start(revealer, false);
 
+		var button_box = new Box(Orientation.HORIZONTAL, 0);
+
 		// Disconnect button
 		connection_button = new Button.from_icon_name("bluetooth-disabled-symbolic", IconSize.BUTTON) {
 			relief = ReliefStyle.HALF,
@@ -387,26 +401,75 @@ public class BTDeviceRow : ListBoxRow {
 			toggle_connection.begin();
 		});
 
+		// Send file button
+		send_file_button = new Button.from_icon_name("folder-download-symbolic", IconSize.BUTTON) {
+			relief = ReliefStyle.HALF,
+			tooltip_text = _("Send file…"),
+		};
+		send_file_button.clicked.connect(() => {
+
+		});
+		send_file_button.get_style_context().add_class("circular");
+
+		button_box.pack_start(send_file_button, false);
+		button_box.pack_start(connection_button, false);
+
+		// Progress stuff
+		progress_revealer = new Revealer() {
+			reveal_child = false,
+			transition_duration = 250,
+			transition_type = RevealerTransitionType.SLIDE_DOWN,
+		};
+
+		progress_label = new Label(null) {
+			halign = Align.START,
+			valign = Align.END,
+			use_markup = true,
+			hexpand = true,
+		};
+
+		progress_bar = new ProgressBar() {
+			hexpand = true,
+		};
+
+		file_label = new Label(null) {
+			ellipsize = Pango.EllipsizeMode.MIDDLE,
+			halign = Align.START,
+			valign = Align.END,
+			use_markup = true,
+			hexpand = true,
+		};
+
+		var progress_grid = new Grid();
+		progress_grid.attach(file_label, 0, 0);
+		progress_grid.attach(progress_bar, 0, 1);
+		progress_grid.attach(progress_label, 0, 2);
+
 		// Signals
 		((DBusProxy) device).g_properties_changed.connect(update_status);
 
 		// Packing
 		grid.attach(image, 0, 0, 2, 2);
 		grid.attach(name_label, 2, 0, 2, 1);
-		grid.attach(connection_button, 4, 0, 1, 2);
+		grid.attach(button_box, 4, 0, 1, 2);
 		grid.attach(status_box, 2, 1, 2, 1);
 		grid.attach(battery_revealer, 2, 2, 1, 1);
+		grid.attach(progress_revealer, 1, 3);
 
 		box.pack_start(grid);
 		add(box);
 
-		update_status();
 		show_all();
-		if (!device.connected) connection_button.hide();
+		update_status();
 	}
 
 	public BTDeviceRow(Device1 device) {
 		Object(device: device);
+	}
+
+	private void hide_progress_revealer() {
+		progress_label.label = "";
+		progress_revealer.reveal_child = false;
 	}
 
 	/**
@@ -434,6 +497,18 @@ public class BTDeviceRow : ListBoxRow {
 
 		revealer.reveal_child = true;
 		spinner.active = false;
+	}
+
+	private void transfer_active(string address) {
+		if (address == device.address) update_transfer_progress();
+	}
+	
+	private void transfer_added(string address, Transfer transfer) {
+		if (address == device.address) this.transfer = transfer;
+	}
+
+	private void transfer_removed(Transfer transfer) {
+		hide_progress_revealer();
 	}
 
 	private void update_battery() {
@@ -491,10 +566,12 @@ public class BTDeviceRow : ListBoxRow {
 		if (device.connected) {
 			status_label.set_text(_("Connected"));
 			connection_button.show();
+			send_file_button.show();
 			activatable = false;
 		} else {
 			status_label.set_text(_("Disconnected"));
 			connection_button.hide();
+			send_file_button.hide();
 			activatable = true;
 		}
 
@@ -505,5 +582,46 @@ public class BTDeviceRow : ListBoxRow {
 		}
 
 		properties_updated();
+	}
+
+	private void update_transfer_progress() {
+		switch (transfer.status) {
+			case "error":
+				hide_progress_revealer();
+				break;
+			case "queued":
+				hide_progress_revealer();
+				break;
+			case "active":
+				// Update the progress bar
+				progress_bar.fraction = (double) transfer.transferred / (double) transfer.size;
+				progress_revealer.reveal_child = true;
+
+				// Update the filename label
+				var name = transfer.name;
+				if (name == null) {
+					file_label.label = _("Filename: %s").printf(Markup.escape_text(name));
+				}
+
+				// Update the progress label
+				var file_name = transfer.filename;
+				if (file_name != null) {
+					if (file_name.contains("/.cache/obexd")) {
+						progress_label.label = _("Receiving… %s of %s").printf(
+							format_size(transfer.transferred),
+							format_size(transfer.size)
+						);
+					} else {
+						progress_label.label = _("Sending… %s of %s").printf(
+							format_size(transfer.transferred),
+							format_size(transfer.size)
+						);
+					}
+				}
+				break;
+			case "complete":
+				hide_progress_revealer();
+				break;
+		}
 	}
 }

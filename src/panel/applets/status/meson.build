@@ -23,6 +23,7 @@ applet_status_sources = [
     'BluetoothDBus.vala',
     'BluetoothEnums.vala',
     'BluetoothIndicator.vala',
+    'BluetoothObexManager.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
     'SoundIndicator.vala',
