@@ -67,7 +67,7 @@ get_feedback_group_for_display parent="Meta.Compositor" cheader_filename="meta/c
 disable_unredirect_for_display parent="Meta.Compositor" cheader_filename="meta/compositor-mutter.h"
 enable_unredirect_for_display parent="Meta.Compositor" cheader_filename="meta/compositor-mutter.h"
 focus_stage_window parent="Meta.Compositor" cheader_filename="meta/compositor-mutter.h"
-keybindings_set_custom_handler parent="Meta.KeyBinding" name="set_custom_handler"
+keybindings_set_custom_handler parent="Meta.KeyBinding" name="set_custom_handler" cheader_filename="meta/keybindings.h"
 KeyHandlerFunc.event type="Clutter.KeyEvent?"
 Window.focus#signal skip=true
 Window.get_xwindow skip=false
