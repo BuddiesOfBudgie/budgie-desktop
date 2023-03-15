@@ -86,3 +86,8 @@ public interface Session : GLib.Object {
 	public abstract string target { owned get; }
 	public abstract string root { owned get; }
 }
+
+[DBus (name="org.gnome.SettingsDaemon.Rfkill")]
+public interface Rfkill : GLib.Object {
+	public abstract bool bluetooth_airplane_mode { get; set; }
+}

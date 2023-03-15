@@ -22,8 +22,12 @@ public class BluetoothIndicator : Bin {
 
 	private ListBox? devices_box = null;
 	private Switch? bluetooth_switch = null;
+	private Label? placeholder_label = null;
+	private Label? placeholder_sublabel = null;
 
 	private BluetoothClient client;
+
+	private ulong switch_handler_id;
 
 	construct {
 		image = new Image();
@@ -32,84 +36,6 @@ public class BluetoothIndicator : Bin {
 		ebox.add(image);
 		ebox.add_events(EventMask.BUTTON_RELEASE_MASK);
 		ebox.button_release_event.connect(on_button_released);
-
-		// Create our popover
-		popover = new Budgie.Popover(ebox);
-		popover.set_size_request(275, -1);
-		popover.get_style_context().add_class("bluetooth-popover");
-		var box = new Box(VERTICAL, 0);
-
-		// Header
-		var header = new Box(HORIZONTAL, 0) {
-			margin_start = 4,
-			margin_end = 4,
-		};
-		header.get_style_context().add_class("bluetooth-header");
-
-		// Header label
-		var switch_label = new Label(_("Bluetooth")) {
-			halign = START,
-			margin_start = 4,
-		};
-		switch_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
-
-		// Settings button
-		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
-			tooltip_text = _("Bluetooth Settings")
-		};
-		button.get_style_context().add_class(STYLE_CLASS_FLAT);
-		button.get_style_context().remove_class(STYLE_CLASS_BUTTON);
-		button.clicked.connect(on_settings_activate);
-
-		// Bluetooth switch
-		bluetooth_switch = new Switch() {
-			tooltip_text = _("Turn Bluetooth on or off"),
-		};
-		bluetooth_switch.notify["active"].connect(on_switch_activate);
-
-		header.pack_start(switch_label);
-		header.pack_end(bluetooth_switch, false, false);
-		header.pack_end(button, false, false);
-
-		// Devices
-		var scrolled_window = new ScrolledWindow(null, null) {
-			hscrollbar_policy = NEVER,
-			min_content_height = 190,
-			max_content_height = 190,
-			propagate_natural_height = true
-		};
-		devices_box = new ListBox() {
-			selection_mode = NONE
-		};
-		devices_box.set_filter_func(filter_paired_devices);
-		devices_box.set_sort_func(sort_devices);
-		devices_box.get_style_context().add_class("bluetooth-device-listbox");
-
-		devices_box.row_activated.connect((row) => {
-			((BTDeviceRow) row).toggle_connection.begin();
-		});
-
-		// Placeholder
-		var placeholder = new Box(Orientation.VERTICAL, 18) {
-			margin_top = 18,
-		};
-		var placeholder_label = new Label(_("No paired Bluetooth devices found.\n\nVisit Bluetooth settings to pair a device.")) {
-			justify = CENTER,
-		};
-		placeholder_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
-		placeholder_label.get_style_context().add_class("bluetooth-placeholder");
-
-		var placeholder_button = new Button.with_label(_("Open Bluetooth Settings")) {
-			relief = HALF,
-		};
-		placeholder_button.get_style_context().add_class(STYLE_CLASS_SUGGESTED_ACTION);
-		placeholder_button.clicked.connect(on_settings_activate);
-
-		placeholder.pack_start(placeholder_label, false);
-		placeholder.pack_start(placeholder_button, false);
-		placeholder.show_all(); // Without this, it never shows. Because... reasons?
-		devices_box.set_placeholder(placeholder);
-		scrolled_window.add(devices_box);
 
 		// Create our Bluetooth client
 		client = new BluetoothClient();
@@ -145,7 +71,8 @@ public class BluetoothIndicator : Bin {
 			});
 		});
 
-		client.global_state_changed.connect(on_client_state_changed);
+		// Handle changes to airplane mode
+		client.airplane_mode_changed.connect(update_state_ui);
 
 		// Show or hide the panel widget if we have a Bluetooth adapter or not
 		client.notify["has-adapter"].connect(() => {
@@ -153,8 +80,100 @@ public class BluetoothIndicator : Bin {
 			else hide();
 		});
 
+		// Create our popover
+		popover = new Budgie.Popover(ebox);
+		popover.set_size_request(275, -1);
+		popover.get_style_context().add_class("bluetooth-popover");
+		var box = new Box(VERTICAL, 0);
+
+		// Header
+		var header = new Box(HORIZONTAL, 0) {
+			margin_start = 4,
+			margin_end = 4,
+		};
+		header.get_style_context().add_class("bluetooth-header");
+
+		// Header label
+		var switch_label = new Label(_("Bluetooth")) {
+			halign = START,
+			margin_start = 4,
+		};
+		switch_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+
+		// Settings button
+		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
+			tooltip_text = _("Bluetooth Settings")
+		};
+		button.get_style_context().add_class(STYLE_CLASS_FLAT);
+		button.get_style_context().remove_class(STYLE_CLASS_BUTTON);
+		button.clicked.connect(on_settings_activate);
+
+		// Bluetooth switch
+		bluetooth_switch = new Switch() {
+			tooltip_text = _("Turn Bluetooth on or off"),
+		};
+		switch_handler_id = bluetooth_switch.notify["active"].connect(on_switch_activate);
+
+		header.pack_start(switch_label);
+		header.pack_end(bluetooth_switch, false, false);
+		header.pack_end(button, false, false);
+
+		// Devices
+		var scrolled_window = new ScrolledWindow(null, null) {
+			hscrollbar_policy = NEVER,
+			min_content_height = 190,
+			max_content_height = 190,
+			propagate_natural_height = true
+		};
+		devices_box = new ListBox() {
+			selection_mode = NONE
+		};
+		devices_box.set_filter_func(filter_paired_devices);
+		devices_box.set_sort_func(sort_devices);
+		devices_box.get_style_context().add_class("bluetooth-device-listbox");
+
+		devices_box.row_activated.connect((row) => {
+			((BTDeviceRow) row).toggle_connection.begin();
+		});
+
+		// Placeholder
+		var placeholder = new Box(Orientation.VERTICAL, 18) {
+			margin_top = 18,
+		};
+
+		var label_attributes = new Pango.AttrList();
+		var weight_attr = new Pango.FontDescription();
+		weight_attr.set_weight(Pango.Weight.BOLD);
+		label_attributes.insert(new Pango.AttrFontDesc(weight_attr));
+
+		placeholder_label = new Label(null) {
+			attributes = label_attributes,
+			justify = CENTER,
+		};
+
+		placeholder_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
+		placeholder_label.get_style_context().add_class("bluetooth-placeholder");
+
+		placeholder_sublabel = new Label(null) {
+			justify = CENTER,
+			wrap = true,
+		};		
+
+		var placeholder_button = new Button.with_label(_("Open Bluetooth Settings")) {
+			relief = HALF,
+		};
+		placeholder_button.get_style_context().add_class(STYLE_CLASS_SUGGESTED_ACTION);
+		placeholder_button.clicked.connect(on_settings_activate);
+
+		placeholder.pack_start(placeholder_label, false);
+		placeholder.pack_start(placeholder_sublabel, false);
+		placeholder.pack_start(placeholder_button, false);
+		placeholder.show_all(); // Without this, it never shows. Because... reasons?
+		devices_box.set_placeholder(placeholder);
+		scrolled_window.add(devices_box);
+
 		// Make sure our starting icon is correct
-		update_tray_icon();
+		update_state_ui();
 
 		add(ebox);
 		box.pack_start(header);
@@ -171,15 +190,10 @@ public class BluetoothIndicator : Bin {
 		if (e.button != BUTTON_MIDDLE) return EVENT_PROPAGATE;
 
 		// Disconnect all Bluetooth on middle click
-		client.set_all_powered.begin(!client.get_powered(), (obj, res) => {
-			client.check_powered();
-		});
+		var enabled = client.airplane_mode_enabled();
+		client.set_airplane_mode(!enabled);
 
 		return Gdk.EVENT_STOP;
-	}
-
-	private void on_client_state_changed(bool enabled, bool connected) {
-		bluetooth_switch.active = enabled;
 	}
 
 	private void on_settings_activate() {
@@ -197,10 +211,8 @@ public class BluetoothIndicator : Bin {
 
 	private void on_switch_activate() {
 		// Turn Bluetooth on or off
-		client.set_all_powered.begin(bluetooth_switch.active, (obj, res) => {
-			client.check_powered();
-			update_tray_icon();
-		});
+		var active = bluetooth_switch.active;
+		client.set_airplane_mode(!active); // If the switch is active, then Bluetooth is enabled. So invert the value
 	}
 
 	private void add_device(Device1 device) {
@@ -209,7 +221,6 @@ public class BluetoothIndicator : Bin {
 		var widget = new BTDeviceRow(device);
 
 		widget.properties_updated.connect(() => {
-			client.check_powered();
 			devices_box.invalidate_filter();
 			devices_box.invalidate_sort();
 		});
@@ -252,18 +263,36 @@ public class BluetoothIndicator : Bin {
 	 * Filters out any unpaired devices from our listbox.
 	 */
 	private bool filter_paired_devices(ListBoxRow row) {
+		if (client.airplane_mode_enabled()) return false;
+
 		return ((BTDeviceRow) row).device.paired || ((BTDeviceRow) row).device.connected;
 	}
 
 	/**
-	 * Update the tray icon used depending on the current Bluetooth state.
+	 * Update the tray icon and Bluetooth switch state to reflect the current
+	 * state of airplane mode.
 	 */
-	private void update_tray_icon() {
-		if (bluetooth_switch.active) {
-			image.set_from_icon_name("bluetooth-active", IconSize.MENU);
-		} else {
+	private void update_state_ui() {
+		var enabled = client.airplane_mode_enabled();
+
+		// Update the tray icon and placeholder text
+		if (enabled) { // Airplane mode is on, so Bluetooth is disabled
 			image.set_from_icon_name("bluetooth-disabled", IconSize.MENU);
+			placeholder_label.label = (_("Airplane mode is on."));
+			placeholder_sublabel.label = _("Bluetooth is disabled while airplane mode is on.");
+		} else { // Airplane mode is off, so Bluetooth is enabled
+			image.set_from_icon_name("bluetooth-active", IconSize.MENU);
+			placeholder_label.label = _("No paired Bluetooth devices found.");
+			placeholder_sublabel.label = _("Visit Bluetooth settings to pair a device.");
 		}
+
+		// Update our switch state
+		SignalHandler.block(bluetooth_switch, switch_handler_id);
+		bluetooth_switch.active = !enabled; // Airplane mode value is opposite of our switch state
+		SignalHandler.unblock(bluetooth_switch, switch_handler_id);
+
+		devices_box.invalidate_filter();
+		devices_box.invalidate_sort();
 	}
 }
 

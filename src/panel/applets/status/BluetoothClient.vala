@@ -20,17 +20,17 @@ const string BLUEZ_MANAGER_PATH = "/";
 const string BLUEZ_ADAPTER_INTERFACE = "org.bluez.Adapter1";
 const string BLUEZ_DEVICE_INTERFACE = "org.bluez.Device1";
 const string BLUETOOTH_ADDRESS_PREFIX = "/org/bluez/";
+const string RFKILL_DBUS_NAME = "org.gnome.SettingsDaemon.Rfkill";
+const string RFKILL_DBUS_PATH = "/org/gnome/SettingsDaemon/Rfkill";
 
 class BluetoothClient : GLib.Object {
 	private Cancellable cancellable;
 
 	private DBusObjectManagerClient object_manager;
 	private Client upower_client;
+	private Rfkill rfkill;
 
 	public bool has_adapter { get; private set; default = false; }
-	public bool is_connected { get; private set; default = false; }
-	public bool is_enabled { get; private set; default = false; }
-	public bool is_powered { get; private set; default = false; }
 	public bool retrieve_finished { get; private set; default = false; }
 
 	/** Signal emitted when a Bluetooth device has been added. */
@@ -41,11 +41,14 @@ class BluetoothClient : GLib.Object {
 	public signal void upower_device_added(Up.Device up_device);
 	/** Signal emitted when a UPower device for a Bluetooth device has been removed. */
 	public signal void upower_device_removed(string object_path);
-	/** Signal emitted when our powered or connected state changes. */
-	public signal void global_state_changed(bool enabled, bool connected);
+	/** Signal emitted when airplane mode state has been changed. */
+	public signal void airplane_mode_changed();
 
 	construct {
 		cancellable = new Cancellable();
+
+		// Get our RFKill proxy
+		create_rfkill_proxy();
 
 		// Set up our UPower client
 		create_upower_client.begin();
@@ -129,29 +132,35 @@ class BluetoothClient : GLib.Object {
 		retrieve_finished = true;
 	}
 
+	private void create_rfkill_proxy() {
+		try {
+			rfkill = Bus.get_proxy_sync<Rfkill>(
+				BusType.SESSION,
+				RFKILL_DBUS_NAME,
+				RFKILL_DBUS_PATH,
+				DBusProxyFlags.NONE,
+				cancellable
+			);
+
+			((DBusProxy) rfkill).g_properties_changed.connect((changed, invalid) => {
+				var variant = changed.lookup_value("BluetoothAirplaneMode", new VariantType("b"));
+				if (variant == null) return;
+				airplane_mode_changed();
+			});
+		} catch (Error e) {
+			critical("Error getting RFKill proxy: %s", e.message);
+		}
+	}
+
 	/**
 	 * Handles the addition of a DBus object interface.
 	 */
 	private void on_interface_added(DBusObject object, DBusInterface iface) {
 		if (iface is Adapter1) {
-			unowned Adapter1 adapter = iface as Adapter1;
-
-			((DBusProxy) adapter).g_properties_changed.connect((changed, invalid) => {
-				var powered = changed.lookup_value("Powered", new VariantType("b"));
-				if (powered == null) return;
-				set_last_powered.begin();
-			});
-
 			has_adapter = true;
 		} else if (iface is Device1) {
 			unowned Device1 device = iface as Device1;
 			device_added(device);
-
-			((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
-				check_powered();
-			});
-
-			check_powered();
 		}
 	}
 
@@ -257,7 +266,7 @@ class BluetoothClient : GLib.Object {
 	/**
 	 * Get all Bluetooth adapters from our Bluez object manager.
 	 */
-	public List<Adapter1> get_adapters() {
+	private List<Adapter1> get_adapters() {
 		var adapters = new List<Adapter1>();
 
 		object_manager.get_objects().foreach((object) => {
@@ -270,110 +279,16 @@ class BluetoothClient : GLib.Object {
 	}
 
 	/**
-	 * Get all Bluetooth devices from our Bluez object manager.
+	 * Get whether or not Bluetooth airplane mode is enabled.
 	 */
-	public List<Device1> get_devices() {
-		var devices = new List<Device1>();
-
-		object_manager.get_objects().foreach((object) => {
-			var iface = object.get_interface(BLUEZ_DEVICE_INTERFACE);
-			if (iface == null) return;
-			devices.append(iface as Device1);
-		});
-
-		return (owned) devices;
+	public bool airplane_mode_enabled() {
+		return rfkill.bluetooth_airplane_mode;
 	}
 
 	/**
-	 * Check if any adapter is currently connected.
+	 * Set whether or not Bluetooth airplane mode is enabled.
 	 */
-	public bool get_connected() {
-		var devices = get_devices();
-
-		foreach (var device in devices) {
-			if (device.connected) return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if any adapter is powered on.
-	 */
-	public bool get_powered() {
-		var adapters = get_adapters();
-
-		foreach (var adapter in adapters) {
-			if (adapter.powered) return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if any Bluetooth adapter is powered and connected, and update our
-	 * Bluetooth state accordingly.
-	 */
-	public void check_powered() {
-		// This is called usually as a signal handler, so start an Idle
-		// task to prevent race conditions.
-		Idle.add(() => {
-			// Get current state
-			var connected = get_connected();
-			var powered = get_powered();
-
-			debug("connected: %s new_connected: %s | powered: %s new_powered: %s",
-				is_connected ? "yes" : "no", connected ? "yes" : "no",
-				is_powered ? "yes" : "no", powered ? "yes" : "no"
-			);
-
-			// Do nothing if the state hasn't changed
-			if (connected == is_connected && powered == is_powered) return Source.REMOVE;
-
-			// Set the new state
-			is_connected = connected;
-			is_powered = powered;
-
-			// Emit changed signal
-			global_state_changed(powered, connected);
-
-			return Source.REMOVE;
-		});
-	}
-
-	/**
-	 * Set the powered state of all adapters. If being powered off and an adapter has
-	 * devices connected to it, they will be disconnected.
-	 *
-	 * It is intended to use `check_powered()` as a callback to this async function.
-	 * As such, this function does not set our global state directly.
-	 */
-	public async void set_all_powered(bool powered) {
-		// Set the adapters' powered state
-		var adapters = get_adapters();
-		foreach (var adapter in adapters) {
-			adapter.powered = powered;
-		}
-
-		is_enabled = powered;
-
-		if (powered) return;
-
-		// If the power is being turned off, disconnect from all devices
-		var devices = get_devices();
-		foreach (var device in devices) {
-			if (device.connected) {
-				try {
-					yield device.disconnect();
-				} catch (Error e) {
-					warning("Error disconnecting Bluetooth device: %s", e.message);
-				}
-			}
-		}
-	}
-
-	public async void set_last_powered() {
-		yield set_all_powered(is_enabled);
-		check_powered();
+	public void set_airplane_mode(bool enabled) {
+		rfkill.bluetooth_airplane_mode = enabled;
 	}
 }
