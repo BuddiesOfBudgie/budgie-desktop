@@ -94,7 +94,13 @@ public class BluetoothIndicator : Bin {
 		header.get_style_context().add_class("bluetooth-header");
 
 		// Header label
+		var header_attributes = new Pango.AttrList();
+		var weight_attr = new Pango.FontDescription();
+		weight_attr.set_weight(Pango.Weight.BOLD);
+		header_attributes.insert(new Pango.AttrFontDesc(weight_attr));
+
 		var switch_label = new Label(_("Bluetooth")) {
+			attributes = header_attributes,
 			halign = START,
 			margin_start = 4,
 		};
@@ -142,8 +148,6 @@ public class BluetoothIndicator : Bin {
 		};
 
 		var label_attributes = new Pango.AttrList();
-		var weight_attr = new Pango.FontDescription();
-		weight_attr.set_weight(Pango.Weight.BOLD);
 		label_attributes.insert(new Pango.AttrFontDesc(weight_attr));
 
 		placeholder_label = new Label(null) {
@@ -278,7 +282,7 @@ public class BluetoothIndicator : Bin {
 		// Update the tray icon and placeholder text
 		if (enabled) { // Airplane mode is on, so Bluetooth is disabled
 			image.set_from_icon_name("bluetooth-disabled", IconSize.MENU);
-			placeholder_label.label = (_("Airplane mode is on."));
+			placeholder_label.label = _("Airplane mode is on.");
 			placeholder_sublabel.label = _("Bluetooth is disabled while airplane mode is on.");
 		} else { // Airplane mode is off, so Bluetooth is enabled
 			image.set_from_icon_name("bluetooth-active", IconSize.MENU);
@@ -384,7 +388,15 @@ public class BTDeviceRow : ListBoxRow {
 		var battery_box = new Box(Orientation.HORIZONTAL, 0);
 
 		battery_icon = new Image();
+
+		var label_attributes = new Pango.AttrList();
+		var desc = new Pango.FontDescription();
+		desc.set_stretch(Pango.Stretch.ULTRA_CONDENSED);
+		desc.set_weight(Pango.Weight.SEMILIGHT);
+		label_attributes.insert(new Pango.AttrFontDesc(desc));
+
 		battery_label = new Label(null) {
+			attributes = label_attributes,
 			halign = START,
 		};
 		battery_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
@@ -408,6 +420,7 @@ public class BTDeviceRow : ListBoxRow {
 		spinner = new Spinner();
 
 		status_label = new Label(null) {
+			attributes = label_attributes,
 			halign = START,
 		};
 		status_label.get_style_context().add_class("bluetooth-device-status");
