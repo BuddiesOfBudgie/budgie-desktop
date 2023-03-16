@@ -442,7 +442,8 @@ namespace Meta {
 		public unowned string get_name ();
 		public bool is_builtin ();
 		public bool is_reversed ();
-		[CCode (cname = "meta_keybindings_set_custom_handler")]
+		[CCode (cname = "meta_keybindings_set_custom_handler",
+			cheader_filename = "meta/keybindings.h" )]
 		public static bool set_custom_handler (string name, owned Meta.KeyHandlerFunc? handler);
 	}
 	[CCode (cheader_filename = "meta/main.h", type_id = "meta_laters_get_type ()")]
