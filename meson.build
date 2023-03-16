@@ -156,6 +156,13 @@ if xdg_appdir == ''
     endif
 endif
 
+# Bluetooth option. BSD systems have no Bluetooth stack, so this allows
+# BSD systems to compile and run Budgie.
+with_bluetooth = get_option('with-bluetooth')
+if with_bluetooth == true
+    add_project_arguments('-D', 'WITH_BLUETOOTH', language: 'vala')
+endif
+
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
 # so we have to use a shared library to prevent multiple registration of the same types..
 rpath_libdir = join_paths(libdir, meson.project_name())
@@ -216,6 +223,7 @@ report = [
     '',
     '    gtk-doc:                                                                     @0@'.format(with_gtk_doc),
     '    stateless:                                                                   @0@'.format(with_stateless),
+    '    bluetooth:                                                                   @0@'.format(with_bluetooth),
 ]
 
 

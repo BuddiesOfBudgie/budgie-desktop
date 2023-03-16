@@ -19,16 +19,21 @@ applet_status_resources = gnome.compile_resources(
 )
 
 applet_status_sources = [
-    'BluetoothClient.vala',
-    'BluetoothDBus.vala',
-    'BluetoothEnums.vala',
-    'BluetoothIndicator.vala',
-    'BluetoothObexManager.vala',
     'StatusApplet.vala',
     'PowerIndicator.vala',
     'SoundIndicator.vala',
     applet_status_resources
 ]
+
+if with_bluetooth == true
+    applet_status_sources += [
+        'BluetoothClient.vala',
+        'BluetoothDBus.vala',
+        'BluetoothEnums.vala',
+        'BluetoothIndicator.vala',
+        'BluetoothObexManager.vala'
+    ]
+endif
 
 applet_status_deps = [
     libpanelplugin_vapi,

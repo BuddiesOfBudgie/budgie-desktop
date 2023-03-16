@@ -40,7 +40,9 @@ public class StatusSettings : Gtk.Grid {
 public class StatusApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
 	protected Gtk.Box widget;
+#if WITH_BLUETOOTH
 	protected BluetoothIndicator blue;
+#endif
 	protected SoundIndicator sound;
 	protected PowerIndicator power;
 	protected Gtk.EventBox? wrap;
@@ -104,10 +106,12 @@ public class StatusApplet : Budgie.Applet {
 		this.setup_popover(power.ebox, power.popover);
 		this.setup_popover(sound.ebox, sound.popover);
 
+#if WITH_BLUETOOTH
 		blue = new BluetoothIndicator();
 		widget.pack_start(blue, false, false, 0);
 		/* Bluetooth widget shows itself - we dont control that */
 		this.setup_popover(blue.ebox, blue.popover);
+#endif
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -123,7 +127,9 @@ public class StatusApplet : Budgie.Applet {
 		this.manager = manager;
 		manager.register_popover(power.ebox, power.popover);
 		manager.register_popover(sound.ebox, sound.popover);
+#if WITH_BLUETOOTH
 		manager.register_popover(blue.ebox, blue.popover);
+#endif
 	}
 
 	public override bool supports_settings() {
