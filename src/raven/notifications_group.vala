@@ -113,9 +113,10 @@ namespace Budgie {
 		 * dismiss_all is responsible for dismissing all notifications
 		 */
 		public void dismiss_all() {
-			notifications.foreach_steal((id, notification) => {
-				list.remove(notification.get_parent());
-				notification.destroy();
+			notifications.foreach_remove((id, notification) => {
+				var parent = notification.get_parent();
+				list.remove(parent);
+				parent.destroy();
 				dismissed_notification(id);
 				return true;
 			});
@@ -131,10 +132,11 @@ namespace Budgie {
 			var notification = notifications.lookup(id); // Get our notification
 
 			if (notification != null) { // If this notification exists
-				notifications.steal(id);
-				list.remove(notification.get_parent());
+				notifications.remove(id);
+				var parent = notification.get_parent();
+				list.remove(parent);
 				list.invalidate_sort();
-				notification.destroy(); // Nuke the notification
+				parent.destroy();
 				update_count(); // Update our counter
 				dismissed_notification(id); // Notify anything listening
 				if (count == 0) { // This was the last notification
