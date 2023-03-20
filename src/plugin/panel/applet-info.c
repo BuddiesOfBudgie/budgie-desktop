@@ -11,11 +11,13 @@
 
 #include "applet-info.h"
 #include <libpeas/peas.h>
+#include <stdbool.h>
 
 enum {
 	PROP_ICON = 1,
 	PROP_NAME,
 	PROP_DESCRIPTION,
+	PROP_BUILTIN,
 	PROP_UUID,
 	PROP_ALIGNMENT,
 	PROP_POSITION,
@@ -30,6 +32,7 @@ struct _BudgieAppletInfoPrivate {
 	char* icon;
 	char* name;
 	char* description;
+	bool builtin;
 	char* uuid;
 	char* alignment;
 	int position;
@@ -54,6 +57,9 @@ static void budgie_applet_info_get_property(GObject* object, guint id, GValue* v
 			break;
 		case PROP_DESCRIPTION:
 			g_value_set_string((GValue*) value, self->priv->description);
+			break;
+		case PROP_BUILTIN:
+			g_value_set_boolean((GValue*) value, self->priv->builtin);
 			break;
 		case PROP_UUID:
 			g_value_set_string((GValue*) value, self->priv->uuid);
@@ -96,6 +102,9 @@ static void budgie_applet_info_set_property(GObject* object, guint id, const GVa
 		case PROP_DESCRIPTION:
 			g_clear_pointer(&self->priv->description, g_free);
 			self->priv->description = g_value_dup_string(value);
+			break;
+		case PROP_BUILTIN:
+			self->priv->builtin = g_value_get_boolean((GValue*) value);
 			break;
 		case PROP_UUID:
 			g_clear_pointer(&self->priv->uuid, g_free);
@@ -167,6 +176,10 @@ static void budgie_applet_info_class_init(BudgieAppletInfoClass* klazz) {
 		"description", "Applet description", "Set the applet description",
 		NULL, G_PARAM_READWRITE);
 
+	obj_properties[PROP_BUILTIN] = g_param_spec_boolean(
+		"builtin", "Applet is built-in", "Set if the applet is built-in",
+		false, G_PARAM_READWRITE);
+
 	obj_properties[PROP_UUID] = g_param_spec_string(
 		"uuid", "Applet UUID", "Set the applet UUID",
 		NULL, G_PARAM_READWRITE);
@@ -233,6 +246,7 @@ BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char
 			"icon", peas_plugin_info_get_icon_name(plugin_info),
 			"name", peas_plugin_info_get_name(plugin_info),
 			"description", peas_plugin_info_get_description(plugin_info),
+			"builtin", peas_plugin_info_is_builtin(plugin_info),
 			"uuid", uuid,
 			"applet", applet,
 			"settings", settings,

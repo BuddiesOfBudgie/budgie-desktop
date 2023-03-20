@@ -261,7 +261,7 @@ namespace Budgie {
 			}
 
 			/* Stuff the new item into display */
-			var item = new SettingsPluginListboxItem(applet.uuid, applet.name, applet.icon, true);
+			var item = new SettingsPluginListboxItem(applet.uuid, applet.name, applet.icon, applet.builtin);
 			item.show_all();
 			items[applet.uuid] = item;
 			applets[applet.uuid] = applet;

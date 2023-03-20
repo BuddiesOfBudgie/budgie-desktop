@@ -27,20 +27,44 @@ namespace Budgie {
 			get_style_context().add_class("plugin-item");
 			instance_uuid = uuid;
 
-			margin_top = 4;
-			margin_bottom = 4;
+			margin_top = 2;
+			margin_bottom = 2;
 
 			image = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU) {
-				margin_start = 12,
-				margin_end = 14,
+				margin_start = 8,
+				margin_end = 12,
+				pixel_size = 24,
 			};
-			pack_start(image, false, false, 0);
 
-			label = new Gtk.Label(name) {
-				margin_end = 18,
-				halign = Gtk.Align.START,
+			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
+
+			label = new Gtk.Label(null) {
+				valign = Gtk.Align.CENTER,
+				xalign = 0.0f,
+				max_width_chars = 1,
+				ellipsize = Pango.EllipsizeMode.END,
+				hexpand = true,
 			};
-			pack_start(label, false, false, 0);
+			label.set_markup(Markup.escape_text(name));
+			label_box.add(label);
+
+			if (builtin) {
+				var builtin_label = new Gtk.Label(null) {
+					valign = Gtk.Align.CENTER,
+					xalign = 0.0f,
+					max_width_chars = 1,
+					ellipsize = Pango.EllipsizeMode.END,
+					hexpand = true,
+				};
+				builtin_label.set_markup("<i><small>%s</small></i>".printf(_("Built-in")));
+				builtin_label.get_style_context().add_class("dim-label");
+				label_box.add(builtin_label);
+			} else {
+				label.vexpand = true;
+			}
+
+			add(image);
+			add(label_box);
 
 			show_all();
 		}
