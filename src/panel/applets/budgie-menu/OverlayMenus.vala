@@ -48,10 +48,11 @@ public class OverlayMenus : Revealer {
 		this.stack.set_homogeneous(false); // Make sure pages are same size
 		this.stack.set_transition_type(StackTransitionType.NONE); // Don't waste any time on transitions
 
-		this.folder_items = new ListBox();
+		this.folder_items = new ListBox() {
+			activate_on_single_click = false,
+			selection_mode = SelectionMode.SINGLE,
+		};
 		this.folder_items.get_style_context().add_class("left-overlay-menu");
-		this.folder_items.activate_on_single_click = false;
-		this.folder_items.selection_mode = SelectionMode.NONE;
 		this.folder_items.set_filter_func(this.filter_list_box_item);
 		this.folder_items.set_sort_func(this.sort_xdg_menu_items); // Ensure our menu items use our locale sorting
 
