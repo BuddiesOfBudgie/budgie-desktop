@@ -90,7 +90,7 @@ public class ApplicationListView : ApplicationView {
 
 		// holds all the applications
 		this.applications = new Gtk.ListBox() {
-			selection_mode = Gtk.SelectionMode.NONE,
+			selection_mode = Gtk.SelectionMode.SINGLE,
 			valign = Gtk.Align.START,
 			// Make sure that the box at least covers the whole area. This helps more themes look better
 			height_request = SCALED_HEIGHT
