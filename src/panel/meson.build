@@ -33,6 +33,7 @@ panel_sources = [
     'settings/settings_panel_dialogs.vala',
     'settings/settings_panel.vala',
     'settings/settings_plugin_chooser.vala',
+    'settings/settings_plugin_listbox.vala',
     'settings/settings_raven.vala',
     'settings/settings_raven_settings.vala',
     'settings/settings_raven_widgets.vala',

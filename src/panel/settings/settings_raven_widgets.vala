@@ -44,7 +44,8 @@ namespace Budgie {
 		private unowned Budgie.Raven? raven = null;
 
 		private Gtk.ListBox listbox_widgets;
-		private HashTable<string, RavenWidgetItem?> items;
+		private HashTable<string, SettingsPluginListboxItem> items;
+		private HashTable<string, RavenWidgetData> widgets;
 		Gtk.Button button_add;
 		private Gtk.Button button_move_widget_up;
 		private Gtk.Button button_move_widget_down;
@@ -88,7 +89,8 @@ namespace Budgie {
 			frame.margin_top = 6;
 			frame.add(frame_box);
 
-			items = new HashTable<string, RavenWidgetItem?>(str_hash, str_equal);
+			items = new HashTable<string, SettingsPluginListboxItem>(str_hash, str_equal);
+			widgets = new HashTable<string, RavenWidgetData>(str_hash, str_equal);
 
 			listbox_widgets = new Gtk.ListBox();
 			listbox_widgets.set_activate_on_single_click(true);
@@ -104,6 +106,7 @@ namespace Budgie {
 			listbox_widgets.get_style_context().set_junction_sides(Gtk.JunctionSides.TOP);
 
 			configure_actions();
+			update_action_buttons();
 
 			this.raven.on_widget_added.connect(add_widget_item);
 			this.raven.get_existing_widgets().foreach(add_widget_item);
@@ -124,10 +127,12 @@ namespace Budgie {
 				settings_stack.add_named(frame, widget_data.uuid);
 			}
 
-			var item = new RavenWidgetItem(widget_data);
+			var info = widget_data.plugin_info;
+			var item = new SettingsPluginListboxItem(widget_data.uuid, info.get_name(), info.get_icon_name(), info.is_builtin());
 			item.show_all();
-			listbox_widgets.add(item);
 			items[widget_data.uuid] = item;
+			widgets[widget_data.uuid] = widget_data;
+			listbox_widgets.add(item);
 		}
 
 		/**
@@ -189,13 +194,14 @@ namespace Budgie {
 			}
 
 			update_action_buttons();
-			unowned RavenWidgetItem? item = row.get_child() as RavenWidgetItem;
-			if (!item.widget_data.supports_settings) {
+			var item = row.get_child() as SettingsPluginListboxItem;
+			var widget = widgets.get(item.instance_uuid);
+			if (!widget.supports_settings) {
 				settings_stack.set_visible_child_name("no-settings");
 				return;
 			}
 
-			unowned Gtk.Widget? lookup = settings_stack.get_child_by_name(item.widget_data.uuid);
+			unowned Gtk.Widget? lookup = settings_stack.get_child_by_name(widget.uuid);
 			settings_stack.set_visible_child(lookup);
 		}
 
@@ -279,7 +285,10 @@ namespace Budgie {
 			bool del = dlg.run();
 			dlg.destroy();
 			if (del) {
-				raven.remove_widget(get_current_data());
+				var widget = get_current_data();
+				items.remove(widget.uuid);
+				widgets.remove(widget.uuid);
+				raven.remove_widget(widget);
 				listbox_widgets.remove(row);
 				update_action_buttons();
 			}
@@ -299,47 +308,14 @@ namespace Budgie {
 
 				listbox_widgets.select_row(row);
 
-				raven.move_widget_by_offset(((RavenWidgetItem) row.get_child()).widget_data, offset);
+				var item = (SettingsPluginListboxItem) row.get_child();
+				raven.move_widget_by_offset(widgets.get(item.instance_uuid), offset);
 			}
 		}
 
 		private RavenWidgetData get_current_data() {
-			unowned Gtk.ListBoxRow? row = listbox_widgets.get_selected_row();
-			return ((RavenWidgetItem) row.get_child()).widget_data;
-		}
-	}
-
-	/**
-	* WidgetItem is used to represent a Budgie Widget in the list
-	*/
-	public class RavenWidgetItem : Gtk.Box {
-		public Budgie.RavenWidgetData widget_data;
-
-		private Gtk.Image image;
-		private Gtk.Label label;
-
-		/**
-		* Construct a new WidgetItem for the given widget
-		*/
-		public RavenWidgetItem(Budgie.RavenWidgetData widget_data) {
-			this.widget_data = widget_data;
-
-			get_style_context().add_class("widget-item");
-
-			margin_top = 4;
-			margin_bottom = 4;
-
-			image = new Gtk.Image.from_icon_name(widget_data.plugin_info.get_icon_name(), Gtk.IconSize.MENU);
-			image.margin_start = 12;
-			image.margin_end = 14;
-			pack_start(image, false, false, 0);
-
-			label = new Gtk.Label(widget_data.plugin_info.get_name());
-			label.margin_end = 18;
-			label.halign = Gtk.Align.START;
-			pack_start(label, false, false, 0);
-
-			this.show_all();
+			var item = (SettingsPluginListboxItem) listbox_widgets.get_selected_row().get_child();
+			return widgets.get(item.instance_uuid);
 		}
 	}
 }

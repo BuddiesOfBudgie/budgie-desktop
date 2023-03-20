@@ -38,47 +38,6 @@ namespace Budgie {
 	}
 
 	/**
-	* AppletItem is used to represent a Budgie Applet in the list
-	*/
-	public class AppletItem : Gtk.Box {
-		/**
-		* We're bound to the info
-		*/
-		public unowned Budgie.AppletInfo? applet { public get ; construct set; }
-
-		private Gtk.Image image;
-		private Gtk.Label label;
-
-		/**
-		* Construct a new AppletItem for the given applet
-		*/
-		public AppletItem(Budgie.AppletInfo? info) {
-			Object(applet: info);
-
-			get_style_context().add_class("applet-item");
-
-			margin_top = 4;
-			margin_bottom = 4;
-
-			image = new Gtk.Image();
-			image.margin_start = 12;
-			image.margin_end = 14;
-			pack_start(image, false, false, 0);
-
-			label = new Gtk.Label("");
-			label.margin_end = 18;
-			label.halign = Gtk.Align.START;
-			pack_start(label, false, false, 0);
-
-			this.applet.bind_property("name", this.label, "label", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
-			this.applet.bind_property("icon", this.image, "icon-name", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
-			this.image.icon_size = Gtk.IconSize.MENU;
-
-			this.show_all();
-		}
-	}
-
-	/**
 	* AppletsPage contains the applets view for a given panel
 	*/
 	public class AppletsPage : Gtk.Box {
@@ -91,7 +50,8 @@ namespace Budgie {
 
 		/* Used applet storage */
 		Gtk.ListBox listbox_applets;
-		HashTable<string, AppletItem?> items;
+		HashTable<string, SettingsPluginListboxItem> items;
+		HashTable<string, AppletInfo> applets;
 
 		/* Allow us to display settings when each item is selected */
 		Gtk.Stack settings_stack;
@@ -147,7 +107,8 @@ namespace Budgie {
 			Budgie.AppletInfo? info = null;
 
 			if (row != null) {
-				info = ((AppletItem) row.get_child()).applet;
+				var item = (SettingsPluginListboxItem) row.get_child();
+				info = applets.get(item.instance_uuid);
 			}
 
 			/* Require applet info to be useful. */
@@ -171,7 +132,8 @@ namespace Budgie {
 		* applets for the panel
 		*/
 		void configure_list() {
-			items = new HashTable<string,AppletItem?>(str_hash, str_equal);
+			items = new HashTable<string, SettingsPluginListboxItem>(str_hash, str_equal);
+			applets = new HashTable<string, AppletInfo>(str_hash, str_equal);
 
 			var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
@@ -271,8 +233,8 @@ namespace Budgie {
 			}
 
 			this.update_action_buttons();
-			unowned AppletItem? item = row.get_child() as AppletItem;
-			unowned Gtk.Widget? lookup = this.settings_stack.get_child_by_name(item.applet.uuid);
+			unowned SettingsPluginListboxItem? item = row.get_child() as SettingsPluginListboxItem;
+			unowned Gtk.Widget? lookup = this.settings_stack.get_child_by_name(item.instance_uuid);
 			if (lookup == null) {
 				this.settings_stack.set_visible_child_name("no-settings");
 				return;
@@ -299,17 +261,18 @@ namespace Budgie {
 			}
 
 			/* Stuff the new item into display */
-			var item = new AppletItem(applet);
+			var item = new SettingsPluginListboxItem(applet.uuid, applet.name, applet.icon, true);
 			item.show_all();
-			listbox_applets.add(item);
 			items[applet.uuid] = item;
+			applets[applet.uuid] = applet;
+			listbox_applets.add(item);
 		}
 
 		/**
 		* An applet was removed, so remove from our list also
 		*/
 		private void applet_removed(string uuid) {
-			AppletItem? item = items.lookup(uuid);
+			SettingsPluginListboxItem? item = items.lookup(uuid);
 			Gtk.Widget? lookup = null;
 
 			if (item == null) {
@@ -324,6 +287,7 @@ namespace Budgie {
 
 			item.get_parent().destroy();
 			items.remove(uuid);
+			applets.remove(uuid);
 		}
 
 		/**
@@ -345,15 +309,15 @@ namespace Budgie {
 		* Sort the list in accordance with alignment and actual position
 		*/
 		int do_sort(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after) {
-			AppletItem? before_child = before.get_child() as AppletItem;
-			AppletItem? after_child = after.get_child() as AppletItem;
+			var before_child = before.get_child() as SettingsPluginListboxItem?;
+			var after_child = after.get_child() as SettingsPluginListboxItem?;
 
 			if (before_child == null || after_child == null) {
 				return 0;
 			}
 
-			unowned Budgie.AppletInfo? before_info = before_child.applet;
-			unowned Budgie.AppletInfo? after_info = after_child.applet;
+			unowned Budgie.AppletInfo? before_info = applets.get(before_child.instance_uuid);
+			unowned Budgie.AppletInfo? after_info = applets.get(after_child.instance_uuid);
 
 			if (before_info == null || after_info == null) {
 				return 0;
@@ -387,12 +351,14 @@ namespace Budgie {
 			unowned Budgie.AppletInfo? after_info = null;
 
 			if (before != null) {
-				before_info = ((AppletItem) before.get_child()).applet;
+				var before_item = (SettingsPluginListboxItem) before.get_child();
+				before_info = applets.get(before_item.instance_uuid);
 				prev = before_info.alignment;
 			}
 
 			if (after != null) {
-				after_info = ((AppletItem) after.get_child()).applet;
+				var after_item = (SettingsPluginListboxItem) after.get_child();
+				after_info = applets.get(after_item.instance_uuid);
 				next = after_info.alignment;
 			}
 
