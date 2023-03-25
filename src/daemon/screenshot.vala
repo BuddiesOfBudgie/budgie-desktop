@@ -637,6 +637,7 @@ namespace BudgieScr {
 			windowstate.statechanged(WindowState.SELECTINGAREA);
 			theme_settings = new GLib.Settings("org.gnome.desktop.interface");
 			this.set_type_hint(Gdk.WindowTypeHint.UTILITY);
+			this.set_decorated(false); // needed on libmutter-12
 			this.fullscreen();
 			this.set_keep_above(true);
 			get_theme_fillcolor();
