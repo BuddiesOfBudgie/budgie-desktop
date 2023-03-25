@@ -136,10 +136,12 @@ namespace Budgie {
 			applets = new HashTable<string, AppletInfo>(str_hash, str_equal);
 
 			var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			frame_box.width_request = 200;
 
 			/* Allow moving the applet */
 			var move_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-			move_box.set_layout(Gtk.ButtonBoxStyle.START);
+			move_box.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+			move_box.spacing = 1;
 			move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 			button_move_applet_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
 			button_move_applet_up.clicked.connect(move_applet_up);

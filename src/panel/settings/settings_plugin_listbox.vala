@@ -32,11 +32,11 @@ namespace Budgie {
 
 			image = new Gtk.Image.from_icon_name(icon, Gtk.IconSize.MENU) {
 				margin_start = 8,
-				margin_end = 12,
+				margin_end = 8,
 				pixel_size = 24,
 			};
 
-			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
+			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
 
 			label = new Gtk.Label(null) {
 				valign = Gtk.Align.CENTER,

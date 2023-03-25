@@ -64,9 +64,11 @@ namespace Budgie {
 			valign = Gtk.Align.FILL;
 
 			var frame_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			frame_box.width_request = 200;
 
 			var move_box = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-			move_box.set_layout(Gtk.ButtonBoxStyle.START);
+			move_box.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+			move_box.spacing = 1;
 			move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 			button_move_widget_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
