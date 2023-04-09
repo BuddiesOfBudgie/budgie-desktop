@@ -32,9 +32,9 @@ applet_status_deps = [
     dep_gtk3,
     dep_peas,
     dep_accountsservice,
+    dep_libwireplumber,
     dependency('upower-glib', version: '>= 0.99.0'),
     link_libpanelplugin,
-    gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
@@ -53,8 +53,8 @@ shared_library(
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'accountsservice',
-        '--pkg', 'gvc-1.0',
         '--pkg', 'gio-unix-2.0',
+        '--pkg', 'wireplumber-0.4',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
     ],
     install: true,

@@ -61,6 +61,9 @@ dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 
+# Needed for Raven widgets and panel applets
+dep_libwireplumber = dependency('wireplumber-0.4')
+
 # Create config.h
 cdata = configuration_data()
 

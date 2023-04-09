@@ -16,10 +16,11 @@ public class SoundIndicator : Gtk.Bin {
 	public Gtk.Image widget { protected set; public get; }
 
 	/** Our mixer */
-	public Gvc.MixerControl mixer { protected set ; public get ; }
-
-	/** Default stream */
-	private Gvc.MixerStream? stream;
+	private Wp.Core core;
+	private Wp.ObjectManager objmanager;
+	private Wp.Plugin mixer_api;
+	private Wp.Plugin default_nodes_api;
+	private Wp.GlobalProxy proxy;
 
 	/** EventBox for popover management */
 	public Gtk.EventBox? ebox;
@@ -50,10 +51,7 @@ public class SoundIndicator : Gtk.Bin {
 		ebox.border_width = 0;
 		add(ebox);
 
-		mixer = new Gvc.MixerControl(MIXER_NAME);
-		mixer.state_changed.connect(on_state_change);
-		mixer.default_sink_changed.connect(on_sink_changed);
-		mixer.open();
+		initialize_wp.begin(null);
 
 		/* Sort out our popover */
 		this.create_sound_popover();
@@ -64,14 +62,83 @@ public class SoundIndicator : Gtk.Bin {
 		/* Catch scroll wheel events */
 		ebox.add_events(Gdk.EventMask.SCROLL_MASK);
 		ebox.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
-		ebox.scroll_event.connect(on_scroll_event);
+		//  ebox.scroll_event.connect(on_scroll_event);
 		ebox.button_release_event.connect(on_button_release_event);
 		show_all();
 	}
 
+	private async void initialize_wp() {
+		Wp.init(Wp.InitFlags.PIPEWIRE);
+
+		core = new Wp.Core(null, null);
+
+		try {
+			core.load_component("libwireplumber-module-default-nodes-api", "module", null);
+			core.load_component("libwireplumber-module-mixer-api", "module", null);
+		} catch (Error e) {
+			critical("Failed to load required modules: %s", e.message);
+			return;
+		}
+
+		if (!core.connect()) {
+			critical("Failed to connect to the PipeWire daemon.");
+			return;
+		}
+
+		Type global_proxy_type = Type.from_name("WpGlobalProxy");
+		Type node_type = Type.from_name("WpNode");
+
+		objmanager = new Wp.ObjectManager();
+		objmanager.add_interest_full(new Wp.ObjectInterest.type(global_proxy_type));
+		objmanager.add_interest_full(new Wp.ObjectInterest.type(node_type));
+		objmanager.request_object_features(global_proxy_type, Wp.PIPEWIRE_OBJECT_FEATURES_MINIMAL);
+		core.install_object_manager(objmanager);
+
+		default_nodes_api = Wp.Plugin.find(core, "default-nodes-api");
+		yield default_nodes_api.activate(Wp.PluginFeatures.ENABLED, null);
+
+		var default_sink_id = get_default_sink_id();
+
+		var interest = new Wp.ObjectInterest.type(global_proxy_type);
+		interest.add_constraint(Wp.ConstraintType.PW_GLOBAL_PROPERTY, "object.id", Wp.ConstraintVerb.EQUALS, default_sink_id);
+		Object? proxy_lookup = objmanager.lookup_full(interest);
+		if (proxy_lookup == null) {
+			warning("Failed to get proxy to default audio sink.");
+			return;
+		}
+		proxy = (Wp.GlobalProxy) proxy_lookup;
+
+		mixer_api = Wp.Plugin.find(core, "mixer-api");
+		yield mixer_api.activate(Wp.PluginFeatures.ENABLED, null);
+	}
+
+	private uint32 get_default_sink_id() {
+		var media_class = "Audio/Sink";
+
+		uint32 res = 0;
+		Signal.emit_by_name(default_nodes_api, "get-default-node", media_class, &res);
+		warning("Default sink ID: %u", res);
+
+		return res;
+	}
+
+	private bool get_volume(out double volume, out bool muted) {
+		Variant? variant = null;
+		Signal.emit_by_name(mixer_api, "get-volume", proxy.get_bound_id(), &variant);
+		if (variant == null) {
+			warning("Node %u does not support volume", proxy.get_bound_id());
+			return false;
+		}
+
+		variant.lookup("volume", "d", &volume);
+		variant.lookup("mute", "b", &muted);
+
+		return true;
+	}
+
 	private bool on_button_release_event(Gdk.EventButton e) {
 		if (e.button == Gdk.BUTTON_MIDDLE) { // Middle click
-			toggle_mute_state();
+			//  toggle_mute_state();
 		} else {
 			return Gdk.EVENT_PROPAGATE;
 		}
@@ -131,116 +198,108 @@ public class SoundIndicator : Gtk.Bin {
 
 		// Set up event bindings
 
-		scale_id = volume_scale.value_changed.connect(on_scale_changed);
+		//  scale_id = volume_scale.value_changed.connect(on_scale_changed);
 
-		mute_button.clicked.connect(toggle_mute_state);
+		//  mute_button.clicked.connect(toggle_mute_state);
 
 		settings_button.clicked.connect(open_sound_settings);
 
-		volume_down.clicked.connect(() => {
-			adjust_volume_increment(-step_size);
-		});
+		//  volume_down.clicked.connect(() => {
+		//  	adjust_volume_increment(-step_size);
+		//  });
 
-		volume_up.clicked.connect(() => {
-			adjust_volume_increment(+step_size);
-		});
+		//  volume_up.clicked.connect(() => {
+		//  	adjust_volume_increment(+step_size);
+		//  });
 
 		// Show the things
 
 		popover.get_child().show_all();
 	}
 
-	void on_sink_changed(uint id) {
-		set_default_mixer();
-	}
+	//  void on_sink_changed(uint id) {
+	//  	set_default_mixer();
+	//  }
 
-	void set_default_mixer() {
-		if (stream != null) {
-			SignalHandler.disconnect(stream, notify_id);
-		}
+	//  void set_default_mixer() {
+	//  	if (stream != null) {
+	//  		SignalHandler.disconnect(stream, notify_id);
+	//  	}
 
-		stream = mixer.get_default_sink();
-		notify_id = stream.notify.connect(on_notify);
-		update_volume();
-	}
+	//  	stream = mixer.get_default_sink();
+	//  	notify_id = stream.notify.connect(on_notify);
+	//  	update_volume();
+	//  }
 
-	void on_notify(Object? o, ParamSpec? p) {
-		if (p.name == "volume" || p.name == "is-muted") {
-			update_volume();
-		}
-	}
-
-	/**
-	 * Called when something changes on the mixer, i.e. we connected
-	 * This is where we hook into the stream for changes
-	 */
-	protected void on_state_change(uint new_state) {
-		if (new_state == Gvc.MixerControlState.READY) {
-			set_default_mixer();
-		}
-	}
+	//  void on_notify(Object? o, ParamSpec? p) {
+	//  	if (p.name == "volume" || p.name == "is-muted") {
+	//  		update_volume();
+	//  	}
+	//  }
 
 	/**
 	 * Update from scroll events. turn volume up + down.
 	 */
-	protected bool on_scroll_event(Gdk.EventScroll event) {
-		return_val_if_fail(stream != null, false);
+	//  protected bool on_scroll_event(Gdk.EventScroll event) {
+	//  	return_val_if_fail(stream != null, false);
 
-		uint32 vol = stream.get_volume();
-		var orig_vol = vol;
+	//  	uint32 vol = stream.get_volume();
+	//  	var orig_vol = vol;
 
-		switch (event.direction) {
-			case Gdk.ScrollDirection.UP:
-				vol += (uint32)step_size;
-				break;
-			case Gdk.ScrollDirection.DOWN:
-				vol -= (uint32)step_size;
-				// uint. im lazy :p
-				if (vol > orig_vol) {
-					vol = 0;
-				}
-				break;
-			default:
-				// Go home, you're drunk.
-				return false;
-		}
+	//  	switch (event.direction) {
+	//  		case Gdk.ScrollDirection.UP:
+	//  			vol += (uint32)step_size;
+	//  			break;
+	//  		case Gdk.ScrollDirection.DOWN:
+	//  			vol -= (uint32)step_size;
+	//  			// uint. im lazy :p
+	//  			if (vol > orig_vol) {
+	//  				vol = 0;
+	//  			}
+	//  			break;
+	//  		default:
+	//  			// Go home, you're drunk.
+	//  			return false;
+	//  	}
 
-		/* Ensure sanity + amp capability */
-		var max_amp = mixer.get_vol_max_amplified();
-		var norm = mixer.get_vol_max_norm();
-		if (max_amp < norm) {
-			max_amp = norm;
-		}
+	//  	/* Ensure sanity + amp capability */
+	//  	var max_amp = mixer.get_vol_max_amplified();
+	//  	var norm = mixer.get_vol_max_norm();
+	//  	if (max_amp < norm) {
+	//  		max_amp = norm;
+	//  	}
 
-		if (vol > max_amp) {
-			vol = (uint32)max_amp;
-		}
+	//  	if (vol > max_amp) {
+	//  		vol = (uint32)max_amp;
+	//  	}
 
-		/* Prevent amplification using scroll on sound indicator */
-		if (vol >= norm) {
-			vol = (uint32)norm;
-		}
+	//  	/* Prevent amplification using scroll on sound indicator */
+	//  	if (vol >= norm) {
+	//  		vol = (uint32)norm;
+	//  	}
 
-		SignalHandler.block(volume_scale, scale_id);
-		if (stream.set_volume(vol)) {
-			Gvc.push_volume(stream);
-		}
-		SignalHandler.unblock(volume_scale, scale_id);
+	//  	SignalHandler.block(volume_scale, scale_id);
+	//  	if (stream.set_volume(vol)) {
+	//  		Gvc.push_volume(stream);
+	//  	}
+	//  	SignalHandler.unblock(volume_scale, scale_id);
 
-		return true;
-	}
+	//  	return true;
+	//  }
 
-	// toggle_mute_state will toggle the volume between muted and unmuted
-	private void toggle_mute_state() {
-		stream.change_is_muted(!stream.get_is_muted());
-	}
+	//  // toggle_mute_state will toggle the volume between muted and unmuted
+	//  private void toggle_mute_state() {
+	//  	stream.change_is_muted(!stream.get_is_muted());
+	//  }
 
 	/**
 	 * Update our icon when something changed (volume/mute)
 	 */
-	protected void update_volume() {
-		var vol_norm = mixer.get_vol_max_norm();
-		var vol = stream.get_volume();
+	public void update_volume() {
+		double vol_norm = 1.0;
+		double vol = 1.0;
+		bool muted = false;
+		get_volume(out vol, out muted);
 
 		/* Same maths as computed by volume.js in gnome-shell, carried over
 		 * from C->Vala port of budgie-panel */
@@ -248,7 +307,7 @@ public class SoundIndicator : Gtk.Bin {
 		string image_name;
 
 		// Work out an icon
-		if (stream.get_is_muted() || vol <= 0) {
+		if (muted || vol <= 0) {
 			image_name = "audio-volume-muted-symbolic";
 		} else {
 			switch (n) {
@@ -294,46 +353,46 @@ public class SoundIndicator : Gtk.Bin {
 		queue_draw();
 	}
 
-	/**
-	 * The scale changed value - update the stream volume to match
-	 */
-	private void on_scale_changed() {
-		if (stream == null || mixer == null) {
-			return;
-		}
-		double scale_value = volume_scale.get_value();
+	//  /**
+	//   * The scale changed value - update the stream volume to match
+	//   */
+	//  private void on_scale_changed() {
+	//  	if (stream == null || mixer == null) {
+	//  		return;
+	//  	}
+	//  	double scale_value = volume_scale.get_value();
 
-		/* Avoid recursion ! */
-		SignalHandler.block(volume_scale, scale_id);
-		if (stream.set_volume((uint32)scale_value)) {
-			Gvc.push_volume(stream);
-		}
-		SignalHandler.unblock(volume_scale, scale_id);
-	}
+	//  	/* Avoid recursion ! */
+	//  	SignalHandler.block(volume_scale, scale_id);
+	//  	if (stream.set_volume((uint32)scale_value)) {
+	//  		Gvc.push_volume(stream);
+	//  	}
+	//  	SignalHandler.unblock(volume_scale, scale_id);
+	//  }
 
-	/**
-	 * Adjust the volume by a given +/- increment and bounds limit it
-	 */
-	private void adjust_volume_increment(double increment) {
-		if (stream == null || mixer == null) {
-			return;
-		}
-		int32 vol = (int32)stream.get_volume();
-		var max_norm = mixer.get_vol_max_norm();
-		vol += (int32)increment;
+	//  /**
+	//   * Adjust the volume by a given +/- increment and bounds limit it
+	//   */
+	//  private void adjust_volume_increment(double increment) {
+	//  	if (stream == null || mixer == null) {
+	//  		return;
+	//  	}
+	//  	int32 vol = (int32)stream.get_volume();
+	//  	var max_norm = mixer.get_vol_max_norm();
+	//  	vol += (int32)increment;
 
-		if (vol < 0) {
-			vol = 0;
-		} else if (vol > max_norm) {
-			vol = (int32) max_norm;
-		}
+	//  	if (vol < 0) {
+	//  		vol = 0;
+	//  	} else if (vol > max_norm) {
+	//  		vol = (int32) max_norm;
+	//  	}
 
-		SignalHandler.block(volume_scale, scale_id);
-		if (stream.set_volume((uint32)vol)) {
-			Gvc.push_volume(stream);
-		}
-		SignalHandler.unblock(volume_scale, scale_id);
-	}
+	//  	SignalHandler.block(volume_scale, scale_id);
+	//  	if (stream.set_volume((uint32)vol)) {
+	//  		Gvc.push_volume(stream);
+	//  	}
+	//  	SignalHandler.unblock(volume_scale, scale_id);
+	//  }
 
 
 	void open_sound_settings() {
