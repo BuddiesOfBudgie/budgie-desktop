@@ -146,11 +146,117 @@ public class BatteryIcon : Gtk.Box {
 	}
 }
 
+const string POWER_PROFILES_DBUS_NAME = "net.hadess.PowerProfiles";
+const string POWER_PROFILES_DBUS_OBJECT_NAME = "/net/hadess/PowerProfiles";
+
+[DBus (name = "net.hadess.PowerProfiles")]
+public interface PowerProfilesDBus : Object {
+	public abstract HashTable<string, Variant>[] profiles { owned get; }
+	public abstract string active_profile { owned get; set; }
+}
+
+public class PowerProfilesOption : Gtk.RadioButton {
+	public PowerProfilesOption(PowerProfilesDBus profiles_proxy, string profile_name, string display_name) {
+		label = display_name;
+		
+		this.toggled.connect(() => {
+			if (this.get_active()) {
+				profiles_proxy.active_profile = profile_name;
+			}
+		});
+	}
+
+}
+
+public class PowerProfilesSelector : Gtk.Box {
+	// Power profile toggles
+	private PowerProfilesOption radio_power_save;
+	private PowerProfilesOption radio_power_balanced;
+	private PowerProfilesOption radio_power_performance;
+
+	public PowerProfilesSelector(PowerProfilesDBus profiles_proxy) {
+		orientation = Gtk.Orientation.VERTICAL;
+		
+		var profiles = new GenericSet<string>(str_hash, str_equal);
+
+		foreach (HashTable<string, Variant> profile in profiles_proxy.profiles) {
+			var profile_value = profile.get("Profile");
+
+			if (!profile_value.is_of_type(VariantType.STRING)) continue;
+			
+			profiles.add(profile_value.get_string());
+		}
+		
+		// need at least two options for it to be meaningful
+		if (profiles.length < 2) return;
+
+		// initialize state
+		on_active_profile_changed(profiles_proxy.active_profile);
+
+		((DBusProxy) profiles_proxy).g_properties_changed.connect(() => {
+			on_active_profile_changed(profiles_proxy.active_profile);
+		});
+
+		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+		pack_start(sep, false, false, 1);
+
+		var header = new Gtk.Label("");
+		header.set_markup("<b>%s</b>".printf(_("Power Mode")));
+		header.set_halign(Gtk.Align.CENTER);
+		pack_start(header);
+
+		var power_profiles_radio_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 1);
+
+		Gtk.RadioButton radio_group = null;
+
+		if (profiles.contains("power-saver")) {
+			radio_power_save = new PowerProfilesOption(profiles_proxy, "power-saver", _("Power Saver"));
+			radio_power_save.join_group(radio_group);
+			radio_group = radio_power_save;
+			power_profiles_radio_box.pack_start(radio_power_save, false, false, 1);
+		}
+
+		if (profiles.contains("balanced")) {
+			radio_power_balanced = new PowerProfilesOption(profiles_proxy, "balanced", _("Balanced"));
+			radio_power_balanced.join_group(radio_group);
+			radio_group = radio_power_balanced;
+			power_profiles_radio_box.pack_start(radio_power_balanced, false, false, 1);
+		}
+
+		if (profiles.contains("performance")) {
+			radio_power_performance = new PowerProfilesOption(profiles_proxy, "performance", _("Performance"));
+			radio_power_performance.join_group(radio_group);
+			radio_group = radio_power_performance;
+			power_profiles_radio_box.pack_start(radio_power_performance, false, false, 1);
+		}
+
+		pack_start(power_profiles_radio_box);
+	}
+
+	void on_active_profile_changed(string active_profile) {
+		switch(active_profile) {
+			case "power-saver":
+				radio_power_save.set_active(true);
+				break;
+			case "balanced":
+				radio_power_balanced.set_active(true);
+				break;
+			case "performance":
+				radio_power_performance.set_active(true);
+				break;
+		}
+	}
+}
+
 public class PowerIndicator : Gtk.Bin {
 	/** Widget containing battery icons to display */
 	public Gtk.EventBox? ebox = null;
 	public Budgie.Popover? popover = null;
 	private Gtk.Box widget = null;
+	private Gtk.Box box = null;
+
+	private PowerProfilesDBus profiles_proxy;
+	private PowerProfilesSelector power_profiles_selector;
 
 	/** Our upower client */
 	public Up.Client client { protected set; public get; }
@@ -170,7 +276,7 @@ public class PowerIndicator : Gtk.Bin {
 		ebox.add(widget);
 
 		popover = new Budgie.Popover(ebox);
-		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
+		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
 		box.border_width = 6;
 		popover.add(box);
 
@@ -196,10 +302,43 @@ public class PowerIndicator : Gtk.Bin {
 
 		client = new Up.Client();
 
+		Bus.watch_name(BusType.SYSTEM, POWER_PROFILES_DBUS_NAME, BusNameWatcherFlags.NONE, has_power_profiles, lost_power_profiles);
+
 		this.sync_devices();
 		client.device_added.connect(this.on_device_added);
 		client.device_removed.connect(this.on_device_removed);
 		toggle_show();
+	}
+
+	void has_power_profiles() {
+		if (profiles_proxy != null) {
+			create_power_profiles_options();
+			return;
+		}
+		
+		Bus.get_proxy.begin<PowerProfilesDBus>(BusType.SYSTEM, POWER_PROFILES_DBUS_NAME, POWER_PROFILES_DBUS_OBJECT_NAME, 0, null, on_proxy_get);
+	}
+	
+	void lost_power_profiles() {
+		power_profiles_selector.destroy();
+	}
+
+	void on_proxy_get(Object? o, AsyncResult? res) {
+		try {
+			profiles_proxy = Bus.get_proxy.end(res);
+
+			if (profiles_proxy.active_profile != null) 
+				create_power_profiles_options();
+
+		} catch (Error e) {
+			warning("unable to connect to net.hadess.PowerProfiles: %s", e.message);
+		}
+	}
+
+	void create_power_profiles_options() {
+		power_profiles_selector = new PowerProfilesSelector(profiles_proxy);
+		box.pack_start(power_profiles_selector);
+		box.show_all();
 	}
 
 	public void change_orientation(Gtk.Orientation orient) {
