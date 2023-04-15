@@ -31,6 +31,7 @@ namespace Budgie.StatusNotifier {
 
 		private KdeWatcher kde_watcher;
 		private uint freedesktop_dbus_identifier = 0;
+		private uint host_dbus_identifier;
 		private HashTable<string, uint> host_services;
 		private HashTable<string, uint> item_watchers;
 		private HashTable<string, DBusServiceInfo?> registered_services;
@@ -50,12 +51,20 @@ namespace Budgie.StatusNotifier {
 			item_watchers = new HashTable<string, uint>(str_hash, str_equal);
 			registered_services = new HashTable<string, DBusServiceInfo?>(str_hash, str_equal);
 
-			freedesktop_dbus_identifier = Bus.own_name(
+			host_dbus_identifier = Bus.own_name(
 				BusType.SESSION,
-				WATCHER_FREEDESKTOP_DBUS_NAME,
-				BusNameOwnerFlags.NONE,
+				"org.freedesktop.StatusNotifierHost-budgie_daemon",
+				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 				null,
-				on_dbus_acquired
+				(conn,name) => {
+					freedesktop_dbus_identifier = Bus.own_name(
+						BusType.SESSION,
+						WATCHER_FREEDESKTOP_DBUS_NAME,
+						BusNameOwnerFlags.NONE,
+						null,
+						on_dbus_acquired
+					);
+				}
 			);
 
 			kde_watcher = new KdeWatcher(this);
@@ -65,6 +74,7 @@ namespace Budgie.StatusNotifier {
 			kde_watcher.unref();
 
 			if (freedesktop_dbus_identifier != 0) Bus.unown_name(freedesktop_dbus_identifier);
+			if (host_dbus_identifier != 0) Bus.unown_name(host_dbus_identifier);
 
 			foreach (uint identifier in host_services.get_values()) {
 				Bus.unwatch_name(identifier);
@@ -76,6 +86,7 @@ namespace Budgie.StatusNotifier {
 
 		private void on_dbus_acquired(DBusConnection conn) {
 			try {
+				register_status_notifier_host("org.freedesktop.StatusNotifierHost-budgie_daemon");
 				conn.register_object(WATCHER_FREEDESKTOP_DBUS_OBJECT_PATH, this);
 				conn.register_object(WATCHER_BASIC_DBUS_OBJECT_PATH, this);
 			} catch (Error e) {

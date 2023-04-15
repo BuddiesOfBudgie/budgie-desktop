@@ -113,7 +113,7 @@ public class TrayApplet : Budgie.Applet {
 			BusType.SESSION,
 			"org.freedesktop.StatusNotifierWatcher",
 			0,
-			(conn, name, owner) => Timeout.add(500, () => {
+			(conn, name, owner) => Timeout.add(100, () => {
 				on_watcher_init();
 				return false;
 			}),
