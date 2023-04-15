@@ -13,34 +13,35 @@
  * Factory widget to represent a category
  */
 public class CategoryButton : Gtk.RadioButton {
-	public new Budgie.Category? category { public get ; protected set; }
+	public Budgie.Category? category { public get; construct; default = null; }
 
 	public CategoryButton(Budgie.Category? category) {
-		this.category = category;
+		Object(category: category);
+	}
 
-		string name = null;
-		if (category != null) {
-			name = category.name;
-		} else {
-			name = _("All");
-		}
+	construct {
+		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
-		Gtk.Label label = new Gtk.Label(name) {
+		var label = new Gtk.Label(null) {
 			halign = Gtk.Align.START,
 			valign = Gtk.Align.CENTER,
 			margin_start = 10,
 			margin_end = 15
 		};
 
-		var layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		layout.pack_start(label, true, true, 0);
-		add(layout);
+		if (category == null) {
+			label.label = _("All");
+		} else {
+			label.label = category.name;
+		}
+
+		layout.pack_start(label);
 
 		get_style_context().add_class("flat");
 		get_style_context().add_class("category-button");
-		// Makes us look like a normal button :)
-		set_property("draw-indicator", false);
-		set_can_focus(false);
+		set_property("draw-indicator", false); // Makes us look like a normal button
+
+		add(layout);
 	}
 }
 

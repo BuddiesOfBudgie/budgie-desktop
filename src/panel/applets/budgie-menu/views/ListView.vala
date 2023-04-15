@@ -81,9 +81,9 @@ public class ApplicationListView : ApplicationView {
 		this.all_categories = new CategoryButton(null);
 		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
 		this.all_categories.toggled.connect(()=> {
-			this.update_category(this.all_categories);
+			this.update_category(all_categories);
 		});
-		this.categories.pack_start(this.all_categories, false, false, 0);
+		this.categories.pack_start(all_categories, false);
 
 		var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		this.pack_start(right_layout, true, true, 0);
@@ -161,9 +161,9 @@ public class ApplicationListView : ApplicationView {
 		this.control_center_buttons.clear();
 
 		// Destroy all category items
-		foreach (var child in this.categories.get_children()) {
+		this.categories.get_children().foreach((child) => {
 			child.destroy();
-		}
+		});
 
 		// Load all of the new content in the background
 		Idle.add(() => {
@@ -185,9 +185,10 @@ public class ApplicationListView : ApplicationView {
 		this.all_categories = new CategoryButton(null);
 		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
 		this.all_categories.toggled.connect(()=> {
-			this.update_category(this.all_categories);
+			this.update_category(all_categories);
 		});
-		this.categories.pack_start(this.all_categories, false, false, 0);
+		all_categories.show_all();
+		this.categories.pack_start(all_categories, false);
 
 		foreach (var category in app_tracker.get_categories()) {
 			// Skip empty categories
@@ -199,14 +200,12 @@ public class ApplicationListView : ApplicationView {
 			var btn = new CategoryButton(category);
 			btn.join_group(all_categories);
 			btn.enter_notify_event.connect(this.on_mouse_enter);
-
-			// Ensures we find the correct button
 			btn.toggled.connect(() => {
-				this.update_category(btn);
+				update_category(btn);
 			});
 
 			btn.show_all();
-			this.categories.pack_start(btn, false, false, 0); // Add the button
+			this.categories.pack_start(btn, false); // Add the button
 
 			// Create a button for each app in this category
 			foreach (var app in category.apps) {
