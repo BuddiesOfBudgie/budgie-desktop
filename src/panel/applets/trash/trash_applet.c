@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+#include <glib/gi18n.h>
+
 #include "trash_applet.h"
 
 #define _GNU_SOURCE
@@ -218,7 +220,7 @@ static void drag_data_received(
 		file = g_file_new_for_uri(unescaped);
 
 		if (!g_file_trash(file, NULL, &err)) {
-			trash_notify_try_send("Error Trashing File", err->message, "dialog-error-symbolic");
+			trash_notify_try_send(_("Trash Error"), err->message, "dialog-error-symbolic");
 			g_critical("%s:%d: Error moving file to trash: %s", __BASE_FILE__, __LINE__, err->message);
 			return;
 		}

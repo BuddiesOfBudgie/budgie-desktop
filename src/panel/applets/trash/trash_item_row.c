@@ -27,6 +27,8 @@
  * TrashItemRow has a single CSS class with name .trash-item-row
  */
 
+#include <glib/gi18n.h>
+
 #include "trash_item_row.h"
 
 enum {
@@ -141,21 +143,21 @@ static void trash_item_row_constructed(GObject *object) {
 	gtk_style_context_add_class(delete_button_style, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
 	gtk_style_context_add_class(delete_button_style, GTK_STYLE_CLASS_FLAT);
 	gtk_style_context_add_class(delete_button_style, "circular");
-	gtk_widget_set_tooltip_text(self->delete_btn, "Permanently delete this item");
+	gtk_widget_set_tooltip_text(self->delete_btn, _("Permanently delete this item"));
 
 	// Confirmation widget
 
 	self->confirm_bar = trash_button_bar_new();
 	trash_button_bar_set_revealed(self->confirm_bar, FALSE);
 
-	confirm_label = gtk_label_new("Are you sure you want to delete this item?");
+	confirm_label = gtk_label_new(_("Are you sure you want to delete this item?"));
 	gtk_label_set_line_wrap(GTK_LABEL(confirm_label), TRUE);
 
 	content_area = trash_button_bar_get_content_area(self->confirm_bar);
 	gtk_box_pack_start(GTK_BOX(content_area), confirm_label, TRUE, TRUE, 6);
 
-	trash_button_bar_add_button(self->confirm_bar, "No", GTK_RESPONSE_NO);
-	trash_button_bar_add_button(self->confirm_bar, "Yes", GTK_RESPONSE_YES);
+	trash_button_bar_add_button(self->confirm_bar, _("No"), GTK_RESPONSE_NO);
+	trash_button_bar_add_button(self->confirm_bar, _("Yes"), GTK_RESPONSE_YES);
 
 	trash_button_bar_add_response_style_class(self->confirm_bar, GTK_RESPONSE_YES, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
 
@@ -291,8 +293,8 @@ static void delete_finish(GObject *object, GAsyncResult *result, gpointer user_d
 
 	if (error) {
 		g_critical("Error deleting file '%s': %s", g_file_get_basename(file), error->message);
-		trash_notify_try_send("Trash Error",
-			g_strdup_printf("Unable to delete '%s': %s", g_file_get_basename(G_FILE(object)), error->message),
+		trash_notify_try_send(_("Trash Error"),
+			g_strdup_printf(_("Unable to delete '%s': %s"), g_file_get_basename(G_FILE(object)), error->message),
 			"user-trash-symbolic");
 	}
 }
@@ -330,8 +332,8 @@ static void restore_finish(GObject *object, GAsyncResult *result, gpointer user_
 
 	if (!success) {
 		g_critical("Error restoring file '%s' to '%s': %s", g_file_get_basename(G_FILE(object)), g_file_get_path(G_FILE(object)), error->message);
-		trash_notify_try_send("Trash Error",
-			g_strdup_printf("Unable to restore '%s': %s", g_file_get_basename(G_FILE(object)), error->message),
+		trash_notify_try_send(_("Trash Error"),
+			g_strdup_printf(_("Unable to restore '%s': %s"), g_file_get_basename(G_FILE(object)), error->message),
 			"user-trash-symbolic");
 	}
 }

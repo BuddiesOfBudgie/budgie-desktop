@@ -19,6 +19,8 @@
  * restore items or empty the trash bin.
  */
 
+#include <glib/gi18n.h>
+
 #include "trash_popover.h"
 
 enum {
@@ -107,15 +109,15 @@ static void settings_clicked(GtkButton *button, TrashPopover *self) {
 	if (g_strcmp0(current_name, "main") == 0) {
 		gtk_stack_set_visible_child_name(stack, "settings");
 
-		image = gtk_image_new_from_icon_name("drive-multidisk-symbolic", GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name("user-trash-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(button, image);
-		gtk_widget_set_tooltip_text(GTK_WIDGET(button), "Drives");
+		gtk_widget_set_tooltip_text(GTK_WIDGET(button), _("Trash Bin"));
 	} else {
 		gtk_stack_set_visible_child_name(stack, "main");
 
 		image = gtk_image_new_from_icon_name("system-settings-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(button, image);
-		gtk_widget_set_tooltip_text(GTK_WIDGET(button), "Settings");
+		gtk_widget_set_tooltip_text(GTK_WIDGET(button), _("Settings"));
 	}
 }
 
@@ -255,7 +257,7 @@ static void trash_popover_constructed(GObject *object) {
 	pango_attr_list_insert(attr_list, font_attr);
 
 	// Header label
-	header_label = gtk_label_new("Trash");
+	header_label = gtk_label_new(_("Trash"));
 	gtk_label_set_attributes(GTK_LABEL(header_label), attr_list);
 	gtk_widget_set_halign(header_label, GTK_ALIGN_START);
 	gtk_widget_set_margin_start(header_label, 4);
@@ -264,7 +266,7 @@ static void trash_popover_constructed(GObject *object) {
 	gtk_style_context_add_class(header_label_style, GTK_STYLE_CLASS_DIM_LABEL);
 
 	settings_button = gtk_button_new_from_icon_name("preferences-system-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_widget_set_tooltip_text(settings_button, "Trash Applet Settings");
+	gtk_widget_set_tooltip_text(settings_button, _("Trash Applet Settings"));
 	g_signal_connect(settings_button, "clicked", G_CALLBACK(settings_clicked), self);
 
 	settings_button_style = gtk_widget_get_style_context(settings_button);
@@ -281,18 +283,18 @@ static void trash_popover_constructed(GObject *object) {
 
 	self->button_bar = trash_button_bar_new();
 
-	btn = trash_button_bar_add_button(self->button_bar, "Restore", TRASH_RESPONSE_RESTORE);
-	gtk_widget_set_tooltip_text(btn, "Restore selected items");
+	btn = trash_button_bar_add_button(self->button_bar, _("Restore"), TRASH_RESPONSE_RESTORE);
+	gtk_widget_set_tooltip_text(btn, _("Restore selected items"));
 
-	btn = trash_button_bar_add_button(self->button_bar, "Empty", TRASH_RESPONSE_EMPTY);
-	gtk_widget_set_tooltip_text(btn, "Empty the trash bin");
+	btn = trash_button_bar_add_button(self->button_bar, _("Empty"), TRASH_RESPONSE_EMPTY);
+	gtk_widget_set_tooltip_text(btn, _("Empty the trash bin"));
 
 	g_signal_connect(self->button_bar, "response", G_CALLBACK(handle_response_cb), self);
 
 	self->confirm_bar = trash_button_bar_new();
 	trash_button_bar_set_revealed(self->confirm_bar, FALSE);
 
-	confirm_label = gtk_label_new("Are you sure you want to empty the trash bin?");
+	confirm_label = gtk_label_new(_("Are you sure you want to empty the trash bin?"));
 	gtk_label_set_attributes(GTK_LABEL(confirm_label), attr_list);
 	gtk_label_set_line_wrap(GTK_LABEL(confirm_label), TRUE);
 	gtk_label_set_max_width_chars(GTK_LABEL(confirm_label), 32);
@@ -301,8 +303,8 @@ static void trash_popover_constructed(GObject *object) {
 	content_area = trash_button_bar_get_content_area(self->confirm_bar);
 	gtk_box_pack_start(GTK_BOX(content_area), confirm_label, TRUE, TRUE, 6);
 
-	trash_button_bar_add_button(self->confirm_bar, "No", GTK_RESPONSE_NO);
-	trash_button_bar_add_button(self->confirm_bar, "Yes", GTK_RESPONSE_YES);
+	trash_button_bar_add_button(self->confirm_bar, _("No"), GTK_RESPONSE_NO);
+	trash_button_bar_add_button(self->confirm_bar, _("Yes"), GTK_RESPONSE_YES);
 
 	trash_button_bar_add_response_style_class(self->confirm_bar, GTK_RESPONSE_YES, GTK_STYLE_CLASS_DESTRUCTIVE_ACTION);
 
