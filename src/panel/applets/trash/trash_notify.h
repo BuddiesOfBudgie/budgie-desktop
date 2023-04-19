@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <libnotify/notification.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 

@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+#include <libnotify/notification.h>
+
 #include "trash_notify.h"
 
 static gpointer notify_send(gpointer data) {

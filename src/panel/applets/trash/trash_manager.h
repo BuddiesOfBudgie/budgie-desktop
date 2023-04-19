@@ -11,8 +11,7 @@
 
 #pragma once
 
-#include "trash_info.h"
-#include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

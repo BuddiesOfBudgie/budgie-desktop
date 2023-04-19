@@ -9,6 +9,9 @@
  * (at your option) any later version.
  */
 
+#include <gtk/gtk.h>
+
+#include "trash_applet.h"
 #include "trash_plugin.h"
 
 #define _GNU_SOURCE

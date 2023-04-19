@@ -21,7 +21,12 @@
 
 #include <glib/gi18n.h>
 
+#include "trash_button_bar.h"
+#include "trash_info.h"
+#include "trash_item_row.h"
+#include "trash_manager.h"
 #include "trash_popover.h"
+#include "trash_settings.h"
 
 enum {
 	TRASH_RESPONSE_EMPTY = 1,

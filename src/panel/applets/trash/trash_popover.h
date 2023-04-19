@@ -11,11 +11,6 @@
 
 #pragma once
 
-#include "trash_button_bar.h"
-#include "trash_info.h"
-#include "trash_item_row.h"
-#include "trash_manager.h"
-#include "trash_settings.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

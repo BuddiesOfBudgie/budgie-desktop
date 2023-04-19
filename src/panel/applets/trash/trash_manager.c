@@ -9,6 +9,9 @@
  * (at your option) any later version.
  */
 
+#include <gio/gio.h>
+
+#include "trash_info.h"
 #include "trash_manager.h"
 
 enum {

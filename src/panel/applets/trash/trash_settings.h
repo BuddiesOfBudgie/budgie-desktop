@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include "trash_enum_types.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

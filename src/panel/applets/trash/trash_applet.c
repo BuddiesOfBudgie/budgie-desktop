@@ -10,8 +10,13 @@
  */
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <libnotify/notify.h>
 
 #include "trash_applet.h"
+#include "trash_notify.h"
+#include "trash_popover.h"
+#include "trash_settings.h"
 
 #define _GNU_SOURCE
 

@@ -17,6 +17,7 @@
  * The #TrashSettings widget contains controls that bind to the applet settings.
  */
 
+#include "trash_enum_types.h"
 #include "trash_settings.h"
 
 struct _TrashSettings {

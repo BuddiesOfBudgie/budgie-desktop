@@ -11,12 +11,7 @@
 
 #pragma once
 
-#include "trash_notify.h"
-#include "trash_popover.h"
-#include "trash_settings.h"
 #include "../../../plugin/panel/applet.h"
-#include <gtk/gtk.h>
-#include <libnotify/notify.h>
 
 #define __budgie_unused__ __attribute__((unused))
 

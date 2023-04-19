@@ -28,8 +28,11 @@
  */
 
 #include <glib/gi18n.h>
+#include <pango/pango.h>
 
+#include "trash_button_bar.h"
 #include "trash_item_row.h"
+#include "trash_notify.h"
 
 enum {
 	PROP_TRASH_INFO = 1,
