@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "applet.h"
-#include <budgie-desktop/plugin.h>
+#include "trash_applet.h"
+#include "../../../plugin/panel/plugin.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

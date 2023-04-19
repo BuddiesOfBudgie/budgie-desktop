@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-#include "plugin.h"
+#include "trash_plugin.h"
 
 #define _GNU_SOURCE
 

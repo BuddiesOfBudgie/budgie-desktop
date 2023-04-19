@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include "notify.h"
+#include "trash_notify.h"
 #include "trash_popover.h"
 #include "trash_settings.h"
-#include <budgie-desktop/applet.h>
+#include "../../../plugin/panel/applet.h"
 #include <gtk/gtk.h>
 #include <libnotify/notify.h>
 

@@ -17,15 +17,15 @@ applet_trash_resources = gnome.compile_resources(
 )
 
 applet_trash_sources = [
-    'applet.c',
-    'notify.c',
-    'plugin.c',
+    'trash_applet.c',
     'trash_button_bar.c',
     'trash_enum_types.c',
     'trash_info.c',
     'trash_item_row.c',
     'trash_manager.c',
+    'trash_notify.c',
     'trash_popover.c',
+    'trash_plugin.c',
     'trash_settings.c',
     applet_trash_resources,
 ]

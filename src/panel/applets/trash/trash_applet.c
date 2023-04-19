@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-#include "applet.h"
+#include "trash_applet.h"
 
 #define _GNU_SOURCE
 

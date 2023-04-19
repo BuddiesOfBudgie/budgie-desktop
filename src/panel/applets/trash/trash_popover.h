@@ -16,7 +16,6 @@
 #include "trash_item_row.h"
 #include "trash_manager.h"
 #include "trash_settings.h"
-#include <budgie-desktop/popover.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

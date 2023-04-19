@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-#include "notify.h"
+#include "trash_notify.h"
 
 static gpointer notify_send(gpointer data) {
 	NotifyNotification *noti = data;

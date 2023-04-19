@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include "notify.h"
 #include "trash_button_bar.h"
 #include "trash_info.h"
+#include "trash_notify.h"
 #include <gtk/gtk.h>
 #include <pango/pango.h>
 
