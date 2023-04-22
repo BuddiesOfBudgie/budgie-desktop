@@ -120,7 +120,7 @@ static void settings_clicked(GtkButton *button, TrashPopover *self) {
 	} else {
 		gtk_stack_set_visible_child_name(stack, "main");
 
-		image = gtk_image_new_from_icon_name("system-settings-symbolic", GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name("preferences-system-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(button, image);
 		gtk_widget_set_tooltip_text(GTK_WIDGET(button), _("Settings"));
 	}
