@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "../../../plugin/panel/applet.h"
+#include "applet.h"
 
 #define __budgie_unused__ __attribute__((unused))
 

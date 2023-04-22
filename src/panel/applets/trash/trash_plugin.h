@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "../../../plugin/panel/plugin.h"
+#include "plugin.h"
 
 G_BEGIN_DECLS
 
