@@ -364,6 +364,8 @@ static void trash_popover_constructed(GObject *object) {
 
 	// Create our settings view
 	settings_view = trash_settings_new(self->settings);
+	gtk_widget_set_margin_start(GTK_WIDGET(settings_view), 10);
+	gtk_widget_set_margin_top(GTK_WIDGET(settings_view), 6);
 	gtk_stack_add_named(GTK_STACK(self->stack), GTK_WIDGET(settings_view), "settings");
 
 	// Pack ourselves up
