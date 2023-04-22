@@ -29,6 +29,7 @@
 
 #include <glib/gi18n.h>
 #include <pango/pango.h>
+#include <pango/pango-layout.h>
 
 #include "trash_button_bar.h"
 #include "trash_item_row.h"
@@ -121,6 +122,8 @@ static void trash_item_row_constructed(GObject *object) {
 	gtk_widget_set_margin_end(icon, 6);
 
 	name_label = gtk_label_new(name);
+	gtk_label_set_max_width_chars(GTK_LABEL(name_label), 26);
+	gtk_label_set_ellipsize(GTK_LABEL(name_label), PANGO_ELLIPSIZE_END);
 	gtk_widget_set_halign(name_label, GTK_ALIGN_START);
 	gtk_widget_set_valign(name_label, GTK_ALIGN_CENTER);
 	gtk_widget_set_hexpand(name_label, TRUE);
