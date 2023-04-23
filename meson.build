@@ -61,6 +61,9 @@ dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 
+zenity = find_program('zenity')
+assert(zenity.found(), 'Zenity is a required program at build and run-time for dialog support in budgie-wm. Please include it in both build and run deps.')
+
 # Create config.h
 cdata = configuration_data()
 

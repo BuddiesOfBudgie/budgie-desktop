@@ -18,6 +18,10 @@ budgie_wm_sources = [
 
 budgie_wm_status_vala_args = []
 
+if zenity.version().version_compare('>=3.90')
+    budgie_wm_status_vala_args += ['-D', 'HAVE_NEW_ZENITY']
+endif
+
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
 dep_mutter = dependency('libmutter-12', version: '>= 44', required: false)
 if dep_mutter.found()
