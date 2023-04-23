@@ -524,11 +524,17 @@ namespace Budgie {
 			Pid child_pid;
 
 			try {
+#if HAVE_NEW_ZENITY
+				string[] spawn_args = {
+					"zenity", type, "--no-wrap",  "--title", "", "--text", message,
+					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon", icon_name
+				};
+#else
 				string[] spawn_args = {
 					"zenity", type, "--no-wrap", "--class", "mutter-dialog", "--title", "", "--text", message,
 					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon-name", icon_name
 				};
-
+#endif
 				Process.spawn_async("/",
 					spawn_args,
 					null,
