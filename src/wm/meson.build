@@ -19,11 +19,12 @@ budgie_wm_sources = [
 budgie_wm_status_vala_args = []
 
 # Yes I know version() exists and that would be simpler, I need to support Ubuntus that don't have modern meson so this is the hack
-zenity_new = find_program('zenity', version: '>=3.90', required: false)
-zenity_old = find_program('zenity', version: '<3.90', required: false)
-assert(zenity_new.found() or zenity_old.found(), 'Zenity is a required program at build and run-time for dialog support in budgie-wm. Please include it in both build and run deps.')
+zenity = find_program('zenity', required: false)
+assert(zenity.found(), 'Zenity is a required program at build and run-time for dialog support in budgie-wm. Please include it in both build and run deps.')
 
-if zenity_new.found()
+zenity_version = run_command('zenity', ['--version'], capture: true)
+
+if zenity_version.stdout().version_compare('>=3.90') == true
     message('Found new zenity, using new zenity flags')
     budgie_wm_status_vala_args += ['-D', 'HAVE_NEW_ZENITY']
 else
