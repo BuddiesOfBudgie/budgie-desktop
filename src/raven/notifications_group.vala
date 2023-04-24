@@ -23,8 +23,8 @@ namespace Budgie {
 		public string app_name { get; construct; }
 		public string app_icon { get; construct; }
 		public uint tokeep { get; construct set; }
-		public NotificationSort noti_sort_mode { get; construct set; }
-		public int count { get; private set; default = 0; }
+		public NotificationSort noti_sort_mode { get; construct set; default = NEW_OLD; }
+		public int noti_count { get; private set; default = 0; }
 
 		/* Signals */
 
@@ -68,7 +68,7 @@ namespace Budgie {
 				use_markup = true,
 			};
 
-			dismiss_button = new Gtk.Button.from_icon_name("noti_box-remove-all-symbolic", Gtk.IconSize.MENU) {
+			dismiss_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.MENU) {
 				valign = Gtk.Align.CENTER,
 				halign = Gtk.Align.END,
 			};
@@ -128,11 +128,8 @@ namespace Budgie {
 		 * dismiss_all is responsible for dismissing all notifications
 		 */
 		public void dismiss_all() {
-			notifications.foreach_remove((id, notification) => {
-				// FIXME: Revisit after making notification widget subclass listboxrow directly
-				var parent = notification.get_parent();
-				noti_box.remove(parent);
-				parent.destroy();
+			notifications.foreach_remove((id, widget) => {
+				widget.destroy();
 				dismissed_notification(id);
 				return true;
 			});
@@ -145,19 +142,18 @@ namespace Budgie {
 		 * remove_notification is responsible for removing a notification (if it exists) and updating our counter
 		 */
 		public void remove_notification(uint32 id) {
-			var notification = notifications.lookup(id); // Get our notification
+			var widget = notifications.lookup(id); // Get our notification
 
-			if (notification != null) { // If this notification exists
+			if (widget != null) { // If this notification exists
 				notifications.remove(id);
-				// FIXME: Revisit after making notification widget subclass listboxrow directly
-				var parent = notification.get_parent();
-				noti_box.remove(parent);
-				noti_box.invalidate_sort();
-				parent.destroy();
-				update_count(); // Update our counter
-				dismissed_notification(id); // Notify anything noti_boxening
 
-				if (count == 0) { // This was the last notification
+				widget.destroy();
+
+				noti_box.invalidate_sort();
+				update_count(); // Update our counter
+				dismissed_notification(id); // Notify anything listening
+
+				if (noti_count == 0) { // This was the last notification
 					dismissed_group(app_name); // Dismiss the group
 				}
 			}
@@ -185,12 +181,11 @@ namespace Budgie {
 			int count = 0;
 
 			foreach (uint n in currnotifs) {
-				if (count < n_remove) {
-					remove_notification(n);
-				} else {
+				if (count >= n_remove) {
 					break;
 				}
 
+				remove_notification(n);
 				count++;
 			}
 		}
@@ -207,18 +202,18 @@ namespace Budgie {
 		 * update_count updates our notifications count for this group
 		 */
 		private void update_count() {
-			count = (int) notifications.length;
+			noti_count = (int) notifications.length;
 
-			if (count > tokeep) {
+			if (noti_count > tokeep) {
 				limit_notifications();
 			}
 
-			name_label.set_markup("<b>%s (%i)</b>".printf(app_name, count));
+			name_label.set_markup("<b>%s (%i)</b>".printf(app_name, noti_count));
 		}
 
 		private int sort_notifications(Gtk.ListBoxRow a, Gtk.ListBoxRow b) {
-			var noti_a = a.get_child() as NotificationWidget;
-			var noti_b = b.get_child() as NotificationWidget;
+			var noti_a = a as NotificationWidget;
+			var noti_b = b as NotificationWidget;
 
 			switch (noti_sort_mode) {
 				case NEW_OLD:

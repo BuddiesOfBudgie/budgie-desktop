@@ -364,7 +364,7 @@ namespace Budgie {
 
 			if (notification_groups.length != 0) {
 				notification_groups.foreach((app_name, notification_group) => { // For each notifications list
-					len += notification_group.count; // Add this notification group count
+					len += notification_group.noti_count; // Add this notification group count
 				});
 			}
 
