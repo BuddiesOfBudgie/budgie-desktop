@@ -7,7 +7,7 @@ body:
     attributes:
       label: Budgie version
       description: |
-        Version name of Budgie, i.e. Budgie 10.7.1 OR specific git commit.
+        Version name of Budgie, i.e. Budgie 10.7.2 OR specific git commit.
 
         To provide the exact version of your Budgie installation, run `budgie-desktop --version`.
     validations:
