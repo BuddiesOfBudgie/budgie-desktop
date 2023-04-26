@@ -818,11 +818,6 @@ static gboolean budgie_popover_button_press(GtkWidget* widget, GdkEventButton* b
 
 
 #if GTK_CHECK_VERSION(3, 24, 36)
-/**
- * Since Gtk version 3.24.36, there is a change in definition of gdk_x11_window_get_frame_extents
- *
- * https://gitlab.gnome.org/GNOME/gtk/-/commit/c43e3c43396abcdbd6b0f6e2565f8563b52c5027
- */
 	x = x * scale_factor;
 	y = y * scale_factor;
 
