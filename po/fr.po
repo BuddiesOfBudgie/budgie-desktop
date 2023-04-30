@@ -1467,7 +1467,7 @@ msgstr "Groupe :"
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
 msgid "_Lock"
-msgstr "Vérouiller"
+msgstr "Verrouiller"
 
 #: src/dialogs/power/window.vala:95
 msgid "L_og Out"
