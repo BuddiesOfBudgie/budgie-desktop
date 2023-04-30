@@ -5,15 +5,16 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Skythrew <mael.guerin@outlook.fr>, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 13:33+0200\n"
+"POT-Creation-Date: 2023-04-30 17:49+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
+"Last-Translator: Skythrew <mael.guerin@outlook.fr>, 2023\n"
 "Language-Team: French (https://www.transifex.com/buddiesofbudgie/teams/129844/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -998,7 +999,7 @@ msgstr "Désolé, aucun résultat trouvé"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "Énergie"
 
 #. Prepare label widget
 #. Caffeine Notification
@@ -1013,7 +1014,7 @@ msgstr "Minuteur"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "Paramètres de la date et l'heure"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1409,51 +1410,51 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Accessoires"
 
 #: src/appindexer/AppIndex.vala:170
 msgid "Education"
-msgstr ""
+msgstr "Éducation"
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "Jeux"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
-msgstr ""
+msgstr "Graphismes"
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
-msgstr ""
+msgstr "Bureautique"
 
 #: src/appindexer/AppIndex.vala:197
 msgid "Programming"
-msgstr ""
+msgstr "Programmation"
 
 #: src/appindexer/AppIndex.vala:201
 msgid "Science"
-msgstr ""
+msgstr "Sciences"
 
 #: src/appindexer/AppIndex.vala:207
 msgid "Sound & Video"
-msgstr ""
+msgstr "Multimédia"
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "Outils système"
 
 #: src/appindexer/AppIndex.vala:222
 msgid "Universal Access"
-msgstr ""
+msgstr "Accès universel"
 
 #: src/appindexer/AppIndex.vala:226
 msgid "Utilities"
-msgstr ""
+msgstr "Utilitaires"
 
 #: src/dialogs/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -1466,31 +1467,31 @@ msgstr "Groupe :"
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
 msgid "_Lock"
-msgstr ""
+msgstr "Vérouiller"
 
 #: src/dialogs/power/window.vala:95
 msgid "L_og Out"
-msgstr ""
+msgstr "Déconnexion"
 
 #: src/dialogs/power/window.vala:98
 msgid "_Suspend"
-msgstr ""
+msgstr "Veille"
 
 #: src/dialogs/power/window.vala:102
 msgid "_Hibernate"
-msgstr ""
+msgstr "Hibernation"
 
 #: src/dialogs/power/window.vala:106
 msgid "_Reboot"
-msgstr ""
+msgstr "Redémarrer"
 
 #: src/dialogs/power/window.vala:109
 msgid "Shut_down"
-msgstr ""
+msgstr "Éteindre"
 
 #: src/dialogs/power/window.vala:161
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "Ce système ne supporte pas l'hibernation"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
