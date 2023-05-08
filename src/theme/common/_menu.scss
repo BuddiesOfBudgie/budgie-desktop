@@ -132,8 +132,17 @@
             background-color: transparent;
             border-radius: 6px;
 
+            > image {
+                color: white;
+            }
+
             &:hover { background-color: transparentize(white, 0.9); }
-            &:active { background-color: transparentize(white, 0.8); }
+            &:active {
+                color: $selected_fg_color;
+                > image {
+                    color: $selected_fg_color;
+                }
+            }
         }
     }
 
@@ -162,8 +171,6 @@
         }
         &:checked:#{$insensitive} {
             opacity: 0.5;
-
-            #{$label} { color: inherit; }
         }
     }
 
