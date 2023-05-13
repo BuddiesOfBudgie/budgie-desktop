@@ -1,26 +1,26 @@
 $fg_color: if($variant == 'default', white, black);
 
-$selected_bg_color: if($variant =='default', #4791CA, black);
-$selected_fg_color: white;
+$selected_bg_color: if($variant =='default', rgb(107, 202, 129), black);
+$selected_fg_color: black;
 
 $warning_color: #F27835;
 $error_color: #FC4138;
-$alert_color: #4fa2e1;
+$alert_color: rgb(107, 202, 129);
 $destructive_color: #F04A50;
-$suggested_color: #4DADD4;
+$suggested_color: rgb(107, 202, 129);
 
-$panel_bg: if($variant == 'default', #252a35, white);
+$panel_bg: if($variant == 'default', #161616, white);
 $panel_border: if($variant == 'default', #0f1116, black);
 $panel_shadow: transparentize(black, 0.7);
 
-$raven_bg: if($variant == 'default', #353945, $panel_bg);
+$raven_bg: if($variant == 'default', #161616, $panel_bg);
 $raven_border: if($variant == 'default', transparentize($panel_border, 0.05), $panel_border);
 
-$raven_expander_bg: if($variant == 'default', darken($raven_bg, 6.5%), $raven_bg);
+$raven_expander_bg: if($variant == 'default', #262626, $raven_bg);
 $raven_expander_fg: $fg_color;
 $raven_expander_border: if($variant == 'default', $raven_expander_bg, $raven_border);
 
-$raven_background_bg: if($variant == 'default', darken($raven_bg, 4%), $raven_bg);
+$raven_background_bg: if($variant == 'default', #262626, $raven_bg);
 $raven_background_border: if($variant == 'default', $raven_background_bg, $raven_border);
 
 $mpris_overlay_bg: transparentize(white, 0.9);

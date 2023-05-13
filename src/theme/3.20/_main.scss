@@ -156,13 +156,3 @@
 }
 @include raven-trigger(button);
 @include raven-mpris(button);
-
-@each $pos, $b_pos in $pos_list {
-    // Raven borders
-    .#{$pos} .raven-frame {
-        border {
-            border: none;
-            border-#{$b_pos}: $border_width solid $raven_border;
-        }
-    }
-}
