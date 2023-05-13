@@ -66,8 +66,15 @@ public class DBusMenu : Object {
 		all_nodes.get(0).submenu.show_all();
 	}
 
-	private DBusMenuNode parse_layout(Variant layout) {
-		int32 id = layout.get_child_value(0).get_int32();
+	private DBusMenuNode? parse_layout(Variant layout) {
+		Variant v_id = layout.get_child_value(0);
+
+		// this happens with some apps that don't follow spec, like jetbrains toolbox
+		if (!v_id.is_of_type(VariantType.INT32)) {
+			return null;
+		}
+
+		int32 id = v_id.get_int32();
 		Variant v_props = layout.get_child_value(1);
 		Variant v_children = layout.get_child_value(2);
 
@@ -91,7 +98,9 @@ public class DBusMenu : Object {
 			for (var v_child = it.next_value(); v_child != null; v_child = it.next_value()) {
 				v_child = v_child.get_variant();
 				var child_node = parse_layout(v_child);
-				new_children.append(child_node);
+				if (child_node != null) {
+					new_children.append(child_node);
+				}
 			}
 
 			node.update_children(new_children);
@@ -129,6 +138,11 @@ public class DBusMenu : Object {
 	}
 
 	public void popup_at_pointer(Gdk.Event event) {
-		all_nodes.get(0).submenu.popup_at_pointer(event);
+		var submenu = all_nodes.get(0).submenu;
+
+		// avoid showing empty menus, e.g. if an app provides invalid data (like jetbrains toolbox)
+		if (submenu.get_children().length() > 0) {
+			submenu.popup_at_pointer(event);
+		}
 	}
 }
