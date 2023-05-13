@@ -95,7 +95,7 @@ namespace Budgie.Abomination {
 			Wnck.WindowType win_type = window.get_window_type(); // Get the window type
 
 			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Budgie Desktop View)
-				   (win_type == Wnck.WindowType.DIALOG) || // Dialogs
+				   (win_type == Wnck.WindowType.DIALOG && window.get_transient() != null) || // Dialogs
 				   (win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
 				   (win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
 				   (win_type == Wnck.WindowType.UTILITY); // Utility like a control on an emulator
