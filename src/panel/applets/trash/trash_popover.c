@@ -301,9 +301,6 @@ static void trash_popover_constructed(GObject *object) {
 	btn = trash_button_bar_add_button(self->button_bar, _("Empty"), TRASH_RESPONSE_EMPTY);
 	gtk_widget_set_tooltip_text(btn, _("Empty the trash bin"));
 
-	count = trash_manager_get_item_count(self->trash_manager);
-	trash_button_bar_set_response_sensitive(self->button_bar, TRASH_RESPONSE_EMPTY, count > 0);
-
 	g_signal_connect(self->button_bar, "response", G_CALLBACK(handle_response_cb), self);
 
 	self->confirm_bar = trash_button_bar_new();
@@ -356,6 +353,9 @@ static void trash_popover_constructed(GObject *object) {
 	// Trash Manager hookups
 
 	self->trash_manager = trash_manager_new();
+
+	count = trash_manager_get_item_count(self->trash_manager);
+	trash_button_bar_set_response_sensitive(self->button_bar, TRASH_RESPONSE_EMPTY, count > 0);
 
 	g_signal_connect(self->trash_manager, "trash-added", G_CALLBACK(trash_added), self);
 	g_signal_connect(self->trash_manager, "trash-removed", G_CALLBACK(trash_removed), self);
