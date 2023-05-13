@@ -72,7 +72,7 @@ namespace Budgie {
 
 		/* Save manually setting all this crap via some nice properties */
 		public AgentDialog(string action_id, string message, string icon_name, string cookie, Cancellable? cancellable) {
-			Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable);
+			Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable, resizable: false);
 
 			set_keep_above(true);
 
