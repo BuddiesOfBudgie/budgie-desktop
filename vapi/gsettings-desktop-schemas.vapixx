@@ -1,0 +1,75 @@
+namespace GDesktop
+{
+
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TOOLBAR_")]
+    public enum ToolbarStyle
+    {
+            BOTH,
+            BOTH_HORIZ,
+            ICONS,
+            TEXT
+    }
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TOOLBAR_ICON_SIZE_")]
+    public enum ToolbarIconSize
+    {
+            SMALL,
+            LARGE
+    }
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_MOUSE_DWELL_MODE_")]
+    public enum MouseDwellMode
+    {
+            WINDOW,
+            GESTURE
+    }
+
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TITLEBAR_ACTION_")]
+    public enum TitlebarAction
+    {
+            TOGGLE_SHADE,
+            TOGGLE_MAXIMIZE,
+            TOGGLE_MAXIMIZE_HORIZONTALLY,
+            TOGGLE_MAXIMIZE_VERTICALLY,
+            MINIMIZE,
+            NONE,
+            LOWER,
+            MENU,
+    }
+
+ 
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_VISUAL_BELL_")]
+    public enum VisualBellType
+    {
+            FULLSCREEN_FLASH,
+            FRAME_FLASH,
+    }
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TOUCHPAD_SCROLL_METHOD_")]
+    public enum TouchpadScrollMethod
+    {
+            DISABLED,
+            EDGE_SCROLLING,
+            TWO_FINGER_SCROLLING
+    }
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TOUCHPAD_HANDEDNESS_")]
+    public enum TouchpadHandedness
+    {
+            RIGHT,
+            LEFT,
+            MOUSE
+    }
+
+    [CCode (cheader_filename = "gsettings-desktop-schemas/gdesktop-enums.h", cprefix = "G_DESKTOP_TOUCHPAD_CLICK_METHOD_")]
+    public enum TouchpadClickMethod
+    {
+            DEFAULT,
+            NONE,
+            AREAS,
+            FINGERS
+    }
+
+}
