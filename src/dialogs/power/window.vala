@@ -45,9 +45,8 @@ namespace Budgie {
 		Budgie.ThemeManager? theme_manager = null;
 
 		construct {
-			maximize(); // Try to prevent the dialog window from losing focus
 			set_keep_above(true);
-			set_position(WindowPosition.CENTER);
+			set_position(WindowPosition.CENTER_ALWAYS);
 
 			var visual = screen.get_rgba_visual();
 			if (visual != null) {
@@ -55,7 +54,6 @@ namespace Budgie {
 			}
 
 			get_style_context().add_class("budgie-power-dialog");
-			get_style_context().remove_class("background");
 
 			theme_manager = new Budgie.ThemeManager();
 
@@ -71,9 +69,6 @@ namespace Budgie {
 				halign = Align.CENTER,
 				valign = Align.CENTER
 			};
-
-			box.get_style_context().add_class("background");
-			box.get_style_context().add_class("drop-shadow");
 
 			var button_grid = new Grid() {
 				column_homogeneous = true,
