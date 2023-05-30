@@ -6,5 +6,10 @@
       <summary>Space between icons</summary>
       <description>How large to make the space between icons, in pixels</description>
     </key>
+    <key type="b" name="show-battery-percentage">
+      <default>false</default>
+      <summary>Show battery percentage</summary>
+      <description>Whether or not to show the battery percentage</description>
+    </key>
   </schema>
 </schemalist>
