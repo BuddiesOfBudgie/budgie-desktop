@@ -30,6 +30,8 @@ public class Button : ToggleButton {
 	}
 
 	construct {
+		get_style_context().add_class("launcher");
+
 		var container = new Box(Orientation.HORIZONTAL, 0);
 		add(container);
 
@@ -38,7 +40,7 @@ public class Button : ToggleButton {
 			margin_end = BUTTON_PADDING,
 			pixel_size = 16, // TODO: We should be able to handle panel resize and icon only mode
 		};
-		this.icon.get_style_context().add_class("icon"); 
+		this.icon.get_style_context().add_class("icon");
 
 		this.label = new Label(null) {
 			halign = START,
