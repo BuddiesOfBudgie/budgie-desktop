@@ -13,7 +13,8 @@ using Gdk;
 using Gtk;
 using Pango;
 
-private const int BUTTON_MAX_LENGTH = 232;
+private const int BUTTON_MAX_WIDTH = 232;
+private const int BUTTON_MIN_WIDTH = 164;
 private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 4;
 
@@ -73,7 +74,7 @@ public class Button : ToggleButton {
 		// Also how to make it so that the parent scale this maximum size? i.e. that button takes the most it can when opened if it has room?
 
 		// TODO: How to set consistent default width w/out relying on that? If we set that we pretty much don't have the widget compression mechanism
-		//  this.set_size_request(BUTTON_MAX_LENGTH, -1);
+		this.set_size_request(BUTTON_MIN_WIDTH, -1);
 
 		// TODO: size request. We should respect parent max width and max height like a good citizen and properly set our size request
 	}
