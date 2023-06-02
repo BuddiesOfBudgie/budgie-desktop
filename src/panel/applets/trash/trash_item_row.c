@@ -32,6 +32,7 @@
 #include <pango/pango-layout.h>
 
 #include "trash_button_bar.h"
+#include "trash_info.h"
 #include "trash_item_row.h"
 #include "trash_notify.h"
 
@@ -313,11 +314,9 @@ static void delete_finish(GObject *object, GAsyncResult *result, gpointer user_d
  */
 void trash_item_row_delete(TrashItemRow *self) {
 	g_autoptr(GFile) file;
-	g_autofree const gchar *name;
-	g_autofree gchar *uri;
+	g_autofree const gchar *uri;
 
-	name = trash_info_get_name(self->trash_info);
-	uri = g_strdup_printf("trash:///%s", name);
+	uri = trash_info_get_uri(self->trash_info);
 	file = g_file_new_for_uri(uri);
 
 	g_file_delete_async(
@@ -352,12 +351,10 @@ static void restore_finish(GObject *object, GAsyncResult *result, gpointer user_
  */
 void trash_item_row_restore(TrashItemRow *self) {
 	g_autoptr(GFile) file, restored_file;
-	g_autofree const gchar *name;
-	g_autofree gchar *uri;
+	g_autofree const gchar *uri;
 	g_autofree const gchar *restore_path;
 
-	name = trash_info_get_name(self->trash_info);
-	uri = g_strdup_printf("trash:///%s", name);
+	uri = trash_info_get_uri(self->trash_info);
 	file = g_file_new_for_uri(uri);
 	restore_path = trash_info_get_restore_path(self->trash_info);
 	restored_file = g_file_new_for_path(restore_path);
