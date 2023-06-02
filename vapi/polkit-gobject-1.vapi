@@ -27,8 +27,10 @@ namespace Polkit {
 		public bool authentication_agent_response_sync (string cookie, Polkit.Identity identity, GLib.Cancellable? cancellable = null) throws GLib.Error;
 		public async Polkit.AuthorizationResult check_authorization (Polkit.Subject subject, string action_id, Polkit.Details? details, Polkit.CheckAuthorizationFlags flags, GLib.Cancellable? cancellable) throws GLib.Error;
 		public Polkit.AuthorizationResult check_authorization_sync (Polkit.Subject subject, string action_id, Polkit.Details? details, Polkit.CheckAuthorizationFlags flags, GLib.Cancellable? cancellable = null) throws GLib.Error;
-		public async void enumerate_actions (GLib.Cancellable? cancellable);
-		public async void enumerate_temporary_authorizations (Polkit.Subject subject, GLib.Cancellable? cancellable);
+		public async GLib.List<Polkit.ActionDescription> enumerate_actions (GLib.Cancellable? cancellable) throws GLib.Error;
+		public GLib.List<Polkit.ActionDescription> enumerate_actions_sync (GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public async GLib.List<Polkit.TemporaryAuthorization> enumerate_temporary_authorizations (Polkit.Subject subject, GLib.Cancellable? cancellable) throws GLib.Error;
+		public GLib.List<Polkit.TemporaryAuthorization> enumerate_temporary_authorizations_sync (Polkit.Subject subject, GLib.Cancellable? cancellable = null) throws GLib.Error;
 		public static Polkit.Authority @get ();
 		public static async Polkit.Authority get_async (GLib.Cancellable? cancellable) throws GLib.Error;
 		public Polkit.AuthorityFeatures get_backend_features ();
@@ -98,7 +100,7 @@ namespace Polkit {
 	[CCode (cheader_filename = "polkit/polkit.h", type_id = "polkit_temporary_authorization_get_type ()")]
 	public class TemporaryAuthorization : GLib.Object {
 		[CCode (has_construct_function = false)]
-		public TemporaryAuthorization (string id, string action_id, Polkit.Subject subject, uint64 time_obtained, uint64 time_expires);
+		protected TemporaryAuthorization ();
 		public unowned string get_action_id ();
 		public unowned string get_id ();
 		public Polkit.Subject get_subject ();
@@ -206,7 +208,7 @@ namespace Polkit {
 		public static bool from_string (string string, Polkit.ImplicitAuthorization out_implicit_authorization);
 		public unowned string to_string ();
 	}
-	[CCode (cheader_filename = "polkit/polkit.h", cprefix = "POLKIT_ERROR_")]
+	[CCode (cheader_filename = "polkit/polkit.h", cprefix = "POLKIT_ERROR_", type_id = "polkit_error_get_type ()")]
 	public errordomain Error {
 		FAILED,
 		CANCELLED,
@@ -215,7 +217,18 @@ namespace Polkit {
 		public static GLib.Quark quark ();
 	}
 	[CCode (cheader_filename = "polkit/polkit.h")]
+	[Version (replacement = "Error.quark")]
+	public static GLib.Quark error_quark ();
+	[CCode (cheader_filename = "polkit/polkit.h")]
+	[Version (replacement = "Identity.from_string")]
 	public static Polkit.Identity? identity_from_string (string str) throws GLib.Error;
 	[CCode (cheader_filename = "polkit/polkit.h")]
+	[Version (replacement = "ImplicitAuthorization.from_string")]
+	public static bool implicit_authorization_from_string (string string, Polkit.ImplicitAuthorization out_implicit_authorization);
+	[CCode (cheader_filename = "polkit/polkit.h")]
+	[Version (replacement = "ImplicitAuthorization.to_string")]
+	public static unowned string implicit_authorization_to_string (Polkit.ImplicitAuthorization implicit_authorization);
+	[CCode (cheader_filename = "polkit/polkit.h")]
+	[Version (replacement = "Subject.from_string")]
 	public static Polkit.Subject subject_from_string (string str) throws GLib.Error;
 }

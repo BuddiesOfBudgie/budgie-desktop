@@ -30,12 +30,30 @@ namespace Budgie {
 		[GtkChild]
 		private unowned Gtk.Label? label_error;
 
+		[GtkChild]
+		private unowned Gtk.Revealer? details_revealer;
+
+		[GtkChild]
+		private unowned Gtk.Label? label_action_value;
+
+		[GtkChild]
+		private unowned Gtk.Label? label_id_value;
+
 		public bool is_cancelled;
 
 		public PolkitAgent.Session? pk_session = null;
 		private Polkit.Identity? pk_identity = null;
 
-		public string action_id { public get; public set; }
+		public string action_id {
+			public get {
+				return label_id_value.get_text();
+			}
+			public set {
+				label_id_value.set_text(value);
+				label_id_value.set_tooltip_text(value);
+			}
+		}
+
 		public string message {
 			public set {
 				label_message.set_text(value);
@@ -65,6 +83,15 @@ namespace Budgie {
 			}
 		}
 
+		public string action_desc {
+			public get {
+				return label_action_value.get_text();
+			}
+			public set {
+				label_action_value.set_text(value);
+			}
+		}
+
 		/* Manipulate Vala's pointer logic to prevent a copy */
 		public unowned Cancellable? cancellable { public set ; public get; }
 
@@ -79,6 +106,35 @@ namespace Budgie {
 			var header = new Gtk.EventBox();
 			set_titlebar(header);
 			header.get_style_context().remove_class("titlebar");
+
+			// Try to get the ActionDescription for this event to give more
+			// context to the popup dialog
+			try {
+				var authority = Polkit.Authority.get_sync(null);
+				// To do this, we have to iterate over all of the actions...
+				authority.enumerate_actions.begin(null, (obj, res) => {
+					try {
+						var actions = authority.enumerate_actions.end(res);
+						Polkit.ActionDescription action = null;
+						actions.foreach((a) => {
+							// ...and see if its ID matches the one we were given
+							if (a.get_action_id() == action_id) {
+								action = a;
+								return;
+							}
+						});
+
+						// If we found the appropiate action, set our description
+						if (action != null) {
+							action_desc = action.get_description();
+						}
+					} catch (Error e) {
+						GLib.warning("Error enumerating Polkit actions: %s", e.message);
+					}
+				});
+			} catch (Error e) {
+				GLib.warning("Error getting Polkit Authority: %s", e.message);
+			}
 
 			combobox_idents.changed.connect(on_ident_changed);
 			var render = new Gtk.CellRendererText();
@@ -104,6 +160,19 @@ namespace Budgie {
 		[GtkCallback]
 		void on_entry_auth_activate() {
 			this.on_agent_authenticate();
+		}
+
+		[GtkCallback]
+		void on_details_button_clicked(Gtk.Button button) {
+			if (details_revealer.get_reveal_child()) {
+				// Close the revealer
+				details_revealer.set_reveal_child(false);
+				button.set_image(new Gtk.Image.from_icon_name("pan-end-symbolic", Gtk.IconSize.BUTTON));
+			} else {
+				// Show the revealer
+				details_revealer.set_reveal_child(true);
+				button.set_image(new Gtk.Image.from_icon_name("pan-down-symbolic", Gtk.IconSize.BUTTON));
+			}
 		}
 
 		/* Ensure we grab focus */
@@ -267,7 +336,7 @@ namespace Budgie {
 
 		public override async bool initiate_authentication(
 			string action_id, string message, string icon_name,
-			Polkit.Details details, string cookie, List<Polkit.Identity?>? identities, Cancellable cancellable
+			Polkit.Details details, string cookie, List<Polkit.Identity> identities, Cancellable? cancellable
 		) throws Polkit.Error {
 			var dialog = new AgentDialog(action_id, message, "dialog-password-symbolic", cookie, cancellable);
 			dialog.done.connect(() => {
