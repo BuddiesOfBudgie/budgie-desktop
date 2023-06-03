@@ -422,14 +422,14 @@ public static int main(string[] args) {
 	int pid = Posix.getpid();
 
 	try {
-		subject = Polkit.UnixSession.new_for_process_sync(pid, null);
+		subject = new Polkit.UnixSession.for_process_sync(pid, null);
 	} catch (Error e) {
 		stdout.printf("Unable to initiate PolKit: %s", e.message);
 		return 1;
 	}
 
 	try {
-		var agenthandle = agent.register(PolkitAgent.RegisterFlags.NONE, subject, null );
+		var agenthandle = agent.register(PolkitAgent.RegisterFlags.NONE, subject, "/org/freedesktop/PolicyKit1/AuthenticationAgent");
 		agent.stopagent.connect(() => {
 			PolkitAgent.Listener.unregister(agenthandle);
 			Gtk.main_quit();
