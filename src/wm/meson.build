@@ -55,7 +55,6 @@ budgie_wm_deps = [
     dep_giounix,
     dep_mutter,
     dep_gnomedesktop,
-    dep_gsettings,
     dep_ibus,
 ]
 
@@ -65,7 +64,6 @@ budgie_wm_vala_args =  [
         '--pkg', 'gnome-desktop-3.0',
         '--pkg', vapi_mutter,
         '--pkg', 'budgie-config',
-        '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
         budgie_wm_status_vala_args,

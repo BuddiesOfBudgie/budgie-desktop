@@ -246,8 +246,8 @@ namespace Budgie {
 				locale = DEFAULT_LOCALE;
 			}
 
-			if (!Gnome.get_input_source_from_locale(locale, out type, out id)) {
-				Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
+			if (!Gnome.Languages.get_input_source_from_locale(locale, out type, out id)) {
+				Gnome.Languages.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 			}
 
 			if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {
