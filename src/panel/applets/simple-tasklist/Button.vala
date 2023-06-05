@@ -11,6 +11,7 @@
 
 using Gdk;
 using Gtk;
+using libxfce4windowing;
 using Pango;
 
 private const int BUTTON_MAX_WIDTH = 232;
@@ -24,10 +25,10 @@ public class Button : ToggleButton {
 
 	private Allocation definite_allocation;
 
-	public Budgie.Abomination.RunningApp app { get; construct; }
+	public libxfce4windowing.Window window{ get; construct; }
 
-	public Button(Budgie.Abomination.RunningApp app) {
-		Object(app: app);
+	public Button(libxfce4windowing.Window window) {
+		Object(window: window);
 	}
 
 	construct {
@@ -54,21 +55,15 @@ public class Button : ToggleButton {
 		container.pack_start(this.icon, false);
 		container.pack_start(this.label);
 
-		this.on_app_name_changed();
-		this.on_app_icon_changed();
+		on_window_name_changed();
+		on_window_icon_changed();
 
 		this.show_all(); // Only show after setting the name
 
 		// SIGNALS
-		this.size_allocate.connect(this.on_size_allocate);
-		this.app.renamed_app.connect(this.on_app_name_changed);
-		this.app.icon_changed.connect(this.on_app_icon_changed);
-		this.app.app_info_changed.connect(() => {
-			warning("App Info changed for %s", this.app.name);
-
-			this.on_app_name_changed();
-			this.on_app_icon_changed();
-		});
+		size_allocate.connect(on_size_allocate);
+		window.name_changed.connect(on_window_name_changed);
+		window.icon_changed.connect(on_window_icon_changed);
 
 		// set_size_request is for MINIMUM size. How to set maximum size?
 		// Also how to make it so that the parent scale this maximum size? i.e. that button takes the most it can when opened if it has room?
@@ -92,18 +87,36 @@ public class Button : ToggleButton {
 	}
 
 	protected override bool button_release_event(EventButton event) {
+		var time = event.time;
+
 		if (event.button == 3) { // Right click
 			//  TODO: show popover
 			return Gdk.EVENT_STOP;
 		}
 
 		if (event.button == 2) { // Middle click
-			this.app.close();
+			try {
+				window.close(time);
+			} catch (GLib.Error e) {
+				warning("Unable to close window '%s': %s", window.get_name(), e.message);
+			}
 			return Gdk.EVENT_STOP;
 		}
 
 		if (event.button == 1) { // Left click
-			this.app.toggle();
+			if (window.state == libxfce4windowing.WindowState.ACTIVE) {
+				try {
+					window.set_minimized(true);
+				} catch (GLib.Error e) {
+					warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
+				}
+			} else {
+				try {
+					window.activate(time);
+				} catch (GLib.Error e) {
+					warning("Unable to activate window '%s': %s", window.get_name(), e.message);
+				}
+			}
 
 			// Don't return on purpose
 		}
@@ -123,17 +136,14 @@ public class Button : ToggleButton {
 		base.size_allocate(definite_allocation);
 	}
 
-	private void on_app_name_changed() {
-		var name = this.app.name;
-		this.label.set_label(name);
-		this.set_tooltip_text(name);
+	private void on_window_name_changed() {
+		var name = window.get_name();
+		label.set_label(name);
+		set_tooltip_text(name);
 	}
 
-	private void on_app_icon_changed() {
-		Pixbuf icon_pixbuf = this.app.get_icon();
-
-		icon_pixbuf = icon_pixbuf.scale_simple(16, 16, InterpType.BILINEAR);
-
-		this.icon.set_from_pixbuf(icon_pixbuf);
+	private void on_window_icon_changed() {
+		Pixbuf icon_pixbuf = window.get_icon(16, 1); // TODO: Icon sizes
+		icon.set_from_pixbuf(icon_pixbuf);
 	}
 }
