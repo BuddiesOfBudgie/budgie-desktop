@@ -39,7 +39,7 @@ if dep_wm.found()
 else
     dep_wm = dependency('libmutter-12', version: '>= 44', required: false)
     if dep_wm.found()
-        message('Using libmagpie-12 ABI from GNOME 44')
+        message('Using libmutter-12 ABI from GNOME 44')
         vapi_wm = 'libmutter-12'
     else
         dep_wm = dependency('libmutter-11', version: '>= 43', required: false)
