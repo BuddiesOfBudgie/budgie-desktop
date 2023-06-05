@@ -74,7 +74,7 @@ public class Button : ToggleButton {
 		// Also how to make it so that the parent scale this maximum size? i.e. that button takes the most it can when opened if it has room?
 
 		// TODO: How to set consistent default width w/out relying on that? If we set that we pretty much don't have the widget compression mechanism
-		this.set_size_request(BUTTON_MIN_WIDTH, -1);
+		// this.set_size_request(BUTTON_MIN_WIDTH, -1);
 
 		// TODO: size request. We should respect parent max width and max height like a good citizen and properly set our size request
 	}
