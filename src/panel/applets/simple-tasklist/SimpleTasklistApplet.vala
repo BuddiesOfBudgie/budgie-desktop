@@ -11,6 +11,7 @@
 
 using Gdk;
 using Gtk;
+using libxfce4windowing;
 
 public const int MAX_BUTTON_LENGTH = 200;
 public const int MIN_BUTTON_LENGTH = MAX_BUTTON_LENGTH / 4;
@@ -27,10 +28,9 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	private Box container;
 
-	private Budgie.Abomination.Abomination? abomination;
 	private HashTable<string, Button> buttons;
-
-	private int num_windows;
+	private libxfce4windowing.Screen screen;
+	private unowned libxfce4windowing.WorkspaceManager workspace_manager;
 
 	construct {
 		get_style_context().add_class("simple-tasklist");
@@ -44,12 +44,26 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		add(container);
 
-		this.abomination = new Budgie.Abomination.Abomination();
+		this.screen = libxfce4windowing.Screen.get_default();
 
-		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
-		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
-		this.abomination.active_app_changed.connect(this.on_active_app_changed);
-		this.abomination.active_workspace_changed.connect(this.on_active_workspace_changed);
+		this.screen.window_opened.connect(on_app_opened);
+		this.screen.window_closed.connect(on_app_closed);
+		this.screen.active_window_changed.connect(on_active_window_changed);
+
+		setup_workspace_listener();
+	}
+
+	private void setup_workspace_listener() {
+		this.workspace_manager = screen.get_workspace_manager();
+		unowned var groups = workspace_manager.list_workspace_groups();
+		if (groups == null) return;
+
+		unowned var element = groups.first();
+		var group = element.data as libxfce4windowing.WorkspaceGroup;
+
+		if (group == null) return;
+
+		group.active_workspace_changed.connect(on_active_workspace_changed);
 	}
 
 	/**
@@ -67,43 +81,51 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	/**
 	 * Create a button for the newly opened app and add it to our tracking map.
 	 */
-	private void on_app_opened(Budgie.Abomination.RunningApp app) {
-		if (this.buttons.contains(app.id.to_string())) return;
+	private void on_app_opened(libxfce4windowing.Window window) {
+		if (window.is_skip_tasklist()) return;
+		if (buttons.contains(window.get_id().to_string().to_string())) return;
 
-		app.workspace_changed.connect(() => this.on_app_workspace_changed(app));
+		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
-		var button = new Button(app);
+		var button = new Button(window);
 		this.container.pack_start(button);
 		this.show_all();
 
-		this.buttons.insert(app.id.to_string(), button);
+		//  if (window.get_workspace().)
+
+		this.buttons.insert(window.get_id().to_string(), button);
 	}
 
 	/**
 	 * Gracefully remove button associated with app and remove it from our
 	 * tracking map.
 	 */
-	private void on_app_closed(Budgie.Abomination.RunningApp app) {
-		var button = this.buttons.get(app.id.to_string());
-		if (button == null) return;
+	private void on_app_closed(libxfce4windowing.Window window) {
+		var button = this.buttons.get(window.get_id().to_string());
+		if (button == null) {
+			return;
+		}
 
 		button.gracefully_die();
 
-		this.buttons.remove(app.id.to_string());
+		this.buttons.remove(window.get_id().to_string());
 	}
 
 	/**
 	 * Manage active state of buttons, mark button associated with new active
 	 * app as active and previous active button as inactive.
 	 */
-	private void on_active_app_changed(Budgie.Abomination.RunningApp? previous_app, Budgie.Abomination.RunningApp? current_app) {
-		if (previous_app != null) {
-			var button = this.buttons.get(previous_app.id.to_string());
+	private void on_active_window_changed(libxfce4windowing.Window? old_window) {
+		if (old_window != null) {
+			var button = this.buttons.get(old_window.get_id().to_string());
 			if (button == null) return;
 			button.set_active(false);
 		}
-		if (current_app != null) {
-			var button = this.buttons.get(current_app.id.to_string());
+
+		var window = screen.get_active_window();
+
+		if (window != null) {
+			var button = this.buttons.get(window.get_id().to_string());
 			if (button == null) return;
 			button.set_active(true);
 		}
@@ -113,9 +135,9 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Go through the managed buttons list and check if they should be
 	 * displayed for the current workspace.
 	 */
-	private void on_active_workspace_changed() {
+	private void on_active_workspace_changed(libxfce4windowing.Workspace? previous_workspace) {
 		foreach (Button button in this.buttons.get_values()) {
-			this.on_app_workspace_changed(button.app);
+			this.on_app_workspace_changed(button.window);
 		}
 	}
 
@@ -123,11 +145,11 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Show / Hide button attached to the app depending on if it is in the
 	 * current workspace.
 	 */
-	private void on_app_workspace_changed(Budgie.Abomination.RunningApp app) {
-		var button = this.buttons.get(app.id.to_string());
+	private void on_app_workspace_changed(libxfce4windowing.Window window) {
+		var button = this.buttons.get(window.get_id().to_string());
 		if (button == null) return;
 
-		if (app.workspace.get_number() == this.abomination.get_active_workspace().get_number()) {
+		if (window.workspace.get_state() == libxfce4windowing.WorkspaceState.ACTIVE) {
 			button.show();
 			button.set_no_show_all(false);
 		} else {

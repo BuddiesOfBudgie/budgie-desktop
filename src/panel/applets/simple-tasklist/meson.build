@@ -20,7 +20,7 @@ applet_simpletasklist_deps = [
     dep_peas,
     dep_wnck, # via Abomination
     dep_gdkx11, # via Abomination
-    link_libabomination,
+    dep_xfce4windowing,
     link_libpanelplugin,
 ]
 
@@ -34,7 +34,8 @@ shared_library(
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'libwnck-3.0',
-        '--vapidir', dir_libabomination,
+        '--pkg', 'libxfce4windowing-0',
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
