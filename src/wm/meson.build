@@ -31,11 +31,11 @@ else
 endif
 
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_wm = dependency('libmagpie-11', version: '>= 43', required: false)
+dep_wm = dependency('libmagpie-1', version: '>= 0.9', required: false)
 
 if dep_wm.found()
-    message('Using libmagpie-11 ABI')
-    vapi_wm = 'libmagpie-11'
+    message('Using libmagpie-1 ABI')
+    vapi_wm = 'libmagpie-1'
 else
     dep_wm = dependency('libmutter-12', version: '>= 44', required: false)
     if dep_wm.found()
@@ -76,12 +76,8 @@ budgie_wm_vala_args =  [
         budgie_wm_status_vala_args,
 ]
 
-rpath = ''
-
-if dep_wm.version().version_compare(gnome_minimum_version)
-    rpath = dep_wm.get_pkgconfig_variable('typelibdir')
-    budgie_wm_vala_args += ['--girdir', rpath]
-endif
+rpath = dep_wm.get_pkgconfig_variable('typelibdir')
+budgie_wm_vala_args += ['--girdir', rpath]
 
 executable(
     'budgie-wm', budgie_wm_sources,
