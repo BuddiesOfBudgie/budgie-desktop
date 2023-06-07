@@ -54,6 +54,8 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		this.screen.active_window_changed.connect(on_active_window_changed);
 
 		setup_workspace_listener();
+
+		show_all();
 	}
 
 	private void setup_workspace_listener() {
@@ -92,7 +94,6 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		var button = new Button(window);
 		this.container.pack_start(button);
-		this.show_all();
 
 		//  if (window.get_workspace().)
 
