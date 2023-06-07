@@ -143,7 +143,7 @@ public class Button : ToggleButton {
 	}
 
 	private void on_window_icon_changed() {
-		Pixbuf icon_pixbuf = window.get_icon(16, 1); // TODO: Icon sizes
+		Pixbuf icon_pixbuf = window.get_icon(24, 1); // TODO: Icon sizes
 		icon.set_from_pixbuf(icon_pixbuf);
 	}
 }
