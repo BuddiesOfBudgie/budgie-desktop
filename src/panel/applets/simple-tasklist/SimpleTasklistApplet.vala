@@ -19,7 +19,7 @@ public const int ARROW_BUTTON_SIZE = 20;
 
 public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
-		return new SimpleTasklistApplet();
+		return new SimpleTasklistApplet(uuid);
 	}
 }
 
@@ -32,9 +32,12 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	private libxfce4windowing.Screen screen;
 	private unowned libxfce4windowing.WorkspaceManager workspace_manager;
 
+	public SimpleTasklistApplet(string uuid) {
+		Object(uuid: uuid, hexpand: false);
+	}
+
 	construct {
 		get_style_context().add_class("simple-tasklist");
-		//  this.hexpand = true;
 
 		this.buttons = new HashTable<string, Button>(str_hash, str_equal);
 
