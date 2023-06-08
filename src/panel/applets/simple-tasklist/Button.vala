@@ -27,12 +27,15 @@ public class Button : ToggleButton {
 
 	public libxfce4windowing.Window window{ get; construct; }
 
+	private int64 last_scroll_time = 0;
+
 	public Button(libxfce4windowing.Window window) {
 		Object(window: window);
 	}
 
 	construct {
 		get_style_context().add_class("launcher");
+		add_events(Gdk.EventMask.SCROLL_MASK);
 
 		var container = new Box(Orientation.HORIZONTAL, 0);
 		add(container);
@@ -122,6 +125,34 @@ public class Button : ToggleButton {
 		}
 
 		return base.button_release_event(event);
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		if (get_monotonic_time() - last_scroll_time < 300000) {
+			return Gdk.EVENT_STOP;
+		}
+
+		switch (event.direction) {
+			case ScrollDirection.UP:
+				try {
+					window.activate(event.time);
+				} catch (GLib.Error e) {
+					warning("Unable to activate window '%s': %s", window.get_name(), e.message);
+				}
+				break;
+			case ScrollDirection.DOWN:
+				try {
+					window.set_minimized(true);
+				} catch (GLib.Error e) {
+					warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
+				}
+				break;
+			default:
+				break;
+		}
+
+		last_scroll_time = get_monotonic_time();
+		return Gdk.EVENT_STOP;
 	}
 
 	private void on_size_allocate(Allocation allocation) {
