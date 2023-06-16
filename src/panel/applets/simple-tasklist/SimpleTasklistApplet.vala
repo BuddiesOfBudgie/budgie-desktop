@@ -41,7 +41,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		this.buttons = new HashTable<string, Button>(str_hash, str_equal);
 
-		this.container = new Box(Orientation.HORIZONTAL, 4) {
+		this.container = new Box(Orientation.HORIZONTAL, 0) {
 			homogeneous = true,
 		};
 
