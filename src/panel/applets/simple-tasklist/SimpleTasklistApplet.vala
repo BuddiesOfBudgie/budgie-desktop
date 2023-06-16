@@ -28,8 +28,28 @@ public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
+[GtkTemplate (ui="/com/solus-project/simple-tasklist/settings.ui")]
+public class SimpleTasklistSettings : Gtk.Grid {
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_icons;
+
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_labels;
+
+	private GLib.Settings? settings;
+
+	public SimpleTasklistSettings(GLib.Settings? settings) {
+		this.settings = settings;
+
+		settings.bind("show-icons", switch_show_icons, "active", SettingsBindFlags.DEFAULT);
+		settings.bind("show-labels", switch_show_labels, "active", SettingsBindFlags.DEFAULT);
+	}
+}
+
 public class SimpleTasklistApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
+
+	protected GLib.Settings settings;
 
 	private Box container;
 
@@ -39,6 +59,11 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	public SimpleTasklistApplet(string uuid) {
 		Object(uuid: uuid, hexpand: false);
+
+		// Hook up our settings
+		settings_schema = "com.solus-project.simple-tasklist";
+		settings_prefix = "/com/solus-project/budgie-panel/instance/simple-tasklist";
+		settings = get_applet_settings(uuid);
 	}
 
 	construct {
@@ -61,6 +86,15 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		setup_workspace_listener();
 
 		show_all();
+	}
+
+	public override Gtk.Widget? get_settings_ui() {
+		var applet_settings = get_applet_settings(uuid);
+		return new SimpleTasklistSettings(applet_settings);
+	}
+
+	public override bool supports_settings() {
+		return true;
 	}
 
 	private void setup_workspace_listener() {
@@ -179,7 +213,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
-		var button = new TasklistButton(window);
+		var button = new TasklistButton(window, settings);
 
 		Gtk.drag_source_set(button, ModifierType.BUTTON1_MASK, SOURCE_TARGETS, DragAction.MOVE);
 		Gtk.drag_dest_set(button, (DestDefaults.DROP|DestDefaults.HIGHLIGHT), SOURCE_TARGETS, DragAction.MOVE);

@@ -17,11 +17,12 @@ using Pango;
 private const int BUTTON_MAX_WIDTH = 232;
 private const int BUTTON_MIN_WIDTH = 164;
 private const int LABEL_MAX_WIDTH = 24;
-private const int BUTTON_PADDING = 4;
+private const int BUTTON_PADDING = 8;
 
 public class TasklistButton : ToggleButton {
 	private Label label;
 	private Image icon;
+	private GLib.Settings settings;
 
 	private Allocation definite_allocation;
 
@@ -29,8 +30,12 @@ public class TasklistButton : ToggleButton {
 
 	private int64 last_scroll_time = 0;
 
-	public TasklistButton(libxfce4windowing.Window window) {
+	public TasklistButton(libxfce4windowing.Window window, GLib.Settings settings) {
 		Object(window: window);
+
+		this.settings = settings;
+		settings.bind("show-icons", this.icon, "visible", SettingsBindFlags.GET);
+		settings.bind("show-labels", this.label, "visible", SettingsBindFlags.GET);
 	}
 
 	construct {
@@ -48,7 +53,7 @@ public class TasklistButton : ToggleButton {
 		this.icon.get_style_context().add_class("icon");
 
 		this.label = new Label(null) {
-			halign = START,
+			halign = CENTER,
 			valign = CENTER,
 			max_width_chars = LABEL_MAX_WIDTH,
 			ellipsize = EllipsizeMode.END,

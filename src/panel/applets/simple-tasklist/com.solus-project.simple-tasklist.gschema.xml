@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <schema id="com.solus-project.simple-tasklist">
+    <key type="b" name="show-icons">
+      <default>true</default>
+      <summary>Show button icons</summary>
+      <description>Show window icons in the tasklist</description>
+    </key>
+    <key type="b" name="show-labels">
+      <default>true</default>
+      <summary>Show button labels</summary>
+      <description>Show window titles in the tasklist</description>
+    </key>
+  </schema>
+</schemalist>
