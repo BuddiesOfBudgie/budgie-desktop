@@ -25,7 +25,7 @@ public class Button : ToggleButton {
 
 	private Allocation definite_allocation;
 
-	public libxfce4windowing.Window window{ get; construct; }
+	public libxfce4windowing.Window window { get; construct; }
 
 	private int64 last_scroll_time = 0;
 
