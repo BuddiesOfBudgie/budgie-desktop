@@ -17,6 +17,11 @@ public const int MAX_BUTTON_LENGTH = 200;
 public const int MIN_BUTTON_LENGTH = MAX_BUTTON_LENGTH / 4;
 public const int ARROW_BUTTON_SIZE = 20;
 
+/** Valid targets for drag-n-dropping tasklist buttons. */
+public const Gtk.TargetEntry[] SOURCE_TARGETS  = {
+	{ "application/x-wnck-window-id", 0, 0 }
+};
+
 public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
 		return new SimpleTasklistApplet(uuid);
@@ -84,6 +89,88 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	}
 
 	/**
+	 * Handles the drag_data_get signal for a tasklist button.
+	 *
+	 * This sets the button's window XID as the drag data.
+	 */
+	private void button_drag_data_get(Widget widget, DragContext context, SelectionData data, uint info, uint time) {
+		var button = widget as Button;
+		var xid = button.window.get_id();
+		data.set(data.get_target(), 8, (uint8[]) xid);
+	}
+
+	/**
+	 * Handles the drag_begin signal for a tasklist button.
+	 *
+	 * This sets the icon at the cursor when the button is dragged.
+	 */
+	private void button_drag_begin(Widget widget, DragContext context) {
+		var button = widget as Button;
+		int size = 0;
+
+		if (!Gtk.icon_size_lookup(IconSize.DND, out size, null)) {
+			size = 32;
+		}
+
+		var scale_factor = button.get_scale_factor();
+		var pixbuf = button.window.get_icon(size, scale_factor);
+
+		if (pixbuf == null) return;
+
+		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale_factor, null);
+		Gtk.drag_set_icon_surface(context, surface);
+	}
+
+	/**
+	 * Handles when a drag item is dropped on a tasklist button.
+	 *
+	 * If the source widget is another tasklist button, reorder the widgets in
+	 * our container so that the dropped button is put in the place of this
+	 * button.
+	 */
+	private void button_drag_data_received(Widget widget, DragContext context, int x, int y, SelectionData data, uint info, uint time) {
+		var button = widget as Button;
+		var source = Gtk.drag_get_source_widget(context);
+		if (!(source is Button)) return; // Make sure the source is a tasklist button
+
+		List<weak Widget> children = container.get_children(); // Get the list of child buttons
+		unowned var self = children.find(button); // Find this button in the list
+		var position = children.position(self); // Get our position
+		container.reorder_child(source, position); // Put the source button in our position
+	}
+
+	/**
+	 * Handles when the cursor leaves the space of a button during a drag.
+	 */
+	private void button_drag_leave(Widget widget, DragContext context, uint time) {
+		Gtk.drag_unhighlight(widget);
+	}
+
+	/**
+	 * Handles when a widget is dragged over a tasklist button.
+	 */
+	private bool button_drag_motion(Widget widget, DragContext context, int x, int y, uint time) {
+		var button = widget as Button;
+		var source = Gtk.drag_get_source_widget(context);
+
+		// Only respond to dragging tasklist buttons
+		if (source == null || !(source is Button)) {
+			Gdk.drag_status(context, 0, time); // Keep emitting the signal
+			return true; // Make sure we receive the Leave signal
+		}
+
+		// Check if this button is a valid drop target
+		var ret = Gtk.drag_dest_find_target(button, context, null);
+		if (ret != Atom.NONE) {
+			Gtk.drag_highlight(button); // Highlight this button
+			Gdk.drag_status(context, DragAction.MOVE, time); // Drag-n-drop to reorder buttons
+			return true;
+		}
+
+		return false; // Send drag-motion to other widgets
+	}
+
+	/**
 	 * Create a button for the newly opened app and add it to our tracking map.
 	 */
 	private void on_app_opened(libxfce4windowing.Window window) {
@@ -93,9 +180,17 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
 		var button = new Button(window);
-		this.container.pack_start(button);
 
-		//  if (window.get_workspace().)
+		Gtk.drag_source_set(button, ModifierType.BUTTON1_MASK, SOURCE_TARGETS, DragAction.MOVE);
+		Gtk.drag_dest_set(button, (DestDefaults.DROP|DestDefaults.HIGHLIGHT), SOURCE_TARGETS, DragAction.MOVE);
+
+		button.drag_data_get.connect(button_drag_data_get);
+		button.drag_begin.connect(button_drag_begin);
+		button.drag_data_received.connect(button_drag_data_received);
+		button.drag_motion.connect(button_drag_motion);
+		button.drag_leave.connect(button_drag_leave);
+
+		this.container.pack_start(button);
 
 		this.buttons.insert(window.get_id().to_string(), button);
 	}
