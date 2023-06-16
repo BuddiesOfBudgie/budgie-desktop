@@ -19,7 +19,7 @@ private const int BUTTON_MIN_WIDTH = 164;
 private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 4;
 
-public class Button : ToggleButton {
+public class TasklistButton : ToggleButton {
 	private Label label;
 	private Image icon;
 
@@ -29,7 +29,7 @@ public class Button : ToggleButton {
 
 	private int64 last_scroll_time = 0;
 
-	public Button(libxfce4windowing.Window window) {
+	public TasklistButton(libxfce4windowing.Window window) {
 		Object(window: window);
 	}
 
