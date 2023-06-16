@@ -33,7 +33,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	private Box container;
 
-	private HashTable<string, Button> buttons;
+	private HashTable<string, TasklistButton> buttons;
 	private libxfce4windowing.Screen screen;
 	private unowned libxfce4windowing.WorkspaceManager workspace_manager;
 
@@ -44,7 +44,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	construct {
 		get_style_context().add_class("simple-tasklist");
 
-		this.buttons = new HashTable<string, Button>(str_hash, str_equal);
+		this.buttons = new HashTable<string, TasklistButton>(str_hash, str_equal);
 
 		this.container = new Box(Orientation.HORIZONTAL, 0) {
 			homogeneous = true,
@@ -94,7 +94,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * This sets the button's window XID as the drag data.
 	 */
 	private void button_drag_data_get(Widget widget, DragContext context, SelectionData data, uint info, uint time) {
-		var button = widget as Button;
+		var button = widget as TasklistButton;
 		var xid = button.window.get_id();
 		data.set(data.get_target(), 8, (uint8[]) xid);
 	}
@@ -105,7 +105,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * This sets the icon at the cursor when the button is dragged.
 	 */
 	private void button_drag_begin(Widget widget, DragContext context) {
-		var button = widget as Button;
+		var button = widget as TasklistButton;
 		int size = 0;
 
 		if (!Gtk.icon_size_lookup(IconSize.DND, out size, null)) {
@@ -129,9 +129,9 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * button.
 	 */
 	private void button_drag_data_received(Widget widget, DragContext context, int x, int y, SelectionData data, uint info, uint time) {
-		var button = widget as Button;
+		var button = widget as TasklistButton;
 		var source = Gtk.drag_get_source_widget(context);
-		if (!(source is Button)) return; // Make sure the source is a tasklist button
+		if (!(source is TasklistButton)) return; // Make sure the source is a tasklist button
 
 		List<weak Widget> children = container.get_children(); // Get the list of child buttons
 		unowned var self = children.find(button); // Find this button in the list
@@ -150,11 +150,11 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Handles when a widget is dragged over a tasklist button.
 	 */
 	private bool button_drag_motion(Widget widget, DragContext context, int x, int y, uint time) {
-		var button = widget as Button;
+		var button = widget as TasklistButton;
 		var source = Gtk.drag_get_source_widget(context);
 
 		// Only respond to dragging tasklist buttons
-		if (source == null || !(source is Button)) {
+		if (source == null || !(source is TasklistButton)) {
 			Gdk.drag_status(context, 0, time); // Keep emitting the signal
 			return true; // Make sure we receive the Leave signal
 		}
@@ -179,7 +179,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
-		var button = new Button(window);
+		var button = new TasklistButton(window);
 
 		Gtk.drag_source_set(button, ModifierType.BUTTON1_MASK, SOURCE_TARGETS, DragAction.MOVE);
 		Gtk.drag_dest_set(button, (DestDefaults.DROP|DestDefaults.HIGHLIGHT), SOURCE_TARGETS, DragAction.MOVE);
@@ -235,7 +235,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * displayed for the current workspace.
 	 */
 	private void on_active_workspace_changed(libxfce4windowing.Workspace? previous_workspace) {
-		foreach (Button button in this.buttons.get_values()) {
+		foreach (TasklistButton button in this.buttons.get_values()) {
 			this.on_app_workspace_changed(button.window);
 		}
 	}
