@@ -31,11 +31,11 @@ else
 endif
 
 dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_wm = dependency('libmagpie-1', version: '>= 0.9', required: false)
+dep_wm = dependency('libmagpie-0', version: '>= 0.9', required: false)
 
 if dep_wm.found()
-    message('Using libmagpie-1 ABI')
-    vapi_wm = 'libmagpie-1'
+    message('Using libmagpie-0 ABI')
+    vapi_wm = 'libmagpie-0'
 else
     dep_wm = dependency('libmutter-12', version: '>= 44', required: false)
     if dep_wm.found()
