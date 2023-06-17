@@ -554,11 +554,7 @@
 			var summary = _("Unread Notifications");
 
 			string? body = null;
-			if (paused_notifications == 1) {
-				body = _("You received 1 notification while an application was fullscreened.");
-			} else {
-				body = _("You received %d notifications while an application was fullscreened.".printf(this.paused_notifications));
-			}
+			body = ngettext("You received %d notification while an application was fullscreened.", "You received %d notifications while an application was fullscreened.", this.paused_notifications).printf(this.paused_notifications);
 
 			var icon = "dialog-information";
 

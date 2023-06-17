@@ -117,10 +117,8 @@ public class NotificationsApplet : Budgie.Applet {
 			return;
 		}
 
-		if (count > 1) {
-			this.icon.set_tooltip_text(_("%u unread notifications").printf(count));
-		} else if (count == 1) {
-			this.icon.set_tooltip_text(_("1 unread notification"));
+		if (count > 0) {
+			this.icon.set_tooltip_text(ngettext("%u unread notification", "%u unread notifications", count).printf(count));
 		} else {
 			this.icon.set_tooltip_text(_("No unread notifications"));
 		}
