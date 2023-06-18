@@ -41,8 +41,32 @@ public class SimpleTasklistSettings : Gtk.Grid {
 	public SimpleTasklistSettings(GLib.Settings? settings) {
 		this.settings = settings;
 
+		settings.changed["show-icons"].connect(settings_changed);
+		settings.changed["show-labels"].connect(settings_changed);
+
 		settings.bind("show-icons", switch_show_icons, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("show-labels", switch_show_labels, "active", SettingsBindFlags.DEFAULT);
+
+		settings_changed("show-icons");
+		settings_changed("show-labels");
+	}
+
+	private void settings_changed(string key) {
+		switch (key) {
+			case "show-icons":
+				var show_icons = settings.get_boolean(key);
+				if (show_icons) switch_show_labels.sensitive = true;
+				else switch_show_labels.sensitive = false;
+				break;
+			case "show-labels":
+				var show_labels = settings.get_boolean(key);
+				if (show_labels) switch_show_icons.sensitive = true;
+				else switch_show_icons.sensitive = false;
+				break;
+			default:
+				warning("Unknown settings key '%s'", key);
+				break;
+		}
 	}
 }
 
