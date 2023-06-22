@@ -20,6 +20,8 @@ namespace Budgie.Windowing {
 
 		private List<libxfce4windowing.Window> windows;
 
+		public signal void window_state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state);
+
 		/**
 		 * Emitted when a window has been added to this group.
 		 */
@@ -41,11 +43,18 @@ namespace Budgie.Windowing {
 			windows = new List<libxfce4windowing.Window>();
 		}
 
+		private void state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state) {
+			window_state_changed(window, changed_mask, new_state);
+		}
+
 		/**
 		 * Adds a window to this WindowGroup.
 		 */
 		public void add_window(libxfce4windowing.Window window) {
 			debug(@"adding window to group '$(application.get_name())': $(window.get_name())");
+
+			window.state_changed.connect(state_changed);
+
 			windows.append(window);
 			window_added(window);
 		}

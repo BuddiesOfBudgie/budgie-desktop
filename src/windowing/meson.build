@@ -1,4 +1,5 @@
 libwindowing_sources = [
+    'dbus.vala',
 	'windowing.vala',
     'window_group.vala',
 ]
