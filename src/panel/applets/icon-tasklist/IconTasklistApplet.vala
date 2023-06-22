@@ -50,6 +50,7 @@ public class IconTasklistSettings : Gtk.Grid {
 
 public class IconTasklistApplet : Budgie.Applet {
 	private Budgie.Abomination.Abomination? abomination = null;
+	private Budgie.Windowing.Windowing windowing;
 	private Wnck.Screen? wnck_screen = null;
 	private Settings? settings = null;
 	private Gtk.Box? main_layout = null;
@@ -95,6 +96,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.wnck_screen = Wnck.Screen.get_default();
 		this.abomination = new Budgie.Abomination.Abomination();
 		this.app_system = new Budgie.AppSystem();
+		this.windowing = new Budgie.Windowing.Windowing();
 
 		/* Now hook up settings */
 		this.settings.changed.connect(this.on_settings_changed);

@@ -43,8 +43,10 @@ applet_icontasklist_deps = [
     dep_gtk3,
     dep_peas,
     dep_wnck,
+    dep_xfce4windowing,
     dep_gdkx11,
     link_libabomination,
+    link_libwindowing,
     link_libappsys,
     link_libpanelplugin,
     meson.get_compiler('c').find_library('m', required: false)
@@ -63,8 +65,11 @@ shared_library(
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'libwnck-3.0',
+        '--pkg', 'libxfce4windowing-0',
         '--vapidir', dir_libappsys,
         '--vapidir', dir_libabomination,
+        '--vapidir', dir_libwindowing,
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

@@ -9,6 +9,7 @@ subdir('libsession')
 subdir('appindexer')
 subdir('appsys')
 subdir('abomination')
+subdir('windowing')
 
 subdir('theme')
 subdir('lib')
