@@ -145,26 +145,8 @@ namespace Budgie {
 				* The spec states that Accessibility must have either the Utility or Settings categories,
 				* and we have a separate accessibility category, so don't put those applications here.
 				*/
-				excluded_categories = { "Accessibility", "System", "X-GNOME-Utilities" },
-				excluded_applications = {
-					"eog.desktop",
-					"gucharmap.desktop",
-					"org.gnome.DejaDup.desktop",
-					"org.gnome.Dictionary.desktop",
-					"org.gnome.DiskUtility.desktop",
-					"org.gnome.Evince.desktop",
-					"org.gnome.FileRoller.desktop",
-					"org.gnome.font-viewer.desktop",
-					"org.gnome.Screenshot.desktop",
-					"org.gnome.seahorse.Application.desktop",
-					"org.gnome.Terminal.desktop",
-					"org.gnome.tweaks.desktop",
-					"org.gnome.Usage.desktop",
-					"plank.desktop",
-					"simple-scan.desktop",
-					"vinagre.desktop",
-					"yelp.desktop"
-				}
+				excluded_categories = { "Accessibility", "System" },
+				excluded_applications = { "plank.desktop" }
 			});
 
 			categories.add(new Category(_("Education")) {
@@ -178,9 +160,9 @@ namespace Budgie {
 
 			categories.add(new Category(_("Graphics")) {
 				included_categories = { "Graphics" },
+				// Evince should be in the Office category
 				excluded_applications = {
-					"org.gnome.Evince.desktop",
-					"simple-scan.desktop"
+					"org.gnome.Evince.desktop"
 				}
 			});
 
@@ -190,8 +172,7 @@ namespace Budgie {
 			});
 
 			categories.add(new Category(_("Office")) {
-				included_categories = { "Office" },
-				excluded_applications = { "org.gnome.Dictionary.desktop", "org.gnome.Evince.desktop" }
+				included_categories = { "Office" }
 			});
 
 			categories.add(new Category(_("Programming")) {
@@ -210,21 +191,16 @@ namespace Budgie {
 
 			categories.add(new Category(_("System Tools")) {
 				included_categories = { "Administration", "Settings", "System" },
-				excluded_categories = { "Games", "X-GNOME-Utilities" },
+				excluded_categories = { "Games" },
+				// OnBoard applications should go in the Universal Access section
 				excluded_applications = {
 					"onboard.desktop",
-					"onboard-settings.desktop",
-					"org.gnome.baobab.desktop",
-					"org.gnome.Usage.desktop"
+					"onboard-settings.desktop"
 				}
 			});
 
 			categories.add(new Category(_("Universal Access")) {
 				included_categories = { "Accessibility" }
-			});
-
-			categories.add(new Category(_("Utilities")) {
-				included_categories = { "X-GNOME-Utilities" }
 			});
 
 			// See if there are any user-custom categories
