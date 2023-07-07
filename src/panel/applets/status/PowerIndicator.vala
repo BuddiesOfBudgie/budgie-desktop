@@ -9,6 +9,12 @@
  * (at your option) any later version.
  */
 
+[DBus (name = "net.hadess.PowerProfiles")]
+public interface PowerProfilesDBus : Object {
+	[DBUS (name = "ActiveProfile")]
+	public abstract string active_profile {owned get; owned set;}
+}
+
 public class BatteryIcon : Gtk.Box {
 	/** The battery associated with this icon */
 	public unowned Up.Device battery { protected set; public get; }
@@ -147,6 +153,9 @@ public class BatteryIcon : Gtk.Box {
 }
 
 public class PowerIndicator : Gtk.Bin {
+	private const string[] POWER_PROFILES = {"performance", "balanced", "power-saver"};
+	private PowerProfilesDBus? power_profiles;
+
 	/** Widget containing battery icons to display */
 	public Gtk.EventBox? ebox = null;
 	public Budgie.Popover? popover = null;
@@ -158,7 +167,9 @@ public class PowerIndicator : Gtk.Bin {
 	private HashTable<string,BatteryIcon?> devices;
 
 	public bool label_visible { set ; get ; default = false; }
+
 	private Gtk.CheckButton check_percent;
+	private List<Gtk.RadioButton> profile_buttons;
 	private Settings battery_settings;
 
 	public PowerIndicator() {
@@ -186,6 +197,35 @@ public class PowerIndicator : Gtk.Bin {
 
 		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 		box.pack_start(sep, false, false, 1);
+
+		try {
+			power_profiles = Bus.get_proxy_sync(BusType.SYSTEM, "net.hadess.PowerProfiles", "/net/hadess/PowerProfiles");
+			var active_profile = power_profiles.active_profile;
+
+			var label = new Gtk.Label(_("Power Profiles"));
+			label.set_justify(Gtk.Justification.CENTER);
+			box.pack_start(label, false, false, 0);
+
+			var radio_button = new Gtk.RadioButton.with_label(null, _("Performance"));
+			profile_buttons.append(radio_button);
+
+			profile_buttons.append(new Gtk.RadioButton.with_label_from_widget(radio_button, _("Balanced")));
+			profile_buttons.append(new Gtk.RadioButton.with_label_from_widget(radio_button, _("Power Saver")));
+
+			for (int i = 0; i < profile_buttons.length(); i++) {
+				var profile = profile_buttons.nth_data(i);
+
+				if (active_profile == POWER_PROFILES[i]) profile.set_active(true);
+
+				profile.toggled.connect(this.on_profile_toggled);
+				box.pack_start(profile, false, false, 0);
+			}
+
+			var sep2 = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+			box.pack_start(sep2, false, false, 1);
+		} catch (Error e) {
+			warning("Could not connect to Power Profiles DBus: %s", e.message);
+		}
 
 		var button = new Gtk.Button.with_label(_("Power settings"));
 		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
@@ -302,5 +342,19 @@ public class PowerIndicator : Gtk.Bin {
 
 		});
 		toggle_show();
+	}
+
+	/**
+	 * Set power profile
+	 */
+	private void on_profile_toggled (Gtk.ToggleButton profile_button) {
+		if (!profile_button.get_active()) return;
+
+		try {
+			int index = profile_buttons.index((Gtk.RadioButton) profile_button);
+			power_profiles.active_profile = POWER_PROFILES[index];
+		} catch (Error e) {
+			critical("Could not set active power profile: %s\n", e.message);
+		}
 	}
 }
