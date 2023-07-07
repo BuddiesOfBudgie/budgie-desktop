@@ -53,7 +53,9 @@ public class ThemeScanner : GLib.Object {
 		"Default",
 		"Emacs",
 		"Industrial",
+		"Kv",
 		"Mist",
+		"Murrina",
 		"Raleigh",
 		"Redmond",
 		"ThinIce"

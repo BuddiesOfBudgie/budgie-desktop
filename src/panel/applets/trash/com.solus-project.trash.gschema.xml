@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist gettext-domain="budgie">
+
+  <enum id="com.solus-project.trash.SortMode">
+    <value nick="type" value="1" />
+    <value nick="a-z" value="2" />
+    <value nick="z-a" value="3" />
+    <value nick="date-ascending" value="4" />
+    <value nick="date-descending" value="5" />
+  </enum>
+
+  <schema id="com.solus-project.trash">
+    <key enum="com.solus-project.trash.SortMode" name="sort-mode">
+      <default>'date-descending'</default>
+      <summary>File sort type</summary>
+      <description>Set how trashed files should be sorted</description>
+    </key>
+  </schema>
+</schemalist>

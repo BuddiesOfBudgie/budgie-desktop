@@ -1,0 +1,9 @@
+[Plugin]
+Module=trashapplet.so
+Builtin=true
+Name=Trash Bin
+_Description=Manage your trash from the Budgie panel
+Authors=Budgie Desktop Developers
+Copyright=Copyright © Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=user-trash
