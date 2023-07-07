@@ -2,7 +2,7 @@
 <schemalist gettext-domain="budgie">
   <schema id="com.solus-project.tray">
     <key type="i" name="spacing">
-      <default>4</default>
+      <default>2</default>
       <summary>Space between icons</summary>
       <description>How large to make the space between icons, in pixels</description>
     </key>
