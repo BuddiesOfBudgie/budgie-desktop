@@ -211,7 +211,7 @@ namespace Budgie {
 					return _("Bottom Right");
 				case NotificationPosition.TOP_RIGHT:
 				default:
-					return _("Top Rightttttttttttttttttttttttttttttttttttttttttt");
+					return _("Top Right");
 			}
 		}
 	}
