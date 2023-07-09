@@ -42,6 +42,9 @@ namespace Budgie {
 			/* System path */
 			var dir = Environment.get_user_data_dir();
 			engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
+			if (Budgie.HAS_SECONDARY_PLUGIN_DIRS) {
+				engine.add_search_path(Budgie.MODULE_DIRECTORY_SECONDARY, Budgie.MODULE_DATA_DIRECTORY_SECONDARY);
+			}
 
 			/* User path */
 			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "plugins");

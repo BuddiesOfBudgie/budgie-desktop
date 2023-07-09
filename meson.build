@@ -88,6 +88,11 @@ datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
 podir = join_paths(meson.source_root(), 'po')
 
+cdata.set_quoted('DATADIR', datadir)
+cdata.set_quoted('SYSCONFDIR', confdir)
+cdata.set_quoted('LOCALEDIR', localedir)
+cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
+
 # Handle i18n on the .desktop file
 # Originally stolem from TingPing:
 # https://github.com/vinszent/gnome-twitch/blob/master/data/meson.build
@@ -106,10 +111,23 @@ cdata.set_quoted('MODULEDIR', plugin_libdir)
 cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
 cdata.set_quoted('RAVEN_PLUGIN_LIBDIR', raven_plugin_libdir)
 cdata.set_quoted('RAVEN_PLUGIN_DATADIR', raven_plugin_datadir)
-cdata.set_quoted('DATADIR', datadir)
-cdata.set_quoted('SYSCONFDIR', confdir)
-cdata.set_quoted('LOCALEDIR', localedir)
-cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
+
+if prefix == '/usr' or prefix == '/usr/local'
+    cdata.set('HAS_SECONDARY_PLUGIN_DIRS', true)
+
+    if prefix == '/usr'
+        secondary_libdir_root = join_paths(prefix, 'local', get_option('libdir'), meson.project_name())
+        secondary_datadir_root = join_paths(prefix, 'local', get_option('datadir'), meson.project_name())
+    else
+        secondary_libdir_root = join_paths('/usr', get_option('libdir'), meson.project_name())
+        secondary_datadir_root = join_paths('/usr', get_option('datadir'), meson.project_name())
+    endif
+
+    cdata.set_quoted('MODULEDIR_SECONDARY', join_paths(secondary_libdir_root, 'plugins'))
+    cdata.set_quoted('MODULE_DATA_DIR_SECONDARY', join_paths(secondary_datadir_root, 'plugins'))
+    cdata.set_quoted('RAVEN_PLUGIN_LIBDIR_SECONDARY', join_paths(secondary_libdir_root, 'raven-plugins'))
+    cdata.set_quoted('RAVEN_PLUGIN_DATADIR_SECONDARY', join_paths(secondary_datadir_root, 'raven-plugins'))
+endif
 
 with_bluetooth = get_option('with-bluetooth')
 if with_bluetooth == true

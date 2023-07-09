@@ -12,6 +12,8 @@
 #ifndef _BUDGIE_CONFIG_H_
 #define _BUDGIE_CONFIG_H_
 
+#include <stdbool.h>
+
 /* i.e. /usr/lib/budgie-desktop */
 extern const char* BUDGIE_MODULE_DIRECTORY;
 
@@ -23,6 +25,12 @@ extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR;
 
 /* i.e. /usr/share/budgie-desktop/raven-plugins */
 extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR;
+
+extern const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS;
+extern const char* BUDGIE_MODULE_DIRECTORY_SECONDARY;
+extern const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY;
+extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY;
+extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY;
 
 /* i.e. /usr/share/ */
 extern const char* BUDGIE_DATADIR;
