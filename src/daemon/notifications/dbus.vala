@@ -471,28 +471,13 @@
 				sound_name = notification.hints.get("sound-name").get_string();
 			}
 
-			play_sound(notification, sound_name);
-		}
-
-		/**
-		 * Play a sound for a notification.
-		 */
-		private void play_sound(Notification notification, string? sound_name = "dialog-information") {
 			// Try to map the notification's category to a sound name to use
 			if (sound_name == "dialog-information" && notification.category != null) {
 				sound_name = get_sound_for_category(notification.category);
 			}
 
-			// Play the sound
-			if (sound_name != null) {
-				Canberra.Proplist props;
-				Canberra.Proplist.create(out props);
-
-				props.sets(Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
-				props.sets(Canberra.PROP_EVENT_ID, sound_name);
-
-				CanberraGtk.context_get().play_full(0, props);
-			}
+			var player = new SoundPlayer(notification, sound_name);
+			new Thread<void>(null, player.play);
 		}
 
 		/**
@@ -615,6 +600,29 @@
 				});
 			} catch (Error e) {
 				critical("Error starting notification thread: %s", e.message);
+			}
+		}
+	}
+
+	class SoundPlayer {
+		private Notification notification;
+		private string? sound_name;
+
+		public SoundPlayer(Notification notification, string? sound_name = "dialog-information") {
+			this.notification = notification;
+			this.sound_name = sound_name;
+		}
+
+		public void play() {
+			// Play the sound
+			if (sound_name != null) {
+				Canberra.Proplist props;
+				Canberra.Proplist.create(out props);
+
+				props.sets(Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
+				props.sets(Canberra.PROP_EVENT_ID, sound_name);
+
+				CanberraGtk.context_get().play_full(0, props);
 			}
 		}
 	}

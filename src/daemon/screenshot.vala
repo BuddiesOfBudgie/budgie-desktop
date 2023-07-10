@@ -297,7 +297,8 @@ namespace BudgieScr {
 				// fake thread to make sure flash and shutter are in sync
 				pipeline.set_state(State.PLAYING);
 				Gst.Bus bus = pipeline.get_bus();
-				bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS);
+				// time out after 2 seconds, in case the output is locked
+				bus.timed_pop_filtered(2000000000, Gst.MessageType.ERROR | Gst.MessageType.EOS);
 				pipeline.set_state(Gst.State.NULL);
 
 				return false;
