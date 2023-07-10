@@ -108,7 +108,7 @@ namespace Budgie {
 			string _term = term.casefold();
 
 			// Get a initial score based on the fuzzy match of the name
-			var score = get_fuzzy_score(name, _term, 1);
+			var score = Fuzzer.get_fuzzy_score(name, _term, 1);
 
 			// If the term is considered to be an exact match, bail early
 			if (score == 0) {
@@ -157,69 +157,6 @@ namespace Budgie {
 
 			// Set the score
 			scores.set(app.desktop_id, int.max(score, 0));
-		}
-
-		/**
-		 * Fuzzily matches two strings using the Fuzzy Bitap Algorithm.
-		 *
-		 * The algorithm tells whether a given text contains a substring
-		 * which is "approximately equal" to a given pattern, where approximate
-		 * equality is defined in terms of Levenshtein distance.
-		 *
-		 * The algorithm begins by precomputing a set of bitmasks containing one
-		 * bit for each element of the pattern. Then it is able to do most of the
-		 * work with bitwise operations, which are extremely fast.
-		 *
-		 * Adapted from here: https://www.programmingalgorithms.com/algorithm/fuzzy-bitap-algorithm/
-		 *
-		 * @param text The text to compare to.
-		 * @param pattern The pattern to match against.
-		 * @param max_distance The maximum distance between the strings to still be considered equal.
-		 */
-		private int get_fuzzy_score(string text, string pattern, int max_distance) {
-			var result = -1;
-			var pattern_length = pattern.length;
-			int[] bit_array;
-			int[] pattern_mask = new int[128];
-			int i, d;
-
-			if (pattern == "") return 0; // Pattern is empty
-			if (pattern_length > 31) return -1; // Error: pattern too long
-
-			/* Initialize the bit array */
-			bit_array = new int[(max_distance + 1) * sizeof(int)];
-
-			/* Initialize the pattern masks */
-			for (i = 0; i <= max_distance; ++i) bit_array[i] = ~1;
-
-			for (i = 0; i <= 127; ++i) pattern_mask[i] = ~0;
-
-			for (i = 0; i < pattern_length; ++i) pattern_mask[pattern[i]] &= ~(1 << i);
-
-			/* Calculating the score */
-
-			for (i = 0; i < text.length; ++i) {
-				/* Update the bit arrays */
-				var old_Rd1 = bit_array[0];
-
-				bit_array[0] |= pattern_mask[text[i]];
-				bit_array[0] <<= 1;
-
-				for (d = 1; d <= max_distance; ++d) {
-					var tmp = bit_array[d];
-
-					/* Only look for substitutions */
-					bit_array[d] = (old_Rd1 & (bit_array[d] | pattern_mask[text[i]])) << 1;
-					old_Rd1 = tmp;
-				}
-
-				if (0 == (bit_array[max_distance] & (1 << pattern_length))) {
-					result = (i - pattern_length) + 1;
-					break;
-				}
-			}
-
-			return result;
 		}
 
 		/* Helper ported from Brisk */
