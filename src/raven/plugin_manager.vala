@@ -53,6 +53,9 @@ namespace Budgie {
 			/* System path */
 			var dir = Environment.get_user_data_dir();
 			engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR, Budgie.RAVEN_PLUGIN_DATADIR);
+			if (Budgie.HAS_SECONDARY_PLUGIN_DIRS) {
+				engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR_SECONDARY, Budgie.RAVEN_PLUGIN_DATADIR_SECONDARY);
+			}
 
 			/* User path */
 			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-plugins");

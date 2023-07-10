@@ -22,6 +22,21 @@ namespace Budgie {
 	[CCode (cheader_filename="budgie-config.h")]
 	public extern const string RAVEN_PLUGIN_DATADIR;
 
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const bool HAS_SECONDARY_PLUGIN_DIRS;
+
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const string? MODULE_DIRECTORY_SECONDARY;
+
+	[CCode (cheader_filename="budgie-config.h")]
+    public extern const string? MODULE_DATA_DIRECTORY_SECONDARY;
+
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const string? RAVEN_PLUGIN_LIBDIR_SECONDARY;
+
+	[CCode (cheader_filename="budgie-config.h")]
+	public extern const string? RAVEN_PLUGIN_DATADIR_SECONDARY;
+
     [CCode (cheader_filename="budgie-config.h")]
     public extern const string DATADIR;
 
