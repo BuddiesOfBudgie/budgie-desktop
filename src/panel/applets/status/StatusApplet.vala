@@ -14,6 +14,8 @@ public class StatusPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
+private const string GNOME_SETTINGS_SCHEMA = "org.gnome.desktop.interface";
+
 [GtkTemplate (ui="/com/solus-project/status/settings.ui")]
 public class StatusSettings : Gtk.Grid {
 	Settings? settings = null;
@@ -25,16 +27,15 @@ public class StatusSettings : Gtk.Grid {
 	[GtkChild]
 	private unowned Gtk.Switch? switch_show_battery_percentage;
 
-	public StatusSettings(Settings? settings, Settings? gnome_settings) {
+	public StatusSettings(Settings? settings) {
 		this.settings = settings;
-		this.gnome_settings = gnome_settings;
+		this.gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
 
 		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
 		gnome_settings.bind("show-battery-percentage", switch_show_battery_percentage, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
-private const string GNOME_SETTINGS_SCHEMA = "org.gnome.desktop.interface";
 
 public class StatusApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
@@ -130,7 +131,7 @@ public class StatusApplet : Budgie.Applet {
 	}
 
 	public override Gtk.Widget? get_settings_ui() {
-		return new StatusSettings(get_applet_settings(uuid), new Settings(GNOME_SETTINGS_SCHEMA));
+		return new StatusSettings(get_applet_settings(uuid));
 	}
 }
 
