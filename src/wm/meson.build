@@ -69,7 +69,6 @@ budgie_wm_vala_args =  [
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
         '--pkg', vapi_wm,
-        '--pkg', 'gsettings-desktop-schemas',
         '--pkg', 'budgie-config',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
