@@ -18,7 +18,6 @@ applet_keyboardlayout_deps = [
     dep_gtk3,
     dep_peas,
     dep_gnomedesktop,
-    dep_gsettings,
     dep_ibus,
     link_libpanelplugin,
 ]
@@ -32,7 +31,6 @@ shared_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
-        '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
     ],
     c_args: [

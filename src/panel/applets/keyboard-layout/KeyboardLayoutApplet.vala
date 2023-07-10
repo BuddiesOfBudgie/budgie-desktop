@@ -157,9 +157,9 @@ class InputSource {
 		}
 
 		/* Get useful display string */
-		string? language = Gnome.get_language_from_code(engine.language, null);
+		string? language = Gnome.Languages.get_language_from_code(engine.language, null);
 		if (language == null) {
-			language = Gnome.get_language_from_locale(engine.language, null);
+			language = Gnome.Languages.get_language_from_locale(engine.language, null);
 		}
 		this.description = "%s (%s)".printf(language, engine.name);
 
@@ -171,7 +171,6 @@ class InputSource {
 		this.ibus_engine = id;
 	}
 }
-
 
 class InputSourceMenuItem : Gtk.Button {
 	private Gtk.Label tick_label;
@@ -441,8 +440,8 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 			locale = DEFAULT_LOCALE;
 		}
 
-		if (!Gnome.get_input_source_from_locale(locale, out type, out id)) {
-			Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
+		if (!Gnome.Languages.get_input_source_from_locale(locale, out type, out id)) {
+			Gnome.Languages.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 		}
 
 		try {
