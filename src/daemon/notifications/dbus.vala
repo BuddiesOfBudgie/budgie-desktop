@@ -553,8 +553,11 @@
 			// translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
 			var summary = _("Unread Notifications");
 
-			string? body = null;
-			body = ngettext("You received %d notification while an application was fullscreened.", "You received %d notifications while an application was fullscreened.", this.paused_notifications).printf(this.paused_notifications);
+			string body = ngettext(
+				"You received %d notification while an application was fullscreened.",
+				"You received %d notifications while an application was fullscreened.",
+				this.paused_notifications
+			).printf(this.paused_notifications);
 
 			var icon = "dialog-information";
 

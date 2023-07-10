@@ -341,9 +341,7 @@ namespace Budgie {
 				string icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
 
 				if (enabled && (time > 0)) {
-					var duration = ngettext("Will turn off in a minute", "Will turn off in %d minutes", time).printf(time);
-
-					body = duration;
+					body = ngettext("Will turn off in a minute", "Will turn off in %d minutes", time).printf(time);
 				}
 
 				if (this.caffeine_notification == null) { // Caffeine Notification not yet created
