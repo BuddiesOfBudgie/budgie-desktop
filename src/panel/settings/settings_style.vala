@@ -108,6 +108,8 @@ namespace Budgie {
 
 			/* Sort out renderers for all of our dropdowns */
 			var render = new Gtk.CellRendererText();
+			render.width_chars = 1;
+			render.ellipsize = Pango.EllipsizeMode.END;
 			combobox_gtk.pack_start(render, true);
 			combobox_gtk.add_attribute(render, "text", 0);
 			combobox_icon.pack_start(render, true);
