@@ -92,7 +92,7 @@ namespace Budgie {
 
 		public void remove_widget_instance(Gtk.Bin? widget_instance) {
 			box.remove(widget_instance);
-			if (box.get_children().length() == 0) {
+			if (box.get_children().is_empty()) {
 				box.add(widget_placeholder);
 			}
 			requested_draw();

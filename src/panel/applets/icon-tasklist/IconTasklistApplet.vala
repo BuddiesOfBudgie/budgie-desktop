@@ -174,9 +174,9 @@ public class IconTasklistApplet : Budgie.Applet {
 			if (!button.pinned) {
 				wrapper.gracefully_die();
 			} else {
-				// the button that we were going to replace is pinned, so instead of removing it from the view, 
+				// the button that we were going to replace is pinned, so instead of removing it from the view,
 				// just remove its class group and first app, then update it visually. this prevents apps like
-				// the LibreOffice launcher from vanishing after a document is opened, despite being pinned 
+				// the LibreOffice launcher from vanishing after a document is opened, despite being pinned
 				button.set_class_group(null);
 				button.first_app = null;
 				button.update();
@@ -396,7 +396,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		if (button.get_class_group() != null) {
-			if (button.get_class_group().get_windows().length() == 0) { // when we don't have windows in the group anymore, it's safe to remove the group
+			if (button.get_class_group().get_windows().is_empty()) { // when we don't have windows in the group anymore, it's safe to remove the group
 				button.set_class_group(null);
 			} else if (!button.pinned) { // update button ID to use the one of the first app in group
 				Budgie.Abomination.RunningApp? first_app = abomination.get_first_app_of_group(button.get_class_group().get_name());

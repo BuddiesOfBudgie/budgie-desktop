@@ -749,7 +749,7 @@ public class IconButton : Gtk.ToggleButton {
 		if (this.first_app == null) { // Not already set
 			List<weak Wnck.Window> class_windows = this.class_group.get_windows();
 
-			if (class_windows.length() != 0) { // Have windows in class group
+			if (!class_windows.is_empty()) { // Have windows in class group
 				Wnck.Window first_window = class_windows.nth_data(0);
 
 				if (first_window != null) {
@@ -860,7 +860,7 @@ public class IconButton : Gtk.ToggleButton {
 					windows = new List<unowned Wnck.Window>();
 				}
 
-				if (windows.length() == 0) {
+				if (windows.is_empty()) {
 					this.launch_app(Gtk.get_current_event_time());
 				} else if (this.app_info != null) {
 					string[] actions = this.app_info.list_actions();

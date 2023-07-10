@@ -141,7 +141,7 @@ public class DBusMenu : Object {
 		var submenu = all_nodes.get(0).submenu;
 
 		// avoid showing empty menus, e.g. if an app provides invalid data (like jetbrains toolbox)
-		if (submenu.get_children().length() > 0) {
+		if (!submenu.get_children().is_empty()) {
 			submenu.popup_at_pointer(event);
 		}
 	}

@@ -501,7 +501,7 @@ namespace Workspaces {
 				});
 				int index = item.get_workspace().get_number();
 				unowned List<int>? dyn = dynamically_created_workspaces.find(index);
-				if (window_list.length() == 0 && dyn != null) {
+				if (window_list.is_empty() && dyn != null) {
 					dynamically_created_workspaces.remove(index);
 					dyn = dynamically_created_workspaces.find(index+1);
 					if (dyn == null) {

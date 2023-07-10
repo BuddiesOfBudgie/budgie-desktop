@@ -152,7 +152,7 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 	 * has_devices will check if we have devices associated with this type
 	 */
 	public bool has_devices() {
-		return (devices.size() != 0) && (mixer.get_cards().length() != 0);
+		return (devices.size() != 0) && (!mixer.get_cards().is_empty());
 	}
 
 	/**

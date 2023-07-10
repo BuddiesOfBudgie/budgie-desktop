@@ -302,7 +302,7 @@ namespace Budgie {
 			Gdk.Rectangle win = Gdk.Rectangle();
 			Gdk.Rectangle pan = Gdk.Rectangle();
 
-			if (window == null && this.window_list.length() == 0) {
+			if (window == null && this.window_list.is_empty()) {
 				return false;
 			}
 
