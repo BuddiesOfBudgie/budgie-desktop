@@ -126,12 +126,12 @@ static void settings_clicked(GtkButton *button, TrashPopover *self) {
 	}
 }
 
-static void trash_added(TrashManager *manager, TrashInfo *trash_info, TrashPopover *self) {
+static void trash_added(TrashManager *manager, GFile *file, TrashInfo *trash_info, TrashPopover *self) {
 	(void) manager;
 	TrashItemRow *row;
 	gint count;
 
-	row = trash_item_row_new(trash_info);
+	row = trash_item_row_new(file, trash_info);
 
 	gtk_list_box_insert(GTK_LIST_BOX(self->file_box), GTK_WIDGET(row), -1);
 
@@ -143,23 +143,25 @@ static void trash_added(TrashManager *manager, TrashInfo *trash_info, TrashPopov
 	g_signal_emit(self, signals[TRASH_FILLED], 0, NULL);
 }
 
-static void foreach_item_cb(TrashItemRow *row, gchar *uri) {
-	TrashInfo *info;
-	g_autofree const gchar *info_uri;
+static void foreach_item_cb(TrashItemRow *row, GFile *file) {
+	g_autofree const gchar *row_uri, *uri;
+	g_autoptr(GFile) row_file;
 
-	info = trash_item_row_get_info(row);
-	info_uri = trash_info_get_uri(info);
+	row_file = trash_item_row_get_file(row);
+	row_uri = g_file_get_uri(row_file);
 
-	if (g_strcmp0(info_uri, uri) == 0) {
+	uri = g_file_get_uri(file);
+
+	if (g_strcmp0(row_uri, uri) == 0) {
 		gtk_widget_destroy(GTK_WIDGET(row));
 	}
 }
 
-static void trash_removed(TrashManager *manager, gchar *name, TrashPopover *self) {
+static void trash_removed(TrashManager *manager, GFile *file, TrashPopover *self) {
 	(void) manager;
 	gint count;
 
-	gtk_container_foreach(GTK_CONTAINER(self->file_box), (GtkCallback) foreach_item_cb, name);
+	gtk_container_foreach(GTK_CONTAINER(self->file_box), (GtkCallback) foreach_item_cb, file);
 
 	gtk_list_box_invalidate_sort(GTK_LIST_BOX(self->file_box));
 
