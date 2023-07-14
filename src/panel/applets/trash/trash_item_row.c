@@ -37,7 +37,8 @@
 #include "trash_notify.h"
 
 enum {
-	PROP_TRASH_INFO = 1,
+	PROP_FILE = 1,
+	PROP_TRASH_INFO,
 	LAST_PROP
 };
 
@@ -48,6 +49,7 @@ static GParamSpec *props[LAST_PROP] = {
 struct _TrashItemRow {
 	GtkListBoxRow parent_instance;
 
+	GFile *file;
 	TrashInfo *trash_info;
 
 	GtkWidget *header;
@@ -198,6 +200,7 @@ static void trash_item_row_finalize(GObject *object) {
 
 	self = TRASH_ITEM_ROW(object);
 
+	g_object_unref(self->file);
 	g_object_unref(self->trash_info);
 
 	G_OBJECT_CLASS(trash_item_row_parent_class)->finalize(object);
@@ -209,6 +212,9 @@ static void trash_item_row_get_property(GObject *object, guint prop_id, GValue *
 	self = TRASH_ITEM_ROW(object);
 
 	switch (prop_id) {
+		case PROP_FILE:
+			g_value_set_pointer(value, trash_item_row_get_file(self));
+			break;
 		case PROP_TRASH_INFO:
 			g_value_set_pointer(value, trash_item_row_get_info(self));
 			break;
@@ -225,6 +231,10 @@ static void trash_item_row_set_property(GObject *object, guint prop_id, const GV
 	self = TRASH_ITEM_ROW(object);
 
 	switch (prop_id) {
+		case PROP_FILE:
+			pointer = g_value_get_pointer(value);
+			self->file = g_object_ref_sink(pointer);
+			break;
 		case PROP_TRASH_INFO:
 			pointer = g_value_get_pointer(value);
 			self->trash_info = g_object_ref_sink(pointer);
@@ -247,6 +257,12 @@ static void trash_item_row_class_init(TrashItemRowClass *klass) {
 
 	// Properties
 
+	props[PROP_FILE] = g_param_spec_pointer(
+		"file",
+		"File",
+		"The file struct for this row",
+		G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
 	props[PROP_TRASH_INFO] = g_param_spec_pointer(
 		"trash-info",
 		"Trash info",
@@ -266,14 +282,27 @@ static void trash_item_row_init(TrashItemRow *self) {
 
 /**
  * trash_item_row_new:
+ * @file: (transfer full): a #GFile
  * @trash_info: (transfer full): a #TrashInfo
  *
  * Creates a new #TrashItemRow.
  *
  * Returns: a new #TrashItemRow
  */
-TrashItemRow *trash_item_row_new(TrashInfo *trash_info) {
-	return g_object_new(TRASH_TYPE_ITEM_ROW, "trash-info", trash_info, NULL);
+TrashItemRow *trash_item_row_new(GFile *file, TrashInfo *trash_info) {
+	return g_object_new(TRASH_TYPE_ITEM_ROW, "file", file, "trash-info", trash_info, NULL);
+}
+
+/**
+ * trash_item_row_get_file:
+ * @self: a #TrashItemRow
+ *
+ * Gets the #GFile for this row.
+ *
+ * Returns: (type Gio.File) (transfer full): the file for the row
+ */
+GFile *trash_item_row_get_file(TrashItemRow *self) {
+	return g_object_ref(self->file);
 }
 
 /**
@@ -313,14 +342,8 @@ static void delete_finish(GObject *object, GAsyncResult *result, gpointer user_d
  * Asynchronously deletes a trashed item.
  */
 void trash_item_row_delete(TrashItemRow *self) {
-	g_autoptr(GFile) file;
-	g_autofree const gchar *uri;
-
-	uri = trash_info_get_uri(self->trash_info);
-	file = g_file_new_for_uri(uri);
-
 	g_file_delete_async(
-		file,
+		self->file,
 		G_PRIORITY_DEFAULT,
 		NULL,
 		delete_finish,
@@ -350,17 +373,14 @@ static void restore_finish(GObject *object, GAsyncResult *result, gpointer user_
  * Asynchronously restores a trashed item to its original location.
  */
 void trash_item_row_restore(TrashItemRow *self) {
-	g_autoptr(GFile) file, restored_file;
-	g_autofree const gchar *uri;
+	g_autoptr(GFile) restored_file;
 	g_autofree const gchar *restore_path;
 
-	uri = trash_info_get_uri(self->trash_info);
-	file = g_file_new_for_uri(uri);
 	restore_path = trash_info_get_restore_path(self->trash_info);
 	restored_file = g_file_new_for_path(restore_path);
 
 	g_file_move_async(
-		file,
+		self->file,
 		restored_file,
 		G_FILE_COPY_ALL_METADATA,
 		G_PRIORITY_DEFAULT,

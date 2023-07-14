@@ -21,7 +21,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(TrashItemRow, trash_item_row, TRASH, ITEM_ROW, GtkListBoxRow)
 
-TrashItemRow *trash_item_row_new(TrashInfo *trash_info);
+TrashItemRow *trash_item_row_new(GFile *file, TrashInfo *trash_info);
+
+GFile *trash_item_row_get_file(TrashItemRow *self);
 
 TrashInfo *trash_item_row_get_info(TrashItemRow *self);
 

@@ -215,18 +215,18 @@ static void drag_data_received(
 	g_return_if_fail(info == 0);
 
 	g_autofree gchar *uri = g_strdup((gchar *) gtk_selection_data_get_data(data));
-	g_autofree gchar *unescaped = NULL;
 	g_autoptr(GFile) file = NULL;
 	g_autoptr(GError) err = NULL;
 
 	if (g_str_has_prefix(uri, "file://")) {
-		unescaped = g_uri_unescape_string(uri, NULL);
-		g_strstrip(unescaped); // Make sure there's nothing silly like a trailing newline
-		file = g_file_new_for_uri(unescaped);
+		g_strstrip(uri); // Make sure there's nothing silly like a trailing newline
+
+		file = g_file_new_for_uri(uri);
 
 		if (!g_file_trash(file, NULL, &err)) {
 			trash_notify_try_send(_("Trash Error"), err->message, "dialog-error-symbolic");
 			g_critical("%s:%d: Error moving file to trash: %s", __BASE_FILE__, __LINE__, err->message);
+			gtk_drag_finish(context, FALSE, TRUE, time);
 			return;
 		}
 	}
