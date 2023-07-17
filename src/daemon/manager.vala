@@ -32,7 +32,7 @@ namespace Budgie {
 		*/
 		public ServiceManager(bool replace) {
 			theme_manager = new Budgie.ThemeManager();
-			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
+			if (use_status_notifier()) status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
 			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
@@ -94,5 +94,29 @@ namespace Budgie {
 				warning("Unable to respond to session manager! %s", e.message);
 			}
 		}
+	}
+
+	bool use_status_notifier () {
+		/**
+		* Check which applets are installed. Return false only if AppIndicator applet
+		* is installed and System Tray isn't. Return true for all other scenarios.
+		*/
+		bool appindicator_installed = false;
+		bool systray_installed = false;
+		string panel_schema = "com.solus-project.budgie-panel";
+		string panel_path = "/com/solus-project/budgie-panel";
+		GLib.Settings? panel_settings = new GLib.Settings(panel_schema);
+		foreach (string panel in panel_settings.get_strv("panels")) {
+			string curr_panel_path = @"$panel_path/panels/{$panel}/";
+			GLib.Settings? curr_panel_subject_settings = new GLib.Settings.with_path(@"$panel_schema.panel", curr_panel_path);
+			foreach (string app in curr_panel_subject_settings.get_strv("applets")) {
+				string curr_apppath = @"$panel_path/applets/{$app}/";
+				GLib.Settings? curr_app_settings = new GLib.Settings.with_path(@"$panel_schema.applet", curr_apppath);
+				string name = curr_app_settings.get_string("name");
+				if (name == "AppIndicator Applet") appindicator_installed = true;
+				if (name == "System Tray") systray_installed = true;
+			}
+		}
+		return (systray_installed || !appindicator_installed);
 	}
 }
