@@ -30,7 +30,6 @@ errordomain InputMethodError {
 class AppletIBusManager : GLib.Object {
 	private HashTable<string,weak IBus.EngineDesc> engines = null;
 	private List<IBus.EngineDesc>? enginelist = null;
-	private bool did_ibus_init = false;
 	private bool ibus_available = true;
 	private IBus.Bus? bus = null;
 
@@ -94,14 +93,6 @@ class AppletIBusManager : GLib.Object {
 	 * We gained connection to the ibus daemon
 	 */
 	private void ibus_connected() {
-		/*
-		 * Init ibus if necessary, to ensure we have the types available to
-		 * glib. After this, try and gain all the engines
-		 */
-		if (!did_ibus_init) {
-			IBus.init();
-			did_ibus_init = true;
-		}
 		this.bus.list_engines_async.begin(-1, null, on_engines_get);
 	}
 
