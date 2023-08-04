@@ -14,7 +14,6 @@
 enum {
 	PROP_NAME = 1,
 	PROP_DISPLAY_NAME,
-	PROP_URI,
 	PROP_RESTORE_PATH,
 	PROP_ICON,
 	PROP_SIZE,
@@ -32,7 +31,6 @@ struct _TrashInfo {
 
 	const gchar *name;
 	const gchar *display_name;
-	const gchar *uri;
 	const gchar *restore_path;
 
 	GIcon *icon;
@@ -52,7 +50,6 @@ static void trash_info_finalize(GObject *obj) {
 
 	g_free((gchar *) self->name);
 	g_free((gchar *) self->display_name);
-	g_free((gchar *) self->uri);
 	g_free((gchar *) self->restore_path);
 	g_object_unref(self->icon);
 	g_date_time_unref(self->deleted_time);
@@ -72,9 +69,6 @@ static void trash_info_get_property(GObject *obj, guint prop_id, GValue *value, 
 			break;
 		case PROP_DISPLAY_NAME:
 			g_value_set_string(value, trash_info_get_display_name(self));
-			break;
-		case PROP_URI:
-			g_value_set_string(value, trash_info_get_uri(self));
 			break;
 		case PROP_RESTORE_PATH:
 			g_value_set_string(value, trash_info_get_restore_path(self));
@@ -111,9 +105,6 @@ static void trash_info_set_property(GObject *obj, guint prop_id, const GValue *v
 			break;
 		case PROP_DISPLAY_NAME:
 			self->display_name = g_value_get_string(value);
-			break;
-		case PROP_URI:
-			self->uri = g_value_get_string(value);
 			break;
 		case PROP_RESTORE_PATH:
 			self->restore_path = g_value_get_string(value);
@@ -155,13 +146,6 @@ static void trash_info_class_init(TrashInfoClass *klazz) {
 		"display-name",
 		"Display name",
 		"The display name of the file",
-		NULL,
-		G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-	props[PROP_URI] = g_param_spec_string(
-		"uri",
-		"URI",
-		"The URI to the file",
 		NULL,
 		G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -212,13 +196,12 @@ static void trash_info_init(TrashInfo *self) {
 /**
  * trash_info_new:
  * @info: a #GFileInfo
- * @uri: (transfer full): a URI to the file
  *
  * Creates a new #TrashInfo object.
  *
  * Returns: a new #TrashInfo object
  */
-TrashInfo *trash_info_new(GFileInfo *info, const gchar *uri) {
+TrashInfo *trash_info_new(GFileInfo *info) {
 	GIcon *icon;
 
 	icon = g_file_info_get_icon(info);
@@ -227,7 +210,6 @@ TrashInfo *trash_info_new(GFileInfo *info, const gchar *uri) {
 		TRASH_TYPE_INFO,
 		"name", g_strdup(g_file_info_get_name(info)),
 		"display-name", g_strdup(g_file_info_get_display_name(info)),
-		"uri", g_strdup(uri),
 		"restore-path", g_strdup(g_file_info_get_attribute_byte_string(info, G_FILE_ATTRIBUTE_TRASH_ORIG_PATH)),
 		"icon", g_icon_serialize(g_object_ref(icon)),
 		"size", g_file_info_get_size(info),
@@ -260,18 +242,6 @@ const gchar *trash_info_get_name(TrashInfo *self) {
  */
 const gchar *trash_info_get_display_name(TrashInfo *self) {
 	return g_strdup(self->display_name);
-}
-
-/**
- * trash_info_get_uri:
- * @self: a #TrashInfo
- *
- * Gets the URI for the file.
- *
- * Returns: (transfer full): the URI to the file
- */
-const gchar *trash_info_get_uri(TrashInfo *self) {
-	return g_strdup(self->uri);
 }
 
 /**

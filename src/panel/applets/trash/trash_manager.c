@@ -58,7 +58,8 @@ static void trash_manager_class_init(TrashManagerClass *klass) {
 		0,
 		NULL, NULL, NULL,
 		G_TYPE_NONE,
-		1,
+		2,
+		G_TYPE_POINTER,
 		G_TYPE_POINTER);
 
 	signals[TRASH_REMOVED] = g_signal_new(
@@ -74,29 +75,23 @@ static void trash_manager_class_init(TrashManagerClass *klass) {
 
 static void trash_query_info_cb(GObject *source, GAsyncResult *result, gpointer user_data) {
 	TrashManager *self = user_data;
+	GFile *file = G_FILE(source);
 	GFileInfo *info;
-	const gchar *uri;
-	const gchar *unescaped_uri;
 	TrashInfo *trash_info;
 
-	info = g_file_query_info_finish(G_FILE(source), result, NULL);
+	info = g_file_query_info_finish(file, result, NULL);
 
 	g_return_if_fail(G_IS_FILE_INFO(info));
 
-	uri = g_file_get_uri(G_FILE(source));
-	unescaped_uri = g_uri_unescape_string(uri, NULL);
-	trash_info = trash_info_new(info, unescaped_uri);
+	trash_info = trash_info_new(info);
 
 	self->file_count++;
-	g_signal_emit(self, signals[TRASH_ADDED], 0, trash_info);
+	g_signal_emit(self, signals[TRASH_ADDED], 0, file, trash_info);
 }
 
 static void file_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event, TrashManager *self) {
 	(void) monitor;
 	(void) other_file;
-
-	const gchar *uri;
-	const gchar *unescaped_uri;
 
 	switch (event) {
 		case G_FILE_MONITOR_EVENT_MOVED_IN:
@@ -113,9 +108,7 @@ static void file_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, 
 		case G_FILE_MONITOR_EVENT_MOVED_OUT:
 		case G_FILE_MONITOR_EVENT_DELETED:
 			self->file_count--;
-			uri = g_file_get_uri(file);
-			unescaped_uri = g_uri_unescape_string(uri, NULL);
-			g_signal_emit(self, signals[TRASH_REMOVED], 0, unescaped_uri);
+			g_signal_emit(self, signals[TRASH_REMOVED], 0, file);
 			break;
 		default:
 			break;
@@ -147,9 +140,10 @@ TrashManager *trash_manager_new(void) {
 
 static void next_file_cb(gpointer data, gpointer user_data) {
 	TrashManager *self = user_data;
+	GFile *file;
 	g_autoptr(GFileInfo) file_info;
 	const gchar *file_name;
-	g_autofree const gchar *uri;
+	g_autofree gchar *escaped_file_name, *uri;
 	TrashInfo *trash_info;
 
 	file_info = data;
@@ -157,11 +151,16 @@ static void next_file_cb(gpointer data, gpointer user_data) {
 	g_return_if_fail(G_IS_FILE_INFO(file_info));
 
 	file_name = g_file_info_get_name(file_info);
-	uri = g_strdup_printf("trash:///%s", file_name);
-	trash_info = trash_info_new(file_info, uri);
+	escaped_file_name = g_uri_escape_string(file_name, NULL, TRUE);
+
+	uri = g_strdup_printf("trash:///%s", escaped_file_name);
+	g_strstrip(uri);
+
+	file = g_file_new_for_uri(uri);
+	trash_info = trash_info_new(file_info);
 
 	self->file_count++;
-	g_signal_emit(self, signals[TRASH_ADDED], 0, trash_info);
+	g_signal_emit(self, signals[TRASH_ADDED], 0, file, trash_info);
 }
 
 static void next_files_cb(GObject *source, GAsyncResult *result, gpointer user_data) {

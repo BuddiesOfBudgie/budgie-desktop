@@ -19,15 +19,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(TrashInfo, trash_info, TRASH, INFO, GObject)
 
-TrashInfo *trash_info_new(GFileInfo *info, const char *uri);
+TrashInfo *trash_info_new(GFileInfo *info);
 
 /* Property getters */
 
 const gchar *trash_info_get_name(TrashInfo *self);
 
 const gchar *trash_info_get_display_name(TrashInfo *self);
-
-const gchar *trash_info_get_uri(TrashInfo *self);
 
 const gchar *trash_info_get_restore_path(TrashInfo *self);
 
