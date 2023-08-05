@@ -60,7 +60,7 @@ namespace Budgie.StatusNotifier {
 					freedesktop_dbus_identifier = Bus.own_name(
 						BusType.SESSION,
 						WATCHER_FREEDESKTOP_DBUS_NAME,
-						BusNameOwnerFlags.NONE,
+						BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 						null,
 						on_dbus_acquired
 					);
@@ -203,7 +203,7 @@ namespace Budgie.StatusNotifier {
 			kde_dbus_identifier = Bus.own_name(
 				BusType.SESSION,
 				WATCHER_KDE_DBUS_NAME,
-				BusNameOwnerFlags.NONE,
+				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 				null,
 				on_dbus_acquired
 			);
