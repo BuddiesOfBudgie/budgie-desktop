@@ -41,15 +41,15 @@ public class BatteryIcon : Gtk.Box {
 		this.percent_label = new Gtk.Label("");
 		this.percent_label.get_style_context().add_class("percent-label");
 
-		this.percent_label.valign = Gtk.Align.CENTER;
-		this.percent_label.margin_end = 4;
-		pack_start(this.percent_label, false, false, 0);
-		this.percent_label.no_show_all = true;
-
 		this.image = new Gtk.Image();
 		this.image.valign = Gtk.Align.CENTER;
 		this.image.pixel_size = 0;
 		pack_start(this.image, false, false, 0);
+
+		this.percent_label.valign = Gtk.Align.CENTER;
+		this.percent_label.margin_end = 4;
+		pack_start(this.percent_label, false, false, 0);
+		this.percent_label.no_show_all = true;
 
 		this.update_ui(battery);
 
