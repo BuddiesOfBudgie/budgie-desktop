@@ -722,7 +722,7 @@ namespace Budgie {
 			for (var i = 0; i < regions.length; i++) {
 				Gtk.Box region = regions[i];
 
-				if (region.get_children().length() > 0) { // If this has a child
+				if (!region.get_children().is_empty()) { // If this has a child
 					if (!region.get_visible()) { // Not already visible
 						region.show(); // Ensure we show the panel specifically. Using show_all results in hidden widgets of children being shown, like Budgie Menu label. Only happens in weird cases like reset.
 						region.queue_draw(); // Ensure we queue a draw
@@ -834,7 +834,7 @@ namespace Budgie {
 			}
 
 			lock (expected_uuids) {
-				if (expected_uuids.length() == 0) {
+				if (expected_uuids.is_empty()) {
 					this.is_fully_loaded = true;
 					this.panel_loaded();
 				}

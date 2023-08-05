@@ -214,7 +214,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * has_devices will check if we have devices associated with this type
 	 */
 	public bool has_devices() {
-		return (devices.size() != 0) && (mixer.get_cards().length() != 0);
+		return (devices.size() != 0) && (!mixer.get_cards().is_empty());
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 			apps.steal(id); // Remove the apps
 
-			if (apps_listbox.get_children().length() == 0) {
+			if (apps_listbox.get_children().is_empty()) {
 				apps_listbox.hide();
 				apps_area.show();
 			}

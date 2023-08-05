@@ -244,11 +244,13 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	 */
 	private void check_expand() {
 		if (mounts_listbox.get_visible()) {
-			mounts_listbox.set_visible(mounts_listbox.get_children().length() != 0);
+			var has_children = !mounts_listbox.get_children().is_empty();
+			mounts_listbox.set_visible(has_children);
 		}
 
 		if (networks_listbox.get_visible()) {
-			networks_listbox.set_visible(networks_listbox.get_children().length() != 0);
+			var has_children = !networks_listbox.get_children().is_empty();
+			networks_listbox.set_visible(has_children);
 		}
 
 		if (places_section.get_visible()) {

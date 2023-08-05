@@ -209,7 +209,7 @@ namespace Budgie.Abomination {
 			if (group != null) {
 				group.remove_window(window);
 
-				if (group.get_windows().length() == 0) { // remove empty group
+				if (group.get_windows().is_empty()) { // remove empty group
 					this.running_app_groups.remove(group.get_name());
 					debug("Removed group: %s", group.get_name());
 				}
@@ -257,7 +257,7 @@ namespace Budgie.Abomination {
 				new_group_windows.foreach((window) => {
 					group.remove_window(window);
 
-					if (group.get_windows().length() == 0) { // remove empty group
+					if (group.get_windows().is_empty()) { // remove empty group
 						this.running_app_groups.remove(old_group_name);
 						debug("Removed group: %s", old_group_name);
 					}

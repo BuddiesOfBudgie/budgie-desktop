@@ -256,7 +256,7 @@ namespace Workspaces {
 				}
 			});
 
-			if (rest_of_the_icons.get_children().length() == 0) {
+			if (rest_of_the_icons.get_children().is_empty()) {
 				popover.hide();
 			}
 

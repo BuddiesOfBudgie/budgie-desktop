@@ -79,7 +79,7 @@ namespace Budgie.Abomination {
 		}
 
 		public Gdk.Pixbuf? get_icon() {
-			if (this.get_windows().length() == 0 || this.get_windows().nth_data(0).get_class_group() == null) {
+			if (this.get_windows().is_empty() || this.get_windows().nth_data(0).get_class_group() == null) {
 				return null;
 			}
 			return this.get_windows().nth_data(0).get_class_group().get_icon();

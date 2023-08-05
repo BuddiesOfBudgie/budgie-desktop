@@ -103,7 +103,7 @@ namespace Budgie {
 		private void on_hide() {
 			var selection = window_box.get_selected_children();
 			Gtk.FlowBoxChild? current = null;
-			if (selection != null && selection.length() > 0) {
+			if (selection != null && !selection.is_empty()) {
 				current = selection.nth_data(0) as Gtk.FlowBoxChild;
 			}
 
