@@ -169,6 +169,7 @@ public class PowerProfilesSelector : Gtk.Box {
 
 	public PowerProfilesSelector(PowerProfilesDBus profiles_proxy) {
 		orientation = Gtk.Orientation.VERTICAL;
+		spacing = 6;
 
 		var profiles = new GenericSet<string>(str_hash, str_equal);
 
@@ -194,11 +195,11 @@ public class PowerProfilesSelector : Gtk.Box {
 		pack_start(sep, false, false, 1);
 
 		var header = new Gtk.Label("");
-		header.set_markup("<b>%s</b>".printf(_("Power Mode")));
-		header.set_halign(Gtk.Align.CENTER);
+		header.set_markup("<b>%s</b>".printf(_("Performance Mode")));
+		header.set_halign(Gtk.Align.START);
 		pack_start(header);
 
-		var power_profiles_radio_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 1);
+		var power_profiles_radio_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
 
 		Gtk.RadioButton radio_group = null;
 
