@@ -57,9 +57,7 @@ public class BatteryIcon : Gtk.Box {
 	}
 
 	private void on_battery_change(Object o, ParamSpec sp) {
-		if (this.changing) {
-			return;
-		}
+		if (this.changing) return;
 		this.changing = true;
 		try {
 			this.battery.refresh_sync(null);
@@ -136,12 +134,7 @@ public class BatteryIcon : Gtk.Box {
 		Gtk.IconTheme theme = Gtk.IconTheme.get_default();
 		Gtk.IconInfo? result = theme.lookup_icon(image_name, Gtk.IconSize.MENU, 0);
 
-		if (result == null) {
-			this.image.set_from_icon_name(image_fallback, Gtk.IconSize.MENU);
-		} else {
-			this.image.set_from_icon_name(image_name, Gtk.IconSize.MENU);
-		}
-
+		this.image.set_from_icon_name((result != null) ? image_name : image_fallback, Gtk.IconSize.MENU);
 		this.queue_draw();
 	}
 }
@@ -176,14 +169,14 @@ public class PowerProfilesSelector : Gtk.Box {
 
 	public PowerProfilesSelector(PowerProfilesDBus profiles_proxy) {
 		orientation = Gtk.Orientation.VERTICAL;
-		
+
 		var profiles = new GenericSet<string>(str_hash, str_equal);
 
 		foreach (HashTable<string, Variant> profile in profiles_proxy.profiles) {
 			var profile_value = profile.get("Profile");
 
 			if (!profile_value.is_of_type(VariantType.STRING)) continue;
-			
+
 			profiles.add(profile_value.get_string());
 		}
 		
@@ -315,10 +308,10 @@ public class PowerIndicator : Gtk.Bin {
 			create_power_profiles_options();
 			return;
 		}
-		
+
 		Bus.get_proxy.begin<PowerProfilesDBus>(BusType.SYSTEM, POWER_PROFILES_DBUS_NAME, POWER_PROFILES_DBUS_OBJECT_NAME, 0, null, on_proxy_get);
 	}
-	
+
 	void lost_power_profiles() {
 		power_profiles_selector.destroy();
 	}
@@ -342,10 +335,7 @@ public class PowerIndicator : Gtk.Bin {
 	}
 
 	public void change_orientation(Gtk.Orientation orient) {
-		int spacing = 0;
-		if (orient == Gtk.Orientation.VERTICAL) {
-			spacing = 5;
-		}
+		int spacing = (orient == Gtk.Orientation.VERTICAL) ? 5 : 0;
 		unowned BatteryIcon? icon = null;
 		var iter = HashTableIter<string,BatteryIcon?>(this.devices);
 		while (iter.next(null, out icon)) {
@@ -366,11 +356,7 @@ public class PowerIndicator : Gtk.Bin {
 	}
 
 	private bool is_interesting(Up.Device device) {
-		/* TODO: Add support for mice, etc. */
-		if (device.kind != Up.DeviceKind.BATTERY) {
-			return false;
-		}
-		return true;
+		return  device.kind == Up.DeviceKind.BATTERY;
 	}
 
 	void open_power_settings() {
@@ -378,9 +364,7 @@ public class PowerIndicator : Gtk.Bin {
 
 		var app_info = new DesktopAppInfo("budgie-power-panel.desktop");
 
-		if (app_info == null) {
-			return;
-		}
+		if (app_info == null) return;
 
 		try {
 			app_info.launch(null, null);
@@ -399,9 +383,7 @@ public class PowerIndicator : Gtk.Bin {
 			devices.lookup(object_path).update_ui(device);
 			return;
 		}
-		if (!this.is_interesting(device)) {
-			return;
-		}
+		if (!this.is_interesting(device)) return;
 		var icon = new BatteryIcon(device);
 		icon.label_visible = this.label_visible;
 		devices.insert(object_path, icon);
@@ -423,9 +405,7 @@ public class PowerIndicator : Gtk.Bin {
 	 * Remove a device from our display
 	 */
 	void on_device_removed(string object_path) {
-		if (!devices.contains(object_path)) {
-			return;
-		}
+		if (!devices.contains(object_path)) return;
 		unowned BatteryIcon? icon = devices.lookup(object_path);
 		widget.remove(icon);
 		devices.remove(object_path);
@@ -438,7 +418,6 @@ public class PowerIndicator : Gtk.Bin {
 
 		devices.foreach((device) => {
 			this.on_device_added(device);
-
 		});
 		toggle_show();
 	}
