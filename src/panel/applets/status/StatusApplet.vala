@@ -14,18 +14,28 @@ public class StatusPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	}
 }
 
+private const string GNOME_SETTINGS_SCHEMA = "org.gnome.desktop.interface";
+
 [GtkTemplate (ui="/com/solus-project/status/settings.ui")]
 public class StatusSettings : Gtk.Grid {
 	Settings? settings = null;
+	Settings? gnome_settings = null;
 
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
+	
+	[GtkChild]
+	private unowned Gtk.Switch? switch_show_battery_percentage;
 
 	public StatusSettings(Settings? settings) {
 		this.settings = settings;
+		this.gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
+
 		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
+		gnome_settings.bind("show-battery-percentage", switch_show_battery_percentage, "active", SettingsBindFlags.DEFAULT);
 	}
 }
+
 
 public class StatusApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
@@ -35,6 +45,7 @@ public class StatusApplet : Budgie.Applet {
 	protected PowerIndicator power;
 	protected Gtk.EventBox? wrap;
 	private Settings? settings;
+	private Settings? gnome_settings;
 	private Budgie.PopoverManager? manager = null;
 
 	/**
@@ -74,6 +85,14 @@ public class StatusApplet : Budgie.Applet {
 		show_all();
 
 		power = new PowerIndicator();
+		
+		gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
+		
+		power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
+		gnome_settings.changed["show-battery-percentage"].connect((key) => {
+			power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
+		});
+		
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 

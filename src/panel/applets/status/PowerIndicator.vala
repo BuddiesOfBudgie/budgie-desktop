@@ -41,15 +41,15 @@ public class BatteryIcon : Gtk.Box {
 		this.percent_label = new Gtk.Label("");
 		this.percent_label.get_style_context().add_class("percent-label");
 
-		this.percent_label.valign = Gtk.Align.CENTER;
-		this.percent_label.margin_end = 4;
-		pack_start(this.percent_label, false, false, 0);
-		this.percent_label.no_show_all = true;
-
 		this.image = new Gtk.Image();
 		this.image.valign = Gtk.Align.CENTER;
 		this.image.pixel_size = 0;
 		pack_start(this.image, false, false, 0);
+
+		this.percent_label.valign = Gtk.Align.CENTER;
+		this.percent_label.margin_end = 4;
+		pack_start(this.percent_label, false, false, 0);
+		this.percent_label.no_show_all = true;
 
 		this.update_ui(battery);
 
@@ -258,8 +258,6 @@ public class PowerIndicator : Gtk.Bin {
 	private HashTable<string,BatteryIcon?> devices;
 
 	public bool label_visible { set ; get ; default = false; }
-	private Gtk.CheckButton check_percent;
-	private Settings battery_settings;
 
 	public PowerIndicator() {
 		devices = new HashTable<string,BatteryIcon?>(str_hash, str_equal);
@@ -273,19 +271,6 @@ public class PowerIndicator : Gtk.Bin {
 		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
 		box.border_width = 6;
 		popover.add(box);
-
-		/* Instaniate label_visible */
-		battery_settings = new Settings("org.gnome.desktop.interface");
-		battery_settings.bind("show-battery-percentage", this, "label-visible", SettingsBindFlags.GET);
-		notify["label-visible"].connect_after(this.update_labels);
-
-		check_percent = new Gtk.CheckButton.with_label(_("Show battery percentage"));
-		check_percent.get_child().set_property("margin", 4);
-		box.pack_start(check_percent, false, false, 0);
-		battery_settings.bind("show-battery-percentage", check_percent, "active", SettingsBindFlags.DEFAULT);
-
-		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		box.pack_start(sep, false, false, 1);
 
 		var button = new Gtk.Button.with_label(_("Power settings"));
 		button.get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
@@ -346,7 +331,9 @@ public class PowerIndicator : Gtk.Bin {
 		widget.set_orientation(orient);
 	}
 
-	private void update_labels() {
+	public void update_labels(bool visible) {
+		this.label_visible = visible;
+		
 		unowned BatteryIcon? icon = null;
 		var iter = HashTableIter<string,BatteryIcon?>(this.devices);
 		while (iter.next(null, out icon)) {
