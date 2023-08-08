@@ -24,26 +24,23 @@ const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
  * and rendering of "dots" for the renderable windows.
  */
 public class IconButton : Gtk.ToggleButton {
-	public Budgie.Abomination.RunningApp? first_app = null;
+	public Budgie.Application application { get; construct; }
+	public Settings settings { get; construct; }
+	public bool pinned { get; construct set; }
+	public Budgie.Windowing.WindowGroup? window_group { get; construct set; default = null; }
+
 	public Icon icon;
-	public bool pinned = false;
-	public Wnck.Window? last_active_window = null;
-	public string button_id;
+	public libxfce4windowing.Window? last_active_window = null;
 
 	private Budgie.IconPopover? popover = null;
 	private Wnck.Screen? screen = null;
-	private Settings? settings = null;
-	private Budgie.Abomination.AppGroup? class_group = null; // This will and should always be null if grouping is disabled
 	private DesktopAppInfo? app_info = null;
 	private int window_count = 0;
 	private Gtk.Allocation definite_allocation;
-	private bool originally_pinned = false;
-	private Gdk.AppLaunchContext launch_context;
 	private int64 last_scroll_time = 0;
 	private bool needs_attention = false;
 	private int target_icon_size;
 
-	public unowned Budgie.Abomination.Abomination? abomination { public set; public get; default = null; }
 	public unowned Budgie.AppSystem? app_system { public set; public get; default = null; }
 	public unowned DesktopHelper? desktop_helper { public set; public get; default = null; }
 	public unowned Budgie.PopoverManager? popover_manager { public set; public get; default = null; }
@@ -58,14 +55,8 @@ public class IconButton : Gtk.ToggleButton {
 	 * Bootstrap a button without window nor group, as it should be for pinned
 	 * buttons without any active apps.
 	 */
-	public IconButton(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, DesktopAppInfo info, string button_id) {
-		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
-		this.settings = c_settings;
-		this.app_info = info;
-		this.pinned = true;
-		this.originally_pinned = true;
-		this.button_id = button_id;
-		this.gobject_constructors_suck();
+	public IconButton(Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
+		Object(application: application, pinned: true, settings: settings, desktop_helper: helper, popover_manager: manager);
 		this.create_popover(); // Create our popover
 
 		this.target_icon_size = helper.icon_size;
@@ -78,19 +69,9 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * Bootstrap our button to be ready to work with grouping ENABLED.
 	 */
-	public IconButton.from_group(Budgie.Abomination.Abomination? ab, Budgie.AppSystem? appsys, Settings? c_settings, DesktopHelper? helper, Budgie.PopoverManager? manager, Budgie.Abomination.AppGroup group, string button_id) {
-		Object(abomination: ab, app_system: appsys, desktop_helper: helper, popover_manager: manager);
-		this.settings = c_settings;
-		this.pinned = false;
-		this.originally_pinned = false;
-		this.first_app = abomination.get_first_app_of_group(group.get_name());
-		this.button_id = button_id;
+	public IconButton.from_group(Budgie.Windowing.WindowGroup? group, Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
+		Object(window_group: group, application: application, pinned: false, settings: settings, desktop_helper: helper, popover_manager: manager);
 
-		if (this.first_app != null && this.first_app.app_info != null) { // Didn't get passed a valid DesktopAppInfo but got one from RunningApp
-			this.app_info = this.first_app.app_info;
-		}
-
-		this.gobject_constructors_suck();
 		this.update_icon();
 		this.create_popover();
 
@@ -99,20 +80,19 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
-	/**
-	 * We have race conditions in glib between the desired properties..
-	 */
-	private void gobject_constructors_suck() {
+	construct {
 		icon = new Icon();
 		icon.get_style_context().add_class("icon");
 		this.add(icon);
 
+		// FIXME: ...but why?
 		enter_notify_event.connect(() => {
 			this.set_tooltip(); // Update our tooltip
 			this.queue_draw(); // Redraw tooltip
 			return false;
 		});
 
+		// FIXME: ...but why?
 		leave_notify_event.connect(() => {
 			this.set_tooltip_text(""); // Clear it
 			this.has_tooltip = false;
@@ -122,7 +102,6 @@ public class IconButton : Gtk.ToggleButton {
 		this.definite_allocation.width = 0;
 		this.definite_allocation.height = 0;
 
-		this.launch_context = this.get_display().get_app_launch_context();
 		this.add_events(Gdk.EventMask.SCROLL_MASK);
 		this.set_draggable(!this.desktop_helper.lock_icons);
 
@@ -149,7 +128,7 @@ public class IconButton : Gtk.ToggleButton {
 		});
 
 		drag_data_get.connect((widget, context, selection_data, info, time) => {
-			selection_data.set(selection_data.get_target(), 8, (uchar[])this.button_id.to_utf8());
+			selection_data.set(selection_data.get_target(), 8, (uchar[])application.desktop_id.to_utf8());
 		});
 
 		var st = get_style_context();
@@ -159,22 +138,21 @@ public class IconButton : Gtk.ToggleButton {
 		this.relief = Gtk.ReliefStyle.NONE;
 
 		this.size_allocate.connect(this.on_size_allocate);
-		this.launch_context.launched.connect(this.on_launched);
-		this.launch_context.launch_failed.connect(this.on_launch_failed);
+		application.launched.connect(this.on_launched);
+		application.launch_failed.connect(this.on_launch_failed);
 
-		if (this.first_app != null) {
-			this.first_app.renamed_app.connect(() => { // When the name of the app has changed
-				this.set_tooltip(); // Update our tooltip
-			});
+		if (window_group == null) return;
 
-			this.first_app.app_info_changed.connect((app_info) => {
-				this.app_info = app_info;
-			});
+		var first_window = window_group.get_first_window();
+		if (first_window == null) return;
 
-			this.first_app.icon_changed.connect(() => { // This one is invoked after the app info are updated
-				this.update_icon(); // Update the icon
-			});
-		}
+		first_window.name_changed.connect(() => { // When the name of the app has changed
+			this.set_tooltip(); // Update our tooltip
+		});
+
+		first_window.icon_changed.connect(() => { // This one is invoked after the app info are updated
+			this.update_icon(); // Update the icon
+		});
 	}
 
 	/**
@@ -213,6 +191,7 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		});
 
+		// TODO: Should this be done in IcontasklistApplet.vala?
 		this.popover.move_window_to_workspace.connect((xid, wid) => { // On a request to move a window to a workspace
 			Wnck.Window requested_window = Wnck.Window.@get(xid);
 			Wnck.Workspace workspace = this.screen.get_workspace(wid - 1);
@@ -223,62 +202,61 @@ public class IconButton : Gtk.ToggleButton {
 		});
 
 		this.popover.perform_action.connect((action) => {
-			if (this.app_info != null) {
-				this.launch_context.set_screen(get_screen());
-				this.launch_context.set_timestamp(Gdk.CURRENT_TIME);
-				this.app_info.launch_action(action, launch_context);
-				this.popover.render(); // Re-render
-			}
+			var context = application.create_launch_context() as Gdk.AppLaunchContext;
+			context.set_screen(get_screen());
+			context.set_timestamp(Gdk.CURRENT_TIME);
+			application.launch_action_with_context(action, context);
+			popover.render();
 		});
 
 		/**
 		 * Wnck bits that are relevant to the popover
 		 */
 
-		this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
-			this.popover.set_workspace_count(this.screen.get_workspace_count());
-		});
+		// TODO: libxfce4windowing doesn't have these. And it should prolly not be handled here
+		// anyways.
+		//  this.screen.workspace_created.connect((workspace) => { // When we've added a workspace
+		//  	this.popover.set_workspace_count(this.screen.get_workspace_count());
+		//  });
 
-		this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
-			this.popover.set_workspace_count(this.screen.get_workspace_count());
-		});
+		//  this.screen.workspace_destroyed.connect((workspace) => { // When we've removed a workspace
+		//  	this.popover.set_workspace_count(this.screen.get_workspace_count());
+		//  });
 
 		this.popover_manager.register_popover(this, this.popover); // Register
 	}
 
-	public void set_class_group(Budgie.Abomination.AppGroup? class_group) {
-		this.class_group = class_group;
+	public void set_window_group(Budgie.Windowing.WindowGroup group) {
+		window_group = group;
 
-		if (this.is_empty()) {
-			return;
-		}
+		if (is_empty()) return;
 
-		this.class_group.icon_changed.connect_after(() => {
-			this.update_icon(); // Update icon based on class group
+		window_group.app_icon_changed.connect_after(() => {
+			update_icon(); // Update icon based on class group
 		});
 
-		this.class_group.added_window.connect((new_window) => { // When a window is opened in group
-			if (!this.should_add_window(new_window)) {
+		window_group.window_added.connect((new_window) => { // When a window is opened in group
+			if (!should_add_window(new_window)) {
 				return;
 			}
 
-			ulong xid = new_window.get_xid();
+			ulong xid = new_window.get_id();
 			string name = new_window.get_name() ?? "Loading...";
 
-			this.popover.add_window(xid, name); // Add the window
+			popover.add_window(xid, name); // Add the window
 			new_window.name_changed.connect(() => { // When this window is renamed
-				this.popover.rename_window(xid); // Rename its entry in the popover
+				popover.rename_window(xid); // Rename its entry in the popover
 			});
-			this.update();
+			update();
 		});
 
-		this.class_group.removed_window.connect((old_window) => { // When a window is closed in group
-			this.popover.remove_window(old_window.get_xid()); // Remove from popover if it exists
-			this.update();
+		window_group.window_removed.connect((old_window) => { // When a window is closed in group
+			popover.remove_window(old_window.get_id()); // Remove from popover if it exists
+			update();
 		});
 
-		this.set_app_for_class_group();
-		this.setup_popover_with_class();
+		set_app_for_class_group();
+		setup_popover_with_class();
 	}
 
 	public void set_draggable(bool draggable) {
@@ -292,12 +270,12 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * should_add_window will return whether or not we should add this window to our popover
 	 */
-	private bool should_add_window(Wnck.Window new_window) {
+	private bool should_add_window(libxfce4windowing.Window new_window) {
 		bool add = false;
 		bool should_try_name_match = false;
 		bool is_matching_class_name = false; // is_matching_class_name is for matching derpy window class names
 
-		if (this.first_app != null) { // If we have an app defined
+		if (first_window != null) { // If we have an app defined
 			Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(new_window.get_xid());
 			if (this.first_app.get_group_name().has_prefix("chrome-") || this.first_app.get_group_name().has_prefix("google-chrome")) { // Is a Chrome or Chrome app
 				should_try_name_match = true;
@@ -319,27 +297,21 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public void update_icon() {
-		if (this.has_valid_windows(null)) {
+		if (has_valid_windows(null)) {
 			this.icon.waiting = false;
 		}
 
-		unowned GLib.Icon? app_icon = null;
-		if (this.app_info != null) {
-			app_icon = this.app_info.get_icon();
-		}
+		unowned GLib.Icon? app_icon = application.icon;
 
 		Gdk.Pixbuf? pixbuf_icon = null;
-		if (!this.is_empty()) {
-			pixbuf_icon = this.class_group.get_icon();
+		if (!is_empty()) {
+			var size = target_icon_size == 0 ? desktop_helper.icon_size : target_icon_size;
+			pixbuf_icon = window_group.get_icon(size, 1);
 		}
 
 		if (app_icon != null) {
 			this.icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
-			// scale pixbuf if it doesn't match the size we want AND if the size we want is valid
-			if (target_icon_size > 0 && (pixbuf_icon.width != target_icon_size || pixbuf_icon.height != target_icon_size)) {
-				pixbuf_icon = pixbuf_icon.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
-			}
 			this.icon.set_from_pixbuf(pixbuf_icon);
 		} else {
 			this.icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
@@ -419,22 +391,15 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	private void launch_app(uint32 time) {
-		if (this.app_info == null) {
-			return;
-		}
-
-		this.launch_context.set_screen(this.get_screen());
-		this.launch_context.set_timestamp(time);
+		var context = application.create_launch_context() as Gdk.AppLaunchContext;
+		context.set_screen(get_screen());
+		context.set_timestamp(Gdk.CURRENT_TIME);
 
 		this.icon.animate_launch(this.desktop_helper.panel_position);
 		this.icon.waiting = true;
 		this.icon.animate_wait();
 
-		try {
-			this.app_info.launch(null, launch_context);
-		} catch (Error e) {
-			warning(e.message);
-		}
+		application.launch_action_with_context(action, context);
 	}
 
 	public bool is_empty() {
@@ -1026,7 +991,7 @@ public class IconButton : Gtk.ToggleButton {
 		return this.app_info;
 	}
 
-	public unowned Budgie.Abomination.AppGroup? get_class_group() {
-		return this.class_group;
+	public unowned Budgie.Windowing.WindowGroup? get_window_group() {
+		return this.window_group;
 	}
 }

@@ -22,8 +22,10 @@ namespace Budgie.Windowing {
 	 */
 	public class Windowing : GLib.Object {
 		private libxfce4windowing.Screen screen;
+		private WorkspaceManager workspace_manager;
 		private HashTable<libxfce4windowing.Application, WindowGroup> applications;
 		private List<Window> fullscreen_windows;
+		private libxfce4windowing.Window? last_active_window;
 
 		private Budgie.Windowing.NotificationDispatcher dispatcher;
 
@@ -34,6 +36,16 @@ namespace Budgie.Windowing {
 		private bool pause_night_light;
 		private bool pause_notifications;
 		private bool previous_color_setting;
+
+		/**
+		 * Emitted when the currently active window has changed.
+		 */
+		public signal void active_window_changed(Window? old_active_window, Window? new_active_window);
+
+		/**
+		 * Emitted when the currently active workspace has changed.
+		 */
+		public signal void active_workspace_changed(Workspace? old_active_workspace);
 
 		/**
 		 * Emitted when a WindowGroup has been created.
@@ -73,8 +85,11 @@ namespace Budgie.Windowing {
 
 			screen.get_windows().foreach(window_added);
 
+			screen.active_window_changed.connect(on_active_window_changed);
 			screen.window_opened.connect(window_added);
 			screen.window_closed.connect(window_removed);
+
+			setup_workspace_listener();
 
 			// Get the current night light setting and watch for changes
 			previous_color_setting = color_settings.get_boolean("night-light-enabled");
@@ -93,6 +108,28 @@ namespace Budgie.Windowing {
 			} catch (GLib.Error e) {
 				critical("Error getting notification dispatcher: %s", e.message);
 			}
+		}
+
+		private void setup_workspace_listener() {
+			workspace_manager = screen.get_workspace_manager();
+			unowned var groups = workspace_manager.list_workspace_groups();
+			if (groups == null) return;
+
+			unowned var element = groups.first();
+			var group = element.data as libxfce4windowing.WorkspaceGroup;
+
+			if (group == null) return;
+
+			group.active_workspace_changed.connect(on_active_workspace_changed);
+		}
+
+		private void on_active_window_changed(Window old_window) {
+			var new_window = screen.get_active_window();
+			active_window_changed(old_window, new_window);
+		}
+
+		private void on_active_workspace_changed(Workspace? previous_workspace) {
+			active_workspace_changed(previous_workspace);
 		}
 
 		private void window_added(Window window) {
@@ -210,6 +247,15 @@ namespace Budgie.Windowing {
 					warning("Unknown setting changed: %s", key);
 					break;
 			}
+		}
+
+		/**
+		 * Get a list of all current #WindowGroups.
+		 *
+		 * Returns: the list of window groups
+		 */
+		public List<weak WindowGroup> get_window_groups() {
+			return applications.get_values();
 		}
 	}
 }

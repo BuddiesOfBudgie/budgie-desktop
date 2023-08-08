@@ -2,10 +2,12 @@
 
 libbudgieprivate_sources = [
     'animation.vala',
+    'application.vala',
     'toplevel.vala',
     'shadow.vala',
     'manager.vala',
-    'notification.vala'
+    'notification.vala',
+    'switcheroo.vala',
 ]
 
 libbudgieprivate = shared_library(

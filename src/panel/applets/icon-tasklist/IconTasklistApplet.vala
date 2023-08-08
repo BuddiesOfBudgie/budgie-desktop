@@ -49,11 +49,9 @@ public class IconTasklistSettings : Gtk.Grid {
 }
 
 public class IconTasklistApplet : Budgie.Applet {
-	private Budgie.Abomination.Abomination? abomination = null;
 	private Budgie.Windowing.Windowing windowing;
-	private Wnck.Screen? wnck_screen = null;
-	private Settings? settings = null;
-	private Gtk.Box? main_layout = null;
+	private Settings settings;
+	private Gtk.Box main_layout;
 
 	private bool restrict_to_workspace = false;
 	private bool only_show_pinned = false;
@@ -66,7 +64,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 	/* Applet support */
 	private DesktopHelper? desktop_helper = null;
-	private Budgie.AppSystem? app_system = null;
 	private unowned Budgie.PopoverManager? manager = null;
 
 	public string uuid { public set; public get; }
@@ -87,24 +84,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.settings_prefix = "/com/solus-project/budgie-panel/instance/icon-tasklist";
 		this.settings = this.get_applet_settings(uuid);
 
-		/* Somewhere to store the window mappings */
-		this.buttons = new HashTable<string,IconButton>(str_hash, str_equal);
-		this.main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-
-		/* Initial bootstrap of helpers */
-		this.desktop_helper = new DesktopHelper(this.settings, this.main_layout);
-		this.wnck_screen = Wnck.Screen.get_default();
-		this.abomination = new Budgie.Abomination.Abomination();
-		this.app_system = new Budgie.AppSystem();
-		this.windowing = new Budgie.Windowing.Windowing();
-
 		/* Now hook up settings */
 		this.settings.changed.connect(this.on_settings_changed);
-
-		this.add(this.main_layout);
-
-		Gtk.drag_dest_set(this.main_layout, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.COPY);
-		this.main_layout.drag_data_received.connect(this.on_drag_data_received);
 
 		Idle.add(() => {
 			this.rebuild_items();
@@ -118,8 +99,24 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.connect_app_signals();
 		this.on_active_window_changed();
 
-		this.get_style_context().add_class("icon-tasklist");
 		this.show_all();
+	}
+
+	construct {
+		get_style_context().add_class("icon-tasklist");
+
+		/* Somewhere to store the window mappings */
+		buttons = new HashTable<string, IconButton>(str_hash, str_equal);
+		main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+		/* Initial bootstrap of helpers */
+		windowing = new Budgie.Windowing.Windowing();
+		desktop_helper = new DesktopHelper(main_layout);
+
+		Gtk.drag_dest_set(main_layout, Gtk.DestDefaults.ALL, DesktopHelper.targets, Gdk.DragAction.COPY);
+		main_layout.drag_data_received.connect(on_drag_data_received);
+
+		add(main_layout);
 	}
 
 	/**
@@ -129,64 +126,65 @@ public class IconTasklistApplet : Budgie.Applet {
 		string[] pinned = this.settings.get_strv("pinned-launchers");
 
 		foreach (string launcher in pinned) {
-			DesktopAppInfo? info = new DesktopAppInfo(launcher);
-			if (info == null) {
-				continue;
-			}
+			var info = new DesktopAppInfo(launcher);
+			if (info == null) continue;
 
-			IconButton button = new IconButton(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, info, launcher);
-			this.add_icon_button(launcher, button);
+			var application = new Budgie.Application(info);
+
+			IconButton button = new IconButton(application, settings, desktop_helper, manager);
+			add_icon_button(launcher, button);
 		}
 	}
 
 	private void connect_app_signals() {
-		this.wnck_screen.active_window_changed.connect_after(this.on_active_window_changed);
-		this.wnck_screen.active_workspace_changed.connect_after(this.update_buttons);
+		windowing.active_window_changed.connect_after(this.on_active_window_changed);
+		windowing.active_workspace_changed.connect_after(this.update_buttons); // FIXME: Wrong method signature
 
-		this.abomination.added_app.connect((group, app) => this.on_app_opened(app));
-		this.abomination.removed_app.connect((group, app) => this.on_app_closed(app));
+		windowing.window_group_added.connect((group) => {});
+		windowing.window_group_removed.connect((group) => {});
 
-		this.abomination.updated_group.connect((group) => { // try to properly group icons
-			Wnck.Window window = group.get_windows().nth_data(0);
-			if (window == null) {
-				return;
-			}
+		// TODO: Figure out if any of this is really needed
+		//  this.abomination.updated_group.connect((group) => { // try to properly group icons
+		//  	Wnck.Window window = group.get_windows().nth_data(0);
+		//  	if (window == null) {
+		//  		return;
+		//  	}
 
-			Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(window.get_xid());
-			if (app == null) {
-				return;
-			}
+		//  	Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(window.get_xid());
+		//  	if (app == null) {
+		//  		return;
+		//  	}
 
-			IconButton button = this.buttons.get(window.get_xid().to_string());
+		//  	IconButton button = this.buttons.get(window.get_xid().to_string());
 
-			if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
-				string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
-				button = this.buttons.get(launcher);
-			}
+		//  	if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
+		//  		string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
+		//  		button = this.buttons.get(launcher);
+		//  	}
 
-			if (button == null) { // we don't manage this button
-				return;
-			}
+		//  	if (button == null) { // we don't manage this button
+		//  		return;
+		//  	}
 
-			ButtonWrapper wrapper = (button.get_parent() as ButtonWrapper);
-			if (wrapper == null) {
-				return;
-			}
+		//  	ButtonWrapper wrapper = (button.get_parent() as ButtonWrapper);
+		//  	if (wrapper == null) {
+		//  		return;
+		//  	}
 
-			if (!button.pinned) {
-				wrapper.gracefully_die();
-			} else {
-				// the button that we were going to replace is pinned, so instead of removing it from the view,
-				// just remove its class group and first app, then update it visually. this prevents apps like
-				// the LibreOffice launcher from vanishing after a document is opened, despite being pinned
-				button.set_class_group(null);
-				button.first_app = null;
-				button.update();
-			}
+		//  	if (!button.pinned) {
+		//  		wrapper.gracefully_die();
+		//  	} else {
+		//  		// the button that we were going to replace is pinned, so instead of removing it from the view,
+		//  		// just remove its class group and first app, then update it visually. this prevents apps like
+		//  		// the LibreOffice launcher from vanishing after a document is opened, despite being pinned
+		//  		button.set_class_group(null);
+		//  		button.first_app = null;
+		//  		button.update();
+		//  	}
 
-			this.remove_button(window.get_xid().to_string());
-			this.on_app_opened(app);
-		});
+		//  	this.remove_button(window.get_xid().to_string());
+		//  	this.on_app_opened(app);
+		//  });
 	}
 
 	/**
@@ -201,7 +199,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		this.startup();
 
-		this.abomination.get_running_apps().foreach(this.on_app_opened); // for each running apps
+		windowing.get_window_groups().foreach(this.on_app_opened); // for each running apps
 	}
 
 	private void on_settings_changed(string key) {
@@ -241,22 +239,26 @@ public class IconTasklistApplet : Budgie.Applet {
 			app_id = app_id.strip();
 
 			DesktopAppInfo? info = new DesktopAppInfo.from_filename(app_id);
-			if (info == null) {
-				return;
-			}
+			if (info == null) return;
 
-			if (info.get_startup_wm_class() == "budgie-desktop-settings") { // Is Budgie Desktop Settings
-				return; // Don't allow drag & drop
-			}
+			// Don't allow d&d for Budgie Desktop Settings
+			if (info.get_startup_wm_class() == "budgie-desktop-settings") return;
 
 			string launcher = this.desktop_helper.get_app_launcher(app_id);
 
 			if (this.buttons.contains(launcher)) {
 				original_button = (this.buttons[launcher].get_parent() as ButtonWrapper);
 			} else {
-				IconButton button = new IconButton(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, info, launcher);
-				this.add_icon_button(launcher, button);
+				var application = new Budgie.Application(info);
+				IconButton button = new IconButton(application, settings, desktop_helper, manager);
+
+				add_icon_button(launcher, button);
 				original_button = button.get_parent() as ButtonWrapper;
+
+				// Set the new launcher as pinned
+				var launchers = settings.get_strv("pinned-launchers");
+				launchers += app_id;
+				settings.set_strv("pinned-launchers", launchers);
 			}
 		} else { // Doesn't start with file://
 			unowned IconButton? button = null;
@@ -332,77 +334,73 @@ public class IconTasklistApplet : Budgie.Applet {
 		original_button.set_transition_type(Gtk.RevealerTransitionType.NONE);
 		original_button.set_reveal_child(true);
 
-		this.desktop_helper.update_pinned();
-
 		Gtk.drag_finish(context, true, true, time);
 	}
 
 	/**
 	 * on_app_opened handles when we open a new app
 	 */
-	private void on_app_opened(Budgie.Abomination.RunningApp app) {
-		Budgie.Abomination.RunningApp first_app = this.abomination.get_first_app_of_group(app.get_group_name());
-		if (first_app == null) {
-			return;
-		}
+	private void on_app_opened(Budgie.Windowing.WindowGroup group) {
+		string application_id = group.application.get_id().to_string();
+		var app_info = new DesktopAppInfo(group.get_desktop_id());
 
-		string first_app_id = first_app.id.to_string();
+		if (app_info == null) return;
+		var application = new Budgie.Application(app_info);
 
-		if (app.app_info != null) { // properly group new apps with their pinned version
-			string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
-			if (this.buttons.contains(launcher)) {
-				first_app_id = launcher;
-			}
+		if (buttons.contains(application_id)) {
+			application_id = application.desktop_id;
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (this.buttons.contains(first_app_id)) {
-			IconButton first_button = this.buttons.get(first_app_id);
+		if (buttons.contains(application_id)) {
+			IconButton first_button = buttons.get(application_id);
 			if (!first_button.icon.waiting && first_button.icon.get_realized()) {
 				first_button.icon.waiting = true;
 				first_button.icon.animate_wait();
 			}
 		}
 
-		IconButton button = null;
-		if (this.buttons.contains(first_app_id)) { // try to get existing button if any
-			button = this.buttons.get(first_app_id);
+		IconButton? button = null;
+		if (buttons.contains(application_id)) { // try to get existing button if any
+			button = buttons.get(application_id);
 
 			if (button != null) {
-				this.add_button(app.id.to_string(), button); // map app to it's button so that we can update it later on
+				this.add_button(application_id, button); // map app to it's button so that we can update it later on
 			}
 		}
 
 		if (button == null) { // create a new button
-			button = new IconButton.from_group(this.abomination, this.app_system, this.settings, this.desktop_helper, this.manager, app.group_object, app.id.to_string());
-			this.add_icon_button(app.id.to_string(), button);
+			button = new IconButton.from_group(group, application, settings, desktop_helper, manager);
+			add_icon_button(application_id, button);
 		}
 
-		if (button.get_class_group() == null) { // button was pinned without app opened, set class group in button to properly group windows
-			button.set_class_group(app.group_object);
+		if (button.get_window_group() == null) { // button was pinned without app opened, set window group in button to properly group windows
+			button.set_window_group(group);
 		}
 
-		this.update_button(button);
+		update_button(button);
 	}
 
-	private void on_app_closed(Budgie.Abomination.RunningApp app) {
-		IconButton? button = this.buttons.get(app.id.to_string());
+	private void on_app_closed(Budgie.Windowing.WindowGroup group) {
+		var app_id = group.application.get_id().to_string();
+		IconButton? button = buttons.get(app_id);
 
-		if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
-			string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
-			button = this.buttons.get(launcher);
+		if (button == null) { // Button might be pinned, try to get button from launcher instead
+			string app_id = group.get_desktop_id();
+			button = buttons.get(app_id);
 		}
 
 		if (button == null) { // we don't manage this button
 			return;
 		}
 
-		if (button.get_class_group() != null) {
-			if (button.get_class_group().get_windows().is_empty()) { // when we don't have windows in the group anymore, it's safe to remove the group
-				button.set_class_group(null);
+		if (button.window_group != null) {
+			if (!button.window_group.has_windows()) { // when we don't have windows in the group anymore, it's safe to remove the group
+				button.window_group = null;
 			} else if (!button.pinned) { // update button ID to use the one of the first app in group
-				Budgie.Abomination.RunningApp? first_app = abomination.get_first_app_of_group(button.get_class_group().get_name());
+				libxfce4windowing.Window? first_app = button.group.get_first_window();
 				if (first_app != null) {
+					// TODO: Will this get nuked or not? Tune in later!
 					button.button_id = first_app.id.to_string();
 				}
 			}
@@ -410,12 +408,12 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		button.update();
 
-		if (button.button_id != app.id.to_string() && app.id.to_string() in buttons) {
-			this.swap_button(app.id.to_string(), button.button_id);
+		if (button.button_id != app_id && app_id in buttons) {
+			this.swap_button(app_id, button.button_id);
 			button.first_app = null;
 			button.set_app_for_class_group();
 		} else {
-			this.remove_button(app.id.to_string());
+			this.remove_button(app_id);
 		}
 	}
 
@@ -494,19 +492,19 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		// when button become pinned, make sure we identify it by its launcher instead of xid or grouping will fail
 		button.pinned_changed.connect(() => {
-			if (button.first_app == null) {
+			if (button.first_window == null) {
 				return;
 			}
 
-			string[] parts = button.first_app.app_info.get_filename().split("/");
+			string[] parts = button.first_window.app_info.get_filename().split("/");
 			string launcher = parts[parts.length - 1];
 			if (button.pinned) {
 				button.button_id = launcher;
 				this.add_button(launcher, button);
-				this.remove_button(button.first_app.id.to_string());
+				this.remove_button(button.first_window.id.to_string());
 			} else {
-				button.button_id = button.first_app.id.to_string();
-				this.add_button(button.first_app.id.to_string(), button);
+				button.button_id = button.first_window.id.to_string();
+				this.add_button(button.first_window.id.to_string(), button);
 				this.remove_button(launcher);
 			}
 		});

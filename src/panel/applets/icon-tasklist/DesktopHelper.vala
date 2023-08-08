@@ -13,7 +13,6 @@
  * Trivial helper for IconTasklist - i.e. desktop lookups
  */
 public class DesktopHelper : GLib.Object {
-	private Settings? settings = null;
 	private Wnck.Screen? screen = null;
 	private Gtk.Box? icon_layout = null;
 
@@ -29,9 +28,8 @@ public class DesktopHelper : GLib.Object {
 	/**
 	 * Handle initial bootstrap of the desktop helper
 	 */
-	public DesktopHelper(Settings? settings, Gtk.Box? icon_layout) {
+	public DesktopHelper(Gtk.Box? icon_layout) {
 		/* Stash privates */
-		this.settings = settings;
 		this.icon_layout = icon_layout;
 
 		/* Stash lifetime reference to screen */
@@ -43,29 +41,6 @@ public class DesktopHelper : GLib.Object {
 		{ "text/uri-list", 0, 0 },
 		{ "application/x-desktop", 0, 0 },
 	};
-
-	/**
-	 * Using our icon_layout, update the per-instance "pinned-launchers" key
-	 * Keeping with pinned internally for compatibility.
-	 */
-	public void update_pinned() {
-		string[] buttons = {};
-		foreach (Gtk.Widget widget in icon_layout.get_children()) {
-			IconButton button = ((ButtonWrapper) widget).button;
-
-			if (button.is_pinned()) {
-				if (button.get_appinfo() != null) {
-					string id = button.get_appinfo().get_id();
-					if (id in buttons) {
-						continue;
-					}
-					buttons += id;
-				}
-			}
-		}
-
-		settings.set_strv("pinned-launchers", buttons); // Keeping with pinned- internally for compatibility.
-	}
 
 	/**
 	 * Return the currently active window

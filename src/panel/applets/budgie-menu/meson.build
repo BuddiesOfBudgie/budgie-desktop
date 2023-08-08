@@ -48,8 +48,9 @@ applet_budgiemenu_deps = [
     dep_peas,
     dep_accountsservice,
     dep_cairo,
-    link_libappindexer,
     link_libpanelplugin,
+    link_libbudgieprivate,
+    link_libappindexer,
 ]
 
 shared_library(

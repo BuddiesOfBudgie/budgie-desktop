@@ -20,6 +20,14 @@ namespace Budgie.Windowing {
 
 		private List<libxfce4windowing.Window> windows;
 
+		/**
+		 * Emitted when the icon of the application for this group changes.
+		 */
+		public signal void app_icon_changed();
+
+		/**
+		 * Emitted when the state of a window in this group changes.
+		 */
 		public signal void window_state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state);
 
 		/**
@@ -41,6 +49,12 @@ namespace Budgie.Windowing {
 
 		construct {
 			windows = new List<libxfce4windowing.Window>();
+
+			application.icon_changed.connect(icon_changed);
+		}
+
+		private void icon_changed() {
+			app_icon_changed();
 		}
 
 		private void state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state) {
@@ -67,6 +81,35 @@ namespace Budgie.Windowing {
 			debug(@"removing window from group '$(application.get_name())': $(window.get_name())");
 			windows.remove(window);
 			window_removed(window);
+		}
+
+		/**
+		 * Get the desktop ID of this application.
+		 *
+		 * Returns: the desktop ID of the application
+		 */
+		 public string get_desktop_id() {
+			return "%s.desktop".printf(application.get_name());
+		}
+
+		/**
+		 * Get the first opened window in this group.
+		 *
+		 * Returns: the first opened window or null
+		 */
+		public libxfce4windowing.Window? get_first_window() {
+			unowned var first = windows.first();
+			if (first == null) return null;
+			return first.data;
+		}
+
+		/**
+		 * Get the icon for this window group.
+		 *
+		 * Returns: the icon if found for the given size and scale
+		 */
+		public Gdk.Pixbuf? get_icon(int size, int scale) {
+			return application.get_icon(size, scale);
 		}
 
 		/**
