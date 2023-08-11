@@ -47,7 +47,7 @@ public class BatteryIcon : Gtk.Box {
 		pack_start(this.image, false, false, 0);
 
 		this.percent_label.valign = Gtk.Align.CENTER;
-		this.percent_label.margin_end = 4;
+		this.percent_label.margin_start = 4;
 		pack_start(this.percent_label, false, false, 0);
 		this.percent_label.no_show_all = true;
 
