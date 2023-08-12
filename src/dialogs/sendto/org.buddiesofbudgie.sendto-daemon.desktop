@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Sendto
+Comment=Bluetooth obex
+Exec=org.buddiesofbudgie.sendto -s
+Icon=bluetooth-active
+Type=Application
+NoDisplay=true
+Categories=System;
+X-GNOME-Autostart-Notify=false
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-enabled=true
+OnlyShowIn=Budgie;

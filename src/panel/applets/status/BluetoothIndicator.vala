@@ -161,7 +161,7 @@ public class BluetoothIndicator : Bin {
 		placeholder_sublabel = new Label(null) {
 			justify = CENTER,
 			wrap = true,
-		};		
+		};
 
 		var placeholder_button = new Button.with_label(_("Open Bluetooth Settings")) {
 			relief = HALF,
@@ -544,7 +544,7 @@ public class BTDeviceRow : ListBoxRow {
 	private void transfer_active(string address) {
 		if (address == device.address) update_transfer_progress();
 	}
-	
+
 	private void transfer_added(string address, Transfer transfer) {
 		if (address == device.address) this.transfer = transfer;
 	}
