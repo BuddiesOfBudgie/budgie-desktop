@@ -11,9 +11,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7\n"
+"Project-Id-Version: budgie-desktop 10.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 13:33+0200\n"
+"POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Mustafa Tınmaz, 2023\n"
 "Language-Team: Turkish (https://app.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
@@ -27,23 +27,22 @@ msgstr ""
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:569
+#: src/daemon/notifications/dbus.vala:554
 msgid "Unread Notifications"
 msgstr "Okunmamış Bildirimler"
 
-#: src/daemon/notifications/dbus.vala:573
-msgid "You received 1 notification while an application was fullscreened."
-msgstr "Bir uygulama tam ekrandayken 1 bildirim aldınız."
-
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:557
 #, c-format
-msgid "You received %d notifications while an application was fullscreened."
-msgstr "Bir uygulama tam ekrandayken %d bildirim aldınız."
+msgid "You received %d notification while an application was fullscreened."
+msgid_plural ""
+"You received %d notifications while an application was fullscreened."
+msgstr[0] ""
+msgstr[1] ""
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:587
+#: src/daemon/notifications/dbus.vala:571
 msgid "View Notifications"
 msgstr "Bildirimleri Göster"
 
@@ -70,6 +69,88 @@ msgstr "Budgie Masaüstü Ayarları"
 msgid "System Settings"
 msgstr "Sistem Ayarları"
 
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
+#. as a workaround
+#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
+msgstr "Budgie Ekran Görüntüsü"
+
+#. Translators: be as brief as possible; popovers ar cut off if broader than
+#. the window
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot entire screen"
+msgstr "Tüm ekranın görüntüsünü al"
+
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot active window"
+msgstr "Etkin pencerenin ekran görüntüsünü al"
+
+#: src/daemon/screenshot.vala:441
+msgid "Screenshot selected area"
+msgstr "Seçilen alanın ekran görüntüsünü al"
+
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:549
+msgid "Screen"
+msgstr "Ekran"
+
+#: src/daemon/screenshot.vala:549
+msgid "Window"
+msgstr "Pencere"
+
+#: src/daemon/screenshot.vala:549
+msgid "Selection"
+msgstr "Seçim"
+
+#. translate
+#: src/daemon/screenshot.vala:900
+msgid "Cancel screenshot"
+msgstr "Ekran görüntüsünü iptal et"
+
+#: src/daemon/screenshot.vala:901
+msgid "Save screenshot to the selected directory"
+msgstr "Ekran görüntüsünü seçilen dizine kaydet"
+
+#: src/daemon/screenshot.vala:902
+msgid "Copy screenshot to the clipboard"
+msgstr "Ekran görüntüsünü panoya kopyala"
+
+#: src/daemon/screenshot.vala:903
+msgid "Open screenshot in default application"
+msgstr "Ekran görüntüsünü öntanımlı uygulamada aç"
+
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1177
+msgid "Other..."
+msgstr "Diğer..."
+
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1261
+msgid "Open Folder"
+msgstr "Klasör Aç"
+
+#: src/daemon/screenshot.vala:1262
+#: src/panel/settings/settings_autostart.vala:194
+#: src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+msgid "Cancel"
+msgstr "Vazgeç"
+
+#: src/daemon/screenshot.vala:1262
+msgid "Open"
+msgstr "Aç"
+
 #. Should show a notification
 #: src/daemon/settings.vala:339
 msgid "Turned on Caffeine Boost"
@@ -80,96 +161,11 @@ msgid "Turned off Caffeine Boost"
 msgstr "Kafein Takviyesi kapatıldı"
 
 #: src/daemon/settings.vala:344
-msgid "Will turn off in a minute"
-msgstr "Bir dakika içinde kapanacak"
-
-#. use plural
-#: src/daemon/settings.vala:347
 #, c-format
-msgid "Will turn off in %d minutes"
-msgstr "%d dakika içinde kapanacak"
-
-#. If we have valid windows open
-#. Only one window and a valid AbominationRunningApp for it
-#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
-#. as a workaround
-#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
-#: src/panel/applets/icon-tasklist/IconPopover.vala:226
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
-msgid "Budgie Screenshot"
-msgstr "Budgie Ekran Görüntüsü"
-
-#. Translators: be as brief as possible; popovers ar cut off if broader than
-#. the window
-#: src/daemon/screenshot.vala:438
-msgid "Screenshot entire screen"
-msgstr "Tüm ekranın görüntüsünü al"
-
-#: src/daemon/screenshot.vala:439
-msgid "Screenshot active window"
-msgstr "Etkin pencerenin ekran görüntüsünü al"
-
-#: src/daemon/screenshot.vala:440
-msgid "Screenshot selected area"
-msgstr "Seçilen alanın ekran görüntüsünü al"
-
-#. we cannot use areabuttons_labels, since these will be translated
-#. don't translate, internal use
-#. translate! These are the interface names
-#: src/daemon/screenshot.vala:548
-msgid "Screen"
-msgstr "Ekran"
-
-#: src/daemon/screenshot.vala:548
-msgid "Window"
-msgstr "Pencere"
-
-#: src/daemon/screenshot.vala:548
-msgid "Selection"
-msgstr "Seçim"
-
-#. translate
-#: src/daemon/screenshot.vala:898
-msgid "Cancel screenshot"
-msgstr "Ekran görüntüsünü iptal et"
-
-#: src/daemon/screenshot.vala:899
-msgid "Save screenshot to the selected directory"
-msgstr "Ekran görüntüsünü seçilen dizine kaydet"
-
-#: src/daemon/screenshot.vala:900
-msgid "Copy screenshot to the clipboard"
-msgstr "Ekran görüntüsünü panoya kopyala"
-
-#: src/daemon/screenshot.vala:901
-msgid "Open screenshot in default application"
-msgstr "Ekran görüntüsünü öntanımlı uygulamada aç"
-
-#. Other -> call Filebrowser (path = null)
-#. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1175
-msgid "Other..."
-msgstr "Diğer..."
-
-#. set custom dir to found dir
-#: src/daemon/screenshot.vala:1259
-msgid "Open Folder"
-msgstr "Klasör Aç"
-
-#: src/daemon/screenshot.vala:1260
-#: src/panel/settings/settings_autostart.vala:194
-#: src/panel/settings/settings_autostart.vala:359
-#: src/panel/settings/settings_panel_dialogs.vala:158
-#: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "Vazgeç"
-
-#: src/daemon/screenshot.vala:1260
-msgid "Open"
-msgstr "Aç"
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -547,82 +543,10 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Bilinmeyen bir hata nedeniyle pencere ögesi örneği oluşturulamadı."
 
-#: src/panel/settings/settings_style.vala:33
-msgid "Style"
-msgstr "Stil"
-
-#: src/panel/settings/settings_style.vala:47
-#: src/panel/settings/settings_raven.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_raven.vala:47
+#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "Gereçler"
-
-#: src/panel/settings/settings_style.vala:48
-msgid "Set the appearance of window decorations and controls"
-msgstr "Pencere süslerinin ve kontrollerinin görünümünü ayarla"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Icons"
-msgstr "Simgeler"
-
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the globally used icon theme"
-msgstr "Genel olarak kullanılan simge temasını ayarla"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Cursors"
-msgstr "İmleçler"
-
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used mouse cursor theme"
-msgstr "Genel olarak kullanılan fare imleci temasını ayarla"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Notification Position"
-msgstr "Bildirim Konumu"
-
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the location for notification popups"
-msgstr "Bildirim pencerelerinin yerleşimini ayarla"
-
-#: src/panel/settings/settings_style.vala:72
-msgid "Dark theme"
-msgstr "Koyu tema"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "Built-in theme"
-msgstr "Yerleşik tema"
-
-#: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
-"Etkinleştirildiğinde, içe inşalı stil masaüstü bileşeni stilini geçersiz "
-"kılar"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Animations"
-msgstr "Animasyonlar"
-
-#: src/panel/settings/settings_style.vala:88
-msgid "Control whether windows and controls use animations"
-msgstr ""
-"Pencerelerin ve denetimlerin animasyon kullanıp kullanmadığını kontrol et"
-
-#: src/panel/settings/settings_style.vala:205
-msgid "Top Left"
-msgstr "Sol Üst"
-
-#: src/panel/settings/settings_style.vala:207
-msgid "Bottom Left"
-msgstr "Sol Alt"
-
-#: src/panel/settings/settings_style.vala:209
-msgid "Bottom Right"
-msgstr "Sağ Alt"
-
-#: src/panel/settings/settings_style.vala:212
-msgid "Top Right"
-msgstr "Sağ Üst"
 
 #: src/panel/settings/settings_raven.vala:48
 #: src/panel/settings/settings_panel.vala:89
@@ -983,9 +907,77 @@ msgstr ""
 "Bildirimlerin en eskiden en yeniye mi yoksa en yeniden en eskiye mi "
 "sıralanacağını ayarlayın."
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
-msgid "All"
-msgstr "Tümü"
+#: src/panel/settings/settings_style.vala:33
+msgid "Style"
+msgstr "Stil"
+
+#: src/panel/settings/settings_style.vala:48
+msgid "Set the appearance of window decorations and controls"
+msgstr "Pencere süslerinin ve kontrollerinin görünümünü ayarla"
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Icons"
+msgstr "Simgeler"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the globally used icon theme"
+msgstr "Genel olarak kullanılan simge temasını ayarla"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Cursors"
+msgstr "İmleçler"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used mouse cursor theme"
+msgstr "Genel olarak kullanılan fare imleci temasını ayarla"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Notification Position"
+msgstr "Bildirim Konumu"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the location for notification popups"
+msgstr "Bildirim pencerelerinin yerleşimini ayarla"
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Dark theme"
+msgstr "Koyu tema"
+
+#: src/panel/settings/settings_style.vala:79
+msgid "Built-in theme"
+msgstr "Yerleşik tema"
+
+#: src/panel/settings/settings_style.vala:80
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Etkinleştirildiğinde, içe inşalı stil masaüstü bileşeni stilini geçersiz "
+"kılar"
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Animations"
+msgstr "Animasyonlar"
+
+#: src/panel/settings/settings_style.vala:88
+msgid "Control whether windows and controls use animations"
+msgstr ""
+"Pencerelerin ve denetimlerin animasyon kullanıp kullanmadığını kontrol et"
+
+#: src/panel/settings/settings_style.vala:207
+msgid "Top Left"
+msgstr "Sol Üst"
+
+#: src/panel/settings/settings_style.vala:209
+msgid "Bottom Left"
+msgstr "Sol Alt"
+
+#: src/panel/settings/settings_style.vala:211
+msgid "Bottom Right"
+msgstr "Sağ Alt"
+
+#: src/panel/settings/settings_style.vala:214
+msgid "Top Right"
+msgstr "Sağ Üst"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -1004,7 +996,7 @@ msgid "Set icon"
 msgstr "Simge ayarla"
 
 #. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:101
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
 msgstr "Üzgünüz, hiçbir öge bulunamadı"
 
@@ -1012,10 +1004,14 @@ msgstr "Üzgünüz, hiçbir öge bulunamadı"
 msgid "Power"
 msgstr "Güç"
 
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "Tümü"
+
 #. Prepare label widget
 #. Caffeine Notification
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:45
+#: src/raven/notifications_group.vala:92
 msgid "Caffeine Mode"
 msgstr "Kafein Kipi"
 
@@ -1095,18 +1091,14 @@ msgid "Num lock is not active"
 msgstr "Num lock etkin değil"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
-#: src/raven/notifications_view.vala:336
 #, c-format
-msgid "%u unread notifications"
-msgstr "%u okunmamış bildirim"
+msgid "%u unread notification"
+msgid_plural "%u unread notifications"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:338
-msgid "1 unread notification"
-msgstr "1 okunmamış bildirim"
-
-#: src/panel/applets/notifications/NotificationsApplet.vala:125
-#: src/raven/notifications_view.vala:340
+#: src/raven/notifications_view.vala:377
 msgid "No unread notifications"
 msgstr "Okunmamış bildirim yok"
 
@@ -1183,18 +1175,6 @@ msgstr "Birim kaldırılırken hata oluştu"
 msgid "Places"
 msgstr "Konumlar"
 
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "Görüntülenecek bir şey yok"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "Sürücü bağla"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "Daha fazla bölüm etkinleştir"
-
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -1212,6 +1192,18 @@ msgstr "Girdiğiniz parola yanlış"
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "Bu birimi bağlamaya çalışırken bilinmeyen bir hata oluştu"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "Görüntülenecek bir şey yok"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "Sürücü bağla"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Daha fazla bölüm etkinleştir"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
@@ -1247,39 +1239,42 @@ msgid_plural "Connected to %d devices"
 msgstr[0] "%d aygıtına bağlı"
 msgstr[1] "%d aygıtına bağlandı"
 
-#: src/panel/applets/status/PowerIndicator.vala:105
+#: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
 msgstr "Pil tamamen doldu."
 
-#: src/panel/applets/status/PowerIndicator.vala:109
+#: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
 #. Set inner charging duration to hours:minutes
-#: src/panel/applets/status/PowerIndicator.vala:118
+#: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
 msgstr "Pil doluyor"
 
-#: src/panel/applets/status/PowerIndicator.vala:123
+#: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
 msgstr "Kalan pil"
 
-#: src/panel/applets/status/PowerIndicator.vala:182
-msgid "Show battery percentage"
-msgstr "Pil yüzdesini göster"
+#: src/panel/applets/status/PowerIndicator.vala:198
+msgid "Performance Mode"
+msgstr ""
 
-#: src/panel/applets/status/PowerIndicator.vala:190
+#: src/panel/applets/status/PowerIndicator.vala:207
+msgid "Power Saver"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:214
+msgid "Balanced"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:221
+msgid "Performance"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
 msgstr "Güç ayarları"
-
-#. there's already an active tray, create an informative icon with a popover
-#: src/panel/applets/tray/TrayApplet.vala:114
-msgid "Only one instance of the System Tray can be active at a time."
-msgstr "Tek seferde yalnızca bir Sistem Tepsisi aktif olabilir."
-
-#: src/panel/applets/tray/TrayApplet.vala:140
-msgid "The System Tray failed to initialize."
-msgstr "Sistem Tepsisi başlatılamadı."
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
@@ -1381,22 +1376,6 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Takas"
 
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "Bildirimler"
-
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr "Parçacık eklenmedi."
-
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "Burada görülecek bir şey yok"
-
-#: src/raven/notifications_view.vala:121
-msgid "No new notifications"
-msgstr "Yeni bildirim yok"
-
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
 msgstr "En eskiden en yeniye"
@@ -1404,6 +1383,31 @@ msgstr "En eskiden en yeniye"
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
 msgstr "En yeniden en eskiye"
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "Burada görülecek bir şey yok"
+
+#: src/raven/notifications_view.vala:124
+msgid "No new notifications"
+msgstr "Yeni bildirim yok"
+
+#: src/raven/notifications_view.vala:373
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u okunmamış bildirim"
+
+#: src/raven/notifications_view.vala:375
+msgid "1 unread notification"
+msgstr "1 okunmamış bildirim"
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "Bildirimler"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr "Parçacık eklenmedi."
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1419,84 +1423,80 @@ msgstr "Yeni Kategori"
 msgid "Accessories"
 msgstr "Donatılar"
 
-#: src/appindexer/AppIndex.vala:170
+#: src/appindexer/AppIndex.vala:152
 msgid "Education"
 msgstr "Eğitim"
 
-#: src/appindexer/AppIndex.vala:175
+#: src/appindexer/AppIndex.vala:157
 msgid "Games"
 msgstr "Oyunlar"
 
-#: src/appindexer/AppIndex.vala:179
+#: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
 msgstr "Grafikler"
 
-#: src/appindexer/AppIndex.vala:187
+#: src/appindexer/AppIndex.vala:169
 msgid "Internet"
 msgstr "İnternet"
 
-#: src/appindexer/AppIndex.vala:192
+#: src/appindexer/AppIndex.vala:174
 msgid "Office"
 msgstr "Ofis"
 
-#: src/appindexer/AppIndex.vala:197
+#: src/appindexer/AppIndex.vala:178
 msgid "Programming"
 msgstr "Programlama"
 
-#: src/appindexer/AppIndex.vala:201
+#: src/appindexer/AppIndex.vala:182
 msgid "Science"
 msgstr "Bilim"
 
-#: src/appindexer/AppIndex.vala:207
+#: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
 msgstr "Ses ve Video"
 
-#: src/appindexer/AppIndex.vala:211
+#: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
 msgstr "Sistem Araçları"
 
-#: src/appindexer/AppIndex.vala:222
+#: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
 msgstr "Evrensel Erişim"
 
-#: src/appindexer/AppIndex.vala:226
-msgid "Utilities"
-msgstr "Araçlar"
-
-#: src/dialogs/polkit/polkitdialog.vala:126
+#: src/dialogs/polkit/polkitdialog.vala:195
 msgid "Authentication failed"
 msgstr "Kimlik doğrulama başarısız"
 
-#: src/dialogs/polkit/polkitdialog.vala:215
+#: src/dialogs/polkit/polkitdialog.vala:284
 msgid "Group:"
 msgstr "Grup:"
 
 #. Create our buttons
-#: src/dialogs/power/window.vala:92
+#: src/dialogs/power/window.vala:87
 msgid "_Lock"
 msgstr "_Kilitle"
 
-#: src/dialogs/power/window.vala:95
+#: src/dialogs/power/window.vala:90
 msgid "L_og Out"
 msgstr "_Oturumu Kapat"
 
-#: src/dialogs/power/window.vala:98
+#: src/dialogs/power/window.vala:93
 msgid "_Suspend"
 msgstr "_Askıya Al"
 
-#: src/dialogs/power/window.vala:102
+#: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
 msgstr "_Hazırda Beklet"
 
-#: src/dialogs/power/window.vala:106
+#: src/dialogs/power/window.vala:101
 msgid "_Reboot"
 msgstr "Yeniden _Başlat"
 
-#: src/dialogs/power/window.vala:109
+#: src/dialogs/power/window.vala:104
 msgid "Shut_down"
 msgstr "_Kapat"
 
-#: src/dialogs/power/window.vala:161
+#: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
 msgstr "Bu sistem hazırda bekletmeyi desteklemiyor."
 
@@ -1674,6 +1674,10 @@ msgstr "Aralayıcı boyutu"
 msgid "Icon Spacing"
 msgstr "Simge Aralığı"
 
+#: src/panel/applets/status/settings.ui.h:2
+msgid "Show battery percentage"
+msgstr "Pil yüzdesini göster"
+
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
 msgstr "\"Ekle\" düğmesi görünürlüğü"
@@ -1714,6 +1718,30 @@ msgstr "1.5x"
 msgid "2.0x"
 msgstr "2.0x"
 
+#: src/panel/applets/trash/settings.ui.h:1
+msgid "Sort Mode"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:2
+msgid "Sort by type"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:3
+msgid "Sort alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:4
+msgid "Sort reverse alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:5
+msgid "Sort by date ascending"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:6
+msgid "Sort by date descending"
+msgstr ""
+
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
 msgstr "Hafta Numaralarını Göster"
@@ -1722,6 +1750,7 @@ msgstr "Hafta Numaralarını Göster"
 msgid "Show Day Names"
 msgstr "Gün Adlarını Göster"
 
+#: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
 msgstr "Sesi Aşırı Yükseltmeye İzin Ver"
@@ -1742,7 +1771,19 @@ msgstr "Parola:"
 msgid "Authentication is required"
 msgstr "Kimlik doğrulama gerekli"
 
+#: src/dialogs/polkit/dialog.ui.h:4
+msgid "Details"
+msgstr ""
+
 #: src/dialogs/polkit/dialog.ui.h:5
+msgid "Action:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:6
+msgid "ID:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
 msgstr "Doğrula"
 
@@ -1827,8 +1868,9 @@ msgid "An application task list with icons and labels."
 msgstr "Simgeler ve etiketler içeren bir uygulama görev listesi."
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System tray using the XEMBED protocol."
-msgstr "XEMBED bağlantı kuralını kullanan sistem tepsisi."
+msgid ""
+"System tray implementing the Freedesktop Status Notifier specification."
+msgstr ""
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1837,6 +1879,10 @@ msgstr "Güç iletişim kutusunu açar."
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
 msgstr "Çalışma alanlarını görüntüleyin ve aralarında geçiş yapın."
+
+#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
+msgid "Manage your trash from the Budgie panel"
+msgstr ""
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"

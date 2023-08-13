@@ -13,9 +13,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7\n"
+"Project-Id-Version: budgie-desktop 10.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 13:33+0200\n"
+"POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Wenyin Root <ruojiner@hotmail.com>, 2023\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/buddiesofbudgie/teams/129844/zh_HK/)\n"
@@ -29,23 +29,21 @@ msgstr ""
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:569
+#: src/daemon/notifications/dbus.vala:554
 msgid "Unread Notifications"
 msgstr "未读通知"
 
-#: src/daemon/notifications/dbus.vala:573
-msgid "You received 1 notification while an application was fullscreened."
-msgstr "在运行全屏应用时你收到了一个通知"
-
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:557
 #, c-format
-msgid "You received %d notifications while an application was fullscreened."
-msgstr "在运行全屏应用时你收到了 1%d 个通知"
+msgid "You received %d notification while an application was fullscreened."
+msgid_plural ""
+"You received %d notifications while an application was fullscreened."
+msgstr[0] ""
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:587
+#: src/daemon/notifications/dbus.vala:571
 msgid "View Notifications"
 msgstr "查看通知"
 
@@ -72,6 +70,88 @@ msgstr "Budgie 桌面設定"
 msgid "System Settings"
 msgstr "系统设置"
 
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
+#. as a workaround
+#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
+msgstr "Budgie 截图"
+
+#. Translators: be as brief as possible; popovers ar cut off if broader than
+#. the window
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot entire screen"
+msgstr "全屏幕截图"
+
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot active window"
+msgstr "活动窗口截图"
+
+#: src/daemon/screenshot.vala:441
+msgid "Screenshot selected area"
+msgstr "选定区域截图"
+
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:549
+msgid "Screen"
+msgstr "屏幕"
+
+#: src/daemon/screenshot.vala:549
+msgid "Window"
+msgstr "窗口"
+
+#: src/daemon/screenshot.vala:549
+msgid "Selection"
+msgstr "选项"
+
+#. translate
+#: src/daemon/screenshot.vala:900
+msgid "Cancel screenshot"
+msgstr "取消截图"
+
+#: src/daemon/screenshot.vala:901
+msgid "Save screenshot to the selected directory"
+msgstr "保存截图到指定目录"
+
+#: src/daemon/screenshot.vala:902
+msgid "Copy screenshot to the clipboard"
+msgstr "复制截图到剪贴板"
+
+#: src/daemon/screenshot.vala:903
+msgid "Open screenshot in default application"
+msgstr "用默认应用打开截图"
+
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1177
+msgid "Other..."
+msgstr "其他..."
+
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1261
+msgid "Open Folder"
+msgstr "打开文件夹"
+
+#: src/daemon/screenshot.vala:1262
+#: src/panel/settings/settings_autostart.vala:194
+#: src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+msgid "Cancel"
+msgstr "取消"
+
+#: src/daemon/screenshot.vala:1262
+msgid "Open"
+msgstr "打开"
+
 #. Should show a notification
 #: src/daemon/settings.vala:339
 msgid "Turned on Caffeine Boost"
@@ -82,96 +162,10 @@ msgid "Turned off Caffeine Boost"
 msgstr "關閉Caffeine Boost程序"
 
 #: src/daemon/settings.vala:344
-msgid "Will turn off in a minute"
-msgstr "将在一分钟后关闭 Caffeine 模式"
-
-#. use plural
-#: src/daemon/settings.vala:347
 #, c-format
-msgid "Will turn off in %d minutes"
-msgstr "将在 %d 分钟后关闭 Caffeine 模式"
-
-#. If we have valid windows open
-#. Only one window and a valid AbominationRunningApp for it
-#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
-#. as a workaround
-#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
-#: src/panel/applets/icon-tasklist/IconPopover.vala:226
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
-msgid "Budgie Screenshot"
-msgstr "Budgie 截图"
-
-#. Translators: be as brief as possible; popovers ar cut off if broader than
-#. the window
-#: src/daemon/screenshot.vala:438
-msgid "Screenshot entire screen"
-msgstr "全屏幕截图"
-
-#: src/daemon/screenshot.vala:439
-msgid "Screenshot active window"
-msgstr "活动窗口截图"
-
-#: src/daemon/screenshot.vala:440
-msgid "Screenshot selected area"
-msgstr "选定区域截图"
-
-#. we cannot use areabuttons_labels, since these will be translated
-#. don't translate, internal use
-#. translate! These are the interface names
-#: src/daemon/screenshot.vala:548
-msgid "Screen"
-msgstr "屏幕"
-
-#: src/daemon/screenshot.vala:548
-msgid "Window"
-msgstr "窗口"
-
-#: src/daemon/screenshot.vala:548
-msgid "Selection"
-msgstr "选项"
-
-#. translate
-#: src/daemon/screenshot.vala:898
-msgid "Cancel screenshot"
-msgstr "取消截图"
-
-#: src/daemon/screenshot.vala:899
-msgid "Save screenshot to the selected directory"
-msgstr "保存截图到指定目录"
-
-#: src/daemon/screenshot.vala:900
-msgid "Copy screenshot to the clipboard"
-msgstr "复制截图到剪贴板"
-
-#: src/daemon/screenshot.vala:901
-msgid "Open screenshot in default application"
-msgstr "用默认应用打开截图"
-
-#. Other -> call Filebrowser (path = null)
-#. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1175
-msgid "Other..."
-msgstr "其他..."
-
-#. set custom dir to found dir
-#: src/daemon/screenshot.vala:1259
-msgid "Open Folder"
-msgstr "打开文件夹"
-
-#: src/daemon/screenshot.vala:1260
-#: src/panel/settings/settings_autostart.vala:194
-#: src/panel/settings/settings_autostart.vala:359
-#: src/panel/settings/settings_panel_dialogs.vala:158
-#: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
-msgid "Cancel"
-msgstr "取消"
-
-#: src/daemon/screenshot.vala:1260
-msgid "Open"
-msgstr "打开"
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] ""
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -538,79 +532,10 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "由于未知错误，无法创建小部件实例。"
 
-#: src/panel/settings/settings_style.vala:33
-msgid "Style"
-msgstr "風格"
-
-#: src/panel/settings/settings_style.vala:47
-#: src/panel/settings/settings_raven.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_raven.vala:47
+#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "小部件"
-
-#: src/panel/settings/settings_style.vala:48
-msgid "Set the appearance of window decorations and controls"
-msgstr "设置窗口美化和控制器的外观"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Icons"
-msgstr "圖示"
-
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the globally used icon theme"
-msgstr "設定通用圖示主題"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Cursors"
-msgstr "滑鼠游標"
-
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used mouse cursor theme"
-msgstr "設定通用滑鼠游標主題"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Notification Position"
-msgstr "通知位置"
-
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the location for notification popups"
-msgstr "设置通知弹出的位置"
-
-#: src/panel/settings/settings_style.vala:72
-msgid "Dark theme"
-msgstr "深色主題"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "Built-in theme"
-msgstr "內置主題"
-
-#: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr "开启后，内置主题将覆盖桌面组件的样式"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Animations"
-msgstr "動畫"
-
-#: src/panel/settings/settings_style.vala:88
-msgid "Control whether windows and controls use animations"
-msgstr "控制是否对窗口和控制条使用动画"
-
-#: src/panel/settings/settings_style.vala:205
-msgid "Top Left"
-msgstr "左上"
-
-#: src/panel/settings/settings_style.vala:207
-msgid "Bottom Left"
-msgstr "左下"
-
-#: src/panel/settings/settings_style.vala:209
-msgid "Bottom Right"
-msgstr "右下"
-
-#: src/panel/settings/settings_style.vala:212
-msgid "Top Right"
-msgstr "右上"
 
 #: src/panel/settings/settings_raven.vala:48
 #: src/panel/settings/settings_panel.vala:89
@@ -944,9 +869,74 @@ msgid ""
 "oldest."
 msgstr "设置通知是从最旧的到最新的，还是从最新的到最旧的排序"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
-msgid "All"
-msgstr "全部"
+#: src/panel/settings/settings_style.vala:33
+msgid "Style"
+msgstr "風格"
+
+#: src/panel/settings/settings_style.vala:48
+msgid "Set the appearance of window decorations and controls"
+msgstr "设置窗口美化和控制器的外观"
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Icons"
+msgstr "圖示"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the globally used icon theme"
+msgstr "設定通用圖示主題"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Cursors"
+msgstr "滑鼠游標"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used mouse cursor theme"
+msgstr "設定通用滑鼠游標主題"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Notification Position"
+msgstr "通知位置"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the location for notification popups"
+msgstr "设置通知弹出的位置"
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Dark theme"
+msgstr "深色主題"
+
+#: src/panel/settings/settings_style.vala:79
+msgid "Built-in theme"
+msgstr "內置主題"
+
+#: src/panel/settings/settings_style.vala:80
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr "开启后，内置主题将覆盖桌面组件的样式"
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Animations"
+msgstr "動畫"
+
+#: src/panel/settings/settings_style.vala:88
+msgid "Control whether windows and controls use animations"
+msgstr "控制是否对窗口和控制条使用动画"
+
+#: src/panel/settings/settings_style.vala:207
+msgid "Top Left"
+msgstr "左上"
+
+#: src/panel/settings/settings_style.vala:209
+msgid "Bottom Left"
+msgstr "左下"
+
+#: src/panel/settings/settings_style.vala:211
+msgid "Bottom Right"
+msgstr "右下"
+
+#: src/panel/settings/settings_style.vala:214
+msgid "Top Right"
+msgstr "右上"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -965,7 +955,7 @@ msgid "Set icon"
 msgstr "設訂圖示"
 
 #. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:101
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
 msgstr "抱歉, 查無此物"
 
@@ -973,10 +963,14 @@ msgstr "抱歉, 查無此物"
 msgid "Power"
 msgstr "电源"
 
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "全部"
+
 #. Prepare label widget
 #. Caffeine Notification
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:45
+#: src/raven/notifications_group.vala:92
 msgid "Caffeine Mode"
 msgstr "Caffeine 模式"
 
@@ -1056,18 +1050,13 @@ msgid "Num lock is not active"
 msgstr "數字鍵盤已關閉"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
-#: src/raven/notifications_view.vala:336
 #, c-format
-msgid "%u unread notifications"
-msgstr "%u 條未讀通知"
+msgid "%u unread notification"
+msgid_plural "%u unread notifications"
+msgstr[0] ""
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:338
-msgid "1 unread notification"
-msgstr "1 條未讀通知"
-
-#: src/panel/applets/notifications/NotificationsApplet.vala:125
-#: src/raven/notifications_view.vala:340
+#: src/raven/notifications_view.vala:377
 msgid "No unread notifications"
 msgstr "無未讀通知"
 
@@ -1144,18 +1133,6 @@ msgstr "卸除裝置時發生錯誤"
 msgid "Places"
 msgstr "位置"
 
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "現在沒有什麼可顯示"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "掛載一些裝置"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "啟用更多區塊"
-
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -1173,6 +1150,18 @@ msgstr "你輸入的密碼不正確"
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "掛載此卷時遇到未知的錯誤"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "現在沒有什麼可顯示"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "掛載一些裝置"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "啟用更多區塊"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
 msgid "Toggle the desktop"
@@ -1207,39 +1196,42 @@ msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
 msgstr[0] "已連結至 %d 部裝置"
 
-#: src/panel/applets/status/PowerIndicator.vala:105
+#: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
 msgstr "電池已充滿."
 
-#: src/panel/applets/status/PowerIndicator.vala:109
+#: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
 msgstr "未知"
 
 #. Set inner charging duration to hours:minutes
-#: src/panel/applets/status/PowerIndicator.vala:118
+#: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
 msgstr "電池正在充電"
 
-#: src/panel/applets/status/PowerIndicator.vala:123
+#: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
 msgstr "電池剩下"
 
-#: src/panel/applets/status/PowerIndicator.vala:182
-msgid "Show battery percentage"
-msgstr "顯示剩餘電池百分比"
+#: src/panel/applets/status/PowerIndicator.vala:198
+msgid "Performance Mode"
+msgstr ""
 
-#: src/panel/applets/status/PowerIndicator.vala:190
+#: src/panel/applets/status/PowerIndicator.vala:207
+msgid "Power Saver"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:214
+msgid "Balanced"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:221
+msgid "Performance"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
 msgstr "能源設定"
-
-#. there's already an active tray, create an informative icon with a popover
-#: src/panel/applets/tray/TrayApplet.vala:114
-msgid "Only one instance of the System Tray can be active at a time."
-msgstr "一次只能有一个系统托盘实例处于活动状态."
-
-#: src/panel/applets/tray/TrayApplet.vala:140
-msgid "The System Tray failed to initialize."
-msgstr "系统托盘初始化失败。处理步骤."
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
@@ -1341,22 +1333,6 @@ msgstr "物理内存"
 msgid "Swap"
 msgstr "交换空间"
 
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "通知"
-
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr "未添加小部件。"
-
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "這裡沒有東西看"
-
-#: src/raven/notifications_view.vala:121
-msgid "No new notifications"
-msgstr "沒有新訊息"
-
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
 msgstr "从最久到最新"
@@ -1364,6 +1340,31 @@ msgstr "从最久到最新"
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
 msgstr "从最新到最久"
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "這裡沒有東西看"
+
+#: src/raven/notifications_view.vala:124
+msgid "No new notifications"
+msgstr "沒有新訊息"
+
+#: src/raven/notifications_view.vala:373
+#, c-format
+msgid "%u unread notifications"
+msgstr "%u 條未讀通知"
+
+#: src/raven/notifications_view.vala:375
+msgid "1 unread notification"
+msgstr "1 條未讀通知"
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "通知"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr "未添加小部件。"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1379,84 +1380,80 @@ msgstr "新的类别"
 msgid "Accessories"
 msgstr "应用程序"
 
-#: src/appindexer/AppIndex.vala:170
+#: src/appindexer/AppIndex.vala:152
 msgid "Education"
 msgstr "教育"
 
-#: src/appindexer/AppIndex.vala:175
+#: src/appindexer/AppIndex.vala:157
 msgid "Games"
 msgstr "游戏"
 
-#: src/appindexer/AppIndex.vala:179
+#: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
 msgstr "图形图像"
 
-#: src/appindexer/AppIndex.vala:187
+#: src/appindexer/AppIndex.vala:169
 msgid "Internet"
 msgstr "互联网"
 
-#: src/appindexer/AppIndex.vala:192
+#: src/appindexer/AppIndex.vala:174
 msgid "Office"
 msgstr "办公"
 
-#: src/appindexer/AppIndex.vala:197
+#: src/appindexer/AppIndex.vala:178
 msgid "Programming"
 msgstr "编程"
 
-#: src/appindexer/AppIndex.vala:201
+#: src/appindexer/AppIndex.vala:182
 msgid "Science"
 msgstr "科技"
 
-#: src/appindexer/AppIndex.vala:207
+#: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
 msgstr "多媒体"
 
-#: src/appindexer/AppIndex.vala:211
+#: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
 msgstr "系统工具"
 
-#: src/appindexer/AppIndex.vala:222
+#: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
 msgstr "通用访问"
 
-#: src/appindexer/AppIndex.vala:226
-msgid "Utilities"
-msgstr "工具"
-
-#: src/dialogs/polkit/polkitdialog.vala:126
+#: src/dialogs/polkit/polkitdialog.vala:195
 msgid "Authentication failed"
 msgstr "認證失敗"
 
-#: src/dialogs/polkit/polkitdialog.vala:215
+#: src/dialogs/polkit/polkitdialog.vala:284
 msgid "Group:"
 msgstr "組別:"
 
 #. Create our buttons
-#: src/dialogs/power/window.vala:92
+#: src/dialogs/power/window.vala:87
 msgid "_Lock"
 msgstr "_锁定"
 
-#: src/dialogs/power/window.vala:95
+#: src/dialogs/power/window.vala:90
 msgid "L_og Out"
 msgstr "注_销"
 
-#: src/dialogs/power/window.vala:98
+#: src/dialogs/power/window.vala:93
 msgid "_Suspend"
 msgstr "_睡眠"
 
-#: src/dialogs/power/window.vala:102
+#: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
 msgstr "_休眠"
 
-#: src/dialogs/power/window.vala:106
+#: src/dialogs/power/window.vala:101
 msgid "_Reboot"
 msgstr "_重启"
 
-#: src/dialogs/power/window.vala:109
+#: src/dialogs/power/window.vala:104
 msgid "Shut_down"
 msgstr "关_机"
 
-#: src/dialogs/power/window.vala:161
+#: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
 msgstr "此系统不支持休眠"
 
@@ -1634,6 +1631,10 @@ msgstr "空隔大小"
 msgid "Icon Spacing"
 msgstr "图标间隔"
 
+#: src/panel/applets/status/settings.ui.h:2
+msgid "Show battery percentage"
+msgstr "顯示剩餘電池百分比"
+
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
 msgstr "“添加”按钮可见"
@@ -1674,6 +1675,30 @@ msgstr "1.5X"
 msgid "2.0x"
 msgstr "2.0X"
 
+#: src/panel/applets/trash/settings.ui.h:1
+msgid "Sort Mode"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:2
+msgid "Sort by type"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:3
+msgid "Sort alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:4
+msgid "Sort reverse alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:5
+msgid "Sort by date ascending"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:6
+msgid "Sort by date descending"
+msgstr ""
+
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
 msgstr "显示周数"
@@ -1682,6 +1707,7 @@ msgstr "显示周数"
 msgid "Show Day Names"
 msgstr "显示星期几"
 
+#: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
 msgstr "允许音量超过限制"
@@ -1702,7 +1728,19 @@ msgstr "密碼："
 msgid "Authentication is required"
 msgstr "需要驗證"
 
+#: src/dialogs/polkit/dialog.ui.h:4
+msgid "Details"
+msgstr ""
+
 #: src/dialogs/polkit/dialog.ui.h:5
+msgid "Action:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:6
+msgid "ID:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
 msgstr "驗證"
 
@@ -1785,8 +1823,9 @@ msgid "An application task list with icons and labels."
 msgstr "带有图标和标签的应用程序任务列表。"
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System tray using the XEMBED protocol."
-msgstr "使用XEMBED协议的系统托盘图标。"
+msgid ""
+"System tray implementing the Freedesktop Status Notifier specification."
+msgstr ""
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1795,6 +1834,10 @@ msgstr "打开电源选项对话框。"
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
 msgstr "显示工作区并在其间切换。"
+
+#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
+msgid "Manage your trash from the Budgie panel"
+msgstr ""
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
