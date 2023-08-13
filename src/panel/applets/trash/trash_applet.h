@@ -35,18 +35,18 @@ struct _TrashAppletClass {
 struct _TrashApplet {
 	BudgieApplet parent;
 
-	TrashAppletPrivate *priv;
-	GSettings *settings;
+	TrashAppletPrivate* priv;
+	GSettings* settings;
 };
 
 GType trash_applet_get_type(void);
 
-void trash_applet_init_gtype(GTypeModule *module);
+void trash_applet_init_gtype(GTypeModule* module);
 
-TrashApplet *trash_applet_new(const gchar *uuid);
+TrashApplet* trash_applet_new(const gchar* uuid);
 
-gchar *trash_applet_get_uuid(TrashApplet *self);
+gchar* trash_applet_get_uuid(TrashApplet* self);
 
-void trash_applet_set_uuid(TrashApplet *self, const gchar *value);
+void trash_applet_set_uuid(TrashApplet* self, const gchar* value);
 
 G_END_DECLS

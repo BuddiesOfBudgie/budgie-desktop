@@ -25,44 +25,44 @@ enum {
 	LAST_PROP
 };
 
-static GParamSpec *props[LAST_PROP] = {
+static GParamSpec* props[LAST_PROP] = {
 	NULL,
 };
 
 struct _TrashAppletPrivate {
-	BudgiePopoverManager *manager;
+	BudgiePopoverManager* manager;
 
-	gchar *uuid;
+	gchar* uuid;
 
-	GtkWidget *popover;
-	GtkWidget *icon_button;
+	GtkWidget* popover;
+	GtkWidget* icon_button;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(TrashApplet, trash_applet, BUDGIE_TYPE_APPLET, 0, G_ADD_PRIVATE_DYNAMIC(TrashApplet))
 
-static void trash_empty_cb(TrashPopover *source, gpointer user_data) {
+static void trash_empty_cb(TrashPopover* source, gpointer user_data) {
 	(void) source;
-	TrashApplet *self = user_data;
-	GtkWidget *image;
+	TrashApplet* self = user_data;
+	GtkWidget* image;
 
 	image = gtk_image_new_from_icon_name("user-trash-symbolic", GTK_ICON_SIZE_MENU);
 
 	gtk_button_set_image(GTK_BUTTON(self->priv->icon_button), image);
 }
 
-static void trash_filled_cb(TrashPopover *source, gpointer user_data) {
+static void trash_filled_cb(TrashPopover* source, gpointer user_data) {
 	(void) source;
-	TrashApplet *self = user_data;
-	GtkWidget *image;
+	TrashApplet* self = user_data;
+	GtkWidget* image;
 
 	image = gtk_image_new_from_icon_name("user-trash-full-symbolic", GTK_ICON_SIZE_MENU);
 
 	gtk_button_set_image(GTK_BUTTON(self->priv->icon_button), image);
 }
 
-static void trash_applet_constructed(GObject *object) {
-	TrashApplet *self = TRASH_APPLET(object);
-	TrashPopover *popover_body;
+static void trash_applet_constructed(GObject* object) {
+	TrashApplet* self = TRASH_APPLET(object);
+	TrashPopover* popover_body;
 
 	// Set our settings schema and prefix
 	g_object_set(self,
@@ -85,9 +85,9 @@ static void trash_applet_constructed(GObject *object) {
 /**
  * Handle cleanup of the applet.
  */
-static void trash_applet_finalize(GObject *object) {
-	TrashApplet *self;
-	TrashAppletPrivate *priv;
+static void trash_applet_finalize(GObject* object) {
+	TrashApplet* self;
+	TrashAppletPrivate* priv;
 
 	self = TRASH_APPLET(object);
 	priv = trash_applet_get_instance_private(self);
@@ -101,8 +101,8 @@ static void trash_applet_finalize(GObject *object) {
 	G_OBJECT_CLASS(trash_applet_parent_class)->finalize(object);
 }
 
-static void trash_applet_get_property(GObject *obj, guint prop_id, GValue *val, GParamSpec *spec) {
-	TrashApplet *self = TRASH_APPLET(obj);
+static void trash_applet_get_property(GObject* obj, guint prop_id, GValue* val, GParamSpec* spec) {
+	TrashApplet* self = TRASH_APPLET(obj);
 
 	switch (prop_id) {
 		case PROP_UUID:
@@ -114,8 +114,8 @@ static void trash_applet_get_property(GObject *obj, guint prop_id, GValue *val, 
 	}
 }
 
-static void trash_applet_set_property(GObject *obj, guint prop_id, const GValue *val, GParamSpec *spec) {
-	TrashApplet *self = TRASH_APPLET(obj);
+static void trash_applet_set_property(GObject* obj, guint prop_id, const GValue* val, GParamSpec* spec) {
+	TrashApplet* self = TRASH_APPLET(obj);
 
 	switch (prop_id) {
 		case PROP_UUID:
@@ -127,9 +127,9 @@ static void trash_applet_set_property(GObject *obj, guint prop_id, const GValue 
 	}
 }
 
-static GtkWidget *trash_applet_get_settings_ui(BudgieApplet *base) {
-	TrashApplet *self = TRASH_APPLET(base);
-	TrashSettings *trash_settings;
+static GtkWidget* trash_applet_get_settings_ui(BudgieApplet* base) {
+	TrashApplet* self = TRASH_APPLET(base);
+	TrashSettings* trash_settings;
 
 	trash_settings = trash_settings_new(self->settings);
 	g_object_ref_sink(trash_settings);
@@ -137,7 +137,7 @@ static GtkWidget *trash_applet_get_settings_ui(BudgieApplet *base) {
 	return GTK_WIDGET(trash_settings);
 }
 
-static gboolean trash_applet_supports_settings(BudgieApplet *base) {
+static gboolean trash_applet_supports_settings(BudgieApplet* base) {
 	(void) base;
 	return TRUE;
 }
@@ -145,8 +145,8 @@ static gboolean trash_applet_supports_settings(BudgieApplet *base) {
 /**
  * Register our popover with the Budgie popover manager.
  */
-static void update_popovers(BudgieApplet *base, BudgiePopoverManager *manager) {
-	TrashApplet *self = TRASH_APPLET(base);
+static void update_popovers(BudgieApplet* base, BudgiePopoverManager* manager) {
+	TrashApplet* self = TRASH_APPLET(base);
 	budgie_popover_manager_register_popover(manager,
 		GTK_WIDGET(self->priv->icon_button),
 		BUDGIE_POPOVER(self->priv->popover));
@@ -156,9 +156,9 @@ static void update_popovers(BudgieApplet *base, BudgiePopoverManager *manager) {
 /**
  * Initialize the Trash Applet class.
  */
-static void trash_applet_class_init(TrashAppletClass *klass) {
-	GObjectClass *class;
-	BudgieAppletClass *budgie_class;
+static void trash_applet_class_init(TrashAppletClass* klass) {
+	GObjectClass* class;
+	BudgieAppletClass* budgie_class;
 
 	class = G_OBJECT_CLASS(klass);
 	budgie_class = BUDGIE_APPLET_CLASS(klass);
@@ -192,11 +192,11 @@ static void trash_applet_class_init(TrashAppletClass *klass) {
 /**
  * Handle cleanup of the applet class.
  */
-static void trash_applet_class_finalize(__budgie_unused__ TrashAppletClass *klass) {
+static void trash_applet_class_finalize(__budgie_unused__ TrashAppletClass* klass) {
 	notify_uninit();
 }
 
-static void toggle_popover(__budgie_unused__ GtkButton *sender, TrashApplet *self) {
+static void toggle_popover(__budgie_unused__ GtkButton* sender, TrashApplet* self) {
 	if (gtk_widget_is_visible(self->priv->popover)) {
 		gtk_widget_hide(self->priv->popover);
 	} else {
@@ -205,16 +205,16 @@ static void toggle_popover(__budgie_unused__ GtkButton *sender, TrashApplet *sel
 }
 
 static void drag_data_received(
-	__budgie_unused__ TrashApplet *self,
-	GdkDragContext *context,
+	__budgie_unused__ TrashApplet* self,
+	GdkDragContext* context,
 	__budgie_unused__ gint x,
 	__budgie_unused__ gint y,
-	GtkSelectionData *data,
+	GtkSelectionData* data,
 	guint info,
 	guint time) {
 	g_return_if_fail(info == 0);
 
-	g_autofree gchar *uri = g_strdup((gchar *) gtk_selection_data_get_data(data));
+	g_autofree gchar* uri = g_strdup((gchar*) gtk_selection_data_get_data(data));
 	g_autoptr(GFile) file = NULL;
 	g_autoptr(GError) err = NULL;
 
@@ -238,8 +238,8 @@ static void drag_data_received(
  * Initialization of basic UI elements and loads our CSS
  * style stuff.
  */
-static void trash_applet_init(TrashApplet *self) {
-	GtkStyleContext *button_style;
+static void trash_applet_init(TrashApplet* self) {
+	GtkStyleContext* button_style;
 
 	// Create our 'private' struct
 	self->priv = trash_applet_get_instance_private(self);
@@ -277,7 +277,7 @@ static void trash_applet_init(TrashApplet *self) {
  *
  * Initializes and registers the #GType for a #TrashApplet object.
  */
-void trash_applet_init_gtype(GTypeModule *module) {
+void trash_applet_init_gtype(GTypeModule* module) {
 	trash_applet_register_type(module);
 }
 
@@ -289,7 +289,7 @@ void trash_applet_init_gtype(GTypeModule *module) {
  *
  * Returns: a new #TrashApplet object
  */
-TrashApplet *trash_applet_new(const gchar *uuid) {
+TrashApplet* trash_applet_new(const gchar* uuid) {
 	return g_object_new(TRASH_TYPE_APPLET, "uuid", uuid, NULL);
 }
 
@@ -301,7 +301,7 @@ TrashApplet *trash_applet_new(const gchar *uuid) {
  *
  * Returns: (type gchar *) (transfer full): the UUID
  */
-gchar *trash_applet_get_uuid(TrashApplet *self) {
+gchar* trash_applet_get_uuid(TrashApplet* self) {
 	g_return_val_if_fail(TRASH_IS_APPLET(self), NULL);
 
 	return g_strdup(self->priv->uuid);
@@ -314,7 +314,7 @@ gchar *trash_applet_get_uuid(TrashApplet *self) {
  *
  * Set the UUID for this applet instance.
  */
-void trash_applet_set_uuid(TrashApplet *self, const gchar *value) {
+void trash_applet_set_uuid(TrashApplet* self, const gchar* value) {
 	g_return_if_fail(TRASH_IS_APPLET(self));
 	g_return_if_fail(value != NULL);
 

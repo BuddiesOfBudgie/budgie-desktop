@@ -34,6 +34,6 @@ typedef enum {
 
 G_DECLARE_FINAL_TYPE(TrashSettings, trash_settings, TRASH, SETTINGS, GtkGrid)
 
-TrashSettings *trash_settings_new(GSettings *settings);
+TrashSettings* trash_settings_new(GSettings* settings);
 
 G_END_DECLS

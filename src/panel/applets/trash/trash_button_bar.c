@@ -44,9 +44,9 @@ static guint signals[LAST_SIGNAL];
 typedef struct _TrashButtonBarPrivate TrashButtonBarPrivate;
 
 struct _TrashButtonBarPrivate {
-	GtkWidget *revealer;
-	GtkWidget *content_area;
-	GtkWidget *action_area;
+	GtkWidget* revealer;
+	GtkWidget* content_area;
+	GtkWidget* action_area;
 };
 
 typedef struct {
@@ -55,8 +55,8 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(TrashButtonBar, trash_button_bar, GTK_TYPE_BOX)
 
-static void trash_button_bar_class_init(TrashButtonBarClass *klass) {
-	GtkWidgetClass *widget_class;
+static void trash_button_bar_class_init(TrashButtonBarClass* klass) {
+	GtkWidgetClass* widget_class;
 
 	widget_class = GTK_WIDGET_CLASS(klass);
 
@@ -83,10 +83,10 @@ static void trash_button_bar_class_init(TrashButtonBarClass *klass) {
 	gtk_widget_class_set_css_name(widget_class, "trashbuttonbar");
 }
 
-static void trash_button_bar_init(TrashButtonBar *self) {
-	TrashButtonBarPrivate *priv;
+static void trash_button_bar_init(TrashButtonBar* self) {
+	TrashButtonBarPrivate* priv;
 	GtkStyleContext *content_area_style, *action_area_style;
-	GtkWidget *box;
+	GtkWidget* box;
 
 	priv = trash_button_bar_get_instance_private(self);
 
@@ -122,7 +122,7 @@ static void trash_button_bar_init(TrashButtonBar *self) {
  *
  * Returns: a new #TrashButtonBar object.
  */
-TrashButtonBar *trash_button_bar_new(void) {
+TrashButtonBar* trash_button_bar_new(void) {
 	return g_object_new(TRASH_TYPE_BUTTON_BAR, "orientation", GTK_ORIENTATION_VERTICAL, "spacing", 0, NULL);
 }
 
@@ -130,8 +130,8 @@ static void response_data_free(gpointer data) {
 	g_slice_free(ResponseData, data);
 }
 
-static ResponseData *get_response_data(GtkWidget *widget, gboolean create) {
-	ResponseData *data;
+static ResponseData* get_response_data(GtkWidget* widget, gboolean create) {
+	ResponseData* data;
 
 	data = g_object_get_data(G_OBJECT(widget), "trash-button-bar-response-data");
 
@@ -144,9 +144,9 @@ static ResponseData *get_response_data(GtkWidget *widget, gboolean create) {
 	return data;
 }
 
-static GtkWidget *find_button(TrashButtonBar *self, gint response_id) {
-	TrashButtonBarPrivate *priv;
-	GtkWidget *widget = NULL;
+static GtkWidget* find_button(TrashButtonBar* self, gint response_id) {
+	TrashButtonBarPrivate* priv;
+	GtkWidget* widget = NULL;
 	GList *children, *list;
 
 	priv = trash_button_bar_get_instance_private(self);
@@ -154,7 +154,7 @@ static GtkWidget *find_button(TrashButtonBar *self, gint response_id) {
 	children = gtk_container_get_children(GTK_CONTAINER(priv->action_area));
 
 	for (list = children; list; list = list->next) {
-		ResponseData *data;
+		ResponseData* data;
 
 		data = get_response_data(list->data, FALSE);
 
@@ -169,9 +169,9 @@ static GtkWidget *find_button(TrashButtonBar *self, gint response_id) {
 	return widget;
 }
 
-static void button_clicked(GtkButton *button, gpointer user_data) {
-	TrashButtonBar *self = user_data;
-	ResponseData *data;
+static void button_clicked(GtkButton* button, gpointer user_data) {
+	TrashButtonBar* self = user_data;
+	ResponseData* data;
 
 	data = get_response_data(GTK_WIDGET(button), FALSE);
 
@@ -190,10 +190,10 @@ static void button_clicked(GtkButton *button, gpointer user_data) {
  *
  * Returns: (type Gtk.Button) (transfer none): the created button.
  */
-GtkWidget *trash_button_bar_add_button(TrashButtonBar *self, const gchar *text, gint response_id) {
-	TrashButtonBarPrivate *priv;
-	GtkWidget *button;
-	ResponseData *data;
+GtkWidget* trash_button_bar_add_button(TrashButtonBar* self, const gchar* text, gint response_id) {
+	TrashButtonBarPrivate* priv;
+	GtkWidget* button;
+	ResponseData* data;
 
 	g_return_val_if_fail(self != NULL, NULL);
 	g_return_val_if_fail(text != NULL, NULL);
@@ -224,8 +224,8 @@ GtkWidget *trash_button_bar_add_button(TrashButtonBar *self, const gchar *text, 
  *
  * Returns: (type Gtk.Box) (transfer none): the content area.
  */
-GtkWidget *trash_button_bar_get_content_area(TrashButtonBar *self) {
-	TrashButtonBarPrivate *priv;
+GtkWidget* trash_button_bar_get_content_area(TrashButtonBar* self) {
+	TrashButtonBarPrivate* priv;
 
 	g_return_val_if_fail(self != NULL, NULL);
 
@@ -242,8 +242,8 @@ GtkWidget *trash_button_bar_get_content_area(TrashButtonBar *self) {
  *
  * Returns: the reveal state of the revealer.
  */
-gboolean trash_button_bar_get_revealed(TrashButtonBar *self) {
-	TrashButtonBarPrivate *priv;
+gboolean trash_button_bar_get_revealed(TrashButtonBar* self) {
+	TrashButtonBarPrivate* priv;
 
 	g_return_val_if_fail(self != NULL, FALSE);
 
@@ -260,9 +260,9 @@ gboolean trash_button_bar_get_revealed(TrashButtonBar *self) {
  *
  * Adds a style class to any button with the given @response_id.
  */
-void trash_button_bar_add_response_style_class(TrashButtonBar *self, gint response_id, const gchar *style) {
-	GtkWidget *widget;
-	GtkStyleContext *widget_style;
+void trash_button_bar_add_response_style_class(TrashButtonBar* self, gint response_id, const gchar* style) {
+	GtkWidget* widget;
+	GtkStyleContext* widget_style;
 
 	g_return_if_fail(self != NULL);
 	g_return_if_fail(style != NULL);
@@ -287,8 +287,8 @@ void trash_button_bar_add_response_style_class(TrashButtonBar *self, gint respon
  *
  * Sets the sensitivity of any button that has the given @response_id.
  */
-void trash_button_bar_set_response_sensitive(TrashButtonBar *self, gint response_id, gboolean sensitive) {
-	GtkWidget *widget;
+void trash_button_bar_set_response_sensitive(TrashButtonBar* self, gint response_id, gboolean sensitive) {
+	GtkWidget* widget;
 
 	g_return_if_fail(self != NULL);
 
@@ -309,8 +309,8 @@ void trash_button_bar_set_response_sensitive(TrashButtonBar *self, gint response
  *
  * Sets whether or not the revealer should show its contents.
  */
-void trash_button_bar_set_revealed(TrashButtonBar *self, gboolean reveal) {
-	TrashButtonBarPrivate *priv;
+void trash_button_bar_set_revealed(TrashButtonBar* self, gboolean reveal) {
+	TrashButtonBarPrivate* priv;
 
 	g_return_if_fail(self != NULL);
 

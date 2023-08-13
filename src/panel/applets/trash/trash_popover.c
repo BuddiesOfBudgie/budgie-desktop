@@ -44,7 +44,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static GParamSpec *props[LAST_PROP] = {
+static GParamSpec* props[LAST_PROP] = {
 	NULL,
 };
 static guint signals[LAST_SIGNAL];
@@ -52,23 +52,23 @@ static guint signals[LAST_SIGNAL];
 struct _TrashPopover {
 	GtkBox parent_instance;
 
-	TrashManager *trash_manager;
+	TrashManager* trash_manager;
 
-	GSettings *settings;
+	GSettings* settings;
 	TrashSortMode sort_mode;
 
-	GtkWidget *stack;
-	GtkWidget *file_box;
-	TrashButtonBar *button_bar;
-	TrashButtonBar *confirm_bar;
+	GtkWidget* stack;
+	GtkWidget* file_box;
+	TrashButtonBar* button_bar;
+	TrashButtonBar* confirm_bar;
 };
 
 G_DEFINE_TYPE(TrashPopover, trash_popover, GTK_TYPE_BOX)
 
-static gint list_box_sort_func(GtkListBoxRow *row1, GtkListBoxRow *row2, gpointer user_data) {
-	TrashPopover *self = user_data;
-	TrashItemRow *a;
-	TrashItemRow *b;
+static gint list_box_sort_func(GtkListBoxRow* row1, GtkListBoxRow* row2, gpointer user_data) {
+	TrashPopover* self = user_data;
+	TrashItemRow* a;
+	TrashItemRow* b;
 
 	a = TRASH_ITEM_ROW(row1);
 	b = TRASH_ITEM_ROW(row2);
@@ -88,8 +88,8 @@ static gint list_box_sort_func(GtkListBoxRow *row1, GtkListBoxRow *row2, gpointe
 	}
 }
 
-static void settings_changed(GSettings *settings, gchar *key, gpointer user_data) {
-	TrashPopover *self = user_data;
+static void settings_changed(GSettings* settings, gchar* key, gpointer user_data) {
+	TrashPopover* self = user_data;
 	TrashSortMode new_sort_mode;
 
 	new_sort_mode = (TrashSortMode) g_settings_get_enum(settings, key);
@@ -103,10 +103,10 @@ static void settings_changed(GSettings *settings, gchar *key, gpointer user_data
 	gtk_list_box_invalidate_sort(GTK_LIST_BOX(self->file_box));
 }
 
-static void settings_clicked(GtkButton *button, TrashPopover *self) {
-	GtkStack *stack;
-	GtkWidget *image;
-	const gchar *current_name = NULL;
+static void settings_clicked(GtkButton* button, TrashPopover* self) {
+	GtkStack* stack;
+	GtkWidget* image;
+	const gchar* current_name = NULL;
 
 	stack = GTK_STACK(self->stack);
 	current_name = gtk_stack_get_visible_child_name(stack);
@@ -126,9 +126,9 @@ static void settings_clicked(GtkButton *button, TrashPopover *self) {
 	}
 }
 
-static void trash_added(TrashManager *manager, GFile *file, TrashInfo *trash_info, TrashPopover *self) {
+static void trash_added(TrashManager* manager, GFile* file, TrashInfo* trash_info, TrashPopover* self) {
 	(void) manager;
-	TrashItemRow *row;
+	TrashItemRow* row;
 	gint count;
 
 	row = trash_item_row_new(file, trash_info);
@@ -143,7 +143,7 @@ static void trash_added(TrashManager *manager, GFile *file, TrashInfo *trash_inf
 	g_signal_emit(self, signals[TRASH_FILLED], 0, NULL);
 }
 
-static void foreach_item_cb(TrashItemRow *row, GFile *file) {
+static void foreach_item_cb(TrashItemRow* row, GFile* file) {
 	g_autofree const gchar *row_uri, *uri;
 	g_autoptr(GFile) row_file;
 
@@ -157,7 +157,7 @@ static void foreach_item_cb(TrashItemRow *row, GFile *file) {
 	}
 }
 
-static void trash_removed(TrashManager *manager, GFile *file, TrashPopover *self) {
+static void trash_removed(TrashManager* manager, GFile* file, TrashPopover* self) {
 	(void) manager;
 	gint count;
 
@@ -173,9 +173,9 @@ static void trash_removed(TrashManager *manager, GFile *file, TrashPopover *self
 	}
 }
 
-static void selected_rows_changed(GtkListBox *source, gpointer user_data) {
-	TrashButtonBar *button_bar = user_data;
-	GList *selected_rows;
+static void selected_rows_changed(GtkListBox* source, gpointer user_data) {
+	TrashButtonBar* button_bar = user_data;
+	GList* selected_rows;
 	guint count;
 
 	selected_rows = gtk_list_box_get_selected_rows(source);
@@ -185,7 +185,7 @@ static void selected_rows_changed(GtkListBox *source, gpointer user_data) {
 	g_list_free(selected_rows);
 }
 
-static void delete_item(GtkWidget *widget, gpointer user_data) {
+static void delete_item(GtkWidget* widget, gpointer user_data) {
 	(void) user_data;
 
 	trash_item_row_delete(TRASH_ITEM_ROW(widget));
@@ -193,15 +193,15 @@ static void delete_item(GtkWidget *widget, gpointer user_data) {
 
 static void restore_item(gpointer data, gpointer user_data) {
 	(void) user_data;
-	TrashItemRow *row = data;
+	TrashItemRow* row = data;
 
 	trash_item_row_restore(row);
 }
 
-static void handle_response_cb(TrashButtonBar *source, gint response, gpointer user_data) {
+static void handle_response_cb(TrashButtonBar* source, gint response, gpointer user_data) {
 	(void) source;
-	TrashPopover *self = user_data;
-	GList *selected_rows;
+	TrashPopover* self = user_data;
+	GList* selected_rows;
 
 	switch (response) {
 		case TRASH_RESPONSE_RESTORE:
@@ -216,8 +216,8 @@ static void handle_response_cb(TrashButtonBar *source, gint response, gpointer u
 	}
 }
 
-static void confirm_response_cb(TrashButtonBar *source, gint response_id, gpointer user_data) {
-	TrashPopover *self = user_data;
+static void confirm_response_cb(TrashButtonBar* source, gint response_id, gpointer user_data) {
+	TrashPopover* self = user_data;
 
 	switch (response_id) {
 		case GTK_RESPONSE_YES:
@@ -231,22 +231,22 @@ static void confirm_response_cb(TrashButtonBar *source, gint response_id, gpoint
 	trash_button_bar_set_revealed(self->button_bar, TRUE);
 }
 
-static void trash_popover_constructed(GObject *object) {
-	TrashPopover *self;
-	GtkWidget *header;
-	PangoAttrList *attr_list;
-	PangoFontDescription *font_description;
-	PangoAttribute *font_attr;
-	GtkWidget *header_label;
-	GtkWidget *settings_button;
-	GtkStyleContext *header_label_style;
-	GtkStyleContext *settings_button_style;
-	GtkWidget *separator;
-	GtkWidget *main_view;
-	GtkWidget *scroller;
+static void trash_popover_constructed(GObject* object) {
+	TrashPopover* self;
+	GtkWidget* header;
+	PangoAttrList* attr_list;
+	PangoFontDescription* font_description;
+	PangoAttribute* font_attr;
+	GtkWidget* header_label;
+	GtkWidget* settings_button;
+	GtkStyleContext* header_label_style;
+	GtkStyleContext* settings_button_style;
+	GtkWidget* separator;
+	GtkWidget* main_view;
+	GtkWidget* scroller;
 	GtkWidget *content_area, *confirm_label;
-	GtkWidget *btn;
-	TrashSettings *settings_view;
+	GtkWidget* btn;
+	TrashSettings* settings_view;
 	gint count;
 
 	self = TRASH_POPOVER(object);
@@ -381,8 +381,8 @@ static void trash_popover_constructed(GObject *object) {
 	G_OBJECT_CLASS(trash_popover_parent_class)->constructed(object);
 }
 
-static void trash_popover_finalize(GObject *object) {
-	TrashPopover *self;
+static void trash_popover_finalize(GObject* object) {
+	TrashPopover* self;
 
 	self = TRASH_POPOVER(object);
 
@@ -392,8 +392,8 @@ static void trash_popover_finalize(GObject *object) {
 	G_OBJECT_CLASS(trash_popover_parent_class)->finalize(object);
 }
 
-static void trash_popover_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *spec) {
-	TrashPopover *self;
+static void trash_popover_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* spec) {
+	TrashPopover* self;
 
 	self = TRASH_POPOVER(object);
 
@@ -407,8 +407,8 @@ static void trash_popover_get_property(GObject *object, guint prop_id, GValue *v
 	}
 }
 
-static void trash_popover_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *spec) {
-	TrashPopover *self;
+static void trash_popover_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* spec) {
+	TrashPopover* self;
 
 	self = TRASH_POPOVER(object);
 
@@ -422,8 +422,8 @@ static void trash_popover_set_property(GObject *object, guint prop_id, const GVa
 	}
 }
 
-static void trash_popover_class_init(TrashPopoverClass *klass) {
-	GObjectClass *class;
+static void trash_popover_class_init(TrashPopoverClass* klass) {
+	GObjectClass* class;
 
 	class = G_OBJECT_CLASS(klass);
 	class->constructed = trash_popover_constructed;
@@ -474,7 +474,7 @@ static void trash_popover_class_init(TrashPopoverClass *klass) {
 	g_object_class_install_properties(class, LAST_PROP, props);
 }
 
-static void trash_popover_init(TrashPopover *self) {
+static void trash_popover_init(TrashPopover* self) {
 	(void) self;
 }
 
@@ -486,6 +486,6 @@ static void trash_popover_init(TrashPopover *self) {
  *
  * Retruns: a new #TrashPopover
  */
-TrashPopover *trash_popover_new(GSettings *settings) {
+TrashPopover* trash_popover_new(GSettings* settings) {
 	return g_object_new(TRASH_TYPE_POPOVER, "settings", settings, "orientation", GTK_ORIENTATION_VERTICAL, "spacing", 0, NULL);
 }

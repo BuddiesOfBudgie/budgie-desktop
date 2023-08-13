@@ -21,20 +21,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(TrashItemRow, trash_item_row, TRASH, ITEM_ROW, GtkListBoxRow)
 
-TrashItemRow *trash_item_row_new(GFile *file, TrashInfo *trash_info);
+TrashItemRow* trash_item_row_new(GFile* file, TrashInfo* trash_info);
 
-GFile *trash_item_row_get_file(TrashItemRow *self);
+GFile* trash_item_row_get_file(TrashItemRow* self);
 
-TrashInfo *trash_item_row_get_info(TrashItemRow *self);
+TrashInfo* trash_item_row_get_info(TrashItemRow* self);
 
-void trash_item_row_delete(TrashItemRow *self);
+void trash_item_row_delete(TrashItemRow* self);
 
-void trash_item_row_restore(TrashItemRow *self);
+void trash_item_row_restore(TrashItemRow* self);
 
-gint trash_item_row_collate_by_date(TrashItemRow *self, TrashItemRow *other);
+gint trash_item_row_collate_by_date(TrashItemRow* self, TrashItemRow* other);
 
-gint trash_item_row_collate_by_name(TrashItemRow *self, TrashItemRow *other);
+gint trash_item_row_collate_by_name(TrashItemRow* self, TrashItemRow* other);
 
-gint trash_item_row_collate_by_type(TrashItemRow *self, TrashItemRow *other);
+gint trash_item_row_collate_by_type(TrashItemRow* self, TrashItemRow* other);
 
 G_END_DECLS

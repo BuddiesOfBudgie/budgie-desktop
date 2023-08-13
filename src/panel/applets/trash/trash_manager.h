@@ -25,10 +25,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(TrashManager, trash_manager, TRASH, MANAGER, GObject)
 
-TrashManager *trash_manager_new(void);
+TrashManager* trash_manager_new(void);
 
-void trash_manager_scan_items(TrashManager *self);
+void trash_manager_scan_items(TrashManager* self);
 
-gint trash_manager_get_item_count(TrashManager *self);
+gint trash_manager_get_item_count(TrashManager* self);
 
 G_END_DECLS

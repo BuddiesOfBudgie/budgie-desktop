@@ -14,7 +14,7 @@
 #include "trash_notify.h"
 
 static gpointer notify_send(gpointer data) {
-	NotifyNotification *noti = data;
+	NotifyNotification* noti = data;
 	gboolean success;
 	g_autoptr(GError) error = NULL;
 
@@ -44,9 +44,9 @@ static gpointer notify_send(gpointer data) {
  * be shown by Budgie without timing out (and locking up the system)
  * until it times out.
  */
-void trash_notify_try_send(gchar *summary, gchar *body, gchar *icon_name) {
-	NotifyNotification *notification;
-	GThread *thread;
+void trash_notify_try_send(gchar* summary, gchar* body, gchar* icon_name) {
+	NotifyNotification* notification;
+	GThread* thread;
 	g_autoptr(GError) error = NULL;
 
 	notification = notify_notification_new(summary, body, icon_name ? icon_name : "user-trash-symbolic");

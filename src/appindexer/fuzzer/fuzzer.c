@@ -24,10 +24,10 @@
  *
  * Return value: a score based on the closeness of the texts
  */
-gint fuzzer_get_fuzzy_score(const gchar *text, const gchar *pattern, gint max_distance) {
+gint fuzzer_get_fuzzy_score(const gchar* text, const gchar* pattern, gint max_distance) {
 	gint result = -1;
 	gint pattern_length;
-	guint64 *bit_array = NULL;
+	guint64* bit_array = NULL;
 	guint64 pattern_mask[CHAR_MAX + 1];
 	gint i, d;
 
@@ -37,10 +37,10 @@ gint fuzzer_get_fuzzy_score(const gchar *text, const gchar *pattern, gint max_di
 	pattern_length = strlen(pattern);
 
 	if (g_strcmp0(pattern, "") == 0) return 0; // Pattern is empty
-	if (pattern_length > 31) return -1; // Error: pattern too long
+	if (pattern_length > 31) return -1;		   // Error: pattern too long
 
 	/* Initialize the bit array */
-	bit_array = (guint64 *) malloc((max_distance + 1) * sizeof(*bit_array));
+	bit_array = (guint64*) malloc((max_distance + 1) * sizeof(*bit_array));
 	for (i = 0; i <= max_distance; ++i) bit_array[i] = ~1;
 
 	/* Initialize the pattern masks */

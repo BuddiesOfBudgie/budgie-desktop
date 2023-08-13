@@ -22,44 +22,44 @@ enum {
 	LAST_PROP
 };
 
-static GParamSpec *props[LAST_PROP] = {
+static GParamSpec* props[LAST_PROP] = {
 	NULL,
 };
 
 struct _TrashInfo {
 	GObject parent_instance;
 
-	const gchar *name;
-	const gchar *display_name;
-	const gchar *restore_path;
+	const gchar* name;
+	const gchar* display_name;
+	const gchar* restore_path;
 
-	GIcon *icon;
+	GIcon* icon;
 
 	goffset size;
 	gboolean is_directory;
 
-	GDateTime *deleted_time;
+	GDateTime* deleted_time;
 };
 
 G_DEFINE_FINAL_TYPE(TrashInfo, trash_info, G_TYPE_OBJECT)
 
-static void trash_info_finalize(GObject *obj) {
-	TrashInfo *self;
+static void trash_info_finalize(GObject* obj) {
+	TrashInfo* self;
 
 	self = TRASH_INFO(obj);
 
-	g_free((gchar *) self->name);
-	g_free((gchar *) self->display_name);
-	g_free((gchar *) self->restore_path);
+	g_free((gchar*) self->name);
+	g_free((gchar*) self->display_name);
+	g_free((gchar*) self->restore_path);
 	g_object_unref(self->icon);
 	g_date_time_unref(self->deleted_time);
 
 	G_OBJECT_CLASS(trash_info_parent_class)->finalize(obj);
 }
 
-static void trash_info_get_property(GObject *obj, guint prop_id, GValue *value, GParamSpec *spec) {
-	TrashInfo *self;
-	GIcon *icon;
+static void trash_info_get_property(GObject* obj, guint prop_id, GValue* value, GParamSpec* spec) {
+	TrashInfo* self;
+	GIcon* icon;
 
 	self = TRASH_INFO(obj);
 
@@ -92,9 +92,9 @@ static void trash_info_get_property(GObject *obj, guint prop_id, GValue *value, 
 	}
 }
 
-static void trash_info_set_property(GObject *obj, guint prop_id, const GValue *value, GParamSpec *spec) {
-	TrashInfo *self;
-	GVariant *raw_icon;
+static void trash_info_set_property(GObject* obj, guint prop_id, const GValue* value, GParamSpec* spec) {
+	TrashInfo* self;
+	GVariant* raw_icon;
 	gpointer date_pointer;
 
 	self = TRASH_INFO(obj);
@@ -121,7 +121,7 @@ static void trash_info_set_property(GObject *obj, guint prop_id, const GValue *v
 			break;
 		case PROP_DELETION_TIME:
 			date_pointer = g_value_get_pointer(value);
-			self->deleted_time = (GDateTime *) date_pointer;
+			self->deleted_time = (GDateTime*) date_pointer;
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, prop_id, spec);
@@ -129,8 +129,8 @@ static void trash_info_set_property(GObject *obj, guint prop_id, const GValue *v
 	}
 }
 
-static void trash_info_class_init(TrashInfoClass *klazz) {
-	GObjectClass *class = G_OBJECT_CLASS(klazz);
+static void trash_info_class_init(TrashInfoClass* klazz) {
+	GObjectClass* class = G_OBJECT_CLASS(klazz);
 	class->finalize = trash_info_finalize;
 	class->get_property = trash_info_get_property;
 	class->set_property = trash_info_set_property;
@@ -189,7 +189,7 @@ static void trash_info_class_init(TrashInfoClass *klazz) {
 	g_object_class_install_properties(class, LAST_PROP, props);
 }
 
-static void trash_info_init(TrashInfo *self) {
+static void trash_info_init(TrashInfo* self) {
 	(void) self;
 }
 
@@ -201,8 +201,8 @@ static void trash_info_init(TrashInfo *self) {
  *
  * Returns: a new #TrashInfo object
  */
-TrashInfo *trash_info_new(GFileInfo *info) {
-	GIcon *icon;
+TrashInfo* trash_info_new(GFileInfo* info) {
+	GIcon* icon;
 
 	icon = g_file_info_get_icon(info);
 
@@ -228,7 +228,7 @@ TrashInfo *trash_info_new(GFileInfo *info) {
  *
  * Returns: (transfer full): the file name
  */
-const gchar *trash_info_get_name(TrashInfo *self) {
+const gchar* trash_info_get_name(TrashInfo* self) {
 	return g_strdup(self->name);
 }
 
@@ -240,7 +240,7 @@ const gchar *trash_info_get_name(TrashInfo *self) {
  *
  * Returns: (transfer full): the file's display name
  */
-const gchar *trash_info_get_display_name(TrashInfo *self) {
+const gchar* trash_info_get_display_name(TrashInfo* self) {
 	return g_strdup(self->display_name);
 }
 
@@ -252,7 +252,7 @@ const gchar *trash_info_get_display_name(TrashInfo *self) {
  *
  * Returns: (transfer full): the file's original path
  */
-const gchar *trash_info_get_restore_path(TrashInfo *self) {
+const gchar* trash_info_get_restore_path(TrashInfo* self) {
 	return g_strdup(self->restore_path);
 }
 
@@ -264,7 +264,7 @@ const gchar *trash_info_get_restore_path(TrashInfo *self) {
  *
  * Returns: (transfer full): an icon for this file
  */
-GIcon *trash_info_get_icon(TrashInfo *self) {
+GIcon* trash_info_get_icon(TrashInfo* self) {
 	return g_object_ref(self->icon);
 }
 
@@ -276,7 +276,7 @@ GIcon *trash_info_get_icon(TrashInfo *self) {
  *
  * Returns: the size of the file
  */
-goffset trash_info_get_size(TrashInfo *self) {
+goffset trash_info_get_size(TrashInfo* self) {
 	return self->size;
 }
 
@@ -288,7 +288,7 @@ goffset trash_info_get_size(TrashInfo *self) {
  *
  * Returns: if the file is a directory
  */
-gboolean trash_info_is_directory(TrashInfo *self) {
+gboolean trash_info_is_directory(TrashInfo* self) {
 	return self->is_directory;
 }
 
@@ -300,6 +300,6 @@ gboolean trash_info_is_directory(TrashInfo *self) {
  *
  * Returns: (transfer full): when the file was trashed
  */
-GDateTime *trash_info_get_deletion_time(TrashInfo *self) {
+GDateTime* trash_info_get_deletion_time(TrashInfo* self) {
 	return g_date_time_ref(self->deleted_time);
 }

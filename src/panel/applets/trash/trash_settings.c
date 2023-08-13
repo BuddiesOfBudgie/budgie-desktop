@@ -17,27 +17,27 @@
  * The #TrashSettings widget contains controls that bind to the applet settings.
  */
 
-#include "trash_enum_types.h"
 #include "trash_settings.h"
+#include "trash_enum_types.h"
 
 struct _TrashSettings {
 	GtkGrid parent_instance;
 
-	GSettings *settings;
+	GSettings* settings;
 
 	gboolean update_setting;
 
-	GtkRadioButton *btn_sort_type;
-	GtkRadioButton *btn_sort_alphabetical;
-	GtkRadioButton *btn_sort_reverse_alphabetical;
-	GtkRadioButton *btn_sort_date_ascending;
-	GtkRadioButton *btn_sort_date_descending;
+	GtkRadioButton* btn_sort_type;
+	GtkRadioButton* btn_sort_alphabetical;
+	GtkRadioButton* btn_sort_reverse_alphabetical;
+	GtkRadioButton* btn_sort_date_ascending;
+	GtkRadioButton* btn_sort_date_descending;
 };
 
 G_DEFINE_FINAL_TYPE(TrashSettings, trash_settings, GTK_TYPE_GRID)
 
-static void trash_settings_finalize(GObject *obj) {
-	TrashSettings *self = TRASH_SETTINGS(obj);
+static void trash_settings_finalize(GObject* obj) {
+	TrashSettings* self = TRASH_SETTINGS(obj);
 
 	if (self->settings) {
 		g_object_unref(self->settings);
@@ -46,8 +46,8 @@ static void trash_settings_finalize(GObject *obj) {
 	G_OBJECT_CLASS(trash_settings_parent_class)->finalize(obj);
 }
 
-static void trash_settings_class_init(TrashSettingsClass *klass) {
-	GObjectClass *class;
+static void trash_settings_class_init(TrashSettingsClass* klass) {
+	GObjectClass* class;
 
 	class = G_OBJECT_CLASS(klass);
 
@@ -61,9 +61,9 @@ static void trash_settings_class_init(TrashSettingsClass *klass) {
 	class->finalize = trash_settings_finalize;
 }
 
-static void button_toggled(GtkToggleButton *button, gpointer user_data) {
-	TrashSettings *self = user_data;
-	GtkRadioButton *radio_btn;
+static void button_toggled(GtkToggleButton* button, gpointer user_data) {
+	TrashSettings* self = user_data;
+	GtkRadioButton* radio_btn;
 	TrashSortMode new_mode;
 
 	// Do nothing if being toggled off
@@ -93,7 +93,7 @@ static void button_toggled(GtkToggleButton *button, gpointer user_data) {
 	g_settings_set_enum(self->settings, TRASH_SETTINGS_KEY_SORT_MODE, new_mode);
 }
 
-static void trash_settings_init(TrashSettings *self) {
+static void trash_settings_init(TrashSettings* self) {
 	gtk_widget_init_template(GTK_WIDGET(self));
 
 	g_signal_connect(self->btn_sort_type, "toggled", G_CALLBACK(button_toggled), self);
@@ -105,8 +105,8 @@ static void trash_settings_init(TrashSettings *self) {
 	self->update_setting = TRUE;
 }
 
-static void settings_changed(GSettings *settings, gchar *key, gpointer user_data) {
-	TrashSettings *self = user_data;
+static void settings_changed(GSettings* settings, gchar* key, gpointer user_data) {
+	TrashSettings* self = user_data;
 	TrashSortMode new_mode;
 
 	if (g_strcmp0(key, TRASH_SETTINGS_KEY_SORT_MODE) == 0) {
@@ -147,8 +147,8 @@ static void settings_changed(GSettings *settings, gchar *key, gpointer user_data
  *
  * Returns: a new #TrashSettings widget
  */
-TrashSettings *trash_settings_new(GSettings *settings) {
-	TrashSettings *self;
+TrashSettings* trash_settings_new(GSettings* settings) {
+	TrashSettings* self;
 
 	self = g_object_new(TRASH_TYPE_SETTINGS, NULL);
 

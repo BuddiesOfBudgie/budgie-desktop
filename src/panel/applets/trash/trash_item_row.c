@@ -28,8 +28,8 @@
  */
 
 #include <glib/gi18n.h>
-#include <pango/pango.h>
 #include <pango/pango-layout.h>
+#include <pango/pango.h>
 
 #include "trash_button_bar.h"
 #include "trash_info.h"
@@ -42,27 +42,27 @@ enum {
 	LAST_PROP
 };
 
-static GParamSpec *props[LAST_PROP] = {
+static GParamSpec* props[LAST_PROP] = {
 	NULL,
 };
 
 struct _TrashItemRow {
 	GtkListBoxRow parent_instance;
 
-	GFile *file;
-	TrashInfo *trash_info;
+	GFile* file;
+	TrashInfo* trash_info;
 
-	GtkWidget *header;
-	GtkWidget *delete_btn;
-	TrashButtonBar *confirm_bar;
+	GtkWidget* header;
+	GtkWidget* delete_btn;
+	TrashButtonBar* confirm_bar;
 };
 
 G_DEFINE_FINAL_TYPE(TrashItemRow, trash_item_row, GTK_TYPE_LIST_BOX_ROW)
 
-static void delete_clicked_cb(GtkButton *source, gpointer user_data) {
+static void delete_clicked_cb(GtkButton* source, gpointer user_data) {
 	(void) source;
 
-	TrashItemRow *self = user_data;
+	TrashItemRow* self = user_data;
 	gboolean revealed;
 
 	revealed = trash_button_bar_get_revealed(self->confirm_bar);
@@ -74,8 +74,8 @@ static void delete_clicked_cb(GtkButton *source, gpointer user_data) {
 	}
 }
 
-static void confirm_response_cb(TrashButtonBar *source, GtkResponseType type, gpointer user_data) {
-	TrashItemRow *self = user_data;
+static void confirm_response_cb(TrashButtonBar* source, GtkResponseType type, gpointer user_data) {
+	TrashItemRow* self = user_data;
 
 	trash_button_bar_set_revealed(source, FALSE);
 
@@ -88,25 +88,25 @@ static void confirm_response_cb(TrashButtonBar *source, GtkResponseType type, gp
 	}
 }
 
-static void trash_item_row_constructed(GObject *object) {
-	TrashItemRow *self;
+static void trash_item_row_constructed(GObject* object) {
+	TrashItemRow* self;
 
-	GVariant *raw_icon;
-	GIcon *gicon;
-	const gchar *name;
-	const gchar *path;
-	GDateTime *deletion_time;
-	gchar *formatted_date;
+	GVariant* raw_icon;
+	GIcon* gicon;
+	const gchar* name;
+	const gchar* path;
+	GDateTime* deletion_time;
+	gchar* formatted_date;
 
-	GtkWidget *grid;
-	GtkWidget *icon;
-	GtkWidget *name_label;
-	GtkWidget *date_label;
-	GtkStyleContext *date_style_context;
-	PangoAttrList *attr_list;
-	PangoFontDescription *font_description;
-	PangoAttribute *font_attr;
-	GtkStyleContext *delete_button_style;
+	GtkWidget* grid;
+	GtkWidget* icon;
+	GtkWidget* name_label;
+	GtkWidget* date_label;
+	GtkStyleContext* date_style_context;
+	PangoAttrList* attr_list;
+	PangoFontDescription* font_description;
+	PangoAttribute* font_attr;
+	GtkStyleContext* delete_button_style;
 	GtkWidget *content_area, *confirm_label;
 
 	self = TRASH_ITEM_ROW(object);
@@ -195,8 +195,8 @@ static void trash_item_row_constructed(GObject *object) {
 	G_OBJECT_CLASS(trash_item_row_parent_class)->constructed(object);
 }
 
-static void trash_item_row_finalize(GObject *object) {
-	TrashItemRow *self;
+static void trash_item_row_finalize(GObject* object) {
+	TrashItemRow* self;
 
 	self = TRASH_ITEM_ROW(object);
 
@@ -206,8 +206,8 @@ static void trash_item_row_finalize(GObject *object) {
 	G_OBJECT_CLASS(trash_item_row_parent_class)->finalize(object);
 }
 
-static void trash_item_row_get_property(GObject *object, guint prop_id, GValue *value, GParamSpec *spec) {
-	TrashItemRow *self;
+static void trash_item_row_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* spec) {
+	TrashItemRow* self;
 
 	self = TRASH_ITEM_ROW(object);
 
@@ -224,8 +224,8 @@ static void trash_item_row_get_property(GObject *object, guint prop_id, GValue *
 	}
 }
 
-static void trash_item_row_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *spec) {
-	TrashItemRow *self;
+static void trash_item_row_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* spec) {
+	TrashItemRow* self;
 	gpointer pointer;
 
 	self = TRASH_ITEM_ROW(object);
@@ -245,8 +245,8 @@ static void trash_item_row_set_property(GObject *object, guint prop_id, const GV
 	}
 }
 
-static void trash_item_row_class_init(TrashItemRowClass *klass) {
-	GObjectClass *class;
+static void trash_item_row_class_init(TrashItemRowClass* klass) {
+	GObjectClass* class;
 
 	class = G_OBJECT_CLASS(klass);
 
@@ -272,8 +272,8 @@ static void trash_item_row_class_init(TrashItemRowClass *klass) {
 	g_object_class_install_properties(class, LAST_PROP, props);
 }
 
-static void trash_item_row_init(TrashItemRow *self) {
-	GtkStyleContext *style;
+static void trash_item_row_init(TrashItemRow* self) {
+	GtkStyleContext* style;
 
 	style = gtk_widget_get_style_context(GTK_WIDGET(self));
 
@@ -289,7 +289,7 @@ static void trash_item_row_init(TrashItemRow *self) {
  *
  * Returns: a new #TrashItemRow
  */
-TrashItemRow *trash_item_row_new(GFile *file, TrashInfo *trash_info) {
+TrashItemRow* trash_item_row_new(GFile* file, TrashInfo* trash_info) {
 	return g_object_new(TRASH_TYPE_ITEM_ROW, "file", file, "trash-info", trash_info, NULL);
 }
 
@@ -301,7 +301,7 @@ TrashItemRow *trash_item_row_new(GFile *file, TrashInfo *trash_info) {
  *
  * Returns: (type Gio.File) (transfer full): the file for the row
  */
-GFile *trash_item_row_get_file(TrashItemRow *self) {
+GFile* trash_item_row_get_file(TrashItemRow* self) {
 	return g_object_ref(self->file);
 }
 
@@ -313,14 +313,14 @@ GFile *trash_item_row_get_file(TrashItemRow *self) {
  *
  * Returns: (type Trash.Info) (transfer full): the file information for the row
  */
-TrashInfo *trash_item_row_get_info(TrashItemRow *self) {
+TrashInfo* trash_item_row_get_info(TrashItemRow* self) {
 	return g_object_ref(self->trash_info);
 }
 
-static void delete_finish(GObject *object, GAsyncResult *result, gpointer user_data) {
+static void delete_finish(GObject* object, GAsyncResult* result, gpointer user_data) {
 	(void) user_data;
 
-	GFile *file;
+	GFile* file;
 	g_autoptr(GError) error = NULL;
 
 	file = G_FILE(object);
@@ -341,7 +341,7 @@ static void delete_finish(GObject *object, GAsyncResult *result, gpointer user_d
  *
  * Asynchronously deletes a trashed item.
  */
-void trash_item_row_delete(TrashItemRow *self) {
+void trash_item_row_delete(TrashItemRow* self) {
 	g_file_delete_async(
 		self->file,
 		G_PRIORITY_DEFAULT,
@@ -350,7 +350,7 @@ void trash_item_row_delete(TrashItemRow *self) {
 		NULL);
 }
 
-static void restore_finish(GObject *object, GAsyncResult *result, gpointer user_data) {
+static void restore_finish(GObject* object, GAsyncResult* result, gpointer user_data) {
 	(void) user_data;
 
 	gboolean success;
@@ -372,9 +372,9 @@ static void restore_finish(GObject *object, GAsyncResult *result, gpointer user_
  *
  * Asynchronously restores a trashed item to its original location.
  */
-void trash_item_row_restore(TrashItemRow *self) {
+void trash_item_row_restore(TrashItemRow* self) {
 	g_autoptr(GFile) restored_file;
-	g_autofree const gchar *restore_path;
+	g_autofree const gchar* restore_path;
 
 	restore_path = trash_info_get_restore_path(self->trash_info);
 	restored_file = g_file_new_for_path(restore_path);
@@ -399,7 +399,7 @@ void trash_item_row_restore(TrashItemRow *self) {
  *
  * Returns: < 0 if @self compares before @other, 0 if they compare equal, > 0 if @self compares after @other
  */
-gint trash_item_row_collate_by_date(TrashItemRow *self, TrashItemRow *other) {
+gint trash_item_row_collate_by_date(TrashItemRow* self, TrashItemRow* other) {
 	return g_date_time_compare(
 		trash_info_get_deletion_time(self->trash_info),
 		trash_info_get_deletion_time(other->trash_info));
@@ -414,7 +414,7 @@ gint trash_item_row_collate_by_date(TrashItemRow *self, TrashItemRow *other) {
  *
  * Returns: < 0 if @self compares before @other, 0 if they compare equal, > 0 if @self compares after @other
  */
-gint trash_item_row_collate_by_name(TrashItemRow *self, TrashItemRow *other) {
+gint trash_item_row_collate_by_name(TrashItemRow* self, TrashItemRow* other) {
 	return strcoll(
 		trash_info_get_name(self->trash_info),
 		trash_info_get_name(other->trash_info));
@@ -433,7 +433,7 @@ gint trash_item_row_collate_by_name(TrashItemRow *self, TrashItemRow *other) {
  *
  * Returns: < 0 if @self compares before @other, 0 if they compare equal, > 0 if @self compares after @other
  */
-gint trash_item_row_collate_by_type(TrashItemRow *self, TrashItemRow *other) {
+gint trash_item_row_collate_by_type(TrashItemRow* self, TrashItemRow* other) {
 	gint ret = 0;
 
 	if (trash_info_is_directory(self->trash_info) && trash_info_is_directory(other->trash_info)) {

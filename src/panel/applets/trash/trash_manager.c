@@ -25,14 +25,14 @@ static guint signals[LAST_SIGNAL];
 struct _TrashManager {
 	GObject parent_instance;
 
-	GFileMonitor *trash_monitor;
+	GFileMonitor* trash_monitor;
 	gint file_count;
 };
 
 G_DEFINE_FINAL_TYPE(TrashManager, trash_manager, G_TYPE_OBJECT)
 
-static void trash_manager_finalize(GObject *object) {
-	TrashManager *self;
+static void trash_manager_finalize(GObject* object) {
+	TrashManager* self;
 
 	self = TRASH_MANAGER(object);
 
@@ -43,8 +43,8 @@ static void trash_manager_finalize(GObject *object) {
 	G_OBJECT_CLASS(trash_manager_parent_class)->finalize(object);
 }
 
-static void trash_manager_class_init(TrashManagerClass *klass) {
-	GObjectClass *class;
+static void trash_manager_class_init(TrashManagerClass* klass) {
+	GObjectClass* class;
 
 	class = G_OBJECT_CLASS(klass);
 	class->finalize = trash_manager_finalize;
@@ -73,11 +73,11 @@ static void trash_manager_class_init(TrashManagerClass *klass) {
 		G_TYPE_POINTER);
 }
 
-static void trash_query_info_cb(GObject *source, GAsyncResult *result, gpointer user_data) {
-	TrashManager *self = user_data;
-	GFile *file = G_FILE(source);
-	GFileInfo *info;
-	TrashInfo *trash_info;
+static void trash_query_info_cb(GObject* source, GAsyncResult* result, gpointer user_data) {
+	TrashManager* self = user_data;
+	GFile* file = G_FILE(source);
+	GFileInfo* info;
+	TrashInfo* trash_info;
 
 	info = g_file_query_info_finish(file, result, NULL);
 
@@ -89,7 +89,7 @@ static void trash_query_info_cb(GObject *source, GAsyncResult *result, gpointer 
 	g_signal_emit(self, signals[TRASH_ADDED], 0, file, trash_info);
 }
 
-static void file_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, GFileMonitorEvent event, TrashManager *self) {
+static void file_changed(GFileMonitor* monitor, GFile* file, GFile* other_file, GFileMonitorEvent event, TrashManager* self) {
 	(void) monitor;
 	(void) other_file;
 
@@ -115,8 +115,8 @@ static void file_changed(GFileMonitor *monitor, GFile *file, GFile *other_file, 
 	}
 }
 
-static void trash_manager_init(TrashManager *self) {
-	GFile *file;
+static void trash_manager_init(TrashManager* self) {
+	GFile* file;
 
 	self->file_count = 0;
 
@@ -134,17 +134,17 @@ static void trash_manager_init(TrashManager *self) {
  *
  * Returns: a new #TrashManager object
  */
-TrashManager *trash_manager_new(void) {
+TrashManager* trash_manager_new(void) {
 	return g_object_new(TRASH_TYPE_MANAGER, NULL);
 }
 
 static void next_file_cb(gpointer data, gpointer user_data) {
-	TrashManager *self = user_data;
-	GFile *file;
+	TrashManager* self = user_data;
+	GFile* file;
 	g_autoptr(GFileInfo) file_info;
-	const gchar *file_name;
+	const gchar* file_name;
 	g_autofree gchar *escaped_file_name, *uri;
-	TrashInfo *trash_info;
+	TrashInfo* trash_info;
 
 	file_info = data;
 
@@ -163,8 +163,8 @@ static void next_file_cb(gpointer data, gpointer user_data) {
 	g_signal_emit(self, signals[TRASH_ADDED], 0, file, trash_info);
 }
 
-static void next_files_cb(GObject *source, GAsyncResult *result, gpointer user_data) {
-	TrashManager *self = user_data;
+static void next_files_cb(GObject* source, GAsyncResult* result, gpointer user_data) {
+	TrashManager* self = user_data;
 	g_autoptr(GList) files;
 	g_autoptr(GError) error = NULL;
 
@@ -186,9 +186,9 @@ static void next_files_cb(GObject *source, GAsyncResult *result, gpointer user_d
 	g_file_enumerator_next_files_async(G_FILE_ENUMERATOR(source), 8, G_PRIORITY_DEFAULT, NULL, next_files_cb, self);
 }
 
-static void trash_enumerate_cb(GObject *source, GAsyncResult *result, gpointer user_data) {
-	TrashManager *self = user_data;
-	GFileEnumerator *enumerator;
+static void trash_enumerate_cb(GObject* source, GAsyncResult* result, gpointer user_data) {
+	TrashManager* self = user_data;
+	GFileEnumerator* enumerator;
 	g_autoptr(GError) error = NULL;
 
 	enumerator = g_file_enumerate_children_finish(G_FILE(source), result, &error);
@@ -210,7 +210,7 @@ static void trash_enumerate_cb(GObject *source, GAsyncResult *result, gpointer u
  *
  * The files are enumerated asynchronously.
  */
-void trash_manager_scan_items(TrashManager *self) {
+void trash_manager_scan_items(TrashManager* self) {
 	g_autoptr(GFile) file;
 
 	file = g_file_new_for_uri("trash:///");
@@ -233,7 +233,7 @@ void trash_manager_scan_items(TrashManager *self) {
  *
  * Returns: the number of trashed items
  */
-gint trash_manager_get_item_count(TrashManager *self) {
+gint trash_manager_get_item_count(TrashManager* self) {
 	g_return_val_if_fail(self != NULL, -1);
 
 	return self->file_count;
