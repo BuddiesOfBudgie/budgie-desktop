@@ -6,6 +6,7 @@
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2023
+# Bruno Kammers Ribeiro, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2023\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/buddiesofbudgie/teams/129844/pt_BR/)\n"
+"Last-Translator: Bruno Kammers Ribeiro, 2023\n"
+"Language-Team: Portuguese (Brazil) (https://app.transifex.com/buddiesofbudgie/teams/129844/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +33,8 @@ msgstr "Notificações não lidas"
 
 #: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
-msgstr "Recebeu 1 notificação enquanto uma aplicação estava em ecrã inteiro."
+msgstr ""
+"Você recebeu 1 notificação enquanto uma aplicação estava em tela cheia."
 
 #: src/daemon/notifications/dbus.vala:575
 #, c-format
@@ -97,13 +99,13 @@ msgstr "Será desligado em %d minutos"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr "Captura de ecrã Budgie"
+msgstr "Captura de tela Budgie"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:438
 msgid "Screenshot entire screen"
-msgstr "Capturar ecrã inteiro"
+msgstr "Capturar tela inteira"
 
 #: src/daemon/screenshot.vala:439
 msgid "Screenshot active window"
@@ -118,7 +120,7 @@ msgstr "Capturar área selecionada"
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:548
 msgid "Screen"
-msgstr "Ecrã"
+msgstr "Tela"
 
 #: src/daemon/screenshot.vala:548
 msgid "Window"
@@ -131,19 +133,19 @@ msgstr "Seleção"
 #. translate
 #: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
-msgstr "Cancelar captura de ecrã"
+msgstr "Cancelar captura de tela"
 
 #: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
-msgstr "Guarde a captura de ecrã para o diretório selecionado"
+msgstr "Salvar a captura de tela no diretório selecionado"
 
 #: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
-msgstr "Copiar a captura de ecrã para a área de transferência"
+msgstr "Copiar a captura de tela para a área de transferência"
 
 #: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
-msgstr "Abrir captura de ecrã na aplicação predefinida"
+msgstr "Abrir a captura de tela na aplicação predefinida"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
@@ -224,7 +226,7 @@ msgstr "Iniciar automaticamente"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr "Programas de inicialização"
+msgstr "Programas de inicialização automática"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
@@ -255,7 +257,7 @@ msgstr "Ícones da área de trabalho"
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
-msgstr "Controlar se devem ser permitidos ícones no ambiente de trabalho."
+msgstr "Controlar se devem ser permitidos ícones na área de trabalho."
 
 #. DesktopFolder doesn't support fancy options like showing home folder,
 #. trash, or active mounts
@@ -267,7 +269,7 @@ msgstr "Montagens Ativas"
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
-msgstr "Mostrar todas as montagens ativas no ambiente de trabalho."
+msgstr "Mostrar todas as montagens ativas na área de trabalho."
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
@@ -297,7 +299,7 @@ msgstr "Tamanho do ícone"
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
-msgstr "Definir o tamanho desejado dos ícones no ambiente de trabalho."
+msgstr "Definir o tamanho desejado dos ícones na área de trabalho."
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
@@ -367,7 +369,7 @@ msgstr "Documentos"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
-msgstr "Defina a fonte de exibição usada pelos documentos."
+msgstr "Definir a fonte de exibição usada pelos documentos."
 
 #: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
@@ -375,7 +377,7 @@ msgstr "Interface"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
-msgstr "Defina a fonte primária usada pelos controles de aplicativos."
+msgstr "Definir a fonte primária usada pelos controles de aplicativos."
 
 #: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
@@ -384,7 +386,7 @@ msgstr "Mono-espaçada"
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
 msgstr ""
-"Defina a fonte de largura fixa usada por aplicativos onde predomina-se o "
+"Definir a fonte de largura fixa usada por aplicativos onde predomina-se o "
 "texto."
 
 #: src/panel/settings/settings_fonts.vala:70
@@ -393,7 +395,7 @@ msgstr "Dimensionamento de texto"
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
-msgstr "Define o fator de escala do texto."
+msgstr "Definir o fator de escala do texto."
 
 #: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
@@ -419,7 +421,7 @@ msgstr "Dicas"
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
-msgstr "Defina o tipo de dica a ser usada."
+msgstr "Definir o tipo de dica a ser usada."
 
 #: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
@@ -435,7 +437,7 @@ msgstr "Antisserrilhado"
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
-msgstr "Defina o tipo de antisserrilhamento a ser usado"
+msgstr "Definir o tipo de antisserrilhamento a ser usado."
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -457,13 +459,13 @@ msgstr "Manter painel"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "Confirmar remoção de Applet"
+msgstr "Confirmar remoção do Applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
-"Você realmente deseja remover este Applet? Essa acão não poderá ser "
+"Você realmente deseja remover este Applet? Essa ação não poderá ser "
 "desfeita."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
@@ -481,12 +483,12 @@ msgstr "Manter Applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr "Confirme a remoção do widget"
+msgstr "Confirmar a remoção do widget"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr "Quer mesmo remover este widget? Esta ação não pode ser anulada."
+msgstr "Quer mesmo remover este widget? Essa ação não poderá ser desfeita."
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -525,7 +527,7 @@ msgid ""
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
 "Falha ao criar a instância widget. O nome do módulo deve estar no formato "
-"DNS invertido, tal como \"tld.domain.group.WidgetName.so\" para C/Vala ou "
+"DNS inverso, tal como \"tld.domain.group.WidgetName.so\" para C/Vala ou "
 "\"tld_domain_group_WidgetName\" para Python."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
@@ -585,7 +587,7 @@ msgstr "Posição das notificações"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Set the location for notification popups"
-msgstr "Defina o local das notificações pop-ups"
+msgstr "Definir o local das notificações pop-ups"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
@@ -698,7 +700,7 @@ msgstr "Centralizar novas janelas na tela"
 
 #: src/panel/settings/settings_wm.vala:53
 msgid "Center newly launched windows on the current screen."
-msgstr "Centraliza novas janelas à tela atual."
+msgstr "Centralizar novas janelas à tela atual."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
@@ -709,21 +711,20 @@ msgid ""
 "Disables Night Light mode when a window is fullscreen. Re-enables when "
 "leaving fullscreen."
 msgstr ""
-"Desativa o modo luz noturna quando uma janela estiver em tela cheia e "
-"reativa ao sair."
+"Desativar o modo luz noturna quando uma janela estiver em tela cheia e "
+"reativar ao sair."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
-msgstr ""
-"Coloca as notificações em pausa quando as janelas estiverem em ecrã inteiro"
+msgstr "Pausar as notificações quando as janelas estiverem em tela cheia"
 
 #: src/panel/settings/settings_wm.vala:65
 msgid ""
 "Prevents notifications from appearing when a window is fullscreen. Unpauses "
 "when leaving fullscreen."
 msgstr ""
-"Impede o aparecimento de notificações quando uma janela está em ecrã "
-"inteiro. Voltam a aparecer quando sair de ecrã inteiro."
+"Impedir o aparecimento de notificações quando uma janela está em tela cheia."
+" Voltar a mostrar quando sair da tela cheia."
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
@@ -746,8 +747,8 @@ msgid ""
 "Enables window focus to apply when the mouse enters the window and unfocus "
 "when the mouse leaves the window."
 msgstr ""
-"Permite que o mouse ative o foco ao entrar uma janela e desative o mesmo ao "
-"sair."
+"Permitir que o mouse ative o foco ao entrar numa janela e desative o mesmo "
+"ao sair."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
@@ -760,10 +761,10 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
-"Ativa o não redirecionamento, o que permitirá às molduras contornar a "
-"composição para aplicações em ecrã inteiro. Esta opção é para utilizadores "
+"Ativar o não redirecionamento, o que permitirá às molduras contornar a "
+"composição para aplicações em tela cheia. Esta opção é para usuários "
 "avançados e recomenda-se que se mantenha ativada. Utilize-a se tiver "
-"problemas gráficos ou de performance com GPUs dedicados."
+"problemas gráficos ou de performance com GPUs dedicadas."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -885,7 +886,7 @@ msgstr "Espaçamento"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Set the spacing between applets for this panel"
-msgstr "Definir o espaçamento entre mini-aplicações para este painel"
+msgstr "Definir o espaçamento entre applets para este painel"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Automatically hide"
@@ -934,11 +935,11 @@ msgid ""
 "freeing up valuable screen estate"
 msgstr ""
 "Quando estiver no modo dock, o painel usará a quantidade mínima de espaço "
-"possível, liberando a valorização da tela"
+"possível, liberando um maior espaço da tela"
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr "Definições de mini-aplicação"
+msgstr "Definições de applet"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -946,7 +947,7 @@ msgstr "Adicionar Applet"
 
 #: src/panel/settings/settings_panel_applets.vala:236
 msgid "Choose a new applet to add to this panel"
-msgstr "Escolha um novo Applet para adicionar a este painel"
+msgstr "Escolher um novo Applet para adicionar a este painel"
 
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
@@ -969,7 +970,7 @@ msgid ""
 "Set which side of the screen Raven will open on. If set to Automatic, Raven "
 "will open where its parent panel is."
 msgstr ""
-"Definir em que lado do ecrã se abrirá o Raven. Se definido para Automático, "
+"Definir em que lado da tela se abrirá o Raven. Se definido para Automático, "
 "o Raven abrirá onde se encontra o seu painel principal."
 
 #: src/panel/settings/settings_raven_settings.vala:71
@@ -1349,7 +1350,7 @@ msgstr "Álbum desconhecido"
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr "A reproduzir - %s"
+msgstr "Reproduzindo - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
@@ -1358,7 +1359,7 @@ msgstr "Em pausa - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr "Nenhuma aplicação está a reproduzir áudio."
+msgstr "Nenhuma aplicação está reproduzindo áudio."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1407,7 +1408,7 @@ msgstr "Do mais antigo para o mais recente"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr "Do mais recente ao mais antigo"
+msgstr "Do mais recente para o mais antigo"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1538,7 +1539,7 @@ msgstr "Rótulos do menu"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr "Usar ícone predefinido do menu"
+msgstr "Usar ícone padrão do menu"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1558,7 +1559,7 @@ msgstr "Giro do mouse"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr "Mostrar itens de definições"
+msgstr "Mostrar itens de configurações"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1615,15 +1616,15 @@ msgstr "Bloquear ícones"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
-msgstr "Restringir a área de Trabalho"
+msgstr "Restringir a área de trabalho"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
-msgstr "Clique do meio para lançar nova janela"
+msgstr "Clique do meio para abrir nova janela"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
-msgstr "Requer um duplo clique para lançar uma nova janela"
+msgstr "Requer um duplo clique para abrir uma nova janela"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
@@ -1752,7 +1753,7 @@ msgstr "Autenticar"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr "Aplicação de captura de ecrã Budgie"
+msgstr "Aplicação de captura de tela Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1772,11 +1773,11 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr "Procura e arranque de aplicações."
+msgstr "Procura e inicialização de aplicações."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr "Impedir que o sistema e o ecrã fiquem inativos."
+msgstr "Impedir que o sistema e a tela fiquem inativos."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
@@ -1784,11 +1785,11 @@ msgstr "Um relógio digital com um formato personalizável."
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr "Uma lista de tarefas de aplicações configurável."
+msgstr "Uma aplicação de lista de tarefas configurável."
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr "Indica qual o esquema do teclado que está atualmente em utilização."
+msgstr "Indica qual o layout do teclado está atualmente em uso."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
@@ -1796,7 +1797,7 @@ msgstr "Mostrar o estado das teclas de bloqueio."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr "Alternar e modificar as definições de Luz noturna."
+msgstr "Alternar e modificar as configurações de Luz noturna."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
@@ -1812,7 +1813,7 @@ msgstr "Abrir a barra lateral do Raven."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr "Separador visual entre mini-aplicações."
+msgstr "Separador visual entre applets."
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
@@ -1820,7 +1821,7 @@ msgstr "Um botão que alterna a visibilidade do ambiente de trabalho."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr "Espaçador ajustável para colocar entre outras mini-aplicações."
+msgstr "Espaçador ajustável para colocar entre outros applets."
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
@@ -1852,20 +1853,20 @@ msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
-"Um calendário simples com uma vista de mês, utilizando o widget Gtk.Calendar"
+"Um calendário simples com uma visão de mês, utilizando o widget Gtk.Calendar"
 " incorporado. O calendário mostra a data atual por padrão."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr "Controlos multimédia"
+msgstr "Controles multimídia"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
-"Este widget utiliza a API Mpris para mostrar o ficheiro ativo em reprodução "
-"com metadados e controlos de reprodução, com suporte para áudio e vídeo."
+"Este widget utiliza a API Mpris para mostrar o arquivo ativo em reprodução "
+"com metadados e controles de reprodução, com suporte para áudio e vídeo."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
@@ -1888,7 +1889,7 @@ msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
 msgstr ""
-"Permite o controlo global e por aplicação do volume de de saída áudio e "
+"Permite o controle global e por aplicação do volume de de saída áudio e "
 "mostra uma lista de dispositivos de saída de áudio disponíveis."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
@@ -1897,7 +1898,7 @@ msgid ""
 "Swap usage by default."
 msgstr ""
 "Uma visualização para o uso de recursos do sistema na forma de gráfico de "
-"barras. Inclui CPU, RAM e Swap por padrão."
+"barras. Inclui uso de CPU, RAM e Swap por padrão."
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

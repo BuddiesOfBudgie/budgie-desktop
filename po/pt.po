@@ -15,7 +15,7 @@ msgstr ""
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>, 2023\n"
-"Language-Team: Portuguese (https://www.transifex.com/buddiesofbudgie/teams/129844/pt/)\n"
+"Language-Team: Portuguese (https://app.transifex.com/buddiesofbudgie/teams/129844/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -251,7 +251,7 @@ msgstr "Ambiente de trabalho"
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
-msgstr "Ícones do Ambiente de trabalho"
+msgstr "Ícones do ambiente de trabalho"
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
@@ -263,7 +263,7 @@ msgstr "Controlar se devem ser permitidos ícones no ambiente de trabalho."
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr "Montagens Ativas"
+msgstr "Montagens ativas"
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
@@ -293,7 +293,7 @@ msgstr "Adicionar um atalho do lixo no seu ambiente de trabalho."
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
 msgid "Icon Size"
-msgstr "Tamanho do ícone"
+msgstr "Tamanho dos ícones"
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
@@ -1112,7 +1112,7 @@ msgstr "Nenhuma notificação por ler"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr "Volume está a ser usado por outros processos"
+msgstr "O volume está a ser usado por outros processos"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
@@ -1143,7 +1143,7 @@ msgstr "Pastas de rede"
 #: src/panel/applets/places-indicator/VolumeItem.vala:34
 #: src/appindexer/AppIndex.vala:44
 msgid "Other"
-msgstr "Outro"
+msgstr "Outros"
 
 #: src/panel/applets/places-indicator/MountItem.vala:58
 #: src/panel/applets/places-indicator/VolumeItem.vala:55

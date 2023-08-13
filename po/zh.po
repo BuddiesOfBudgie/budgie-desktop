@@ -7,6 +7,7 @@
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # Gavin Zhao, 2022
 # Yazi Tian, 2022
+# Wenyin Root <ruojiner@hotmail.com>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -15,8 +16,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Yazi Tian, 2022\n"
-"Language-Team: Chinese (https://www.transifex.com/buddiesofbudgie/teams/129844/zh/)\n"
+"Last-Translator: Wenyin Root <ruojiner@hotmail.com>, 2023\n"
+"Language-Team: Chinese (https://app.transifex.com/buddiesofbudgie/teams/129844/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,23 +30,23 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:569
 msgid "Unread Notifications"
-msgstr ""
+msgstr "未读通知"
 
 #: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
-msgstr ""
+msgstr "在运行全屏应用时你收到了 1 个通知"
 
 #: src/daemon/notifications/dbus.vala:575
 #, c-format
 msgid "You received %d notifications while an application was fullscreened."
-msgstr ""
+msgstr "在运行全屏应用时你收到了 %d 个通知"
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:587
 msgid "View Notifications"
-msgstr ""
+msgstr "查看通知"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -98,64 +99,64 @@ msgstr "将在 %d 分钟后关闭 Caffeine 模式"
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Budgie 截图"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:438
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "全屏幕截图"
 
 #: src/daemon/screenshot.vala:439
 msgid "Screenshot active window"
-msgstr ""
+msgstr "活动窗口截图"
 
 #: src/daemon/screenshot.vala:440
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "选定区域截图"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:548
 msgid "Screen"
-msgstr ""
+msgstr "屏幕"
 
 #: src/daemon/screenshot.vala:548
 msgid "Window"
-msgstr ""
+msgstr "窗口"
 
 #: src/daemon/screenshot.vala:548
 msgid "Selection"
-msgstr ""
+msgstr "选项"
 
 #. translate
 #: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "取消截图"
 
 #: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "保存截图到指定目录"
 
 #: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "复制截图到剪贴板"
 
 #: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "用默认应用打开截图"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1175
 msgid "Other..."
-msgstr ""
+msgstr "其他..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
-msgstr ""
+msgstr "打开文件夹"
 
 #: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
@@ -169,7 +170,7 @@ msgstr "取消"
 
 #: src/daemon/screenshot.vala:1260
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -472,12 +473,12 @@ msgstr "保留小程序"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "确认移除小部件"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr ""
+msgstr "您真的想要移除该小部件吗？此操作无法撤销。"
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -486,15 +487,15 @@ msgstr "移除"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "小部件设置"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "添加小部件"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "选择一个新的小部件添加到小部件视图"
 
 #: src/panel/settings/settings_raven_widgets.vala:164
 #: src/panel/settings/settings_panel_applets.vala:250
@@ -505,7 +506,7 @@ msgstr "无可用设置"
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
-msgstr ""
+msgstr "创建小部件实例失败。插件引擎无法找到此插件的信息。"
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -513,12 +514,14 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"创建小部件实例失败。模块名必须为反向 DNS 格式， 示例：'tld.domain.group.WidgetName.so' 使用 C/Vala  或 "
+"'tld_domain_group_WidgetName'  使用 Python。"
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
-msgstr ""
+msgstr "创建小部件实例失败。插件引擎无法从磁盘加载插件。"
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -526,10 +529,13 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"创建小部件实例失败。插件支持设置，但不安装具有相同名称的设置模式。\n"
+"\n"
+"模式名称应该与模块名称相同，但没有扩展名（在Python的情况下）下划线应替换为句号。"
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "由于未知错误，无法创建小部件实例。"
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -612,24 +618,24 @@ msgstr "设置"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr ""
+msgstr "内建的"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "选择一个插件"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "无描述"
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "通过 %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
-msgstr ""
+msgstr "未列出的作者"
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
@@ -719,7 +725,7 @@ msgstr "当鼠标进入窗口时激活该窗口的焦点，并在鼠标离开该
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "启用反重定向"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -728,6 +734,7 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
+"启用反重定向，允许帧绕过全屏应用程序的合成。该选项适用于高级用户，建议保持启用状态。如果您在使用独立GPU时遇到图形或性能问题，请使用此选项。"
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -842,11 +849,11 @@ msgstr "设置此面板的尺寸（宽度或高度，取决于窗口方向）"
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Spacing"
-msgstr ""
+msgstr "间距"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "为这个面板设置控件之间的间距"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Automatically hide"
@@ -894,7 +901,7 @@ msgstr "启用停靠模式时，面板可以尽可能地使用最少的空间从
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "小程序设定"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -928,13 +935,13 @@ msgstr "设置 Raven 将打开屏幕的哪一边。如果设置为自动，Raven
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "设置通知排列顺序"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
-msgstr ""
+msgstr "设置通知是从最旧的到最新的，还是从最新的到最旧的排序"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
@@ -963,7 +970,7 @@ msgstr "抱歉，这里空空如也"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "电源"
 
 #. Prepare label widget
 #. Caffeine Notification
@@ -978,7 +985,7 @@ msgstr "计时器（分钟）"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "系统时间和日期设置"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1282,31 +1289,31 @@ msgstr "播放音乐"
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr ""
+msgstr "未知标题"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:110
 #: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr ""
+msgstr "未知艺术家"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr ""
+msgstr "未知专辑"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "正在播放 - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "已暂停 - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "没有应用在播放音频。"
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1319,19 +1326,19 @@ msgstr "设备"
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr ""
+msgstr "用量监控"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr ""
+msgstr "物理内存"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr ""
+msgstr "交换空间"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -1339,7 +1346,7 @@ msgstr "通知"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "未添加小部件。"
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -1351,16 +1358,16 @@ msgstr "没有新的通知"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "从最久到最新"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "从最新到最久"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "新的类别"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1369,51 +1376,51 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "应用程序"
 
 #: src/appindexer/AppIndex.vala:170
 msgid "Education"
-msgstr ""
+msgstr "教育"
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "游戏"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
-msgstr ""
+msgstr "图形图像"
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "互联网"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
-msgstr ""
+msgstr "办公"
 
 #: src/appindexer/AppIndex.vala:197
 msgid "Programming"
-msgstr ""
+msgstr "编程"
 
 #: src/appindexer/AppIndex.vala:201
 msgid "Science"
-msgstr ""
+msgstr "科技"
 
 #: src/appindexer/AppIndex.vala:207
 msgid "Sound & Video"
-msgstr ""
+msgstr "多媒体"
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "系统工具"
 
 #: src/appindexer/AppIndex.vala:222
 msgid "Universal Access"
-msgstr ""
+msgstr "通用访问"
 
 #: src/appindexer/AppIndex.vala:226
 msgid "Utilities"
-msgstr ""
+msgstr "工具"
 
 #: src/dialogs/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -1426,31 +1433,31 @@ msgstr "组："
 #. Create our buttons
 #: src/dialogs/power/window.vala:92
 msgid "_Lock"
-msgstr ""
+msgstr "_锁定"
 
 #: src/dialogs/power/window.vala:95
 msgid "L_og Out"
-msgstr ""
+msgstr "注_销"
 
 #: src/dialogs/power/window.vala:98
 msgid "_Suspend"
-msgstr ""
+msgstr "_睡眠"
 
 #: src/dialogs/power/window.vala:102
 msgid "_Hibernate"
-msgstr ""
+msgstr "_休眠"
 
 #: src/dialogs/power/window.vala:106
 msgid "_Reboot"
-msgstr ""
+msgstr "_重启"
 
 #: src/dialogs/power/window.vala:109
 msgid "Shut_down"
-msgstr ""
+msgstr "关_机"
 
 #: src/dialogs/power/window.vala:161
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "此系统不支持休眠。"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1458,23 +1465,23 @@ msgstr "确实要结束回话吗？"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "名称："
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "文件夹："
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "以秒为单位的延迟"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "显示鼠标指针"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "截图时播放声音"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1486,7 +1493,7 @@ msgstr "菜单标签"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "使用默认的菜单图标"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1506,7 +1513,7 @@ msgstr "滚动鼠标"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "显示设置项"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1534,20 +1541,20 @@ msgstr "使用 24 小时制"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "自定义格式"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%H:%M:%S %d.%m.%Y"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "自定义时区"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1632,7 +1639,7 @@ msgstr "“添加”按钮可见"
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr ""
+msgstr "项目大小倍数"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
@@ -1648,39 +1655,39 @@ msgstr "总是显示"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5 X"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75 X"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1.0 X"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1.5 X"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2.0 X"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "显示周数"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "显示星期几"
 
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr ""
+msgstr "允许音量超过限制"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr ""
+msgstr "显示交换空间用量"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1700,7 +1707,7 @@ msgstr "认证"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
+msgstr "Budgie 截图程序"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1718,75 +1725,75 @@ msgstr "启动其他程序并提供各种工具来管理窗口，显示时间等
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "搜索并启动应用程序。"
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr ""
+msgstr "防止系统和屏幕j进入休眠状态。"
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "可定制格式的数字时钟。"
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr ""
+msgstr "可配置的应用程序列表。"
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr ""
+msgstr "指示当前正在使用的键盘布局。"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "显示切换锁定键状态。"
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr ""
+msgstr "切换和修改夜间模式。"
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr ""
+msgstr "打开 Raven 通知视图。"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "显示驱动器和喜欢的目录。"
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr ""
+msgstr "显示 Raven 侧边栏。"
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "小程序之间的可视分隔符。"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr ""
+msgstr "切换桌面可见性的按钮。"
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr ""
+msgstr "放置在其他小程序之间的可调节间隔。"
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
-msgstr ""
+msgstr "显示系统状态指示，如声音，电池和蓝牙。"
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
+msgstr "带有图标和标签的应用程序任务列表。"
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System tray using the XEMBED protocol."
-msgstr ""
+msgstr "使用XEMBED协议的系统托盘图标。"
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "打开电源选项对话框。"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr ""
+msgstr "显示工作区并在其间切换。"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
@@ -1796,43 +1803,43 @@ msgstr "日历"
 msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
-msgstr ""
+msgstr "一个带有月份视图的简单日历小部件，使用系统内建GTK编写。默认情况下，日历显示当前日期。"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "多媒体控制"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
-msgstr ""
+msgstr "这个小部件通过元数据和播放控件显示正在播放的媒体，使用Mpris API，并支持音视频。"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "音频输入"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
-msgstr ""
+msgstr "允许调整音频输入音量，并显示可用的音频输入设备的列表。"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "音频输出"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
-msgstr ""
+msgstr "允许全局和每个应用程序音频输出音量控制，并显示可用的音频输出设备列表。"
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
-msgstr ""
+msgstr "以条形图形式显示系统资源使用情况。默认情况下包括CPU、物理内存和交换空间使用率。"
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

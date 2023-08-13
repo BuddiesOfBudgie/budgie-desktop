@@ -15,7 +15,7 @@ msgstr ""
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Junghee Lee <daemul72@gmail.com>, 2023\n"
-"Language-Team: Korean (https://www.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
+"Language-Team: Korean (https://app.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -504,7 +504,7 @@ msgstr "사용 가능한 설정이 없습니다"
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
-msgstr ""
+msgstr "위젯 인스턴스를 생성하지 못했습니다. 플러그인 엔진에서 이 플러그인에 대한 정보를 찾을 수 없습니다."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -512,12 +512,14 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"위젯 인스턴스를 생성하지 못했습니다. 모듈 이름은 C/Vala의 경우 'tld.domain.group.WidgetName.so' 또는 "
+"Python의 경우 'tld_domain_group_WidgetName'와 같이 역방향 DNS 형식이어야 합니다."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
-msgstr ""
+msgstr "위젯 인스턴스를 만들지 못했습니다. 플러그인 엔진이 디스크에서 플러그인을 불러오지 못했습니다."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -525,10 +527,13 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"위젯 인스턴스를 만들지 못했습니다. 플러그인이 설정을 지원하지만 같은 이름의 설정 스키마를 설치하지 않습니다.\n"
+"\n"
+"스키마 이름은 모듈 이름과 동일해야 하지만 확장자가 없어야 하며 밑줄은 마침표로 바뀌어야 합니다(Python의 경우)."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "알 수 없는 오류로 인해 위젯 인스턴스를 만들지 못했습니다."
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -611,7 +616,7 @@ msgstr "설정"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr ""
+msgstr "내장"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
@@ -624,7 +629,7 @@ msgstr "설명이 없습니다."
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "작성자: %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
@@ -727,6 +732,8 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
+"프레임이 전체 화면 응용 프로그램에 대한 합성을 우회할 수 있도록 리디렉션 해제를 활성화합니다. 이 옵션은 고급 사용자를 위한 것이며 "
+"활성화된 상태로 유지하는 것이 좋습니다. 전용 GPU에 그래픽 또는 성능 문제가 있는 경우 사용합니다."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -777,7 +784,7 @@ msgstr "아래쪽 간소화된 작업표시줄"
 
 #: src/panel/settings/settings_panel.vala:140
 msgid "Top Panel"
-msgstr "위쪽 작업표시줄"
+msgstr "상단 작업표시줄"
 
 #: src/panel/settings/settings_panel.vala:142
 msgid "Right Panel"
@@ -789,7 +796,7 @@ msgstr "왼쪽 작업표시줄"
 
 #: src/panel/settings/settings_panel.vala:146
 msgid "Bottom Panel"
-msgstr "아래쪽 작업표시줄"
+msgstr "하단 작업표시줄"
 
 #: src/panel/settings/settings_panel.vala:183
 msgid "Top"
@@ -893,7 +900,7 @@ msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "애플릿 설정"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -928,13 +935,13 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "알림 정렬 순서 설정"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
-msgstr ""
+msgstr "알림을 가장 오래된 것에서 최신으로 정렬할지 또는 최신에서 가장 오래된 것으로 정렬할지 여부를 설정합니다."
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
@@ -1292,21 +1299,21 @@ msgstr "알 수 없는 아티스트"
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr ""
+msgstr "알 수 없는 앨범"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "재생중 - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "일시정지됨 - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "오디오를 재생하는 앱이 없습니다."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1351,11 +1358,11 @@ msgstr "새 알림 없음"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "가장 오래된 것에서 최신으로"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "최신에서 가장 오래된 것으로"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1369,51 +1376,51 @@ msgstr "새 범주"
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "보조프로그램"
 
 #: src/appindexer/AppIndex.vala:170
 msgid "Education"
-msgstr ""
+msgstr "교육"
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "게임"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
-msgstr ""
+msgstr "그래픽"
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "인터넷"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
-msgstr ""
+msgstr "오피스"
 
 #: src/appindexer/AppIndex.vala:197
 msgid "Programming"
-msgstr ""
+msgstr "프로그래밍"
 
 #: src/appindexer/AppIndex.vala:201
 msgid "Science"
-msgstr ""
+msgstr "과학"
 
 #: src/appindexer/AppIndex.vala:207
 msgid "Sound & Video"
-msgstr ""
+msgstr "사운드 및 비디오"
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "시스템 도구"
 
 #: src/appindexer/AppIndex.vala:222
 msgid "Universal Access"
-msgstr ""
+msgstr "범용적 접근"
 
 #: src/appindexer/AppIndex.vala:226
 msgid "Utilities"
-msgstr ""
+msgstr "유틸리티"
 
 #: src/dialogs/polkit/polkitdialog.vala:126
 msgid "Authentication failed"
@@ -1506,7 +1513,7 @@ msgstr "마우스 커서를 올려놓으면 자동으로 해당항목 표시"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "설정 항목 표시하기"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1534,16 +1541,16 @@ msgstr "24시간제 사용하기"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "사용자 지정 형식"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%Y.%m.%d %H:%M:%S"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "사용자 지정 표준시간대"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
@@ -1619,7 +1626,7 @@ msgstr "항상 장소 확장하기"
 
 #: src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "공백 크기"
+msgstr "스페이서 크기"
 
 #: src/panel/applets/status/settings.ui.h:1
 #: src/panel/applets/tray/settings.ui.h:1
@@ -1722,71 +1729,71 @@ msgstr "응용프로그램을 검색하고 시작합니다."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr ""
+msgstr "시스템과 화면이 절전 모드로 전환되지 않도록 합니다."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "사용자 지정 가능한 형식의 디지털 시계입니다."
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr ""
+msgstr "구성 가능한 응용프로그램 작업 목록입니다."
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr ""
+msgstr "현재 사용 중인 키보드 레이아웃을 나타냅니다."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "잠금 키의 상태를 표시합니다."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr ""
+msgstr "야간 조명 설정을 전환하고 수정합니다."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr ""
+msgstr "Raven 알림 보기를 엽니다."
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "드라이브와 즐겨찾는 폴더를 표시합니다."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr ""
+msgstr "Raven 사이드바를 엽니다."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "애플릿 간의 시각적 구분 기호입니다."
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr ""
+msgstr "바탕화면의 표시 여부를 전환하는 버튼입니다."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr ""
+msgstr "다른 애플릿 사이에 넣을 수 있는 조절 가능한 스페이서입니다."
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
-msgstr ""
+msgstr "사운드, 배터리, 블루투스와 같은 시스템 상태 표시기를 표시합니다."
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
+msgstr "아이콘과 레이블이 있는 응용프로그램 작업 목록입니다."
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid "System tray using the XEMBED protocol."
-msgstr ""
+msgstr "XEMBED 프로토콜을 사용하는 시스템 트레이입니다."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "전원 대화상자를 엽니다."
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr ""
+msgstr "작업공간을 표시하고 작업공간 간에 전환합니다."
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
@@ -1797,16 +1804,19 @@ msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
+"기본 제공 Gtk.Calendar 위젯을 사용하는 월별 보기가 있는 간단한 달력입니다. 달력은 기본적으로 현재 날짜를 표시합니다."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "미디어 제어"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
+"이 위젯은 메타데이터 및 플레이백 컨트롤과 함께 활발하게 재생 중인 미디어를 표시하고 오디오 및 비디오를 지원하는 Mpris API를 "
+"사용합니다."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
@@ -1816,7 +1826,7 @@ msgstr "사운드 입력"
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
-msgstr ""
+msgstr "오디오 입력 볼륨을 조정할 수 있으며 사용 가능한 오디오 입력 장치 목록을 표시합니다."
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
@@ -1826,13 +1836,13 @@ msgstr "사운드 출력"
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
-msgstr ""
+msgstr "전역 및 앱별 오디오 출력 볼륨을 제어할 수 있으며 사용 가능한 오디오 출력 장치 목록을 표시합니다."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
-msgstr ""
+msgstr "막대 그래프 형태의 시스템 리소스 사용량 보기입니다. 기본적으로 CPU, RAM 및 스왑 사용량이 포함됩니다."
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

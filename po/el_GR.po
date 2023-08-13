@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# Michail Stefanis, 2023
 # 
 #, fuzzy
 msgid ""
@@ -13,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
-"Language-Team: Greek (Greece) (https://www.transifex.com/buddiesofbudgie/teams/129844/el_GR/)\n"
+"Last-Translator: Michail Stefanis, 2023\n"
+"Language-Team: Greek (Greece) (https://app.transifex.com/buddiesofbudgie/teams/129844/el_GR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +28,7 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:569
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Αδιάβαστες Ειδοποιήσεις"
 
 #: src/daemon/notifications/dbus.vala:573
 msgid "You received 1 notification while an application was fullscreened."
@@ -43,7 +44,7 @@ msgstr ""
 #. notifications view
 #: src/daemon/notifications/dbus.vala:587
 msgid "View Notifications"
-msgstr ""
+msgstr "Προβολή ειδοποιήσεων"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -117,7 +118,7 @@ msgstr ""
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:548
 msgid "Screen"
-msgstr ""
+msgstr "οθόνη"
 
 #: src/daemon/screenshot.vala:548
 msgid "Window"
@@ -167,7 +168,7 @@ msgstr "Άκυρο"
 
 #: src/daemon/screenshot.vala:1260
 msgid "Open"
-msgstr ""
+msgstr "Άνοιγμα"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -227,7 +228,7 @@ msgstr "Αυτόματη εκκίνηση εφαρμογών"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
-msgstr ""
+msgstr "Προσθήκη Εφαρμογής"
 
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
@@ -1412,7 +1413,7 @@ msgstr ""
 
 #: src/appindexer/AppIndex.vala:175
 msgid "Games"
-msgstr ""
+msgstr "Παιχνίδια"
 
 #: src/appindexer/AppIndex.vala:179
 msgid "Graphics"
@@ -1420,7 +1421,7 @@ msgstr ""
 
 #: src/appindexer/AppIndex.vala:187
 msgid "Internet"
-msgstr ""
+msgstr "Διαδίκτυο"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "Office"
@@ -1436,7 +1437,7 @@ msgstr ""
 
 #: src/appindexer/AppIndex.vala:207
 msgid "Sound & Video"
-msgstr ""
+msgstr "Ήχος και Βίντεο"
 
 #: src/appindexer/AppIndex.vala:211
 msgid "System Tools"

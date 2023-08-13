@@ -6,6 +6,7 @@
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # Sabri Ünal <libreajans@gmail.com>, 2023
+# Mustafa Tınmaz, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>, 2023\n"
-"Language-Team: Turkish (https://www.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
+"Last-Translator: Mustafa Tınmaz, 2023\n"
+"Language-Team: Turkish (https://app.transifex.com/buddiesofbudgie/teams/129844/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -747,7 +748,7 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "Yönlendirmemeyi etkinleştir"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -756,6 +757,10 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
+"Çerçevelerin tam ekran uygulamalar için birleştirme işlemini atlamasına izin"
+" verecek olan yönlendirmemeyi etkinleştirin. Bu seçenek ileri düzey "
+"kullanıcılar içindir ve etkin tutulması önerilir. Özel GPU'larla grafik veya"
+" performans sorunları yaşıyorsanız bunu kullanın."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -932,7 +937,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "Parçacık Ayarları"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -968,13 +973,15 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "Bildirim sıralama düzenini ayarla"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
 msgstr ""
+"Bildirimlerin en eskiden en yeniye mi yoksa en yeniden en eskiye mi "
+"sıralanacağını ayarlayın."
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
@@ -1338,12 +1345,12 @@ msgstr "Bilinmeyen Albüm"
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "Oynatılıyor - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "Duraklatıldı - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
@@ -1392,11 +1399,11 @@ msgstr "Yeni bildirim yok"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "En eskiden en yeniye"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "En yeniden en eskiye"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1499,23 +1506,23 @@ msgstr "Oturumunuzu kapatmak istediğinizden emin misiniz?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Ad:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Dosya:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "Saniye cinsinden gecikme"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "İşaretçiyi Göster"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "Çekim yaparken ses çal"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"

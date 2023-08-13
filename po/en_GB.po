@@ -16,7 +16,7 @@ msgstr ""
 "POT-Creation-Date: 2023-02-18 13:33+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: David Mohammed <fossfreedom@ubuntu.com>, 2023\n"
-"Language-Team: English (United Kingdom) (https://www.transifex.com/buddiesofbudgie/teams/129844/en_GB/)\n"
+"Language-Team: English (United Kingdom) (https://app.transifex.com/buddiesofbudgie/teams/129844/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -931,7 +931,7 @@ msgstr ""
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "Applet Settings"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -967,13 +967,15 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "Set notification sort order"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
 msgstr ""
+"Set whether notifications are sorted from oldest to newest, or newest to "
+"oldest."
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
 msgid "All"
@@ -1337,12 +1339,12 @@ msgstr "Unknown Album"
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "Playing - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "Paused - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
@@ -1391,11 +1393,11 @@ msgstr "No new notifications"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "Oldest to newest"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "Newest to oldest"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
