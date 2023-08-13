@@ -5,10 +5,10 @@
 # 
 # Translators:
 # Gilberth Perez, 2022
-# Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # Evan Maddock, 2023
 # Tomás Varela Duarte, 2023
 # _-Caleb-_ <tanausugomez@gmail.com>, 2023
+# Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: _-Caleb-_ <tanausugomez@gmail.com>, 2023\n"
+"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2023\n"
 "Language-Team: Spanish (https://app.transifex.com/buddiesofbudgie/teams/129844/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1909,9 +1909,8 @@ msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
-"Un calendario simple con vista mensual, usando\n"
-"el Calendario Gtk incluído. El calendario muestra\n"
-"la fecha actual por defecto."
+"Un calendario simple con vista mensual, usando el Calendario Gtk incluído. "
+"El calendario muestra la fecha actual por defecto."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
@@ -1922,10 +1921,8 @@ msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
-"Este widget usa la API Mpris para mostrar\n"
-"activamente el medio reproducido con sus\n"
-"metadatos y controles, con soporte para audio\n"
-"y vídeo."
+"Este widget usa la API Mpris para mostrar activamente el medio reproducido "
+"con sus metadatos y controles, con soporte para audio y vídeo."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
