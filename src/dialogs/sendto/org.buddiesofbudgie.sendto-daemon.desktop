@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Sendto
 Comment=Bluetooth obex
-Exec=org.buddiesofbudgie.sendto -s
+Exec=org.buddiesofbudgie.sendto -d
 Icon=bluetooth-active
 Type=Application
 NoDisplay=true

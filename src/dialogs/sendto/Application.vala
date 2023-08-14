@@ -10,18 +10,18 @@
  */
 
 public class SendtoApplication : Gtk.Application {
-	public const OptionEntry[] OPTIONS = {
-		{ "silent", 's', 0, OptionArg.NONE, out silent, "Run the application in the background", null },
+	private const OptionEntry[] OPTIONS = {
+		{ "daemon", 'd', 0, OptionArg.NONE, out silent, "Run the application in the background", null },
 		{ "send", 'f', 0, OptionArg.NONE, out send, "Send a file via Bluetooth", null },
 		{ "", 0, 0, OptionArg.STRING_ARRAY, out arg_files, "Get files", null }, // TODO: Better description
 		{ null },
 	};
 
-	public static bool silent = false;
-	public static bool send = true;
-	public static bool active_once;
+	private static bool silent = true;
+	private static bool send = false;
+	private static bool active_once;
 	[CCode (array_length = false, array_null_terminated = true)]
-	public static string[]? arg_files = {};
+	private static string[]? arg_files = {};
 
 	private Bluetooth.ObjectManager manager;
 	private Bluetooth.Obex.Agent agent;
@@ -37,16 +37,16 @@ public class SendtoApplication : Gtk.Application {
 	}
 
 	public override int command_line(ApplicationCommandLine command) {
-		var command_args = command.get_arguments();
-		unowned var args = command_args;
+		var args = command.get_arguments();
 		var context = new OptionContext(null);
 		context.add_main_entries(OPTIONS, null);
 
 		// Try to parse the command args
 		try {
-			context.parse(ref args);
+			context.parse_strv(ref args);
 		} catch (Error e) {
 			warning("Unable to parse command args: %s", e.message);
+			return 1;
 		}
 
 		activate();
@@ -66,7 +66,7 @@ public class SendtoApplication : Gtk.Application {
 		}
 
 		// If we weren't given any files, open a file picker dialog
-		if (files.length == 0 && !silent) {
+		if (files.length == 0) {
 			var picker = new Gtk.FileChooserDialog(
 				_("Files to send"),
 				null,
