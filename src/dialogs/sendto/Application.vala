@@ -17,7 +17,7 @@ public class SendtoApplication : Gtk.Application {
 		{ null },
 	};
 
-	private static bool silent = true;
+	private static bool silent = false;
 	private static bool send = false;
 	private static bool active_once;
 	[CCode (array_length = false, array_null_terminated = true)]
@@ -77,12 +77,15 @@ public class SendtoApplication : Gtk.Application {
 				select_multiple = true,
 			};
 
-			if (picker.run() == Gtk.ResponseType.ACCEPT) {
-				var picked_files = picker.get_files();
-				picked_files.foreach((file) => {
-					files += file;
-				});
+			if (picker.run() != Gtk.ResponseType.ACCEPT) {
+				picker.destroy();
+				return 0;
 			}
+
+			var picked_files = picker.get_files();
+			picked_files.foreach((file) => {
+				files += file;
+			});
 
 			picker.destroy();
 		}
@@ -107,6 +110,8 @@ public class SendtoApplication : Gtk.Application {
 		// Clear our pointer when the scan dialog is destroyed
 		scan_dialog.destroy.connect(() => {
 			scan_dialog = null;
+
+			if (!silent) quit();
 		});
 
 		// Send the files when a device has been selected
