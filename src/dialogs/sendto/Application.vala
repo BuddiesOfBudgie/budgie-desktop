@@ -13,7 +13,7 @@ public class SendtoApplication : Gtk.Application {
 	private const OptionEntry[] OPTIONS = {
 		{ "daemon", 'd', 0, OptionArg.NONE, out silent, "Run the application in the background", null },
 		{ "send", 'f', 0, OptionArg.NONE, out send, "Send a file via Bluetooth", null },
-		{ "", 0, 0, OptionArg.STRING_ARRAY, out arg_files, "Files to send via Bluetooth", null }, // TODO: Better description
+		{ "", 0, 0, OptionArg.STRING_ARRAY, out arg_files, "Files to send via Bluetooth", null },
 		{ null },
 	};
 
