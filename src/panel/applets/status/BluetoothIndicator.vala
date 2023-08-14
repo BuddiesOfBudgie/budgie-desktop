@@ -21,6 +21,7 @@ public class BluetoothIndicator : Bin {
 	public Budgie.Popover? popover = null;
 
 	private ListBox? devices_box = null;
+	private Button? send_button = null;
 	private Switch? bluetooth_switch = null;
 	private Label? placeholder_label = null;
 	private Label? placeholder_sublabel = null;
@@ -106,13 +107,20 @@ public class BluetoothIndicator : Bin {
 		};
 		switch_label.get_style_context().add_class(STYLE_CLASS_DIM_LABEL);
 
+		// Send button
+		send_button = new Button.from_icon_name("folder-download-symbolic", MENU) {
+			relief = NONE,
+			tooltip_text = _("Send files via Bluetooth"),
+		};
+		send_button.clicked.connect(on_send_clicked);
+
 		// Settings button
-		var button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
+		var settings_button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
 			tooltip_text = _("Bluetooth Settings")
 		};
-		button.get_style_context().add_class(STYLE_CLASS_FLAT);
-		button.get_style_context().remove_class(STYLE_CLASS_BUTTON);
-		button.clicked.connect(on_settings_activate);
+		settings_button.get_style_context().add_class(STYLE_CLASS_FLAT);
+		settings_button.get_style_context().remove_class(STYLE_CLASS_BUTTON);
+		settings_button.clicked.connect(on_settings_activate);
 
 		// Bluetooth switch
 		bluetooth_switch = new Switch() {
@@ -122,7 +130,8 @@ public class BluetoothIndicator : Bin {
 
 		header.pack_start(switch_label);
 		header.pack_end(bluetooth_switch, false, false);
-		header.pack_end(button, false, false);
+		header.pack_end(settings_button, false, false);
+		header.pack_end(send_button, false, false);
 
 		// Devices
 		var scrolled_window = new ScrolledWindow(null, null) {
@@ -200,6 +209,27 @@ public class BluetoothIndicator : Bin {
 		return Gdk.EVENT_STOP;
 	}
 
+	private void on_send_clicked() {
+		this.popover.hide();
+
+		string[] args = { "org.buddiesofbudgie.sendto", "-f" };
+		var env = Environ.get();
+		Pid pid;
+
+		try {
+			Process.spawn_async(
+				null,
+				args,
+				env,
+				SEARCH_PATH_FROM_ENVP,
+				null,
+				out pid
+			);
+		} catch (SpawnError e) {
+			warning("Error starting sendto: %s", e.message);
+		}
+	}
+
 	private void on_settings_activate() {
 		this.popover.hide();
 
@@ -217,6 +247,7 @@ public class BluetoothIndicator : Bin {
 		// Turn Bluetooth on or off
 		var active = bluetooth_switch.active;
 		client.set_airplane_mode(!active); // If the switch is active, then Bluetooth is enabled. So invert the value
+		send_button.sensitive = active;
 	}
 
 	private void add_device(Device1 device) {
@@ -312,7 +343,6 @@ public class BTDeviceRow : ListBoxRow {
 	private Revealer? revealer = null;
 	private Spinner? spinner = null;
 	private Label? status_label = null;
-	private Button? send_file_button = null;
 	private Button? connection_button = null;
 	private Revealer? progress_revealer = null;
 	private Label? file_label = null;
@@ -443,17 +473,6 @@ public class BTDeviceRow : ListBoxRow {
 			toggle_connection.begin();
 		});
 
-		// Send file button
-		send_file_button = new Button.from_icon_name("folder-download-symbolic", IconSize.BUTTON) {
-			relief = ReliefStyle.HALF,
-			tooltip_text = _("Send file…"),
-		};
-		send_file_button.clicked.connect(() => {
-
-		});
-		send_file_button.get_style_context().add_class("circular");
-
-		button_box.pack_start(send_file_button, false);
 		button_box.pack_start(connection_button, false);
 
 		// Progress stuff
@@ -608,12 +627,10 @@ public class BTDeviceRow : ListBoxRow {
 		if (device.connected) {
 			status_label.set_text(_("Connected"));
 			connection_button.show();
-			send_file_button.show();
 			activatable = false;
 		} else {
 			status_label.set_text(_("Disconnected"));
 			connection_button.hide();
-			send_file_button.hide();
 			activatable = true;
 		}
 
