@@ -195,7 +195,7 @@ public class PowerProfilesSelector : Gtk.Box {
 		pack_start(sep, false, false, 1);
 
 		var header = new Gtk.Label("");
-		header.set_markup("<b>%s</b>".printf(_("Performance Mode")));
+		header.set_markup("<b>%s</b>".printf(_("Power Mode")));
 		header.set_halign(Gtk.Align.START);
 		pack_start(header);
 
