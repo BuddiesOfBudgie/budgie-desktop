@@ -79,6 +79,6 @@ The remainder of the project (i.e. installed binaries) is available under the te
 
 ## Authors
 
-Copyright © 2014-2023 Budgie Desktop Developers
+Copyright Budgie Desktop Developers
 
 See our [contributors graph](https://github.com/BuddiesOfBudgie/budgie-desktop/graphs/contributors)!
