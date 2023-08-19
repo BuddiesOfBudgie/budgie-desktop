@@ -27,6 +27,7 @@ public class BluetoothIndicator : Bin {
 	private Label? placeholder_sublabel = null;
 
 	private BluetoothClient client;
+	private ObexManager obex_manager;
 
 	private ulong switch_handler_id;
 
@@ -40,6 +41,7 @@ public class BluetoothIndicator : Bin {
 
 		// Create our Bluetooth client
 		client = new BluetoothClient();
+		obex_manager = new ObexManager();
 
 		client.device_added.connect((device) => {
 			// Remove any existing rows for this device
@@ -253,7 +255,7 @@ public class BluetoothIndicator : Bin {
 	private void add_device(Device1 device) {
 		debug("Bluetooth device added: %s", device.alias);
 
-		var widget = new BTDeviceRow(device);
+		var widget = new BTDeviceRow(device, obex_manager);
 
 		widget.properties_updated.connect(() => {
 			devices_box.invalidate_filter();
@@ -335,6 +337,9 @@ public class BluetoothIndicator : Bin {
  * Widget for displaying a Bluetooth device in a ListBox.
  */
 public class BTDeviceRow : ListBoxRow {
+	private const string OBEX_AGENT = "org.bluez.obex.Agent1";
+	private const string OBEX_PATH = "/org/bluez/obex/budgie";
+
 	private Image? image = null;
 	private Label? name_label = null;
 	private Revealer? battery_revealer = null;
@@ -350,6 +355,7 @@ public class BTDeviceRow : ListBoxRow {
 	private ProgressBar? progress_bar = null;
 
 	public Device1 device { get; construct; }
+	public ObexManager obex_manager { get; construct; }
 	public Transfer transfer;
 
 	private ulong up_handler_id = 0;
@@ -379,7 +385,6 @@ public class BTDeviceRow : ListBoxRow {
 		get_style_context().add_class("bluetooth-device-row");
 
 		// Obex manager for file transfers
-		var obex_manager = new ObexManager();
 		obex_manager.transfer_active.connect(transfer_active);
 		obex_manager.transfer_added.connect(transfer_added);
 		obex_manager.transfer_removed.connect(transfer_removed);
@@ -480,6 +485,8 @@ public class BTDeviceRow : ListBoxRow {
 			reveal_child = false,
 			transition_duration = 250,
 			transition_type = RevealerTransitionType.SLIDE_DOWN,
+			margin_left = 4,
+			margin_right = 4,
 		};
 
 		progress_label = new Label(null) {
@@ -491,6 +498,8 @@ public class BTDeviceRow : ListBoxRow {
 
 		progress_bar = new ProgressBar() {
 			hexpand = true,
+			margin_top = 6,
+			margin_bottom = 6,
 		};
 
 		file_label = new Label(null) {
@@ -505,6 +514,7 @@ public class BTDeviceRow : ListBoxRow {
 		progress_grid.attach(file_label, 0, 0);
 		progress_grid.attach(progress_bar, 0, 1);
 		progress_grid.attach(progress_label, 0, 2);
+		progress_revealer.add(progress_grid);
 
 		// Signals
 		((DBusProxy) device).g_properties_changed.connect(update_status);
@@ -515,17 +525,20 @@ public class BTDeviceRow : ListBoxRow {
 		grid.attach(button_box, 4, 0, 1, 2);
 		grid.attach(status_box, 2, 1, 2, 1);
 		grid.attach(battery_revealer, 2, 2, 1, 1);
-		grid.attach(progress_revealer, 1, 3);
 
-		box.pack_start(grid);
+		var box_grid = new Grid();
+		box_grid.attach(grid, 0, 0);
+		box_grid.attach(progress_revealer, 0, 1);
+
+		box.pack_start(box_grid);
 		add(box);
 
 		show_all();
 		update_status();
 	}
 
-	public BTDeviceRow(Device1 device) {
-		Object(device: device);
+	public BTDeviceRow(Device1 device, ObexManager obex_manager) {
+		Object(device: device, obex_manager: obex_manager);
 	}
 
 	private void hide_progress_revealer() {
@@ -538,6 +551,28 @@ public class BTDeviceRow : ListBoxRow {
 	 * device depending on its current connection state.
 	 */
 	public async void toggle_connection() {
+		// Show transfer progress dialog on click if a transfer is
+		// in progress
+		if (progress_revealer.child_revealed) {
+			try {
+				var conn = yield Bus.get(BusType.SESSION);
+				yield conn.call(
+					OBEX_AGENT,
+					OBEX_PATH,
+					OBEX_AGENT,
+					"TransferActive",
+					new Variant("(s)", transfer.session),
+					null,
+					DBusCallFlags.NONE,
+					-1
+				);
+			} catch (Error e) {
+				warning("Error activating Bluetooth file transfer: %s", e.message);
+			}
+
+			return;
+		}
+
 		if (spinner.active) return;
 
 		spinner.active = true;
@@ -655,11 +690,12 @@ public class BTDeviceRow : ListBoxRow {
 				// Update the progress bar
 				progress_bar.fraction = (double) transfer.transferred / (double) transfer.size;
 				progress_revealer.reveal_child = true;
+				activatable = true;
 
 				// Update the filename label
 				var name = transfer.name;
-				if (name == null) {
-					file_label.label = _("Filename: %s").printf(Markup.escape_text(name));
+				if (name != null) {
+					file_label.set_markup(_("<b>Filename</b>: %s").printf(Markup.escape_text(name)));
 				}
 
 				// Update the progress label
@@ -680,6 +716,9 @@ public class BTDeviceRow : ListBoxRow {
 				break;
 			case "complete":
 				hide_progress_revealer();
+				if (device.connected) {
+					activatable = false;
+				}
 				break;
 		}
 	}

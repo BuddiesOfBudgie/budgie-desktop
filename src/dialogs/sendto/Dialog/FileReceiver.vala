@@ -10,6 +10,7 @@
  */
 
 public class FileReceiver : Gtk.Dialog {
+	public Bluetooth.Device device { get; set; }
 	public string session_path { get; set; }
 
 	public Bluetooth.Obex.Transfer transfer;
@@ -24,7 +25,7 @@ public class FileReceiver : Gtk.Dialog {
 
 	private Notification notification;
 
-	private string folder_path = "";
+	private string file_name = "";
 	private int start_time = 0;
 	private uint64 total_size = 0;
 
@@ -138,10 +139,12 @@ public class FileReceiver : Gtk.Dialog {
 		});
 	}
 
-	public void set_transfer(string device_name, string device_icon, string path) {
-		device_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), device_name));
+	public void set_transfer(Bluetooth.Device device, string path) {
+		this.device = device;
+
+		device_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), device.alias));
 		directory_label.set_markup(Markup.printf_escaped(_("<b>To</b>: %s"), Environment.get_user_special_dir (UserDirectory.DOWNLOAD)));
-		device_image.set_from_gicon(new ThemedIcon(device_icon ?? "bluetooth-active"), Gtk.IconSize.LARGE_TOOLBAR);
+		device_image.set_from_gicon(new ThemedIcon(device.icon ?? "bluetooth-active"), Gtk.IconSize.LARGE_TOOLBAR);
 		start_time = (int) get_real_time();
 
 		try {
@@ -163,22 +166,28 @@ public class FileReceiver : Gtk.Dialog {
 			case "error":
 				notification.set_icon(device_image.gicon);
 				notification.set_title(_("File transfer failed"));
-				notification.set_body(Markup.printf_escaped(_("%s <b>File</b>: %s not received"), device_label.get_label(), transfer.name));
+				notification.set_body(_("File '%s' not received from %s").printf(transfer.name, device.alias));
 				((Gtk.Window) get_toplevel()).application.send_notification("org.buddiesofbudgie.bluetooth", notification);
 				destroy();
 				break;
 			case "queued":
 				break;
 			case "active":
+				// Save the file name here because it won't be available later
+				var name = transfer.filename;
+				if (name != null) {
+					file_name = name;
+				}
+				// Update the transfer progress UI
 				on_transfer_progress(transfer.transferred);
 				break;
 			case "complete":
 				try {
-					move_to_downloads(transfer.filename);
+					move_to_downloads(file_name);
 				} catch (Error e) {
 					notification.set_icon(device_image.gicon);
 					notification.set_title(_("File transfer failed"));
-					notification.set_body(_("File '%s' from %s not received: %s".printf(transfer.name, device_label.get_label(), e.message)));
+					notification.set_body(_("File '%s' from %s not received: %s".printf(transfer.name, device.alias, e.message)));
 					((Gtk.Window) get_toplevel()).application.send_notification("org.buddiesofbudgie.bluetooth", notification);
 					warning("Error saving transferred file: %s", e.message);
 				}
@@ -196,7 +205,7 @@ public class FileReceiver : Gtk.Dialog {
 
 		notification.set_icon(device_image.gicon);
 		notification.set_title(_("File transferred successfully"));
-		notification.set_body(Markup.printf_escaped(_("%s <b>Saved to</b>: %s"), device_label.get_label(), dest.get_path()));
+		notification.set_body(_("Saved file from %s to '%s'").printf(device.alias, dest.get_path()));
 		((Gtk.Window) get_toplevel()).application.send_notification("org.buddiesofbudgie.bluetooth", notification);
 	}
 

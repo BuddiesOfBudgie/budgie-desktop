@@ -112,8 +112,6 @@ public class SendtoApplication : Gtk.Application {
 		// Clear our pointer when the scan dialog is destroyed
 		scan_dialog.destroy.connect(() => {
 			scan_dialog = null;
-
-			if (!silent) quit();
 		});
 
 		// Send the files when a device has been selected
@@ -124,15 +122,12 @@ public class SendtoApplication : Gtk.Application {
 				file_senders.append(file_sender);
 				file_sender.show_all();
 				file_sender.destroy.connect(() => {
-					file_senders.foreach((sender) => {
-						if (sender.device == file_sender.device) {
-							file_senders.remove_link(file_senders.find(sender));
-						}
-					});
+					file_senders.remove_link(file_senders.find(file_sender));
 				});
 			}
 		});
 
+		// Cleanup
 		arg_files = {};
 		send = false;
 
@@ -142,70 +137,70 @@ public class SendtoApplication : Gtk.Application {
 	protected override void activate() {
 		if (silent) {
 			if (active_once) {
-				release();
+				release(); // Allow normal exit if `activate()` has already been called once
 			}
-			hold();
+			hold(); // Prevent normal application exit if silent
 			silent = false;
 		}
 
-		if (manager == null) {
-			file_receivers = new List<FileReceiver>();
-			file_senders = new List<FileSender>();
+		if (manager != null) return;
 
-			manager = new Bluetooth.ObjectManager();
-			manager.notify["has-object"].connect(() => {
-				var build_path = Path.build_filename(Environment.get_home_dir(), ".local", "share", "contractor");
-				var file = File.new_for_path(
-					Path.build_filename(
-						build_path,
-						Environment.get_application_name() + ".contract"
-					)
-				);
-				var file_exists = file.query_exists();
+		file_receivers = new List<FileReceiver>();
+		file_senders = new List<FileSender>();
 
-				// Create the parent directory for the contract file if it doesn't exist
-				if (!File.new_for_path(build_path).query_exists()) {
-					DirUtils.create(build_path, 0700);
+		manager = new Bluetooth.ObjectManager();
+		manager.notify["has-object"].connect(() => {
+			var build_path = Path.build_filename(Environment.get_home_dir(), ".local", "share", "contractor");
+			var file = File.new_for_path(
+				Path.build_filename(
+					build_path,
+					Environment.get_application_name() + ".contract"
+				)
+			);
+			var file_exists = file.query_exists();
+
+			// Create the parent directory for the contract file if it doesn't exist
+			if (!File.new_for_path(build_path).query_exists()) {
+				DirUtils.create(build_path, 0700);
+			}
+
+			// If we have Bluetooth devices, create our Obex Agent and contract file
+			if (manager.has_object) {
+				// Create our Obex Agent if we haven't been activated yet
+				if (!active_once) {
+					agent = new Bluetooth.Obex.Agent();
+					agent.transfer_view.connect(dialog_active);
+					agent.response_accepted.connect(response_accepted);
+					agent.response_notify.connect(response_notify);
+					active_once = true;
 				}
 
-				// If we have Bluetooth devices, create our Obex Agent and contract file
-				if (manager.has_object) {
-					// Create our Obex Agent if we haven't been activated yet
-					if (!active_once) {
-						agent = new Bluetooth.Obex.Agent();
-						agent.transfer_view.connect(dialog_active);
-						agent.response_accepted.connect(response_accepted);
-						agent.response_notify.connect(response_notify);
-						active_once = true;
-					}
+				// Create and write to our Obex contract file if it doesn't exist
+				if (!file_exists) {
+					var keyfile = new KeyFile();
+					keyfile.set_string("Contractor Entry", "Name", _("Send Files via Bluetooth"));
+					keyfile.set_string("Contractor Entry", "Icon", "bluetooth-active");
+					keyfile.set_string("Contractor Entry", "Description", _("Send files to device…"));
+					keyfile.set_string("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
+					keyfile.set_string("Contractor Entry", "MimeType", "!inode;");
 
-					// Create and write to our Obex contract file if it doesn't exist
-					if (!file_exists) {
-						var keyfile = new KeyFile();
-						keyfile.set_string("Contractor Entry", "Name", _("Send Files via Bluetooth"));
-						keyfile.set_string("Contractor Entry", "Icon", "bluetooth-active");
-						keyfile.set_string("Contractor Entry", "Description", _("Send files to device…"));
-						keyfile.set_string("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
-						keyfile.set_string("Contractor Entry", "MimeType", "!inode;");
-
-						try {
-							keyfile.save_to_file(file.get_path());
-						} catch (Error e) {
-							critical("Error saving contract file: %s", e.message);
-						}
-					}
-				} else {
-					// Delete the contract file if it exists
-					if (file_exists) {
-						try {
-							file.delete();
-						} catch (Error e) {
-							critical("Error deleting old contract file: %s", e.message);
-						}
+					try {
+						keyfile.save_to_file(file.get_path());
+					} catch (Error e) {
+						critical("Error saving contract file: %s", e.message);
 					}
 				}
-			});
-		}
+			} else {
+				// Delete the contract file if it exists
+				if (file_exists) {
+					try {
+						file.delete();
+					} catch (Error e) {
+						critical("Error deleting old contract file: %s", e.message);
+					}
+				}
+			}
+		});
 	}
 
 	private void dialog_active(string session_path) {
@@ -254,15 +249,11 @@ public class SendtoApplication : Gtk.Application {
 		file_receivers.append(file_receiver);
 
 		file_receiver.destroy.connect(() => {
-			file_receivers.foreach((receiver) => {
-				if (receiver.transfer.session == file_receiver.session_path) {
-					file_receivers.remove_link(file_receivers.find(receiver));
-				}
-			});
+			file_receivers.remove_link(file_receivers.find(file_receiver));
 		});
 
 		Bluetooth.Device device = manager.get_device(address);
-		file_receiver.set_transfer(device.alias ?? get_name_for_device(device), device.icon, path);
+		file_receiver.set_transfer(device, path);
 	}
 
 	private void response_notify(string address, ObjectPath object_path) {
@@ -320,27 +311,6 @@ public class SendtoApplication : Gtk.Application {
 		}
 
 		return size == file_size && input_file.query_exists();
-	}
-
-	private string get_name_for_device(Bluetooth.Device device) {
-		switch (device.icon) {
-			case "audio-card":
-				return _("Speaker");
-			case "input-gaming":
-				return _("Controller");
-			case "input-keyboard":
-				return _("Keyboard");
-			case "input-mouse":
-				return _("Mouse");
-			case "input-tablet":
-				return _("Tablet");
-			case "input-touchpad":
-				return _("Touchpad");
-			case "phone":
-				return _("Phone");
-			default:
-				return device.address;
-		}
 	}
 }
 

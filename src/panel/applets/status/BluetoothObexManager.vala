@@ -17,8 +17,10 @@ public class ObexManager : Object {
 	public signal void transfer_active(string address);
 
 	private DBusObjectManager object_manager;
+	private HashTable<Transfer, string> active_transfers;
 
 	construct {
+		active_transfers = new HashTable<Transfer, string>(direct_hash, direct_equal);
 		create_manager.begin();
 	}
 
@@ -89,11 +91,11 @@ public class ObexManager : Object {
 				critical("Error getting Obex session proxy: %s", e.message);
 			}
 
-			transfer_added(session.destination, transfer);
-
+			active_transfers[transfer] = session.destination;
 			((DBusProxy) transfer).g_properties_changed.connect((changed, invalid) => {
 				transfer_active(session.destination);
 			});
+			transfer_added(session.destination, transfer);
 		}
 	}
 
@@ -102,7 +104,11 @@ public class ObexManager : Object {
 	 */
 	private void interface_removed(DBusObject obj, DBusInterface iface) {
 		if (iface is Transfer) {
-			transfer_removed(iface as Transfer);
+			unowned Transfer transfer = (Transfer) iface;
+			if (active_transfers.contains(transfer)) {
+				active_transfers.remove(transfer);
+			}
+			transfer_removed(transfer);
 		}
 	}
 }
