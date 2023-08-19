@@ -1780,11 +1780,11 @@ msgstr ""
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Veiksmas:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"

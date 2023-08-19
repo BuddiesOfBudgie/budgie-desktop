@@ -36,8 +36,11 @@ msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
 msgstr[0] ""
+"Recebeu %d notificação enquanto uma aplicação estava em ecrã inteiro."
 msgstr[1] ""
+"Recebeu %d notificações enquanto uma aplicação estava em ecrã inteiro."
 msgstr[2] ""
+"Recebeu %d notificações enquanto uma aplicação estava em ecrã inteiro."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -164,9 +167,9 @@ msgstr "Desativado o aumento de cafeína"
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Desligar-se-á num minuto"
+msgstr[1] "Desligar-se-á em %d minutos"
+msgstr[2] "Desligar-se-á em %d minutos"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1096,9 +1099,9 @@ msgstr "O Num lock está desligado"
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u notificação não lida"
+msgstr[1] "%u notificações não lidas"
+msgstr[2] "%u notificações não lidas"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377
@@ -1262,19 +1265,19 @@ msgstr "Bateria restante"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Modo de desempenho"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Poupança de energia"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Equilibrado"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Desempenho"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1724,27 +1727,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Modo de ordenação"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Ordenar por tipo"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Ordenar alfabeticamente"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Ordenar por ordem alfabética inversa"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Ordenar por data ascendente"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Ordenar por data descendente"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1777,15 +1780,15 @@ msgstr "A autenticação é necessária"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Detalhes"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Ação:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1876,6 +1879,8 @@ msgstr "Uma lista de tarefas de aplicações com ícones e etiquetas."
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
+"Área de notificação do sistema que implementa a especificação Notificador de"
+" Estado do Freedesktop."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1887,7 +1892,7 @@ msgstr "Mostrar áreas de trabalho e alternar entre elas."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Gerir o lixo a partir do painel Budgie"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
