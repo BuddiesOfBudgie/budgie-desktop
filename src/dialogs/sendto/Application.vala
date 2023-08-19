@@ -17,7 +17,7 @@ public class SendtoApplication : Gtk.Application {
 		{ null },
 	};
 
-	private static bool silent = false;
+	private static bool silent = true;
 	private static bool send = false;
 	private static bool active_once;
 	[CCode (array_length = false, array_null_terminated = true)]
@@ -27,7 +27,9 @@ public class SendtoApplication : Gtk.Application {
 	private Bluetooth.Obex.Agent agent;
 	private Bluetooth.Obex.Transfer transfer;
 
+	private FileReceiver file_receiver;
 	private FileSender file_sender;
+	private List<FileReceiver> file_receivers;
 	private List<FileSender> file_senders;
 	private ScanDialog scan_dialog;
 
@@ -147,6 +149,7 @@ public class SendtoApplication : Gtk.Application {
 		}
 
 		if (manager == null) {
+			file_receivers = new List<FileReceiver>();
 			file_senders = new List<FileSender>();
 
 			manager = new Bluetooth.ObjectManager();
@@ -171,18 +174,19 @@ public class SendtoApplication : Gtk.Application {
 					if (!active_once) {
 						agent = new Bluetooth.Obex.Agent();
 						agent.transfer_view.connect(dialog_active);
-						// TODO: Connect agent signals
+						agent.response_accepted.connect(response_accepted);
+						agent.response_notify.connect(response_notify);
 						active_once = true;
 					}
 
 					// Create and write to our Obex contract file if it doesn't exist
 					if (!file_exists) {
 						var keyfile = new KeyFile();
-						keyfile.set_string ("Contractor Entry", "Name", _("Send Files via Bluetooth"));
-						keyfile.set_string ("Contractor Entry", "Icon", "bluetooth-active");
-						keyfile.set_string ("Contractor Entry", "Description", _("Send files to device…"));
-						keyfile.set_string ("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
-						keyfile.set_string ("Contractor Entry", "MimeType", "!inode;");
+						keyfile.set_string("Contractor Entry", "Name", _("Send Files via Bluetooth"));
+						keyfile.set_string("Contractor Entry", "Icon", "bluetooth-active");
+						keyfile.set_string("Contractor Entry", "Description", _("Send files to device…"));
+						keyfile.set_string("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
+						keyfile.set_string("Contractor Entry", "MimeType", "!inode;");
 
 						try {
 							keyfile.save_to_file(file.get_path());
@@ -205,7 +209,13 @@ public class SendtoApplication : Gtk.Application {
 	}
 
 	private void dialog_active(string session_path) {
-		// TODO: Receivers
+		// Show any file receiver dialogs if there is a transfer session for the
+		// given path
+		file_receivers.foreach((receiver) => {
+			if (receiver.transfer.session == session_path) {
+				receiver.show_all();
+			}
+		});
 
 		// Show any file sender dialogs if there is a transfer session for the
 		// given path
@@ -229,6 +239,108 @@ public class SendtoApplication : Gtk.Application {
 		});
 
 		return exists;
+	}
+
+	private void response_accepted(string address, ObjectPath path) {
+		try {
+			transfer = Bus.get_proxy_sync<Bluetooth.Obex.Transfer>(BusType.SESSION, "org.bluez.obex", path);
+		} catch (Error e) {
+			warning("Error getting transfer proxy: %s", e.message);
+		}
+
+		if (transfer.name == null) return;
+
+		file_receiver = new FileReceiver(this);
+		file_receivers.append(file_receiver);
+
+		file_receiver.destroy.connect(() => {
+			file_receivers.foreach((receiver) => {
+				if (receiver.transfer.session == file_receiver.session_path) {
+					file_receivers.remove_link(file_receivers.find(receiver));
+				}
+			});
+		});
+
+		Bluetooth.Device device = manager.get_device(address);
+		file_receiver.set_transfer(device.alias ?? get_name_for_device(device), device.icon, path);
+	}
+
+	private void response_notify(string address, ObjectPath object_path) {
+		Bluetooth.Device device = manager.get_device(address);
+
+		try {
+			transfer = Bus.get_proxy_sync<Bluetooth.Obex.Transfer>(BusType.SESSION, "org.bluez.obex", object_path);
+		} catch (Error e) {
+			warning("Error getting transfer proxy: %s", e.message);
+		}
+
+		var notification = new Notification("Bluetooth");
+		notification.set_icon(new ThemedIcon(device.icon));
+
+		if (reject_if_exists(transfer.name, transfer.size)) {
+			notification.set_title(_("Rejected file"));
+			notification.set_body(_("File already exists: %s").printf(transfer.name));
+			send_notification("org.buddiesofbudgie.bluetooth", notification);
+			Idle.add(() => {
+				activate_action("btcancel", new Variant.string("Cancel"));
+				return Source.REMOVE;
+			});
+
+			return;
+		}
+
+		// Create a notification prompting the user what to do
+		notification.set_priority(NotificationPriority.URGENT);
+		notification.set_title(_("Receiving file"));
+		notification.set_body(_("Device '%s' wants to send a file: %s %s").printf(device.alias, transfer.name, format_size(transfer.size)));
+		notification.add_button(
+			_("Accept"),
+			Action.print_detailed_name("app.btaccept", new Variant.string("Accept"))
+		);
+		notification.add_button(
+			_("Reject"),
+			Action.print_detailed_name("app.btcancel", new Variant.string("Cancel"))
+		);
+
+		send_notification("org.buddiesofbudgie.bluetooth", notification);
+	}
+
+	private bool reject_if_exists(string name, uint64 size) {
+		var input_path = Path.build_filename(Environment.get_user_special_dir(UserDirectory.DOWNLOAD), name);
+		var input_file = File.new_for_path(input_path);
+		uint64 file_size = 0;
+
+		if (input_file.query_exists()) {
+			try {
+				var file_info = input_file.query_info(FileAttribute.STANDARD_SIZE, FileQueryInfoFlags.NONE, null);
+				file_size = file_info.get_size();
+			} catch (Error e) {
+				warning("Error getting file size: %s", e.message);
+			}
+		}
+
+		return size == file_size && input_file.query_exists();
+	}
+
+	private string get_name_for_device(Bluetooth.Device device) {
+		switch (device.icon) {
+			case "audio-card":
+				return _("Speaker");
+			case "input-gaming":
+				return _("Controller");
+			case "input-keyboard":
+				return _("Keyboard");
+			case "input-mouse":
+				return _("Mouse");
+			case "input-tablet":
+				return _("Tablet");
+			case "input-touchpad":
+				return _("Touchpad");
+			case "phone":
+				return _("Phone");
+			default:
+				return device.address;
+		}
 	}
 }
 

@@ -128,7 +128,7 @@ public class FileSender : Gtk.Dialog {
 						warning("Error cancelling Bluetooth transfer: %s", e.message);
 					}
 
-					// TODO: remove_session.begin();
+					remove_session.begin();
 				}
 
 				destroy();
@@ -373,9 +373,9 @@ public class FileSender : Gtk.Dialog {
 		uint64 transfer_rate = transferred / elapsed_time;
 		if (transfer_rate == 0) return;
 
-		rate_label.label = Markup.printf_escaped (_("<b>Transfer rate:</b> %s"), format_size(transfer_rate));
+		rate_label.label = Markup.printf_escaped(_("<b>Transfer rate:</b> %s"), format_size(transfer_rate));
 		uint64 remaining_time = (total_size - transferred) / transfer_rate;
-		progress_label.label = _("(%i/%i) %s of %s sent. Time remaining: %s").printf (current_file, total_files, format_size(transferred), format_size(total_size), format_time((int) remaining_time));
+		progress_label.label = _("(%i/%i) %s of %s sent. Time remaining: %s").printf(current_file, total_files, format_size(transferred), format_size(total_size), format_time((int) remaining_time));
 	}
 
 	private string format_time(int seconds) {

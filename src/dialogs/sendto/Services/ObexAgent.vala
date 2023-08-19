@@ -36,7 +36,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 
 	private void on_name_get(GLib.DBusConnection conn) {
 		try {
-			conn.register_object ("/org/bluez/obex/budgie", this);
+			conn.register_object("/org/bluez/obex/budgie", this);
 		} catch (Error e) {
 			error (e.message);
 		}
