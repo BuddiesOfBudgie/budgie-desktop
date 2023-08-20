@@ -21,7 +21,7 @@ Budgie Desktop consists of a number of components to provide a more complete des
 
 The main Budgie menu provides a quick and easy to use menu, suitable for both mouse and keyboard driven users. Features search-as-you-type and category based filtering.
 
-![main_menu](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/BudgieMenu.png)
+![main_menu](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/BudgieMenu.jpg)
 
 ### Raven
 
@@ -57,7 +57,7 @@ The session dialog provides the usual shutdown, logout, options which can be act
 
 The `budgie-polkit-dialog` provides a PolicyKit agent for the session, ensuring a cohesive and integrated experience whilst authenticating for actions on modern Linux desktop systems.
 
-![budgie_polkit](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/Polkit.png)
+![budgie_polkit](https://github.com/BuddiesOfBudgie/budgie-desktop/raw/main/.github/screenshots/Polkit.jpg)
 
 ## Testing
 
