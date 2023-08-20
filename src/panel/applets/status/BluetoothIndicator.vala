@@ -2,7 +2,7 @@
  * This file is part of budgie-desktop
  *
  * Copyright Budgie Desktop Developers
- * Copyright (C) 2015 Alberts Muktupāvels
+ * Copyright © 2015 Alberts Muktupāvels
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
