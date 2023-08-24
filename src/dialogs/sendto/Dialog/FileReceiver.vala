@@ -47,7 +47,9 @@ public class FileReceiver : Gtk.Dialog {
 			halign = Gtk.Align.END,
 		};
 
-		var overlay = new Gtk.Overlay();
+		var overlay = new Gtk.Overlay() {
+			margin_right = 12,
+		};
 		overlay.add(icon_image);
 		overlay.add_overlay(device_image);
 
@@ -82,6 +84,8 @@ public class FileReceiver : Gtk.Dialog {
 
 		progress_bar = new Gtk.ProgressBar() {
 			hexpand = true,
+			margin_top = 4,
+			margin_bottom = 4,
 		};
 
 		progress_label = new Gtk.Label(null) {
@@ -89,10 +93,12 @@ public class FileReceiver : Gtk.Dialog {
 			hexpand = false,
 			wrap = true,
 			xalign = 0,
+			margin_bottom = 4,
 		};
 
 		var message_grid = new Gtk.Grid() {
 			column_spacing = 0,
+			row_spacing = 4,
 			width_request = 450,
 			margin_start = 10,
 			margin_end = 15
@@ -233,7 +239,7 @@ public class FileReceiver : Gtk.Dialog {
 		uint64 transfer_rate = transferred / elapsed_time;
 		if (transfer_rate == 0) return;
 
-		rate_label.label = Markup.printf_escaped(_("<b>Transfer rate:</b> %s"), format_size(transfer_rate));
+		rate_label.label = Markup.printf_escaped(_("<b>Transfer rate:</b> %s / s"), format_size(transfer_rate));
 		uint64 remaining_time = (total_size - transferred) / transfer_rate;
 		progress_label.label = _("%s of %s received. Time remaining: %s").printf(format_size(transferred), format_size(total_size), format_time((int) remaining_time));
 	}
