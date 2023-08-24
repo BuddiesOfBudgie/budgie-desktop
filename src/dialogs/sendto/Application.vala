@@ -171,6 +171,7 @@ public class SendtoApplication : Gtk.Application {
 					agent = new Bluetooth.Obex.Agent();
 					agent.transfer_view.connect(dialog_active);
 					agent.response_accepted.connect(response_accepted);
+					agent.response_canceled.connect(response_canceled);
 					agent.response_notify.connect(response_notify);
 					active_once = true;
 				}
@@ -254,6 +255,23 @@ public class SendtoApplication : Gtk.Application {
 
 		Bluetooth.Device device = manager.get_device(address);
 		file_receiver.set_transfer(device, path);
+	}
+
+	private void response_canceled(ObjectPath? path = null) {
+		try {
+			Bluetooth.Obex.Transfer? transfer = null;
+
+			if (path == null) {
+				var last_receiver = file_receivers.first().data as FileReceiver;
+				transfer = last_receiver.transfer;
+			} else {
+				transfer = Bus.get_proxy_sync<Bluetooth.Obex.Transfer>(BusType.SESSION, "org.bluez.obex", path);
+			}
+
+			transfer.cancel();
+		} catch (Error e) {
+			warning("Error cancelling file transfer: %s", e.message);
+		}
 	}
 
 	private void response_notify(string address, ObjectPath object_path) {

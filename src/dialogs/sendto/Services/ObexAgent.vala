@@ -20,10 +20,10 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	/* one confirmation for many files in one session */
     private GLib.ObjectPath many_files;
 
-    public signal void response_notify(string address, GLib.ObjectPath objectpath);
-    public signal void response_accepted(string address, GLib.ObjectPath objectpath);
+    public signal void response_notify(string address, ObjectPath object_path);
+    public signal void response_accepted(string address, ObjectPath object_path);
     public signal void transfer_view(string session_path);
-    public signal void response_canceled();
+    public signal void response_canceled(ObjectPath? object_path = null);
 
     public Agent() {
         Bus.own_name(
@@ -76,7 +76,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
         Bluetooth.Obex.Transfer transfer = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", object_path);
 
         if (transfer.name == null) {
-            throw new BluezObexError.REJECTED("Authorize Reject");
+            throw new BluezObexError.REJECTED("File transfer rejected");
         }
 
         Bluetooth.Obex.Session session = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", transfer.session);
@@ -95,8 +95,8 @@ public class Bluetooth.Obex.Agent : GLib.Object {
         var cancel_action = new SimpleAction("btcancel", VariantType.STRING);
         GLib.Application.get_default().add_action(cancel_action);
         cancel_action.activate.connect((parameter) => {
-            obex_error = new BluezObexError.CANCELED("Authorize Cancel");
-            response_canceled();
+            obex_error = new BluezObexError.CANCELED("File transfer cancelled");
+            response_canceled(object_path);
             if (callback != null) {
                 Idle.add((owned) callback);
             }
