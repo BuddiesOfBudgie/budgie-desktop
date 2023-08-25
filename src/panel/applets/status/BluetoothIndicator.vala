@@ -314,11 +314,11 @@ public class BluetoothIndicator : Bin {
 
 		// Update the tray icon and placeholder text
 		if (enabled) { // Airplane mode is on, so Bluetooth is disabled
-			image.set_from_icon_name("bluetooth-disabled", IconSize.MENU);
+			image.set_from_icon_name("bluetooth-disabled-symbolic", IconSize.MENU);
 			placeholder_label.label = _("Airplane mode is on.");
 			placeholder_sublabel.label = _("Bluetooth is disabled while airplane mode is on.");
 		} else { // Airplane mode is off, so Bluetooth is enabled
-			image.set_from_icon_name("bluetooth-active", IconSize.MENU);
+			image.set_from_icon_name("bluetooth-active-symbolic", IconSize.MENU);
 			placeholder_label.label = _("No paired Bluetooth devices found.");
 			placeholder_sublabel.label = _("Visit Bluetooth settings to pair a device.");
 		}
