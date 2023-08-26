@@ -11,28 +11,28 @@
 
 [DBus (name = "org.bluez.obex.Error")]
 public errordomain BluezObexError {
-    REJECTED,
-    CANCELED
+	REJECTED,
+	CANCELED
 }
 
 [DBus (name = "org.bluez.obex.Agent1")]
 public class Bluetooth.Obex.Agent : GLib.Object {
 	/* one confirmation for many files in one session */
-    private GLib.ObjectPath many_files;
+	private GLib.ObjectPath many_files;
 
-    public signal void response_notify(string address, ObjectPath object_path);
-    public signal void response_accepted(string address, ObjectPath object_path);
-    public signal void transfer_view(string session_path);
-    public signal void response_canceled(ObjectPath? object_path = null);
+	public signal void response_notify(string address, ObjectPath object_path);
+	public signal void response_accepted(string address, ObjectPath object_path);
+	public signal void transfer_view(string session_path);
+	public signal void response_canceled(ObjectPath? object_path = null);
 
-    public Agent() {
-        Bus.own_name(
-            BusType.SESSION,
-            "org.bluez.obex.Agent1",
-            GLib.BusNameOwnerFlags.NONE,
-            on_name_get
-        );
-    }
+	public Agent() {
+		Bus.own_name(
+			BusType.SESSION,
+			"org.bluez.obex.Agent1",
+			GLib.BusNameOwnerFlags.NONE,
+			on_name_get
+		);
+	}
 
 	private void on_name_get(GLib.DBusConnection conn) {
 		try {
@@ -42,9 +42,9 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 		}
 	}
 
-    public void transfer_active(string session_path) throws GLib.Error {
-        transfer_view(session_path);
-    }
+	public void transfer_active(string session_path) throws GLib.Error {
+		transfer_view(session_path);
+	}
 
 	/**
 	 * release:
@@ -55,7 +55,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * agent, because when this method gets called it has
 	 * already been unregistered.
 	 */
-    public void release() throws GLib.Error {}
+	public void release() throws GLib.Error {}
 
 	/**
 	 * authorize_push:
@@ -70,60 +70,60 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * property that contains the default location and name
 	 * that can be returned.
 	 */
-    public async string authorize_push(GLib.ObjectPath object_path) throws Error {
-        SourceFunc callback = authorize_push.callback;
-        BluezObexError? obex_error = null;
-        Bluetooth.Obex.Transfer transfer = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", object_path);
+	public async string authorize_push(GLib.ObjectPath object_path) throws Error {
+		SourceFunc callback = authorize_push.callback;
+		BluezObexError? obex_error = null;
+		Bluetooth.Obex.Transfer transfer = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", object_path);
 
-        if (transfer.name == null) {
-            throw new BluezObexError.REJECTED("File transfer rejected");
-        }
+		if (transfer.name == null) {
+			throw new BluezObexError.REJECTED("File transfer rejected");
+		}
 
-        Bluetooth.Obex.Session session = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", transfer.session);
+		Bluetooth.Obex.Session session = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", transfer.session);
 
 		// Register application action to accept a file transfer
-        var accept_action = new SimpleAction("btaccept", VariantType.STRING);
-        GLib.Application.get_default().add_action(accept_action);
-        accept_action.activate.connect((parameter) => {
-            response_accepted(session.destination, object_path);
-            if (callback != null) {
-                Idle.add((owned) callback);
-            }
-        });
+		var accept_action = new SimpleAction("btaccept", VariantType.STRING);
+		GLib.Application.get_default().add_action(accept_action);
+		accept_action.activate.connect((parameter) => {
+			response_accepted(session.destination, object_path);
+			if (callback != null) {
+				Idle.add((owned) callback);
+			}
+		});
 
 		// Register application action to reject a file transfer
-        var cancel_action = new SimpleAction("btcancel", VariantType.STRING);
-        GLib.Application.get_default().add_action(cancel_action);
-        cancel_action.activate.connect((parameter) => {
-            obex_error = new BluezObexError.CANCELED("File transfer cancelled");
-            response_canceled(object_path);
-            if (callback != null) {
-                Idle.add((owned) callback);
-            }
-        });
+		var cancel_action = new SimpleAction("btcancel", VariantType.STRING);
+		GLib.Application.get_default().add_action(cancel_action);
+		cancel_action.activate.connect((parameter) => {
+			obex_error = new BluezObexError.CANCELED("File transfer cancelled");
+			response_canceled(object_path);
+			if (callback != null) {
+				Idle.add((owned) callback);
+			}
+		});
 
 		// Automatically accept the transfer if there are multiple files for
 		// the one transfer
-        if (many_files == object_path) {
-            Idle.add(()=>{
-                response_accepted(session.destination, object_path);
-                if (callback != null) {
-                    Idle.add((owned) callback);
-                }
-                return GLib.Source.REMOVE;
-            });
-        } else {
+		if (many_files == object_path) {
+			Idle.add(()=>{
+				response_accepted(session.destination, object_path);
+				if (callback != null) {
+					Idle.add((owned) callback);
+				}
+				return GLib.Source.REMOVE;
+			});
+		} else {
 			// Not multple files, ask to accept or reject
-            response_notify(session.destination, object_path);
-        }
+			response_notify(session.destination, object_path);
+		}
 
-        yield;
+		yield;
 
-        if (obex_error != null) throw obex_error;
+		if (obex_error != null) throw obex_error;
 
-        many_files = object_path;
-        return transfer.name;
-    }
+		many_files = object_path;
+		return transfer.name;
+	}
 
 	/**
 	 * cancel:
@@ -132,7 +132,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * request failed before a reply was returned. It cancels
 	 * the previous request.
 	 */
-    public void cancel() throws GLib.Error {
-        response_canceled();
-    }
+	public void cancel() throws GLib.Error {
+		response_canceled();
+	}
 }
