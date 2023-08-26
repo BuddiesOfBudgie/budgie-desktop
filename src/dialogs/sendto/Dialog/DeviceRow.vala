@@ -16,7 +16,6 @@ public class DeviceRow : Gtk.ListBoxRow {
 	private static Gtk.SizeGroup size_group;
 
 	private Gtk.Button send_button;
-	private Gtk.Image state_image;
 	private Gtk.Label state_label;
 
 	public signal void send_clicked(Bluetooth.Device device);
@@ -32,20 +31,10 @@ public class DeviceRow : Gtk.ListBoxRow {
 	construct {
 		var image = new Gtk.Image.from_icon_name(device.icon ?? "bluetooth-active", Gtk.IconSize.DND);
 
-		state_image = new Gtk.Image.from_icon_name("user-offline", Gtk.IconSize.MENU) {
-			valign = Gtk.Align.END,
-			halign = Gtk.Align.END,
-		};
-
 		state_label = new Gtk.Label(null) {
 			use_markup = true,
 			xalign = 0,
 		};
-
-		var overlay = new Gtk.Overlay();
-		overlay.tooltip_text = device.address;
-		overlay.add(image);
-		overlay.add_overlay(state_image);
 
 		string? device_name = device.alias;
 		if (device_name == null) {
@@ -75,7 +64,7 @@ public class DeviceRow : Gtk.ListBoxRow {
 			orientation = Gtk.Orientation.HORIZONTAL,
 		};
 
-		grid.attach(overlay, 0, 0, 1, 2);
+		grid.attach(image, 0, 0, 1, 2);
 		grid.attach(label, 1, 0, 1, 1);
 		grid.attach(state_label, 1, 1, 1, 1);
 		grid.attach(send_button, 4, 0, 1, 2);
@@ -85,7 +74,6 @@ public class DeviceRow : Gtk.ListBoxRow {
 		show_all();
 
 		set_sensitive(adapter.powered);
-		set_status(device.connected);
 
 		((DBusProxy) adapter).g_properties_changed.connect((changed, invalid) => {
 			var powered = changed.lookup_value("Powered", new VariantType("b"));
@@ -95,11 +83,6 @@ public class DeviceRow : Gtk.ListBoxRow {
 		});
 
 		((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
-			var connected = changed.lookup_value("Connected", new VariantType("b"));
-			if (connected != null) {
-				set_status(device.connected);
-			}
-
 			var name = changed.lookup_value("Name", new VariantType("s"));
 			if (name != null) {
 				label.label = device.alias;
@@ -139,9 +122,5 @@ public class DeviceRow : Gtk.ListBoxRow {
 			default:
 				return device.address;
 		}
-	}
-
-	private void set_status(bool status) {
-		state_image.icon_name = status ? "user-available" : "user-offline";
 	}
 }

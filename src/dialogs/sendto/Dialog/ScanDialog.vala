@@ -41,7 +41,9 @@ public class ScanDialog : Gtk.Dialog {
 			xalign = 0,
 		};
 
-		var placeholder = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		var placeholder = new Gtk.Box(Gtk.Orientation.VERTICAL, 18) {
+			margin_top = 125,
+		};
 		var placeholder_title = new Gtk.Label(_("<b>No devices found</b>")) {
 			use_markup = true,
 		};
@@ -49,8 +51,8 @@ public class ScanDialog : Gtk.Dialog {
 		var placeholder_text = new Gtk.Label(_("Ensure that your devices are visable and ready for pairing"));
 		placeholder_text.get_style_context().add_class(Gtk.STYLE_CLASS_DIM_LABEL);
 
-		placeholder.pack_start(placeholder_title);
-		placeholder.pack_start(placeholder_text);
+		placeholder.pack_start(placeholder_title, false);
+		placeholder.pack_start(placeholder_text, false);
 		placeholder.show_all();
 
 		devices_box = new Gtk.ListBox() {
@@ -60,6 +62,7 @@ public class ScanDialog : Gtk.Dialog {
 
 		devices_box.set_header_func((Gtk.ListBoxUpdateHeaderFunc) title_rows);
 		devices_box.set_sort_func((Gtk.ListBoxSortFunc) compare_rows);
+		devices_box.set_filter_func((Gtk.ListBoxFilterFunc) filter_row);
 		devices_box.set_placeholder(placeholder);
 
 		var scrolled_window = new Gtk.ScrolledWindow(null, null) {
@@ -139,6 +142,20 @@ public class ScanDialog : Gtk.Dialog {
 			manager.stop_discovery.begin();
 			send_file(device);
 		});
+
+		((DBusProxy) row.device).g_properties_changed.connect((changed, invalid) => {
+			var paired = changed.lookup_value("Paired", new VariantType("b"));
+			if (paired != null) {
+				invalidate_filters();
+			}
+
+			var connected = changed.lookup_value("Connected", new VariantType("b"));
+			if (connected != null) {
+				invalidate_filters();
+			}
+		});
+
+		invalidate_filters();
 	}
 
 	private void device_removed(Bluetooth.Device device) {
@@ -148,6 +165,14 @@ public class ScanDialog : Gtk.Dialog {
 				break;
 			}
 		}
+
+		invalidate_filters();
+	}
+
+	private void invalidate_filters() {
+		devices_box.invalidate_filter();
+		devices_box.invalidate_headers();
+		devices_box.invalidate_sort();
 	}
 
 	[CCode (instance_pos = -1)]
@@ -197,5 +222,12 @@ public class ScanDialog : Gtk.Dialog {
 		} else {
 			row1.set_header(null);
 		}
+	}
+
+	[CCode (instance_pos = -1)]
+	private bool filter_row(DeviceRow row) {
+		unowned Bluetooth.Device device = row.device;
+
+		return device.paired && device.connected;
 	}
 }
