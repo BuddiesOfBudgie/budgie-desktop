@@ -34,6 +34,8 @@ public class FileReceiver : Gtk.Dialog {
 	}
 
 	construct {
+		title = _("Bluetooth File Transfer");
+
 		notification = new Notification("Bluetooth");
 		notification.set_priority(NotificationPriority.NORMAL);
 
@@ -100,8 +102,7 @@ public class FileReceiver : Gtk.Dialog {
 			column_spacing = 0,
 			row_spacing = 4,
 			width_request = 450,
-			margin_start = 10,
-			margin_end = 15
+			margin = 10,
 		};
 
 		message_grid.attach(overlay, 0, 0, 1, 3);

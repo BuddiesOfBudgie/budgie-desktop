@@ -39,6 +39,8 @@ public class FileSender : Gtk.Dialog {
 	}
 
 	construct {
+		title = _("Bluetooth File Transfer");
+
 		file_store = new Gtk.ListStore(1, typeof(GLib.File));
 
 		var icon_image = new Gtk.Image.from_icon_name ("bluetooth-active", Gtk.IconSize.DIALOG) {
@@ -104,8 +106,7 @@ public class FileSender : Gtk.Dialog {
 			column_spacing = 0,
 			row_spacing = 4,
 			width_request = 450,
-			margin_start = 10,
-			margin_end = 15
+			margin = 10,
 		};
 
 		message_grid.attach(overlay, 0, 0, 1, 3);
