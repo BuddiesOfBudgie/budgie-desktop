@@ -158,7 +158,9 @@ public class Bluetooth.ObjectManager : Object {
         var adapters = get_adapters();
 
         foreach (var adapter in adapters) {
-            return adapter.discovering;
+            if (adapter.discovering) {
+				return true;
+			}
         }
 
         return false;

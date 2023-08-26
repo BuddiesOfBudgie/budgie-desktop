@@ -12,6 +12,8 @@
 public class ScanDialog : Gtk.Dialog {
 	public Bluetooth.ObjectManager manager { get; construct; }
 
+	private Gtk.Revealer status_revealer;
+	private Gtk.Spinner spinner;
 	private Gtk.ListBox devices_box;
 
 	public signal void send_file(Bluetooth.Device device);
@@ -21,18 +23,12 @@ public class ScanDialog : Gtk.Dialog {
 	}
 
 	construct {
+		title = _("Bluetooth File Transfer");
+
 		var icon_image = new Gtk.Image.from_icon_name("bluetooth-active", Gtk.IconSize.DIALOG) {
 			valign = Gtk.Align.CENTER,
 			halign = Gtk.Align.CENTER,
 		};
-
-		var title_label = new Gtk.Label(_("Bluetooth File Transfer")) {
-			max_width_chars = 45,
-			use_markup = true,
-			wrap = true,
-			xalign = 0,
-		};
-		title_label.get_style_context().add_class("primary");
 
 		var info_label = new Gtk.Label(_("Select a Bluetooth device to send files to")) {
 			max_width_chars = 45,
@@ -40,6 +36,27 @@ public class ScanDialog : Gtk.Dialog {
 			wrap = true,
 			xalign = 0,
 		};
+
+		status_revealer = new Gtk.Revealer() {
+			reveal_child = false,
+			transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN,
+		};
+
+		spinner = new Gtk.Spinner() {
+			margin = 4,
+		};
+
+		var status_label = new Gtk.Label(_("Discovering…")) {
+			max_width_chars = 45,
+			wrap = true,
+			xalign = 0,
+		};
+
+		var status_grid = new Gtk.Grid();
+		status_grid.attach(spinner, 0, 0, 1, 1);
+		status_grid.attach(status_label, 1, 0, 1, 1);
+
+		status_revealer.add(status_grid);
 
 		var placeholder = new Gtk.Box(Gtk.Orientation.VERTICAL, 18) {
 			margin_top = 125,
@@ -71,12 +88,13 @@ public class ScanDialog : Gtk.Dialog {
 		scrolled_window.add(devices_box);
 
 		var grid = new Gtk.Grid() {
+			margin_top = 10,
 			margin_bottom = 10,
 		};
 
 		grid.attach(icon_image, 0, 0, 1, 2);
-		grid.attach(title_label, 1, 0, 1, 1);
-		grid.attach(info_label, 1, 1, 1, 1);
+		grid.attach(info_label, 1, 0, 1, 1);
+		grid.attach(status_revealer, 1, 1, 1, 1);
 
 		var devices_grid = new Gtk.Grid() {
 			orientation = Gtk.Orientation.VERTICAL,
@@ -90,6 +108,7 @@ public class ScanDialog : Gtk.Dialog {
 		// devices_grid.add(frame);
 		devices_grid.add(scrolled_window);
 
+		get_content_area().add(grid);
 		get_content_area().add(devices_grid);
 
 		add_button(_("Close"), Gtk.ResponseType.CLOSE);
@@ -101,9 +120,7 @@ public class ScanDialog : Gtk.Dialog {
 		// Connect manager signals
 		manager.device_added.connect(add_device);
 		manager.device_removed.connect(device_removed);
-		manager.status_discovering.connect(() => {
-			// TODO: dunno how or if to show this yet
-		});
+		manager.status_discovering.connect(update_status);
 	}
 
 	public override void show() {
@@ -115,6 +132,17 @@ public class ScanDialog : Gtk.Dialog {
 		}
 
 		manager.start_discovery.begin();
+		update_status();
+	}
+
+	private void update_status() {
+		if (manager.check_discovering()) {
+			spinner.start();
+			status_revealer.set_reveal_child(true);
+		} else {
+			spinner.stop();
+			status_revealer.set_reveal_child(false);
+		}
 	}
 
 	private void add_device(Bluetooth.Device device) {
