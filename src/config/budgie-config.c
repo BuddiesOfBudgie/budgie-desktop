@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -11,12 +11,30 @@
 
 #ifndef CONFIG_H_INCLUDED
 #include "config.h"
+#include <stdbool.h>
 
 /**
  * All this is to keep Vala happy & configured..
  */
 const char* BUDGIE_MODULE_DIRECTORY = MODULEDIR;
 const char* BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = RAVEN_PLUGIN_LIBDIR;
+const char* BUDGIE_RAVEN_PLUGIN_DATADIR = RAVEN_PLUGIN_DATADIR;
+
+#ifdef HAS_SECONDARY_PLUGIN_DIRS
+const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = true;
+const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = MODULEDIR_SECONDARY;
+const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY = MODULE_DATA_DIR_SECONDARY;
+const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY = RAVEN_PLUGIN_LIBDIR_SECONDARY;
+const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = RAVEN_PLUGIN_DATADIR_SECONDARY;
+#else
+const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = false;
+const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = NULL;
+const char* BUDGIE_MODULE_DATA_DIRECTORY = NULL;
+const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = NULL;
+const char* BUDGIE_RAVEN_PLUGIN_DATADIR = NULL;
+#endif
+
 const char* BUDGIE_DATADIR = DATADIR;
 const char* BUDGIE_VERSION = PACKAGE_VERSION;
 const char* BUDGIE_WEBSITE = PACKAGE_URL;

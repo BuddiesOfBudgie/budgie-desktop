@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@ namespace Budgie {
 	public const string MUTTER_MODAL_ATTACH = "attach-modal-dialogs";
 	public const string MUTTER_BUTTON_LAYOUT = "button-layout";
 	public const string EXPERIMENTAL_DIALOG = "experimental-enable-run-dialog-as-menu";
-	public const string WM_FORCE_UNREDIRECT = "force-unredirect";
+	public const string WM_ENABLE_UNREDIRECT = "enable-unredirect";
 	public const string WM_SCHEMA = "com.solus-project.budgie-wm";
 
 	public const bool CLUTTER_EVENT_PROPAGATE = false;
@@ -28,6 +28,9 @@ namespace Budgie {
 
 	public const string LOGIND_DBUS_NAME = "org.freedesktop.login1";
 	public const string LOGIND_DBUS_OBJECT_PATH = "/org/freedesktop/login1";
+
+	public const string POWER_DIALOG_DBUS_NAME = "org.buddiesofbudgie.PowerDialog";
+	public const string POWER_DIALOG_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/PowerDialog";
 
 	/** Menu management */
 	public const string MENU_DBUS_NAME = "org.budgie_desktop.MenuManager";
@@ -115,6 +118,14 @@ namespace Budgie {
 		public async abstract void StartFullScreenshot() throws GLib.Error;
 	}
 
+	/**
+	 * Allows us to toggle the visibility of the Power Dialog
+	 */
+	[DBus (name="org.buddiesofbudgie.PowerDialog")]
+	public interface PowerDialog: GLib.Object {
+		public abstract async void Toggle() throws Error;
+	}
+
 	public class MinimizeData {
 		public float scale_x;
 		public float scale_y;
@@ -156,10 +167,11 @@ namespace Budgie {
 		LoginDRemote? logind_proxy = null;
 		MenuManager? menu_proxy = null;
 		Switcher? switcher_proxy = null;
+		PowerDialog? power_proxy = null;
 
 		Settings? iface_settings = null;
 
-		private bool force_unredirect = false;
+		public bool enable_unredirect = true;
 
 		HashTable<Meta.WindowActor?, AnimationState?> state_map;
 		Clutter.Actor? display_group;
@@ -245,10 +257,7 @@ namespace Budgie {
 		void on_logind_get(Object? o, AsyncResult? res) {
 			try {
 				logind_proxy = Bus.get_proxy.end(res);
-				if (logind_proxy == null) {
-					return;
-				}
-				if (this.is_nvidia()) {
+				if (logind_proxy != null && this.is_nvidia()) {
 					logind_proxy.PrepareForSleep.connect(prepare_for_sleep);
 				}
 			} catch (Error e) {
@@ -258,9 +267,7 @@ namespace Budgie {
 
 		/* Kudos to gnome-shell guys here: https://bugzilla.gnome.org/show_bug.cgi?id=739178 */
 		void prepare_for_sleep(bool suspending) {
-			if (suspending) {
-				return;
-			}
+			if (suspending) return;
 			Meta.Background.refresh_all();
 		}
 
@@ -286,6 +293,37 @@ namespace Budgie {
 			if (switcher_proxy == null) {
 				Bus.get_proxy.begin<Switcher>(BusType.SESSION, SWITCHER_DBUS_NAME, SWITCHER_DBUS_OBJECT_PATH, 0, null, on_switcher_get);
 			}
+		}
+
+		void has_power_dialog() {
+			if (power_proxy == null) {
+				Bus.get_proxy.begin<PowerDialog>(BusType.SESSION, POWER_DIALOG_DBUS_NAME, POWER_DIALOG_DBUS_OBJECT_PATH, 0, null, on_power_dialog_get);
+			}
+		}
+
+		void on_power_dialog_get(Object? o, AsyncResult? res) {
+			try {
+				power_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get Power Dialog proxy: %s", e.message);
+			}
+		}
+
+		void lost_power_dialog() {
+			power_proxy = null;
+		}
+
+		/* Binding for showing the Power Dialog */
+		void on_show_power_dialog(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding) {
+			if (power_proxy == null) return;
+
+			power_proxy.Toggle.begin((obj, res) => {
+				try {
+					power_proxy.Toggle.end(res);
+				} catch (Error e) {
+					warning("Unable to toggle Power Dialog: %s", e.message);
+				}
+			});
 		}
 
 		/* Binding for take-full-screenshot */
@@ -345,7 +383,6 @@ namespace Budgie {
 						}
 					});
 				}
-
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
@@ -432,9 +469,7 @@ namespace Budgie {
 		}
 
 		void on_overlay_key() {
-			if (panel_proxy == null) {
-				return;
-			}
+			if (panel_proxy == null) return;
 			if (enabled_experimental_run_diag_as_menu) { // Use Budgie Run Dialog
 				try {
 					Process.spawn_command_line_async("budgie-run-dialog");
@@ -487,11 +522,17 @@ namespace Budgie {
 			Pid child_pid;
 
 			try {
+#if HAVE_NEW_ZENITY
+				string[] spawn_args = {
+					"zenity", type, "--no-wrap",  "--title", "", "--text", message,
+					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon", icon_name
+				};
+#else
 				string[] spawn_args = {
 					"zenity", type, "--no-wrap", "--class", "mutter-dialog", "--title", "", "--text", message,
 					"--timeout", timeout, "--ok-label", ok_text, "--cancel-label", cancel_text, "--icon-name", icon_name
 				};
-
+#endif
 				Process.spawn_async("/",
 					spawn_args,
 					null,
@@ -522,9 +563,7 @@ namespace Budgie {
 		private bool is_nvidia() {
 			var ptr = (GlQueryFunc)Cogl.get_proc_address("glGetString");
 
-			if (ptr == null) {
-				return false;
-			}
+			if (ptr == null) return false;
 
 			unowned string? ret = ptr(GL_VENDOR);
 			if (ret != null && "NVIDIA Corporation" in ret) {
@@ -547,7 +586,7 @@ namespace Budgie {
 			gnome_desktop_prefs = new Settings("org.gnome.desktop.wm.preferences");
 			this.settings.changed.connect(this.on_wm_schema_changed);
 			this.on_wm_schema_changed(EXPERIMENTAL_DIALOG);
-			this.on_wm_schema_changed(WM_FORCE_UNREDIRECT);
+			this.on_wm_schema_changed(WM_ENABLE_UNREDIRECT);
 
 			this.update_workspace_count(); // Update (create if necessary) our workspaces
 			gnome_desktop_prefs.changed["num-workspaces"].connect(this.update_workspace_count);
@@ -559,6 +598,7 @@ namespace Budgie {
 			display.add_keybinding("take-window-screenshot", settings, Meta.KeyBindingFlags.NONE, on_take_window_screenshot);
 			display.add_keybinding("toggle-raven", settings, Meta.KeyBindingFlags.NONE, on_raven_main_toggle);
 			display.add_keybinding("toggle-notifications", settings, Meta.KeyBindingFlags.NONE, on_raven_notification_toggle);
+			display.add_keybinding("show-power-dialog", settings, Meta.KeyBindingFlags.NONE, on_show_power_dialog);
 			display.overlay_key.connect(on_overlay_key);
 
 			/* Hook up Raven handler.. */
@@ -576,6 +616,10 @@ namespace Budgie {
 			/* TabSwitcher */
 			Bus.watch_name(BusType.SESSION, SWITCHER_DBUS_NAME, BusNameWatcherFlags.NONE,
 				has_switcher, lost_switcher);
+
+			/* Power Dialog */
+			Bus.watch_name(BusType.SESSION, POWER_DIALOG_DBUS_NAME, BusNameWatcherFlags.NONE,
+				has_power_dialog, lost_power_dialog);
 
 			/* ScreenshotControl */
 			Bus.watch_name(BusType.SESSION, SCREENSHOTCONTROL_DBUS_NAME, BusNameWatcherFlags.NONE,
@@ -604,7 +648,9 @@ namespace Budgie {
 			display_group.insert_child_below(background_group, null);
 			background_group.button_release_event.connect(on_background_click);
 
-			var monitor_manager = Meta.MonitorManager.get();
+			Meta.Context ctx = display.get_context();
+
+			var monitor_manager = ctx.get_backend().get_monitor_manager();
 			monitor_manager.monitors_changed.connect(on_monitors_changed);
 			on_monitors_changed();
 
@@ -648,30 +694,24 @@ namespace Budgie {
 		private void on_wm_schema_changed(string key) {
 			if (key == EXPERIMENTAL_DIALOG) { // Key changed was the experimental enable
 				enabled_experimental_run_diag_as_menu = this.settings.get_boolean(key);
-			} else if (key == WM_FORCE_UNREDIRECT) {
-				bool enab = this.settings.get_boolean(key);
-
-				if (enab == this.force_unredirect) {
-					return;
-				}
-
-				var display = this.get_display();
-				if (enab) {
-					Meta.Compositor.enable_unredirect_for_display(display);
-				} else {
-					Meta.Compositor.disable_unredirect_for_display(display);
-				}
-				this.force_unredirect = enab;
+			} else if (key == WM_ENABLE_UNREDIRECT) {
+				set_redirection_mode(this.settings.get_boolean(key));
 			}
 		}
 
+		public void set_redirection_mode(bool enable) {
+			var display = this.get_display();
+			if (enable) {
+				Meta.Compositor.enable_unredirect_for_display(display);
+			} else {
+				Meta.Compositor.disable_unredirect_for_display(display);
+			}
+			this.enable_unredirect = enable;
+		}
+
 		public override void show_window_menu(Meta.Window window, Meta.WindowMenuType type, int x, int y) {
-			if (type != Meta.WindowMenuType.WM) {
-				return;
-			}
-			if (menu_proxy == null) {
-				return;
-			}
+			if (type != Meta.WindowMenuType.WM) return;
+			if (menu_proxy == null) return;
 			Timeout.add(100, () => {
 				uint32 xid = (uint32)window.get_xwindow();
 				menu_proxy.ShowWindowMenu.begin(xid, 3, 0, (obj, res) => {
@@ -786,9 +826,7 @@ namespace Budgie {
 		*/
 		public void store_focused() {
 			var workspace = get_display().get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
+			if (workspace == null) return;
 			foreach (var window in workspace.list_windows()) {
 				if (window.has_focus()) {
 					focused_window = window;
@@ -801,9 +839,7 @@ namespace Budgie {
 		* Restore the focused window
 		*/
 		public void restore_focused() {
-			if (focused_window == null) {
-				return;
-			}
+			if (focused_window == null) return;
 			focused_window.focus(get_display().get_current_time());
 			focused_window = null;
 		}
@@ -902,8 +938,11 @@ namespace Budgie {
 			actor.set_easing_duration(MINIMIZE_TIMEOUT);
 			actor.transitions_completed.connect(minimize_done);
 
+			Meta.Display display = this.get_display();
+			Meta.Context ctx = display.get_context();
+
 			/* Save the minimize state for later restoration */
-			var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
+			var scale_factor = ctx.get_backend().get_settings().get_ui_scaling_factor();
 			var scale_x = (float)((icon.width * scale_factor) / actor.width);
 			var scale_y = (float)((icon.height * scale_factor) / actor.height);
 			var place_x = (float)icon.x * scale_factor;

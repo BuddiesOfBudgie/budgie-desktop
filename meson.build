@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.6.4',
+    version: '10.8',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -23,9 +23,9 @@ else
     budgie_screensaver_vala_args = ['-D', 'HAVE_GNOME_SCREENSAVER']
 endif
 
-git = find_program('git', required: false)
-
 meson.add_install_script('scripts/mesonPostInstall.sh')
+
+fs = import('fs')
 
 # Budgie needs a minimum GNOME 40 stack with GTK 3.24+
 gnome_minimum_version = '>= 40.0'
@@ -57,17 +57,20 @@ dep_wnck = dependency('libwnck-3.0', version: '>= 3.36.0')
 # accountsservice in multiple applets
 dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 
+# Needed for Daemon (notifications)
+dep_canberra = dependency('libcanberra')
+dep_canberra_gtk3 = dependency('libcanberra-gtk3')
+
 # Create config.h
 cdata = configuration_data()
 
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
 
-if git.found()
-    git_version = run_command('git', ['rev-parse', 'HEAD'], check: false)
-    if git_version.returncode() == 0
-        package_version += ' (git-'+git_version.stdout().strip()+')'
-    endif
+if fs.exists('.git')
+    git = find_program('git')
+    git_version = run_command('git', ['rev-parse', 'HEAD'], check: true)
+    package_version += ' (git-'+git_version.stdout().strip()+')'
 endif
 
 cdata.set_quoted('PACKAGE_VERSION', package_version)
@@ -79,10 +82,16 @@ add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
 # Globals that we need
 prefix = get_option('prefix')
 libdir = join_paths(prefix, get_option('libdir'))
+libexecdir = join_paths(prefix, get_option('libexecdir'), meson.project_name())
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
 podir = join_paths(meson.source_root(), 'po')
+
+cdata.set_quoted('DATADIR', datadir)
+cdata.set_quoted('SYSCONFDIR', confdir)
+cdata.set_quoted('LOCALEDIR', localedir)
+cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
 
 # Handle i18n on the .desktop file
 # Originally stolem from TingPing:
@@ -94,12 +103,46 @@ intltool = find_program('intltool-merge')
 plugin_libdir = join_paths(libdir, meson.project_name(), 'plugins')
 plugin_datadir = join_paths(datadir, meson.project_name(), 'plugins')
 
+# and raven widget builds
+raven_plugin_libdir = join_paths(libdir, meson.project_name(), 'raven-plugins')
+raven_plugin_datadir = join_paths(datadir, meson.project_name(), 'raven-plugins')
+
 cdata.set_quoted('MODULEDIR', plugin_libdir)
 cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
-cdata.set_quoted('DATADIR', datadir)
-cdata.set_quoted('SYSCONFDIR', confdir)
-cdata.set_quoted('LOCALEDIR', localedir)
-cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
+cdata.set_quoted('RAVEN_PLUGIN_LIBDIR', raven_plugin_libdir)
+cdata.set_quoted('RAVEN_PLUGIN_DATADIR', raven_plugin_datadir)
+
+if prefix == '/usr' or prefix == '/usr/local'
+    cdata.set('HAS_SECONDARY_PLUGIN_DIRS', true)
+
+    if prefix == '/usr'
+        secondary_libdir_root = join_paths(prefix, 'local', get_option('libdir'), meson.project_name())
+        secondary_datadir_root = join_paths(prefix, 'local', get_option('datadir'), meson.project_name())
+    else
+        secondary_libdir_root = join_paths('/usr', get_option('libdir'), meson.project_name())
+        secondary_datadir_root = join_paths('/usr', get_option('datadir'), meson.project_name())
+    endif
+
+    cdata.set_quoted('MODULEDIR_SECONDARY', join_paths(secondary_libdir_root, 'plugins'))
+    cdata.set_quoted('MODULE_DATA_DIR_SECONDARY', join_paths(secondary_datadir_root, 'plugins'))
+    cdata.set_quoted('RAVEN_PLUGIN_LIBDIR_SECONDARY', join_paths(secondary_libdir_root, 'raven-plugins'))
+    cdata.set_quoted('RAVEN_PLUGIN_DATADIR_SECONDARY', join_paths(secondary_datadir_root, 'raven-plugins'))
+endif
+
+with_bluetooth = get_option('with-bluetooth')
+if with_bluetooth == true
+  add_project_arguments('-D', 'with_bluetooth', language: 'vala')
+endif
+
+with_hibernate = get_option('with-hibernate')
+if with_hibernate == true
+  add_project_arguments('-D', 'WITH_HIBERNATE', language: 'vala')
+endif
+
+with_libuuid_time_safe = get_option('with-libuuid-time-safe')
+if with_libuuid_time_safe == true
+  add_project_arguments('-D', 'with_libuuid_time_safe', language: 'vala')
+endif
 
 with_stateless = get_option('with-stateless')
 if with_stateless == true
@@ -150,11 +193,9 @@ subdir('po')
 # Now build Budgie proper
 subdir('src')
 
-# Documentation...
+# Take care of documentation
 with_gtk_doc = get_option('with-gtk-doc')
-if with_gtk_doc == true
-    subdir('docs')
-endif
+subdir('docs')
 
 # And lastly, data bits
 subdir('data')

@@ -3,6 +3,7 @@
 # We bash-quote already.
 session_data = configuration_data()
 session_data.set('PACKAGE_VERSION', package_version)
+session_data.set('libexecdir', libexecdir)
 
 gnome_session_components = [
     'gnome-settings-daemon',
@@ -46,6 +47,7 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieWm',
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
+    'org.buddiesofbudgie.BudgiePowerDialog'
 ]
 
 if with_polkit == true
@@ -140,6 +142,21 @@ endif
 custom_target('desktop-file-screensaver',
     input : session_screensaver,
     output : 'org.buddiesofbudgie.BudgieDesktopScreensaver.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : xdg_appdir,
+)
+
+# Merge + install power dialog
+session_power_dialog_desktop = configure_file(
+    input: 'budgie-desktop-powerdialog.desktop.in.in',
+    output: 'budgie-desktop-powerdialog.desktop.in',
+    configuration: session_data,
+)
+
+custom_target('desktop-file-powerdialog',
+    input : session_power_dialog_desktop,
+    output : 'org.buddiesofbudgie.BudgiePowerDialog.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,

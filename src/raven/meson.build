@@ -1,5 +1,7 @@
 # Provides budgie's Raven component
 
+subdir('widgets')
+
 gresource = join_paths(meson.current_source_dir(), 'ui', 'budgie-raven.gresource.xml')
 
 # Compile the assets into the binary
@@ -19,33 +21,28 @@ lib_libraven_resources = static_library(
 )
 
 libraven_sources = [
-    'app_sound_control.vala',
-    'calendar.vala',
     'headerwidget.vala',
     'main_view.vala',
-    'mpris/MprisClient.vala',
-    'mpris/MprisGui.vala',
-    'mpris/MprisWidget.vala',
     'notification_widget.vala',
     'notifications_group.vala',
     'notifications_view.vala',
-    'powerstrip.vala',
+    'plugin_manager.vala',
     'raven.vala',
-    'sound.vala',
-    'start_listening.vala',
-    'widget.vala',
 ]
 
 libraven_deps = [
     # XXX: Keep this order the same to work around
     # https://github.com/mesonbuild/meson/issues/2096
     link_libbudgieprivate,
-    libplugin_vapi,
+    link_libravenplugin,
+    link_libpanelplugin,
+    libravenplugin_vapi,
+    libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
+    dep_libuuid,
     dep_peas,
     link_libconfig,
-    link_libplugin,
     link_libtheme,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),

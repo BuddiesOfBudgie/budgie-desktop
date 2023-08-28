@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie">
+  <enum id="com.solus-project.workspaces.AddButtonVisibility">
+      <value nick="never" value="1" />
+      <value nick="hover" value="2" />
+      <value nick="always" value="4" />
+  </enum>
+  <enum id="com.solus-project.workspaces.ItemSizeMultiplier">
+    <value nick="0.5" value="2" />
+    <value nick="0.75" value="3" />
+    <value nick="1.0" value="4" />
+    <value nick="1.5" value="6" />
+    <value nick="2.0" value="8" />
+  </enum>
+  <schema id="com.solus-project.workspaces">
+    <key enum="com.solus-project.workspaces.AddButtonVisibility" name="addbutton-visibility">
+      <default>'always'</default>
+      <summary>Add Button Visibility</summary>
+      <description>Controls the visibility of the add workspace button</description>
+    </key>
+    <key enum="com.solus-project.workspaces.ItemSizeMultiplier" name="item-size-multiplier">
+      <default>'1.0'</default>
+      <summary>Item Size Multiplier</summary>
+      <description>A multiplier for the size of individual workspace items</description>
+    </key>
+  </schema>
+</schemalist>

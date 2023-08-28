@@ -2,7 +2,12 @@ gnome = import('gnome')
 pkgconfig = import('pkgconfig')
 
 # Compile to CSS dynamically.
-sassc = find_program('sassc')
+sass = find_program('sass', required: false)
+sass_args = ['--no-source-map', '--style', 'compressed', '@INPUT@', '@OUTPUT@']
+if not sass.found()
+    sass = find_program('sassc')
+    sass_args = ['--omit-map-comment', '--style', 'compressed', '@INPUT@', '@OUTPUT@']
+endif
 
 # Normal and high contrast
 theme_variants = [
@@ -57,7 +62,7 @@ foreach version : theme_versions
         theme_deps += custom_target('theme' + variant + '_' + version + '.css',
             input: version + '/theme' + variant + '.scss',
             output: 'theme' + variant + '_' + version + '.css',
-            command: [sassc, '-M', '-t', 'compressed', '@INPUT@', '@OUTPUT@'],
+            command: [sass] + sass_args,
             depend_files: sass_depend_files,
             build_by_default: true,
         )

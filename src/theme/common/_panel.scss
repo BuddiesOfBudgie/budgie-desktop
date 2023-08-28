@@ -27,4 +27,17 @@
     .battery-icon label {
         font-weight: bold;
     }
+
+    button.image-button {
+        padding: 0 2px;
+        background: none;
+        border-radius: 0;
+        transition: background-color 170ms ease-out;
+
+        &:hover { background-color: transparentize(white, 0.9); }
+        &:active {
+            color: $selected_fg_color;
+            background-color: $selected_bg_color;
+        }
+    }
 }

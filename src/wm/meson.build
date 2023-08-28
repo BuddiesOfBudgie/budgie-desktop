@@ -18,26 +18,49 @@ budgie_wm_sources = [
 
 budgie_wm_status_vala_args = []
 
-dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
-dep_mutter = dependency('libmutter-11', version: '>= 43', required: false)
-if dep_mutter.found()
-    #budgie_wm_status_vala_args += ['-D', 'HAVE_MUTTER_9']
-    message('Using libmutter-11 ABI from GNOME 43')
-    vapi_mutter = 'libmutter-11'
+zenity = find_program('zenity', required: false)
+assert(zenity.found(), 'Zenity is a required program at build and run-time for dialog support in budgie-wm. Please include it in both build and run deps, as well as check if you need to set use-old-zenity.')
+
+use_old_zenity = get_option('use-old-zenity')
+
+if use_old_zenity == false
+    message('Using new zenity flags')
+    budgie_wm_status_vala_args += ['-D', 'HAVE_NEW_ZENITY']
 else
-    dep_mutter = dependency('libmutter-10', version: gnome_minimum_version)
-    if dep_mutter.found()
-        message('Using libmutter-10 ABI from GNOME 42')
-        vapi_mutter = 'libmutter-10'
+    message('Using old zenity flags')
+endif
+
+dep_graphene = dependency('graphene-gobject-1.0', version: '>= 1.10')
+dep_wm = dependency('libmagpie-0', version: '>= 0.9', required: false)
+
+if dep_wm.found()
+    message('Using libmagpie-0 ABI')
+    vapi_wm = 'libmagpie-0'
+else
+    dep_wm = dependency('libmutter-12', version: '>= 44', required: false)
+    if dep_wm.found()
+        message('Using libmutter-12 ABI from GNOME 44')
+        vapi_wm = 'libmutter-12'
+    else
+        dep_wm = dependency('libmutter-11', version: '>= 43', required: false)
+        if dep_wm.found()
+            message('Using libmutter-11 ABI from GNOME 43')
+            vapi_wm = 'libmutter-11'
+        else
+            dep_wm = dependency('libmutter-10', version: gnome_minimum_version)
+            if dep_wm.found()
+                message('Using libmutter-10 ABI from GNOME 42')
+                vapi_wm = 'libmutter-10'
+            endif
+        endif
     endif
 endif
 
 budgie_wm_deps = [
     link_libconfig,
     dep_giounix,
-    dep_mutter,
+    dep_wm,
     dep_gnomedesktop,
-    dep_gsettings,
     dep_ibus,
 ]
 
@@ -45,20 +68,15 @@ budgie_wm_vala_args =  [
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'ibus-1.0',
         '--pkg', 'gnome-desktop-3.0',
-        '--pkg', vapi_mutter,
+        '--pkg', vapi_wm,
         '--pkg', 'budgie-config',
-        '--pkg', 'gsettings-desktop-schemas',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         '--vapidir', dir_libconfig,
         budgie_wm_status_vala_args,
 ]
 
-rpath = ''
-
-if dep_mutter.version().version_compare(gnome_minimum_version)
-    rpath = dep_mutter.get_pkgconfig_variable('typelibdir')
-    budgie_wm_vala_args += ['--girdir', rpath]
-endif
+rpath = dep_wm.get_pkgconfig_variable('typelibdir')
+budgie_wm_vala_args += ['--girdir', rpath]
 
 executable(
     'budgie-wm', budgie_wm_sources,

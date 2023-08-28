@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,8 +80,8 @@ namespace Budgie {
 			/* Unredirect.. */
 			switch_unredirect = new Gtk.Switch();
 			grid.add_row(new SettingsRow(switch_unredirect,
-				_("Disable unredirection of windows"),
-				_("This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs.")
+				_("Enable unredirection"),
+				_("Enable unredirection which will allow frames to bypass compositing for fullscreen applications. This option is for advanced users and recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs.")
 			));
 
 			switch_all_windows_tabswitcher = new Gtk.Switch();
@@ -114,7 +114,7 @@ namespace Budgie {
 			budgie_wm_settings.bind("pause-notifications-on-fullscreen", pause_notifications, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
-			budgie_wm_settings.bind("force-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
+			budgie_wm_settings.bind("enable-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("show-all-windows-tabswitcher", switch_all_windows_tabswitcher, "active", SettingsBindFlags.DEFAULT);
 		}
 	}

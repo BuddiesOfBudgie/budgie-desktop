@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ namespace Budgie {
 			this.add_page(new Budgie.FontPage());
 			this.add_page(new Budgie.WindowsPage());
 			this.add_page(new Budgie.AutostartPage());
-			this.add_page(new Budgie.RavenPage());
+			this.add_page(new Budgie.RavenPage(this.manager));
 		}
 
 		public void requested_close() throws DBusError, IOError {

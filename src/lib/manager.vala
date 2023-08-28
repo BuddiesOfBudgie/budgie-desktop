@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop.
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,11 @@ namespace Budgie {
 
 		public abstract void create_new_panel();
 		public abstract void delete_panel(string uuid);
-		public abstract List<Peas.PluginInfo?> get_panel_plugins();
 
+		public abstract List<Peas.PluginInfo?> get_panel_plugins();
+		public abstract List<Peas.PluginInfo?> get_raven_plugins();
+
+		public abstract void rescan_panel_plugins();
+		public abstract void rescan_raven_plugins();
 	}
 }

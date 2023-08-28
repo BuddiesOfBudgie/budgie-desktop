@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2016-2022 Budgie Desktop Developers
+ * Copyright © Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,6 +74,9 @@ public static int main(string[] args) {
 		}
 		return false;
 	});
+
+	/* Initialize libnotify */
+	Notify.init("com.solus-project.budgie-daemon");
 
 	manager = new Budgie.ServiceManager(replace);
 	end_dialog = new Budgie.EndSessionDialog(replace);

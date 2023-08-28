@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2016-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ namespace Budgie {
 		/* On Screen Display */
 		Budgie.OSDManager? osd;
 		Budgie.Notifications.Server? notifications;
+		Budgie.StatusNotifier.FreedesktopWatcher? status_notifier;
 		Budgie.MenuManager? menus;
 		Budgie.TabSwitcher? switcher;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
@@ -31,6 +32,7 @@ namespace Budgie {
 		*/
 		public ServiceManager(bool replace) {
 			theme_manager = new Budgie.ThemeManager();
+			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
 			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ namespace Budgie {
 		public Icon icon { get; private set; default = new ThemedIcon.with_default_fallbacks("application-default-icon"); }
 		public string desktop_path { get; private set; }
 		public string categories { get; private set; }
+		public string[] content_types { get; private set; }
 		public string generic_name { get; private set; default = ""; }
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
@@ -54,6 +55,7 @@ namespace Budgie {
 			this.desktop_path = app_info.get_filename();
 			this.keywords = app_info.get_keywords();
 			this.categories = app_info.get_categories();
+			this.content_types = app_info.get_supported_types();
 			this.generic_name = app_info.get_generic_name();
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
 			this.should_show = app_info.should_show();
@@ -64,7 +66,7 @@ namespace Budgie {
 			if (desktop_icon != null) {
 				// Make sure we have a usable icon
 				unowned var theme = Gtk.IconTheme.get_default();
-				if (theme.lookup_by_gicon(this.icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
+				if (theme.lookup_by_gicon(desktop_icon, 64, Gtk.IconLookupFlags.USE_BUILTIN) != null) {
 					this.icon = desktop_icon;
 				}
 			}

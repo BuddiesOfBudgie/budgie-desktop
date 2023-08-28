@@ -28,6 +28,7 @@ daemon_sources = [
     'notifications/dbus.vala',
     'notifications/popup.vala',
     'screenshot.vala',
+    'statusnotifier.vala',
     'main.vala',
     'manager.vala',
     'menus.vala',
@@ -38,6 +39,8 @@ daemon_sources = [
 ]
 
 daemon_deps = [
+    dep_canberra,
+    dep_canberra_gtk3,
     dep_giounix,
     dep_gtk3,
     dep_gdkx11,
@@ -46,7 +49,7 @@ daemon_deps = [
     dep_gst,
     dep_cairo,
     link_libbudgieprivate,
-    libplugin_vapi,
+    libpanelplugin_vapi,
     link_libappsys,
     link_libconfig,
     link_libtheme,
@@ -64,6 +67,8 @@ if dep_gsd.found()
     message('Found GNOME Settings Daemon >= 3.33.90')
 endif
 
+top_vapidir = join_paths(meson.source_root(), 'vapi')
+
 executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
@@ -74,6 +79,7 @@ executable(
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
         '--vapidir', dir_libappsys,
+        '--vapidir', top_vapidir,
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gio-unix-2.0',
@@ -121,4 +127,10 @@ custom_target('org.buddiesofbudgie.BudgieScreenshot',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'applications'),
+)
+
+# gschemas
+install_data(
+    files('notifications/20_buddiesofbudgie.budgie-desktop.notifications.gschema.override'),
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2018-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ namespace Budgie.Abomination {
 			Wnck.WindowType win_type = window.get_window_type(); // Get the window type
 
 			return (win_type == Wnck.WindowType.DESKTOP) || // Desktop-mode (like Budgie Desktop View)
-				   (win_type == Wnck.WindowType.DIALOG) || // Dialogs
+				   (win_type == Wnck.WindowType.DIALOG && window.get_transient() != null) || // Dialogs
 				   (win_type == Wnck.WindowType.DOCK) || // Like Budgie Panel
 				   (win_type == Wnck.WindowType.SPLASHSCREEN) || // Splash screens
 				   (win_type == Wnck.WindowType.UTILITY); // Utility like a control on an emulator
@@ -209,7 +209,7 @@ namespace Budgie.Abomination {
 			if (group != null) {
 				group.remove_window(window);
 
-				if (group.get_windows().length() == 0) { // remove empty group
+				if (group.get_windows().is_empty()) { // remove empty group
 					this.running_app_groups.remove(group.get_name());
 					debug("Removed group: %s", group.get_name());
 				}
@@ -257,7 +257,7 @@ namespace Budgie.Abomination {
 				new_group_windows.foreach((window) => {
 					group.remove_window(window);
 
-					if (group.get_windows().length() == 0) { // remove empty group
+					if (group.get_windows().is_empty()) { // remove empty group
 						this.running_app_groups.remove(old_group_name);
 						debug("Removed group: %s", old_group_name);
 					}

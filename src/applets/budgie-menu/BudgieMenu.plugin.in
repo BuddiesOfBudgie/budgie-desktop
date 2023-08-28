@@ -1,8 +1,0 @@
-[Plugin]
-Module=budgiemenuapplet.so
-Name=Budgie Menu
-_Description=Search for and start up applications
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2014-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=view-grid-symbolic

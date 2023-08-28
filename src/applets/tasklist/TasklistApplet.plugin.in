@@ -1,8 +1,0 @@
-[Plugin]
-Module=tasklistapplet.so
-Name=Task List
-_Description=An application task list with icons and labels
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=task-list-symbolic

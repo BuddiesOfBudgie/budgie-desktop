@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
- * Copyright (C) GNOME Shell Developers (Heavy inspiration, logic theft)
+ * Copyright Budgie Desktop Developers
+ * Copyright © GNOME Shell Developers (Heavy inspiration, logic theft)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -250,8 +250,9 @@ namespace Budgie {
 			string? slayouts = string.joinv(",", layouts);
 			string? svariants = string.joinv(",", variants);
 			string? options = string.joinv(",", this.options);
-
-			Meta.Backend.get_backend().set_keymap(slayouts, svariants, options);
+			Meta.Display display = wm.get_display();
+			Meta.Context ctx = display.get_context();
+			ctx.get_backend().set_keymap(slayouts, svariants, options);
 		}
 
 		/* Apply an indexed layout, i.e. 0 for now */
@@ -262,7 +263,9 @@ namespace Budgie {
 			}
 
 			this.current_source = idx;
-			Meta.Backend.get_backend().lock_layout_group(idx);
+			Meta.Display display = wm.get_display();
+			Meta.Context ctx = display.get_context();
+			ctx.get_backend().lock_layout_group(idx);
 			/* Send this off to gsettings so that clients know what our idx is */
 			this.write_source_index(idx);
 		}
@@ -281,8 +284,8 @@ namespace Budgie {
 				locale = DEFAULT_LOCALE;
 			}
 
-			if (!Gnome.get_input_source_from_locale(locale, out type, out id)) {
-				Gnome.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
+			if (!Gnome.Languages.get_input_source_from_locale(locale, out type, out id)) {
+				Gnome.Languages.get_input_source_from_locale(DEFAULT_LOCALE, out type, out id);
 			}
 
 			if (xkb.get_layout_info(id, out display_name, out short_name, out xkb_layout, out xkb_variant)) {

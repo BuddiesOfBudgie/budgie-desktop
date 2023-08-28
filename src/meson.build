@@ -17,16 +17,10 @@ subdir('raven')
 # Executable components
 subdir('daemon')
 
-if with_polkit == true
-    subdir('polkit')
-endif
+subdir('dialogs')
 
-subdir('rundialog')
 subdir('wm')
 subdir('panel')
-
-# Now build applets
-subdir('applets')
 
 # Finish up by doing the session
 subdir('session')

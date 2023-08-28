@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ namespace Budgie {
 		* Arbitrary threshold that scores have to be below to
 		* be considered "relevant."
 		*/
-		public const int THRESHOLD = 4;
+		public const int THRESHOLD = 16;
 
 		/** Static map of desktop IDs to scores. */
 		private static Gee.HashMap<string, int> scores;
@@ -36,7 +36,7 @@ namespace Budgie {
 		public static string? searchable_string(string input) {
 			/* Force dup in vala */
 			string mod = "" + input;
-			return mod.replace("\u00AD", "").ascii_down().strip();
+			return mod.replace("\u00AD", "").casefold().strip();
 		}
 
 		/**
@@ -63,7 +63,9 @@ namespace Budgie {
 				return false;
 			}
 
-			return this.get_score(app) < THRESHOLD;
+			var score = get_score(app);
+
+			return score >= 0 && score < THRESHOLD;
 		}
 
 		/**
@@ -103,12 +105,26 @@ namespace Budgie {
 			}
 
 			string name = searchable_string(app.name);
-			var score = 0;
+			string _term = term.casefold();
 
-			// If we don't have a match on the name...
-			if (!term.match_string(name, true)) {
-				// Calculate our Levenshtein distance
-				score = this.get_levenshtein_distance(name, term);
+			// Get a initial score based on the fuzzy match of the name
+			var score = Fuzzer.get_fuzzy_score(name, _term, 1);
+
+			// If the term is considered to be an exact match, bail early
+			if (score == 0) {
+				// Prioritize matches where the name starts with the term
+				if (!name.has_prefix(_term)) {
+					score++;
+				}
+
+				scores.set(app.desktop_id, score);
+				return;
+			}
+
+			// Score is less than 0, disqualified
+			if (score < 0) {
+				scores.set(app.desktop_id, score);
+				return;
 			}
 
 			string?[] fields = {
@@ -119,7 +135,7 @@ namespace Budgie {
 
 			// Check the various fields, and decrease the score
 			// for every match
-			if (array_contains(fields, term)) {
+			if (array_contains(fields, _term)) {
 				score--;
 			}
 
@@ -127,54 +143,20 @@ namespace Budgie {
 			var keywords = app.keywords;
 			if (keywords != null && keywords.length > 0) {
 				// Decrease the score for every match
-				if (array_contains(keywords, term)) {
+				if (array_contains(keywords, _term)) {
 					score--;
 				}
 			}
 
+			// Check if the application is the default handler for its supported
+			// MIME types
+			if (name.contains(_term) && is_default_handler(app)) {
+				debug("Application '%s' is default handler", app.name);
+				score--;
+			}
+
 			// Set the score
-			scores.set(app.desktop_id, score);
-		}
-
-		/**
-		* Calculates the Levenshtein Distance between two strings.
-		*
-		* The lower the returned score, the closer the match.
-		*
-		* This was adapted from https://gist.github.com/Davidblkx/e12ab0bb2aff7fd8072632b396538560,
-		* an implementation in C#.
-		*/
-		private int get_levenshtein_distance(string s1, string s2) {
-			var matrix = new int[s1.length + 1, s2.length + 1];
-
-			// If either term is empty, return the full length of the other
-			if (s1.length == 0) {
-				return s2.length;
-			} else if (s2.length == 0) {
-				return s1.length;
-			}
-
-			// Initialization of matrix with row size s1.length and column size s2.length
-			for (int i = 0; i <= s1.length; matrix[i, 0] = i++) {}
-			for (int j = 0; j <= s2.length; matrix[0, j] = j++) {}
-
-			// Calculate row and column distances
-			for (int i = 1; i <= s1.length; i++) {
-				for (int j = 1; j <= s2.length; j++) {
-					// If the chars at the current indices match, the cost is 0
-					// else, the cost is 1, thus increasing the score
-					var cost = (s2[j - 1] == s1[i - 1]) ? 0 : 1;
-
-					// Set the score in the matrix at the current indices
-					matrix[i, j] = int.min(
-						int.min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1),
-						matrix[i - 1, j - 1] + cost
-					);
-				}
-			}
-
-			// The final score is at the end of the matrix
-			return matrix[s1.length, s2.length];
+			scores.set(app.desktop_id, int.max(score, 0));
 		}
 
 		/* Helper ported from Brisk */
@@ -184,13 +166,24 @@ namespace Budgie {
 					continue;
 				}
 				string ct = searchable_string(field);
-				if (term.match_string(ct, true)) {
-					return true;
-				}
-				if (term in ct) {
+				if (ct.match_string(term, true)) {
 					return true;
 				}
 			}
+			return false;
+		}
+
+		/**
+		 * Check if an application is the default handler for
+		 * any of its supported MIME types.
+		 */
+		private bool is_default_handler(Application app) {
+			foreach (var content_type in app.content_types) {
+				var default_app = AppInfo.get_default_for_type(content_type, false);
+				if (default_app == null) continue;
+				if (default_app.get_id() == app.desktop_id) return true;
+			}
+
 			return false;
 		}
 	}

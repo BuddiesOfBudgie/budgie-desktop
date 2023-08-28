@@ -1,0 +1,9 @@
+[Plugin]
+Module=clockapplet.so
+Builtin=true
+Name=Clock
+_Description=A digital clock with a customizable format.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=clock-applet

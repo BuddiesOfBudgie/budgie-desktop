@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  * Copyright 2014 Josh Klar <j@iv597.com> (original Budgie work, prior to Budgie 10)
  *
  * This program is free software; you can redistribute it and/or modify
@@ -70,8 +70,12 @@ namespace Budgie {
 
 	public class NotificationsView : Gtk.Box {
 		private const string BUDGIE_PANEL_SCHEMA = "com.solus-project.budgie-panel";
+		private const string BUDGIE_RAVEN_SCHEMA = "com.solus-project.budgie-raven";
 		private const string APPLICATION_SCHEMA = "org.gnome.desktop.notifications.application";
 		private const string APPLICATION_PREFIX = "/org/gnome/desktop/notifications/application";
+		private const uint TOTAL_MAX_NOTIFICATIONS = 500;
+		private const uint DEFAULT_MAX_PERGROUP = 25;
+		private uint max_per_group = DEFAULT_MAX_PERGROUP;
 
 		private HeaderWidget? header = null;
 		private Gtk.Button button_mute;
@@ -82,16 +86,20 @@ namespace Budgie {
 
 		private bool do_not_disturb { get; private set; default = false; }
 		private bool performing_clear_all { get; private set; default = false; }
+		private NotificationSort sort_mode { get; private set; default = NEW_OLD; }
 
-		private Dispatcher dispatcher { private get; private set; default = null; }
-		private HashTable<uint32, Budgie.Notification> notifications { private get; private set; default = null; }
-		private HashTable<string, NotificationGroup> notification_groups { private get; private set; default = null; }
-		private Settings budgie_settings { private get; private set; default = null; }
+		private Dispatcher dispatcher;
+		private HashTable<uint32, Budgie.Notification> notifications;
+		private HashTable<string, NotificationGroup> notification_groups;
 
-		private RavenInterface raven { get; private set; default = null; }
+		private Settings budgie_settings;
+		private Settings raven_settings;
+
+		private RavenInterface raven;
 
 		construct {
 			this.budgie_settings = new Settings(BUDGIE_PANEL_SCHEMA);
+			this.raven_settings = new Settings(BUDGIE_RAVEN_SCHEMA);
 
 			this.orientation = Gtk.Orientation.VERTICAL;
 			this.spacing = 0;
@@ -135,6 +143,15 @@ namespace Budgie {
 			var placeholder = new NotificationPlaceholder();
 			listbox.set_placeholder(placeholder);
 			scrolledwindow.add(listbox);
+
+			raven_settings.changed["notification-sort"].connect((key) => {
+				sort_mode = (NotificationSort) raven_settings.get_enum(key);
+				listbox.foreach((row) => {
+					var group = ((Gtk.ListBoxRow) row).get_child() as NotificationGroup;
+					group.set_sort_mode(sort_mode);
+				});
+			});
+			sort_mode = (NotificationSort) raven_settings.get_enum("notification-sort");
 
 			show_all();
 			update_child_count();
@@ -271,18 +288,20 @@ namespace Budgie {
 					// Look for an existing group. If one doesn't exist, create it
 					var group = this.notification_groups.lookup(name);
 					if (group == null) {
-						group = new NotificationGroup(app_icon, name);
+						group = new NotificationGroup(app_icon, name, sort_mode, max_per_group);
 						this.listbox.add(group);
 
 						group.dismissed_group.connect((name) => { // When we dismiss the group
-							listbox.remove(group.get_parent()); // Remove this from the listbox
+							var parent = group.get_parent();
+							listbox.remove(parent);
+							parent.destroy();
 
 							/**
-							* If we're not performing a clear all, steal this entry from notifications list and update our child count
-							* Performing a steal seems to affect a .foreach call, so best to avoid this.
+							* If we're not performing a clear all, remove this entry from notifications list and update our child count
+							* Performing a remove seems to affect a .foreach call, so best to avoid this.
 							*/
 							if (!performing_clear_all) {
-								notification_groups.steal(name); // Remove notifications group from list
+								notification_groups.remove(name);
 								update_child_count();
 							}
 
@@ -304,16 +323,48 @@ namespace Budgie {
 					Raven.get_instance().UnreadNotifications();
 				}
 			}
-
 			this.notifications.remove(id);
 		}
 
+		void adjust_max_per_group(uint newmax, bool trim) {
+			notification_groups.foreach((app_name, notification_group) => {
+				notification_group.set_group_max_notifications(max_per_group);
+				if (trim) {
+					notification_group.limit_notifications();
+				}
+			});
+		}
+
+		void check_notification_allocation(uint len) {
+			uint n_groups = notification_groups.length;
+			uint newmax = max_per_group;
+			bool trim = false;
+			if (n_groups == 0) {
+				/* if no notifications left, set to DEFAULT_MAX_PERGROUP */
+				newmax = DEFAULT_MAX_PERGROUP;
+			} else if (len > TOTAL_MAX_NOTIFICATIONS) {
+				/* if totalmax is exceeded, reduce max per group */
+				newmax = (uint)((float)TOTAL_MAX_NOTIFICATIONS/(float)n_groups);
+				trim = true;
+			} else if (
+				max_per_group < DEFAULT_MAX_PERGROUP &&
+				(n_groups * (max_per_group + 1)) <= TOTAL_MAX_NOTIFICATIONS
+			) {
+				/* if we previously reduced group size but now can add at least one back */
+				newmax = (uint)((float)TOTAL_MAX_NOTIFICATIONS/(float)n_groups);
+			}
+			if (newmax != max_per_group) {
+				max_per_group = newmax;
+				adjust_max_per_group(newmax, trim);
+			}
+		}
+
 		void update_child_count() {
-			int len = 0;
+			uint len = 0;
 
 			if (notification_groups.length != 0) {
 				notification_groups.foreach((app_name, notification_group) => { // For each notifications list
-					len += notification_group.count; // Add this notification group count
+					len += notification_group.noti_count; // Add this notification group count
 				});
 			}
 
@@ -329,6 +380,7 @@ namespace Budgie {
 			Raven.get_instance().set_notification_count(len);
 			header.text = text;
 			clear_notifications_button.set_visible((len >= 1)); // Only show clear notifications button if we actually have notifications
+			check_notification_allocation(len);
 		}
 
 		void clear_all() {
@@ -338,8 +390,7 @@ namespace Budgie {
 				notification_group.dismiss_all();
 			});
 
-			notification_groups.steal_all(); // Ensure we're resetting notifications_list
-
+			notification_groups.remove_all(); // Ensure we're resetting notifications_list
 			performing_clear_all = false;
 			update_child_count();
 			Raven.get_instance().ReadNotifications();

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,20 +90,13 @@ namespace Budgie {
 
 		public async void screenshot(bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
 			int width, height;
-			yield wait_stage_repaint();
-
 			display.get_size(out width, out height);
-
-			var image = take_screenshot(0, 0, width, height, include_cursor);
-
-			if (flash) {
-				flash_area(0, 0, width, height);
-			}
-
-			success = yield save_image(image, filename, out filename_used);
+			yield screenshot_area(0, 0, width, height, include_cursor, flash, filename, out success, out filename_used);
 		}
 
 		public async void screenshot_area(int x, int y, int width, int height, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
+			var existing_unredirect = wm.enable_unredirect;
+			wm.set_redirection_mode(false); // Force the disabling of unredirect for clutter capture
 			yield wait_stage_repaint();
 
 			// do some sizing checks
@@ -118,6 +111,8 @@ namespace Budgie {
 				flash_area(x, y, width, height);
 			}
 
+			wm.set_redirection_mode(existing_unredirect); // Restore old value
+
 			success = yield save_image(image, filename, out filename_used);
 			if (!success) {
 				throw new DBusError.FAILED("Failed to save image");
@@ -125,12 +120,19 @@ namespace Budgie {
 		}
 
 		public async void screenshot_window(bool include_frame, bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws DBusError, IOError {
+			var existing_unredirect = wm.enable_unredirect;
+			wm.set_redirection_mode(false); // Force the disabling of unredirect for clutter capture
 			yield wait_stage_repaint();
 
 			var window = display.get_focus_window();
 
 			if (window == null) {
 				throw new DBusError.FAILED("Cannot find active window");
+			}
+
+			if (window.get_window_type() == Meta.WindowType.DESKTOP) {
+				yield screenshot(include_cursor, flash, filename, out success, out filename_used);
+				return;
 			}
 
 			var window_actor = (Meta.WindowActor) window.get_compositor_private();
@@ -163,6 +165,8 @@ namespace Budgie {
 				flash_area(rect.x, rect.y, rect.width, rect.height);
 			}
 
+			wm.set_redirection_mode(existing_unredirect); // Restore old value
+
 			success = yield save_image(image, filename, out filename_used);
 			if (!success) {
 				throw new DBusError.FAILED("Failed to save image");
@@ -176,8 +180,9 @@ namespace Budgie {
 				if (!used_filename.has_suffix(EXTENSION)) {
 					used_filename = used_filename.concat(EXTENSION);
 				}
-
-				var scale_factor = Meta.Backend.get_backend().get_settings().get_ui_scaling_factor();
+				Meta.Display display = wm.get_display();
+				Meta.Context ctx = display.get_context();
+				var scale_factor = ctx.get_backend().get_settings().get_ui_scaling_factor();
 				if (scale_factor > 1) {
 					var scale_pos = -EXTENSION.length;
 					used_filename = used_filename.splice(scale_pos, scale_pos, "@%ix".printf(scale_factor));

@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright © 2015-2022 Budgie Desktop Developers
+ * Copyright Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,9 @@ namespace Budgie {
 	public class AppletSettingsFrame : Gtk.Box {
 		public AppletSettingsFrame() {
 			Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
-			Gtk.Label lab = new Gtk.Label(_("Configure applet"));
-			lab.set_use_markup(true);
+
+			Gtk.Label lab = new Gtk.Label(null);
+			lab.set_markup("<big>%s</big>".printf(_("Applet Settings")));
 			lab.halign = Gtk.Align.START;
 			lab.margin_bottom = 6;
 			valign = Gtk.Align.START;
@@ -90,7 +91,7 @@ namespace Budgie {
 
 		/* Used applet storage */
 		Gtk.ListBox listbox_applets;
-		HashTable<string,AppletItem?> items;
+		HashTable<string, AppletItem?> items;
 
 		/* Allow us to display settings when each item is selected */
 		Gtk.Stack settings_stack;
@@ -99,12 +100,12 @@ namespace Budgie {
 
 		public AppletsPage(Budgie.DesktopManager? manager, Budgie.Toplevel? toplevel) {
 			Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0);
+
 			this.manager = manager;
 			this.toplevel = toplevel;
-			valign = Gtk.Align.FILL;
-			vexpand = false;
 
-			margin = 6;
+			halign = Gtk.Align.CENTER;
+			valign = Gtk.Align.FILL;
 
 			this.configure_list();
 			this.configure_actions();
@@ -190,10 +191,11 @@ namespace Budgie {
 			move_box.add(button_remove_applet);
 
 			frame_box.pack_start(move_box, false, false, 0);
+
 			var frame = new Gtk.Frame(null);
 			frame.vexpand = false;
 			frame.margin_end = 20;
-			frame.margin_top = 12;
+			frame.margin_top = 6;
 			frame.add(frame_box);
 
 			listbox_applets = new Gtk.ListBox();
@@ -426,7 +428,8 @@ namespace Budgie {
 		* show a chooser dialog
 		*/
 		void add_applet() {
-			var dlg = new AppletChooser(this.get_toplevel() as Gtk.Window);
+			this.manager.rescan_panel_plugins();
+			var dlg = new SettingsPluginChooser(this.get_toplevel() as Gtk.Window, true);
 			dlg.set_plugin_list(this.manager.get_panel_plugins());
 			string? applet_id = dlg.run();
 			dlg.destroy();

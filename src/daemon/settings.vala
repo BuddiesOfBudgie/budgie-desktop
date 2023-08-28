@@ -1,7 +1,7 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2017-2022 Budgie Desktop Developers
+ * Copyright © Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,8 +65,6 @@ namespace Budgie {
 		private bool temporary_notification_disabled = false;
 
 		public SettingsManager() {
-			Notify.init("com.solus-project.budgie-daemon"); // Attempt initialization of Notify
-
 			set_supported_caffeine_icons(); // Set supported Caffeine icons will determine whether or not to use an IconTheme or Budgie caffeine icons
 
 			/* Settings we need to write to */
@@ -343,13 +341,7 @@ namespace Budgie {
 				string icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
 
 				if (enabled && (time > 0)) {
-					var duration = _("Will turn off in a minute");
-
-					if (time > 1) { // use plural
-						duration = _("Will turn off in %d minutes").printf(time);
-					}
-
-					body = duration;
+					body = ngettext("Will turn off in a minute", "Will turn off in %d minutes", time).printf(time);
 				}
 
 				if (this.caffeine_notification == null) { // Caffeine Notification not yet created

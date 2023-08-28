@@ -1,8 +1,0 @@
-[Plugin]
-Module=libuserindicator.so
-Name=User Indicator
-_Description=Indicator for logging out, restarting, suspending, etc
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2016-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=system-users-symbolic

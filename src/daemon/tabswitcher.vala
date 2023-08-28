@@ -1,8 +1,8 @@
 /*
  * This file is part of budgie-desktop
  *
- * Copyright (C) 2017-2022 taaem <taaem@mailbox.org>
- * Copyright (C) 2017-2022 Budgie Desktop Developers
+ * Copyright © taaem <taaem@mailbox.org>
+ * Copyright © Budgie Desktop Developers
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ namespace Budgie {
 		private void on_hide() {
 			var selection = window_box.get_selected_children();
 			Gtk.FlowBoxChild? current = null;
-			if (selection != null && selection.length() > 0) {
+			if (selection != null && !selection.is_empty()) {
 				current = selection.nth_data(0) as Gtk.FlowBoxChild;
 			}
 

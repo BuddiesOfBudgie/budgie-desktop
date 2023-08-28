@@ -1,6 +1,10 @@
-/build/
-node_modules/
+/*build*/
+*.tar.*
 
-*.tar.xz*
-nohup.out
+*.out
+*.vgcore
+
 justfile
+/.fleet/
+/.idea/
+/.cache/

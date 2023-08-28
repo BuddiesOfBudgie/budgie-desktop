@@ -1,8 +1,0 @@
-[Plugin]
-Module=lockkeysapplet.so
-Name=Lock Keys Indicator
-_Description=Show status of lock keys
-Authors=Budgie Desktop Developers
-Copyright=Copyright © 2015-2022 Budgie Desktop Developers
-Website=https://buddiesofbudgie.org
-Icon=num-lock-symbolic

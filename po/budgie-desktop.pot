@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.5.2\n"
+"Project-Id-Version: budgie-desktop 10.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-28 19:37+0200\n"
+"POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,331 +18,206 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/polkit/polkitdialog.vala:126
-msgid "Authentication failed"
+#. Do nothing if there were no held notifications
+#. translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
+#: src/daemon/notifications/dbus.vala:554
+msgid "Unread Notifications"
 msgstr ""
 
-#: src/polkit/polkitdialog.vala:215
-msgid "Group:"
+#: src/daemon/notifications/dbus.vala:557
+#, c-format
+msgid "You received %d notification while an application was fullscreened."
+msgid_plural "You received %d notifications while an application was fullscreened."
+msgstr[0] ""
+msgstr[1] ""
+
+#. No existing ref, make a new notification
+#. translators: Text for a button on the notification to open Raven to the notifications view
+#: src/daemon/notifications/dbus.vala:571
+msgid "View Notifications"
 msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:19
-msgid "Configure applet"
+#: src/daemon/endsession.vala:154
+msgid "Log out"
 msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:233
-#: src/panel/settings/settings_applet_chooser.vala:80
-msgid "Add applet"
+#: src/daemon/endsession.vala:158
+msgid "Restart device"
 msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:234
-msgid "Choose a new applet to add to this panel"
+#: src/daemon/endsession.vala:170 src/daemon/endsession.ui.h:1
+msgid "Power Off"
 msgstr ""
 
-#: src/panel/settings/settings_panel_applets.vala:248
-msgid "No settings available"
-msgstr ""
-
-#: src/panel/settings/settings_panel_applets.vala:401
-msgid "Start"
-msgstr ""
-
-#: src/panel/settings/settings_panel_applets.vala:404
-msgid "Center"
-msgstr ""
-
-#: src/panel/settings/settings_panel_applets.vala:407
-msgid "End"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:24
-msgid "Confirm panel removal"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:31
-msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:42
-msgid "Remove panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:43
-msgid "Keep panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:67
-msgid "Confirm applet removal"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:74
-msgid "Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:89
-msgid "Don't ask me again"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:98
-msgid "Remove applet"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:99
-msgid "Keep applet"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr ""
-
-#: src/panel/settings/settings_main.vala:68 src/daemon/menus.vala:46
+#: src/daemon/menus.vala:46 src/panel/settings/settings_main.vala:68
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr ""
 
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
+#: src/daemon/menus.vala:51
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+msgid "System Settings"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:31
-msgid "Windows"
+#. If we have valid windows open
+#. Only one window and a valid AbominationRunningApp for it
+#. Budgie Screensaver reports as budgie-daemon, so at the very least fix here as a workaround
+#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:40
-msgid "Attach modal dialogs to windows"
+#. Translators: be as brief as possible; popovers ar cut off if broader than the window
+#: src/daemon/screenshot.vala:439
+msgid "Screenshot entire screen"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:41
-msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+#: src/daemon/screenshot.vala:440
+msgid "Screenshot active window"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:46
-msgid "Button layout"
+#: src/daemon/screenshot.vala:441
+msgid "Screenshot selected area"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:47
-msgid "Change the layout of buttons in application titlebars."
+#. we cannot use areabuttons_labels, since these will be translated
+#. don't translate, internal use
+#. translate! These are the interface names
+#: src/daemon/screenshot.vala:549
+msgid "Screen"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:52
-msgid "Center new windows on screen"
+#: src/daemon/screenshot.vala:549
+msgid "Window"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:53
-msgid "Center newly launched windows on the current screen."
+#: src/daemon/screenshot.vala:549
+msgid "Selection"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:58
-msgid "Disable Night Light mode when windows are fullscreen"
+#. translate
+#: src/daemon/screenshot.vala:900
+msgid "Cancel screenshot"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:59
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+#: src/daemon/screenshot.vala:901
+msgid "Save screenshot to the selected directory"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:64
-msgid "Pause notifications when windows are fullscreen"
+#: src/daemon/screenshot.vala:902
+msgid "Copy screenshot to the clipboard"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:65
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+#: src/daemon/screenshot.vala:903
+msgid "Open screenshot in default application"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:70
-msgid "Automatic tiling"
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/daemon/screenshot.vala:1177
+msgid "Other..."
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:71
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+#. set custom dir to found dir
+#: src/daemon/screenshot.vala:1261
+msgid "Open Folder"
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:76
-msgid "Enable window focus change on mouse enter and leave"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:77
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:83
-msgid "Disable unredirection of windows"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:84
-msgid "This option is for advanced users. Use this if you are having graphical or performance issues with dedicated GPUs."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:89
-msgid "Show all windows in tab switcher"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:90
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:97
-msgid "Right (standard)"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:99
-#: src/panel/settings/settings_panel.vala:181 src/raven/raven.vala:33
-msgid "Left"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:32
-msgid "Style"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:46
-msgid "Widgets"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:47
-msgid "Set the appearance of window decorations and controls"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:51
-msgid "Icons"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Set the globally used icon theme"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:56
-msgid "Cursors"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Set the globally used mouse cursor theme"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:61
-msgid "Notification Position"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Set the location for notification popups"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:71
-msgid "Dark theme"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:78
-msgid "Built-in theme"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:79
-msgid "When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:86
-msgid "Animations"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Control whether windows and controls use animations"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:204
-msgid "Top Left"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:206
-msgid "Bottom Left"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:208
-msgid "Bottom Right"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:211
-msgid "Top Right"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:61
-msgid "Set Raven position"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:62
-msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:67
-msgid "Allow raising volume above 100%"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:68
-msgid "Allows raising the volume via Sound Settings as well as the Sound Output Widget in Raven up to 150%."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:72
-msgid "Enable display of week numbers in Calendar"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:73
-msgid "This setting enables the display of week numbers in the Calendar widget."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:78
-msgid "Show Calendar Widget"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:79
-msgid "Shows or hides the Calendar Widget in Raven's Applets section."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:84
-msgid "Show Sound Output Widget"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:85
-msgid "Shows or hides the Sound Output Widget in Raven's Applets section."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:90
-msgid "Show Microphone Input Widget"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:91
-msgid "Shows or hides the Microphone Input Widget in Raven's Applets section."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:96
-msgid "Show Media Playback Controls Widget"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:97
-msgid "Shows or hides the Media Playback Controls (MPRIS) Widget in Raven's Applets section."
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:102
-msgid "Show Power Strip"
-msgstr ""
-
-#: src/panel/settings/settings_raven.vala:103
-msgid "Shows or hides the Power Strip in the bottom of Raven."
-msgstr ""
-
-#: src/panel/settings/settings_applet_chooser.vala:74
-msgid "Choose an applet"
-msgstr ""
-
-#: src/panel/settings/settings_applet_chooser.vala:79
+#: src/daemon/screenshot.vala:1262
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
-#: src/applets/budgie-menu/IconChooser.vala:52 src/polkit/dialog.ui.h:4
-#: src/daemon/endsession.ui.h:3
+#: src/panel/settings/settings_panel_dialogs.vala:158
+#: src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
+msgstr ""
+
+#: src/daemon/screenshot.vala:1262
+msgid "Open"
+msgstr ""
+
+#. Should show a notification
+#: src/daemon/settings.vala:339
+msgid "Turned on Caffeine Boost"
+msgstr ""
+
+#: src/daemon/settings.vala:339
+msgid "Turned off Caffeine Boost"
+msgstr ""
+
+#: src/daemon/settings.vala:344
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/panel/settings/settings_autostart.vala:134
+msgid "Untitled"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:141
+msgid "No description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:164
+msgid "running"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:185
+msgid "Applications"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:195
+#: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_plugin_chooser.vala:106
+msgid "Add"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:354
+#: src/panel/settings/settings_autostart.vala:387
+msgid "Command"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:370
+msgid "An entry with that title already exists"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:373
+msgid "Title"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:377
+#: src/panel/settings/settings_autostart.vala:391
+msgid "Required"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:380
+msgid "Description"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:384
+msgid "Optional"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:446
+msgid "Autostart"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:464
+msgid "Autostart apps"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:506
+msgid "Add Application"
+msgstr ""
+
+#: src/panel/settings/settings_autostart.vala:508
+msgid "Add Command"
 msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:52
@@ -451,872 +326,1376 @@ msgstr ""
 msgid "Massive"
 msgstr ""
 
-#: src/panel/settings/settings_panel.vala:82 src/raven/main_view.vala:57
-msgid "Applets"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:83
-msgid "Settings"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:85
-msgid "Remove Panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:86
-msgid "Remove this panel from the screen"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:123
-msgid "Top Dock"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:125
-msgid "Right Dock"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:127
-msgid "Left Dock"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:129
-msgid "Bottom Dock"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:134
-msgid "Top Panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:136
-msgid "Right Panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:138
-msgid "Left Panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:140
-msgid "Bottom Panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:177
-msgid "Top"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:179 src/raven/raven.vala:35
-msgid "Right"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:183
-msgid "Bottom"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:193
-msgid "Always"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:195
-msgid "Dynamic"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:198
-#: src/panel/settings/settings_fonts.vala:84
-#: src/panel/settings/settings_fonts.vala:110
-msgid "None"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:208 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:210
-msgid "Intelligent"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:213
-msgid "Never"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:228
-msgid "Position"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:229
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:237
-msgid "Size"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:238
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:245
-msgid "Automatically hide"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:246
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:253
-msgid "Transparency"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:254
-msgid "Control when this panel should have a solid background"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:259
-msgid "Shadow"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:260
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:266
-msgid "Stylize regions"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:267
-msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:274
-msgid "Dock mode"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:275
-msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:134
-msgid "Untitled"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:141
-msgid "No description"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:164
-msgid "running"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:185
-msgid "Applications"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:195
-#: src/panel/settings/settings_autostart.vala:360
-msgid "Add"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:354
-#: src/panel/settings/settings_autostart.vala:387
-msgid "Command"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:370
-msgid "An entry with that title already exists"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:373
-msgid "Title"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:377
-#: src/panel/settings/settings_autostart.vala:391
-msgid "Required"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:380
-msgid "Description"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:384
-msgid "Optional"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:446
-msgid "Autostart"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:464
-msgid "Autostart apps"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:506
-msgid "Add Application"
-msgstr ""
-
-#: src/panel/settings/settings_autostart.vala:508
-msgid "Add Command"
-msgstr ""
-
-#: src/panel/settings/settings_fonts.vala:32
+#: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:43
+#: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:44
+#: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:50
+#: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:51
+#: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:57
+#: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:58
+#: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:64
+#: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:65
+#: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:71
+#: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:72
+#: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:81
+#: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:82
+#: src/panel/settings/settings_fonts.vala:81
 msgid "Medium"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:83
+#: src/panel/settings/settings_fonts.vala:82
 msgid "Slight"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:100
+#: src/panel/settings/settings_fonts.vala:83
+#: src/panel/settings/settings_fonts.vala:109
+#: src/panel/settings/settings_panel.vala:204
+msgid "None"
+msgstr ""
+
+#: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:101
+#: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:108
+#: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:109
+#: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:125
+#: src/panel/settings/settings_fonts.vala:124
 msgid "Antialiasing"
 msgstr ""
 
-#: src/panel/settings/settings_fonts.vala:126
+#: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr ""
 
-#: src/raven/start_listening.vala:20
-msgid "No apps are currently playing audio."
+#: src/panel/settings/settings_panel_dialogs.vala:24
+msgid "Confirm panel removal"
 msgstr ""
 
-#: src/raven/start_listening.vala:28
-msgid "Play some music"
+#: src/panel/settings/settings_panel_dialogs.vala:31
+msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr ""
 
-#: src/raven/notifications_view.vala:101
-msgid "Nothing to see here"
+#: src/panel/settings/settings_panel_dialogs.vala:42
+msgid "Remove panel"
 msgstr ""
 
-#: src/raven/notifications_view.vala:654
-#: src/applets/notifications/NotificationsApplet.vala:106
-#, c-format
-msgid "%u unread notifications"
+#: src/panel/settings/settings_panel_dialogs.vala:43
+msgid "Keep panel"
 msgstr ""
 
-#: src/raven/notifications_view.vala:656
-#: src/applets/notifications/NotificationsApplet.vala:108
-msgid "1 unread notification"
+#: src/panel/settings/settings_panel_dialogs.vala:67
+msgid "Confirm applet removal"
 msgstr ""
 
-#: src/raven/notifications_view.vala:658
-#: src/applets/notifications/NotificationsApplet.vala:110
-msgid "No unread notifications"
+#: src/panel/settings/settings_panel_dialogs.vala:74
+msgid "Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
 
-#: src/raven/notifications_view.vala:889
-msgid "No new notifications"
+#: src/panel/settings/settings_panel_dialogs.vala:89
+#: src/panel/settings/settings_panel_dialogs.vala:148
+msgid "Don't ask me again"
 msgstr ""
 
-#. 125ms
-#: src/raven/sound.vala:158
-msgid "Apps"
+#: src/panel/settings/settings_panel_dialogs.vala:98
+msgid "Remove applet"
 msgstr ""
 
-#: src/raven/sound.vala:159
-msgid "Devices"
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid "Keep applet"
 msgstr ""
 
-#: src/raven/main_view.vala:60
-#: src/applets/notifications/NotificationsApplet.plugin.in.h:1
-msgid "Notifications"
+#: src/panel/settings/settings_panel_dialogs.vala:126
+msgid "Confirm widget removal"
 msgstr ""
 
-#. Caffeine Notification
-#. Prepare label widget
-#: src/raven/notifications_group.vala:47
-#: src/applets/caffeine/CaffeineWindow.vala:37
-msgid "Caffeine Mode"
+#: src/panel/settings/settings_panel_dialogs.vala:133
+msgid "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
 
-#: src/daemon/menus.vala:51
-msgid "System Settings"
-msgstr ""
-
-#: src/daemon/endsession.vala:157
-msgid "Log out"
-msgstr ""
-
-#: src/daemon/endsession.vala:161
-msgid "Restart device"
-msgstr ""
-
-#: src/daemon/endsession.vala:173 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr ""
-
-#. Should show a notification
-#: src/daemon/settings.vala:341
-msgid "Turned on Caffeine Boost"
-msgstr ""
-
-#: src/daemon/settings.vala:341
-msgid "Turned off Caffeine Boost"
-msgstr ""
-
-#: src/daemon/settings.vala:346
-msgid "Will turn off in a minute"
-msgstr ""
-
-#. use plural
-#: src/daemon/settings.vala:349
-#, c-format
-msgid "Will turn off in %d minutes"
-msgstr ""
-
-#. User Menu Creation
-#: src/applets/user-indicator/UserIndicatorWindow.vala:99
-msgid "User"
-msgstr ""
-
-#. Default to "User" and symbolic icon
-#. The rest
-#: src/applets/user-indicator/UserIndicatorWindow.vala:105
-msgid "Lock"
-msgstr ""
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:106
-msgid "Suspend"
-msgstr ""
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:107
-msgid "Hibernate"
-msgstr ""
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:108
-#: src/daemon/endsession.ui.h:5
-msgid "Restart"
-msgstr ""
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:109
-#: src/daemon/endsession.ui.h:6
-msgid "Shutdown"
-msgstr ""
-
-#: src/applets/user-indicator/UserIndicatorWindow.vala:208
-#: src/daemon/endsession.ui.h:4
-msgid "Logout"
-msgstr ""
-
-#: src/applets/lock-keys/LockKeysApplet.vala:55
-msgid "Caps lock is active"
-msgstr ""
-
-#: src/applets/lock-keys/LockKeysApplet.vala:58
-msgid "Caps lock is not active"
-msgstr ""
-
-#: src/applets/lock-keys/LockKeysApplet.vala:67
-msgid "Num lock is active"
-msgstr ""
-
-#: src/applets/lock-keys/LockKeysApplet.vala:70
-msgid "Num lock is not active"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:23
-#: src/applets/places-indicator/VolumeItem.vala:25
-msgid "Removable devices"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:25
-#: src/applets/places-indicator/VolumeItem.vala:27
-msgid "Local volumes"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:29
-#: src/applets/places-indicator/VolumeItem.vala:31
-msgid "Network folders"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:32
-#: src/applets/places-indicator/VolumeItem.vala:34
-msgid "Other"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:58
-#: src/applets/places-indicator/VolumeItem.vala:55
-msgid "Eject"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:60
-msgid "Unmount"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:63
-#: src/applets/places-indicator/PlaceItem.vala:36
-#, c-format
-msgid "Open \"%s\""
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:75
-#: src/applets/places-indicator/VolumeItem.vala:83
-msgid "You can now safely remove"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:76
-msgid "Unknown Device"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:84
-msgid "Error while ejecting device"
-msgstr ""
-
-#: src/applets/places-indicator/MountItem.vala:100
-msgid "Error while unmounting volume"
-msgstr ""
-
-#: src/applets/places-indicator/VolumeItem.vala:41
-#, c-format
-msgid "Mount and open \"%s\""
-msgstr ""
-
-#: src/applets/places-indicator/VolumeItem.vala:73
-#: src/applets/places-indicator/VolumeItem.vala:114
-msgid "Enter the encryption passphrase to unlock this volume"
-msgstr ""
-
-#: src/applets/places-indicator/VolumeItem.vala:112
-msgid "The password you entered is incorrect"
-msgstr ""
-
-#: src/applets/places-indicator/VolumeItem.vala:116
-msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
-
-#: src/applets/places-indicator/MountHelper.vala:35
-msgid "Volume is in use by other processes"
-msgstr ""
-
-#: src/applets/places-indicator/MountHelper.vala:40
-msgid "Operation aborted"
-msgstr ""
-
-#: src/applets/places-indicator/MountHelper.vala:51
-msgid "Type your password"
-msgstr ""
-
-#: src/applets/places-indicator/PlacesIndicator.vala:80
-#: src/applets/places-indicator/PlacesSection.vala:22
-#: src/applets/places-indicator/PlacesSection.vala:44
-#: src/applets/places-indicator/PlacesIndicator.plugin.in.h:1
-msgid "Places"
-msgstr ""
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr ""
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr ""
-
-#: src/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr ""
-
-#. Settings button
-#: src/applets/status/BluetoothIndicator.vala:53
-msgid "Bluetooth Settings"
-msgstr ""
-
-#. Send files button
-#: src/applets/status/BluetoothIndicator.vala:60
-msgid "Send Files"
-msgstr ""
-
-#. Airplane mode
-#: src/applets/status/BluetoothIndicator.vala:70
-msgid "Bluetooth Airplane Mode"
-msgstr ""
-
-#: src/applets/status/BluetoothIndicator.vala:173
-msgid "Bluetooth is disabled"
-msgstr ""
-
-#: src/applets/status/BluetoothIndicator.vala:177
-msgid "Bluetooth is active"
-msgstr ""
-
-#: src/applets/status/BluetoothIndicator.vala:182
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/applets/status/PowerIndicator.vala:93
-msgid "Battery fully charged."
-msgstr ""
-
-#: src/applets/status/PowerIndicator.vala:96
-msgid "Unknown"
-msgstr ""
-
-#. Set inner charging duration to hours:minutes
-#: src/applets/status/PowerIndicator.vala:105
-msgid "Battery charging"
-msgstr ""
-
-#: src/applets/status/PowerIndicator.vala:110
-msgid "Battery remaining"
-msgstr ""
-
-#: src/applets/status/PowerIndicator.vala:161
-msgid "Show battery percentage"
-msgstr ""
-
-#: src/applets/status/PowerIndicator.vala:169
-msgid "Power settings"
-msgstr ""
-
-#: src/applets/workspaces/WorkspaceItem.vala:69
-msgid "Rename"
-msgstr ""
-
-#: src/applets/workspaces/WorkspaceItem.vala:77
+#: src/panel/settings/settings_panel_dialogs.vala:157
+#: src/panel/applets/workspaces/WorkspaceItem.vala:80
 msgid "Remove"
 msgstr ""
 
-#: src/applets/caffeine/CaffeineWindow.vala:39
-msgid "Timer (minutes)"
+#: src/panel/settings/settings_raven_widgets.vala:21
+msgid "Widget Settings"
 msgstr ""
 
-#. there's already an active tray, create an informative icon with a popover
-#: src/applets/tray/TrayApplet.vala:114
-msgid "Only one instance of the System Tray can be active at a time."
+#: src/panel/settings/settings_raven_widgets.vala:149
+msgid "Add widget"
 msgstr ""
 
-#: src/applets/tray/TrayApplet.vala:140
-msgid "The System Tray failed to initialize."
+#: src/panel/settings/settings_raven_widgets.vala:150
+msgid "Choose a new widget to add to the Widgets view"
 msgstr ""
 
-#: src/applets/show-desktop/ShowDesktopApplet.vala:30
-msgid "Toggle the desktop"
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:250
+msgid "No settings available"
 msgstr ""
 
-#. Special case, "All"
-#: src/applets/budgie-menu/BudgieMenuButtons.vala:25
-msgid "All"
+#: src/panel/settings/settings_raven_widgets.vala:237
+msgid "Failed to create the widget instance. The plugin engine could not find info for this plugin."
 msgstr ""
 
-#: src/applets/budgie-menu/IconChooser.vala:24
+#: src/panel/settings/settings_raven_widgets.vala:240
+msgid "Failed to create the widget instance. The module name must be in reverse-DNS format, such as 'tld.domain.group.WidgetName.so' for C/Vala or 'tld_domain_group_WidgetName' for Python."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:244
+msgid "Failed to create the widget instance. The plugin engine failed to load the plugin from the disk."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:247
+msgid ""
+"Failed to create the widget instance. The plugin supports settings, but does not install a settings schema with the same name.\n"
+"\n"
+"The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:252
+msgid "Failed to create the widget instance due to an unknown failure."
+msgstr ""
+
+#: src/panel/settings/settings_raven.vala:47
+#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
+msgid "Widgets"
+msgstr ""
+
+#: src/panel/settings/settings_raven.vala:48
+#: src/panel/settings/settings_panel.vala:89
+msgid "Settings"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:31
+msgid "Windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:40
+msgid "Attach modal dialogs to windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:41
+msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:46
+msgid "Button layout"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:47
+msgid "Change the layout of buttons in application titlebars."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:52
+msgid "Center new windows on screen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:53
+msgid "Center newly launched windows on the current screen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:58
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:59
+msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:64
+msgid "Pause notifications when windows are fullscreen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:65
+msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:70
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:71
+msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:76
+msgid "Enable window focus change on mouse enter and leave"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:77
+msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:83
+msgid "Enable unredirection"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:84
+msgid "Enable unredirection which will allow frames to bypass compositing for fullscreen applications. This option is for advanced users and recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:89
+msgid "Show all windows in tab switcher"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:90
+msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Right (standard)"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+#: src/panel/settings/settings_panel.vala:187 src/raven/raven.vala:33
+msgid "Left"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:88
+msgid "Applets"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:91
+msgid "Remove Panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:92
+msgid "Remove this panel from the screen"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:129
+msgid "Top Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:131
+msgid "Right Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:133
+msgid "Left Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:135
+msgid "Bottom Dock"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:140
+msgid "Top Panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:142
+msgid "Right Panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:144
+msgid "Left Panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:146
+msgid "Bottom Panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:183
+msgid "Top"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:185 src/raven/raven.vala:35
+msgid "Right"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:189
+msgid "Bottom"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:199
+msgid "Always"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:201
+msgid "Dynamic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:214 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:216
+msgid "Intelligent"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:219
+msgid "Never"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:236
+msgid "Position"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:237
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Size"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:246
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:253
+msgid "Spacing"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Set the spacing between applets for this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:261
+msgid "Automatically hide"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:262
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:269
+msgid "Transparency"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:270
+msgid "Control when this panel should have a solid background"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:275
+msgid "Shadow"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:276
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:282
+msgid "Stylize regions"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:283
+msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:290
+msgid "Dock mode"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:291
+msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:235
+msgid "Add applet"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:236
+msgid "Choose a new applet to add to this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:403
+msgid "Start"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:406
+msgid "Center"
+msgstr ""
+
+#: src/panel/settings/settings_panel_applets.vala:409
+msgid "End"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:47
+msgid "Set Raven position"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:48
+msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:71
+msgid "Set notification sort order"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:72
+msgid "Set whether notifications are sorted from oldest to newest, or newest to oldest."
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:33
+msgid "Style"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:48
+msgid "Set the appearance of window decorations and controls"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Icons"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the globally used icon theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Cursors"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used mouse cursor theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Notification Position"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the location for notification popups"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Dark theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:79
+msgid "Built-in theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:80
+msgid "When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Animations"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:88
+msgid "Control whether windows and controls use animations"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:207
+msgid "Top Left"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:209
+msgid "Bottom Left"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:211
+msgid "Bottom Right"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:214
+msgid "Top Right"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
 msgstr ""
 
-#: src/applets/budgie-menu/IconChooser.vala:34
+#: src/panel/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
 msgstr ""
 
-#: src/applets/budgie-menu/IconChooser.vala:40
+#: src/panel/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
 msgstr ""
 
-#: src/applets/budgie-menu/IconChooser.vala:53
+#: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
 msgstr ""
 
 #. placeholder in case of no results
-#: src/applets/budgie-menu/BudgieMenuWindow.vala:123
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
 msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:143
-msgid "Time and date settings"
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+msgid "Power"
 msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:144
-msgid "Calendar"
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
 msgstr ""
 
-#. pack page2
-#: src/applets/clock/ClockApplet.vala:151
-#: src/applets/clock/ClockApplet.vala:182
-msgid "Preferences"
+#. Prepare label widget
+#. Caffeine Notification
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+#: src/raven/notifications_group.vala:92
+msgid "Caffeine Mode"
 msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:161
-msgid "Show date"
+#: src/panel/applets/caffeine/CaffeineWindow.vala:39
+msgid "Timer (minutes)"
 msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:166
-msgid "Show seconds"
+#: src/panel/applets/clock/ClockApplet.vala:122
+msgid "System time and date settings"
 msgstr ""
 
-#: src/applets/clock/ClockApplet.vala:172
-msgid "Use 24 hour time"
-msgstr ""
-
-#: src/applets/icon-tasklist/IconPopover.vala:106
+#: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:109
+#: src/panel/applets/icon-tasklist/IconPopover.vala:110
 msgid "Close All Windows"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:117
+#: src/panel/applets/icon-tasklist/IconPopover.vala:118
 msgid "Always On Top"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:119
-#: src/applets/icon-tasklist/IconPopover.vala:545
+#: src/panel/applets/icon-tasklist/IconPopover.vala:120
+#: src/panel/applets/icon-tasklist/IconPopover.vala:557
 msgid "Maximize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:120
+#: src/panel/applets/icon-tasklist/IconPopover.vala:121
 msgid "Minimize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:433
+#: src/panel/applets/icon-tasklist/IconPopover.vala:445
 msgid "Unfavorite"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:433
+#: src/panel/applets/icon-tasklist/IconPopover.vala:445
 msgid "Favorite"
 msgstr ""
 
 #. If our current amount of workspaces is different than how many we have added
 #. We have items to add
 #. For workspaces we need to add
-#: src/applets/icon-tasklist/IconPopover.vala:445
+#: src/panel/applets/icon-tasklist/IconPopover.vala:457
 #, c-format
 msgid "Move To Workspace %i"
 msgstr ""
 
 #. Update our always on top button
-#: src/applets/icon-tasklist/IconPopover.vala:545
+#: src/panel/applets/icon-tasklist/IconPopover.vala:557
 msgid "Unmaximize"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:604
+#: src/panel/applets/icon-tasklist/IconPopover.vala:616
 msgid "Close Window"
 msgstr ""
 
-#: src/applets/icon-tasklist/IconPopover.vala:606
+#: src/panel/applets/icon-tasklist/IconPopover.vala:618
 msgid "Show Window Controls"
 msgstr ""
 
-#: src/polkit/dialog.ui.h:1
-msgid "Authentication Required"
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:68
+msgid "Caps lock is active"
 msgstr ""
 
-#: src/polkit/dialog.ui.h:2
-msgid "Password:"
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:71
+msgid "Caps lock is not active"
 msgstr ""
 
-#: src/polkit/dialog.ui.h:3
-msgid "Authentication is required"
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:80
+msgid "Num lock is active"
 msgstr ""
 
-#: src/polkit/dialog.ui.h:5
-msgid "Authenticate"
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:83
+msgid "Num lock is not active"
+msgstr ""
+
+#: src/panel/applets/notifications/NotificationsApplet.vala:121
+#, c-format
+msgid "%u unread notification"
+msgid_plural "%u unread notifications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/panel/applets/notifications/NotificationsApplet.vala:123
+#: src/raven/notifications_view.vala:377
+msgid "No unread notifications"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountHelper.vala:35
+msgid "Volume is in use by other processes"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountHelper.vala:40
+msgid "Operation aborted"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountHelper.vala:51
+msgid "Type your password"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:23
+#: src/panel/applets/places-indicator/VolumeItem.vala:25
+msgid "Removable devices"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:25
+#: src/panel/applets/places-indicator/VolumeItem.vala:27
+msgid "Local volumes"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:29
+#: src/panel/applets/places-indicator/VolumeItem.vala:31
+msgid "Network folders"
+msgstr ""
+
+#. Create our misc category, but don't add it to the list until it actually has apps in it
+#: src/panel/applets/places-indicator/MountItem.vala:32
+#: src/panel/applets/places-indicator/VolumeItem.vala:34
+#: src/appindexer/AppIndex.vala:44
+msgid "Other"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:58
+#: src/panel/applets/places-indicator/VolumeItem.vala:55
+msgid "Eject"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:60
+msgid "Unmount"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:63
+#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#, c-format
+msgid "Open \"%s\""
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:75
+#: src/panel/applets/places-indicator/VolumeItem.vala:83
+msgid "You can now safely remove"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:76
+msgid "Unknown Device"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:84
+msgid "Error while ejecting device"
+msgstr ""
+
+#: src/panel/applets/places-indicator/MountItem.vala:100
+msgid "Error while unmounting volume"
+msgstr ""
+
+#: src/panel/applets/places-indicator/PlacesIndicator.vala:80
+#: src/panel/applets/places-indicator/PlacesSection.vala:22
+#: src/panel/applets/places-indicator/PlacesSection.vala:44
+msgid "Places"
+msgstr ""
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:41
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr ""
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:73
+#: src/panel/applets/places-indicator/VolumeItem.vala:114
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr ""
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:112
+msgid "The password you entered is incorrect"
+msgstr ""
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:116
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr ""
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr ""
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr ""
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr ""
+
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+msgid "Toggle the desktop"
+msgstr ""
+
+#. Settings button
+#: src/panel/applets/status/BluetoothIndicator.vala:55
+msgid "Bluetooth Settings"
+msgstr ""
+
+#. Send files button
+#: src/panel/applets/status/BluetoothIndicator.vala:62
+msgid "Send Files"
+msgstr ""
+
+#. Airplane mode
+#: src/panel/applets/status/BluetoothIndicator.vala:72
+msgid "Bluetooth Airplane Mode"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:182
+msgid "Bluetooth is disabled"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:186
+msgid "Bluetooth is active"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:191
+#, c-format
+msgid "Connected to %d device"
+msgid_plural "Connected to %d devices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/panel/applets/status/PowerIndicator.vala:103
+msgid "Battery fully charged."
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:107
+msgid "Unknown"
+msgstr ""
+
+#. Set inner charging duration to hours:minutes
+#: src/panel/applets/status/PowerIndicator.vala:116
+msgid "Battery charging"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:121
+msgid "Battery remaining"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:198
+msgid "Performance Mode"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:207
+msgid "Power Saver"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:214
+msgid "Balanced"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:221
+msgid "Performance"
+msgstr ""
+
+#: src/panel/applets/status/PowerIndicator.vala:275
+msgid "Power settings"
+msgstr ""
+
+#. User Menu Creation
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
+msgid "User"
+msgstr ""
+
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:109
+msgid "Lock"
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:110
+msgid "Suspend"
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:111
+msgid "Hibernate"
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:112
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:113
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:212
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr ""
+
+#: src/panel/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr ""
+
+#: src/raven/widgets/media-controls/media_controls.vala:155
+msgid "No apps are currently playing audio."
+msgstr ""
+
+#: src/raven/widgets/media-controls/media_controls.vala:164
+msgid "Play some music"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:107
+#: src/raven/widgets/media-controls/mpris_gui.vala:430
+msgid "Unknown Title"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:110
+#: src/raven/widgets/media-controls/mpris_gui.vala:434
+msgid "Unknown Artist"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:113
+#: src/raven/widgets/media-controls/mpris_gui.vala:438
+msgid "Unknown Album"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:302
+#, c-format
+msgid "Playing - %s"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:309
+#, c-format
+msgid "Paused - %s"
+msgstr ""
+
+#: src/raven/widgets/sound-output/sound_output.vala:173
+msgid "No apps are playing audio."
+msgstr ""
+
+#: src/raven/widgets/sound-output/sound_output.vala:189
+msgid "Apps"
+msgstr ""
+
+#: src/raven/widgets/sound-output/sound_output.vala:190
+msgid "Devices"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
+msgid "Usage Monitor"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+msgid "CPU"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+msgid "RAM"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+msgid "Swap"
+msgstr ""
+
+#: src/raven/raven.vala:49
+msgid "Oldest to newest"
+msgstr ""
+
+#: src/raven/raven.vala:52
+msgid "Newest to oldest"
+msgstr ""
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr ""
+
+#: src/raven/notifications_view.vala:124
+msgid "No new notifications"
+msgstr ""
+
+#: src/raven/notifications_view.vala:373
+#, c-format
+msgid "%u unread notifications"
+msgstr ""
+
+#: src/raven/notifications_view.vala:375
+msgid "1 unread notification"
+msgstr ""
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr ""
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr ""
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr ""
+
+#.
+#. * Add our categories, adhearing to the Freedesktop Menu spec.
+#. *
+#. * Inclusions and exclusions are sourced from multiple places,
+#. * including the UbuntuBudgie fork of applications-menu, gnome-menus,
+#. * the Freedeskop Menus spec, and by ourselves.
+#.
+#: src/appindexer/AppIndex.vala:142
+msgid "Accessories"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:152
+msgid "Education"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:157
+msgid "Games"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:161
+msgid "Graphics"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:169
+msgid "Internet"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:174
+msgid "Office"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:178
+msgid "Programming"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:182
+msgid "Science"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:188
+msgid "Sound & Video"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:192
+msgid "System Tools"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:202
+msgid "Universal Access"
+msgstr ""
+
+#: src/dialogs/polkit/polkitdialog.vala:195
+msgid "Authentication failed"
+msgstr ""
+
+#: src/dialogs/polkit/polkitdialog.vala:284
+msgid "Group:"
+msgstr ""
+
+#. Create our buttons
+#: src/dialogs/power/window.vala:87
+msgid "_Lock"
+msgstr ""
+
+#: src/dialogs/power/window.vala:90
+msgid "L_og Out"
+msgstr ""
+
+#: src/dialogs/power/window.vala:93
+msgid "_Suspend"
+msgstr ""
+
+#: src/dialogs/power/window.vala:97
+msgid "_Hibernate"
+msgstr ""
+
+#: src/dialogs/power/window.vala:101
+msgid "_Reboot"
+msgstr ""
+
+#: src/dialogs/power/window.vala:104
+msgid "Shut_down"
+msgstr ""
+
+#: src/dialogs/power/window.vala:156
+msgid "This system does not support hibernation."
 msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
 msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:1
-msgid "Show label"
+#: src/daemon/aftershot.ui.h:1
+msgid "Name:"
 msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:2
-msgid "Show places"
+#: src/daemon/aftershot.ui.h:2
+msgid "Folder:"
 msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:3
-msgid "Show network folders"
+#: src/daemon/screenshothome.ui.h:1
+msgid "Delay in seconds"
 msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:4
-msgid "Show removable drives"
+#: src/daemon/screenshothome.ui.h:2
+msgid "Show Pointer"
 msgstr ""
 
-#: src/applets/places-indicator/settings.ui.h:5
-msgid "Always expand places"
+#: src/daemon/screenshothome.ui.h:3
+msgid "Play sound when capturing"
 msgstr ""
 
-#: src/applets/status/settings.ui.h:1 src/applets/tray/settings.ui.h:1
-msgid "Icon Spacing"
-msgstr ""
-
-#: src/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr ""
-
-#: src/applets/workspaces/settings.ui.h:1
-msgid "\"Add\" button visibility"
-msgstr ""
-
-#: src/applets/workspaces/settings.ui.h:2
-msgid "Don't show"
-msgstr ""
-
-#: src/applets/workspaces/settings.ui.h:3
-msgid "Show on mouseover"
-msgstr ""
-
-#: src/applets/workspaces/settings.ui.h:4
-msgid "Always show"
-msgstr ""
-
-#: src/applets/caffeine/settings.ui.h:1
-msgid "Enable notification"
-msgstr ""
-
-#: src/applets/caffeine/settings.ui.h:2
-msgid "Maximize brightness"
-msgstr ""
-
-#: src/applets/caffeine/settings.ui.h:3
-msgid "Brightness Level"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:1
-#: src/applets/night-light/NightLight.plugin.in.h:1
-msgid "Night Light"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:2
-msgid "Temperature"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:3
-msgid "Schedule"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:4
-msgid "Sunset to Sunrise"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:5
-msgid "Manual"
-msgstr ""
-
-#: src/applets/night-light/indicator_window.ui.h:6
-msgid "Display Settings"
-msgstr ""
-
-#: src/applets/budgie-menu/settings.ui.h:1
+#: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
 msgstr ""
 
-#: src/applets/budgie-menu/settings.ui.h:2
-msgid "Compact Mode"
-msgstr ""
-
-#: src/applets/budgie-menu/settings.ui.h:3
-msgid "Show Headers"
-msgstr ""
-
-#: src/applets/budgie-menu/settings.ui.h:4
+#: src/panel/applets/budgie-menu/settings.ui.h:2
 msgid "Menu Label"
 msgstr ""
 
-#: src/applets/budgie-menu/settings.ui.h:5
-msgid "Roll-over mouse"
+#: src/panel/applets/budgie-menu/settings.ui.h:3
+msgid "Use Default Menu Icon"
 msgstr ""
 
-#: src/applets/budgie-menu/settings.ui.h:6
+#: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:1
+#: src/panel/applets/budgie-menu/settings.ui.h:5
+msgid "Compact Mode"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/settings.ui.h:6
+msgid "Show Headers"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/settings.ui.h:7
+msgid "Roll-over mouse"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/settings.ui.h:8
+msgid "Show settings items"
+msgstr ""
+
+#: src/panel/applets/caffeine/settings.ui.h:1
+msgid "Enable notification"
+msgstr ""
+
+#: src/panel/applets/caffeine/settings.ui.h:2
+msgid "Maximize brightness"
+msgstr ""
+
+#: src/panel/applets/caffeine/settings.ui.h:3
+msgid "Brightness Level"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:1
+msgid "Show date"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:2
+msgid "Show seconds"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:3
+msgid "Use 24 hour time"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:4
+msgid "Custom Format"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:6
+#, no-c-format
+msgid "%H:%M:%S %d.%m.%Y"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:7
+msgid "Custom Timezone"
+msgstr ""
+
+#: src/panel/applets/clock/settings.ui.h:8
+msgid "UTC"
+msgstr ""
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:2
+#: src/panel/applets/icon-tasklist/settings.ui.h:2
 msgid "Only show favorited"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:3
+#: src/panel/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:4
+#: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:5
-msgid "Window grouping"
-msgstr ""
-
-#: src/applets/icon-tasklist/settings.ui.h:6
+#: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
 msgstr ""
 
-#: src/applets/icon-tasklist/settings.ui.h:7
+#: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
 msgstr ""
 
-#: src/session/budgie-desktop.session.in.in.h:1
-#: src/session/budgie-desktop.desktop.in.in.h:1
-msgid "Budgie Desktop"
+#: src/panel/applets/night-light/indicator_window.ui.h:1
+msgid "Night Light"
 msgstr ""
 
-#: src/session/budgie-desktop.desktop.in.in.h:2
-msgid "This session logs you into the Budgie Desktop"
+#: src/panel/applets/night-light/indicator_window.ui.h:2
+msgid "Temperature"
+msgstr ""
+
+#: src/panel/applets/night-light/indicator_window.ui.h:3
+msgid "Schedule"
+msgstr ""
+
+#: src/panel/applets/night-light/indicator_window.ui.h:4
+msgid "Sunset to Sunrise"
+msgstr ""
+
+#: src/panel/applets/night-light/indicator_window.ui.h:5
+msgid "Manual"
+msgstr ""
+
+#: src/panel/applets/night-light/indicator_window.ui.h:6
+msgid "Display Settings"
+msgstr ""
+
+#: src/panel/applets/places-indicator/settings.ui.h:1
+msgid "Show label"
+msgstr ""
+
+#: src/panel/applets/places-indicator/settings.ui.h:2
+msgid "Show places"
+msgstr ""
+
+#: src/panel/applets/places-indicator/settings.ui.h:3
+msgid "Show network folders"
+msgstr ""
+
+#: src/panel/applets/places-indicator/settings.ui.h:4
+msgid "Show removable drives"
+msgstr ""
+
+#: src/panel/applets/places-indicator/settings.ui.h:5
+msgid "Always expand places"
+msgstr ""
+
+#: src/panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr ""
+
+#: src/panel/applets/status/settings.ui.h:1
+#: src/panel/applets/tray/settings.ui.h:1
+msgid "Icon Spacing"
+msgstr ""
+
+#: src/panel/applets/status/settings.ui.h:2
+msgid "Show battery percentage"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:1
+msgid "\"Add\" button visibility"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:2
+msgid "Item Size Multiplier"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:3
+msgid "Don't show"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:4
+msgid "Show on mouseover"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:5
+msgid "Always show"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:6
+msgid "0.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:7
+msgid "0.75x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:8
+msgid "1.0x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:9
+msgid "1.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:10
+msgid "2.0x"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:1
+msgid "Sort Mode"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:2
+msgid "Sort by type"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:3
+msgid "Sort alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:4
+msgid "Sort reverse alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:5
+msgid "Sort by date ascending"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:6
+msgid "Sort by date descending"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:1
+msgid "Show Week Numbers"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:2
+msgid "Show Day Names"
+msgstr ""
+
+#: src/raven/widgets/sound-input/settings.ui.h:1
+#: src/raven/widgets/sound-output/settings.ui.h:1
+msgid "Allow Volume Overdrive"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/settings.ui.h:1
+msgid "Show Swap Usage"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:1
+msgid "Authentication Required"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:2
+msgid "Password:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:3
+msgid "Authentication is required"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:4
+msgid "Details"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:5
+msgid "Action:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:6
+msgid "ID:"
+msgstr ""
+
+#: src/dialogs/polkit/dialog.ui.h:8
+msgid "Authenticate"
+msgstr ""
+
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
+msgid "Budgie screenshot app"
+msgstr ""
+
+#: src/panel/budgie-desktop-settings.desktop.in.h:2
+msgid "Change desktop appearance and behavior"
 msgstr ""
 
 #: src/panel/budgie-panel.desktop.in.h:1
@@ -1327,66 +1706,123 @@ msgstr ""
 msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
 msgstr ""
 
-#: src/panel/budgie-desktop-settings.desktop.in.h:2
-msgid "Change desktop appearance and behavior"
+#: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
+msgid "Search for and start up applications."
 msgstr ""
 
-#: src/applets/user-indicator/UserIndicator.plugin.in.h:1
-msgid "User Indicator"
+#: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
+msgid "Prevent the system and screen from sleeping."
 msgstr ""
 
-#: src/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Lock Keys Indicator"
+#: src/panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "A digital clock with a customizable format."
 msgstr ""
 
-#: src/applets/status/StatusApplet.plugin.in.h:1
-msgid "Status Indicator"
+#: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "A configurable application task list."
 msgstr ""
 
-#: src/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Spacer"
+#: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Indicates which keyboard layout is currently in use."
 msgstr ""
 
-#: src/applets/separator/SeparatorApplet.plugin.in.h:1
-msgid "Separator"
+#: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Show status of lock keys."
 msgstr ""
 
-#: src/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Workspace Switcher"
+#: src/panel/applets/night-light/NightLight.plugin.in.h:1
+msgid "Toggle and modify Night Light settings."
 msgstr ""
 
-#: src/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
-msgid "Keyboard Layout Indicator"
+#: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
+msgid "Open the Raven notifications view."
 msgstr ""
 
-#: src/applets/caffeine/CaffeineApplet.plugin.in.h:1
-msgid "Caffeine"
+#: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
+msgid "Show drives and favorite folders."
 msgstr ""
 
-#: src/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System Tray"
+#: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Open the Raven sidebar."
 msgstr ""
 
-#: src/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
-msgid "Raven Sidebar Control"
+#: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Visual separator between applets."
 msgstr ""
 
-#: src/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
-msgid "Show Desktop Button"
+#: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "A button that toggles visibility of the desktop."
 msgstr ""
 
-#: src/applets/budgie-menu/BudgieMenu.plugin.in.h:1
-msgid "Budgie Menu"
+#: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Adjustable spacer to put between other applets."
 msgstr ""
 
-#: src/applets/clock/ClockApplet.plugin.in.h:1
-msgid "Clock"
+#: src/panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Show system status indicators, like sound, battery, and Bluetooth."
 msgstr ""
 
-#: src/applets/tasklist/TasklistApplet.plugin.in.h:1
-msgid "Task List"
+#: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
+msgid "An application task list with icons and labels."
 msgstr ""
 
-#: src/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
-msgid "Icon Task List"
+#: src/panel/applets/tray/TrayApplet.plugin.in.h:1
+msgid "System tray implementing the Freedesktop Status Notifier specification."
+msgstr ""
+
+#: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "Opens the power dialog."
+msgstr ""
+
+#: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Display workspaces and switch between them."
+msgstr ""
+
+#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
+msgid "Manage your trash from the Budgie panel"
+msgstr ""
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:1
+msgid "Calendar"
+msgstr ""
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:2
+msgid "A simple calendar with a month view, using the built-in Gtk.Calendar widget. The calendar shows the current date by default."
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
+msgid "Media Controls"
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
+msgid "This widget uses the Mpris API to show actively playing media with metadata and playback controls, with support for audio and video."
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
+msgid "Sound Input"
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
+msgid "Allows adjustment of audio input volume, and displays a list of available audio input devices."
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
+msgid "Sound Output"
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
+msgid "Allows global and per-app audio output volume control, and displays a list of available audio output devices."
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
+msgid "A view for system resource usage in bar graph form. Includes CPU, RAM, and Swap usage by default."
+msgstr ""
+
+#: src/session/budgie-desktop.desktop.in.in.h:1
+#: src/session/budgie-desktop.session.in.in.h:1
+msgid "Budgie Desktop"
+msgstr ""
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid "This session logs you into the Budgie Desktop"
 msgstr ""

@@ -1,0 +1,9 @@
+[Plugin]
+Module=keyboardlayoutapplet.so
+Builtin=true
+Name=Keyboard Layout
+_Description=Indicates which keyboard layout is currently in use.
+Authors=Budgie Desktop Developers
+Copyright=Copyright Budgie Desktop Developers
+Website=https://buddiesofbudgie.org/
+Icon=input-keyboard
