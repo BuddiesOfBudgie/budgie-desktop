@@ -60,11 +60,12 @@ namespace Budgie {
 		unowned Budgie.BudgieWM? wm;
 		static KeyboardManager? instance;
 		static VariantType sources_variant_type;
+		private static GLib.Settings settings;
 
 		private Gnome.XkbInfo? xkb;
 		string[] options = {};
 
-		Settings? settings = null;
+		//Settings? settings = null;
 		Array<InputSource> sources = null;
 		InputSource fallback;
 
@@ -88,6 +89,13 @@ namespace Budgie {
 
 		static construct {
 			sources_variant_type = new VariantType("a(ss)");
+
+			var schema = GLib.SettingsSchemaSource.get_default ().lookup ("org.gnome.desktop.input-sources", true);
+			if (schema == null) {
+				critical ("org.gnome.desktop.input-sources not found.");
+			}
+
+			settings = new GLib.Settings.full (schema, null, null);
 		}
 
 		KeyboardManager(Budgie.BudgieWM? wm) {
@@ -107,13 +115,10 @@ namespace Budgie {
 		}
 
 		construct {
-			var schema = GLib.SettingsSchemaSource.get_default().lookup("org.gnome.desktop.input-sources", true);
-			if (schema == null) return;
+			settings.changed.connect (set_keyboard_layout);
 
-			settings = new GLib.Settings.full(schema, null, null);
-			Signal.connect(settings, "changed", (Callback) set_keyboard_layout, this);
-
-			set_keyboard_layout("current");
+			set_keyboard_layout (settings, "sources");
+			set_keyboard_layout (settings, "current");
 		}
 
 		[CCode (instance_pos = -1)]
@@ -176,7 +181,7 @@ namespace Budgie {
 					this.options = settings.get_strv(key);
 					break;
 				case "current":
-					set_keyboard_layout(key);
+					set_keyboard_layout(settings, key);
 					break;
 				default:
 					break;
@@ -229,7 +234,7 @@ namespace Budgie {
 			this.apply_layout_group();
 
 			/* Always start up with the last selected index if possible */
-			var default_idx = this.settings.get_uint("current");
+			var default_idx = settings.get_uint("current");
 			this.apply_layout(default_idx);
 			this.apply_ibus();
 		}
@@ -308,11 +313,11 @@ namespace Budgie {
 		*/
 		[CCode (instance_pos = -1)]
 		private void write_source_index(uint index) {
-			SignalHandler.block(this.settings, this.sig_id);
-			this.settings.set_uint("current", index);
-			this.settings.apply();
-			this.set_keyboard_layout("current");
-			SignalHandler.unblock(this.settings, this.sig_id);
+			SignalHandler.block(settings, this.sig_id);
+			settings.set_uint("current", index);
+			settings.apply();
+			set_keyboard_layout(settings, "current");
+			SignalHandler.unblock(settings, this.sig_id);
 		}
 
 		/**
@@ -320,7 +325,7 @@ namespace Budgie {
 		*/
 		[CCode (instance_pos = -1)]
 		private void on_current_source_changed() {
-			uint new_source = this.settings.get_uint("current");
+			uint new_source = settings.get_uint("current");
 			this.hold_keyboard();
 			apply_layout(new_source);
 			this.apply_ibus();
@@ -380,38 +385,36 @@ namespace Budgie {
 		* Called whenever  the keyboard layout needs to be set/reset
 		*/
 		[CCode (instance_pos = -1)]
-		void set_keyboard_layout(string key) {
-			if (!(key == "current" || key == "sources" || key == "xkb-options")) return;
+		void set_keyboard_layout (GLib.Settings settings, string key) {
+			if (key == "sources" || key == "xkb-options") {
+				string[] layouts = {}, variants = {};
 
-			string layout = DEFAULT_LAYOUT, variant = DEFAULT_VARIANT, options = "";
+				var sources = settings.get_value ("sources");
+				if (!sources.is_of_type (sources_variant_type)) {
+					return;
+				}
 
-			var sources = settings.get_value("sources");
-			if (!sources.is_of_type(sources_variant_type)) return;
+				for (int i = 0; i < sources.n_children (); i++) {
+					unowned string? type = null, name = null;
+					sources.get_child (i, "(&s&s)", out type, out name);
 
-			var current = settings.get_uint ("current");
-			unowned string? type = null, name = null;
-			if (sources.n_children () > current) {
-				sources.get_child (current, "(&s&s)", out type, out name);
+					if (type == "xkb") {
+						string[] arr = name.split ("+", 2);
+						layouts += arr[0];
+						variants += arr[1] ?? "";
+					}
+				}
+
+				var xkb_options = settings.get_strv ("xkb-options");
+
+				var layout = string.joinv (",", layouts);
+				var variant = string.joinv (",", variants);
+				var options = string.joinv (",", xkb_options);
+
+				Meta.Backend.get_backend ().set_keymap (layout, variant, options);
+			} else if (key == "current") {
+				Meta.Backend.get_backend ().lock_layout_group (settings.get_uint ("current"));
 			}
-
-			if (type != "xkb") return; //We do not want to change the current xkb layout here when using ibus.
-
-			string[] arr = name.split ("+", 2);
-			layout = arr[0];
-			variant = arr[1] ?? "";
-
-			var xkb_options = settings.get_strv("xkb-options");
-			if (xkb_options.length > 0) {
-				options = string.joinv(",", xkb_options);
-			}
-
-			// Needed to make common keybindings work on non-latin layouts
-			if (layout != DEFAULT_LAYOUT || variant != DEFAULT_VARIANT) {
-				layout = layout + "," + DEFAULT_LAYOUT;
-				variant = variant + ",";
-			}
-
-			Meta.Backend.get_backend().set_keymap(layout, variant, options);
 		}
 	}
 }
