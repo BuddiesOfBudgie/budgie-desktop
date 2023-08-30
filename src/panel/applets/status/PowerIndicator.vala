@@ -184,13 +184,6 @@ public class PowerProfilesSelector : Gtk.Box {
 		// need at least two options for it to be meaningful
 		if (profiles.length < 2) return;
 
-		// initialize state
-		on_active_profile_changed(profiles_proxy.active_profile);
-
-		((DBusProxy) profiles_proxy).g_properties_changed.connect(() => {
-			on_active_profile_changed(profiles_proxy.active_profile);
-		});
-
 		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 		pack_start(sep, false, false, 1);
 
@@ -225,6 +218,14 @@ public class PowerProfilesSelector : Gtk.Box {
 		}
 
 		pack_start(power_profiles_radio_box);
+
+		// initialize state
+		on_active_profile_changed(profiles_proxy.active_profile);
+
+		((DBusProxy) profiles_proxy).g_properties_changed.connect(() => {
+			on_active_profile_changed(profiles_proxy.active_profile);
+		});
+
 	}
 
 	void on_active_profile_changed(string active_profile) {
