@@ -213,11 +213,11 @@ internal class TrayItem : Gtk.EventBox {
 
 				if (markup != "") {
 					set_tooltip_markup(markup);
-					return;
 				} else {
 					set_tooltip_text(title);
-					return;
 				}
+				
+				return;
 			} else if (dbus_properties.tool_tip.is_of_type(VariantType.STRING)) {
 				// quirk for TeamViewer
 				set_tooltip_text(dbus_properties.tool_tip.get_string());
