@@ -39,7 +39,8 @@ internal interface SnItemProperties : Object {
 	public abstract SnIconPixmap[] attention_icon_pixmap {owned get;}
 	public abstract string attention_movie_name {owned get;}
 	public abstract string icon_theme_path {owned get;}
-	public abstract SnToolTip? tool_tip {owned get;}
+	[DBus (signature="(sa(iiay)ss)")]
+	public abstract Variant? tool_tip {owned get;}
 	public abstract bool item_is_menu {get;}
 	public abstract ObjectPath? menu {owned get;}
 }
@@ -206,14 +207,25 @@ internal class TrayItem : Gtk.EventBox {
 
 	private void reset_tooltip() {
 		if (dbus_properties.tool_tip != null) {
-			if (dbus_properties.tool_tip.markup != "") {
-				set_tooltip_markup(dbus_properties.tool_tip.markup);
-			} else {
-				set_tooltip_text(dbus_properties.tool_tip.title);
+			if (dbus_properties.tool_tip.get_type_string() == "(sa(iiay)ss)") {
+				string title = dbus_properties.tool_tip.get_child_value(2).get_string();
+				string markup = dbus_properties.tool_tip.get_child_value(3).get_string();
+
+				if (markup != "") {
+					set_tooltip_markup(markup);
+					return;
+				} else {
+					set_tooltip_text(title);
+					return;
+				}
+			} else if (dbus_properties.tool_tip.is_of_type(VariantType.STRING)) {
+				// quirk for TeamViewer
+				set_tooltip_text(dbus_properties.tool_tip.get_string());
+				return;
 			}
-		} else {
-			set_tooltip_text(null);
 		}
+
+		set_tooltip_text(null);
 	}
 
 	public override bool button_release_event(Gdk.EventButton event) {
