@@ -6,5 +6,10 @@
       <summary>Space between icons</summary>
       <description>How large to make the space between icons, in pixels</description>
     </key>
+    <key type="b" name="scaling">
+      <default>false</default>
+      <summary>Scale icons with panel size</summary>
+      <description>Whether icons in the tray should scale along with the panel size.</description>
+    </key>
   </schema>
 </schemalist>
