@@ -79,11 +79,8 @@ public class TrayApplet : Budgie.Applet {
 			layout.set_spacing(settings.get_int("spacing"));
 		});
 		settings.changed["scaling"].connect((key) => {
-			if (settings.get_boolean("scaling")) {
-				items.get_values().foreach((item) => item.resize(panel_size));
-			} else {
-				items.get_values().foreach((item) => item.resize(36));
-			}
+			var size = settings.get_boolean("scaling") ? panel_size : 36;
+			items.get_values().foreach((item) => item.resize(size));
 		});
 
 		items = new HashTable<string, TrayItem>(str_hash, str_equal);
