@@ -22,9 +22,13 @@ public class TraySettings : Gtk.Grid {
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
 
+	[GtkChild]
+	private unowned Gtk.Switch? switch_scaling;
+
 	public TraySettings(Settings? settings) {
 		this.settings = settings;
 		settings.bind("spacing", spinbutton_spacing, "value", SettingsBindFlags.DEFAULT);
+		settings.bind("scaling", switch_scaling, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
@@ -73,6 +77,10 @@ public class TrayApplet : Budgie.Applet {
 		settings = get_applet_settings(uuid);
 		settings.changed["spacing"].connect((key) => {
 			layout.set_spacing(settings.get_int("spacing"));
+		});
+		settings.changed["scaling"].connect((key) => {
+			var size = settings.get_boolean("scaling") ? panel_size : 36;
+			items.get_values().foreach((item) => item.resize(size));
 		});
 
 		items = new HashTable<string, TrayItem>(str_hash, str_equal);
@@ -191,9 +199,11 @@ public class TrayApplet : Budgie.Applet {
 
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
 		panel_size = panel;
-		items.get_values().foreach((item)=>{
-			item.resize(panel);
-		});
+		if (settings.get_boolean("scaling")) {
+			items.get_values().foreach((item)=>{
+				item.resize(panel);
+			});
+		}
 	}
 
 	public override bool supports_settings() {
