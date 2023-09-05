@@ -91,7 +91,7 @@ public class DBusMenu : Object {
 			all_nodes.set(id, node);
 		}
 
-		if (v_children.is_container() && v_children.n_children() > 0) {
+		if (v_children.get_type().is_array() && v_children.n_children() > 0) {
 			var new_children = new List<DBusMenuNode>();
 
 			VariantIter it = v_children.iterator();
@@ -119,11 +119,13 @@ public class DBusMenu : Object {
 	}
 
 	private void update_node_properties(DBusMenuNode node, Variant props) {
-		VariantIter prop_it = props.iterator();
-		string key;
-		Variant value;
-		while (prop_it.next("{sv}", out key, out value)) {
-			node.update_property(key, value);
+		VariantIter it = props.iterator();
+		for (var prop = it.next_value(); prop != null; prop = it.next_value()) {
+			if (prop.is_of_type(new VariantType("{sv}"))) {
+				string key = prop.get_child_value(0).get_string();
+				Variant value = prop.get_child_value(1);
+				node.update_property(key, value);
+			}
 		}
 	}
 
