@@ -15,3 +15,8 @@ install_data(
     version_file,
     install_dir: join_paths(datadir, 'budgie')
 )
+
+install_data(
+    'budgie-portals.conf',
+    install_dir: join_paths(datadir, 'xdg-desktop-portal')
+)

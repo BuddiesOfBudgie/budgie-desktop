@@ -12,6 +12,8 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="hexpand">True</property>
+    <property name="row_spacing">4</property>
+    <property name="column_spacing">4</property>
     <child>
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
@@ -78,6 +80,28 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Scale icons with panel size</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="switch_scaling">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="halign">end</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+      </packing>
     </child>
   </template>
 </interface>

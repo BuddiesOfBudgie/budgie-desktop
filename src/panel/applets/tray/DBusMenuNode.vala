@@ -47,6 +47,10 @@ public class DBusMenuNode : Object {
 		for (int i = 0; i < new_children.length(); i++) {
 			var item = new_children.nth_data(i).item;
 
+			if (item.parent != null) {
+				item.parent.remove(item);
+			}
+
 			if (item.parent != submenu) {
 				submenu.add(item);
 			}

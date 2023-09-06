@@ -19,7 +19,7 @@ namespace Budgie {
 		* Arbitrary threshold that scores have to be below to
 		* be considered "relevant."
 		*/
-		public const int THRESHOLD = 16;
+		public const int THRESHOLD = 18;
 
 		/** Static map of desktop IDs to scores. */
 		private static Gee.HashMap<string, int> scores;
@@ -104,11 +104,26 @@ namespace Budgie {
 				return;
 			}
 
-			string name = searchable_string(app.name);
 			string _term = term.casefold();
 
-			// Get a initial score based on the fuzzy match of the name
-			var score = Fuzzer.get_fuzzy_score(name, _term, 1);
+			string?[] data = {
+				app.name,
+				app.generic_name,
+			};
+			foreach (var k in app.keywords) {
+				data += k;
+			}
+
+			// Get an initial best score from the fuzzy match of name, generic_name and keywords
+			int score = get_best_score(data, _term);
+
+			// Score is less than 0, disqualified
+			if (score < 0) {
+				scores.set(app.desktop_id, score);
+				return;
+			}
+
+			string name = app.name.casefold();
 
 			// If the term is considered to be an exact match, bail early
 			if (score == 0) {
@@ -121,31 +136,19 @@ namespace Budgie {
 				return;
 			}
 
-			// Score is less than 0, disqualified
-			if (score < 0) {
-				scores.set(app.desktop_id, score);
-				return;
+			// Prioritize matches where the name contains the exact term
+			if (name.contains(_term)) {
+				score--;
 			}
 
 			string?[] fields = {
-				app.generic_name,
 				app.description,
 				app.exec
 			};
 
-			// Check the various fields, and decrease the score
-			// for every match
+			// Check the various fields, prioritize if there's a match
 			if (array_contains(fields, _term)) {
 				score--;
-			}
-
-			// Check the application's keywords
-			var keywords = app.keywords;
-			if (keywords != null && keywords.length > 0) {
-				// Decrease the score for every match
-				if (array_contains(keywords, _term)) {
-					score--;
-				}
 			}
 
 			// Check if the application is the default handler for its supported
@@ -157,6 +160,28 @@ namespace Budgie {
 
 			// Set the score
 			scores.set(app.desktop_id, int.max(score, 0));
+		}
+
+		/**
+    	 * Retrieve the highest score by performing a fuzzy match on a list of strings
+		 */
+		private int get_best_score(string?[] elements, string term) {
+			int score = -1;
+
+			foreach (var e in elements) {
+				if (e == null) {
+					continue;
+				}
+
+				string target = searchable_string(e);
+				int tmp_score = Fuzzer.get_fuzzy_score(target, term, 1);
+
+				if (tmp_score >= 0 && (tmp_score < score || score == -1)) {
+					score = tmp_score;
+				}
+			}
+
+			return score;
 		}
 
 		/* Helper ported from Brisk */
