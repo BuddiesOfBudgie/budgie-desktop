@@ -65,7 +65,6 @@ namespace Budgie {
 		private Gnome.XkbInfo? xkb;
 		string[] options = {};
 
-		//Settings? settings = null;
 		Array<InputSource> sources = null;
 		InputSource fallback;
 
