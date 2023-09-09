@@ -73,9 +73,15 @@
 			HashTable<string, Variant> hints,
 			uint expire_timeout
 		) {
+			var name = app_name;
+
+			if (("budgie" in name) && ("caffeine" in app_icon)) { // Caffeine Notification
+				name = _("Caffeine Mode");
+			}
+
 			Object (
 				id: id,
-				app_name: app_name,
+				app_name: name,
 				app_icon: app_icon,
 				summary: summary,
 				body: body,

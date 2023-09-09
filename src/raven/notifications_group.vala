@@ -21,7 +21,7 @@ namespace Budgie {
 		private Gtk.ListBox noti_box;
 
 		public string app_name { get; construct; }
-		public string app_icon { get; construct; }
+		public Gtk.Image image { get; construct; }
 		public uint tokeep { get; construct set; }
 		public NotificationSort noti_sort_mode { get; construct set; default = NEW_OLD; }
 		public int noti_count { get; private set; default = 0; }
@@ -55,11 +55,10 @@ namespace Budgie {
 			var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
 			header.get_style_context().add_class("raven-notifications-group-header");
 
-			var app_image = new Gtk.Image.from_icon_name(app_icon, Gtk.IconSize.DND) {
-				halign = Gtk.Align.START,
-				margin_end = 5,
-				pixel_size = 32, // Really ensure it's 32x32
-			};
+			var app_icon = image;
+			app_icon.halign = Gtk.Align.START;
+			app_icon.margin_end = 5;
+			app_icon.pixel_size = 32;
 
 			name_label = new Gtk.Label(app_name) {
 				ellipsize = Pango.EllipsizeMode.END,
@@ -77,7 +76,7 @@ namespace Budgie {
 
 			dismiss_button.clicked.connect(dismiss_all);
 
-			header.pack_start(app_image, false, false, 0);
+			header.pack_start(app_icon, false, false, 0);
 			header.pack_start(name_label, false, false, 0);
 			header.pack_end(dismiss_button, false, false, 0);
 
@@ -85,16 +84,10 @@ namespace Budgie {
 			pack_start(noti_box);
 		}
 
-		public NotificationGroup(string c_app_icon, string c_app_name, NotificationSort sort_mode, uint keep) {
-			var name = c_app_name;
-
-			if (("budgie" in name) && ("caffeine" in c_app_icon)) { // Caffeine Notification
-				name = _("Caffeine Mode");
-			}
-
+		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep) {
 			Object(
-				app_name: name,
-				app_icon: c_app_icon,
+				app_name: notification.app_name,
+				image: notification.image,
 				tokeep: keep,
 				noti_sort_mode: sort_mode,
 				orientation: Gtk.Orientation.VERTICAL,
