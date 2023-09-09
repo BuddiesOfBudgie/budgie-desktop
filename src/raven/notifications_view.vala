@@ -268,11 +268,10 @@ namespace Budgie {
 				listbox.add(group);
 
 				group.dismissed_group.connect((name) => { // When we dismiss the group
-					var parent = group.get_parent();
-					parent.destroy();
 					notification_count -= group.noti_count;
 					update_child_count();
 					Raven.get_instance().ReadNotifications(); // Update our counter
+					group.destroy();
 				});
 
 				group.dismissed_notification.connect((id) => {
@@ -291,26 +290,20 @@ namespace Budgie {
 		}
 
 		private NotificationGroup? get_notification_group(string name) {
-			NotificationGroup? group = null;
-
-			foreach (var child in listbox.get_children()) {
-				var row = ((Gtk.ListBoxRow) child).get_child() as NotificationGroup;
-
-				if (row.app_name != name) continue;
-
-				group = row;
-				break;
+			foreach (var group in listbox.get_children()) {
+				if (((NotificationGroup) group).app_name == name) {
+					return group as NotificationGroup;
+				}
 			}
 
-			return group;
+			return null;
 		}
 
 		void adjust_max_per_group(uint newmax, bool trim) {
-			foreach (var child in listbox.get_children()) {
-				var group = ((Gtk.Bin) child).get_child() as NotificationGroup;
-				group.set_group_max_notifications(max_per_group);
+			foreach (var group in listbox.get_children()) {
+				((NotificationGroup) group).set_group_max_notifications(max_per_group);
 				if (trim) {
-					group.limit_notifications();
+					((NotificationGroup) group).limit_notifications();
 				}
 			}
 		}

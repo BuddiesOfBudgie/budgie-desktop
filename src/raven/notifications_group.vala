@@ -13,7 +13,7 @@ namespace Budgie {
 	/**
 	 * NotificationGroup is a group of notifications.
 	 */
-	public class NotificationGroup : Gtk.Box {
+	public class NotificationGroup : Gtk.ListBoxRow {
 		private HashTable<uint32, NotificationWidget> notifications;
 
 		private Gtk.Label name_label;
@@ -32,13 +32,7 @@ namespace Budgie {
 		public signal void dismissed_notification(uint32 id);
 
 		construct {
-			can_focus = false; // Disable focus to prevent scroll on click
-			focus_on_click = false;
-
 			get_style_context().add_class("raven-notifications-group");
-
-			// Intentially omit _end because it messes with alignment of dismiss buttons
-			margin = 4;
 
 			notifications = new HashTable<uint32, NotificationWidget>(direct_hash, direct_equal);
 
@@ -80,8 +74,14 @@ namespace Budgie {
 			header.pack_start(name_label, false, false, 0);
 			header.pack_end(dismiss_button, false, false, 0);
 
-			pack_start(header);
-			pack_start(noti_box);
+			var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 4) {
+				margin = 4,
+			};
+
+			box.pack_start(header);
+			box.pack_start(noti_box);
+
+			add(box);
 		}
 
 		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep) {
@@ -90,8 +90,10 @@ namespace Budgie {
 				image: notification.image,
 				tokeep: keep,
 				noti_sort_mode: sort_mode,
-				orientation: Gtk.Orientation.VERTICAL,
-				spacing: 4
+				activatable: false,
+				selectable: false,
+				can_focus: false,
+				focus_on_click: false
 			);
 		}
 
@@ -111,9 +113,7 @@ namespace Budgie {
 			update_count();
 
 			widget.closed_individually.connect(() => { // When this notification is closed
-				uint n_id = (uint) notification.id;
-				remove_notification(n_id);
-				dismissed_notification(n_id);
+				remove_notification((uint) notification.id);
 			});
 		}
 
