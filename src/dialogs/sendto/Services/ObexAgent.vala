@@ -18,7 +18,7 @@ public errordomain BluezObexError {
 [DBus (name = "org.bluez.obex.Agent1")]
 public class Bluetooth.Obex.Agent : GLib.Object {
 	/* one confirmation for many files in one session */
-	private GLib.ObjectPath many_files;
+	private ObjectPath many_files;
 
 	public signal void response_notify(string address, ObjectPath object_path);
 	public signal void response_accepted(string address, ObjectPath object_path);
@@ -29,12 +29,12 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 		Bus.own_name(
 			BusType.SESSION,
 			"org.bluez.obex.Agent1",
-			GLib.BusNameOwnerFlags.NONE,
+			BusNameOwnerFlags.NONE,
 			on_name_get
 		);
 	}
 
-	private void on_name_get(GLib.DBusConnection conn) {
+	private void on_name_get(DBusConnection conn) {
 		try {
 			conn.register_object("/org/bluez/obex/budgie", this);
 		} catch (Error e) {
@@ -42,7 +42,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 		}
 	}
 
-	public void transfer_active(string session_path) throws GLib.Error {
+	public void transfer_active(string session_path) throws Error {
 		transfer_view(session_path);
 	}
 
@@ -55,7 +55,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * agent, because when this method gets called it has
 	 * already been unregistered.
 	 */
-	public void release() throws GLib.Error {}
+	public void release() throws Error {}
 
 	/**
 	 * authorize_push:
@@ -70,7 +70,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * property that contains the default location and name
 	 * that can be returned.
 	 */
-	public async string authorize_push(GLib.ObjectPath object_path) throws Error {
+	public async string authorize_push(ObjectPath object_path) throws Error {
 		SourceFunc callback = authorize_push.callback;
 		BluezObexError? obex_error = null;
 		Bluetooth.Obex.Transfer transfer = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", object_path);
@@ -107,10 +107,12 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 		if (many_files == object_path) {
 			Idle.add(()=>{
 				response_accepted(session.destination, object_path);
+
 				if (callback != null) {
 					Idle.add((owned) callback);
 				}
-				return GLib.Source.REMOVE;
+
+				return Source.REMOVE;
 			});
 		} else {
 			// Not multple files, ask to accept or reject
@@ -132,7 +134,7 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	 * request failed before a reply was returned. It cancels
 	 * the previous request.
 	 */
-	public void cancel() throws GLib.Error {
+	public void cancel() throws Error {
 		response_canceled();
 	}
 }

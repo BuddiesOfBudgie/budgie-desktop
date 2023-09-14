@@ -43,7 +43,7 @@ public class FileSender : Gtk.Dialog {
 
 		file_store = new Gtk.ListStore(1, typeof(GLib.File));
 
-		var icon_image = new Gtk.Image.from_icon_name ("bluetooth-active", Gtk.IconSize.DIALOG) {
+		var icon_image = new Gtk.Image.from_icon_name("bluetooth-active", Gtk.IconSize.DIALOG) {
 			valign = Gtk.Align.END,
 			halign = Gtk.Align.END,
 		};
@@ -65,7 +65,6 @@ public class FileSender : Gtk.Dialog {
 			xalign = 0,
 			use_markup = true,
 		};
-		path_label.get_style_context().add_class("primary");
 
 		device_label = new Gtk.Label(Markup.printf_escaped("<b>%s</b>:", _("To"))) {
 			max_width_chars = 45,
@@ -224,9 +223,9 @@ public class FileSender : Gtk.Dialog {
 			variant_client.get("(o)", out session_path);
 
 			// Create our Obex session
-			session = yield new GLib.DBusProxy (
+			session = yield new GLib.DBusProxy(
 				connection,
-				GLib.DBusProxyFlags.NONE,
+				DBusProxyFlags.NONE,
 				null,
 				"org.bluez.obex",
 				session_path,
@@ -255,7 +254,7 @@ public class FileSender : Gtk.Dialog {
 			};
 
 			retry_dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-			var suggested_button = retry_dialog.add_button(_("Accept"), Gtk.ResponseType.ACCEPT);
+			var suggested_button = retry_dialog.add_button(_("Retry"), Gtk.ResponseType.ACCEPT);
 			suggested_button.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
 			retry_dialog.response.connect((response_id) => {
@@ -287,7 +286,7 @@ public class FileSender : Gtk.Dialog {
 		// Update the labels
 		path_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), file_path.get_parent().get_path()));
 		device_label.set_markup(GLib.Markup.printf_escaped(_("<b>To</b>: %s"), device.alias));
-		icon_label.set_from_gicon(new ThemedIcon(device.icon == null ? "bluetooth-active" : device.icon), Gtk.IconSize.LARGE_TOOLBAR);
+		icon_label.set_from_gicon(new ThemedIcon(device.icon ?? "bluetooth-active"), Gtk.IconSize.LARGE_TOOLBAR);
 		progress_label.label = _("Waiting for acceptance on %s…").printf(device.alias);
 
 		try {
@@ -336,7 +335,7 @@ public class FileSender : Gtk.Dialog {
 				};
 
 				retry_dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-				var suggested_button = retry_dialog.add_button(_("Accept"), Gtk.ResponseType.ACCEPT);
+				var suggested_button = retry_dialog.add_button(_("Retry"), Gtk.ResponseType.ACCEPT);
 				suggested_button.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
 				retry_dialog.response.connect((response_id) => {
@@ -421,7 +420,7 @@ public class FileSender : Gtk.Dialog {
 
 	private void send_notify() {
 		var notification = new Notification("Bluetooth");
-		notification.set_icon(new ThemedIcon(device.icon));
+		notification.set_icon(new ThemedIcon(device.icon ?? "bluetooth-active"));
 		notification.set_title(_("File transferred successfully"));
 		notification.set_body(Markup.printf_escaped("<b>From:</b> %s <b>Sent to:</b> %s", file_path.get_path(), device.alias));
 		notification.set_priority(NotificationPriority.NORMAL);

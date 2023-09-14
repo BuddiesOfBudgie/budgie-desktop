@@ -39,7 +39,7 @@ public class FileReceiver : Gtk.Dialog {
 		notification = new Notification("Bluetooth");
 		notification.set_priority(NotificationPriority.NORMAL);
 
-		var icon_image = new Gtk.Image.from_icon_name ("bluetooth-active", Gtk.IconSize.DIALOG) {
+		var icon_image = new Gtk.Image.from_icon_name("bluetooth-active", Gtk.IconSize.DIALOG) {
 			valign = Gtk.Align.END,
 			halign = Gtk.Align.END,
 		};
@@ -61,7 +61,6 @@ public class FileReceiver : Gtk.Dialog {
 			xalign = 0,
 			use_markup = true,
 		};
-		device_label.get_style_context().add_class("primary");
 
 		directory_label = new Gtk.Label(null) {
 			max_width_chars = 45,
@@ -162,7 +161,7 @@ public class FileReceiver : Gtk.Dialog {
 
 			total_size = transfer.size;
 			session_path = transfer.session;
-			filename_label.set_markup(Markup.printf_escaped (_("<b>File name</b>: %s"), transfer.name));
+			filename_label.set_markup(Markup.printf_escaped(_("<b>File name</b>: %s"), transfer.name));
 		} catch (Error e) {
 			warning("Error accepting Bluetooth file transfer: %s", e.message);
 		}
@@ -234,10 +233,12 @@ public class FileReceiver : Gtk.Dialog {
 		progress_bar.fraction = (double) transferred / (double) total_size;
 		int current_time = (int) get_real_time();
 		int elapsed_time = (current_time - start_time) / 1000000;
+
 		if (current_time < start_time + 1000000) return;
 		if (elapsed_time == 0) return;
 
 		uint64 transfer_rate = transferred / elapsed_time;
+
 		if (transfer_rate == 0) return;
 
 		rate_label.label = Markup.printf_escaped(_("<b>Transfer rate:</b> %s / s"), format_size(transfer_rate));

@@ -12,7 +12,7 @@
 public class Bluetooth.ObjectManager : Object {
 	public bool has_object { get; private set; default = false; }
 
-	private GLib.DBusObjectManagerClient object_manager;
+	private DBusObjectManagerClient object_manager;
 
 	public signal void device_added(Bluetooth.Device device);
 	public signal void device_removed(Bluetooth.Device device);
@@ -25,9 +25,9 @@ public class Bluetooth.ObjectManager : Object {
 
 	public async void create_manager() {
 		try {
-			object_manager = yield new GLib.DBusObjectManagerClient.for_bus.begin(
+			object_manager = yield new DBusObjectManagerClient.for_bus.begin(
 				BusType.SYSTEM,
-				GLib.DBusObjectManagerClientFlags.NONE,
+				DBusObjectManagerClientFlags.NONE,
 				"org.bluez",
 				"/",
 				object_manager_proxy_get_type,
@@ -54,7 +54,7 @@ public class Bluetooth.ObjectManager : Object {
 		}
 	}
 
-	//TODO: Do not rely on this when it is possible to do it natively in Vala
+	// TODO: Do not rely on this when it is possible to do it natively in Vala
 	[CCode (cname="bluetooth_device_proxy_get_type")]
 	extern static GLib.Type get_device_proxy_type();
 
@@ -62,7 +62,7 @@ public class Bluetooth.ObjectManager : Object {
 	extern static GLib.Type get_adapter_proxy_type();
 
 	private GLib.Type object_manager_proxy_get_type(DBusObjectManagerClient manager, string object_path, string? interface_name) {
-		if (interface_name == null) return typeof (GLib.DBusObjectProxy);
+		if (interface_name == null) return typeof (DBusObjectProxy);
 
 		switch (interface_name) {
 			case "org.bluez.Device1":
@@ -70,7 +70,7 @@ public class Bluetooth.ObjectManager : Object {
 			case "org.bluez.Adapter1":
 				return get_adapter_proxy_type();
 			default:
-				return typeof(GLib.DBusProxy);
+				return typeof(DBusProxy);
 		}
 	}
 
@@ -84,14 +84,14 @@ public class Bluetooth.ObjectManager : Object {
 				"RegisterAgent", // TODO: Do we need to worry about unregistering?
 				new Variant("(o)", "/org/bluez/obex/budgie"),
 				null,
-				GLib.DBusCallFlags.NONE,
+				DBusCallFlags.NONE,
 				-1);
 		} catch (Error e) {
 			critical("Error registering Obex agent manager: %s", e.message);
 		}
 	}
 
-	private void on_interface_added(GLib.DBusObject object, GLib.DBusInterface iface) {
+	private void on_interface_added(DBusObject object, DBusInterface iface) {
 		if (iface is Bluetooth.Device) {
 			unowned var device = (Bluetooth.Device) iface;
 			device_added(device);
@@ -99,7 +99,7 @@ public class Bluetooth.ObjectManager : Object {
 			unowned var adapter = (Bluetooth.Adapter) iface;
 			has_object = true;
 			((DBusProxy) adapter).g_properties_changed.connect((changed, invalid) => {
-				var discovering = changed.lookup_value("Discovering", GLib.VariantType.BOOLEAN);
+				var discovering = changed.lookup_value("Discovering", VariantType.BOOLEAN);
 				if (discovering != null) {
 					status_discovering();
 				}
@@ -107,7 +107,7 @@ public class Bluetooth.ObjectManager : Object {
 		}
 	}
 
-	private void on_interface_removed(GLib.DBusObject object, GLib.DBusInterface iface) {
+	private void on_interface_removed(DBusObject object, DBusInterface iface) {
 		if (iface is Bluetooth.Device) {
 			device_removed((Bluetooth.Device) iface);
 		} else if (iface is Bluetooth.Adapter) {
@@ -119,7 +119,7 @@ public class Bluetooth.ObjectManager : Object {
 		var adapters = new Gee.LinkedList<Bluetooth.Adapter>();
 
 		object_manager.get_objects().foreach((object) => {
-			GLib.DBusInterface? iface = object.get_interface("org.bluez.Adapter1");
+			DBusInterface? iface = object.get_interface("org.bluez.Adapter1");
 			if (iface == null) return;
 
 			adapters.add(((Bluetooth.Adapter) iface));
@@ -132,7 +132,7 @@ public class Bluetooth.ObjectManager : Object {
 		var devices = new Gee.LinkedList<Bluetooth.Device>();
 
 		object_manager.get_objects().foreach((object) => {
-			GLib.DBusInterface? iface = object.get_interface("org.bluez.Device1");
+			DBusInterface? iface = object.get_interface("org.bluez.Device1");
 			if (iface == null) return;
 
 			devices.add(((Bluetooth.Device) iface));
@@ -183,7 +183,7 @@ public class Bluetooth.ObjectManager : Object {
 	}
 
 	public Bluetooth.Adapter? get_adapter_from_path(string path) {
-		GLib.DBusObject? object = object_manager.get_object(path);
+		DBusObject? object = object_manager.get_object(path);
 
 		if (object != null) {
 			return (Bluetooth.Adapter?) object.get_interface("org.bluez.Adapter1");

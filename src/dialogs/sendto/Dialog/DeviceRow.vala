@@ -38,7 +38,9 @@ public class DeviceRow : Gtk.ListBoxRow {
 
 		string? device_name = device.alias;
 		if (device_name == null) {
-			if (device.icon == null) {
+			if (device.name != null) {
+				device_name = device.name;
+			} else if (device.icon != null) {
 				device_name = get_name_from_icon();
 			} else {
 				device_name = device.address;
