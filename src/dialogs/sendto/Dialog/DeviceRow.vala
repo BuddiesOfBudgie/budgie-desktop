@@ -85,7 +85,7 @@ public class DeviceRow : Gtk.ListBoxRow {
 		});
 
 		((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
-			var name = changed.lookup_value("Name", new VariantType("s"));
+			var name = changed.lookup_value("Alias", new VariantType("s"));
 			if (name != null) {
 				label.label = device.alias;
 			}
