@@ -47,9 +47,9 @@
 
 		/* Notification information */
 		public string app_name { get; construct; }
+		public string notification_icon { get; construct; }
 		public HashTable<string, Variant> hints { get; construct; }
 		public string[] actions { get; construct; }
-		public string app_icon { get; construct; }
 		public string body { get; construct set; }
 		public string summary { get; construct set; }
 		public uint expire_timeout { get; construct set; }
@@ -58,6 +58,7 @@
 		public int64 timestamp { get; construct set; }
 
 		/* Icon stuff */
+		public Gtk.Image? app_image { get; set; default = null; }
 		public Gtk.Image? image { get; set; default = null; }
 
 		private static Regex entity_regex;
@@ -66,7 +67,7 @@
 		public Notification(
 			uint32 id,
 			string app_name,
-			string app_icon,
+			string notification_icon,
 			string summary,
 			string body,
 			string[] actions,
@@ -75,14 +76,14 @@
 		) {
 			var name = app_name;
 
-			if (("budgie" in name) && ("caffeine" in app_icon)) { // Caffeine Notification
+			if (("budgie" in name) && ("caffeine" in notification_icon)) { // Caffeine Notification
 				name = _("Caffeine Mode");
 			}
 
 			Object (
 				id: id,
 				app_name: name,
-				app_icon: app_icon,
+				notification_icon: notification_icon,
 				summary: summary,
 				body: body,
 				actions: actions,
@@ -96,30 +97,34 @@
 				entity_regex = new Regex("&(?!amp;|quot;|apos;|lt;|gt;|#39;|nbsp;)");
 				tag_regex = new Regex("<(?!\\/?[biu]>)");
 			} catch (Error e) {
-				warning("Invalid notificiation regex: %s", e.message);
+				warning("Invalid notification regex: %s", e.message);
 			}
 		}
 
 		construct {
 			unowned Variant? variant = null;
-			this.timestamp = new DateTime.now().to_unix();
+			timestamp = new DateTime.now().to_unix();
 
 			// Set the priority
 			if ((variant = hints.lookup("urgency")) != null && variant.is_of_type(VariantType.BYTE)) {
-				this.urgency = (GLib.NotificationPriority) variant.get_byte();
+				urgency = (GLib.NotificationPriority) variant.get_byte();
 			}
 
 			// Set the category
 			if ((variant = hints.lookup("category")) != null && variant.is_of_type(VariantType.STRING)) {
-				this.category = variant.get_string();
+				category = variant.get_string();
 			}
 
 			// Set the application ID and app info
 			if ((variant = hints.lookup("desktop-entry")) != null && variant.is_of_type(VariantType.STRING)) {
-				this.app_id = variant.get_string();
+				app_id = variant.get_string();
 				app_id.replace(".desktop", "");
-				this.app_info = new DesktopAppInfo("%s.desktop".printf(app_id));
+				app_info = new DesktopAppInfo("%s.desktop".printf(app_id));
+
+				if (app_info != null) app_name = app_info.get_string("Name") ?? app_name;
 			}
+
+			app_image = get_appinfo_image(Gtk.IconSize.DND, app_id.down());
 
 			bool image_found = false;
 
@@ -136,42 +141,42 @@
 			}
 
 			// If there was no image data, check if we have a path to the image to use.
-			if (!image_found) {
-				if (
+			if (!image_found &&
+				(
 					(variant = hints.lookup("image-path")) != null ||
 					(variant = hints.lookup("image_path")) != null
-				) {
-					var path = variant.get_string();
+				)
+			) {
+				var path = variant.get_string();
 
-					if (Gtk.IconTheme.get_default().has_icon(path) && path != this.app_icon) {
-						var icon = new ThemedIcon(path);
-						this.image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+				if (Gtk.IconTheme.get_default().has_icon(path) && path != notification_icon) {
+					var icon = new ThemedIcon(path);
+					image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+					image_found = true;
+				} else if (path.has_prefix("/") || path.has_prefix("file://")) {
+					try {
+						var pixbuf = new Gdk.Pixbuf.from_file_at_size(path, 48, 48);
+						image = new Gtk.Image.from_pixbuf(pixbuf);
 						image_found = true;
-					} else if (path.has_prefix("/") || path.has_prefix("file://")) {
-						try {
-							var pixbuf = new Gdk.Pixbuf.from_file_at_size(path, 48, 48);
-							this.image = new Gtk.Image.from_pixbuf(pixbuf);
-							image_found = true;
-						} catch (Error e) {
-							critical("Unable to get pixbuf from path: %s", e.message);
-						}
+					} catch (Error e) {
+						critical("Unable to get pixbuf from path: %s", e.message);
 					}
 				}
 			}
 
-			// If no image path, try the app_icon parameter.
+			// If no image path, try the notification_icon parameter.
 			if (!image_found) {
-				if (app_icon != "" && !app_icon.contains("/")) { // Use the app icon directly
-					this.image = new Gtk.Image.from_icon_name(app_icon, Gtk.IconSize.DIALOG);
+				if (notification_icon != "" && !notification_icon.contains("/")) { // Use the app icon directly
+					image = new Gtk.Image.from_icon_name(notification_icon, Gtk.IconSize.DIALOG);
 					image_found = true;
-				} else if (app_icon == "" && app_info != null) { // Try to get icon from application info
-					this.image = new Gtk.Image.from_gicon(app_info.get_icon(), Gtk.IconSize.DIALOG);
+				} else if (notification_icon == "" && app_info != null) { // Try to get icon from application info
+					image = get_appinfo_image(Gtk.IconSize.DIALOG, "mail-unread-symbolic");
 					image_found = true;
-				} else if (app_icon.contains("/")) { // Try to get icon from file
-					var file = File.new_for_uri(app_icon);
+				} else if (notification_icon.contains("/")) { // Try to get icon from file
+					var file = File.new_for_uri(notification_icon);
 					if (file.query_exists()) {
 						var icon = new FileIcon(file);
-						this.image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+						image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
 						image_found = true;
 					}
 				}
@@ -188,7 +193,7 @@
 
 			// If we still don't have a valid image to use, show a generic icon
 			if (!image_found) {
-				this.image = new Gtk.Image.from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
+				image = new Gtk.Image.from_icon_name("mail-unread-symbolic", Gtk.IconSize.DIALOG);
 			}
 
 			// GLib.Notification only requires summary, so make sure we have a title
@@ -246,6 +251,25 @@
 			}
 
 			return text;
+		}
+
+		private Gtk.Image? get_appinfo_image(Gtk.IconSize size, string? fallback) {
+			if (app_info == null) {
+				var fallback_image = new Gtk.Image.from_icon_name(fallback, size);
+				var invalid_image = (fallback_image == null) || (fallback_image.icon_name == null) || (fallback_image.icon_name == "image-missing") || (fallback_image.icon_name == "");
+				return invalid_image ? null : fallback_image;
+			}
+
+			var app_icon_name = app_info.get_string("Icon"); // Use the Icon from the respective DesktopAppInfo or fallback to generic applications-internet
+			var app_icon = app_info.get_icon();
+
+			if (app_icon_name != null) {
+				return new Gtk.Image.from_icon_name(app_icon_name, size);
+			} else if ((app_icon_name == null) && (app_icon != null)) {
+				return new Gtk.Image.from_gicon(app_icon, size);
+			}
+
+			return null;
 		}
 	}
  }

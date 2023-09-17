@@ -219,7 +219,7 @@ namespace Budgie {
 
 			this.notifications[id] = notification;
 
-			string settings_app_name = app_name;
+			string settings_app_name = notification.app_name;
 
 			// If this notification has a desktop entry in the hints,
 			// set the app name to get the settings for to it.
@@ -240,7 +240,7 @@ namespace Budgie {
 							!application_settings.get_boolean("show-banners");
 
 			if (no_popup) {
-				on_notification_closed(id, app_name, NotificationCloseReason.EXPIRED);
+				on_notification_closed(id, notification.app_name, NotificationCloseReason.EXPIRED);
 			}
 		}
 
@@ -255,14 +255,14 @@ namespace Budgie {
 			string[] spam_apps = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_APPS);
 			string[] spam_categories = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
 
-			var app_id = (notification.app_id != null) ? notification.app_id : app_name;
+			var app_id = notification.app_id ?? notification.app_name;
 			bool should_store = !(notification.category != null && notification.category in spam_categories) &&
-								!(app_id != null && app_id in spam_apps);
+								!(app_id in spam_apps);
 
 			if (!should_store) return;
 
 			// Look for an existing group. If one doesn't exist, create it
-			var group = get_notification_group(app_name);
+			var group = get_notification_group(notification.app_name) ?? get_notification_group(notification.app_id);
 			if (group == null) {
 				group = new NotificationGroup(notification, sort_mode, max_per_group);
 				listbox.add(group);
@@ -289,7 +289,9 @@ namespace Budgie {
 			Raven.get_instance().UnreadNotifications();
 		}
 
-		private NotificationGroup? get_notification_group(string name) {
+		private NotificationGroup? get_notification_group(string? name) {
+			if (name == null) return null;
+
 			foreach (var group in listbox.get_children()) {
 				if (((NotificationGroup) group).app_name == name) {
 					return group as NotificationGroup;
@@ -336,7 +338,7 @@ namespace Budgie {
 			string? text = null;
 
 			if (notification_count > 0) {
-				text = ngettext("%u unread notification", "%u unread notifications", notification_count);
+				text = (ngettext("%u unread notification", "%u unread notifications", notification_count)).printf(notification_count);
 			} else {
 				text = _("No unread notifications");
 			}

@@ -87,7 +87,7 @@ namespace Budgie {
 		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep) {
 			Object(
 				app_name: notification.app_name,
-				image: notification.image,
+				image: notification.app_image ?? notification.image ?? new Gtk.Image.from_icon_name("applications-internet", Gtk.IconSize.DND),
 				tokeep: keep,
 				noti_sort_mode: sort_mode,
 				activatable: false,
