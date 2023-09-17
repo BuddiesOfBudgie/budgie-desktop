@@ -294,43 +294,43 @@ private class Properties {
 		switch (key) {
 			case "visible":
 				var old_value = visible;
-				visible = Properties.parse_bool(value, true);
+				visible = Properties.parse_bool(unbox(value), true);
 				return visible != old_value;
 			case "enabled":
 				var old_value = enabled;
-				enabled = Properties.parse_bool(value, true);
+				enabled = Properties.parse_bool(unbox(value), true);
 				return enabled != old_value;
 			case "label":
 				var old_value = label;
-				label = Properties.parse_string(value, "");
+				label = Properties.parse_string(unbox(value), "");
 				return label != old_value;
 			case "type":
 				var old_value = type;
-				type = Properties.parse_string(value, "standard");
+				type = Properties.parse_string(unbox(value), "standard");
 				return type != old_value;
 			case "disposition":
 				var old_value = disposition;
-				disposition = Properties.parse_string(value, "normal");
+				disposition = Properties.parse_string(unbox(value), "normal");
 				return disposition != old_value;
 			case "children-display":
 				var old_value = children_display;
-				children_display = Properties.parse_string(value, "");
+				children_display = Properties.parse_string(unbox(value), "");
 				return children_display != old_value;
 			case "toggle-type":
 				var old_value = toggle_type;
-				toggle_type = Properties.parse_string(value, "");
+				toggle_type = Properties.parse_string(unbox(value), "");
 				return toggle_type != old_value;
 			case "toggle-state":
 				var old_value = toggle_state;
-				toggle_state = Properties.parse_int32_bool(value, null);
+				toggle_state = Properties.parse_int32_bool(unbox(value), null);
 				return toggle_state != old_value;
 			case "icon-name":
 				var old_value = icon_name;
-				icon_name = Properties.parse_string(value, "");
+				icon_name = Properties.parse_string(unbox(value), "");
 				return icon_name != old_value;
 			case "icon-data":
 				var old_value = icon_data;
-				icon_data = Properties.parse_bytes(value, new Bytes({}));
+				icon_data = Properties.parse_bytes(unbox(value), new Bytes({}));
 				return icon_data != old_value;
 			case "shortcut":
 				shortcut = Properties.parse_shortcuts(value);
@@ -377,5 +377,14 @@ private class Properties {
 		}
 
 		return ret;
+	}
+
+	private static Variant? unbox(Variant? variant) {
+		int levels = 0; // insurance policy
+		Variant? temp = variant;
+		while (temp != null && temp.is_of_type(VariantType.VARIANT) && levels < 8) {
+			temp = variant.get_variant();
+		}
+		return temp;
 	}
 }
