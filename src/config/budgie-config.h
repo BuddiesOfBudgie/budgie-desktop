@@ -13,6 +13,7 @@
 #define _BUDGIE_CONFIG_H_
 
 #include <stdbool.h>
+#include <stddef.h>
 
 /* i.e. /usr/lib/budgie-desktop */
 extern const char* BUDGIE_MODULE_DIRECTORY;

@@ -12,6 +12,7 @@
 #ifndef CONFIG_H_INCLUDED
 #include "config.h"
 #include <stdbool.h>
+#include <stddef.h>
 
 /**
  * All this is to keep Vala happy & configured..
@@ -30,9 +31,9 @@ const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = RAVEN_PLUGIN_DATADIR_SECONDA
 #else
 const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = false;
 const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = NULL;
-const char* BUDGIE_MODULE_DATA_DIRECTORY = NULL;
-const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = NULL;
-const char* BUDGIE_RAVEN_PLUGIN_DATADIR = NULL;
+const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY = NULL;
+const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY = NULL;
+const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = NULL;
 #endif
 
 const char* BUDGIE_DATADIR = DATADIR;
