@@ -21,8 +21,10 @@ public class IconButton : Gtk.ToggleButton {
 	private const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
 
 	public Budgie.Application app { get; construct; }
-	public Budgie.Windowing.WindowGroup? window_group { get; construct set; default = null; }
 	public unowned Budgie.PopoverManager popover_manager { get; construct; }
+	public bool pinned { get; set; default = false; }
+
+	private Budgie.Windowing.WindowGroup? window_group = null;
 
 	private Icon? icon;
 	private ButtonPopover? popover;
@@ -34,7 +36,6 @@ public class IconButton : Gtk.ToggleButton {
 
 	private bool has_active_window = false;
 	private bool needs_attention = false;
-	private bool pinned = false;
 
 	public IconButton(Budgie.Application app, Budgie.PopoverManager popover_manager) {
 		Object(
@@ -47,10 +48,11 @@ public class IconButton : Gtk.ToggleButton {
 	public IconButton.with_group(Budgie.Application app, Budgie.Windowing.WindowGroup window_group, Budgie.PopoverManager popover_manager) {
 		Object(
 			app: app,
-			window_group: window_group,
 			popover_manager: popover_manager,
 			relief: Gtk.ReliefStyle.NONE
 		);
+
+		set_window_group(window_group);
 	}
 
 	construct {
@@ -342,6 +344,10 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
+	public bool has_window(libxfce4windowing.Window window) {
+		return window_group != null && window_group.has_window(window);
+	}
+
 	public Icon? get_icon() {
 		return icon;
 	}
@@ -352,6 +358,10 @@ public class IconButton : Gtk.ToggleButton {
 
 	public void set_panel_position(Budgie.PanelPosition position) {
 		panel_position = position;
+	}
+
+	public Budgie.Windowing.WindowGroup? get_window_group() {
+		return window_group;
 	}
 
 	public void set_window_group(Budgie.Windowing.WindowGroup? window_group) {

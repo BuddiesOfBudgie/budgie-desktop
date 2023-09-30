@@ -23,13 +23,15 @@ const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
  * windows in a group, as well as selection capabilities, interaction, animations
  * and rendering of "dots" for the renderable windows.
  */
-public class IconButton : Gtk.ToggleButton {
+public class IconButtonOld : Gtk.ToggleButton {
 	public Budgie.Application application { get; construct; }
 	public Settings settings { get; construct; }
 	public bool pinned { get; construct set; }
 	public Budgie.Windowing.WindowGroup? window_group { get; construct set; default = null; }
 
 	public Icon icon;
+
+	public libxfce4windowing.Window? first_window = null;
 	public libxfce4windowing.Window? last_active_window = null;
 
 	private Budgie.IconPopover? popover = null;
@@ -55,7 +57,7 @@ public class IconButton : Gtk.ToggleButton {
 	 * Bootstrap a button without window nor group, as it should be for pinned
 	 * buttons without any active apps.
 	 */
-	public IconButton(Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
+	public IconButtonOld(Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
 		Object(application: application, pinned: true, settings: settings, desktop_helper: helper, popover_manager: manager);
 		this.create_popover(); // Create our popover
 
@@ -69,7 +71,7 @@ public class IconButton : Gtk.ToggleButton {
 	/**
 	 * Bootstrap our button to be ready to work with grouping ENABLED.
 	 */
-	public IconButton.from_group(Budgie.Windowing.WindowGroup? group, Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
+	public IconButtonOld.from_group(Budgie.Windowing.WindowGroup? group, Budgie.Application application, Settings settings, DesktopHelper? helper, Budgie.PopoverManager? manager) {
 		Object(window_group: group, application: application, pinned: false, settings: settings, desktop_helper: helper, popover_manager: manager);
 
 		this.update_icon();
@@ -159,7 +161,6 @@ public class IconButton : Gtk.ToggleButton {
 	 * create_popover will create our popover
 	 */
 	public void create_popover() {
-		this.screen = Wnck.Screen.get_default(); // Get the default screen
 		this.popover = new Budgie.IconPopover(this, this.app_info, this.screen.get_workspace_count());
 		this.popover.set_pinned_state(this.pinned); // Set our pinned state
 
@@ -183,7 +184,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		this.popover.changed_pin_state.connect((new_pinned_state) => { // On changed pinned state
 			this.pinned = new_pinned_state;
-			this.desktop_helper.update_pinned(); // Update via desktop helper
 			this.pinned_changed();
 
 			if (!this.has_valid_windows(null)) { // Does not have any windows open and no longer pinned

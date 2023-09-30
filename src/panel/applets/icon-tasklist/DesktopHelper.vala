@@ -41,26 +41,4 @@ public class DesktopHelper : GLib.Object {
 		{ "text/uri-list", 0, 0 },
 		{ "application/x-desktop", 0, 0 },
 	};
-
-	/**
-	 * Return the currently active window
-	 */
-	public Wnck.Window get_active_window() {
-		return screen.get_active_window();
-	}
-
-	/**
-	 * Return the currently active workspace
-	 */
-	public Wnck.Workspace get_active_workspace() {
-		return screen.get_active_workspace();
-	}
-
-	/**
-	 * get_app_launcher will return the last past of an app_id string. Useful when handling the full path to a DesktopAppInfo
-	 */
-	public string get_app_launcher(string app_id) {
-		string[] parts = app_id.split("/");
-		return parts[parts.length - 1];
-	}
 }

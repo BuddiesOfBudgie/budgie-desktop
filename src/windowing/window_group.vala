@@ -18,7 +18,7 @@ namespace Budgie.Windowing {
 		/** The libxfce4windowing.Application that this group belongs to. */
 		public libxfce4windowing.Application application { get; construct; }
 
-		private List<libxfce4windowing.Window> windows;
+		private List<unowned libxfce4windowing.Window> windows;
 
 		/**
 		 * Emitted when the icon of the application for this group changes.
@@ -48,7 +48,7 @@ namespace Budgie.Windowing {
 		}
 
 		construct {
-			windows = new List<libxfce4windowing.Window>();
+			windows = new List<unowned libxfce4windowing.Window>();
 
 			application.icon_changed.connect(icon_changed);
 		}
@@ -117,8 +117,17 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: a list of open windows
 		 */
-		public unowned List<libxfce4windowing.Window> get_windows() {
-			return windows;
+		public List<unowned libxfce4windowing.Window> get_windows() {
+			return windows.copy();
+		}
+
+		/**
+		 * Checks whether or not the given window is in this group.
+		 *
+		 * Returns: true if the window is in this window group
+		 */
+		public bool has_window(libxfce4windowing.Window window) {
+			return windows.find(window) != null;
 		}
 
 		/**

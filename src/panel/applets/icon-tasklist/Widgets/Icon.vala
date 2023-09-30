@@ -77,30 +77,30 @@ public class Icon : Gtk.Image {
 
 		attention_cycle_counter++;
 
-		BudgieTaskList.Animation attention_animation = new BudgieTaskList.Animation();
+		Animation attention_animation = new Animation();
 		attention_animation.widget = this;
-		attention_animation.length = 50 * BudgieTaskList.MSECOND;
-		attention_animation.tween = BudgieTaskList.sine_ease_in;
+		attention_animation.length = 50 * MSECOND;
+		attention_animation.tween = sine_ease_in;
 
 		if (attention_cycle_counter % 2 == 0) {
-			attention_animation.changes = new BudgieTaskList.PropChange[] {
-				BudgieTaskList.PropChange() {
+			attention_animation.changes = new PropChange[] {
+				PropChange() {
 					property = "attention",
 					old = -5.0,
 					@new = 5.0
 				}
 			};
 		} else if (attention_cycle_counter == 5) {
-			attention_animation.changes = new BudgieTaskList.PropChange[] {
-				BudgieTaskList.PropChange() {
+			attention_animation.changes = new PropChange[] {
+				PropChange() {
 					property = "attention",
 					old = 5.0,
 					@new = 0.0
 				}
 			};
 		} else {
-			attention_animation.changes = new BudgieTaskList.PropChange[] {
-				BudgieTaskList.PropChange() {
+			attention_animation.changes = new PropChange[] {
+				PropChange() {
 					property = "attention",
 					old = (attention_cycle_counter == 1) ? 0.0 : 5.0,
 					@new = -5.0
@@ -126,24 +126,24 @@ public class Icon : Gtk.Image {
 
 		wait_cycle_counter++;
 
-		BudgieTaskList.Animation wait_animation = new BudgieTaskList.Animation();
+		Animation wait_animation = new Animation();
 		wait_animation.widget = this;
-		wait_animation.length = 700 * BudgieTaskList.MSECOND;
-		wait_animation.tween = BudgieTaskList.sine_ease_in;
-		wait_animation.changes = new BudgieTaskList.PropChange[] {
-			BudgieTaskList.PropChange() {
+		wait_animation.length = 700 * MSECOND;
+		wait_animation.tween = sine_ease_in;
+		wait_animation.changes = new PropChange[] {
+			PropChange() {
 				property = "icon_opacity",
 				old = 1.0,
 				@new = 0.3
 			}
 		};
 
-		BudgieTaskList.Animation wait_animation1 = new BudgieTaskList.Animation();
+		Animation wait_animation1 = new Animation();
 		wait_animation1.widget = this;
-		wait_animation1.length = 700 * BudgieTaskList.MSECOND;
-		wait_animation1.tween = BudgieTaskList.sine_ease_in;
-		wait_animation1.changes = new BudgieTaskList.PropChange[] {
-			BudgieTaskList.PropChange() {
+		wait_animation1.length = 700 * MSECOND;
+		wait_animation1.tween = sine_ease_in;
+		wait_animation1.changes = new PropChange[] {
+			PropChange() {
 				property = "icon_opacity",
 				old = 0.3,
 				@new = 1.0
@@ -180,12 +180,12 @@ public class Icon : Gtk.Image {
 			old_value = (double)((this.widget_width-this.pixel_size)/2);
 		}
 
-		BudgieTaskList.Animation launch_animation = new BudgieTaskList.Animation();
+		Animation launch_animation = new Animation();
 		launch_animation.widget = this;
-		launch_animation.length = 1200 * BudgieTaskList.MSECOND;
-		launch_animation.tween = BudgieTaskList.elastic_ease_out;
-		launch_animation.changes = new BudgieTaskList.PropChange[] {
-			BudgieTaskList.PropChange() {
+		launch_animation.length = 1200 * MSECOND;
+		launch_animation.tween = elastic_ease_out;
+		launch_animation.changes = new PropChange[] {
+			PropChange() {
 				property = "bounce",
 				old = old_value,
 				@new = this.bounce
