@@ -85,12 +85,11 @@ namespace Budgie {
 		private Gtk.Image image_notifications_enabled = new Gtk.Image.from_icon_name("notification-alert-symbolic", Gtk.IconSize.MENU);
 
 		private bool do_not_disturb { get; private set; default = false; }
-		private bool performing_clear_all { get; private set; default = false; }
 		private NotificationSort sort_mode { get; private set; default = NEW_OLD; }
 
 		private Dispatcher dispatcher;
 		private HashTable<uint32, Budgie.Notification> notifications;
-		private HashTable<string, NotificationGroup> notification_groups;
+		private int notification_count;
 
 		private Settings budgie_settings;
 		private Settings raven_settings;
@@ -130,7 +129,7 @@ namespace Budgie {
 			pack_start(header, false, false, 0);
 
 			notifications = new HashTable<uint32, Budgie.Notification>(direct_hash, direct_equal);
-			notification_groups = new HashTable<string, NotificationGroup>(str_hash, str_equal);
+			notification_count = 0;
 
 			var scrolledwindow = new Gtk.ScrolledWindow(null, null);
 			scrolledwindow.get_style_context().add_class("raven-background");
@@ -220,7 +219,7 @@ namespace Budgie {
 
 			this.notifications[id] = notification;
 
-			string settings_app_name = app_name;
+			string settings_app_name = notification.app_name;
 
 			// If this notification has a desktop entry in the hints,
 			// set the app name to get the settings for to it.
@@ -241,102 +240,78 @@ namespace Budgie {
 							!application_settings.get_boolean("show-banners");
 
 			if (no_popup) {
-				on_notification_closed(id, app_name, NotificationCloseReason.EXPIRED);
+				on_notification_closed(id, notification.app_name, NotificationCloseReason.EXPIRED);
 			}
 		}
 
 		private void on_notification_closed(uint32 id, string app_name, NotificationCloseReason reason) {
-			var notification = this.notifications[id];
-			if (notification == null) {
-				this.notifications.remove(id);
-				return;
-			}
+			Budgie.Notification? notification;
+			if (!notifications.steal_extended(id, null, out notification)) return;
 
 			// We only care about expired notifications so we can add them to the
 			// notifications view in Raven.
-			if (reason == NotificationCloseReason.EXPIRED) {
-				string[] spam_apps = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_APPS);
-				string[] spam_categories = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
+			if (reason != NotificationCloseReason.EXPIRED) return;
 
-				var app_id = (notification.app_id != null) ? notification.app_id : app_name;
-				bool should_store = !(notification.category != null && notification.category in spam_categories) &&
-									!(app_id != null && app_id in spam_apps);
-				if (should_store) {
-					// Get an icon to use for this application group
-					string app_icon = ((app_name != "") && (app_name != null)) ? app_name : "applications-internet"; // Default app_icon to being the name of the app, or fallback
+			string[] spam_apps = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_APPS);
+			string[] spam_categories = budgie_settings.get_strv(Budgie.ROOT_KEY_SPAM_CATEGORIES);
 
-					if ((notification.image != null) && (notification.image.icon_name != null)) { // If we have an image set
-						app_icon = notification.image.icon_name; // Use the icon specified in the image
-					}
+			var app_id = notification.app_id ?? notification.app_name;
+			bool should_store = !(notification.category != null && notification.category in spam_categories) &&
+								!(app_id in spam_apps);
 
-					app_icon = app_icon.down();
+			if (!should_store) return;
 
-					if (app_icon == "image-invalid") {
-						app_icon = "applications-internet";
-					}
+			// Look for an existing group. If one doesn't exist, create it
+			var group = get_notification_group(notification.app_name) ?? get_notification_group(notification.app_id);
+			if (group == null) {
+				group = new NotificationGroup(notification, sort_mode, max_per_group);
+				listbox.add(group);
 
-					var name = notification.app_name;
-					if (notification.app_info != null) {
-						if (notification.app_info.has_key("Icon")) {
-							app_icon = notification.app_info.get_string("Icon");
-						}
-						if (notification.app_info.has_key("Name")) {
-							name = notification.app_info.get_string("Name");
-						}
-					}
-
-					// Look for an existing group. If one doesn't exist, create it
-					var group = this.notification_groups.lookup(name);
-					if (group == null) {
-						group = new NotificationGroup(app_icon, name, sort_mode, max_per_group);
-						this.listbox.add(group);
-
-						group.dismissed_group.connect((name) => { // When we dismiss the group
-							var parent = group.get_parent();
-							listbox.remove(parent);
-							parent.destroy();
-
-							/**
-							* If we're not performing a clear all, remove this entry from notifications list and update our child count
-							* Performing a remove seems to affect a .foreach call, so best to avoid this.
-							*/
-							if (!performing_clear_all) {
-								notification_groups.remove(name);
-								update_child_count();
-							}
-
-							Raven.get_instance().ReadNotifications(); // Update our counter
-						});
-
-						group.dismissed_notification.connect((id) => {
-							update_child_count();
-							Raven.get_instance().ReadNotifications(); // Update our counter
-						});
-
-						notification_groups.insert(name, group);
-					}
-
-					// Add the notification to the group, and notify Raven
-					group.add_notification(id, notification);
-					group.show_all();
+				group.dismissed_group.connect((name) => { // When we dismiss the group
+					notification_count -= group.noti_count;
 					update_child_count();
-					Raven.get_instance().UnreadNotifications();
+					Raven.get_instance().ReadNotifications(); // Update our counter
+					group.destroy();
+				});
+
+				group.dismissed_notification.connect((id) => {
+					notification_count--;
+					update_child_count();
+					Raven.get_instance().ReadNotifications(); // Update our counter
+				});
+			}
+
+			// Add the notification to the group, and notify Raven
+			group.add_notification(id, notification);
+			group.show_all();
+			notification_count++;
+			update_child_count();
+			Raven.get_instance().UnreadNotifications();
+		}
+
+		private NotificationGroup? get_notification_group(string? name) {
+			if (name == null) return null;
+
+			foreach (var group in listbox.get_children()) {
+				if (((NotificationGroup) group).app_name == name) {
+					return group as NotificationGroup;
 				}
 			}
-			this.notifications.remove(id);
+
+			return null;
 		}
 
 		void adjust_max_per_group(uint newmax, bool trim) {
-			notification_groups.foreach((app_name, notification_group) => {
-				notification_group.set_group_max_notifications(max_per_group);
+			foreach (var group in listbox.get_children()) {
+				((NotificationGroup) group).set_group_max_notifications(max_per_group);
 				if (trim) {
-					notification_group.limit_notifications();
+					((NotificationGroup) group).limit_notifications();
 				}
-			});
+			}
 		}
 
 		void check_notification_allocation(uint len) {
-			uint n_groups = notification_groups.length;
+			uint n_groups = listbox.get_children().length();
 			uint newmax = max_per_group;
 			bool trim = false;
 			if (n_groups == 0) {
@@ -360,38 +335,26 @@ namespace Budgie {
 		}
 
 		void update_child_count() {
-			uint len = 0;
-
-			if (notification_groups.length != 0) {
-				notification_groups.foreach((app_name, notification_group) => { // For each notifications list
-					len += notification_group.noti_count; // Add this notification group count
-				});
-			}
-
 			string? text = null;
-			if (len > 1) {
-				text = _("%u unread notifications").printf(len);
-			} else if (len == 1) {
-				text = _("1 unread notification");
+
+			if (notification_count > 0) {
+				text = (ngettext("%u unread notification", "%u unread notifications", notification_count)).printf(notification_count);
 			} else {
 				text = _("No unread notifications");
 			}
 
-			Raven.get_instance().set_notification_count(len);
+			Raven.get_instance().set_notification_count(notification_count);
 			header.text = text;
-			clear_notifications_button.set_visible((len >= 1)); // Only show clear notifications button if we actually have notifications
-			check_notification_allocation(len);
+			clear_notifications_button.set_visible((notification_count > 0)); // Only show clear notifications button if we actually have notifications
+			check_notification_allocation(notification_count);
 		}
 
 		void clear_all() {
-			performing_clear_all = true;
+			foreach (var child in listbox.get_children()) {
+				child.destroy();
+			}
 
-			notification_groups.foreach((app_name, notification_group) => {
-				notification_group.dismiss_all();
-			});
-
-			notification_groups.remove_all(); // Ensure we're resetting notifications_list
-			performing_clear_all = false;
+			notification_count = 0;
 			update_child_count();
 			Raven.get_instance().ReadNotifications();
 		}

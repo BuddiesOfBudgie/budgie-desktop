@@ -13,7 +13,7 @@ namespace Budgie {
 	/**
 	 * NotificationGroup is a group of notifications.
 	 */
-	public class NotificationGroup : Gtk.Box {
+	public class NotificationGroup : Gtk.ListBoxRow {
 		private HashTable<uint32, NotificationWidget> notifications;
 
 		private Gtk.Label name_label;
@@ -21,7 +21,7 @@ namespace Budgie {
 		private Gtk.ListBox noti_box;
 
 		public string app_name { get; construct; }
-		public string app_icon { get; construct; }
+		public Gtk.Image image { get; construct; }
 		public uint tokeep { get; construct set; }
 		public NotificationSort noti_sort_mode { get; construct set; default = NEW_OLD; }
 		public int noti_count { get; private set; default = 0; }
@@ -32,13 +32,7 @@ namespace Budgie {
 		public signal void dismissed_notification(uint32 id);
 
 		construct {
-			can_focus = false; // Disable focus to prevent scroll on click
-			focus_on_click = false;
-
 			get_style_context().add_class("raven-notifications-group");
-
-			// Intentially omit _end because it messes with alignment of dismiss buttons
-			margin = 4;
 
 			notifications = new HashTable<uint32, NotificationWidget>(direct_hash, direct_equal);
 
@@ -55,11 +49,10 @@ namespace Budgie {
 			var header = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0); // Create our Notification header
 			header.get_style_context().add_class("raven-notifications-group-header");
 
-			var app_image = new Gtk.Image.from_icon_name(app_icon, Gtk.IconSize.DND) {
-				halign = Gtk.Align.START,
-				margin_end = 5,
-				pixel_size = 32, // Really ensure it's 32x32
-			};
+			var app_icon = image;
+			app_icon.halign = Gtk.Align.START;
+			app_icon.margin_end = 5;
+			app_icon.pixel_size = 32;
 
 			name_label = new Gtk.Label(app_name) {
 				ellipsize = Pango.EllipsizeMode.END,
@@ -77,28 +70,30 @@ namespace Budgie {
 
 			dismiss_button.clicked.connect(dismiss_all);
 
-			header.pack_start(app_image, false, false, 0);
+			header.pack_start(app_icon, false, false, 0);
 			header.pack_start(name_label, false, false, 0);
 			header.pack_end(dismiss_button, false, false, 0);
 
-			pack_start(header);
-			pack_start(noti_box);
+			var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 4) {
+				margin = 4,
+			};
+
+			box.pack_start(header);
+			box.pack_start(noti_box);
+
+			add(box);
 		}
 
-		public NotificationGroup(string c_app_icon, string c_app_name, NotificationSort sort_mode, uint keep) {
-			var name = c_app_name;
-
-			if (("budgie" in name) && ("caffeine" in c_app_icon)) { // Caffeine Notification
-				name = _("Caffeine Mode");
-			}
-
+		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep) {
 			Object(
-				app_name: name,
-				app_icon: c_app_icon,
+				app_name: notification.app_name,
+				image: notification.app_image ?? notification.image ?? new Gtk.Image.from_icon_name("applications-internet", Gtk.IconSize.DND),
 				tokeep: keep,
 				noti_sort_mode: sort_mode,
-				orientation: Gtk.Orientation.VERTICAL,
-				spacing: 4
+				activatable: false,
+				selectable: false,
+				can_focus: false,
+				focus_on_click: false
 			);
 		}
 
@@ -118,9 +113,7 @@ namespace Budgie {
 			update_count();
 
 			widget.closed_individually.connect(() => { // When this notification is closed
-				uint n_id = (uint) notification.id;
-				remove_notification(n_id);
-				dismissed_notification(n_id);
+				remove_notification((uint) notification.id);
 			});
 		}
 

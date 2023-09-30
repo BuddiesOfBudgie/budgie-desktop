@@ -28,7 +28,7 @@
         &.middle { border-bottom-style: none; }  // applet background between two headers
     }
 
-    .raven-notifications-view > .raven-background > .frame > list > row.activatable {
+    .raven-notifications-view > .raven-background > .frame > list {
         @extend %reset_style;
 
         .raven-notifications-group {
@@ -37,7 +37,7 @@
             }
 
             // single notification
-            > list > row.activatable {
+            box > list > row.activatable {
                 @extend %reset_style;
 
                 padding: 3px 6px;

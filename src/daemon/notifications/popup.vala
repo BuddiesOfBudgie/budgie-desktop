@@ -301,7 +301,8 @@ namespace Budgie.Notifications {
 				margin_bottom = 5,
 				margin_right = 16,
 				halign = Gtk.Align.START,
-				hexpand = true
+				hexpand = true,
+				use_markup = true
 			};
 			title_label.get_style_context().add_class("notification-title");
 
