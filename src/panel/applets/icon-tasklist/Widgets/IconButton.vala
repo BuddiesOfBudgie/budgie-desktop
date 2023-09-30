@@ -85,37 +85,46 @@ public class IconButton : Gtk.ToggleButton {
 			update_icon();
 		}
 
-		this.definite_allocation = allocation;
+		definite_allocation = allocation;
 		base.size_allocate(definite_allocation);
 
+		// If this button has active windows, set their button geometry
+		if (window_group != null && window_group.has_windows()) {
+			foreach (var win in window_group.get_windows()) {
+				try {
+					set_window_button_geometry(win);
+				} catch (Error e) {
+					warning("Unable to set button geometry for window %s: %s", win.get_name(), e.message);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets the button geometry for a window.
+	 *
+	 * What this means is that when a window is minimized, it will minimize to
+	 * the icon button's location on the screen.
+	 *
+	 * Throws: if the button geometry could not be set
+	 */
+	private void set_window_button_geometry(libxfce4windowing.Window window) throws Error {
 		int x, y;
 		var toplevel = get_toplevel();
 
-		if (toplevel == null || toplevel.get_window() == null) {
-			return;
-		}
+		if (toplevel == null || toplevel.get_window() == null) return;
 
 		translate_coordinates(toplevel, 0, 0, out x, out y);
 		toplevel.get_window().get_root_coords(x, y, out x, out y);
 
-		if (window_group != null && window_group.has_windows()) {
-			try {
-				foreach (var win in window_group.get_windows()) {
-					Gdk.Rectangle rect = {
-						x,
-						y,
-						definite_allocation.width,
-						definite_allocation.height
-					};
+		Gdk.Rectangle rect = {
+			x,
+			y,
+			definite_allocation.width,
+			definite_allocation.height
+		};
 
-					// TODO: Wayland expects another window that's relative to the current window.
-					// I have no idea what to do here.
-					win.set_button_geometry(null, rect);
-				}
-			} catch (Error e) {
-				warning("Unable to set button geometry for window: %s", e.message);
-			}
-		}
+		window.set_button_geometry(toplevel.get_window(), rect);
 	}
 
 	public Icon? get_icon() {
