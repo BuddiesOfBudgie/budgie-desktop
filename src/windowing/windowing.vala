@@ -110,13 +110,19 @@ namespace Budgie.Windowing {
 			}
 		}
 
-		private void setup_workspace_listener() {
-			workspace_manager = screen.get_workspace_manager();
+		private WorkspaceGroup? get_workspace_group() {
 			unowned var groups = workspace_manager.list_workspace_groups();
-			if (groups == null) return;
+
+			if (groups == null) return null;
 
 			unowned var element = groups.first();
-			var group = element.data as libxfce4windowing.WorkspaceGroup;
+
+			return element.data as libxfce4windowing.WorkspaceGroup;
+		}
+
+		private void setup_workspace_listener() {
+			workspace_manager = screen.get_workspace_manager();
+			var group = get_workspace_group();
 
 			if (group == null) return;
 
@@ -256,6 +262,19 @@ namespace Budgie.Windowing {
 		 */
 		public List<weak WindowGroup> get_window_groups() {
 			return applications.get_values();
+		}
+
+		/**
+		 * Get the currently active workspace.
+		 *
+		 * Returns: the active workspace, or NULL
+		 */
+		public Workspace? get_active_workspace() {
+			var group = get_workspace_group();
+
+			if (group == null) return null;
+
+			return group.get_active_workspace();
 		}
 	}
 }

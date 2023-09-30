@@ -113,6 +113,15 @@ namespace Budgie.Windowing {
 		}
 
 		/**
+		 * Get the open windows in this group.
+		 *
+		 * Returns: a list of open windows
+		 */
+		public unowned List<libxfce4windowing.Window> get_windows() {
+			return windows;
+		}
+
+		/**
 		 * Checks whether or not this group still has any open windows.
 		 *
 		 * Returns: true if there are open windows
