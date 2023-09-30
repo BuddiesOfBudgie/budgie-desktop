@@ -96,7 +96,7 @@ public class ButtonPopover : Budgie.Popover {
 
 		add(stack);
 
-		show_all();
+		stack.show_all();
 	}
 
 	public void add_window(libxfce4windowing.Window window) {
@@ -219,8 +219,6 @@ private class WindowControls : Gtk.Box {
 		window.workspace_changed.connect(() => {
 			// TODO: Not implemented yet
 		});
-
-		show_all();
 	}
 
 	private void update_maximize_label() {

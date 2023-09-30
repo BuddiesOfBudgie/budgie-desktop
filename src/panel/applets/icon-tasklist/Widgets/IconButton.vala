@@ -133,6 +133,16 @@ public class IconButton : Gtk.ToggleButton {
 		window.set_button_geometry(toplevel.get_window(), rect);
 	}
 
+	public override bool button_release_event(Gdk.EventButton event) {
+		switch (event.button) {
+			case Gdk.BUTTON_SECONDARY:
+				popover_manager.show_popover(this);
+				return Gdk.EVENT_STOP;
+		}
+
+		return Gdk.EVENT_PROPAGATE;
+	}
+
 	public override bool draw(Cairo.Context ctx) {
 		int x = definite_allocation.x;
 		int y = definite_allocation.y;
