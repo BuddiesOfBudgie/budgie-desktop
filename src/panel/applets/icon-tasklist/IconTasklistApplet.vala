@@ -431,9 +431,11 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * Our panel has moved somewhere, stash the positions
 	 */
 	public override void panel_position_changed(Budgie.PanelPosition position) {
-		this.desktop_helper.panel_position = position;
-		this.desktop_helper.orientation = this.get_orientation();
-		this.main_layout.set_orientation(this.desktop_helper.orientation);
+		foreach (Widget.IconButton button in buttons.get_values()) {
+			button.set_panel_position(position);
+		}
+
+		main_layout.set_orientation(get_orientation());
 		resize();
 	}
 

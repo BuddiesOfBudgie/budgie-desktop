@@ -30,6 +30,10 @@ public class IconButton : Gtk.ToggleButton {
 	private Gtk.Allocation definite_allocation;
 	private int target_icon_size = 0;
 
+	private Budgie.PanelPosition panel_position;
+
+	private bool has_active_window = false;
+	private bool needs_attention = false;
 	private bool pinned = false;
 
 	public IconButton(Budgie.Application app, Budgie.PopoverManager popover_manager) {
@@ -127,8 +131,227 @@ public class IconButton : Gtk.ToggleButton {
 		window.set_button_geometry(toplevel.get_window(), rect);
 	}
 
+	public override bool draw(Cairo.Context ctx) {
+		int x = definite_allocation.x;
+		int y = definite_allocation.y;
+		int width = definite_allocation.width;
+		int height = definite_allocation.height;
+
+		List<unowned libxfce4windowing.Window> windows;
+
+		if (window_group != null && window_group.has_windows()) {
+			windows = window_group.get_windows();
+		} else {
+			windows = new List<unowned libxfce4windowing.Window>();
+		}
+
+		if (windows.is_empty()) {
+			return base.draw(ctx);
+		}
+
+		int count = windows.length() > 5 ? 5 : (int) windows.length();
+		var styles = get_style_context();
+
+		Gdk.RGBA color;
+
+		if (!styles.lookup_color("budgie_tasklist_indicator_color", out color)) {
+			color.parse("#3C6DA6");
+		}
+
+		if (get_active()) {
+			if (!styles.lookup_color("budgie_tasklist_indicator_color_active", out color)) {
+				color.parse("#5294E2");
+			}
+		} else {
+			if (needs_attention) {
+				if (!styles.lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
+					color.parse("#D84E4E");
+				}
+			}
+
+			draw_inactive(ctx, color);
+			return base.draw(ctx);
+		}
+
+		int counter = 0;
+		int previous_x = 0;
+		int previous_y = 0;
+		int spacing = width % count;
+		spacing = (spacing == 0) ? 1 : spacing;
+
+		foreach (var window in windows) {
+			if (counter == count) break;
+
+			if (window.is_skip_tasklist()) continue;
+
+			// Set the position of our window indicators
+			int indicator_x = 0;
+			int indicator_y = 0;
+
+			switch (panel_position) {
+				case Budgie.PanelPosition.LEFT:
+					if (counter == 0) {
+						indicator_y = y;
+					} else {
+						previous_y = indicator_y = previous_y + (height/count);
+						indicator_y += spacing;
+					}
+					indicator_x = x;
+					break;
+				case Budgie.PanelPosition.RIGHT:
+					if (counter == 0) {
+						indicator_y = y;
+					} else {
+						previous_y = indicator_y = previous_y + (height/count);
+						indicator_y += spacing;
+					}
+					indicator_x = x + width;
+					break;
+				case Budgie.PanelPosition.TOP:
+					if (counter == 0) {
+						indicator_x = x;
+					} else {
+						previous_x = indicator_x = previous_x + (width/count);
+						indicator_x += spacing;
+					}
+					indicator_y = y;
+					break;
+				case Budgie.PanelPosition.BOTTOM:
+					if (counter == 0) {
+						indicator_x = x;
+					} else {
+						previous_x = indicator_x = previous_x + (width/count);
+						indicator_x += spacing;
+					}
+					indicator_y = y + height;
+					break;
+				default:
+					break;
+			}
+
+			ctx.set_line_width(6);
+
+			if (count > 1 && has_active_window) {
+				Gdk.RGBA color2 = color;
+
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color2)) {
+					color2.parse("#6BBFFF");
+				}
+
+				ctx.set_source_rgba(color2.red, color2.green, color2.blue, 1);
+			} else {
+				ctx.set_source_rgba(color.red, color.green, color.blue, 1);
+			}
+
+			ctx.move_to(indicator_x, indicator_y);
+
+			switch (panel_position) {
+				case Budgie.PanelPosition.LEFT:
+				case Budgie.PanelPosition.RIGHT:
+					int to = 0;
+
+					if (counter == count-1) {
+						to = y + height;
+					} else {
+						to = previous_y + (height / count);
+					}
+
+					ctx.line_to(indicator_x, to);
+					break;
+				default:
+					int to = 0;
+
+					if (counter == count-1) {
+						to = x + width;
+					} else {
+						to = previous_x + (width / count);
+					}
+
+					ctx.line_to(to, indicator_y);
+					break;
+			}
+
+			ctx.stroke();
+			counter ++;
+		}
+
+		return base.draw(ctx);
+	}
+
+	public void draw_inactive(Cairo.Context ctx, Gdk.RGBA color) {
+		int x = definite_allocation.x;
+		int y = definite_allocation.y;
+		int width = definite_allocation.width;
+		int height = definite_allocation.height;
+
+		List<unowned libxfce4windowing.Window> windows;
+
+		if (window_group != null && window_group.has_windows()) {
+			windows = window_group.get_windows();
+		} else {
+			windows = new List<unowned libxfce4windowing.Window>();
+		}
+
+		if (windows.is_empty()) return;
+
+		int count = windows.length() > 5 ? 5 : (int) windows.length();
+		int counter = 0;
+
+		foreach (var window in windows) {
+			if (counter == count) break;
+
+			if (window.is_skip_pager() || window.is_skip_tasklist()) continue;
+
+			int indicator_x = 0;
+			int indicator_y = 0;
+
+			switch (panel_position) {
+				case Budgie.PanelPosition.TOP:
+					indicator_x = x + (width / 2);
+					indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
+					indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
+					indicator_y = y + (INDICATOR_SIZE / 2);
+					break;
+				case Budgie.PanelPosition.BOTTOM:
+					indicator_x = x + (width / 2);
+					indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
+					indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
+					indicator_y = y + height - (INDICATOR_SIZE / 2);
+					break;
+				case Budgie.PanelPosition.LEFT:
+					indicator_y = x + (height / 2);
+					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - (INACTIVE_INDICATOR_SPACING * 2);
+					indicator_y += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
+					indicator_x = y + (INDICATOR_SIZE / 2);
+					break;
+				case Budgie.PanelPosition.RIGHT:
+					indicator_y = x + (height / 2);
+					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
+					indicator_y += ((INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING) * counter);
+					indicator_x = y + width - (INDICATOR_SIZE / 2);
+					break;
+				default:
+					break;
+			}
+
+			ctx.set_source_rgba(color.red, color.green, color.blue, 1);
+			ctx.arc(indicator_x, indicator_y, INDICATOR_SIZE, 0, Math.PI * 2);
+			ctx.fill();
+
+			counter++;
+		}
+	}
+
 	public Icon? get_icon() {
 		return icon;
+	}
+
+	public void set_active_window(bool active) {
+		has_active_window = active;
+	}
+
+	public void set_panel_position(Budgie.PanelPosition position) {
+		panel_position = position;
 	}
 
 	public void set_window_group(Budgie.Windowing.WindowGroup? window_group) {
