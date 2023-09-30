@@ -27,6 +27,7 @@ namespace Budgie {
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
 		public bool dbus_activatable { get; private set; default = false; }
+		public unowned string[] actions { get; private set; }
 
 		/**
 		 * Emitted when the application is launched.
@@ -60,6 +61,7 @@ namespace Budgie {
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
 			this.should_show = app_info.should_show();
 			this.dbus_activatable = app_info.get_boolean("DBusActivatable");
+			this.actions = app_info.list_actions();
 
 			// Try to get an icon from the desktop file
 			var desktop_icon = app_info.get_icon();
