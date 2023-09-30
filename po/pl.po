@@ -1259,19 +1259,19 @@ msgstr "Pozostały czas działania"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Tryb wydajności"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Oszczędzanie energii"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Zrównoważony"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Wydajność"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1721,27 +1721,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Tryb sortowania"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Sortuj według typu"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Sortuj alfabetycznie"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Sortuj alfabetycznie w odwrotnej kolejności"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Sortuj według daty rosnąco"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Sortuj według daty malejąco"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1774,15 +1774,15 @@ msgstr "Uwierzytelnienie jest wymagane"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Detale"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Działanie:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1871,7 +1871,7 @@ msgstr "Lista zadań aplikacji z ikonami i etykietami."
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "Zasobnik systemowy zgodny ze specyfikacją Freedesktop Status Notifier"
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1883,7 +1883,7 @@ msgstr "Wyświetlanie obszarów roboczych i przełączanie się między nimi."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Zarządzaj koszem z panelu Budgie"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"

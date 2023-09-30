@@ -38,9 +38,17 @@ msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
 msgstr[0] ""
+"Вы получили %d уведомление, когда приложение работало в полноэкранном "
+"режиме."
 msgstr[1] ""
+"Вы получили %d уведомления, когда приложение работало в полноэкранном "
+"режиме."
 msgstr[2] ""
+"Вы получили %d уведомлений, когда приложение работало в полноэкранном "
+"режиме."
 msgstr[3] ""
+"Вы получили %d уведомлений, когда приложение работало в полноэкранном "
+"режиме."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -167,10 +175,10 @@ msgstr "Caffeine Boost отключен"
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Отключение произойдёт через 1 минуту"
+msgstr[1] "Отключение произойдёт через %d минуты"
+msgstr[2] "Отключение произойдёт через %d минут"
+msgstr[3] "Отключение произойдёт через %d минут"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1102,10 +1110,10 @@ msgstr "Num lock выключен"
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%u непрочитанное уведомление "
+msgstr[1] "%u непорчитанное уведомление"
+msgstr[2] "%u непрочитанных уведомлений"
+msgstr[3] "%u непрочитанных уведомлений"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377
@@ -1270,19 +1278,19 @@ msgstr "Осталось заряда"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Режим производительности"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Сохранение энергии"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Сбалансированный"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Производительность"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1732,27 +1740,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Режим сортировки"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Тип сортировки"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Сортировка по алфавиту"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Сортировка в обратном порядке по алфавиту"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Сортировка по дате"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Сортировка в обратном порядке по дате"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1785,15 +1793,15 @@ msgstr "Требуется аутентификация"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Детали"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Действие:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ИД:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1885,6 +1893,7 @@ msgstr "Список задач приложения с пиктограммам
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
+"Системный трей, реализующий спецификацию уведомителя состояния Freedesktop."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1896,7 +1905,7 @@ msgstr "Отображение рабочих пространств и пере
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Управляйте своим мусором с панели Budgie"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"

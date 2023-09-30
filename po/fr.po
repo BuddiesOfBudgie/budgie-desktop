@@ -5,8 +5,8 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
+# linky, 2023
 # Patrice Genieys, 2023
-# linky Wolfka, 2023
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: linky Wolfka, 2023\n"
+"Last-Translator: Patrice Genieys, 2023\n"
 "Language-Team: French (https://app.transifex.com/buddiesofbudgie/teams/129844/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,8 +37,14 @@ msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
 msgstr[0] ""
+"Vous avez reçu %d notification pendant qu'une application était en plein "
+"écran."
 msgstr[1] ""
+"Vous avez reçu %d notifications pendant qu'une application était en plein "
+"écran."
 msgstr[2] ""
+"Vous avez reçu %d notifications pendant qu'une application était en plein "
+"écran."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -165,9 +171,9 @@ msgstr "Injection de Caféine désactivée"
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "S'éteindra dans une minute"
+msgstr[1] "S'éteindra dans %d minutes"
+msgstr[2] "S'éteindra dans %d minutes"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1109,9 +1115,9 @@ msgstr "La touche Verr. Num. est désactivée"
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u notification non lue"
+msgstr[1] "%u notifications non lues"
+msgstr[2] "%u notifications non lues"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377
@@ -1277,19 +1283,19 @@ msgstr "Batterie restante"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Mode performance"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Économie d'énergie"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Équilibré"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Performance"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1739,27 +1745,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Mode de tri"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Trier par type"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Trier par ordre alphabétique"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Trier par ordre alphabétique inversé"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Trier par date croissante"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Trier par date décroissante"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1792,15 +1798,15 @@ msgstr "L'authentification est requise"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Détails"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Action:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1892,6 +1898,8 @@ msgstr "Une liste de tâches d'application avec icônes et étiquettes."
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
+"La Barre d'état système utilise les spécifications Freedesktop Status "
+"Notifier."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1903,7 +1911,7 @@ msgstr "Afficher les espaces de travail et passer de l'un à l'autre."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Gérer votre corbeille depuis le panneau Budgie"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
