@@ -131,6 +131,17 @@ namespace Budgie.Windowing {
 
 		private void on_active_window_changed(Window old_window) {
 			var new_window = screen.get_active_window();
+
+			foreach (var group in applications.get_values()) {
+				if (group.has_window(new_window)) {
+					group.set_active_window(new_window);
+				} else if (group.has_window(old_window)) {
+					group.set_last_active_window(old_window);
+				}
+			}
+
+			last_active_window = old_window;
+
 			active_window_changed(old_window, new_window);
 		}
 

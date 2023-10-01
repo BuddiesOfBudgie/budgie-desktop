@@ -19,6 +19,8 @@ namespace Budgie.Windowing {
 		public libxfce4windowing.Application application { get; construct; }
 
 		private List<unowned libxfce4windowing.Window> windows;
+		private unowned libxfce4windowing.Window? active_window = null;
+		private unowned libxfce4windowing.Window? last_active_window = null;
 
 		/**
 		 * Emitted when the icon of the application for this group changes.
@@ -93,6 +95,25 @@ namespace Budgie.Windowing {
 		}
 
 		/**
+		 * Get the currently active window in this group if
+		 * one is active.
+		 *
+		 * Returns: the currently active window, or NULL
+		 */
+		 public unowned libxfce4windowing.Window? get_active_window() {
+			return active_window;
+		}
+
+		/**
+		 * Get the last active window in this group.
+		 *
+		 * Returns: the last active window, or NULL
+		 */
+		public unowned libxfce4windowing.Window? get_last_active_window() {
+			return last_active_window;
+		}
+
+		/**
 		 * Get the first opened window in this group.
 		 *
 		 * Returns: the first opened window or null
@@ -138,6 +159,20 @@ namespace Budgie.Windowing {
 		public bool has_windows() {
 			debug(@"window group '$(application.get_name()) has $(windows.length()) windows in it");
 			return windows.length() > 0;
+		}
+
+		/**
+		 * Set the currently active window.
+		 */
+		public void set_active_window(libxfce4windowing.Window? window) {
+			active_window = window;
+		}
+
+		/**
+		 * Set the previously active window.
+		 */
+		public void set_last_active_window(libxfce4windowing.Window? window) {
+			last_active_window = window;
 		}
 	}
 }

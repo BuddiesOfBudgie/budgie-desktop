@@ -135,6 +135,27 @@ public class IconButton : Gtk.ToggleButton {
 
 	public override bool button_release_event(Gdk.EventButton event) {
 		switch (event.button) {
+			case Gdk.BUTTON_PRIMARY:
+				if (window_group != null) {
+					if (has_active_window) {
+						var window = window_group.get_active_window();
+
+						try {
+							window.set_minimized(!window.is_minimized());
+						} catch (Error e) {
+							warning("Unable to set minimized state of window %s: %s", window.get_name(), e.message);
+						}
+					} else {
+						var window = window_group.get_last_active_window();
+
+						try {
+							window.activate(event.time);
+						} catch (Error e) {
+							warning("Unable to activate window %s: %s", window.get_name(), e.message);
+						}
+					}
+				}
+				return Gdk.EVENT_STOP;
 			case Gdk.BUTTON_SECONDARY:
 				popover_manager.show_popover(this);
 				return Gdk.EVENT_STOP;

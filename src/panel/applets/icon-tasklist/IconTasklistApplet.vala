@@ -426,8 +426,10 @@ public class IconTasklistApplet : Budgie.Applet {
 	private void on_active_window_changed(libxfce4windowing.Window? old_active_window, libxfce4windowing.Window? new_active_window) {
 		foreach (IconButton button in buttons.get_values()) {
 			if (button.has_window(new_active_window)) {
-				// button.last_active_window = new_active_window;
+				button.set_active_window(true);
 				// TODO: button.attention(false);
+			} else {
+				button.set_active_window(false);
 			}
 
 			button.update();
