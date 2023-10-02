@@ -71,6 +71,16 @@ public class IconButton : Gtk.ToggleButton {
 
 		// TODO: connect signals
 
+		if (app != null) {
+			app.launched.connect_after(() => {
+				icon.waiting = false;
+			});
+
+			app.launch_failed.connect_after(() => {
+				icon.waiting = false;
+			});
+		}
+
 		popover_manager.register_popover(this, popover);
 
 		add(icon);
@@ -153,6 +163,20 @@ public class IconButton : Gtk.ToggleButton {
 						} catch (Error e) {
 							warning("Unable to activate window %s: %s", window.get_name(), e.message);
 						}
+					}
+				} else {
+					if (!pinned) {
+						warning("IconButton was clicked with no active windows, but is not pinned!");
+						return Gdk.EVENT_STOP;
+					}
+
+					icon.animate_launch(panel_position);
+					icon.waiting = true;
+					icon.animate_wait();
+
+					if (!app.launch()) {
+						warning("Failed to launch application: %s", app.name);
+						return Gdk.EVENT_STOP;
 					}
 				}
 				return Gdk.EVENT_STOP;

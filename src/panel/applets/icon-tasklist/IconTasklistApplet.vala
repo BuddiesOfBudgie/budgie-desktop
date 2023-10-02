@@ -142,6 +142,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 			var application = new Budgie.Application(info);
 			var button = new IconButton(application, manager);
+			button.pinned = true;
 
 			add_icon_button(launcher, button);
 		}
