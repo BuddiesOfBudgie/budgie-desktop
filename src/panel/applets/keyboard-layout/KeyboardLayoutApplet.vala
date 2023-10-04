@@ -11,7 +11,7 @@
 
 public class KeyboardLayoutPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
-		return new KeyboardLayoutApplet();
+		return new KeyboardLayoutApplet(uuid);
 	}
 }
 
@@ -210,7 +210,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	private Gtk.Image img;
 
 	/* Tracking input-source settings */
-	private Settings? settings;
+	private Settings? input_source_settings;
 
 	/* Keyboard tracking */
 	Array<InputSource> sources;
@@ -228,7 +228,19 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	/* ibus interfacing */
 	private AppletIBusManager? ibus_manager = null;
 
-	public KeyboardLayoutApplet() {
+	/* User settings */
+	private Settings user_settings;
+	public string uuid { public set ; public get; }
+
+	public KeyboardLayoutApplet(string uuid) {
+		Object(uuid: uuid);
+
+		settings_schema = "com.solus-project.keyboard-layout";
+		settings_prefix = "/com/solus-project/budgie-panel/instance/keyboard-layout";
+
+		user_settings = get_applet_settings(uuid);
+		user_settings.changed.connect(on_settings_changed);
+
 		/* Graphical stuff */
 		widget = new Gtk.EventBox();
 
@@ -264,7 +276,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		layout.pack_start(label_stack, false, false, 0);
 
 		/* Popover menu magicks */
-		popover = new Budgie.Popover(img_wrap);
+		popover = new Budgie.Popover(layout);
 		popover.get_style_context().add_class("user-menu");
 		listbox = new Gtk.ListBox();
 		listbox.set_can_focus(false);
@@ -275,7 +287,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 		/* Settings/init */
 		xkb = new Gnome.XkbInfo();
-		settings = new Settings("org.gnome.desktop.input-sources");
+		input_source_settings = new Settings("org.gnome.desktop.input-sources");
 
 		/* Hook up the ibus manager */
 		this.ibus_manager = new AppletIBusManager();
@@ -285,17 +297,23 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 		/* Go show up */
 		show_all();
+
+		on_settings_changed("show-icon");
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
 		Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
-		int margin = 4;
 		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
 			orient = Gtk.Orientation.VERTICAL;
-			margin = 0;
+			img.set_margin_end(5);
+			label_stack.set_margin_start(2);
 		}
-		img.set_margin_end(margin);
+		else {
+			img.set_margin_end(0);
+			label_stack.set_margin_start(4);
+		}
 		this.layout.set_orientation(orient);
+		on_settings_changed("show-icon");
 	}
 
 	/**
@@ -303,7 +321,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	 * or we explicitly find it won't work
 	 */
 	private void on_ibus_ready() {
-		settings.changed.connect(on_settings_changed);
+		input_source_settings.changed.connect(on_settings_changed);
 
 		/* Forcibly init ourselves */
 		on_settings_changed("sources");
@@ -317,7 +335,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		var btn = item as InputSourceMenuItem;
 		uint idx = btn.idx;
 
-		this.settings.set_uint("current", idx);
+		this.input_source_settings.set_uint("current", idx);
 		popover.hide();
 	}
 
@@ -356,10 +374,19 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	}
 
 	private void on_settings_changed(string key) {
-		if (key == "sources") {
-			update_sources();
-		} else if (key == "current") {
-			update_current();
+		switch (key)
+		{
+			case "sources":
+				update_sources();
+				break;
+			case "current":
+				update_current();
+				break;
+			case "show-icon":
+				img_wrap.set_visible(user_settings.get_boolean(key));
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -373,7 +400,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		sources = null;
 		sources = new Array<InputSource>();
 
-		var val = settings.get_value("sources");
+		var val = input_source_settings.get_value("sources");
 		for (size_t i = 0; i < val.n_children(); i++) {
 			InputSource? source = null;
 			string? id = null;
@@ -450,7 +477,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	 * Update our knowledge of the currently selected keyboard layout
 	 */
 	private void update_current() {
-		uint id = settings.get_uint("current");
+		uint id = input_source_settings.get_uint("current");
 		/* Safety: Check we have this guy :] */
 		Gtk.Widget? child = label_stack.get_child_by_name(id.to_string());
 		if (child == null) {
@@ -474,6 +501,27 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
 		manager.register_popover(widget, popover);
+	}
+
+	public override Gtk.Widget? get_settings_ui() {
+		return new KeyboardLayoutSettings(get_applet_settings(uuid));
+	}
+
+	public override bool supports_settings() {
+		return true;
+	}
+}
+
+[GtkTemplate (ui="/com/solus-project/keyboard-layout/settings.ui")]
+public class KeyboardLayoutSettings : Gtk.Grid {
+	[GtkChild]
+	private unowned Gtk.Switch? switch_icon;
+
+	private Settings? settings;
+
+	public KeyboardLayoutSettings(Settings? settings) {
+		this.settings = settings;
+		settings.bind("show-icon", switch_icon, "active", SettingsBindFlags.DEFAULT);
 	}
 }
 
