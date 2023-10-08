@@ -62,6 +62,7 @@ public class TrayApplet : Budgie.Applet {
 	private uint dbus_identifier;
 	private SnWatcherInterface? watcher = null;
 	private int panel_size;
+	private const int DEFAULT_PANEL_SIZE = 36;
 
 	public TrayApplet(string uuid) {
 		Object(uuid: uuid);
@@ -79,8 +80,7 @@ public class TrayApplet : Budgie.Applet {
 			layout.set_spacing(settings.get_int("spacing"));
 		});
 		settings.changed["scaling"].connect((key) => {
-			var size = settings.get_boolean("scaling") ? panel_size : 36;
-			items.get_values().foreach((item) => item.resize(size));
+			items.get_values().foreach((item) => item.resize(get_target_panel_size()));
 		});
 
 		items = new HashTable<string, TrayItem>(str_hash, str_equal);
@@ -172,7 +172,7 @@ public class TrayApplet : Budgie.Applet {
 		if (key in items) return;
 
 		try {
-			var new_item = new TrayItem(name, object_path, panel_size);
+			var new_item = new TrayItem(name, object_path, get_target_panel_size());
 			items.set(key, new_item);
 			if (object_path == "/org/ayatana/NotificationItem/nm_applet") {
 				layout.pack_end(new_item);
@@ -182,6 +182,14 @@ public class TrayApplet : Budgie.Applet {
 			}
 		} catch (Error e) {
 			warning("Failed to fetch dbus item info for name=%s and path=%s", name, object_path);
+		}
+	}
+
+	private int get_target_panel_size() {
+		if (settings.get_boolean("scaling")) {
+			return panel_size;
+		} else {
+			return (int) Math.fmin(panel_size, DEFAULT_PANEL_SIZE);
 		}
 	}
 
@@ -199,11 +207,9 @@ public class TrayApplet : Budgie.Applet {
 
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
 		panel_size = panel;
-		if (settings.get_boolean("scaling")) {
-			items.get_values().foreach((item)=>{
-				item.resize(panel);
-			});
-		}
+		items.get_values().foreach((item) => {
+			item.resize(get_target_panel_size());
+		});
 	}
 
 	public override bool supports_settings() {
