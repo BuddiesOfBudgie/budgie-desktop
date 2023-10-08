@@ -207,7 +207,7 @@ public class TrayApplet : Budgie.Applet {
 
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
 		panel_size = panel;
-		items.get_values().foreach((item)=>{
+		items.get_values().foreach((item) => {
 			item.resize(get_target_panel_size());
 		});
 	}
