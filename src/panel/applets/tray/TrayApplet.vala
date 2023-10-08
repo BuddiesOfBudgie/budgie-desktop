@@ -172,7 +172,8 @@ public class TrayApplet : Budgie.Applet {
 		if (key in items) return;
 
 		try {
-			var new_item = new TrayItem(name, object_path, panel_size);
+			var size = settings.get_boolean("scaling") ? panel_size : 36;
+			var new_item = new TrayItem(name, object_path, size);
 			items.set(key, new_item);
 			if (object_path == "/org/ayatana/NotificationItem/nm_applet") {
 				layout.pack_end(new_item);
