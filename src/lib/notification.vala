@@ -115,15 +115,27 @@
 				category = variant.get_string();
 			}
 
-			// Set the application ID and app info
+			// Try to set the application ID and app info
 			if ((variant = hints.lookup("desktop-entry")) != null && variant.is_of_type(VariantType.STRING)) {
 				app_id = variant.get_string();
 				app_id.replace(".desktop", "");
 				app_info = new DesktopAppInfo("%s.desktop".printf(app_id));
-
-				if (app_info != null) app_name = app_info.get_string("Name") ?? app_name;
 			}
 
+			// Because following specs is a lost art, sometimes the desktop-entry
+			// value does not correspond to the desktop file. So, try to best-guess
+			// the desktop id instead.
+			if (app_info == null) {
+				app_id = app_name.replace(" ", "-").down();
+				app_info = new DesktopAppInfo("%s.desktop".printf(app_id));
+			}
+
+			// Make sure we have the best app name
+			if (app_info != null) {
+				app_name = app_info.get_string("Name") ?? app_name;
+			}
+
+			// Try to get the application's image
 			app_image = get_appinfo_image(Gtk.IconSize.DND, app_id.down());
 
 			bool image_found = false;
@@ -272,4 +284,4 @@
 			return null;
 		}
 	}
- }
+}
