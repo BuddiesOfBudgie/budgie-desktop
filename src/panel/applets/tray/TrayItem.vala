@@ -163,11 +163,24 @@ internal class TrayItem : Gtk.EventBox {
 		}
 
 		if (icon_name != null && icon_name.length > 0) {
-			var icon_theme = Gtk.IconTheme.get_default();
-			if (icon_theme_path != null && !icon_theme.has_icon(icon_name)) {
+			if (icon_theme_path != null && !Gtk.IconTheme.get_default().has_icon(icon_name)) {
+				var icon_theme = new Gtk.IconTheme();
 				icon_theme.prepend_search_path(icon_theme_path);
+				try {
+					var pixbuf = icon_theme.load_icon(icon_name, target_icon_size, 0);
+					if (pixbuf != null) {
+						icon.set_from_pixbuf(pixbuf);
+					} else {
+						icon.set_from_icon_name(fallback_icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+					}
+				} catch (Error e) {
+					warning("Failed to fetch icon with name %s for tray icon: %s", icon_name, e.message);
+					icon.set_from_icon_name(fallback_icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+				}
+			} else {
+				icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR);
 			}
-			icon.set_from_icon_name(icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+
 			icon.visible = true;
 		} else if (icon_pixmap != null) {
 			// ARGB32 to RGBA32
@@ -216,7 +229,7 @@ internal class TrayItem : Gtk.EventBox {
 				} else {
 					set_tooltip_text(title);
 				}
-				
+
 				return;
 			} else if (dbus_properties.tool_tip.is_of_type(VariantType.STRING)) {
 				// quirk for TeamViewer
