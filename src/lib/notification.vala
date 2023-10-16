@@ -267,9 +267,13 @@
 
 		private Gtk.Image? get_appinfo_image(Gtk.IconSize size, string? fallback) {
 			if (app_info == null) {
-				var fallback_image = new Gtk.Image.from_icon_name(fallback, size);
-				var invalid_image = (fallback_image == null) || (fallback_image.icon_name == null) || (fallback_image.icon_name == "image-missing") || (fallback_image.icon_name == "");
-				return invalid_image ? null : fallback_image;
+				var theme = Gtk.IconTheme.get_default();
+
+				if (!theme.has_icon(fallback)) {
+					return null;
+				}
+
+				return new Gtk.Image.from_icon_name(fallback, size);
 			}
 
 			var app_icon_name = app_info.get_string("Icon"); // Use the Icon from the respective DesktopAppInfo or fallback to generic applications-internet
