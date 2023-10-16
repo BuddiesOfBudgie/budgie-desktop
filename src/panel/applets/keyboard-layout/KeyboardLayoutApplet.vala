@@ -260,7 +260,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		get_style_context().add_class("keyboard-indicator");
 
 		/* Layout */
-		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 4);
 		widget.add(layout);
 
 		/* Image */
@@ -302,17 +302,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
-		Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
-		if (position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT) {
-			orient = Gtk.Orientation.VERTICAL;
-			img.set_margin_end(5);
-			label_stack.set_margin_start(2);
-		}
-		else {
-			img.set_margin_end(0);
-			label_stack.set_margin_start(4);
-		}
-		this.layout.set_orientation(orient);
+		this.layout.set_orientation(position == Budgie.PanelPosition.LEFT || position == Budgie.PanelPosition.RIGHT ? Gtk.Orientation.VERTICAL : Gtk.Orientation.HORIZONTAL);
 		on_settings_changed("show-icon");
 	}
 
@@ -390,12 +380,6 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		}
 	}
 
-	/*
-	 * Reset InputSource list and produce something consumable by xkb
-	 *
-	 * TODO: Share code between WM and plugin in private Budgie library in
-	 * the C rewrite, this is a joke now.
-	 */
 	void update_sources() {
 		sources = null;
 		sources = new Array<InputSource>();
