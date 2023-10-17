@@ -152,8 +152,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		windowing.active_window_changed.connect_after(on_active_window_changed);
 		windowing.active_workspace_changed.connect_after(update_buttons);
 
-		windowing.window_group_added.connect((group) => {});
-		windowing.window_group_removed.connect((group) => {});
+		windowing.window_group_added.connect(on_app_opened);
+		windowing.window_group_removed.connect(on_app_closed);
 
 		// TODO: Figure out if any of this is really needed
 		//  this.abomination.updated_group.connect((group) => { // try to properly group icons
@@ -354,19 +354,23 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * on_app_opened handles when we open a new app
 	 */
 	private void on_app_opened(Budgie.Windowing.WindowGroup group) {
-		string application_id = group.application.get_id().to_string();
-		var app_info = new DesktopAppInfo(group.get_desktop_id());
+		string application_id = group.group_id.to_string();
 
-		if (app_info == null) return;
-		var application = new Budgie.Application(app_info);
+		if (group.app_info == null) {
+			warning("Couldn't get app info from window");
+			return;
+		}
 
-		if (buttons.contains(application_id)) {
+		var application = new Budgie.Application(group.app_info);
+
+		if (application.desktop_id in buttons) {
 			application_id = application.desktop_id;
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (buttons.contains(application_id)) {
-			IconButton first_button = buttons.get(application_id);
+		if (application_id in buttons) {
+			var first_button = buttons[application_id];
+
 			if (!first_button.get_icon().waiting && first_button.get_icon().get_realized()) {
 				first_button.get_icon().waiting = true;
 				first_button.get_icon().animate_wait();
@@ -374,11 +378,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		IconButton? button = null;
-		if (buttons.contains(application_id)) { // try to get existing button if any
-			button = buttons.get(application_id);
+		if (application_id in buttons) { // try to get existing button if any
+			button = buttons[application_id];
 
 			if (button != null) {
-				this.add_button(application_id, button); // map app to it's button so that we can update it later on
+				add_button(application_id, button); // map app to it's button so that we can update it later on
 			}
 		}
 
@@ -395,7 +399,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_app_closed(Budgie.Windowing.WindowGroup group) {
-		var app_id = group.application.get_id().to_string();
+		var app_id = group.group_id.to_string();
 		IconButton? button = buttons.get(app_id);
 
 		if (button == null) { // Button might be pinned, try to get button from launcher instead
@@ -408,6 +412,10 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		if (!button.pinned) { // Remove the button if it isn't a pinned launcher
+			if (button.get_parent() is ButtonWrapper) {
+				((ButtonWrapper) button.get_parent()).gracefully_die();
+			}
+
 			remove_button(app_id);
 			return;
 		}
@@ -489,7 +497,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void add_icon_button(string app_id, IconButton button) {
-		this.add_button(app_id, button); // map app to it's button so that we can update it later on
+		add_button(app_id, button); // map app to it's button so that we can update it later on
 
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = this.get_orientation();
@@ -550,7 +558,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	 */
 	private void add_button(string key, IconButton button) {
 		lock(this.buttons) {
-			this.buttons.insert(key, button);
+			this.buttons[key] = button;
 		}
 	}
 

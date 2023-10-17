@@ -1,17 +1,22 @@
 libwindowing_sources = [
     'dbus.vala',
-	'windowing.vala',
+    'windowing.vala',
     'window_group.vala',
+    'window_mapper.vala',
 ]
 
 libwindowing_deps = [
     dep_xfce4windowing,
+    dep_wnck,
 ]
 
 libwindowing = static_library(
     'windowing',
     libwindowing_sources,
     dependencies: libwindowing_deps,
+    c_args: [
+        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
+    ],
     vala_args: [
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',

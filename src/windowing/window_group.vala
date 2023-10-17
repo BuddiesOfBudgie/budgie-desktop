@@ -18,6 +18,11 @@ namespace Budgie.Windowing {
 		/** The libxfce4windowing.Application that this group belongs to. */
 		public libxfce4windowing.Application application { get; construct; }
 
+		/** A copy of the application's ID. */
+		public uint64 group_id { get; construct; }
+
+		public DesktopAppInfo? app_info { get; construct; default = null; }
+
 		private List<unowned libxfce4windowing.Window> windows;
 		private unowned libxfce4windowing.Window? active_window = null;
 		private unowned libxfce4windowing.Window? last_active_window = null;
@@ -45,8 +50,8 @@ namespace Budgie.Windowing {
 		/**
 		 * Create a new WindowGroup for an application.
 		 */
-		public WindowGroup(libxfce4windowing.Application application) {
-			Object(application: application);
+		public WindowGroup(libxfce4windowing.Application application, DesktopAppInfo? app_info) {
+			Object(application: application, group_id: application.get_id(), app_info: app_info);
 		}
 
 		construct {
