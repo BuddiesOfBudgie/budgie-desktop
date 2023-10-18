@@ -64,12 +64,10 @@ namespace BudgieScr {
 				showtooltips = screenshot_settings.get_boolean("showtooltips");
 			});
 
-			// we need to use the same temporary file across instances
-			// so use the logged in user to differentiate in multiuser
-			// scenarios
-			string username = Environment.get_user_name();
-			string tmpdir = Environment.get_tmp_dir();
-			tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, username + "_budgiescreenshot_tempfile");
+			// we need to use the same temporary user-space file across dbus client/server calls to coordinate
+			// the passing of screenshot images
+			string tmpdir = Environment.get_variable("XDG_RUNTIME_DIR") ?? Environment.get_variable("HOME");
+			tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, ".budgiescreenshot_tempfile");
 		}
 
 		private void fill_buttonpos() {
