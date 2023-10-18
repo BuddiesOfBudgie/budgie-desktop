@@ -31,8 +31,10 @@ public class IconButton : Gtk.ToggleButton {
 
 	private Gtk.Allocation definite_allocation;
 	private int target_icon_size = 0;
-
+	private int panel_size = 0;
 	private Budgie.PanelPosition panel_position;
+
+	private Gtk.Orientation orientation;
 
 	private bool has_active_window = false;
 	private bool needs_attention = false;
@@ -206,7 +208,7 @@ public class IconButton : Gtk.ToggleButton {
 			return base.draw(ctx);
 		}
 
-		int count = windows.length() > 5 ? 5 : (int) windows.length();
+		int count = int.min((int) windows.length(), 5);
 		var styles = get_style_context();
 
 		Gdk.RGBA color;
@@ -329,7 +331,7 @@ public class IconButton : Gtk.ToggleButton {
 			}
 
 			ctx.stroke();
-			counter ++;
+			counter++;
 		}
 
 		return base.draw(ctx);
@@ -399,6 +401,28 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
+	public override void get_preferred_width(out int min, out int nat) {
+		if (orientation == Gtk.Orientation.HORIZONTAL) {
+			min = nat = panel_size;
+		} else {
+			int m, n;
+			base.get_preferred_width(out m, out n);
+			min = m;
+			nat = n;
+		}
+	}
+
+	public override void get_preferred_height(out int min, out int nat) {
+		if (orientation == Gtk.Orientation.VERTICAL) {
+			min = nat = panel_size;
+		} else {
+			int m, n;
+			base.get_preferred_height(out m, out n);
+			min = m;
+			nat = n;
+		}
+	}
+
 	public bool has_window(libxfce4windowing.Window window) {
 		return window_group != null && window_group.has_window(window);
 	}
@@ -409,6 +433,18 @@ public class IconButton : Gtk.ToggleButton {
 
 	public void set_active_window(bool active) {
 		has_active_window = active;
+	}
+
+	public void set_icon_size(int size) {
+		target_icon_size = size;
+	}
+
+	public void set_orientation(Gtk.Orientation orientation) {
+		this.orientation = orientation;
+	}
+
+	public void set_panel_size(int size) {
+		panel_size = size;
 	}
 
 	public void set_panel_position(Budgie.PanelPosition position) {
@@ -456,7 +492,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		update_icon();
-		// queue_redraw();
+		queue_resize();
 	}
 
 	public void update_icon() {

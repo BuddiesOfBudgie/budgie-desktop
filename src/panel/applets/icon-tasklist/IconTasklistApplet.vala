@@ -453,6 +453,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		foreach (IconButton button in buttons.get_values()) {
 			button.set_panel_position(position);
+			button.set_orientation(get_orientation());
 		}
 
 		main_layout.set_orientation(get_orientation());
@@ -470,9 +471,9 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void resize() {
-		// Wnck.set_default_icon_size(this.desktop_helper.panel_size);
-
 		this.buttons.foreach((id, button) => {
+			button.set_icon_size(icon_size);
+			button.set_panel_size(panel_size);
 			button.queue_resize();
 		});
 
@@ -500,7 +501,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		add_button(app_id, button); // map app to it's button so that we can update it later on
 
 		ButtonWrapper wrapper = new ButtonWrapper(button);
-		wrapper.orient = this.get_orientation();
+		wrapper.orient = get_orientation();
 
 		// TODO: Kill button when there are no window left and its not pinned
 		//  button.became_empty.connect(() => {
@@ -550,6 +551,10 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		((ButtonWrapper) button.get_parent()).orient = get_orientation();
 		((Gtk.Revealer) button.get_parent()).set_reveal_child(visible);
+
+		button.set_panel_size(panel_size);
+		button.set_panel_position(panel_position);
+		button.set_orientation(get_orientation());
 		button.update();
 	}
 
