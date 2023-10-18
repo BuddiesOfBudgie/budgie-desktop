@@ -66,7 +66,7 @@ namespace BudgieScr {
 
 			// we need to use the same temporary user-space file across dbus client/server calls to coordinate
 			// the passing of screenshot images
-			string tmpdir = Environment.get_variable("XDG_RUNTIME_DIR") != null ? Environment.get_variable("XDG_RUNTIME_DIR") : Environment.get_variable("HOME");
+			string tmpdir = Environment.get_variable("XDG_RUNTIME_DIR") ?? Environment.get_variable("HOME");
 			tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, ".budgiescreenshot_tempfile");
 		}
 
