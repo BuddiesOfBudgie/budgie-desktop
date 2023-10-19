@@ -480,7 +480,7 @@ namespace BudgieScr {
 			*/
 			Gtk.Button shootbutton = new Gtk.Button();
 			if (windowstate.showtooltips) {
-				shootbutton.set_tooltip_text("Take a screenshot");
+				shootbutton.set_tooltip_text(_("Take a screenshot"));
 			}
 
 			var iconfile =  new ThemedIcon(name = "shootscreen-symbolic");
@@ -826,8 +826,6 @@ namespace BudgieScr {
 				if (pixfile.query_exists()) {
 					try {
 						Pixbuf pxb = new Gdk.Pixbuf.from_file(windowstate.tempfile_path);
-						delete_file(pixfile);
-
 						return pxb;
 					} catch (Error e) {
 						message("unable to load image from /tmp\n");
@@ -850,6 +848,12 @@ namespace BudgieScr {
 			} else {
 				makeaftershotwindow(pxb);
 			}
+			this.destroy.connect(() => {
+				var file = File.new_for_path(windowstate.tempfile_path);
+				if (file.query_exists() == true) {
+					delete_file(file);
+				}
+			});
 		}
 
 		private void makeaftershotwindow(Pixbuf pxb) {
@@ -898,13 +902,15 @@ namespace BudgieScr {
 				_("Cancel screenshot"),
 				_("Save screenshot to the selected directory"),
 				_("Copy screenshot to the clipboard"),
-				_("Open screenshot in default application")
+				_("Open screenshot in default application"),
+				_("Upload screenshot to a web service")
 			};
 			string[] header_imagenames = {
 				"trash-shot-symbolic",
 				"save-shot-symbolic",
 				"clipboard-shot-symbolic",
-				"edit-shot-symbolic"
+				"edit-shot-symbolic",
+				"emblem-shared-symbolic"
 			};
 
 			int currbutton = 0;
@@ -975,8 +981,102 @@ namespace BudgieScr {
 				}
 			});
 
+			// upload to web service
+			decisionbuttons[4].clicked.connect(() => {
+				var path = save_tmp_jpeg_file(pxb);
+				make_providers_popover(decisionbuttons[4], clp, path);
+			});
+
 			this.set_titlebar(bar);
 			this.show_all();
+		}
+
+		// Creates a popover menu where the screenshot can be uploaded to a web provider
+		private Gtk.Popover make_providers_popover(Gtk.Button button, Clipboard clp, string imagepath) {
+			var padding = 5;
+
+			// Menu popover on share btn click
+			var providerspopover = new Gtk.Popover(button);
+			providerspopover.set_position(Gtk.PositionType.BOTTOM);
+			// Master container for all other boxes
+			var containerbox = new Gtk.Box(Gtk.Orientation.VERTICAL, padding);
+			// Box for selecting a web provider and uploading to it
+			var providersbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, padding);
+			// Box to display uploaded URLs
+			var urlsbox = new Gtk.Box(Gtk.Orientation.VERTICAL, padding);
+
+			containerbox.pack_start(providersbox, false, false, padding);
+			containerbox.add(urlsbox);
+			providerspopover.add(containerbox);
+
+			var providerslabel = new Gtk.Label(_("Provider:"));
+			providersbox.pack_start(providerslabel, true, false, padding);
+
+			var Uploader = new Uploader();
+
+			// Populate combobox with providers
+			var combobox = new Gtk.ComboBoxText();
+			foreach (var p in Uploader.provider) {
+				combobox.append_text(Uploader.provider_string_to_display(p));
+			}
+			combobox.set_active(0);
+			// Initialize provider from idx 0
+			string chosenprovider = combobox.get_active_text();
+			combobox.changed.connect(() => {
+				chosenprovider = combobox.get_active_text();
+			});
+			providersbox.add(combobox);
+
+			// Create upload button
+			var uploadbutton = new Gtk.Button();
+			var uploadicon =  new ThemedIcon(name = "upload-shot-symbolic");
+			var uploadimage = new Gtk.Image.from_gicon(uploadicon,Gtk.IconSize.DND);
+			uploadimage.pixel_size = 16;
+			uploadimage.margin_start = padding;
+			uploadimage.margin_end = padding;
+			uploadbutton.add(uploadimage);
+			uploadbutton.set_tooltip_text(_("Upload screenshot"));
+			uploadbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+			providersbox.pack_end(uploadbutton, false, false, padding);
+
+			// Upload to provider on clicked
+			uploadbutton.clicked.connect(() => {
+				string? link = null;
+				bool status = false;
+				status = Uploader.upload_to_provider(chosenprovider, imagepath, out link);
+
+				if (link == null || status == false) {
+					var failed_label = new Gtk.Label(_("Failed to get a response"));
+					urlsbox.add(failed_label);
+					warning("Failed to get response from provider: %s\n", chosenprovider);
+					providerspopover.show_all();
+				}
+				if (link != null) {
+					clp.set_text(link, link.length);
+					// TODO: Save the URLs for later incase popover is destroyed
+					var link_btn = new Gtk.LinkButton.with_label(link, link);
+
+					// Truncate link if neccessary to prevent label overflow
+					var maxstringlen = 45;
+					if (link.length > maxstringlen) {
+						link_btn = new Gtk.LinkButton.with_label(link, link.substring(0, maxstringlen) + "...");
+					}
+
+					urlsbox.add(link_btn);
+					providerspopover.show_all();
+				}
+			});
+
+			providerspopover.show_all();
+
+			this.destroy.connect(() => {
+				var file = File.new_for_path(imagepath);
+				if (file.query_exists() == true) {
+					delete_file(file);
+				}
+			});
+
+			return providerspopover;
 		}
 
 		private void open_indefaultapp(string path) {
@@ -1008,6 +1108,25 @@ namespace BudgieScr {
 			return now.format(@"Snapshot_%F_%H-%M-%S.$extension");
 		}
 
+		// Convert pixbuf to a slightly compressed jpeg for uploading to a web service
+		private string save_tmp_jpeg_file(Pixbuf pxb) {
+			var extension = "jpeg";
+			var username = Environment.get_user_name();
+			var tmpdir = Environment.get_tmp_dir();
+			var tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, username + "_budgiescreenshot_tempfile." + extension);
+
+			string[] option_keys = {"quality"};
+			string[] option_values = {"85"};
+
+			try {
+				pxb.savev(tempfile_path, extension, option_keys, option_values);
+			} catch (Error e) {
+				warning("save_tmp_jpeg_file failed, reason: %s\n", e.message);
+				return "fail";
+			}
+			return tempfile_path;
+		}
+
 		private string save_tofile(Gtk.Entry entry, ComboBox combo, Pixbuf pxb) {
 			string? found_dir = get_path_fromcombo(combo);
 			string fname = entry.get_text();
@@ -1020,7 +1139,7 @@ namespace BudgieScr {
 				warning("save_tofile %s\n", e.message);
 				Button savebutton = decisionbuttons[1];
 				set_buttoncontent(savebutton, "saveshot-noaccess-symbolic");
-				savebutton.set_tooltip_text("A permission error on the directory occurred");
+				savebutton.set_tooltip_text(_("A permission error on the directory occurred"));
 
 				return "fail";
 			}
