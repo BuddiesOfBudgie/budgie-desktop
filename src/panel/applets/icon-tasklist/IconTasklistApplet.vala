@@ -108,7 +108,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.on_settings_changed("only-pinned");
 
 		this.connect_app_signals();
-		// TODO: this.on_active_window_changed();
 
 		this.show_all();
 	}
@@ -214,6 +213,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		windowing.get_window_groups().foreach(this.on_app_opened); // for each running apps
 	}
 
+	// TODO: Redo
 	private void on_settings_changed(string key) {
 		switch (key) {
 			case "lock-icons":
@@ -434,7 +434,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 	private void on_active_window_changed(libxfce4windowing.Window? old_active_window, libxfce4windowing.Window? new_active_window) {
 		foreach (IconButton button in buttons.get_values()) {
-			if (button.has_window(new_active_window)) {
+			if (new_active_window != null && button.has_window(new_active_window)) {
 				button.set_active_window(true);
 				// TODO: button.attention(false);
 			} else {

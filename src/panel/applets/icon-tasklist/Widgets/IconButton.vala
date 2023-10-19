@@ -491,6 +491,8 @@ public class IconButton : Gtk.ToggleButton {
 			}
 		}
 
+		set_active(has_active_window);
+
 		update_icon();
 		queue_resize();
 	}

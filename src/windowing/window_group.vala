@@ -76,6 +76,14 @@ namespace Budgie.Windowing {
 
 			window.state_changed.connect(state_changed);
 
+			// If this is the first window, set it as the last active window.
+			// This ensures that we can switch to it in the tasklist if, for
+			// example, the tasklist was restarted during a session with open
+			// windows.
+			if (windows.is_empty()) {
+				last_active_window = window;
+			}
+
 			windows.append(window);
 			window_added(window);
 		}
@@ -86,6 +94,15 @@ namespace Budgie.Windowing {
 		 */
 		public void remove_window(libxfce4windowing.Window window) {
 			debug(@"removing window from group '$(application.get_name())': $(window.get_name())");
+
+			if (active_window == window) {
+				active_window = null;
+			}
+
+			if (last_active_window == window) {
+				last_active_window = null;
+			}
+
 			windows.remove(window);
 			window_removed(window);
 		}

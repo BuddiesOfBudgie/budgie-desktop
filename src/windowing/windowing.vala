@@ -132,13 +132,15 @@ namespace Budgie.Windowing {
 			group.active_workspace_changed.connect(on_active_workspace_changed);
 		}
 
-		private void on_active_window_changed(Window old_window) {
+		private void on_active_window_changed(Window? old_window) {
 			var new_window = screen.get_active_window();
 
 			foreach (var group in applications.get_values()) {
 				if (group.has_window(new_window)) {
 					group.set_active_window(new_window);
-				} else if (group.has_window(old_window)) {
+				}
+
+				if (old_window != null && group.has_window(old_window)) {
 					group.set_last_active_window(old_window);
 				}
 			}
@@ -270,6 +272,15 @@ namespace Budgie.Windowing {
 					warning("Unknown setting changed: %s", key);
 					break;
 			}
+		}
+
+		/**
+		 * Get the currently active window.
+		 *
+		 * Returns: the active window, or NULL
+		 */
+		public unowned Window? get_active_window() {
+			return screen.get_active_window();
 		}
 
 		/**
