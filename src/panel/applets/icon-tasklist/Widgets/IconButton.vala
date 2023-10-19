@@ -20,6 +20,8 @@ public class IconButton : Gtk.ToggleButton {
 	private const double TARGET_ICON_SCALE = 2.0 / 3.0;
 	private const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
 
+	private const int64 SCROLL_TIMEOUT = 300000;
+
 	public Budgie.Application app { get; construct; }
 	public unowned Budgie.PopoverManager popover_manager { get; construct; }
 	public bool pinned { get; set; default = false; }
@@ -37,6 +39,7 @@ public class IconButton : Gtk.ToggleButton {
 	private Gtk.Orientation orientation;
 
 	private bool has_active_window = false;
+	private int64 last_scroll_time = 0;
 	private bool needs_attention = false;
 
 	public IconButton(Budgie.Application app, Budgie.PopoverManager popover_manager) {
@@ -61,6 +64,8 @@ public class IconButton : Gtk.ToggleButton {
 		get_style_context().remove_class(Gtk.STYLE_CLASS_BUTTON);
 		get_style_context().remove_class("toggle");
 		get_style_context().add_class("launcher");
+
+		add_events(Gdk.EventMask.SCROLL_MASK);
 
 		definite_allocation.width = 0;
 		definite_allocation.height = 0;
@@ -188,6 +193,68 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		return Gdk.EVENT_PROPAGATE;
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		if (get_monotonic_time() - last_scroll_time < SCROLL_TIMEOUT) {
+			return Gdk.EVENT_STOP;
+		}
+
+		// Nothing to do if there are no open windows
+		if (window_group == null) {
+			return Gdk.EVENT_STOP;
+		}
+
+		unowned libxfce4windowing.Window target_window = null;
+
+		// Get the currently active window in the group
+		unowned var active_window = window_group.get_active_window();
+
+		// If there is no currently active window, get the last active window
+		if (active_window == null) {
+			active_window = window_group.get_last_active_window();
+		}
+
+		switch (event.direction) {
+			case Gdk.ScrollDirection.UP:
+				// Get the next window in the group to activate
+				target_window = window_group.get_next_window(active_window);
+
+				// Attempt to activate the target window
+				try {
+					target_window.activate(event.time);
+				} catch (Error e) {
+					warning("Error activating and unminimizing window '%s': %s", target_window.get_name(), e.message);
+				}
+
+				break;
+			case Gdk.ScrollDirection.DOWN:
+				// Make the target window the last active window
+				target_window = active_window;
+
+				if (target_window == null) {
+					break;
+				}
+
+				// Break if already minimized to avoid unnecessary logging
+				if (target_window.is_minimized()) {
+					break;
+				}
+
+				// Attempt to minimize the target window
+				try {
+					target_window.set_minimized(true);
+				} catch (Error e) {
+					warning("Error minimizing window '%s': %s", target_window.get_name(), e.message);
+				}
+				break;
+			default:
+				break;
+		}
+
+		last_scroll_time = get_monotonic_time();
+
+		return Gdk.EVENT_STOP;
 	}
 
 	public override bool draw(Cairo.Context ctx) {

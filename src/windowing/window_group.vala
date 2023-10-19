@@ -156,6 +156,50 @@ namespace Budgie.Windowing {
 		}
 
 		/**
+		 * Get the next window in the group relative to the given window.
+		 *
+		 * This works on a copy of the current window list in case we need
+		 * to reverse the list.
+		 *
+		 * Returns: The next (or technically previous, if reversed) window in the group
+		 */
+		public unowned libxfce4windowing.Window get_next_window(libxfce4windowing.Window? window, bool reverse = false) {
+			// Make a copy of the window list to operate on
+			var copy = get_windows();
+
+			// Reverse the list if necessary
+			if (reverse) {
+				copy.reverse();
+			}
+
+			// If the window given to us is null, return the first window
+			if (window == null) {
+				return copy.first().data;
+			}
+
+			// If there is only one window in this group, just return it
+			if (windows.length() == 1) {
+				return window;
+			}
+
+			// Get and increment the index of the given window.
+			// This should get us the next window in the list.
+			// (Technically, the previous window, if we're in
+			// reverse mode.)
+			var i = copy.index(window);
+
+			i++;
+
+			// Make sure we don't go beyond the bounds of the list
+			if (i >= copy.length()) {
+				i = 0;
+			}
+
+			// Return the window at the index
+			return copy.nth_data(i);
+		}
+
+		/**
 		 * Get the open windows in this group.
 		 *
 		 * Returns: a list of open windows
