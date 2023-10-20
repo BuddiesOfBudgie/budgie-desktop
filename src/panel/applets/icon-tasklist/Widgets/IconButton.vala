@@ -527,6 +527,10 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (window_group == null) return;
 
+		foreach (var window in window_group.get_windows()) {
+			popover.add_window(window);
+		}
+
 		window_group.app_icon_changed.connect_after(() => {
 			update_icon();
 		});
@@ -540,7 +544,9 @@ public class IconButton : Gtk.ToggleButton {
 			update();
 		});
 
-		window_group.window_removed.connect(() => {
+		window_group.window_removed.connect((window) => {
+			popover.remove_window(window);
+
 			update();
 		});
 	}

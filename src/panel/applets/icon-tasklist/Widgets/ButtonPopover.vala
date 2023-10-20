@@ -37,10 +37,18 @@ public class ButtonPopover : Budgie.Popover {
 
 		get_style_context().add_class("icon-popover");
 
-		desktop_actions = new Gtk.ListBox();
+		desktop_actions = new Gtk.ListBox() {
+			selection_mode = Gtk.SelectionMode.NONE,
+		};
+
+		var app_info = new DesktopAppInfo(app.desktop_id);
 
 		foreach (var action in app.actions) {
-			var action_button = new Gtk.Button.with_label(action);
+			var action_label = app_info.get_action_name(action);
+	
+			var action_button = new Gtk.Button.with_label(action_label) {
+				relief = Gtk.ReliefStyle.NONE,
+			};
 
 			action_button.clicked.connect(() => {
 				app.launch_action(action);
@@ -50,7 +58,9 @@ public class ButtonPopover : Budgie.Popover {
 			desktop_actions.add(action_button);
 		}
 
-		windows = new Gtk.ListBox();
+		windows = new Gtk.ListBox() {
+			selection_mode = Gtk.SelectionMode.NONE,
+		};
 
 		if (group != null) {
 			foreach (var window in group.get_windows()) {
@@ -60,14 +70,17 @@ public class ButtonPopover : Budgie.Popover {
 
 		pin_button = new Gtk.Button.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Favorite"),
+			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		new_instance_button = new Gtk.Button.from_icon_name("window-new-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Launch new instance"),
+			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
-			tooltip_text = _("Close all windows")
+			tooltip_text = _("Close all windows"),
+			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -159,19 +172,29 @@ private class WindowControls : Gtk.Box {
 	public signal void return_clicked();
 
 	public WindowControls(libxfce4windowing.Window window) {
-		Object(window: window);
+		Object(window: window, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 	}
 
 	construct {
-		keep_on_top_button = new Gtk.CheckButton.with_label(_("Always on top"));
+		keep_on_top_button = new Gtk.CheckButton.with_label(_("Always on top")) {
+			relief = Gtk.ReliefStyle.NONE,
+		};
 
-		maximize_button = new Gtk.Button.with_label(_("Unmaximize"));
+		maximize_button = new Gtk.Button.with_label(null) {
+			relief = Gtk.ReliefStyle.NONE,
+		};
 
-		minimize_button = new Gtk.Button.with_label(_("Minimize"));
+		minimize_button = new Gtk.Button.with_label(_("Minimize")) {
+			relief = Gtk.ReliefStyle.NONE,
+		};
 
-		return_button = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		return_button = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
+			relief = Gtk.ReliefStyle.NONE,
+		};
 
-		var list_box = new Gtk.ListBox();
+		var list_box = new Gtk.ListBox() {
+			selection_mode = Gtk.SelectionMode.NONE,
+		};
 
 		list_box.add(keep_on_top_button);
 		list_box.add(maximize_button);
@@ -219,6 +242,10 @@ private class WindowControls : Gtk.Box {
 		window.workspace_changed.connect(() => {
 			// TODO: Not implemented yet
 		});
+
+		update_maximize_label();
+
+		show_all();
 	}
 
 	private void update_maximize_label() {
@@ -253,7 +280,9 @@ private class WindowItem : Gtk.ListBoxRow {
 			tooltip_text = window.get_name(),
 		};
 
-		name_button = new Gtk.Button();
+		name_button = new Gtk.Button() {
+			relief = Gtk.ReliefStyle.NONE,
+		};
 		var button_inner = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
 		button_inner.pack_start(name_label);
@@ -261,10 +290,12 @@ private class WindowItem : Gtk.ListBoxRow {
 
 		close_button = new Gtk.Button.from_icon_name("window-close-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close window"),
+			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		page_switch_button = new Gtk.Button.from_icon_name("go-next-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
-			tooltip_text = _("Show window controls")
+			tooltip_text = _("Show window controls"),
+			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
