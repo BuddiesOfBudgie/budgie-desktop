@@ -214,7 +214,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 				string label = "";
 				ulong value = -1;
 
-				line.scanf("%s %lu", label, &value);
+				line.scanf("%ms %lu", &label, &value);
 
 				if (label == "MemTotal:") {
 					contents.mem_total = value;
