@@ -18,8 +18,7 @@ public class ShowDesktopPlugin : Budgie.Plugin, Peas.ExtensionBase {
 public class ShowDesktopApplet : Budgie.Applet {
 	protected Gtk.ToggleButton widget;
 	protected Gtk.Image img;
-	private Wnck.Screen wscreen;
-	private List<ulong> window_list;
+	private libxfce4windowing.Screen xfce_screen;
 
 	public ShowDesktopApplet() {
 		widget = new Gtk.ToggleButton();
@@ -29,50 +28,36 @@ public class ShowDesktopApplet : Budgie.Applet {
 		widget.add(img);
 		widget.set_tooltip_text(_("Toggle the desktop"));
 
-		window_list = new List<ulong>();
-		wscreen = Wnck.Screen.get_default();
+		xfce_screen = libxfce4windowing.Screen.get_default();
 
-		wscreen.window_opened.connect(() => {
-			window_list = new List<ulong>();
+		xfce_screen.window_opened.connect((window) => {
+			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
+
 			widget.set_active(false);
+
+			window.state_changed.connect(() => {
+				if (!window.is_minimized()) widget.set_active(false);
+			});
 		});
 
 		widget.toggled.connect(() => {
-			if (widget.get_active()) {
-				wscreen.get_windows_stacked().foreach(record_windows_state);
-			} else {
-				window_list.foreach(unminimize_windows);
-			}
+			bool showing_desktop = !widget.get_active();
+  			xfce_screen.get_windows_stacked().foreach((window) => {
+				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
+
+				try {
+					window.set_minimized(!showing_desktop);
+				} catch (Error e) {
+					// Note: This is intentionally set to debug instead of warning because libxfce4windowing will create noise otherwise
+					// Unminimize operations can end up being noisy when they fail due to the window not yet reporting the capability to support CAN_MINIMIZE
+					// https://gitlab.xfce.org/xfce/libxfce4windowing/-/blob/main/libxfce4windowing/xfw-window-x11.c#L363
+					debug("Failed to change state of window \"%s\": %s", window.get_name(), e.message);
+				}
+			});
 		});
 
 		add(widget);
 		show_all();
-	}
-
-	private void record_windows_state(Wnck.Window window) {
-		if (window.is_skip_pager() || window.is_skip_tasklist()) {
-			return;
-		}
-
-		window.state_changed.connect(() => {
-			if (!window.is_minimized()) {
-				window_list = new List<ulong>();
-				widget.set_active(false);
-			}
-		});
-
-		if (!window.is_minimized()) {
-			window_list.append(window.get_xid());
-			window.minimize();
-		}
-	}
-
-	private void unminimize_windows(ulong xid) {
-		var window = Wnck.Window.@get(xid);
-
-		if (window != null && window.is_minimized()) {
-			window.unminimize(Gtk.get_current_event_time());
-		}
 	}
 }
 

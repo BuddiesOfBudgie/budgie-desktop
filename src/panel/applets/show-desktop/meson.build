@@ -16,8 +16,8 @@ applet_showdesktop_sources = [
 applet_showdesktop_deps = [
     libpanelplugin_vapi,
     dep_gtk3,
-    dep_wnck,
     dep_peas,
+    dep_xfce4windowing,
     link_libpanelplugin,
 ]
 
@@ -26,12 +26,10 @@ shared_library(
     applet_showdesktop_sources,
     dependencies: applet_showdesktop_deps,
     vala_args: [
+        '--vapidir', top_vapidir,
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'libwnck-3.0',
-    ],
-    c_args: [
-        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
+        '--pkg', 'libxfce4windowing-0',
     ],
     install: true,
     install_dir: applet_showdesktop_dir,
