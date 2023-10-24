@@ -11,9 +11,11 @@
 
 public class IconButton : Gtk.ToggleButton {
 	private const double DEFAULT_OPACITY = 0.1;
+
+	private const int INDICATOR_PADDING = 2;
 	private const int INDICATOR_SIZE = 2;
 	private const int INDICATOR_SPACING = 1;
-	private const int INACTIVE_INDICATOR_SPACING = 2;
+	private const int INACTIVE_INDICATOR_SPACING = 4;
 
 	private const int DEFAULT_ICON_SIZE = 32;
 	private const int TARGET_ICON_PADDING = 18;
@@ -265,146 +267,164 @@ public class IconButton : Gtk.ToggleButton {
 
 		List<unowned libxfce4windowing.Window> windows;
 
+		// Get the windows in this group, if any
 		if (window_group != null && window_group.has_windows()) {
 			windows = window_group.get_windows();
 		} else {
 			windows = new List<unowned libxfce4windowing.Window>();
 		}
 
+		// No indicators if there are no windows
 		if (windows.is_empty()) {
 			return base.draw(ctx);
 		}
 
+		// If this button does not have any focused windows,
+		// draw the inactive versions of the window indicators
+		if (!get_active()) {
+			return draw_inactive(ctx);
+		}
+
 		int count = int.min((int) windows.length(), 5);
-		var styles = get_style_context();
 
-		Gdk.RGBA color;
+		// Calculate the spacing between individual indicators
+		int spacing = width % count;
+		spacing = (spacing == 0) ? INDICATOR_SPACING : spacing;
 
-		if (!styles.lookup_color("budgie_tasklist_indicator_color", out color)) {
-			color.parse("#3C6DA6");
-		}
-
-		if (get_active()) {
-			if (!styles.lookup_color("budgie_tasklist_indicator_color_active", out color)) {
-				color.parse("#5294E2");
-			}
-		} else {
-			if (needs_attention) {
-				if (!styles.lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
-					color.parse("#D84E4E");
-				}
-			}
-
-			draw_inactive(ctx, color);
-			return base.draw(ctx);
-		}
-
-		int counter = 0;
 		int previous_x = 0;
 		int previous_y = 0;
-		int spacing = width % count;
-		spacing = (spacing == 0) ? 1 : spacing;
 
-		foreach (var window in windows) {
-			if (counter == count) break;
+		// Draw an indicator for each window
+		for (int i = 0; i < count; i++) {
+			// Get the window
+			var window = windows.nth_data(i);
 
+			// No indicator for skippers
 			if (window.is_skip_tasklist()) continue;
 
-			// Set the position of our window indicators
+			// Set the inital position of our window indicators to 0,0
 			int indicator_x = 0;
 			int indicator_y = 0;
+			int length = 0;
 
+			// Calculate the length of the indicator
 			switch (panel_position) {
 				case Budgie.PanelPosition.LEFT:
-					if (counter == 0) {
-						indicator_y = y;
-					} else {
-						previous_y = indicator_y = previous_y + (height/count);
-						indicator_y += spacing;
-					}
-					indicator_x = x;
+				case Budgie.PanelPosition.RIGHT:
+					length = (height / count);
+					break;
+				default:
+					length = (width / count);
+					break;
+			}
+
+			// Calculate the starting x coord
+			switch (panel_position) {
+				case Budgie.PanelPosition.LEFT:
+					indicator_x = x + INDICATOR_PADDING; // Set x to just off the left of the button
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					if (counter == 0) {
-						indicator_y = y;
-					} else {
-						previous_y = indicator_y = previous_y + (height/count);
-						indicator_y += spacing;
-					}
-					indicator_x = x + width;
+					indicator_x = x + width - INDICATOR_PADDING; // Set x to just off the right of the button
 					break;
 				case Budgie.PanelPosition.TOP:
-					if (counter == 0) {
-						indicator_x = x;
-					} else {
-						previous_x = indicator_x = previous_x + (width/count);
-						indicator_x += spacing;
-					}
-					indicator_y = y;
-					break;
 				case Budgie.PanelPosition.BOTTOM:
-					if (counter == 0) {
-						indicator_x = x;
-					} else {
-						previous_x = indicator_x = previous_x + (width/count);
-						indicator_x += spacing;
+					if (i == 0) { // First indicator
+						indicator_x = x; // Set x to the starting x of the button
+					} else { // Not the first indicator
+						indicator_x = previous_x; // Set x to the x coord of the previous indicator
+						indicator_x += length; // Add the length of the indicator to the x coord
+						previous_x = indicator_x; // Set the new x to the previous x
+						indicator_x += spacing; // Add the spacing to the x coord
 					}
-					indicator_y = y + height;
 					break;
 				default:
 					break;
 			}
 
-			ctx.set_line_width(6);
-
-			if (count > 1 && has_active_window) {
-				Gdk.RGBA color2 = color;
-
-				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color2)) {
-					color2.parse("#6BBFFF");
-				}
-
-				ctx.set_source_rgba(color2.red, color2.green, color2.blue, 1);
-			} else {
-				ctx.set_source_rgba(color.red, color.green, color.blue, 1);
-			}
-
-			ctx.move_to(indicator_x, indicator_y);
-
+			// Calculate the starting y coord
 			switch (panel_position) {
 				case Budgie.PanelPosition.LEFT:
 				case Budgie.PanelPosition.RIGHT:
-					int to = 0;
-
-					if (counter == count-1) {
-						to = y + height;
-					} else {
-						to = previous_y + (height / count);
+					if (i == 0) { // First indicator
+						indicator_y = y; // Set y to the starting y of the button
+					} else { // Not the first indicator
+						indicator_y = previous_y; // Set y to the y coord of the previous indicator
+						indicator_y += length; // Add the indicator length to the y coord
+						previous_y = indicator_y; // Set the new y to the previous y
+						indicator_y += spacing; // Add the spacing to the y coord						
 					}
-
-					ctx.line_to(indicator_x, to);
+					break;
+				case Budgie.PanelPosition.TOP:
+					indicator_y = y + INDICATOR_PADDING; // Set the y coord to just off the top of the button
+					break;
+				case Budgie.PanelPosition.BOTTOM:
+					indicator_y = y + height - INDICATOR_PADDING; // Set the y coord to just off the bottom of the button
 					break;
 				default:
-					int to = 0;
+					break;
+			}
 
-					if (counter == count-1) {
-						to = x + width;
-					} else {
-						to = previous_x + (width / count);
+			// Set the color of the indicator
+			Gdk.RGBA color;
+
+			if (has_active_window && window == window_group.get_active_window()) {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color)) {
+					color.parse("#6BBFFF");
+				}
+			} else if (needs_attention) {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
+					color.parse("#D84E4E");
+				}
+			} else {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active", out color)) {
+					color.parse("#5294E2");
+				}
+			}
+
+			ctx.set_source_rgba(color.red, color.green, color.blue, 1);
+
+			// Set the indicator thickness
+			ctx.set_line_width(INDICATOR_SIZE + 1);
+
+			// Move to the start coords
+			ctx.move_to(indicator_x, indicator_y);
+
+			// Calculate the ending x or y coord and set the line to be drawn
+			int to = 0;
+			switch (panel_position) {
+				case Budgie.PanelPosition.LEFT:
+				case Budgie.PanelPosition.RIGHT:
+					if (i == count - 1) { // Last indicator
+						to = y + height; // Set 'to' to the end of the button
+					} else { // Not the last indicator
+						to = previous_y; // Set 'to' to the y of the previous indicator
+						to += length; // Add the indicator length to the end location
 					}
 
+					// Draw a line from the start down to the end
+					ctx.line_to(indicator_y, to);
+					break;
+				default:
+					if (i == count - 1) { // Last indicator
+						to = x + width; // Set 'to' to the end of the button
+					} else { // Not the last indicator
+						to = previous_x; // Set 'to' to the y of the previous indicator
+						to += length; // Add the indicator length to the end location
+					}
+
+					// Draw a line from the start right to the end
 					ctx.line_to(to, indicator_y);
 					break;
 			}
 
+			// Draw the indicator
 			ctx.stroke();
-			counter++;
 		}
 
 		return base.draw(ctx);
 	}
 
-	public void draw_inactive(Cairo.Context ctx, Gdk.RGBA color) {
+	public bool draw_inactive(Cairo.Context ctx) {
 		int x = definite_allocation.x;
 		int y = definite_allocation.y;
 		int width = definite_allocation.width;
@@ -412,60 +432,88 @@ public class IconButton : Gtk.ToggleButton {
 
 		List<unowned libxfce4windowing.Window> windows;
 
+		// Get the windows in this group, if any
 		if (window_group != null && window_group.has_windows()) {
 			windows = window_group.get_windows();
 		} else {
 			windows = new List<unowned libxfce4windowing.Window>();
 		}
 
-		if (windows.is_empty()) return;
+		// No windows, no indicators
+		if (windows.is_empty()) {
+			return base.draw(ctx);
+		}
 
-		int count = windows.length() > 5 ? 5 : (int) windows.length();
-		int counter = 0;
+		int count = int.min((int) windows.length(), 5);
 
-		foreach (var window in windows) {
-			if (counter == count) break;
+		// Iterate over the number of windows
+		for (int i = 0; i < count; i++) {
+			var window = windows.nth_data(i);
 
-			if (window.is_skip_pager() || window.is_skip_tasklist()) continue;
+			// No indicators for skippers!
+			if (window.is_skip_tasklist()) continue;
 
+			// Initialize our x,y coords
 			int indicator_x = 0;
 			int indicator_y = 0;
 
+			// Calculate the x coord
 			switch (panel_position) {
 				case Budgie.PanelPosition.TOP:
-					indicator_x = x + (width / 2);
-					indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-					indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-					indicator_y = y + (INDICATOR_SIZE / 2);
-					break;
 				case Budgie.PanelPosition.BOTTOM:
 					indicator_x = x + (width / 2);
 					indicator_x -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-					indicator_x += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-					indicator_y = y + height - (INDICATOR_SIZE / 2);
+					indicator_x += ((INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING) * i) - 1;
 					break;
 				case Budgie.PanelPosition.LEFT:
-					indicator_y = x + (height / 2);
-					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - (INACTIVE_INDICATOR_SPACING * 2);
-					indicator_y += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * counter);
-					indicator_x = y + (INDICATOR_SIZE / 2);
+					indicator_x = y + (INDICATOR_SIZE / 2) - INDICATOR_PADDING;
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					indicator_y = x + (height / 2);
-					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
-					indicator_y += ((INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING) * counter);
-					indicator_x = y + width - (INDICATOR_SIZE / 2);
+					indicator_x = y + width - (INDICATOR_SIZE / 2) + INDICATOR_PADDING;
 					break;
 				default:
 					break;
 			}
 
-			ctx.set_source_rgba(color.red, color.green, color.blue, 1);
-			ctx.arc(indicator_x, indicator_y, INDICATOR_SIZE, 0, Math.PI * 2);
-			ctx.fill();
+			// Calculate the y coord
+			switch (panel_position) {
+				case Budgie.PanelPosition.TOP:
+					indicator_y = y + (INDICATOR_SIZE / 2) + INDICATOR_PADDING;
+					break;
+				case Budgie.PanelPosition.BOTTOM:
+					indicator_y = y + height - (INDICATOR_SIZE / 2) - INDICATOR_PADDING;
+					break;
+				case Budgie.PanelPosition.LEFT:
+					indicator_y = x + (height / 2);
+					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - (INACTIVE_INDICATOR_SPACING * 2);
+					indicator_y += (((INDICATOR_SIZE) + INACTIVE_INDICATOR_SPACING) * i);
+					break;
+				case Budgie.PanelPosition.RIGHT:
+					indicator_y = x + (height / 2);
+					indicator_y -= ((count * (INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING)) / 2) - INACTIVE_INDICATOR_SPACING;
+					indicator_y += ((INDICATOR_SIZE + INACTIVE_INDICATOR_SPACING) * i);
+					break;
+				default:
+					break;
+			}
 
-			counter++;
+			// Set the color of the indicator
+			Gdk.RGBA color;
+
+			if (!get_style_context().lookup_color("budgie_tasklist_indicator_color", out color)) {
+				color.parse("#3C6DA6");
+			}
+
+			ctx.set_source_rgba(color.red, color.green, color.blue, 1);
+
+			// Create a circle at the coords for the indicator
+			ctx.arc(indicator_x, indicator_y, INDICATOR_SIZE, 0, Math.PI * 2);
+
+			// Fill it with color
+			ctx.fill();
 		}
+
+		return base.draw(ctx);
 	}
 
 	public override void get_preferred_width(out int min, out int nat) {
