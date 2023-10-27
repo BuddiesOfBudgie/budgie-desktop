@@ -144,6 +144,9 @@ namespace Budgie {
 		*/
 		public TabSwitcherWindow() {
 			Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
+		}
+		
+		construct {
 
 			app_system = new Budgie.AppSystem();
 			recency = new List<string?>();
