@@ -54,7 +54,7 @@ namespace Budgie {
 		public unowned libxfce4windowing.Window? window = null;
 
 		public signal void closed(TabSwitcherWidget widget);
-		public signal void window_activated(libxfce4windowing.Window windiw);
+		public signal void window_activated(libxfce4windowing.Window window);
 		public signal void workspace_changed();
 
 		public TabSwitcherWidget(Budgie.AppSystem app_system, libxfce4windowing.Window? win) {
