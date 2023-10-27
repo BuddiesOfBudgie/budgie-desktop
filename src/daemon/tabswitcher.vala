@@ -145,7 +145,7 @@ namespace Budgie {
 		public TabSwitcherWindow() {
 			Object(type: Gtk.WindowType.POPUP, type_hint: Gdk.WindowTypeHint.NOTIFICATION);
 		}
-		
+
 		construct {
 
 			app_system = new Budgie.AppSystem();
@@ -282,16 +282,9 @@ namespace Budgie {
 			window_box.unselect_child(current);
 
 			try {
-				libxfce4windowing.Workspace? workspace = tab.window.get_workspace();
-				if (workspace != null) workspace.activate();
-			} catch (GLib.Error e) {
-				stderr.printf("Failed to activate workspace. Window switching will almost certainly fail: %s\n", e.message);
-			}
-
-			try {
 				tab.window.activate(get_time());
 			} catch (GLib.Error e) {
-				stderr.printf("Failed to activate window: %s\n", e.message);
+				warning("Failed to activate window: %s\n", e.message);
 			}
 		}
 
@@ -369,8 +362,13 @@ namespace Budgie {
 				uint64 new_id_pos = 0;
 
 				if (backwards) {
+					// If our current position is 0, we can't go any further "back" so wrap around to end
+					// Otherwise, use the current position of window in recency
+					// Then, minus the position by next index + 1
+					// e.g. first iteration for last item in array of 5 is (5 - 0+1) -> 4 -> 0-based index means this is last item
 					new_id_pos = (id_pos == 0 ? len : id_pos) - (i+1);
 				} else {
+					// Similar behavior as backwards..just forwards and wrap to beginning instead of end
 					new_id_pos = id_pos == len - 1 ? 0 : id_pos + (i+1);
 				}
 
