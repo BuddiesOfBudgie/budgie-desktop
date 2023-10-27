@@ -44,7 +44,8 @@ namespace Budgie {
 	/**
 	* A TabSwitcherWidget is used for each icon in the display
 	*/
-	public class TabSwitcherWidget : Gtk.Image {
+	public class TabSwitcherWidget : Gtk.FlowBoxChild {
+		private Gtk.Image image;
 		private uint64 activation_timestamp;
 		private libxfce4windowing.Application? application;
 		private DesktopAppInfo? info;
@@ -71,6 +72,8 @@ namespace Budgie {
 				info = app_system.query_window_by_xid((ulong)uid);
 			}
 
+			image = new Gtk.Image();
+			add(image);
 			set_property("margin", 10);
 			set_icon();
 
@@ -98,13 +101,13 @@ namespace Budgie {
 			Icon? info_icon = info != null ? info.get_icon() : null;
 
 			if (info_icon != null) {
-				set_from_gicon(info_icon, Gtk.IconSize.DIALOG);
+				image.set_from_gicon(info_icon, Gtk.IconSize.DIALOG);
 				return;
 			}
 
 			Pixbuf? windowing_app_icon = application != null ? application.get_icon(Gtk.IconSize.DIALOG, Gtk.IconSize.DIALOG) : null;
 			Pixbuf? window_icon = window.get_icon(Gtk.IconSize.DIALOG, Gtk.IconSize.DIALOG);
-			set_from_pixbuf(windowing_app_icon ?? window_icon);
+			image.set_from_pixbuf(windowing_app_icon ?? window_icon);
 		}
 
 		private void set_title() {
@@ -147,7 +150,6 @@ namespace Budgie {
 		}
 
 		construct {
-
 			app_system = new Budgie.AppSystem();
 			recency = new List<string?>();
 			ids = new HashTable<string?,TabSwitcherWidget?>(str_hash, str_equal);
@@ -235,7 +237,7 @@ namespace Budgie {
 		}
 
 		private bool flowbox_filter(FlowBoxChild box_child) {
-			TabSwitcherWidget? tab =  box_child.get_child() as TabSwitcherWidget;;
+			TabSwitcherWidget? tab =  box_child as TabSwitcherWidget;
 
 			if ((tab == null) || (tab.window == null)) return false; // Hide if we can't cast
 
@@ -246,8 +248,8 @@ namespace Budgie {
 		}
 
 		private int flowbox_sort(FlowBoxChild child1, FlowBoxChild child2) {
-			TabSwitcherWidget? tab1 =  child1.get_child() as TabSwitcherWidget;
-			TabSwitcherWidget? tab2 =  child2.get_child() as TabSwitcherWidget;
+			TabSwitcherWidget? tab1 =  child1 as TabSwitcherWidget;
+			TabSwitcherWidget? tab2 =  child2 as TabSwitcherWidget;
 			int64 pos1 = get_position_in_recency(tab1.id);
 			int64 pos2 = get_position_in_recency(tab2.id);
 			return pos1 < pos2 ? -1 : 1;
@@ -278,7 +280,7 @@ namespace Budgie {
 			if (current == null) return;
 
 			/* Get the window, which should be activated and activate that */
-			TabSwitcherWidget? tab = current.get_child() as TabSwitcherWidget;
+			TabSwitcherWidget? tab = current as TabSwitcherWidget;
 			window_box.unselect_child(current);
 
 			try {
@@ -346,10 +348,10 @@ namespace Budgie {
 
 			// Visible, each input should cycle to previous / next
 			if (visible) {
-				widget = window_box.get_selected_children().nth_data(0).get_child() as TabSwitcherWidget;
+				widget = window_box.get_selected_children().nth_data(0) as TabSwitcherWidget;
 				if (widget != null) active_window = widget.window;
 			} else if (!visible && widget != null) {
-				window_box.select_child(widget.get_parent() as FlowBoxChild);
+				window_box.select_child(widget);
 			}
 
 			FlowBoxChild? new_child = null;
@@ -375,7 +377,7 @@ namespace Budgie {
 				var child_at_pos = window_box.get_child_at_index((int)new_id_pos);
 				if (child_at_pos == null) continue;
 
-				var widget_at_pos = child_at_pos.get_child() as TabSwitcherWidget;
+				var widget_at_pos = child_at_pos as TabSwitcherWidget;
 				if (widget_at_pos == null || widget_at_pos.window == null) continue;
 
 				if (!show_all_windows && !window_on_active_workspace(widget_at_pos.window)) continue;
