@@ -207,7 +207,7 @@ namespace Workspaces {
 
 				unowned libxfce4windowing.Workspace current = workspace_group.get_active_workspace();
 				unowned libxfce4windowing.Workspace? next = current.get_neighbor(
-					(e.direction == Gdk.ScrollDirection.DOWN) ? libxfce4windowing.Direction.RIGHT : libxfce4windowing.Direction.LEFT
+					(down) ? libxfce4windowing.Direction.RIGHT : libxfce4windowing.Direction.LEFT
 				);
 
 				if (next != null) {
