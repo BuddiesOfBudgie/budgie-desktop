@@ -82,8 +82,8 @@ namespace Budgie {
 
 			window.state_changed.connect((changed_mask, new_state) => {
 				if (
-					((changed_mask & libxfce4windowing.WindowState.ACTIVE) != 0) &&
-					((new_state & libxfce4windowing.WindowState.ACTIVE) != 0)
+					(libxfce4windowing.WindowState.ACTIVE in changed_mask) &&
+					(libxfce4windowing.WindowState.ACTIVE in new_state)
 				) {
 					activation_timestamp = get_time();
 					window_activated(window);
