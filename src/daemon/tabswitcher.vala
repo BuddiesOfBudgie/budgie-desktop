@@ -298,8 +298,6 @@ namespace Budgie {
 		private void on_workspace_changed() {
 			if (workspace_group != null) active_workspace = workspace_group.active_workspace;
 		}
-
-
 		public void move_switcher() {
 			/* Find the primary monitor bounds */
 			Gdk.Rectangle bounds = primary_monitor.get_geometry();
