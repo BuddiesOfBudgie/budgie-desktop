@@ -103,7 +103,7 @@ namespace Budgie {
 	[DBus (name="org.budgie_desktop.TabSwitcher")]
 	public interface Switcher: GLib.Object {
 		public abstract async void PassItem(uint32 xid, uint32 timestamp) throws Error;
-		public abstract async void ShowSwitcher(uint32 curr_xid) throws Error;
+		public abstract async void ShowSwitcher(bool backwards) throws Error;
 		public abstract async void StopSwitcher() throws Error;
 	}
 
@@ -1137,167 +1137,20 @@ namespace Budgie {
 			}
 		}
 
-		//  static int tab_sort(Meta.Window a, Meta.Window b) {
-		//  	uint32 at;
-		//  	uint32 bt;
-
-		//  	at = a.get_user_time();
-		//  	bt = a.get_user_time();
-
-		//  	if (at < bt) {
-		//  		return -1;
-		//  	}
-		//  	if (at > bt) {
-		//  		return 1;
-		//  	}
-		//  	return 0;
-		//  }
-
-		static int tab_sort_reverse(Meta.Window a, Meta.Window b) {
-			uint32 at;
-			uint32 bt;
-
-			at = a.get_user_time();
-			bt = a.get_user_time();
-
-			if (at < bt) {
-				return 1;
-			}
-			if (at > bt) {
-				return -1;
-			}
-			return 0;
-		}
-
-		unowned Meta.Workspace? cur_workspace = null;
-		List<weak Meta.Window>? cur_tabs = null;
-		int cur_index = 0;
-		uint32 last_time = -1;
-
-		void invalidate_tab(Meta.Workspace space, Meta.Window window) {
-			if (space == cur_workspace) {
-				cur_tabs = null;
-				cur_index = 0;
-				last_time = -1;
-			}
-		}
-
-		public const uint32 MAX_TAB_ELAPSE = 2000;
-
 		public void switch_windows_backward(Meta.Display display,
 						Meta.Window? window, Clutter.KeyEvent? event,
 						Meta.KeyBinding binding) {
-			uint32 cur_time = display.get_current_time();
-
-			var workspace = display.get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
-
-			string? data = null;
-			if ((data = workspace.get_data("__flagged")) == null) {
-				workspace.window_added.connect(invalidate_tab);
-				workspace.window_removed.connect(invalidate_tab);
-				workspace.set_data("__flagged", "yes");
-			}
-
-			if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
-				cur_workspace = workspace;
-				cur_tabs = null;
-				cur_index = 0;
-			}
-			last_time = cur_time;
-
-			if (cur_tabs == null) {
-				cur_tabs = this.get_current_tabs(display, workspace, this.settings.get_boolean("show-all-windows-tabswitcher"));
-			}
-
-			if (cur_tabs == null) {
-				return;
-			}
-
-			switch_switcher(true); /* true as in "yes, backward" */
+			switch_switcher(true);
 		}
 
 		public void switch_windows(Meta.Display display,
 						Meta.Window? window, Clutter.KeyEvent? event,
 						Meta.KeyBinding binding) {
-			uint32 cur_time = display.get_current_time();
-
-			var workspace = display.get_workspace_manager().get_active_workspace();
-			if (workspace == null) {
-				return;
-			}
-
-			string? data = null;
-			if ((data = workspace.get_data("__flagged")) == null) {
-				workspace.window_added.connect(invalidate_tab);
-				workspace.window_removed.connect(invalidate_tab);
-				workspace.set_data("__flagged", "yes");
-			}
-
-			if (workspace != cur_workspace || cur_time - last_time >= MAX_TAB_ELAPSE) {
-				cur_workspace = workspace;
-				cur_tabs = null;
-				cur_index = 0;
-			}
-			last_time = cur_time;
-
-			if (cur_tabs == null) {
-				cur_tabs = this.get_current_tabs(display, workspace, this.settings.get_boolean("show-all-windows-tabswitcher"));
-			}
-
-			if (cur_tabs == null) {
-				return;
-			}
-
 			switch_switcher();
 		}
 
-		public void switch_switcher(bool backward = false) {
-			/* Pass each window over to tabswitcher */
-			foreach (var child in cur_tabs) {
-				uint32 xid = (uint32)child.get_xwindow();
-				switcher_proxy.PassItem.begin(xid, child.get_user_time());
-			}
-			/* Either choose previous or choose next window */
-			if (backward) {
-				cur_index--;
-				if (cur_index < 0) {
-					cur_index = (int)cur_tabs.length() - 1;
-				}
-			} else {
-				cur_index++;
-				if (cur_index > cur_tabs.length() - 1) {
-					cur_index = 0;
-				}
-			}
-			/* Get the new selected window over to TabSwitcher */
-			var win = cur_tabs.nth_data(cur_index);
-			if (win == null) {
-				return;
-			}
-			uint32 curr_xid = (uint32)win.get_xwindow();
-			switcher_proxy.ShowSwitcher.begin(curr_xid);
-		}
-
-		/* Return sorted list of user open tabs */
-		private List<weak Meta.Window> get_current_tabs(Meta.Display display,
-						Meta.Workspace workspace,
-						bool getTabsForAllWindows) {
-			List<weak Meta.Window> tabs;
-			CompareFunc<weak Meta.Window> cm = Budgie.BudgieWM.tab_sort_reverse;
-
-			if (getTabsForAllWindows) {
-				tabs = display.get_tab_list(Meta.TabList.NORMAL, null);
-			} else {
-				// Return only tabs for the current workspace
-				tabs = display.get_tab_list(Meta.TabList.NORMAL, workspace);
-			}
-
-			tabs.sort(cm);
-
-			return tabs;
+		public void switch_switcher(bool backwards = false) {
+			switcher_proxy.ShowSwitcher.begin(backwards);
 		}
 
 		public void stop_switch_windows() {

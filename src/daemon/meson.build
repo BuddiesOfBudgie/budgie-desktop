@@ -46,6 +46,7 @@ daemon_deps = [
     dep_gdkx11,
     dep_notify,
     dep_wnck,
+    dep_xfce4windowing,
     dep_gst,
     dep_cairo,
     link_libbudgieprivate,
@@ -86,6 +87,7 @@ executable(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'libwnck-3.0',
+        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
