@@ -81,10 +81,6 @@ public class IconButton : Gtk.ToggleButton {
 		// TODO: connect signals
 
 		if (app != null) {
-			app.launched.connect_after(() => {
-				icon.waiting = false;
-			});
-
 			app.launch_failed.connect_after(() => {
 				icon.waiting = false;
 			});
