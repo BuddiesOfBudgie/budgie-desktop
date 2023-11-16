@@ -572,6 +572,7 @@ public class IconButton : Gtk.ToggleButton {
 
 	public void set_window_group(Budgie.Windowing.WindowGroup? window_group) {
 		this.window_group = window_group;
+		popover.group = window_group;
 
 		if (window_group == null) return;
 

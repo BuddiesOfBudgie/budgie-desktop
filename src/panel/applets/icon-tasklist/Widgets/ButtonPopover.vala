@@ -19,7 +19,7 @@ public interface SettingsRemote : GLib.Object {
 
 public class ButtonPopover : Budgie.Popover {
 	public Budgie.Application app { get; construct; }
-	public Budgie.Windowing.WindowGroup? group { get; construct; }
+	public Budgie.Windowing.WindowGroup? group { get; construct set; }
 
 	private Gtk.Stack? stack;
 	private Gtk.ListBox? desktop_actions;
@@ -78,10 +78,14 @@ public class ButtonPopover : Budgie.Popover {
 			relief = Gtk.ReliefStyle.NONE,
 		};
 
+		new_instance_button.clicked.connect(on_new_instance_clicked);
+
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close all windows"),
 			relief = Gtk.ReliefStyle.NONE,
 		};
+
+		close_all_button.clicked.connect(on_close_all_clicked);
 
 		var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		button_box.pack_start(pin_button);
@@ -110,6 +114,25 @@ public class ButtonPopover : Budgie.Popover {
 		add(stack);
 
 		stack.show_all();
+	}
+
+	private void on_new_instance_clicked() {
+		app.launch();
+		hide();
+	}
+
+	private void on_close_all_clicked() {
+		var windows = group.get_windows();
+
+		foreach (var window in windows) {
+			try {
+				window.close(Gtk.get_current_event_time());
+			} catch (Error e) {
+				warning("Unable to close window '%s': %s", window.get_name(), e.message);
+			}
+		}
+
+		hide();
 	}
 
 	public void add_window(libxfce4windowing.Window window) {
