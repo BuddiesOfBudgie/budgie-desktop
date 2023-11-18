@@ -78,6 +78,8 @@ public class IconButton : Gtk.ToggleButton {
 
 		popover = new ButtonPopover(this, app, window_group);
 
+		popover.bind_property("pinned", this, "pinned", BindingFlags.BIDIRECTIONAL);
+
 		// TODO: connect signals
 
 		if (app != null) {

@@ -21,6 +21,22 @@ public class ButtonPopover : Budgie.Popover {
 	public Budgie.Application app { get; construct; }
 	public Budgie.Windowing.WindowGroup? group { get; construct set; }
 
+	private bool _pinned = false;
+	public bool pinned {
+		get { return _pinned; }
+		construct set {
+			_pinned = value;
+
+			if (pin_button == null) return;
+
+			if (_pinned) {
+				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite", Gtk.IconSize.SMALL_TOOLBAR);
+			} else {
+				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			}		
+		}
+	}
+
 	private Gtk.Stack? stack;
 	private Gtk.ListBox? desktop_actions;
 	private Gtk.ListBox? windows;
@@ -68,10 +84,21 @@ public class ButtonPopover : Budgie.Popover {
 			}
 		}
 
-		pin_button = new Gtk.Button.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
+		Gtk.Image pinned_icon;
+
+		if (pinned) {
+			pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite", Gtk.IconSize.SMALL_TOOLBAR);
+		} else {
+			pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		}
+
+		pin_button = new Gtk.Button() {
+			image = pinned_icon,
 			tooltip_text = _("Favorite"),
 			relief = Gtk.ReliefStyle.NONE,
 		};
+
+		pin_button.clicked.connect(on_pin_clicked);
 
 		new_instance_button = new Gtk.Button.from_icon_name("window-new-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Launch new instance"),
@@ -114,6 +141,10 @@ public class ButtonPopover : Budgie.Popover {
 		add(stack);
 
 		stack.show_all();
+	}
+
+	private void on_pin_clicked() {
+		pinned = !pinned;
 	}
 
 	private void on_new_instance_clicked() {

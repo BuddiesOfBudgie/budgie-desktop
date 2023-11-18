@@ -132,7 +132,7 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * Add IconButton for pinned apps
 	 */
 	private void startup() {
-		string[] pinned = this.settings.get_strv("pinned-launchers");
+		var pinned = settings.get_strv("pinned-launchers");
 
 		foreach (string launcher in pinned) {
 			var info = new DesktopAppInfo(launcher);
@@ -140,8 +140,11 @@ public class IconTasklistApplet : Budgie.Applet {
 			if (info == null) continue;
 
 			var application = new Budgie.Application(info);
-			var button = new IconButton(application, manager);
-			button.pinned = true;
+			var button = new IconButton(application, manager) {
+				pinned = true,
+			};
+
+			button.notify["pinned"].connect(on_pinned_changed);
 
 			add_icon_button(launcher, button);
 		}
@@ -263,6 +266,8 @@ public class IconTasklistApplet : Budgie.Applet {
 			} else {
 				var application = new Budgie.Application(info);
 				var button = new IconButton(application, manager);
+
+				button.notify["pinned"].connect(on_pinned_changed);
 
 				add_icon_button(launcher, button);
 
@@ -388,6 +393,9 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		if (button == null) { // create a new button
 			button = new IconButton.with_group(application, group, manager);
+
+			button.notify["pinned"].connect(on_pinned_changed);
+
 			add_icon_button(application_id, button);
 		}
 
@@ -503,33 +511,29 @@ public class IconTasklistApplet : Budgie.Applet {
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = get_orientation();
 
-		// TODO: Kill button when there are no window left and its not pinned
-		//  button.became_empty.connect(() => {
-		//  	if (!button.pinned) {
-		//  		if (wrapper != null) {
-		//  			wrapper.gracefully_die();
-		//  		}
-
-		//  		this.remove_button(app_id);
-		//  	}
-		//  });
-
-		// TODO: when button become pinned, make sure we identify it by its launcher instead of xid or grouping will fail
-		//  button.pinned_changed.connect(() => {
-		//  	if (button.first_window == null) return;
-
-		//  	if (button.pinned) {
-		//  		add_button(launcher, button);
-		//  		remove_button(button.application.desktop_id);
-		//  	} else {
-		//  		add_button(button.application.desktop_id, button);
-		//  		remove_button(launcher);
-		//  	}
-		//  });
-
 		this.main_layout.add(wrapper);
 		this.show_all();
 		this.update_button(button);
+	}
+
+	private void on_pinned_changed(Object object, ParamSpec pspec) {
+		update_pinned_launchers();
+
+		// TODO: Do we want to do anything about sorting?
+	}
+
+	private void update_pinned_launchers() {
+		var pinned = new string[]{};
+
+		foreach (var child in main_layout.get_children()) {
+			IconButton child_button = ((ButtonWrapper) child).button;
+
+			if (child_button.pinned) {
+				pinned += child_button.app.desktop_id;
+			}
+		}
+
+		settings.set_strv("pinned-launchers", pinned);
 	}
 
 	private void update_button(IconButton button) {
