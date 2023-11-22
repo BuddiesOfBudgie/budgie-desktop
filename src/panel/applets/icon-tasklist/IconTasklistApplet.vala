@@ -10,8 +10,10 @@
  */
 
 public const Gtk.TargetEntry[] DRAG_TARGETS = {
-	{ "application/x-icon-tasklist-launcher-id", 0, 0 },
 	{ "text/uri-list", 0, 0 },
+};
+
+public const Gtk.TargetEntry[] SOURCE_TARGET = {
 	{ "application/x-desktop", 0, 0 },
 };
 
@@ -239,6 +241,121 @@ public class IconTasklistApplet : Budgie.Applet {
 		});
 	}
 
+	/**
+	 * Handles the drag_data_get signal for an icon button.
+	 *
+	 * This sets the button's application's desktop-id as the drag data.
+	 */
+	private void button_drag_data_get(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData data, uint info, uint time) {
+		var button = widget as IconButton;
+		var id = button.app.desktop_id;
+
+		data.set(data.get_target(), 8, id.data);
+	}
+
+	/**
+	 * Handles the drag_begin signal for an icon button.
+	 *
+	 * This sets the icon at the cursor when the button is dragged.
+	 */
+	private void button_drag_begin(Gtk.Widget widget, Gdk.DragContext context) {
+		var button = widget as IconButton;
+		int size = 0;
+
+		if (!Gtk.icon_size_lookup(Gtk.IconSize.DND,  out size, null)) {
+			size = 32;
+		}
+
+		var scale_factor = button.get_scale_factor();
+
+		var icon_theme = Gtk.IconTheme.get_default();
+		var icon_info = icon_theme.lookup_icon(button.app.icon.to_string(), size, Gtk.IconLookupFlags.USE_BUILTIN);
+		Gdk.Pixbuf? pixbuf;
+
+		try {
+			pixbuf = icon_info.load_icon();
+		} catch (Error e) {
+			warning("Unable to get Pixbuf from Icon");
+			return;
+		}
+
+		if (pixbuf == null) return;
+
+		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale_factor, null);
+
+		Gtk.drag_set_icon_surface(context, surface);
+	}
+
+	/**
+	 * Handles when a drag item is dropped on a icon button.
+	 *
+	 * If the source widget is another icon button, reorder the widgets in
+	 * our container so that the dropped button is put in the place of this
+	 * button.
+	 */
+	private void button_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData data, uint info, uint time) {
+		var button = widget as IconButton;
+		var source = Gtk.drag_get_source_widget(context);
+
+		// Make sure the source is a icon button
+		if (!(source is IconButton)) {
+			Gtk.drag_finish(context, false, false, Gtk.get_current_event_time());
+			return;
+		}
+
+		List<weak Gtk.Widget> children = main_layout.get_children(); // Get the list of child buttons
+		unowned var self = children.find_custom(button.get_parent(), (a, b) => {
+			var wrapper_a = a as ButtonWrapper;
+			var wrapper_b = b as ButtonWrapper;
+
+			return strcmp(wrapper_a.button.app.desktop_id, wrapper_b.button.app.desktop_id);
+		});
+
+		if (self == null) {
+			warning("Unable to find the correct wrapper");
+			Gtk.drag_finish(context, false, false, Gtk.get_current_event_time());
+			return;
+		}
+
+		var position = children.position(self); // Get our position
+
+		main_layout.reorder_child(source.get_parent(), position); // Put the source button in our position
+		update_pinned_launchers(); // Update our pin order
+		Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, Gtk.get_current_event_time());
+	}
+
+	/**
+	 * Handles when the cursor leaves the space of a button during a drag.
+	 */
+	private void button_drag_leave(Gtk.Widget widget, Gdk.DragContext context, uint time) {
+		Gtk.drag_unhighlight(widget);
+	}
+
+	/**
+	 * Handles when a widget is dragged over a tasklist button.
+	 */
+	private bool button_drag_motion(Gtk.Widget widget, Gdk.DragContext context, int x, int y, uint time) {
+		var button = widget as IconButton;
+		var source = Gtk.drag_get_source_widget(context);
+
+		// Only respond to dragging tasklist buttons
+		if (source == null || !(source is IconButton)) {
+			Gdk.drag_status(context, 0, time); // Keep emitting the signal
+			return true; // Make sure we receive the Leave signal
+		}
+
+		// Check if this button is a valid drop target
+		var ret = Gtk.drag_dest_find_target(button, context, null);
+
+		if (ret != Gdk.Atom.NONE) {
+			Gtk.drag_highlight(button); // Highlight this button
+			Gdk.drag_status(context, Gdk.DragAction.MOVE, time); // Drag-n-drop to reorder buttons
+			return true;
+		}
+
+		return false; // Send drag-motion to other widgets
+	}
+
 	private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint item, uint time) {
 		if (item != 0) {
 			message("Invalid target type");
@@ -278,79 +395,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				launchers += app_id;
 				settings.set_strv("pinned-launchers", launchers);
 			}
-		} else { // Doesn't start with file://
-			unowned IconButton? button = null;
-			string app_id_without_desktop_suffix = app_id.replace(".desktop", "");
-
-			if (this.buttons.contains(app_id)) { // If buttons contains this ID for this application (can be a desktop file name or xid)
-				button = this.buttons.get(app_id);
-			} else {
-				button = this.buttons.get(app_id_without_desktop_suffix);
-			}
-
-			if (button != null) {
-				original_button = button.get_parent() as ButtonWrapper;
-			}
 		}
-
-		if (original_button == null) {
-			return;
-		}
-
-		// Iterate through launchers
-		foreach (Gtk.Widget widget1 in this.main_layout.get_children()) {
-			ButtonWrapper current_button = (widget1 as ButtonWrapper);
-
-			Gtk.Allocation alloc;
-
-			current_button.get_allocation(out alloc);
-
-			if ((this.get_orientation() == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + (alloc.width / 2))) ||
-				(this.get_orientation() == Gtk.Orientation.VERTICAL && y <= (alloc.y + (alloc.height / 2)))) {
-				int new_position, old_position;
-				this.main_layout.child_get(original_button, "position", out old_position, null);
-				this.main_layout.child_get(current_button, "position", out new_position, null);
-
-				if (new_position == old_position) {
-					break;
-				}
-
-				if (new_position == old_position + 1) {
-					break;
-				}
-
-				if (new_position > old_position) {
-					new_position = new_position - 1;
-				}
-
-				this.main_layout.reorder_child(original_button, new_position);
-				break;
-			}
-
-			if ((this.get_orientation() == Gtk.Orientation.HORIZONTAL && x <= (alloc.x + alloc.width)) ||
-				(this.get_orientation() == Gtk.Orientation.VERTICAL && y <= (alloc.y + alloc.height))) {
-				int new_position, old_position;
-				this.main_layout.child_get(original_button, "position", out old_position, null);
-				this.main_layout.child_get(current_button, "position", out new_position, null);
-
-				if (new_position == old_position) {
-					break;
-				}
-
-				if (new_position == old_position - 1) {
-					break;
-				}
-
-				if (new_position < old_position) {
-					new_position = new_position + 1;
-				}
-
-				this.main_layout.reorder_child(original_button, new_position);
-				break;
-			}
-		}
-		original_button.set_transition_type(Gtk.RevealerTransitionType.NONE);
-		original_button.set_reveal_child(true);
 
 		Gtk.drag_finish(context, true, true, time);
 	}
@@ -511,8 +556,16 @@ public class IconTasklistApplet : Budgie.Applet {
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = get_orientation();
 
+		Gtk.drag_source_set(button, Gdk.ModifierType.BUTTON1_MASK, SOURCE_TARGET, Gdk.DragAction.MOVE);
+		Gtk.drag_dest_set(button, (Gtk.DestDefaults.DROP|Gtk.DestDefaults.HIGHLIGHT), SOURCE_TARGET, Gdk.DragAction.MOVE);
+
+		button.drag_data_get.connect(button_drag_data_get);
+		button.drag_begin.connect(button_drag_begin);
+		button.drag_data_received.connect(button_drag_data_received);
+		button.drag_motion.connect(button_drag_motion);
+		button.drag_leave.connect(button_drag_leave);
+
 		this.main_layout.add(wrapper);
-		this.show_all();
 		this.update_button(button);
 	}
 

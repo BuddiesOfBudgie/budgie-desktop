@@ -174,7 +174,7 @@ public class IconButton : Gtk.ToggleButton {
 				} else {
 					if (!pinned) {
 						warning("IconButton was clicked with no active windows, but is not pinned!");
-						return Gdk.EVENT_STOP;
+						break;
 					}
 
 					icon.animate_launch(panel_position);
@@ -183,16 +183,16 @@ public class IconButton : Gtk.ToggleButton {
 
 					if (!app.launch()) {
 						warning("Failed to launch application: %s", app.name);
-						return Gdk.EVENT_STOP;
+						break;
 					}
 				}
-				return Gdk.EVENT_STOP;
+				break;
 			case Gdk.BUTTON_SECONDARY:
 				popover_manager.show_popover(this);
 				return Gdk.EVENT_STOP;
 		}
 
-		return Gdk.EVENT_PROPAGATE;
+		return base.button_release_event(event);
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
