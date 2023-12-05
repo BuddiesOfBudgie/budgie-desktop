@@ -2,24 +2,24 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the budgie-desktop package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# 
-#, fuzzy
+# David Medina <opensusecatala@gmail.com>, desembre de 2023
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.7.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:28+0300\n"
-"PO-Revision-Date: 2022-01-02 09:45+0000\n"
+"PO-Revision-Date: 2023-12-05 11:26+0100\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2022\n"
 "Language-Team: Catalan (https://app.transifex.com/buddiesofbudgie/teams/129844/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
@@ -27,22 +27,21 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:554
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Notificacions per llegir"
 
 #: src/daemon/notifications/dbus.vala:557
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
-msgid_plural ""
-"You received %d notifications while an application was fullscreened."
-msgstr[0] ""
-msgstr[1] ""
+msgid_plural "You received %d notifications while an application was fullscreened."
+msgstr[0] "Heu rebut %d notificació mentre una aplicació estava en pantalla completa."
+msgstr[1] "Heu rebut %d notificacions mentre una aplicació estava en pantalla completa."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:571
 msgid "View Notifications"
-msgstr ""
+msgstr "Mostra les notificacions"
 
 #: src/daemon/endsession.vala:154
 msgid "Log out"
@@ -54,16 +53,14 @@ msgstr "Reinicia el dispositiu"
 
 #: src/daemon/endsession.vala:170 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Atura"
+msgstr "Atura't"
 
-#: src/daemon/menus.vala:46 src/panel/settings/settings_main.vala:68
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
+#: src/daemon/menus.vala:46 src/panel/settings/settings_main.vala:68 src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr "Paràmetres de l'escriptori Budgie"
 
-#: src/daemon/menus.vala:51
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+#: src/daemon/menus.vala:51 src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
 msgstr "Paràmetres del sistema"
 
@@ -71,83 +68,77 @@ msgstr "Paràmetres del sistema"
 #. Only one window and a valid AbominationRunningApp for it
 #. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
 #. as a workaround
-#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
-#: src/panel/applets/icon-tasklist/IconPopover.vala:226
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846 src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/panel/applets/icon-tasklist/IconButton.vala:463 src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Captura de pantalla del Budgie"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
 #: src/daemon/screenshot.vala:439
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Captura tota la pantalla"
 
 #: src/daemon/screenshot.vala:440
 msgid "Screenshot active window"
-msgstr ""
+msgstr "Captura la finestra activa"
 
 #: src/daemon/screenshot.vala:441
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Captura l'àrea seleccionada"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
 #: src/daemon/screenshot.vala:549
 msgid "Screen"
-msgstr ""
+msgstr "Pantalla"
 
 #: src/daemon/screenshot.vala:549
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 #: src/daemon/screenshot.vala:549
 msgid "Selection"
-msgstr ""
+msgstr "Selecció"
 
 #. translate
 #: src/daemon/screenshot.vala:900
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Cancel·la la captura"
 
 #: src/daemon/screenshot.vala:901
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Desa la captura al directori seleccionat"
 
 #: src/daemon/screenshot.vala:902
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Copia la captura al porta-retalls"
 
 #: src/daemon/screenshot.vala:903
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Obre la captura a l'aplicació predeterminada"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1177
 msgid "Other..."
-msgstr ""
+msgstr "Altres..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1261
 msgid "Open Folder"
-msgstr ""
+msgstr "Obre una carpeta"
 
-#: src/daemon/screenshot.vala:1262
-#: src/panel/settings/settings_autostart.vala:194
-#: src/panel/settings/settings_autostart.vala:359
-#: src/panel/settings/settings_panel_dialogs.vala:158
-#: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+#: src/daemon/screenshot.vala:1262 src/panel/settings/settings_autostart.vala:194 src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158 src/panel/settings/settings_plugin_chooser.vala:105
+#: src/panel/applets/budgie-menu/IconChooser.vala:52 src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
 msgstr "Cancel·la"
 
 #: src/daemon/screenshot.vala:1262
 msgid "Open"
-msgstr ""
+msgstr "Obre"
 
 #. Should show a notification
 #: src/daemon/settings.vala:339
@@ -162,8 +153,8 @@ msgstr "S'ha desactivat l'empenta de la Cafeïna."
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "S'aturarà d'aquí a un minut."
+msgstr[1] "S'aturarà d'aquí a %d minuts."
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -181,14 +172,12 @@ msgstr "s'executa"
 msgid "Applications"
 msgstr "Aplicacions"
 
-#: src/panel/settings/settings_autostart.vala:195
-#: src/panel/settings/settings_autostart.vala:360
+#: src/panel/settings/settings_autostart.vala:195 src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_plugin_chooser.vala:106
 msgid "Add"
 msgstr "Afegeix"
 
-#: src/panel/settings/settings_autostart.vala:354
-#: src/panel/settings/settings_autostart.vala:387
+#: src/panel/settings/settings_autostart.vala:354 src/panel/settings/settings_autostart.vala:387
 msgid "Command"
 msgstr "Ordre"
 
@@ -200,8 +189,7 @@ msgstr "Ja existeix una entrada amb aquest títol."
 msgid "Title"
 msgstr "Títol"
 
-#: src/panel/settings/settings_autostart.vala:377
-#: src/panel/settings/settings_autostart.vala:391
+#: src/panel/settings/settings_autostart.vala:377 src/panel/settings/settings_autostart.vala:391
 msgid "Required"
 msgstr "Necessari"
 
@@ -299,11 +287,8 @@ msgid "Number of virtual desktops"
 msgstr "Nombre d'escriptoris virtuals"
 
 #: src/panel/settings/settings_desktop.vala:149
-msgid ""
-"Number of virtual desktops / workspaces to create automatically on startup."
-msgstr ""
-"Nombre d'escriptoris virtuals / espais de treball per crear automàticament a"
-" l'engegada."
+msgid "Number of virtual desktops / workspaces to create automatically on startup."
+msgstr "Nombre d'escriptoris virtuals / espais de treball per crear automàticament a l'engegada."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
@@ -319,11 +304,8 @@ msgid "Click Policy"
 msgstr "Funcionament del clic"
 
 #: src/panel/settings/settings_desktop.vala:237
-msgid ""
-"Click Policy determines if we should open items on a single or double click."
-msgstr ""
-"El funcionament del clic determina si s'han d'obrir els elements amb un clic"
-" únic o doble."
+msgid "Click Policy determines if we should open items on a single or double click."
+msgstr "El funcionament del clic determina si s'han d'obrir els elements amb un clic únic o doble."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -378,9 +360,7 @@ msgstr "Monoespai"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr ""
-"Establiu la lletra d'amplada fixa usada per les aplicacions predominants en "
-"text."
+msgstr "Establiu la lletra d'amplada fixa usada per les aplicacions predominants en text."
 
 #: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
@@ -402,9 +382,7 @@ msgstr "Mitjana"
 msgid "Slight"
 msgstr "Lleu"
 
-#: src/panel/settings/settings_fonts.vala:83
-#: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_fonts.vala:83 src/panel/settings/settings_fonts.vala:109 src/panel/settings/settings_panel.vala:204
 msgid "None"
 msgstr "Cap"
 
@@ -453,14 +431,10 @@ msgid "Confirm applet removal"
 msgstr "Confirmeu la supressió de la miniaplicació."
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
-msgid ""
-"Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
-"Realment voleu suprimir aquesta miniaplicació? Aquesta acció no es pot "
-"desfer."
+msgid "Do you really want to remove this applet? This action cannot be undone."
+msgstr "Realment voleu suprimir aquesta miniaplicació? Aquesta acció no es pot desfer."
 
-#: src/panel/settings/settings_panel_dialogs.vala:89
-#: src/panel/settings/settings_panel_dialogs.vala:148
+#: src/panel/settings/settings_panel_dialogs.vala:89 src/panel/settings/settings_panel_dialogs.vala:148
 msgid "Don't ask me again"
 msgstr "No m'ho tornis a preguntar."
 
@@ -474,53 +448,47 @@ msgstr "Mantén la miniaplicació."
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "Confirmeu la supressió del giny"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
-msgid ""
-"Do you really want to remove this widget? This action cannot be undone."
-msgstr ""
+msgid "Do you really want to remove this widget? This action cannot be undone."
+msgstr "Realment voleu suprimir aquest giny? Aquesta acció no es pot desfer."
 
-#: src/panel/settings/settings_panel_dialogs.vala:157
-#: src/panel/applets/workspaces/WorkspaceItem.vala:80
+#: src/panel/settings/settings_panel_dialogs.vala:157 src/panel/applets/workspaces/WorkspaceItem.vala:80
 msgid "Remove"
 msgstr "Suprimeix"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "Configuració dels ginys"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Afegeix un giny"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "Trieu un giny nou per afegir-lo a la vista de ginys"
 
-#: src/panel/settings/settings_raven_widgets.vala:164
-#: src/panel/settings/settings_panel_applets.vala:250
+#: src/panel/settings/settings_raven_widgets.vala:164 src/panel/settings/settings_panel_applets.vala:250
 msgid "No settings available"
 msgstr "No hi ha paràmetres disponibles."
 
 #: src/panel/settings/settings_raven_widgets.vala:237
-msgid ""
-"Failed to create the widget instance. The plugin engine could not find info "
-"for this plugin."
-msgstr ""
+msgid "Failed to create the widget instance. The plugin engine could not find info for this plugin."
+msgstr "Ha fallat crear la instància del giny. El motor de connectors no ha pogut trobar informació per a aquest connector."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
-"Failed to create the widget instance. The module name must be in reverse-DNS"
-" format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
+"Failed to create the widget instance. The module name must be in reverse-DNS format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"Ha fallat crear la instància del giny. El nom del mòdul ha d'estar en format DNS invers, com ara \"tld.domain.group.WidgetName.so\" per a C / "
+"Vala o \"tld_domain_group_WidgetName\" per a Python."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
-msgid ""
-"Failed to create the widget instance. The plugin engine failed to load the "
-"plugin from the disk."
-msgstr ""
+msgid "Failed to create the widget instance. The plugin engine failed to load the plugin from the disk."
+msgstr "Ha fallat crear la instància del giny. El motor de connectors no ha pogut carregar el connector des del disc."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -528,41 +496,42 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"Ha fallat crear la instància del giny. El connector admet la configuració, però no instal·la un esquema de configuració amb el mateix nom.\n"
+"\n"
+"El nom de l'esquema hauria de ser idèntic al nom del mòdul, però sense extensió i (en el cas de Python) els guions baixos substituïts per punts."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "Ha fallat crear la instància del giny a causa d'un error desconegut."
 
-#: src/panel/settings/settings_raven.vala:47
-#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_raven.vala:47 src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "Ginys"
 
-#: src/panel/settings/settings_raven.vala:48
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_raven.vala:48 src/panel/settings/settings_panel.vala:89
 msgid "Settings"
 msgstr "Paràmetres"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr ""
+msgstr "Integrat"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "Trieu un giny"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Sense descripció"
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "fet per %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
-msgstr ""
+msgstr "No hi ha cap llista d'autors."
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
@@ -589,12 +558,8 @@ msgid "Attach modal dialogs to windows"
 msgstr "Adjunta diàlegs modals a les finestres."
 
 #: src/panel/settings/settings_wm.vala:41
-msgid ""
-"Modal dialogs will become attached to the parent window and move together "
-"when dragged."
-msgstr ""
-"Els diàlegs modals s'adjuntaran a la finestra mare i es mouran conjuntament "
-"quan s'arrosseguin."
+msgid "Modal dialogs will become attached to the parent window and move together when dragged."
+msgstr "Els diàlegs modals s'adjuntaran a la finestra mare i es mouran conjuntament quan s'arrosseguin."
 
 #: src/panel/settings/settings_wm.vala:46
 msgid "Button layout"
@@ -602,8 +567,7 @@ msgstr "Disposició dels botons"
 
 #: src/panel/settings/settings_wm.vala:47
 msgid "Change the layout of buttons in application titlebars."
-msgstr ""
-"Canvia la disposició dels botons a les barres de títol de les aplicacions."
+msgstr "Canvia la disposició dels botons a les barres de títol de les aplicacions."
 
 #: src/panel/settings/settings_wm.vala:52
 msgid "Center new windows on screen"
@@ -615,88 +579,61 @@ msgstr "Centra les finestres noves que s'obrin a la pantalla actual."
 
 #: src/panel/settings/settings_wm.vala:58
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr ""
-"Inhabilita el mode de llum de nit quan les finestres estiguin en pantalla "
-"completa."
+msgstr "Inhabilita el mode de llum de nit quan les finestres estiguin en pantalla completa."
 
 #: src/panel/settings/settings_wm.vala:59
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr ""
-"Inhabilita el mode de llum de nit quan una finestra està en pantalla "
-"completa. Es torna a habilitar quan se'n surt."
+msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgstr "Inhabilita el mode de llum de nit quan una finestra està en pantalla completa. Es torna a habilitar quan se'n surt."
 
 #: src/panel/settings/settings_wm.vala:64
 msgid "Pause notifications when windows are fullscreen"
-msgstr ""
-"Interromp les notificacions quan les finestres estiguin en pantalla "
-"completa."
+msgstr "Interromp les notificacions quan les finestres estiguin en pantalla completa."
 
 #: src/panel/settings/settings_wm.vala:65
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr ""
-"Evita que apareguin notificacions quan una finestra està en pantalla "
-"completa. Es torna a habilitar quan se'n surt."
+msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgstr "Evita que apareguin notificacions quan una finestra està en pantalla completa. Es torna a habilitar quan se'n surt."
 
 #: src/panel/settings/settings_wm.vala:70
 msgid "Automatic tiling"
 msgstr "Mosaic automàtic"
 
 #: src/panel/settings/settings_wm.vala:71
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Les finestres faran automàticament un mosaic quan s'arrosseguin a dalt de "
-"tot de la pantalla o als cantons."
+msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgstr "Les finestres faran automàticament un mosaic quan s'arrosseguin a dalt de tot de la pantalla o als cantons."
 
 #: src/panel/settings/settings_wm.vala:76
 msgid "Enable window focus change on mouse enter and leave"
-msgstr ""
-"Habilita el canvi del focus de la finestra en entrar-hi i sortir-ne amb el "
-"ratolí."
+msgstr "Habilita el canvi del focus de la finestra en entrar-hi i sortir-ne amb el ratolí."
 
 #: src/panel/settings/settings_wm.vala:77
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr ""
-"Habilita que la finestra tingui el focus quan s'hi entri amb el ratolí i que"
-" el deixi de tenir quan se'n surti."
+msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
+msgstr "Habilita que la finestra tingui el focus quan s'hi entri amb el ratolí i que el deixi de tenir quan se'n surti."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "Habilita la redirecció"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
-"Enable unredirection which will allow frames to bypass compositing for "
-"fullscreen applications. This option is for advanced users and recommended "
-"to keep enabled. Use this if you are having graphical or performance issues "
-"with dedicated GPUs."
+"Enable unredirection which will allow frames to bypass compositing for fullscreen applications. This option is for advanced users and "
+"recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs."
 msgstr ""
+"Habiliteu la redirecció que permetrà que els fotogrames passin per alt la composició per a aplicacions de pantalla completa. Aquesta opció és "
+"per a usuaris avançats i es recomana mantenir-la activada. Useu-ho si teniu problemes gràfics o de rendiment amb les GPU dedicades."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
 msgstr "Mostra totes les finestres al canviador de pestanyes."
 
 #: src/panel/settings/settings_wm.vala:90
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr ""
-"El canviador de pestanyes les mostrarà totes independentment de l'espai de "
-"treball en ús."
+msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgstr "El canviador de pestanyes les mostrarà totes independentment de l'espai de treball en ús."
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Right (standard)"
 msgstr "Dreta (estàndard)"
 
-#: src/panel/settings/settings_wm.vala:99
-#: src/panel/settings/settings_panel.vala:187 src/raven/raven.vala:33
+#: src/panel/settings/settings_wm.vala:99 src/panel/settings/settings_panel.vala:187 src/raven/raven.vala:33
 msgid "Left"
 msgstr "Esquerra"
 
@@ -790,16 +727,15 @@ msgstr "Mida"
 
 #: src/panel/settings/settings_panel.vala:246
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
-"Establiu la mida (amplada o alçada, segons l'orientació) d'aquest plafó."
+msgstr "Establiu la mida (amplada o alçada, segons l'orientació) d'aquest plafó."
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Spacing"
-msgstr ""
+msgstr "Espaiat"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "Estableix l'espai entre les miniaplicacions per a aquest plafó."
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Automatically hide"
@@ -807,9 +743,7 @@ msgstr "Amaga'l automàticament."
 
 #: src/panel/settings/settings_panel.vala:262
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
-"Quan estigui establert, aquest plafó s'amagarà per maximitzar l'espai de la "
-"pantalla."
+msgstr "Quan estigui establert, aquest plafó s'amagarà per maximitzar l'espai de la pantalla."
 
 #: src/panel/settings/settings_panel.vala:269
 msgid "Transparency"
@@ -832,28 +766,20 @@ msgid "Stylize regions"
 msgstr "Estilitza les regions."
 
 #: src/panel/settings/settings_panel.vala:283
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr ""
-"Afegeix un suggeriment al plafó de manera que cada una de les tres àrees "
-"principals pugui tenir un tema diferent."
+msgid "Adds a hint to the panel so that each of the panel's three main areas may be themed differently."
+msgstr "Afegeix un suggeriment al plafó de manera que cada una de les tres àrees principals pugui tenir un tema diferent."
 
 #: src/panel/settings/settings_panel.vala:290
 msgid "Dock mode"
 msgstr "Mode d'acoblador"
 
 #: src/panel/settings/settings_panel.vala:291
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr ""
-"En mode d'acoblador, el plafó usarà la mínima quantitat d'espai possible i "
-"alliberarà espai de pantalla valuós."
+msgid "When in dock mode, the panel will use the minimal amount of space possible, freeing up valuable screen estate"
+msgstr "En mode d'acoblador, el plafó usarà la mínima quantitat d'espai possible i alliberarà espai de pantalla valuós."
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "Paràmetres de les miniaplicacions"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -880,22 +806,16 @@ msgid "Set Raven position"
 msgstr "Establiu la posició del Raven."
 
 #: src/panel/settings/settings_raven_settings.vala:48
-msgid ""
-"Set which side of the screen Raven will open on. If set to Automatic, Raven "
-"will open where its parent panel is."
-msgstr ""
-"Establiu a quin costat de la pantalla s'obrirà el Raven. Si s'estableix a "
-"automàtic, s'obrirà on sigui el plafó de què depengui."
+msgid "Set which side of the screen Raven will open on. If set to Automatic, Raven will open where its parent panel is."
+msgstr "Establiu a quin costat de la pantalla s'obrirà el Raven. Si s'estableix a automàtic, s'obrirà on sigui el plafó de què depengui."
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "Establiu l'ordre de classificació de les notificacions."
 
 #: src/panel/settings/settings_raven_settings.vala:72
-msgid ""
-"Set whether notifications are sorted from oldest to newest, or newest to "
-"oldest."
-msgstr ""
+msgid "Set whether notifications are sorted from oldest to newest, or newest to oldest."
+msgstr "Definiu si les notificacions s'ordenen de més antiga a més recent o de més recent a més antiga."
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -903,8 +823,7 @@ msgstr "Estil"
 
 #: src/panel/settings/settings_style.vala:48
 msgid "Set the appearance of window decorations and controls"
-msgstr ""
-"Establiu l'aparença de les decoracions de les finestres i dels controls."
+msgstr "Establiu l'aparença de les decoracions de les finestres i dels controls."
 
 #: src/panel/settings/settings_style.vala:52
 msgid "Icons"
@@ -939,11 +858,8 @@ msgid "Built-in theme"
 msgstr "Tema integrat"
 
 #: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
-"Quan estigui habilitat, l'estil de l'escriptori se substituirà per l'estil "
-"integrat."
+msgid "When enabled, the built-in theme will override the desktop component styling"
+msgstr "Quan estigui habilitat, l'estil de l'escriptori se substituirà per l'estil integrat."
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Animations"
@@ -992,7 +908,7 @@ msgstr "Perdoneu, no s'ha trobat cap element."
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "Energia"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
@@ -1000,8 +916,7 @@ msgstr "Tot"
 
 #. Prepare label widget
 #. Caffeine Notification
-#: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:92
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37 src/raven/notifications_group.vala:92
 msgid "Caffeine Mode"
 msgstr "Mode de la Cafeïna"
 
@@ -1011,7 +926,7 @@ msgstr "Temporitzador (minuts)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "Configuració de data i hora del sistema"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1025,8 +940,7 @@ msgstr "Tanca totes les finestres."
 msgid "Always On Top"
 msgstr "Sempre a dalt"
 
-#: src/panel/applets/icon-tasklist/IconPopover.vala:120
-#: src/panel/applets/icon-tasklist/IconPopover.vala:557
+#: src/panel/applets/icon-tasklist/IconPopover.vala:120 src/panel/applets/icon-tasklist/IconPopover.vala:557
 msgid "Maximize"
 msgstr "Maximitza"
 
@@ -1066,29 +980,28 @@ msgstr "Mostra els controls de les finestres."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "El bloqueig de majúscules està activat."
+msgstr "El blocatge de majúscules està activat."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "El bloqueig de majúscules no està activat."
+msgstr "El blocatge de majúscules no està activat."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "El bloqueig numèric està activat."
+msgstr "El blocatge numèric està activat."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "El bloqueig numèric no està activat."
+msgstr "El blocatge numèric no està activat."
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u notificació no llegida"
+msgstr[1] "%u notificacions no llegides"
 
-#: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:377
+#: src/panel/applets/notifications/NotificationsApplet.vala:123 src/raven/notifications_view.vala:377
 msgid "No unread notifications"
 msgstr "No hi ha notificacions per llegir."
 
@@ -1104,31 +1017,25 @@ msgstr "S'ha avortat l'operació."
 msgid "Type your password"
 msgstr "Escriviu la contrasenya."
 
-#: src/panel/applets/places-indicator/MountItem.vala:23
-#: src/panel/applets/places-indicator/VolumeItem.vala:25
+#: src/panel/applets/places-indicator/MountItem.vala:23 src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
 msgstr "Dispositius extraïbles"
 
-#: src/panel/applets/places-indicator/MountItem.vala:25
-#: src/panel/applets/places-indicator/VolumeItem.vala:27
+#: src/panel/applets/places-indicator/MountItem.vala:25 src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
 msgstr "Volums locals"
 
-#: src/panel/applets/places-indicator/MountItem.vala:29
-#: src/panel/applets/places-indicator/VolumeItem.vala:31
+#: src/panel/applets/places-indicator/MountItem.vala:29 src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
 msgstr "Carpetes de xarxa"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
-#: src/panel/applets/places-indicator/MountItem.vala:32
-#: src/panel/applets/places-indicator/VolumeItem.vala:34
-#: src/appindexer/AppIndex.vala:44
+#: src/panel/applets/places-indicator/MountItem.vala:32 src/panel/applets/places-indicator/VolumeItem.vala:34 src/appindexer/AppIndex.vala:44
 msgid "Other"
 msgstr "Altres"
 
-#: src/panel/applets/places-indicator/MountItem.vala:58
-#: src/panel/applets/places-indicator/VolumeItem.vala:55
+#: src/panel/applets/places-indicator/MountItem.vala:58 src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
 msgstr "Expulsa"
 
@@ -1136,14 +1043,12 @@ msgstr "Expulsa"
 msgid "Unmount"
 msgstr "Desmunta"
 
-#: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/MountItem.vala:63 src/panel/applets/places-indicator/PlaceItem.vala:36
 #, c-format
 msgid "Open \"%s\""
 msgstr "Obre %s"
 
-#: src/panel/applets/places-indicator/MountItem.vala:75
-#: src/panel/applets/places-indicator/VolumeItem.vala:83
+#: src/panel/applets/places-indicator/MountItem.vala:75 src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
 msgstr "Ara podeu desconnectar amb seguretat"
 
@@ -1159,8 +1064,7 @@ msgstr "Error en expulsar el dispositiu"
 msgid "Error while unmounting volume"
 msgstr "Error en desmuntar el volum"
 
-#: src/panel/applets/places-indicator/PlacesIndicator.vala:80
-#: src/panel/applets/places-indicator/PlacesSection.vala:22
+#: src/panel/applets/places-indicator/PlacesIndicator.vala:80 src/panel/applets/places-indicator/PlacesSection.vala:22
 #: src/panel/applets/places-indicator/PlacesSection.vala:44
 msgid "Places"
 msgstr "Llocs"
@@ -1170,8 +1074,7 @@ msgstr "Llocs"
 msgid "Mount and open \"%s\""
 msgstr "Munta i obre %s"
 
-#: src/panel/applets/places-indicator/VolumeItem.vala:73
-#: src/panel/applets/places-indicator/VolumeItem.vala:114
+#: src/panel/applets/places-indicator/VolumeItem.vala:73 src/panel/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
 msgstr "Escriviu la contrasenya d'encriptació per desbloquejar aquest volum."
 
@@ -1181,8 +1084,7 @@ msgstr "La contrasenya que heu escrit no és correcta."
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
-"Hi ha hagut un error desconegut mentre s'intentava muntar aquest volum."
+msgstr "Hi ha hagut un error desconegut mentre s'intentava muntar aquest volum."
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
@@ -1249,19 +1151,19 @@ msgstr "Càrrega de la bateria"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Mode de rendiment"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Estalvi d'energia"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Equilibrat"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Rendiment"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1286,18 +1188,15 @@ msgstr "Suspèn"
 msgid "Hibernate"
 msgstr "Hiberna"
 
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:112
-#: src/daemon/endsession.ui.h:5
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:112 src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "Reinicia"
+msgstr "Reinicia't"
 
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:113
-#: src/daemon/endsession.ui.h:6
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:113 src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Atura"
+msgstr "Atura't"
 
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:212
-#: src/daemon/endsession.ui.h:4
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:212 src/daemon/endsession.ui.h:4
 msgid "Logout"
 msgstr "Surt"
 
@@ -1313,34 +1212,31 @@ msgstr "Ara no hi ha cap aplicació que reprodueixi àudio."
 msgid "Play some music"
 msgstr "Reprodueix una mica de música"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:107
-#: src/raven/widgets/media-controls/mpris_gui.vala:430
+#: src/raven/widgets/media-controls/mpris_gui.vala:107 src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr ""
+msgstr "Títol desconegut"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:110
-#: src/raven/widgets/media-controls/mpris_gui.vala:434
+#: src/raven/widgets/media-controls/mpris_gui.vala:110 src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr ""
+msgstr "Artista desconegut"
 
-#: src/raven/widgets/media-controls/mpris_gui.vala:113
-#: src/raven/widgets/media-controls/mpris_gui.vala:438
+#: src/raven/widgets/media-controls/mpris_gui.vala:113 src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr ""
+msgstr "Àlbum desconegut"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "Es reprodueix - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "Interromput - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "No hi ha cap aplicació que reprodueixi àudio."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1350,30 +1246,29 @@ msgstr "Aplicacions"
 msgid "Devices"
 msgstr "Dispositius"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
-#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:47 src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr ""
+msgstr "Monitor d'ús"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr ""
+msgstr "RAM"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr ""
+msgstr "Intercanvi"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "De la més antiga a la més nova"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "De la més nova a la més antiga"
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -1398,12 +1293,12 @@ msgstr "Notificacions"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "No s'ha afegit cap giny."
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "Categoria nova"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1412,47 +1307,47 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Acessoris"
 
 #: src/appindexer/AppIndex.vala:152
 msgid "Education"
-msgstr ""
+msgstr "Educació"
 
 #: src/appindexer/AppIndex.vala:157
 msgid "Games"
-msgstr ""
+msgstr "Jocs"
 
 #: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
-msgstr ""
+msgstr "Gràfics"
 
 #: src/appindexer/AppIndex.vala:169
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: src/appindexer/AppIndex.vala:174
 msgid "Office"
-msgstr ""
+msgstr "Oficina"
 
 #: src/appindexer/AppIndex.vala:178
 msgid "Programming"
-msgstr ""
+msgstr "Programació"
 
 #: src/appindexer/AppIndex.vala:182
 msgid "Science"
-msgstr ""
+msgstr "Ciència"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr ""
+msgstr "So i vídeo"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
-msgstr ""
+msgstr "Eines del sistema"
 
 #: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
-msgstr ""
+msgstr "Accés universal"
 
 #: src/dialogs/polkit/polkitdialog.vala:195
 msgid "Authentication failed"
@@ -1465,31 +1360,31 @@ msgstr "Grup:"
 #. Create our buttons
 #: src/dialogs/power/window.vala:87
 msgid "_Lock"
-msgstr ""
+msgstr "B_loca"
 
 #: src/dialogs/power/window.vala:90
 msgid "L_og Out"
-msgstr ""
+msgstr "S_urt de la sessió"
 
 #: src/dialogs/power/window.vala:93
 msgid "_Suspend"
-msgstr ""
+msgstr "_Suspèn"
 
 #: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
-msgstr ""
+msgstr "_Hiberna"
 
 #: src/dialogs/power/window.vala:101
 msgid "_Reboot"
-msgstr ""
+msgstr "_Reinicia't"
 
 #: src/dialogs/power/window.vala:104
 msgid "Shut_down"
-msgstr ""
+msgstr "_Atura't"
 
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "Aquest sistema no admet la hibernació."
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1497,23 +1392,23 @@ msgstr "Segur que voleu acabar la sessió?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Nom:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Carpeta:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "Retard en segons:"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "Mostra el punter."
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "Reprodueix un so en fer una captrua."
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1525,7 +1420,7 @@ msgstr "Etiqueta del menú"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "Usa les icones de menú predeterminades."
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1545,7 +1440,7 @@ msgstr "Pas del ratolí"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "Mostra els elements de la configuració."
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1573,20 +1468,20 @@ msgstr "Usa l'hora de 24 h."
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "Format personalitzat"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%H.%M.%S %d.%m.%Y"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "Zona horària personalitzada"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1614,7 +1509,7 @@ msgstr "Requereix un clic doble per obrir una finestra nova."
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
-msgstr "Llum de nit"
+msgstr "Llum nocturna"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
@@ -1660,8 +1555,7 @@ msgstr "Expandeix sempre els llocs."
 msgid "Spacer size"
 msgstr "Mida de l'espaiador"
 
-#: src/panel/applets/status/settings.ui.h:1
-#: src/panel/applets/tray/settings.ui.h:1
+#: src/panel/applets/status/settings.ui.h:1 src/panel/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
 msgstr "Espaiament de les icones"
 
@@ -1675,7 +1569,7 @@ msgstr "Visibilitat del botó «Afegeix»"
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr ""
+msgstr "Multiplicador de la mida dels elements"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
@@ -1691,64 +1585,63 @@ msgstr "Mostra'l sempre."
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75x"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1.0x"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Mode de classificació"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Ordre per tipus"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Ordre alfabètic"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Ordre alfabètic invers"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Data ascendent"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Data descendent"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Mostra el número de la setmana."
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "Mostra el nom del dia."
 
-#: src/raven/widgets/sound-input/settings.ui.h:1
-#: src/raven/widgets/sound-output/settings.ui.h:1
+#: src/raven/widgets/sound-input/settings.ui.h:1 src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr ""
+msgstr "Permet l'excés de volum."
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr ""
+msgstr "Mostra l'ús de l'intercanvi."
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1764,15 +1657,15 @@ msgstr "Cal autenticació."
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Detalls"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Acció:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1780,7 +1673,7 @@ msgstr "Autentica"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
+msgstr "Aplicació de captura de pantalla del Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1791,138 +1684,125 @@ msgid "Budgie Panel"
 msgstr "Plafó del Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
-msgid ""
-"Launch other applications and provide various utilities to manage windows, "
-"show the time, etc."
-msgstr ""
-"Obre altres aplicacions i proporciona diverses utilitats per gestionar "
-"finestres, mostrar l'hora, etc."
+msgid "Launch other applications and provide various utilities to manage windows, show the time, etc."
+msgstr "Obre altres aplicacions i proporciona diverses utilitats per gestionar finestres, mostrar l'hora, etc."
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "Cerqueu i obriu aplicacions."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr ""
+msgstr "Evita que el sistema i la pantalla s'adormin."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "Un rellotge digital amb un format personalitzable"
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr ""
+msgstr "Una llista de tasques d'aplicació configurable"
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr ""
+msgstr "Indica quina disposició de teclat s'usa actualment."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "Mostra l'estat de les tecles de blocatge."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr ""
+msgstr "Canvia i modifica la configuració de la llum nocturna."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr ""
+msgstr "Obre la vista de notificacions del Raven."
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "Mostra les unitats i les carpetes preferides."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr ""
+msgstr "Obre la barra lateral del Raven."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "Separador visual entre miniaplicacions"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr ""
+msgstr "Un botó que canvia la visibilitat de l'escriptori"
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr ""
+msgstr "Separador ajustable per situar entre altres miniaplicacions"
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
-msgstr ""
+msgstr "Mostra indicadors d'estat del sistema, com ara so, bateria i Bluetooth."
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
+msgstr "Una llista de tasques d'aplicacions amb icones i etiquetes."
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid ""
-"System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgid "System tray implementing the Freedesktop Status Notifier specification."
+msgstr "Safata del sistema que implementa l'especificació Freedesktop Status Notifier."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "Obre el diàleg d'energia."
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr ""
+msgstr "Mostra els espais de treball i canvia d'un a un altre."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Gestioneu la paperera des del plafó del Budgie."
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
 msgstr "Calendari"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:2
-msgid ""
-"A simple calendar with a month view, using the built-in Gtk.Calendar widget."
-" The calendar shows the current date by default."
-msgstr ""
+msgid "A simple calendar with a month view, using the built-in Gtk.Calendar widget. The calendar shows the current date by default."
+msgstr "Un calendari senzill amb vista mensual, que usa el giny Gtk.Calendar integrat. El calendari mostra la data actual per defecte."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "Controls multimèdia"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
-msgid ""
-"This widget uses the Mpris API to show actively playing media with metadata "
-"and playback controls, with support for audio and video."
+msgid "This widget uses the Mpris API to show actively playing media with metadata and playback controls, with support for audio and video."
 msgstr ""
+"Aquest giny usa l'API Mpris per mostrar contingut multimèdia en reproducció activa amb metadades i controls de reproducció, amb suport per a "
+"àudio i vídeo."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "Entrada de so"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
-msgid ""
-"Allows adjustment of audio input volume, and displays a list of available "
-"audio input devices."
-msgstr ""
+msgid "Allows adjustment of audio input volume, and displays a list of available audio input devices."
+msgstr "Permet ajustar el volum d'entrada d'àudio i mostra una llista dels dispositius d'entrada d'àudio disponibles."
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "Sortida d'àudio"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
-msgid ""
-"Allows global and per-app audio output volume control, and displays a list "
-"of available audio output devices."
-msgstr ""
+msgid "Allows global and per-app audio output volume control, and displays a list of available audio output devices."
+msgstr "Permet el control del volum de sortida d'àudio global i per aplicació, i mostra una llista de dispositius de sortida d'àudio disponibles."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
-msgid ""
-"A view for system resource usage in bar graph form. Includes CPU, RAM, and "
-"Swap usage by default."
+msgid "A view for system resource usage in bar graph form. Includes CPU, RAM, and Swap usage by default."
 msgstr ""
+"Una vista per a l'ús dels recursos del sistema en forma de gràfic de barres. Inclou l'ús de CPU, RAM i intercanvi de manera predeterminada."
 
-#: src/session/budgie-desktop.desktop.in.in.h:1
-#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1 src/session/budgie-desktop.session.in.in.h:1
 msgid "Budgie Desktop"
 msgstr "Escriptori Budgie"
 
