@@ -659,14 +659,13 @@ public class BTDeviceRow : ListBoxRow {
 	}
 
 	private void update_status() {
-		if (device.connected) {
-			status_label.set_text(_("Connected"));
-			connection_button.show();
-			activatable = false;
-		} else {
-			status_label.set_text(_("Disconnected"));
+		activatable = !device.connected;
+		status_label.set_text(activatable ? _("Disconnected") : _("Connected"));
+
+		if (activatable) {
 			connection_button.hide();
-			activatable = true;
+		} else {
+			connection_button.show();
 		}
 
 		// Update the name if changed

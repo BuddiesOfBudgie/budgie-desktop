@@ -54,7 +54,6 @@ public class Bluetooth.ObjectManager : Object {
 		}
 	}
 
-	// TODO: Do not rely on this when it is possible to do it natively in Vala
 	[CCode (cname="bluetooth_device_proxy_get_type")]
 	extern static GLib.Type get_device_proxy_type();
 
