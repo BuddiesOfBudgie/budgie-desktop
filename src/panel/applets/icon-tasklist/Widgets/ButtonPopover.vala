@@ -245,13 +245,16 @@ private class WindowControls : Gtk.Box {
 			relief = Gtk.ReliefStyle.NONE,
 		};
 
-		maximize_button = new Gtk.Button.with_label(null) {
+		maximize_button = new Gtk.Button.with_label("") {
 			relief = Gtk.ReliefStyle.NONE,
 		};
 
 		minimize_button = new Gtk.Button.with_label(_("Minimize")) {
 			relief = Gtk.ReliefStyle.NONE,
 		};
+
+		var minimize_button_label = minimize_button.get_child() as Gtk.Label;
+		minimize_button_label.halign = Gtk.Align.START;
 
 		return_button = new Gtk.Button.from_icon_name("go-previous-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			relief = Gtk.ReliefStyle.NONE,
@@ -319,6 +322,9 @@ private class WindowControls : Gtk.Box {
 		} else {
 			maximize_button.set_label(_("Maximize"));
 		}
+
+		var maximize_button_label = maximize_button.get_child() as Gtk.Label;
+		maximize_button_label.halign = Gtk.Align.START;
 	}
 }
 
