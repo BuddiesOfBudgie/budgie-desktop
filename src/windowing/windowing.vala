@@ -59,6 +59,16 @@ namespace Budgie.Windowing {
 		public signal void window_group_removed(WindowGroup group);
 
 		/**
+		 * Emitted when a Workspace has been created.
+		 */
+		public signal void workspace_created(Workspace workspace);
+
+		/**
+		 * Emitted when a Workspace has been destroyed.
+		 */
+		public signal void workspace_destroyed(Workspace workspace);
+
+		/**
 		 * Creates a new Windowing object. This is the entry point into
 		 * this library.
 		 */
@@ -113,7 +123,12 @@ namespace Budgie.Windowing {
 			}
 		}
 
-		private WorkspaceGroup? get_workspace_group() {
+		/**
+		 * Get the first workspace group. X11 has no concept of
+		 * workspace groups, so the first one is guaranteed to
+		 * be the only one.
+		 */
+		public WorkspaceGroup? get_workspace_group() {
 			unowned var groups = workspace_manager.list_workspace_groups();
 
 			if (groups == null) return null;
@@ -130,6 +145,8 @@ namespace Budgie.Windowing {
 			if (group == null) return;
 
 			group.active_workspace_changed.connect(on_active_workspace_changed);
+			group.workspace_created.connect(on_workspace_created);
+			group.workspace_destroyed.connect(on_workspace_destroyed);
 		}
 
 		private void on_active_window_changed(Window? old_window) {
@@ -152,6 +169,14 @@ namespace Budgie.Windowing {
 
 		private void on_active_workspace_changed(Workspace? previous_workspace) {
 			active_workspace_changed(previous_workspace);
+		}
+
+		private void on_workspace_created(Workspace workspace) {
+			workspace_created(workspace);
+		}
+
+		private void on_workspace_destroyed(Workspace workspace) {
+			workspace_destroyed(workspace);
 		}
 
 		private void window_added(Window window) {
