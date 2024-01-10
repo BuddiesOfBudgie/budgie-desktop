@@ -42,7 +42,7 @@ public class IconButton : Gtk.ToggleButton {
 
 	private bool has_active_window = false;
 	private int64 last_scroll_time = 0;
-	private bool needs_attention = false;
+	private bool urgent = false;
 
 	public IconButton(Budgie.Application app, Budgie.PopoverManager popover_manager) {
 		Object(
@@ -349,7 +349,7 @@ public class IconButton : Gtk.ToggleButton {
 						indicator_y = previous_y; // Set y to the y coord of the previous indicator
 						indicator_y += length; // Add the indicator length to the y coord
 						previous_y = indicator_y; // Set the new y to the previous y
-						indicator_y += spacing; // Add the spacing to the y coord						
+						indicator_y += spacing; // Add the spacing to the y coord
 					}
 					break;
 				case Budgie.PanelPosition.TOP:
@@ -369,7 +369,7 @@ public class IconButton : Gtk.ToggleButton {
 				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color)) {
 					color.parse("#6BBFFF");
 				}
-			} else if (needs_attention) {
+			} else if (urgent) {
 				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
 					color.parse("#D84E4E");
 				}
@@ -568,6 +568,21 @@ public class IconButton : Gtk.ToggleButton {
 		return window_group;
 	}
 
+	public void set_urgent(bool urgent) {
+		this.urgent = urgent;
+
+		if (urgent) {
+			get_style_context().add_class("needs-attention");
+			// TODO: Can this be left to themes?
+			icon.animate_attention(panel_position);
+		} else {
+			get_style_context().remove_class("needs-attention");
+		}
+
+		update();
+		queue_draw();
+	}
+
 	public void set_window_group(Budgie.Windowing.WindowGroup? window_group) {
 		this.window_group = window_group;
 		popover.group = window_group;
@@ -587,6 +602,16 @@ public class IconButton : Gtk.ToggleButton {
 			var name = window.get_name() ?? "Loading...";
 
 			popover.add_window(window);
+
+			window.state_changed.connect((changed_mask, new_state) => {
+				if (!(libxfce4windowing.WindowState.URGENT in changed_mask)) {
+					return;
+				}
+
+				urgent = (new_state & libxfce4windowing.WindowState.URGENT) != 0;
+
+				set_urgent(urgent);
+			});
 
 			update();
 		});
