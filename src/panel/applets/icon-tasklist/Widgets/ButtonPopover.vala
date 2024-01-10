@@ -237,7 +237,9 @@ private class WindowControls : Gtk.Box {
 	public signal void return_clicked();
 
 	public WindowControls(libxfce4windowing.Window window) {
-		Object(window: window, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+		Object(window: window,
+					 orientation: Gtk.Orientation.VERTICAL,
+					 spacing: 0);
 	}
 
 	construct {
@@ -267,6 +269,8 @@ private class WindowControls : Gtk.Box {
 		list_box.add(keep_on_top_button);
 		list_box.add(maximize_button);
 		list_box.add(minimize_button);
+
+		build_workspace_buttons(list_box);
 
 		pack_start(list_box);
 		pack_end(return_button, false, false, 0);
@@ -307,13 +311,42 @@ private class WindowControls : Gtk.Box {
 			}
 		});
 
-		window.workspace_changed.connect(() => {
-			// TODO: Not implemented yet
-		});
-
 		update_maximize_label();
 
 		show_all();
+	}
+
+	private void build_workspace_buttons(Gtk.ListBox list_box) {
+		unowned var current_workspace = window.get_workspace();
+
+		if (current_workspace == null) return;
+
+		unowned var workspace_group = current_workspace.get_workspace_group();
+
+		if (workspace_group == null) return;
+
+		foreach (var workspace in workspace_group.list_workspaces()) {
+			// Translators: This is used for buttons to move applications to another Workspace
+			var button = new Gtk.Button.with_label(_("Move to %s").printf(workspace.get_name())) {
+				relief = Gtk.ReliefStyle.NONE,
+			};
+			var button_label = button.get_child() as Gtk.Label;
+			button_label.halign = Gtk.Align.START;
+
+			button.clicked.connect(() => {
+				if (workspace == window.get_workspace()) {
+					return;
+				}
+
+				try {
+					window.move_to_workspace(workspace);
+				} catch (Error e) {
+					warning("Unable to move window '%s' to new workspace: %s", window.get_name(), e.message);
+				}
+			});
+
+			list_box.add(button);
+		}
 	}
 
 	private void update_maximize_label() {
