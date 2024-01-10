@@ -33,7 +33,7 @@ public class ButtonPopover : Budgie.Popover {
 				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite", Gtk.IconSize.SMALL_TOOLBAR);
 			} else {
 				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			}		
+			}
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ButtonPopover : Budgie.Popover {
 
 		foreach (var action in app.actions) {
 			var action_label = app_info.get_action_name(action);
-	
+
 			var action_button = new Gtk.Button.with_label(action_label) {
 				relief = Gtk.ReliefStyle.NONE,
 			};
@@ -237,9 +237,7 @@ private class WindowControls : Gtk.Box {
 	public signal void return_clicked();
 
 	public WindowControls(libxfce4windowing.Window window) {
-		Object(window: window,
-					 orientation: Gtk.Orientation.VERTICAL,
-					 spacing: 0);
+		Object(window: window, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 	}
 
 	construct {
