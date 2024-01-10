@@ -166,6 +166,17 @@ public class ButtonPopover : Budgie.Popover {
 		hide();
 	}
 
+	public override void hide() {
+		base.hide();
+
+		if (stack.get_visible_child_name() != "main") {
+			var page = stack.get_visible_child();
+			stack.set_visible_child_name("main");
+			stack.remove(page);
+			page.destroy();
+		}
+	}
+
 	public void add_window(libxfce4windowing.Window window) {
 		var window_item = new WindowItem(window);
 
