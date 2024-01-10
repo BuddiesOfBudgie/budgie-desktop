@@ -248,23 +248,23 @@ public class FileReceiver : Gtk.Dialog {
 
 	private string format_time(int seconds) {
 		if (seconds < 0) seconds = 0;
-		if (seconds < 60) return ngettext("%d second", "%d seconds", seconds).printf(seconds);
 
-		int minutes;
-		if (seconds < 60 * 60) {
-			minutes = (seconds + 30) / 60;
-			return ngettext("%d minute", "%d minutes", minutes).printf(minutes);
+		var hours = seconds / 3600;
+		var minutes = (seconds - hours * 3600) / 60;
+		seconds = seconds - hours * 3600 - minutes * 60;
+
+		if (hours > 0) {
+			var h = ngettext("%u hour", "%u hours", hours).printf(hours);
+			var m = ngettext("%u minute", "%u minutes", minutes).printf(minutes);
+			return "%s, %s".printf(h, m);
 		}
 
-		int hours = seconds / (60 * 60);
-		if (seconds < 60 * 60 * 4) {
-			minutes = (seconds - hours * 60 * 60 + 30) / 60;
-			string h = ngettext("%u hour", "%u hours", hours).printf(hours);
-			string m = ngettext("%u minute", "%u minutes", minutes).printf(minutes);
-			///TRANSLATORS: For example "1 hour, 8 minutes".
-			return _("%s, %s").printf(h, m);
+		if (minutes > 0) {
+			var m = ngettext("%u minute", "%u minutes", minutes).printf(minutes);
+			var s = ngettext("%u second", "%u seconds", seconds).printf(seconds);
+			return "%s, %s".printf(m, s);
 		}
 
-		return ngettext("about %d hour", "about %d hours", hours).printf(hours);
+		return ngettext("%d second", "%d seconds", seconds).printf(seconds);
 	}
 }
