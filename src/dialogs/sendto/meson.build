@@ -1,5 +1,6 @@
 sendto_sources = [
     'Application.vala',
+    'Dialog/BaseDialog.vala',
     'Dialog/DeviceRow.vala',
     'Dialog/FileReceiver.vala',
     'Dialog/FileSender.vala',

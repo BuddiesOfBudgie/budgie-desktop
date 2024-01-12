@@ -9,14 +9,9 @@
  * (at your option) any later version.
  */
 
-public class FileSender : Gtk.Dialog {
-	public Bluetooth.Obex.Transfer transfer;
-	public Bluetooth.Device device;
-
+public class FileSender : BaseDialog {
 	private int current_file = 0;
 	private int total_files = 0;
-	private uint64 total_size = 0;
-	private int start_time = 0;
 
 	private DBusConnection connection;
 	private DBusProxy client_proxy;
@@ -25,14 +20,6 @@ public class FileSender : Gtk.Dialog {
 	private ObjectPath session_path;
 
 	private Gtk.ListStore file_store;
-
-	private Gtk.Label path_label;
-	private Gtk.Label device_label;
-	private Gtk.Label filename_label;
-	private Gtk.Label rate_label;
-	private Gtk.Label progress_label;
-	private Gtk.ProgressBar progress_bar;
-	private Gtk.Image icon_label;
 
 	public FileSender(Gtk.Application application) {
 		Object(application: application, resizable: false);
@@ -43,116 +30,16 @@ public class FileSender : Gtk.Dialog {
 
 		file_store = new Gtk.ListStore(1, typeof(GLib.File));
 
-		var icon_image = new Gtk.Image.from_icon_name("bluetooth-active", Gtk.IconSize.DIALOG) {
-			valign = Gtk.Align.END,
-			halign = Gtk.Align.END,
-		};
-
-		icon_label = new Gtk.Image() {
-			valign = Gtk.Align.END,
-			halign = Gtk.Align.END,
-		};
-
-		var overlay = new Gtk.Overlay() {
-			margin_right = 12,
-		};
-		overlay.add(icon_image);
-		overlay.add_overlay(icon_label);
-
-		path_label = new Gtk.Label(Markup.printf_escaped("<b>%s</b>:", _("From"))) {
-			max_width_chars = 45,
-			wrap = true,
-			xalign = 0,
-			use_markup = true,
-		};
-
-		device_label = new Gtk.Label(Markup.printf_escaped("<b>%s</b>:", _("To"))) {
-			max_width_chars = 45,
-			wrap = true,
-			xalign = 0,
-			use_markup = true,
-		};
-
-		filename_label = new Gtk.Label(Markup.printf_escaped("<b>%s</b>:", _("File name"))) {
-			max_width_chars = 45,
-			wrap = true,
-			xalign = 0,
-			use_markup = true,
-		};
-
-		rate_label = new Gtk.Label(Markup.printf_escaped("<b>%s</b>:", _("Transfer rate"))) {
-			max_width_chars = 45,
-			wrap = true,
-			xalign = 0,
-			use_markup = true,
-		};
-
-		progress_bar = new Gtk.ProgressBar() {
-			hexpand = true,
-			margin_top = 4,
-			margin_bottom = 4,
-		};
-
-		progress_label = new Gtk.Label(null) {
-			max_width_chars = 45,
-			hexpand = false,
-			wrap = true,
-			xalign = 0,
-			margin_bottom = 4,
-		};
-
-		var message_grid = new Gtk.Grid() {
-			column_spacing = 0,
-			row_spacing = 4,
-			width_request = 450,
-			margin = 10,
-		};
-
-		message_grid.attach(overlay, 0, 0, 1, 3);
-		message_grid.attach(path_label, 1, 0, 1, 1);
-		message_grid.attach(device_label, 1, 1, 1, 1);
-		message_grid.attach(filename_label, 1, 2, 1, 1);
-		message_grid.attach(rate_label, 1, 3, 1, 1);
-		message_grid.attach(progress_bar, 1, 4, 1, 1);
-		message_grid.attach(progress_label, 1, 5, 1, 1);
-
-		get_content_area().add(message_grid);
-
-		// Now add the dialog buttons
-		add_button(_("Close"), Gtk.ResponseType.CLOSE);
-		var reject_transfer = add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-		reject_transfer.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+		directory_label.set_markup(Markup.printf_escaped("<b>%s</b>:", _("From")));
+		device_label.set_markup(Markup.printf_escaped("<b>%s</b>:", _("To")));
 
 		// Hook up the responses
 		response.connect((response_id) => {
 			if (response_id == Gtk.ResponseType.CANCEL) {
-				// Cancel the current transfer if it is active
+				// Cancel the current session if it is active
 				if (transfer != null && transfer.status == "active") {
-					try {
-						transfer.cancel();
-					} catch (Error e) {
-						warning("Error cancelling Bluetooth transfer: %s", e.message);
-					}
-
 					remove_session.begin();
 				}
-
-				destroy();
-			} else {
-				// Close button clicked, hide or close
-				if (transfer.status == "active") {
-					hide_on_delete();
-				} else {
-					destroy();
-				}
-			}
-		});
-
-		delete_event.connect(() => {
-			if (transfer.status == "active") {
-				return hide_on_delete();
-			} else {
-				destroy();
 			}
 		});
 	}
@@ -210,9 +97,9 @@ public class FileSender : Gtk.Dialog {
 			);
 
 			// Update the labels
-			path_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), file_path.get_parent().get_path()));
+			directory_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), file_path.get_parent().get_path()));
 			device_label.set_markup(GLib.Markup.printf_escaped(_("<b>To</b>: %s"), device.alias));
-			icon_label.set_from_gicon(new ThemedIcon(device.icon == null ? "bluetooth-active" : device.icon), Gtk.IconSize.LARGE_TOOLBAR);
+			device_image.set_from_gicon(new ThemedIcon(device.icon == null ? "bluetooth-active" : device.icon), Gtk.IconSize.LARGE_TOOLBAR);
 			progress_label.label = _("Trying to connect to %s…").printf(device.alias);
 
 			// Prepare to send the file
@@ -284,9 +171,9 @@ public class FileSender : Gtk.Dialog {
 
 	private async void send_file() {
 		// Update the labels
-		path_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), file_path.get_parent().get_path()));
+		directory_label.set_markup(GLib.Markup.printf_escaped(_("<b>From</b>: %s"), file_path.get_parent().get_path()));
 		device_label.set_markup(GLib.Markup.printf_escaped(_("<b>To</b>: %s"), device.alias));
-		icon_label.set_from_gicon(new ThemedIcon(device.icon ?? "bluetooth-active"), Gtk.IconSize.LARGE_TOOLBAR);
+		device_image.set_from_gicon(new ThemedIcon(device.icon ?? "bluetooth-active"), Gtk.IconSize.LARGE_TOOLBAR);
 		progress_label.label = _("Waiting for acceptance on %s…").printf(device.alias);
 
 		try {
@@ -367,43 +254,6 @@ public class FileSender : Gtk.Dialog {
 			default:
 				break;
 		}
-	}
-
-	private void on_transfer_progress(uint64 transferred) {
-		progress_bar.fraction = (double) transferred / (double) total_size;
-		int current_time = (int) get_real_time();
-		int elapsed_time = (current_time - start_time) / 1000000;
-		if (current_time < start_time + 1000000) return;
-		if (elapsed_time == 0) return;
-
-		uint64 transfer_rate = transferred / elapsed_time;
-		if (transfer_rate == 0) return;
-
-		rate_label.label = Markup.printf_escaped(_("<b>Transfer rate:</b> %s / s"), format_size(transfer_rate));
-		uint64 remaining_time = (total_size - transferred) / transfer_rate;
-		progress_label.label = _("(%i/%i) %s of %s sent. Time remaining: %s").printf(current_file, total_files, format_size(transferred), format_size(total_size), format_time((int) remaining_time));
-	}
-
-	private string format_time(int seconds) {
-		if (seconds < 0) seconds = 0;
-
-		var hours = seconds / 3600;
-		var minutes = (seconds - hours * 3600) / 60;
-		seconds = seconds - hours * 3600 - minutes * 60;
-
-		if (hours > 0) {
-			var h = ngettext("%u hour", "%u hours", hours).printf(hours);
-			var m = ngettext("%u minute", "%u minutes", minutes).printf(minutes);
-			return "%s, %s".printf(h, m);
-		}
-
-		if (minutes > 0) {
-			var m = ngettext("%u minute", "%u minutes", minutes).printf(minutes);
-			var s = ngettext("%u second", "%u seconds", seconds).printf(seconds);
-			return "%s, %s".printf(m, s);
-		}
-
-		return ngettext("%d second", "%d seconds", seconds).printf(seconds);
 	}
 
 	private bool try_next_file() {
