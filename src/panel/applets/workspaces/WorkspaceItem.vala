@@ -15,17 +15,17 @@ namespace Workspaces {
 	};
 
 	public class WorkspaceItem : Gtk.EventBox {
-		private Wnck.Workspace workspace;
+		private libxfce4windowing.Workspace workspace;
 		private Budgie.Popover popover;
 		private Gtk.Stack popover_stack;
 		private Gtk.FlowBox rest_of_the_icons;
-		public signal void remove_workspace(int index, uint32 time);
+		public signal void remove_workspace(uint index, uint32 time);
 		public signal void pls_update_windows();
 		private Gtk.Grid icon_grid;
 		private Gtk.Allocation real_alloc;
 		private float size_multiplier;
 
-		public WorkspaceItem(Wnck.Workspace space, float multiplier) {
+		public WorkspaceItem(libxfce4windowing.Workspace space, float multiplier) {
 			this.get_style_context().add_class("workspace-item");
 			this.workspace = space;
 			this.size_multiplier = multiplier;
@@ -129,12 +129,12 @@ namespace Workspaces {
 
 			rename_confirm.clicked.connect(() => {
 				popover.hide();
-				workspace.change_name(entry.get_text());
+				workspace.name = entry.get_text();
 			});
 
 			entry.activate.connect(() => {
 				popover.hide();
-				workspace.change_name(entry.get_text());
+				workspace.name = entry.get_text();
 			});
 
 			popover.closed.connect(() => {
@@ -177,15 +177,23 @@ namespace Workspaces {
 			ulong* data = (ulong*)selection_data.get_data();
 
 			if (data != null) {
-				Wnck.Window window = Wnck.Window.@get(*data);
-				window.move_to_workspace(this.workspace);
-				dnd_success = true;
+				try {
+					foreach (libxfce4windowing.Window window in WorkspacesApplet.xfce_screen.get_windows()) {
+						if (window.get_id() == *data) {
+							window.move_to_workspace(this.workspace);
+							dnd_success = true;
+							break;
+						}
+					}
+				} catch (Error e) {
+					warning("Failed to move window to workspace: %s", e.message);
+				}
 			}
 
 			Gtk.drag_finish(context, dnd_success, true, time);
 		}
 
-		public void update_windows(List<unowned Wnck.Window> window_list) {
+		public void update_windows(List<weak libxfce4windowing.Window> window_list) {
 			int num_columns = (real_alloc.width - 4) / 20;
 			int num_rows = (real_alloc.height - 4) / 20;
 
@@ -274,11 +282,14 @@ namespace Workspaces {
 
 		public override bool button_release_event(Gdk.EventButton event) {
 			if (event.button == 1) {
-				var _workspace = WorkspacesApplet.wnck_screen.get_active_workspace();
-				if (_workspace != null && _workspace == workspace) {
-					return Gdk.EVENT_STOP;
+				var _workspace = WorkspacesApplet.workspace_group.get_active_workspace();
+				if (_workspace != null && _workspace == workspace) return Gdk.EVENT_STOP;
+
+				try {
+					workspace.activate();
+				} catch (Error e) {
+					warning("Failed to activate workspace: %s", e.message);
 				}
-				workspace.activate(event.time);
 			} else if (event.button == 3) {
 				WorkspacesApplet.manager.register_popover(this, popover);
 				WorkspacesApplet.manager.show_popover(this);
@@ -311,7 +322,7 @@ namespace Workspaces {
 			real_alloc.height = (int) (height * 2 * size_multiplier);
 		}
 
-		public Wnck.Workspace get_workspace() {
+		public libxfce4windowing.Workspace get_workspace() {
 			return workspace;
 		}
 	}

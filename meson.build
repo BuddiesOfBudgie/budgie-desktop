@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.8.1',
+    version: '10.8.2',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -60,6 +60,9 @@ dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 # Needed for Daemon (notifications)
 dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
+
+# Needed for window tracking
+dep_xfce4windowing = dependency('libxfce4windowing-0')
 
 # Create config.h
 cdata = configuration_data()

@@ -133,6 +133,27 @@ namespace Budgie {
 			}
 		}
 
+		public DesktopAppInfo? query_by_pid(int64 pid) {
+			if (pid in pid_cache) {
+				string filename = pid_cache[pid];
+				DesktopAppInfo? info = new DesktopAppInfo.from_filename(filename);
+				return info;
+			}
+
+			return null;
+		}
+
+		public DesktopAppInfo? query_by_xid(ulong xid) {
+			string? gtk_id = query_gtk_application_id(xid);
+			if (gtk_id == null) return null;
+			gtk_id = gtk_id.down() + ".desktop";
+			return desktops.get(gtk_id);
+		}
+
+		public DesktopAppInfo? query_window_by_xid(ulong xid) {
+			return query_window(Wnck.Window.@get(xid));
+		}
+
 		/**
 		* Attempt to gain the DesktopAppInfo relating to a given window
 		*/
@@ -170,20 +191,12 @@ namespace Budgie {
 			}
 
 			/* See if the pid associated with the window is in our pid cache */
-			if (pid in pid_cache) {
-				string filename = pid_cache[pid];
-				DesktopAppInfo? info = new DesktopAppInfo.from_filename(filename);
-				return info;
-			}
+			DesktopAppInfo? pid_info = query_by_pid(pid);
+			if (pid_info != null) return query_by_pid(pid);
 
 			/* Next, attempt to get the application based on the GtkApplication ID */
-			string? gtk_id = this.query_gtk_application_id(xid);
-			if (gtk_id != null) {
-				gtk_id = gtk_id.down() + ".desktop";
-				if (gtk_id in this.desktops) {
-					return this.desktops[gtk_id];
-				}
-			}
+			DesktopAppInfo? desktops_by_xid = query_by_xid(xid);
+			if (desktops_by_xid != null) return desktops_by_xid;
 
 			/* Is the group name in the simpletons? */
 			if (grp_name != null && grp_name.down() in this.simpletons) {

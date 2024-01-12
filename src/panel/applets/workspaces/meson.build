@@ -30,7 +30,7 @@ applet_workspaces_deps = [
     libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
-    dep_wnck,
+    dep_xfce4windowing,
     dep_peas,
     link_libappsys,
     link_libpanelplugin,
@@ -41,16 +41,14 @@ shared_library(
     applet_workspaces_sources,
     dependencies: applet_workspaces_deps,
     vala_args: [
+        '--vapidir', top_vapidir,
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'libwnck-3.0',
+        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-    ],
-    c_args: [
-        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_workspaces_dir,
