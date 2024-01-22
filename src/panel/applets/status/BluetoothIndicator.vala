@@ -174,15 +174,8 @@ public class BluetoothIndicator : Bin {
 			wrap = true,
 		};
 
-		var placeholder_button = new Button.with_label(_("Open Bluetooth Settings")) {
-			relief = HALF,
-		};
-		placeholder_button.get_style_context().add_class(STYLE_CLASS_SUGGESTED_ACTION);
-		placeholder_button.clicked.connect(on_settings_activate);
-
 		placeholder.pack_start(placeholder_label, false);
 		placeholder.pack_start(placeholder_sublabel, false);
-		placeholder.pack_start(placeholder_button, false);
 		placeholder.show_all(); // Without this, it never shows. Because... reasons?
 		devices_box.set_placeholder(placeholder);
 		scrolled_window.add(devices_box);
@@ -192,7 +185,7 @@ public class BluetoothIndicator : Bin {
 
 		add(ebox);
 		box.pack_start(header);
-		box.pack_start(new Separator(HORIZONTAL), true, true, 2);
+		box.pack_start(new Separator(HORIZONTAL), true, true, 4);
 		box.pack_start(scrolled_window);
 		box.show_all();
 		popover.add(box);
@@ -249,7 +242,21 @@ public class BluetoothIndicator : Bin {
 		// Turn Bluetooth on or off
 		var active = bluetooth_switch.active;
 		client.set_airplane_mode(!active); // If the switch is active, then Bluetooth is enabled. So invert the value
-		send_button.sensitive = active;
+		send_button.sensitive = active && has_connected_devices();
+	}
+
+	private bool has_connected_devices() {
+		bool connected = false;
+
+		foreach (var row in devices_box.get_children()) {
+			var child = row as BTDeviceRow;
+			if (child.device.connected) {
+				connected = true;
+				break;
+			}
+		}
+
+		return connected;
 	}
 
 	private void add_device(Device1 device) {
@@ -260,11 +267,13 @@ public class BluetoothIndicator : Bin {
 		widget.properties_updated.connect(() => {
 			devices_box.invalidate_filter();
 			devices_box.invalidate_sort();
+			send_button.sensitive = has_connected_devices();
 		});
 
 		devices_box.add(widget);
 		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
+		send_button.sensitive = has_connected_devices();
 	}
 
 	private void remove_device(Device1 device) {
@@ -279,6 +288,7 @@ public class BluetoothIndicator : Bin {
 
 		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
+		send_button.sensitive = has_connected_devices();
 	}
 
 	/**
