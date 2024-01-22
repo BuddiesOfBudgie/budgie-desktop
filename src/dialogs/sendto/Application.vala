@@ -13,6 +13,7 @@ public class SendtoApplication : Gtk.Application {
 	private const OptionEntry[] OPTIONS = {
 		{ "daemon", 'd', 0, OptionArg.NONE, out silent, "Run the application in the background", null },
 		{ "send", 'f', 0, OptionArg.NONE, out send, "Send a file via Bluetooth", null },
+		{ "device", 'a', 0, OptionArg.STRING, out device_addr, "Bluetooth device to send files to", null },
 		{ "", 0, 0, OptionArg.STRING_ARRAY, out arg_files, "Files to send via Bluetooth", null },
 		{ null },
 	};
@@ -20,6 +21,7 @@ public class SendtoApplication : Gtk.Application {
 	private static bool silent = true;
 	private static bool send = false;
 	private static bool active_once;
+	private static string? device_addr = null;
 	[CCode (array_length = false, array_null_terminated = true)]
 	private static string[]? arg_files = {};
 
@@ -95,37 +97,46 @@ public class SendtoApplication : Gtk.Application {
 		// Still no files, exit
 		if (files.length == 0) return 0;
 
-		// Create the Bluetooth scanner dialog if it doesn't yet exist
-		if (scan_dialog == null) {
-			scan_dialog = new ScanDialog(this, manager);
+		// Start and show the device scanner if we weren't given a
+		// Bluetooth device address
+		if (device_addr == null || device_addr == "") {
+			// Make sure we have a dialog object
+			if (scan_dialog == null) {
+				scan_dialog = new ScanDialog(this, manager);
 
-			// Wait for asyncronous initialization before showing the dialog
-			Idle.add(() => {
-				scan_dialog.show_all();
-				return Source.REMOVE;
+				// Wait for asyncronous initialization before showing the dialog
+				Idle.add(() => {
+					scan_dialog.show_all();
+					return Source.REMOVE;
+				});
+			} else {
+				// Dialog already exists, present it
+				scan_dialog.present();
+			}
+
+			// Clear our pointer when the scan dialog is destroyed
+			scan_dialog.destroy.connect(() => {
+				scan_dialog = null;
 			});
-		} else {
-			// Dialog already exists, present it
-			scan_dialog.present();
+
+			// Send the files when a device has been selected
+			scan_dialog.send_file.connect((device) => {
+				device_addr = device.address;
+			});
 		}
 
-		// Clear our pointer when the scan dialog is destroyed
-		scan_dialog.destroy.connect(() => {
-			scan_dialog = null;
-		});
+		var device = manager.get_device(device_addr);
 
-		// Send the files when a device has been selected
-		scan_dialog.send_file.connect((device) => {
-			if (!insert_sender(files, device)) {
-				file_sender = new FileSender(this);
-				file_sender.add_files(files, device);
-				file_senders.append(file_sender);
-				file_sender.show_all();
-				file_sender.destroy.connect(() => {
-					file_senders.remove_link(file_senders.find(file_sender));
-				});
-			}
-		});
+		// Send the file to the device
+		if (!insert_sender(files, device)) {
+			file_sender = new FileSender(this);
+			file_sender.add_files(files, device);
+			file_senders.append(file_sender);
+			file_sender.show_all();
+			file_sender.destroy.connect(() => {
+				file_senders.remove_link(file_senders.find(file_sender));
+			});
+		}
 
 		// Cleanup
 		arg_files = {};
