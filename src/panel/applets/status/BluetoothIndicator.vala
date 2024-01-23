@@ -110,10 +110,9 @@ public class BluetoothIndicator : Bin {
 
 		// Settings button
 		var settings_button = new Button.from_icon_name("preferences-system-symbolic", MENU) {
+			relief = ReliefStyle.NONE,
 			tooltip_text = _("Bluetooth Settings")
 		};
-		settings_button.get_style_context().add_class(STYLE_CLASS_FLAT);
-		settings_button.get_style_context().remove_class(STYLE_CLASS_BUTTON);
 		settings_button.clicked.connect(on_settings_activate);
 
 		// Bluetooth switch
@@ -301,6 +300,9 @@ public class BluetoothIndicator : Bin {
 public class BTDeviceRow : ListBoxRow {
 	private const string OBEX_AGENT = "org.bluez.obex.Agent1";
 	private const string OBEX_PATH = "/org/bluez/obex/budgie";
+	private const uint32 SMARTPHONE_MASK = 0x20C;
+	private const uint32 DESKTOP_MASK = 0x104;
+	private const uint32 LAPTOP_MASK = 0x10C;
 
 	private Image? image = null;
 	private Label? name_label = null;
@@ -428,11 +430,13 @@ public class BTDeviceRow : ListBoxRow {
 		status_box.pack_start(status_label, false);
 		status_box.pack_start(revealer, false);
 
-		var button_box = new Box(Orientation.HORIZONTAL, 0);
+		var button_box = new Box(Orientation.HORIZONTAL, 0) {
+			homogeneous = false,
+		};
 
 		// Send button
 		send_button = new Button.from_icon_name("folder-download-symbolic") {
-			relief = ReliefStyle.HALF,
+			relief = ReliefStyle.NONE,
 			tooltip_text = _("Send file"),
 		};
 		send_button.get_style_context().add_class("circular");
@@ -457,7 +461,7 @@ public class BTDeviceRow : ListBoxRow {
 
 		// Disconnect button
 		connection_button = new Button.from_icon_name("bluetooth-disabled-symbolic", IconSize.BUTTON) {
-			relief = ReliefStyle.HALF,
+			relief = ReliefStyle.NONE,
 			tooltip_text = _("Disconnect"),
 		};
 		connection_button.get_style_context().add_class("circular");
@@ -466,8 +470,8 @@ public class BTDeviceRow : ListBoxRow {
 			toggle_connection.begin();
 		});
 
-		button_box.pack_start(send_button, false);
-		button_box.pack_start(connection_button, false);
+		button_box.pack_start(send_button, true, true, 0);
+		button_box.pack_start(connection_button, true, true, 0);
 
 		// Progress stuff
 		progress_revealer = new Revealer() {
@@ -523,6 +527,7 @@ public class BTDeviceRow : ListBoxRow {
 		add(box);
 
 		show_all();
+		send_button.hide();
 		update_status();
 	}
 
@@ -648,22 +653,22 @@ public class BTDeviceRow : ListBoxRow {
 	}
 
 	private void update_status() {
-		activatable = !device.connected;
-		status_label.set_text(activatable ? _("Disconnected") : _("Connected"));
+		status_label.set_text(device.connected ? _("Connected") : _("Disconnected"));
 
-		if (activatable) {
-			connection_button.hide();
-			send_button.hide();
-		} else {
+		if (device.connected) {
 			connection_button.show();
 
 			// We only want to show the send button if the device
 			// can actually receive files.
-			if ((device.@class & 0x20C) == 0 || // Smartphone
-				(device.@class & 0x104) == 0 || // Desktop workstation
-				(device.@class & 0x10C) == 0) { // Laptop
+			message("%x", device.@class & 0x20C);
+			if ((device.@class & SMARTPHONE_MASK) == SMARTPHONE_MASK ||
+				(device.@class & DESKTOP_MASK) == DESKTOP_MASK ||
+				(device.@class & LAPTOP_MASK) == LAPTOP_MASK) {
 				send_button.show();
 			}
+		} else {
+			connection_button.hide();
+			send_button.hide();
 		}
 
 		// Update the name if changed
