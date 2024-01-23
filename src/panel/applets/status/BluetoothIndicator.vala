@@ -660,7 +660,6 @@ public class BTDeviceRow : ListBoxRow {
 
 			// We only want to show the send button if the device
 			// can actually receive files.
-			message("%x", device.@class & 0x20C);
 			if ((device.@class & SMARTPHONE_MASK) == SMARTPHONE_MASK ||
 				(device.@class & DESKTOP_MASK) == DESKTOP_MASK ||
 				(device.@class & LAPTOP_MASK) == LAPTOP_MASK) {
