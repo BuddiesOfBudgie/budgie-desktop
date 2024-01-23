@@ -666,9 +666,12 @@ public class BTDeviceRow : ListBoxRow {
 				(device.@class & LAPTOP_MASK) == LAPTOP_MASK) {
 				send_button.show();
 			}
+
+			update_battery();
 		} else {
 			connection_button.hide();
 			send_button.hide();
+			battery_revealer.reveal_child = false;
 		}
 
 		// Update the name if changed
