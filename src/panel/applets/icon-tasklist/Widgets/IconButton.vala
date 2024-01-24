@@ -367,15 +367,21 @@ public class IconButton : Gtk.ToggleButton {
 
 			if (has_active_window && window == window_group.get_active_window()) {
 				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color)) {
+					color.parse("#5294E2");
+				}
+			} else if (has_active_window) {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active", out color)) {
 					color.parse("#6BBFFF");
 				}
-			} else if (urgent) {
+			} else {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color", out color)) {
+					color.parse("#3C6DA6");
+				}
+			}
+
+			if (urgent) {
 				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
 					color.parse("#D84E4E");
-				}
-			} else {
-				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active", out color)) {
-					color.parse("#5294E2");
 				}
 			}
 
@@ -498,8 +504,14 @@ public class IconButton : Gtk.ToggleButton {
 			// Set the color of the indicator
 			Gdk.RGBA color;
 
-			if (!get_style_context().lookup_color("budgie_tasklist_indicator_color", out color)) {
-				color.parse("#3C6DA6");
+			if (urgent) {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_attention", out color)) {
+					color.parse("#D84E4E");
+				}
+			} else {
+				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color", out color)) {
+					color.parse("#3C6DA6");
+				}
 			}
 
 			ctx.set_source_rgba(color.red, color.green, color.blue, 1);
