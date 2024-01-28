@@ -1093,10 +1093,10 @@ msgstr ""
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%u neskaitytas pranešimas"
+msgstr[1] "%u neskaityti pranešimai"
+msgstr[2] "%u neskaitytų pranešimų"
+msgstr[3] "%u neskaitytas pranešimas"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377

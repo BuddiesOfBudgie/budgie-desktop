@@ -4,9 +4,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# rexhent 1, 2022
-# Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# Green <usergreen@users.osdn.me>, 2023
+# rexhent 1, 2023
+# Joshua Strobl <joshua.strobl@outlook.com>, 2023
+# Green <usergreen@users.osdn.me>, 2024
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:28+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Green <usergreen@users.osdn.me>, 2023\n"
+"Last-Translator: Green <usergreen@users.osdn.me>, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,7 +36,7 @@ msgstr "未読通知"
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
-msgstr[0] ""
+msgstr[0] "すべて調べたところ、%d 件の通知があります。"
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -66,7 +66,7 @@ msgstr "Budgie デスクトップの設定"
 #: src/daemon/menus.vala:51
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "システム設定"
+msgstr "システムの設定"
 
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
@@ -91,7 +91,7 @@ msgstr "アクティブな画面のみ撮影"
 
 #: src/daemon/screenshot.vala:441
 msgid "Screenshot selected area"
-msgstr "選択した部分を撮影"
+msgstr "選択部分を撮影"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
@@ -163,7 +163,7 @@ msgstr "カフェインブースト OFF"
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
+msgstr[0] "%d 分で電源を切る"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -194,7 +194,7 @@ msgstr "コマンド"
 
 #: src/panel/settings/settings_autostart.vala:370
 msgid "An entry with that title already exists"
-msgstr "そのタイトルのエントリーはすでに存在します"
+msgstr "そのタイトルのエントリはすでに存在します"
 
 #: src/panel/settings/settings_autostart.vala:373
 msgid "Title"
@@ -382,7 +382,7 @@ msgstr "テキストの拡大縮小"
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
-msgstr "テキストの拡大縮小率を設定します。"
+msgstr "テキストの表示倍率を設定します。"
 
 #: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
@@ -400,7 +400,7 @@ msgstr "最小"
 #: src/panel/settings/settings_fonts.vala:109
 #: src/panel/settings/settings_panel.vala:204
 msgid "None"
-msgstr "いいえ"
+msgstr "なし"
 
 #: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
@@ -444,7 +444,7 @@ msgstr "パネルを保持する"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "アプレットの削除の確認"
+msgstr "アプレットの削除確認"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
@@ -466,12 +466,12 @@ msgstr "アプレットを保持する"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr "アプリ削除の確認"
+msgstr "アプレット削除の確認"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr "本当にこのアプリを削除しますか？この操作は元に戻せません。"
+msgstr "本当にこのアプレットを削除しますか？この操作は元に戻せません。"
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -480,15 +480,15 @@ msgstr "削除"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr "アプリの設定"
+msgstr "ウィジェット（アプレット）の設定"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr "アプリの追加"
+msgstr "ウィジェットの追加"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr "アプリ一覧に追加する新しいアプリを選択してください"
+msgstr "ウィジェット一覧に追加する新しいウィジェットを選択してください"
 
 #: src/panel/settings/settings_raven_widgets.vala:164
 #: src/panel/settings/settings_panel_applets.vala:250
@@ -499,7 +499,7 @@ msgstr "設定がありません"
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
-msgstr "アプリ追加の作成に失敗しました。プラグインエンジンは、このプラグイン情報を見つけることができません。"
+msgstr "ウィジェットのインスタンス作成に失敗しました。プラグインエンジンは、このプラグインの情報を見つけることができません。"
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -507,12 +507,14 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"ウィジェットのインスタンス（実体）作成に失敗しました。モジュール名は逆DNS形式にする必要があります。例：'tld.domain.group.WidgetName.so'"
+" (C/Vala のとき) や　 'tld_domain_group_WidgetName' ( Python のとき) など。"
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
-msgstr ""
+msgstr "ウィジェットのインスタンス作成に失敗しました。プラグインエンジンがディスクからのロードに失敗しました。"
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -520,10 +522,13 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"ウィジェットのインスタンス作成に失敗しました。プラグインは設定をサポートしますが、同名の設定スキーマをインストールしません。\n"
+"\n"
+"スキーマ名はモジュール名と同じでなくてはなりませんが、拡張子を付けず、（Python の場合には）下線記号はピリオドに置き換えます。"
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
+msgstr "不明な障害によって、ウィジェットのインスタンス作成に失敗しました。"
 
 #: src/panel/settings/settings_raven.vala:47
 #: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
@@ -550,7 +555,7 @@ msgstr "説明なし"
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "by %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
@@ -644,7 +649,7 @@ msgstr "マウスがウィンドウの中に入るとウィンドウフォーカ
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "リダイレクトを無効化"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -653,6 +658,8 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
+"リダイレクトを無効にすると、全画面表示のアプリケーションでフレームの合成をバイパスできるようになります。このオプションは上級者向けで、有効にしておくことをお勧めします。専用の"
+" GPU でグラフィックやパフォーマンスに問題が発生する場合に使用してください。"
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -940,7 +947,7 @@ msgstr "画像ファイル"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
-msgstr "何かのファイル"
+msgstr "すべてのファイル"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
@@ -976,7 +983,7 @@ msgstr "システムの時刻と日付の設定"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
-msgstr "新しいインスタンス（アプリ）を開始する"
+msgstr "新しいインスタンス（アプリ）を開始"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:110
 msgid "Close All Windows"
@@ -1045,7 +1052,7 @@ msgstr "Num Lock が無効です"
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
+msgstr[0] "%u 件の未読通知"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377
@@ -1077,7 +1084,7 @@ msgstr "ローカルボリューム"
 #: src/panel/applets/places-indicator/MountItem.vala:29
 #: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
-msgstr "ネットワークフォルダー"
+msgstr "ネットワークフォルダ"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -1186,11 +1193,11 @@ msgstr "Bluetooth が有効です"
 #, c-format
 msgid "Connected to %d device"
 msgid_plural "Connected to %d devices"
-msgstr[0] "%d デバイスが接続されました"
+msgstr[0] "%d デバイスに接続しました"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
-msgstr "バッテリーは満充電です。"
+msgstr "バッテリは満充電です。"
 
 #: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
@@ -1199,27 +1206,27 @@ msgstr "不明"
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
-msgstr "バッテリー充電中"
+msgstr "バッテリ充電中"
 
 #: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
-msgstr "バッテリーの残り時間"
+msgstr "バッテリの残り時間"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "性能優先モード"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "電力節約"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "バランス優先"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "パフォーマンス"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1265,7 +1272,7 @@ msgstr "名前の変更"
 
 #: src/raven/widgets/media-controls/media_controls.vala:155
 msgid "No apps are currently playing audio."
-msgstr "現在、オーディオ再生中のアプリはありません。"
+msgstr "現在、演奏中のアプリはありません。"
 
 #: src/raven/widgets/media-controls/media_controls.vala:164
 msgid "Play some music"
@@ -1361,7 +1368,7 @@ msgstr "追加したアプリはありません。"
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr "新しいカテゴリー"
+msgstr "新しいカテゴリ"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1402,7 +1409,7 @@ msgstr "科学"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr "サウンドとビデオ"
+msgstr "サウンド & ビデオ"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
@@ -1536,15 +1543,15 @@ msgstr "カスタム形式"
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%Y年%b%d日 %H:%M:%S"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "独自の時刻帯"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "世界標準時"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1572,7 +1579,7 @@ msgstr "新しいウィンドウを起動するにはダブルクリックが必
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
-msgstr "夜間照明"
+msgstr "夜間モード"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
@@ -1584,7 +1591,7 @@ msgstr "スケジュール"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "日没から日出まで"
+msgstr "日の入りから日の出まで"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
@@ -1604,7 +1611,7 @@ msgstr "場所の表示"
 
 #: src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "ネットワークフォルダーの表示"
+msgstr "ネットワークフォルダの表示"
 
 #: src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
@@ -1669,27 +1676,27 @@ msgstr "200 %"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "並べ替えモード"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "種類別"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "アルファベットの昇順"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "アルファベットの降順"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "日付の昇順"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "日付の降順"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1697,7 +1704,7 @@ msgstr "週番号を表示"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "日表示"
 
 #: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
@@ -1722,15 +1729,15 @@ msgstr "認証が必要です"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "詳細"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "アクション:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1780,19 +1787,19 @@ msgstr "ロックキーの状態を表示"
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr "夜間照明の切り替えや設定変更"
+msgstr "夜間モードの切り替えや設定変更"
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr "Raven 通知ビューを開く"
+msgstr "Raven の通知ビューを開きます。"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr "ドライブとお気に入りを表示"
+msgstr "ドライブとお気に入りのフォルダを表示"
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr "Raven サイドバーを開く"
+msgstr "Raven サイドバーを開きます。"
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
@@ -1817,19 +1824,19 @@ msgstr "アイコンとラベルがあるアプリケーションのタスク一
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "Freedesktop のステータス通知の仕様を実装したシステムトレイです。"
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "電源に関するダイアログを開きます。"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr "ワークスペースの切替と表示"
+msgstr "ワークスペースの表示と切替"
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Budgie パネルでゴミ箱を管理する"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
@@ -1839,7 +1846,7 @@ msgstr "カレンダー"
 msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
-msgstr ""
+msgstr "組込み Gtk.Calendar ウィジェットを使う、月表示のシンプルなカレンダーです。カレンダーは既定で現在の日付を表示します。"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
@@ -1850,6 +1857,7 @@ msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
+"このウィジェットはMpris APIを使用して、オーディオとビデオをサポートします。再生中、メディアのメタデータと再生コントロールを表示します。"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
@@ -1859,7 +1867,7 @@ msgstr "音声入力"
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
-msgstr ""
+msgstr "音声入力の音量を調整し、使用可能な音声入力デバイスの一覧を表示します。"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
@@ -1869,13 +1877,13 @@ msgstr "音声出力"
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
-msgstr ""
+msgstr "全体およびアプリ毎のオーディオ出力ん音量調節を可能にし、利用できる音声出力のデバイス一覧を表示します。"
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
-msgstr ""
+msgstr "システムリソースの使用状況を棒グラフで表示します。これには、CPU、RAM、スワップ消費量が含まれます。"
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

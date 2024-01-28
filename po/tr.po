@@ -4,8 +4,8 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Joshua Strobl <joshua.strobl@outlook.com>, 2022
 # Sabri Ünal <libreajans@gmail.com>, 2023
+# Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # Mustafa Tınmaz, 2023
 # 
 #, fuzzy
@@ -36,8 +36,8 @@ msgstr "Okunmamış Bildirimler"
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bir uygulama tam ekrandayken %d bildirim aldınız."
+msgstr[1] "Bir uygulama tam ekrandayken %d bildirim aldınız."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -164,8 +164,8 @@ msgstr "Kafein Takviyesi kapatıldı"
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bir dakika içinde kapanacak"
+msgstr[1] "%d dakika içinde kapanacak"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1094,8 +1094,8 @@ msgstr "Num lock etkin değil"
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u okunmamış bildirim"
+msgstr[1] "%u okunmamış bildirim"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
 #: src/raven/notifications_view.vala:377
@@ -1258,19 +1258,19 @@ msgstr "Kalan pil"
 
 #: src/panel/applets/status/PowerIndicator.vala:198
 msgid "Performance Mode"
-msgstr ""
+msgstr "Performans Modu"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Power Saver"
-msgstr ""
+msgstr "Güç Tasarrufu"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Balanced"
-msgstr ""
+msgstr "Dengeli"
 
 #: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "Performans"
 
 #: src/panel/applets/status/PowerIndicator.vala:275
 msgid "Power settings"
@@ -1720,27 +1720,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Sıralama Modu"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Türe göre sırala"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Alfabetik olarak sırala"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Alfabetik olarak ters sırala"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Tarihe göre artan şekilde sırala"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Tarihe göre azalan şekilde sırala"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1773,15 +1773,15 @@ msgstr "Kimlik doğrulama gerekli"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "Detaylar"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "Eylem:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "KİMLİK:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1870,7 +1870,7 @@ msgstr "Simgeler ve etiketler içeren bir uygulama görev listesi."
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "Freedesktop Durum Bildiricisi yönetmeliğini uygulayan sistem tepsisi."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1882,7 +1882,7 @@ msgstr "Çalışma alanlarını görüntüleyin ve aralarında geçiş yapın."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Çöpünüzü Budgie panelinden yönetin"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
