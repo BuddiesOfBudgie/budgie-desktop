@@ -36,7 +36,7 @@ executable(
 
 install_data(
     'org.buddiesofbudgie.sendto-daemon.desktop',
-    install_dir: join_paths(confdir, 'xdg', 'autostart')
+    install_dir: xdg_appdir
 )
 
 install_data(
