@@ -256,7 +256,7 @@ namespace Budgie {
 			return pos1 < pos2 ? -1 : 1;
 		}
 
-		private uint get_preferred_max_children() {
+		private uint get_visible_children() {
 			uint visible_children = 0;
 			foreach (var child in window_box.get_children()) {
 				var tab = child as TabSwitcherWidget;
@@ -350,7 +350,7 @@ namespace Budgie {
 		}
 
 		private void update_sizing() {
-			window_box.set_max_children_per_line(get_preferred_max_children().clamp(1, 8));
+			window_box.set_max_children_per_line(get_visible_children().clamp(1, 8));
 			window_box.queue_resize();
 			queue_resize();
 			move_switcher();
