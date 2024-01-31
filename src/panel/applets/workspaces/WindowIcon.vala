@@ -22,7 +22,7 @@ namespace Workspaces {
 			this.get_style_context().add_class("workspace-icon-button");
 			this.set_tooltip_text(window.get_name());
 
-			Gtk.Image icon = new Gtk.Image.from_pixbuf(window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor()));
+			Gtk.Image icon = new Gtk.Image.from_gicon(window.get_gicon(), Gtk.IconSize.INVALID);
 			icon.set_pixel_size(WORKSPACE_ICON_SIZE);
 			this.add(icon);
 			icon.show();
@@ -32,7 +32,7 @@ namespace Workspaces {
 			});
 
 			window.icon_changed.connect(() => {
-				icon.set_from_pixbuf(window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor()));
+				icon.set_from_gicon(window.get_gicon(), Gtk.IconSize.INVALID);
 				icon.queue_draw();
 			});
 
@@ -43,7 +43,7 @@ namespace Workspaces {
 				Gdk.DragAction.MOVE
 			);
 
-			Gtk.drag_source_set_icon_pixbuf(this, window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor()));
+			Gtk.drag_source_set_icon_gicon(this, window.get_gicon());
 
 			this.drag_begin.connect(on_drag_begin);
 			this.drag_end.connect(on_drag_end);
