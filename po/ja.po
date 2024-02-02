@@ -11,9 +11,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7.2\n"
+"Project-Id-Version: budgie-desktop 10.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 14:28+0300\n"
+"POT-Creation-Date: 2024-01-28 14:21+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Green <usergreen@users.osdn.me>, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
@@ -68,11 +68,26 @@ msgstr "Budgie デスクトップの設定"
 msgid "System Settings"
 msgstr "システムの設定"
 
+#. Should show a notification
+#: src/daemon/settings.vala:352
+msgid "Turned on Caffeine Boost"
+msgstr "カフェインブースト ON"
+
+#: src/daemon/settings.vala:352
+msgid "Turned off Caffeine Boost"
+msgstr "カフェインブースト OFF"
+
+#: src/daemon/settings.vala:357
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "%d 分で電源を切る"
+
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
 #. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
 #. as a workaround
-#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/daemon/screenshot.vala:332 src/daemon/screenshot.vala:844
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/panel/applets/icon-tasklist/IconButton.vala:463
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
@@ -81,89 +96,84 @@ msgstr "Budgie スクリーンショット"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
-#: src/daemon/screenshot.vala:439
+#: src/daemon/screenshot.vala:437
 msgid "Screenshot entire screen"
 msgstr "画面全体を撮影"
 
-#: src/daemon/screenshot.vala:440
+#: src/daemon/screenshot.vala:438
 msgid "Screenshot active window"
 msgstr "アクティブな画面のみ撮影"
 
-#: src/daemon/screenshot.vala:441
+#: src/daemon/screenshot.vala:439
 msgid "Screenshot selected area"
 msgstr "選択部分を撮影"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Screen"
 msgstr "画面"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Window"
 msgstr "ウィンドウ"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Selection"
 msgstr "選択"
 
 #. translate
-#: src/daemon/screenshot.vala:900
+#: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
 msgstr "スクリーンショットの取り消し"
 
-#: src/daemon/screenshot.vala:901
+#: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
 msgstr "スクリーンショットを選択したディレクトリへ保存"
 
-#: src/daemon/screenshot.vala:902
+#: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
 msgstr "スクリーンショットをクリップボードへ貼り付け"
 
-#: src/daemon/screenshot.vala:903
+#: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
 msgstr "スクリーンショットを既定のアプリケーションで開く"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1177
+#: src/daemon/screenshot.vala:1175
 msgid "Other..."
 msgstr "その他..."
 
 #. set custom dir to found dir
-#: src/daemon/screenshot.vala:1261
+#: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
 msgstr "フォルダを開く"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
 #: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
+#: src/dialogs/sendto/Dialog/FileSender.vala:143
+#: src/dialogs/sendto/Dialog/FileSender.vala:224 src/daemon/endsession.ui.h:3
+#: src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 msgid "Open"
 msgstr "開く"
 
-#. Should show a notification
-#: src/daemon/settings.vala:339
-msgid "Turned on Caffeine Boost"
-msgstr "カフェインブースト ON"
-
-#: src/daemon/settings.vala:339
-msgid "Turned off Caffeine Boost"
-msgstr "カフェインブースト OFF"
-
-#: src/daemon/settings.vala:344
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] "%d 分で電源を切る"
+#. Caffeine Notification
+#. Prepare label widget
+#: src/lib/notification.vala:80
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+msgid "Caffeine Mode"
+msgstr "カフェインモード"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -479,6 +489,7 @@ msgid "Remove"
 msgstr "削除"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
+#, c-format
 msgid "Widget Settings"
 msgstr "ウィジェット（アプレット）の設定"
 
@@ -541,6 +552,7 @@ msgid "Settings"
 msgstr "設定"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
+#, c-format
 msgid "Built-in"
 msgstr "ビルトイン"
 
@@ -558,6 +570,7 @@ msgid "by %s"
 msgstr "by %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
+#, c-format
 msgid "No authors listed"
 msgstr "作者名なし"
 
@@ -710,7 +723,7 @@ msgstr "下部のドック"
 
 #: src/panel/settings/settings_panel.vala:140
 msgid "Top Panel"
-msgstr "上端パネル"
+msgstr "トップパネル"
 
 #: src/panel/settings/settings_panel.vala:142
 msgid "Right Panel"
@@ -722,7 +735,7 @@ msgstr "左端パネル"
 
 #: src/panel/settings/settings_panel.vala:146
 msgid "Bottom Panel"
-msgstr "下端パネル"
+msgstr "ボトムパネル"
 
 #: src/panel/settings/settings_panel.vala:183
 msgid "Top"
@@ -825,6 +838,7 @@ msgid ""
 msgstr "ドックモードではパネルが最小限の大きさとなり、利用可能な画面領域が広くなります。"
 
 #: src/panel/settings/settings_panel_applets.vala:21
+#, c-format
 msgid "Applet Settings"
 msgstr "アプレットの設定"
 
@@ -955,6 +969,7 @@ msgstr "アイコンの設定"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
+#, c-format
 msgid "Sorry, no items found"
 msgstr "アイテムが見つかりませんでした"
 
@@ -965,13 +980,6 @@ msgstr "電源"
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
 msgstr "すべて"
-
-#. Prepare label widget
-#. Caffeine Notification
-#: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:92
-msgid "Caffeine Mode"
-msgstr "カフェインモード"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1049,13 +1057,14 @@ msgid "Num lock is not active"
 msgstr "Num Lock が無効です"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
+#: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
 msgstr[0] "%u 件の未読通知"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:377
+#: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "未読通知はありません"
 
@@ -1151,10 +1160,12 @@ msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "このボリュームをマウントしている最中に不明なエラーが発生しました"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+#, c-format
 msgid "Nothing to display right now"
 msgstr "表示可能なものはありません"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+#, c-format
 msgid "Mount some drives"
 msgstr "ドライブをマウントしました"
 
@@ -1162,38 +1173,9 @@ msgstr "ドライブをマウントしました"
 msgid "Enable more sections"
 msgstr "ほかのセクションも有効にする"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
 msgstr "デスクトップの切り替え"
-
-#. Settings button
-#: src/panel/applets/status/BluetoothIndicator.vala:55
-msgid "Bluetooth Settings"
-msgstr "Bluetooth の設定"
-
-#. Send files button
-#: src/panel/applets/status/BluetoothIndicator.vala:62
-msgid "Send Files"
-msgstr "ファイルを送信する"
-
-#. Airplane mode
-#: src/panel/applets/status/BluetoothIndicator.vala:72
-msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth の機内モード"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:182
-msgid "Bluetooth is disabled"
-msgstr "Bluetooth が無効です"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:186
-msgid "Bluetooth is active"
-msgstr "Bluetooth が有効です"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:191
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "%d デバイスに接続しました"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
@@ -1212,30 +1194,110 @@ msgstr "バッテリ充電中"
 msgid "Battery remaining"
 msgstr "バッテリの残り時間"
 
-#: src/panel/applets/status/PowerIndicator.vala:198
+#: src/panel/applets/status/PowerIndicator.vala:191
+#, c-format
 msgid "Performance Mode"
 msgstr "性能優先モード"
 
-#: src/panel/applets/status/PowerIndicator.vala:207
+#: src/panel/applets/status/PowerIndicator.vala:200
 msgid "Power Saver"
 msgstr "電力節約"
 
-#: src/panel/applets/status/PowerIndicator.vala:214
+#: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Balanced"
 msgstr "バランス優先"
 
-#: src/panel/applets/status/PowerIndicator.vala:221
+#: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Performance"
 msgstr "パフォーマンス"
 
-#: src/panel/applets/status/PowerIndicator.vala:275
+#: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
 msgstr "電源設定"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:104
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:114
+msgid "Bluetooth Settings"
+msgstr "Bluetooth の設定"
+
+#. Bluetooth switch
+#: src/panel/applets/status/BluetoothIndicator.vala:120
+msgid "Turn Bluetooth on or off"
+msgstr ""
+
+#. Update the tray icon and placeholder text
+#. Airplane mode is on, so Bluetooth is disabled
+#: src/panel/applets/status/BluetoothIndicator.vala:279
+msgid "Airplane mode is on."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:280
+msgid "Bluetooth is disabled while airplane mode is on."
+msgstr ""
+
+#. Airplane mode is off, so Bluetooth is enabled
+#: src/panel/applets/status/BluetoothIndicator.vala:283
+msgid "No paired Bluetooth devices found."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:284
+msgid "Visit Bluetooth settings to pair a device."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:440
+msgid "Send file"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:465
+msgid "Disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:577
+msgid "Disconnecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:580
+msgid "Connecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to connect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Connected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Disconnected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:702
+#, c-format
+msgid "<b>Filename</b>: %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:709
+#, c-format
+msgid "Receiving… %s of %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:714
+#, c-format
+msgid "Sending… %s of %s"
+msgstr ""
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
 msgid "User"
-msgstr "ユーザー"
+msgstr "ユーザ"
 
 #. Default to "User" and symbolic icon
 #. The rest
@@ -1340,30 +1402,23 @@ msgstr "古いもの順に"
 msgid "Newest to oldest"
 msgstr "最新の順で"
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "表示可能なものはありません"
-
-#: src/raven/notifications_view.vala:124
-msgid "No new notifications"
-msgstr "新しい通知はありません"
-
-#: src/raven/notifications_view.vala:373
-#, c-format
-msgid "%u unread notifications"
-msgstr "未読通知が %u 件あります"
-
-#: src/raven/notifications_view.vala:375
-msgid "1 unread notification"
-msgstr "未読通知が 1 件あります"
-
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "通知"
 
 #: src/raven/main_view.vala:68
+#, c-format
 msgid "No widgets added."
 msgstr "追加したアプリはありません。"
+
+#: src/raven/notifications_view.vala:31
+#, c-format
+msgid "Nothing to see here"
+msgstr "表示可能なものはありません"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "新しい通知はありません"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1409,7 +1464,7 @@ msgstr "科学"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr "サウンド & ビデオ"
+msgstr "サウンド＆ビデオ"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
@@ -1424,6 +1479,7 @@ msgid "Authentication failed"
 msgstr "認証に失敗"
 
 #: src/dialogs/polkit/polkitdialog.vala:284
+#, c-format
 msgid "Group:"
 msgstr "グループ:"
 
@@ -1454,7 +1510,249 @@ msgstr "シャットダウン(_D)"
 
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
-msgstr "このシステムではハイバネーションをサポートしません。"
+msgstr "このシステムではハイバネートをサポートしません。"
+
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr "送信するファイル"
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr "キャンセル(_C)"
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr "開く(_O)"
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr "Bluetooth 経由でファイルを送信する"
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr ""
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
+msgid "File name"
+msgstr "ファイル名"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
+msgid "Transfer rate"
+msgstr "転送速度"
+
+#. Now add the dialog buttons
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+msgid "Close"
+msgstr "閉じる"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
+#, c-format
+msgid "<b>Transfer rate:</b> %s / s"
+msgstr "<b>転送速度:</b> %s / s"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
+#, c-format
+msgid "%s / %s: Time remaining: %s"
+msgstr "%s / %s: 残り時間: %s"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
+#, c-format
+msgid "%u hour"
+msgid_plural "%u hours"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
+#, c-format
+msgid "%u minute"
+msgid_plural "%u minutes"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:58
+msgid "Send"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:111
+msgid "Speaker"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:113
+msgid "Controller"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:115
+msgid "Keyboard"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+msgid "Mouse"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:119
+msgid "Tablet"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:121
+msgid "Touchpad"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:123
+msgid "Phone"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:24
+#: src/dialogs/sendto/Dialog/FileSender.vala:29
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:26
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#. Update the labels
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:30
+#: src/dialogs/sendto/Dialog/FileSender.vala:100
+#: src/dialogs/sendto/Dialog/FileSender.vala:174
+#, c-format
+msgid "<b>From</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:31
+#: src/dialogs/sendto/Dialog/FileSender.vala:101
+#: src/dialogs/sendto/Dialog/FileSender.vala:175
+#, c-format
+msgid "<b>To</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:43
+#, c-format
+msgid "<b>File name</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:53
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:74
+msgid "File transfer failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:54
+#, c-format
+msgid "File '%s' not received from %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:75
+#, c-format
+msgid "File '%s' from %s not received: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:92
+#: src/dialogs/sendto/Dialog/FileSender.vala:274
+msgid "File transferred successfully"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:93
+#, c-format
+msgid "Saved file from %s to '%s'"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:33
+msgid "From"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:34
+msgid "To"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:103
+#, c-format
+msgid "Trying to connect to %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:136
+#, c-format
+msgid "Connecting to '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:139
+#: src/dialogs/sendto/Dialog/FileSender.vala:220
+msgid "The file has not been transferred."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:144
+#: src/dialogs/sendto/Dialog/FileSender.vala:225
+msgid "Retry"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:177
+#, c-format
+msgid "Waiting for acceptance on %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:217
+#, c-format
+msgid "Transferring '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:219
+#, c-format
+msgid "The transfer was interrupted or declined by %s."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:33
+msgid "Select a Bluetooth device to send files to"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:49
+msgid "Discovering…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:64
+msgid "<b>No devices found</b>"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:68
+msgid "Ensure that your devices are visable and ready for pairing"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:231
+msgid "Available Devices"
+msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1502,7 +1800,7 @@ msgstr "簡易モード"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:6
 msgid "Show Headers"
-msgstr "ヘッダーの表示"
+msgstr "ヘッダの表示"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:7
 msgid "Roll-over mouse"
@@ -1632,7 +1930,11 @@ msgstr "アイコンの間隔"
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
-msgstr "バッテリー容量をパーセントで表示"
+msgstr "バッテリ容量をパーセントで表示"
+
+#: src/panel/applets/tray/settings.ui.h:2
+msgid "Scale icons with panel size"
+msgstr ""
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"

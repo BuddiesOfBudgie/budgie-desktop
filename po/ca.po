@@ -5,16 +5,16 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Davidmp <medipas@gmail.com>, 2023
+# Davidmp <medipas@gmail.com>, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7.2\n"
+"Project-Id-Version: budgie-desktop 10.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 14:28+0300\n"
+"POT-Creation-Date: 2024-01-28 14:21+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>, 2023\n"
+"Last-Translator: Davidmp <medipas@gmail.com>, 2024\n"
 "Language-Team: Catalan (https://app.transifex.com/buddiesofbudgie/teams/129844/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,11 +70,27 @@ msgstr "Paràmetres de l'escriptori Budgie"
 msgid "System Settings"
 msgstr "Paràmetres del sistema"
 
+#. Should show a notification
+#: src/daemon/settings.vala:352
+msgid "Turned on Caffeine Boost"
+msgstr "S'ha activat l'empenta de la Cafeïna."
+
+#: src/daemon/settings.vala:352
+msgid "Turned off Caffeine Boost"
+msgstr "S'ha desactivat l'empenta de la Cafeïna."
+
+#: src/daemon/settings.vala:357
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "S'aturarà d'aquí a un minut."
+msgstr[1] "S'aturarà d'aquí a %d minuts."
+
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
 #. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
 #. as a workaround
-#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/daemon/screenshot.vala:332 src/daemon/screenshot.vala:844
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/panel/applets/icon-tasklist/IconButton.vala:463
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
@@ -83,90 +99,84 @@ msgstr "Captura de pantalla del Budgie"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
-#: src/daemon/screenshot.vala:439
+#: src/daemon/screenshot.vala:437
 msgid "Screenshot entire screen"
 msgstr "Captura tota la pantalla"
 
-#: src/daemon/screenshot.vala:440
+#: src/daemon/screenshot.vala:438
 msgid "Screenshot active window"
 msgstr "Captura la finestra activa"
 
-#: src/daemon/screenshot.vala:441
+#: src/daemon/screenshot.vala:439
 msgid "Screenshot selected area"
 msgstr "Captura l'àrea seleccionada"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Screen"
 msgstr "Pantalla"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Window"
 msgstr "Finestra"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Selection"
 msgstr "Selecció"
 
 #. translate
-#: src/daemon/screenshot.vala:900
+#: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
 msgstr "Cancel·la la captura"
 
-#: src/daemon/screenshot.vala:901
+#: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
 msgstr "Desa la captura al directori seleccionat"
 
-#: src/daemon/screenshot.vala:902
+#: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
 msgstr "Copia la captura al porta-retalls"
 
-#: src/daemon/screenshot.vala:903
+#: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
 msgstr "Obre la captura a l'aplicació predeterminada"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1177
+#: src/daemon/screenshot.vala:1175
 msgid "Other..."
 msgstr "Altres..."
 
 #. set custom dir to found dir
-#: src/daemon/screenshot.vala:1261
+#: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
 msgstr "Obre una carpeta"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
 #: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
+#: src/dialogs/sendto/Dialog/FileSender.vala:143
+#: src/dialogs/sendto/Dialog/FileSender.vala:224 src/daemon/endsession.ui.h:3
+#: src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 msgid "Open"
 msgstr "Obre"
 
-#. Should show a notification
-#: src/daemon/settings.vala:339
-msgid "Turned on Caffeine Boost"
-msgstr "S'ha activat l'empenta de la Cafeïna."
-
-#: src/daemon/settings.vala:339
-msgid "Turned off Caffeine Boost"
-msgstr "S'ha desactivat l'empenta de la Cafeïna."
-
-#: src/daemon/settings.vala:344
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] "S'aturarà d'aquí a un minut."
-msgstr[1] "S'aturarà d'aquí a %d minuts."
+#. Caffeine Notification
+#. Prepare label widget
+#: src/lib/notification.vala:80
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+msgid "Caffeine Mode"
+msgstr "Mode de la Cafeïna"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -490,6 +500,7 @@ msgid "Remove"
 msgstr "Suprimeix"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
+#, c-format
 msgid "Widget Settings"
 msgstr "Configuració dels ginys"
 
@@ -557,6 +568,7 @@ msgid "Settings"
 msgstr "Paràmetres"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
+#, c-format
 msgid "Built-in"
 msgstr "Integrat"
 
@@ -574,6 +586,7 @@ msgid "by %s"
 msgstr "fet per %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
+#, c-format
 msgid "No authors listed"
 msgstr "No hi ha cap llista d'autors."
 
@@ -869,6 +882,7 @@ msgstr ""
 "alliberarà espai de pantalla valuós."
 
 #: src/panel/settings/settings_panel_applets.vala:21
+#, c-format
 msgid "Applet Settings"
 msgstr "Paràmetres de les miniaplicacions"
 
@@ -1006,6 +1020,7 @@ msgstr "Establiu-ne la icona."
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
+#, c-format
 msgid "Sorry, no items found"
 msgstr "Perdoneu, no s'ha trobat cap element."
 
@@ -1016,13 +1031,6 @@ msgstr "Energia"
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
 msgstr "Tot"
-
-#. Prepare label widget
-#. Caffeine Notification
-#: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:92
-msgid "Caffeine Mode"
-msgstr "Mode de la Cafeïna"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1100,6 +1108,7 @@ msgid "Num lock is not active"
 msgstr "El blocatge numèric no està activat."
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
+#: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
@@ -1107,7 +1116,7 @@ msgstr[0] "%u notificació no llegida"
 msgstr[1] "%u notificacions no llegides"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:377
+#: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "No hi ha notificacions per llegir."
 
@@ -1204,10 +1213,12 @@ msgstr ""
 "Hi ha hagut un error desconegut mentre s'intentava muntar aquest volum."
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+#, c-format
 msgid "Nothing to display right now"
 msgstr "Ara no hi ha res per mostrar."
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+#, c-format
 msgid "Mount some drives"
 msgstr "Munteu alguns dispositius."
 
@@ -1215,39 +1226,9 @@ msgstr "Munteu alguns dispositius."
 msgid "Enable more sections"
 msgstr "Habiliteu més seccions."
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
 msgstr "Commuta l'escriptori."
-
-#. Settings button
-#: src/panel/applets/status/BluetoothIndicator.vala:55
-msgid "Bluetooth Settings"
-msgstr "Paràmetres del Bluetooth"
-
-#. Send files button
-#: src/panel/applets/status/BluetoothIndicator.vala:62
-msgid "Send Files"
-msgstr "Envia els fitxers"
-
-#. Airplane mode
-#: src/panel/applets/status/BluetoothIndicator.vala:72
-msgid "Bluetooth Airplane Mode"
-msgstr "Mode d'avió del Bluetooth"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:182
-msgid "Bluetooth is disabled"
-msgstr "El Bluetooth està inhabilitat."
-
-#: src/panel/applets/status/BluetoothIndicator.vala:186
-msgid "Bluetooth is active"
-msgstr "El Bluetooth està actiu."
-
-#: src/panel/applets/status/BluetoothIndicator.vala:191
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "Connectat a %d dispositiu"
-msgstr[1] "Connectat a %d dispostius"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
@@ -1266,25 +1247,105 @@ msgstr "Es carrega la bateria."
 msgid "Battery remaining"
 msgstr "Càrrega de la bateria"
 
-#: src/panel/applets/status/PowerIndicator.vala:198
+#: src/panel/applets/status/PowerIndicator.vala:191
+#, c-format
 msgid "Performance Mode"
 msgstr "Mode de rendiment"
 
-#: src/panel/applets/status/PowerIndicator.vala:207
+#: src/panel/applets/status/PowerIndicator.vala:200
 msgid "Power Saver"
 msgstr "Estalvi d'energia"
 
-#: src/panel/applets/status/PowerIndicator.vala:214
+#: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Balanced"
 msgstr "Equilibrat"
 
-#: src/panel/applets/status/PowerIndicator.vala:221
+#: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Performance"
 msgstr "Rendiment"
 
-#: src/panel/applets/status/PowerIndicator.vala:275
+#: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
 msgstr "Paràmetres de l'energia"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:104
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:114
+msgid "Bluetooth Settings"
+msgstr "Paràmetres del Bluetooth"
+
+#. Bluetooth switch
+#: src/panel/applets/status/BluetoothIndicator.vala:120
+msgid "Turn Bluetooth on or off"
+msgstr "Activa o desactiva el bluetooth"
+
+#. Update the tray icon and placeholder text
+#. Airplane mode is on, so Bluetooth is disabled
+#: src/panel/applets/status/BluetoothIndicator.vala:279
+msgid "Airplane mode is on."
+msgstr "El mode d'avió està activat."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:280
+msgid "Bluetooth is disabled while airplane mode is on."
+msgstr "El bluetooth està desactivat mentre el mode avió està activat."
+
+#. Airplane mode is off, so Bluetooth is enabled
+#: src/panel/applets/status/BluetoothIndicator.vala:283
+msgid "No paired Bluetooth devices found."
+msgstr "No s'ha trobat cap dispositiu bluetooth vinculat."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:284
+msgid "Visit Bluetooth settings to pair a device."
+msgstr "Aneu a la configuració de bluetooth per vincular un dispositiu."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:440
+msgid "Send file"
+msgstr "Envia el fitxer"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:465
+msgid "Disconnect"
+msgstr "Desconnecta"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:577
+msgid "Disconnecting…"
+msgstr "Es desconnecta..."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:580
+msgid "Connecting…"
+msgstr "Es connecta..."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to disconnect"
+msgstr "Ha fallat desconnectar."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to connect"
+msgstr "Ha fallat connectar."
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Connected"
+msgstr "Connectat"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Disconnected"
+msgstr "Desconnectat"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:702
+#, c-format
+msgid "<b>Filename</b>: %s"
+msgstr "<b>Nom del fitxer</b>: %s"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:709
+#, c-format
+msgid "Receiving… %s of %s"
+msgstr "Es rep… %s de %s"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:714
+#, c-format
+msgid "Sending… %s of %s"
+msgstr "S'envia… %s de %s"
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
@@ -1394,30 +1455,23 @@ msgstr "De la més antiga a la més nova"
 msgid "Newest to oldest"
 msgstr "De la més nova a la més antiga"
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "Aquí no hi ha res per veure."
-
-#: src/raven/notifications_view.vala:124
-msgid "No new notifications"
-msgstr "No hi ha cap notificació nova."
-
-#: src/raven/notifications_view.vala:373
-#, c-format
-msgid "%u unread notifications"
-msgstr "%u notificacions per llegir"
-
-#: src/raven/notifications_view.vala:375
-msgid "1 unread notification"
-msgstr "1 notificació per llegir"
-
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "Notificacions"
 
 #: src/raven/main_view.vala:68
+#, c-format
 msgid "No widgets added."
 msgstr "No s'ha afegit cap giny."
+
+#: src/raven/notifications_view.vala:31
+#, c-format
+msgid "Nothing to see here"
+msgstr "Aquí no hi ha res per veure."
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "No hi ha cap notificació nova."
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1478,6 +1532,7 @@ msgid "Authentication failed"
 msgstr "Ha fallat l'autenticació."
 
 #: src/dialogs/polkit/polkitdialog.vala:284
+#, c-format
 msgid "Group:"
 msgstr "Grup:"
 
@@ -1509,6 +1564,254 @@ msgstr "_Atura't"
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
 msgstr "Aquest sistema no admet la hibernació."
+
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr "Fitxers per enviar"
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr "_Cancel·la"
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr "_Obre"
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr "Envia fitxers per bluetooth"
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr "Envia fitxers al dispositiu..."
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr "Fitxer rebutjat"
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr "El fitxer ja existeix: %s"
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr "Es rep un fitxer"
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr "El dispositiu %s vol enviar un fitxer: %s %s"
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr "Accepta-ho"
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr "Rebutja-ho"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
+msgid "File name"
+msgstr "Nom del fitxer"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
+msgid "Transfer rate"
+msgstr "Taxa de transferència"
+
+#. Now add the dialog buttons
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+msgid "Close"
+msgstr "Tanca"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
+#, c-format
+msgid "<b>Transfer rate:</b> %s / s"
+msgstr "<b>Taxa de transferència:</b> %s / s"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
+#, c-format
+msgid "%s / %s: Time remaining: %s"
+msgstr "%s / %s. Temps restant: %s"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
+#, c-format
+msgid "%u hour"
+msgid_plural "%u hours"
+msgstr[0] "%u hora"
+msgstr[1] "%u hores"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
+#, c-format
+msgid "%u minute"
+msgid_plural "%u minutes"
+msgstr[0] "%u minut"
+msgstr[1] "%u minuts"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] "%u segon"
+msgstr[1] "%u segons"
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d segon"
+msgstr[1] "%d segons"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:58
+msgid "Send"
+msgstr "Envia"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:111
+msgid "Speaker"
+msgstr "Altaveu"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:113
+msgid "Controller"
+msgstr "Controlador"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:115
+msgid "Keyboard"
+msgstr "Teclat"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+msgid "Mouse"
+msgstr "Ratolí"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:119
+msgid "Tablet"
+msgstr "Tauleta"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:121
+msgid "Touchpad"
+msgstr "Ratolí tàctil"
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:123
+msgid "Phone"
+msgstr "Telèfon"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:24
+#: src/dialogs/sendto/Dialog/FileSender.vala:29
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:26
+msgid "Bluetooth File Transfer"
+msgstr "Transferència de fitxers per bluetooth"
+
+#. Update the labels
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:30
+#: src/dialogs/sendto/Dialog/FileSender.vala:100
+#: src/dialogs/sendto/Dialog/FileSender.vala:174
+#, c-format
+msgid "<b>From</b>: %s"
+msgstr "<b>De</b>: %s"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:31
+#: src/dialogs/sendto/Dialog/FileSender.vala:101
+#: src/dialogs/sendto/Dialog/FileSender.vala:175
+#, c-format
+msgid "<b>To</b>: %s"
+msgstr "<b>A</b>: %s"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:43
+#, c-format
+msgid "<b>File name</b>: %s"
+msgstr "<b>Nom del fitxer</b>: %s"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:53
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:74
+msgid "File transfer failed"
+msgstr "Ha fallat la transferència."
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:54
+#, c-format
+msgid "File '%s' not received from %s"
+msgstr "El fitxer %s no s'ha rebut de %s."
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:75
+#, c-format
+msgid "File '%s' from %s not received: %s"
+msgstr "El fitxer %s de %s no s'ha rebut. %s"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:92
+#: src/dialogs/sendto/Dialog/FileSender.vala:274
+msgid "File transferred successfully"
+msgstr "Transferència correcta"
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:93
+#, c-format
+msgid "Saved file from %s to '%s'"
+msgstr "S'ha desat el fitxer de %s a %s. "
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:33
+msgid "From"
+msgstr "De"
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:34
+msgid "To"
+msgstr "A"
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:103
+#, c-format
+msgid "Trying to connect to %s…"
+msgstr "S'intenta connectar amb %s..."
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:136
+#, c-format
+msgid "Connecting to '%s' failed"
+msgstr "Ha fallat connectar amb %s."
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:139
+#: src/dialogs/sendto/Dialog/FileSender.vala:220
+msgid "The file has not been transferred."
+msgstr "No s'ha transferit el fitxer."
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:144
+#: src/dialogs/sendto/Dialog/FileSender.vala:225
+msgid "Retry"
+msgstr "Torneu-ho a provar"
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:177
+#, c-format
+msgid "Waiting for acceptance on %s…"
+msgstr "S'espera l'acceptació a %s..."
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:217
+#, c-format
+msgid "Transferring '%s' failed"
+msgstr "Ha fallat transferir %s."
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:219
+#, c-format
+msgid "The transfer was interrupted or declined by %s."
+msgstr "La transferència ha estat interrompuda o rebutjada per %s."
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:33
+msgid "Select a Bluetooth device to send files to"
+msgstr "Seleccioneu un dispositiu bluetooth al qual enviar fitxers."
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:49
+msgid "Discovering…"
+msgstr "Es descobreix..."
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:64
+msgid "<b>No devices found</b>"
+msgstr "<b>No s'ha trobat cap dispositiu.</b>"
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:68
+msgid "Ensure that your devices are visable and ready for pairing"
+msgstr ""
+"Assegureu-vos que els dispositius siguin visibles i estiguin preparats per a"
+" la vinculació."
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:231
+msgid "Available Devices"
+msgstr "Dispositius disponibles"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1687,6 +1990,10 @@ msgstr "Espaiament de les icones"
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "Mostra el percentatge de la bateria."
+
+#: src/panel/applets/tray/settings.ui.h:2
+msgid "Scale icons with panel size"
+msgstr "Escala les icones segons la mida del plafó."
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
