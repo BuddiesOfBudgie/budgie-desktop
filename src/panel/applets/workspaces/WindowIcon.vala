@@ -55,14 +55,10 @@ namespace Workspaces {
 		public override bool button_release_event(Gdk.EventButton event) {
 			if (event.button != 1) return Gdk.EVENT_STOP;
 
-			var workspace = WorkspacesApplet.workspace_group.get_active_workspace();
-			if (workspace != null && workspace == window.get_workspace()) {
-				try {
-					window.activate(event.time);
-				} catch (Error e) {
-					warning("Failed to activate window: %s", e.message);
-				}
-				return Gdk.EVENT_STOP;
+			try {
+				window.activate(event.time);
+			} catch (Error e) {
+				warning("Failed to activate window: %s", e.message);
 			}
 			return Gdk.EVENT_STOP;
 		}
