@@ -20,6 +20,7 @@ jobs:
             'pkgconfig(alsa)' \
             'pkgconfig(gee-0.8)' \
             'pkgconfig(gnome-desktop-3.0)' \
+            'pkgconfig(gnome-settings-daemon)' \
             'pkgconfig(gstreamer-1.0)' \
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
