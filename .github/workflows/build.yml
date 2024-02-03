@@ -38,7 +38,7 @@ jobs:
             desktop-file-utils \
             gcc \
             gettext \
-            git-core \
+            git \
             gtk-doc \
             intltool \
             magpie-devel \
