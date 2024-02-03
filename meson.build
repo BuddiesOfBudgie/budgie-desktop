@@ -70,7 +70,8 @@ cdata = configuration_data()
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
 
-if fs.exists('.git')
+ci = get_option('ci')
+if fs.exists('.git') and ci == false
     git = find_program('git')
     git_version = run_command('git', ['rev-parse', 'HEAD'], check: true)
     package_version += ' (git-'+git_version.stdout().strip()+')'

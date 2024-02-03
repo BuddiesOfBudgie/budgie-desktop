@@ -9,13 +9,46 @@ on:
       - main
       - v10.9.x
 jobs:
-  ubuntu:
-    runs-on: ubuntu-22.04
+  fedora:
+    runs-on: ubuntu-latest
+    container: "registry.fedoraproject.org/fedora:rawhide"
     steps:
-      - uses: actions/checkout@v1
-      - run: sudo add-apt-repository ppa:xubuntu-dev/experimental
-      - run: sudo apt update
-      - run: sudo apt remove libunwind-14-dev
-      - run: sudo apt install meson ninja-build zenity gnome-screensaver gnome-settings-daemon-dev gtk-doc-tools intltool libaccountsservice-dev libasound2-dev libcanberra-dev libcanberra-gtk3-dev libgee-0.8-dev libgnome-bluetooth-dev libgnome-desktop-3-dev libgnome-menu-3-dev libgtk-3-dev libibus-1.0-dev libmutter-10-dev libpeas-dev libpolkit-agent-1-dev libpulse-dev libupower-glib-dev libwnck-3-dev sassc uuid-dev valac libgstreamer1.0-dev libgee-0.8-dev libxfce4windowing-0-dev
-      - run: meson build -Duse-old-zenity=true -Dwith-gnome-screensaver=true
-      - run: meson compile -C build
+      - name: Install prerequisites
+        run: |
+          dnf install --assumeyes \
+            'pkgconfig(accountsservice)' \
+            'pkgconfig(alsa)' \
+            'pkgconfig(gee-0.8)' \
+            'pkgconfig(gnome-desktop-3.0)' \
+            'pkgconfig(gnome-settings-daemon)' \
+            'pkgconfig(gstreamer-1.0)' \
+            'pkgconfig(ibus-1.0)' \
+            'pkgconfig(libcanberra)' \
+            'pkgconfig(libnotify)' \
+            'pkgconfig(libpeas-1.0)' \
+            'pkgconfig(libpulse)' \
+            'pkgconfig(libwnck-3.0)' \
+            'pkgconfig(libxfce4windowing-0)' \
+            'pkgconfig(polkit-agent-1)' \
+            'pkgconfig(upower-glib)' \
+            'pkgconfig(uuid)' \
+            'pkgconfig(vapigen)' \
+            budgie-desktop-view \
+            budgie-screensaver \
+            desktop-file-utils \
+            gcc \
+            gettext \
+            git \
+            gtk-doc \
+            intltool \
+            magpie-devel \
+            meson \
+            sassc \
+            zenity
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Build Budgie Desktop
+        run: |
+          meson build -Dci=true
+          meson compile -C build
