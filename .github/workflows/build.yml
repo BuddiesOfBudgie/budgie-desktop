@@ -45,8 +45,10 @@ jobs:
             meson \
             sassc \
             zenity
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: Build Budgie Desktop
         run: |
-          meson setup build -Dci=true
+          meson build -Dci=true
           meson compile -C build
