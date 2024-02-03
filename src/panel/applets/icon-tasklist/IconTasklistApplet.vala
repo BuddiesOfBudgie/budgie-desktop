@@ -10,7 +10,8 @@
  */
 
 public const Gtk.TargetEntry[] DRAG_TARGETS = {
-	{ "text/uri-list", 0, 0 },
+	{ "application/x-desktop", 0, 0 },
+	{ "text/uri-list", 0, 1 },
 };
 
 public const Gtk.TargetEntry[] SOURCE_TARGET = {
@@ -123,9 +124,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		/* Initial bootstrap of helpers */
 		windowing = new Budgie.Windowing.Windowing();
-
-		Gtk.drag_dest_set(main_layout, Gtk.DestDefaults.ALL, DRAG_TARGETS, Gdk.DragAction.COPY);
-		main_layout.drag_data_received.connect(on_drag_data_received);
 
 		add(main_layout);
 	}
@@ -294,14 +292,24 @@ public class IconTasklistApplet : Budgie.Applet {
 	 * button.
 	 */
 	private void button_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData data, uint info, uint time) {
-		var button = widget as IconButton;
 		var source = Gtk.drag_get_source_widget(context);
 
-		// Make sure the source is a icon button
-		if (!(source is IconButton)) {
-			Gtk.drag_finish(context, false, false, Gtk.get_current_event_time());
-			return;
+		switch (info) {
+			case 0: // Drag contains a desktop file info
+				button_drag_data_received_handle_desktop_info(widget, context, data, source);
+				break;
+			case 1: // Drag contains a URI
+				button_drag_data_received_handle_uri(context, data, time);
+				break;
+			default: // Unknown
+				warning("Unknown data passed during drag and drop");
+				Gtk.drag_finish(context, false, false, Gtk.get_current_event_time());
+				break;
 		}
+	}
+
+	private void button_drag_data_received_handle_desktop_info(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData data, Gtk.Widget source) {
+		var button = widget as IconButton;
 
 		List<weak Gtk.Widget> children = main_layout.get_children(); // Get the list of child buttons
 		unowned var self = children.find_custom(button.get_parent(), (a, b) => {
@@ -322,6 +330,50 @@ public class IconTasklistApplet : Budgie.Applet {
 		main_layout.reorder_child(source.get_parent(), position); // Put the source button in our position
 		update_pinned_launchers(); // Update our pin order
 		Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, Gtk.get_current_event_time());
+	}
+
+	private void button_drag_data_received_handle_uri(Gdk.DragContext context, Gtk.SelectionData data, uint time) {
+		// id of app that is currently being dragged
+		var app_id = (string) data.get_data();
+
+		if (!app_id.has_prefix("file://")) {
+			Gtk.drag_finish(context, false, false, time);
+			return;
+		}
+
+		app_id = app_id.split("://")[1];
+		app_id = app_id.strip();
+
+		DesktopAppInfo? info = new DesktopAppInfo.from_filename(app_id);
+
+		if (info == null) {
+			Gtk.drag_finish(context, false, false, time);
+			return;
+		}
+
+		// Don't allow d&d for Budgie Desktop Settings
+		if (info.get_startup_wm_class() == "budgie-desktop-settings") {
+			Gtk.drag_finish(context, false, false, time);
+			return;
+		}
+
+		string launcher = info.get_id();
+
+		if (buttons.contains(launcher)) {
+			Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, time);
+			return;
+		}
+
+		var application = new Budgie.Application(info);
+		var button = new IconButton(application, manager) {
+			pinned = true,
+		};
+
+		button.notify["pinned"].connect(on_pinned_changed);
+
+		add_icon_button(launcher, button);
+		update_pinned_launchers(); // Update our pin order
+		Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, time);
 	}
 
 	/**
@@ -354,55 +406,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		Gtk.drag_get_data(widget, context, ret, time);
 		return true;
-	}
-
-	private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint item, uint time) {
-		if (item != 0) {
-			warning("Invalid target type for icon-tasklist drag and drop");
-			// Gtk.drag_finish(context, false, false, time);
-			return;
-		}
-
-		// id of app that is currently being dragged
-		var app_id = (string) selection_data.get_data();
-
-		if (!app_id.has_prefix("file://")) {
-			// Gtk.drag_finish(context, false, false, time);
-			return;
-		}
-
-		app_id = app_id.split("://")[1];
-		app_id = app_id.strip();
-
-		DesktopAppInfo? info = new DesktopAppInfo.from_filename(app_id);
-
-		if (info == null) {
-			// Gtk.drag_finish(context, false, false, time);
-			return;
-		}
-
-		// Don't allow d&d for Budgie Desktop Settings
-		if (info.get_startup_wm_class() == "budgie-desktop-settings") {
-			// Gtk.drag_finish(context, false, false, time);
-			return;
-		}
-
-		string launcher = info.get_id();
-
-		if (buttons.contains(launcher)) {
-			// Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, time);
-			return;
-		}
-
-		var application = new Budgie.Application(info);
-		var button = new IconButton(application, manager) {
-			pinned = true,
-		};
-
-		button.notify["pinned"].connect(on_pinned_changed);
-
-		add_icon_button(launcher, button);
-		// Gtk.drag_finish(context, true, context.get_selected_action() == Gdk.DragAction.MOVE, time);
 	}
 
 	/**
@@ -562,8 +565,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		wrapper.orient = get_orientation();
 
 		Gtk.drag_source_set(button, Gdk.ModifierType.BUTTON1_MASK, SOURCE_TARGET, Gdk.DragAction.MOVE);
-		// Gtk.drag_dest_set(button, (Gtk.DestDefaults.DROP|Gtk.DestDefaults.HIGHLIGHT), SOURCE_TARGET, Gdk.DragAction.MOVE);
-		Gtk.drag_dest_set(button, 0, SOURCE_TARGET, Gdk.DragAction.MOVE);
+		Gtk.drag_dest_set(button, 0, DRAG_TARGETS, Gdk.DragAction.MOVE);
 
 		button.drag_data_get.connect(button_drag_data_get);
 		button.drag_begin.connect(button_drag_begin);
