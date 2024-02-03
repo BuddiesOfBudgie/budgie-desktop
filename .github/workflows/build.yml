@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Install prerequisites
         run: |
-          dnf install --assumeyes install \
+          dnf install --assumeyes \
             'pkgconfig(accountsservice)' \
             'pkgconfig(alsa)' \
             'pkgconfig(gee-0.8)' \
