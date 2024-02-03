@@ -46,6 +46,8 @@ jobs:
             sassc \
             zenity
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Build Budgie Desktop
         run: |
           meson setup build
