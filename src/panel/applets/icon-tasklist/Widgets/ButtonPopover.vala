@@ -145,6 +145,7 @@ public class ButtonPopover : Budgie.Popover {
 
 	private void on_pin_clicked() {
 		pinned = !pinned;
+		hide();
 	}
 
 	private void on_new_instance_clicked() {

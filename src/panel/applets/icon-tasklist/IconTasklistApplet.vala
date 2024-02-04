@@ -579,9 +579,22 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_pinned_changed(Object object, ParamSpec pspec) {
-		update_pinned_launchers();
+		var button = object as IconButton;
 
-		// TODO: Do we want to do anything about sorting?
+		// If the button has been unpinned, remove it from the panel if
+		// there are no open windows
+		if (!button.pinned) {
+			var group = button.get_window_group();
+
+			if (group == null) {
+				var id = button.app.desktop_id;
+
+				((ButtonWrapper) button.get_parent()).gracefully_die();
+				remove_button(id);
+			}
+		}
+
+		update_pinned_launchers();
 	}
 
 	private void update_pinned_launchers() {
