@@ -617,9 +617,13 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (restrict_to_workspace) { // Only show apps on this workspace
 			var workspace = windowing.get_active_workspace();
 
-			if (workspace == null) return;
+			if (workspace != null) {
+				var group = button.get_window_group();
 
-			// TODO: visible = button.has_window_on_workspace(workspace); // Set if the button is pinned and on workspace
+				if (group != null) {
+					visible = group.has_window_on_workspace(workspace);
+				}
+			}
 		}
 
 		if (only_show_pinned) {

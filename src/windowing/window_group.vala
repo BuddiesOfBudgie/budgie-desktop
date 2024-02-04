@@ -218,6 +218,26 @@ namespace Budgie.Windowing {
 		}
 
 		/**
+		 * Check whether this group has an open window on
+		 * a workspace.
+		 *
+		 * Returns: true if there is a window on the workspace
+		 */
+		public bool has_window_on_workspace(libxfce4windowing.Workspace workspace) {
+			if (windows.is_empty()) return false;
+
+			foreach (unowned var window in windows) {
+				var window_workspace = window.get_workspace();
+
+				if (window_workspace == null) continue;
+
+				if (window_workspace.get_id() == workspace.get_id()) return true;
+			}
+
+			return false;
+		}
+
+		/**
 		 * Checks whether or not this group still has any open windows.
 		 *
 		 * Returns: true if there are open windows
