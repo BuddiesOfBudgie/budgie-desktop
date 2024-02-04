@@ -156,49 +156,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		windowing.window_group_added.connect(on_app_opened);
 		windowing.window_group_removed.connect(on_app_closed);
-
-		// TODO: Figure out if any of this is really needed
-		//  this.abomination.updated_group.connect((group) => { // try to properly group icons
-		//  	Wnck.Window window = group.get_windows().nth_data(0);
-		//  	if (window == null) {
-		//  		return;
-		//  	}
-
-		//  	Budgie.Abomination.RunningApp app = this.abomination.get_app_from_window_id(window.get_xid());
-		//  	if (app == null) {
-		//  		return;
-		//  	}
-
-		//  	IconButton button = this.buttons.get(window.get_xid().to_string());
-
-		//  	if (button == null && app.app_info != null) { // Button might be pinned, try to get button from launcher instead
-		//  		string launcher = this.desktop_helper.get_app_launcher(app.app_info.get_filename());
-		//  		button = this.buttons.get(launcher);
-		//  	}
-
-		//  	if (button == null) { // we don't manage this button
-		//  		return;
-		//  	}
-
-		//  	ButtonWrapper wrapper = (button.get_parent() as ButtonWrapper);
-		//  	if (wrapper == null) {
-		//  		return;
-		//  	}
-
-		//  	if (!button.pinned) {
-		//  		wrapper.gracefully_die();
-		//  	} else {
-		//  		// the button that we were going to replace is pinned, so instead of removing it from the view,
-		//  		// just remove its class group and first app, then update it visually. this prevents apps like
-		//  		// the LibreOffice launcher from vanishing after a document is opened, despite being pinned
-		//  		button.set_class_group(null);
-		//  		button.first_app = null;
-		//  		button.update();
-		//  	}
-
-		//  	this.remove_button(window.get_xid().to_string());
-		//  	this.on_app_opened(app);
-		//  });
 	}
 
 	/**
@@ -483,21 +440,12 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		// Update the launcher button
 		button.update();
-
-		//  if (button.button_id != app_id && app_id in buttons) {
-		//  	this.swap_button(app_id, button.button_id);
-		//  	button.first_app = null;
-		//  	button.set_app_for_class_group();
-		//  } else {
-		//  	this.remove_button(app_id);
-		//  }
 	}
 
 	private void on_active_window_changed(libxfce4windowing.Window? old_active_window, libxfce4windowing.Window? new_active_window) {
 		foreach (IconButton button in buttons.get_values()) {
 			if (new_active_window != null && button.has_window(new_active_window)) {
 				button.set_active_window(true);
-				// TODO: button.attention(false);
 			} else {
 				button.set_active_window(false);
 			}
