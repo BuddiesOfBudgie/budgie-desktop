@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Joshua Strobl <joshua.strobl@outlook.com>, 2022
-# JungHee Lee <daemul72@gmail.com>, 2023
+# Joshua Strobl <joshua.strobl@outlook.com>, 2023
+# Junghee Lee <daemul72@gmail.com>, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7.2\n"
+"Project-Id-Version: budgie-desktop 10.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 14:28+0300\n"
+"POT-Creation-Date: 2024-01-28 14:21+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: JungHee Lee <daemul72@gmail.com>, 2023\n"
+"Last-Translator: Junghee Lee <daemul72@gmail.com>, 2023\n"
 "Language-Team: Korean (https://app.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +35,7 @@ msgstr "읽지 않은 알림"
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
-msgstr[0] ""
+msgstr[0] "응용프로그램이 전체 화면으로 표시되는 동안 %d개의 알림을 받았습니다."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
@@ -67,11 +67,26 @@ msgstr "Budgie 데스크톱 설정"
 msgid "System Settings"
 msgstr "시스템 설정"
 
+#. Should show a notification
+#: src/daemon/settings.vala:352
+msgid "Turned on Caffeine Boost"
+msgstr "카페인 부스트 켜기"
+
+#: src/daemon/settings.vala:352
+msgid "Turned off Caffeine Boost"
+msgstr "카페인 부스트 끄기"
+
+#: src/daemon/settings.vala:357
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "%d분 후에 꺼집니다"
+
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
 #. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
 #. as a workaround
-#: src/daemon/screenshot.vala:334 src/daemon/screenshot.vala:846
+#: src/daemon/screenshot.vala:332 src/daemon/screenshot.vala:844
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
 #: src/panel/applets/icon-tasklist/IconButton.vala:463
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
@@ -80,89 +95,84 @@ msgstr "Budgie 스크린숏"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
-#: src/daemon/screenshot.vala:439
+#: src/daemon/screenshot.vala:437
 msgid "Screenshot entire screen"
 msgstr "스크린숏 전체 화면"
 
-#: src/daemon/screenshot.vala:440
+#: src/daemon/screenshot.vala:438
 msgid "Screenshot active window"
 msgstr "스크린숏 활성 창"
 
-#: src/daemon/screenshot.vala:441
+#: src/daemon/screenshot.vala:439
 msgid "Screenshot selected area"
 msgstr "스크린숏 선택된 영역"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Screen"
 msgstr "화면"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Window"
 msgstr "창"
 
-#: src/daemon/screenshot.vala:549
+#: src/daemon/screenshot.vala:547
 msgid "Selection"
 msgstr "선택영역"
 
 #. translate
-#: src/daemon/screenshot.vala:900
+#: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
 msgstr "스크린숏 취소하기"
 
-#: src/daemon/screenshot.vala:901
+#: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
 msgstr "선택한 디렉터리에 스크린숏 저장하기"
 
-#: src/daemon/screenshot.vala:902
+#: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
 msgstr "스크린숏을 클립보드에 복사하기"
 
-#: src/daemon/screenshot.vala:903
+#: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
 msgstr "기본 응용프로그램에서 스크린숏 열기"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/daemon/screenshot.vala:1177
+#: src/daemon/screenshot.vala:1175
 msgid "Other..."
 msgstr "기타..."
 
 #. set custom dir to found dir
-#: src/daemon/screenshot.vala:1261
+#: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
 msgstr "폴더 열기"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
 #: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:7
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
+#: src/dialogs/sendto/Dialog/FileSender.vala:143
+#: src/dialogs/sendto/Dialog/FileSender.vala:224 src/daemon/endsession.ui.h:3
+#: src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
 msgstr "취소하기"
 
-#: src/daemon/screenshot.vala:1262
+#: src/daemon/screenshot.vala:1260
 msgid "Open"
 msgstr "열기"
 
-#. Should show a notification
-#: src/daemon/settings.vala:339
-msgid "Turned on Caffeine Boost"
-msgstr "카페인 부스트 켜기"
-
-#: src/daemon/settings.vala:339
-msgid "Turned off Caffeine Boost"
-msgstr "카페인 부스트 끄기"
-
-#: src/daemon/settings.vala:344
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
+#. Caffeine Notification
+#. Prepare label widget
+#: src/lib/notification.vala:80
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+msgid "Caffeine Mode"
+msgstr "카페인 모드"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -478,6 +488,7 @@ msgid "Remove"
 msgstr "제거하기"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
+#, c-format
 msgid "Widget Settings"
 msgstr "위젯 설정"
 
@@ -540,6 +551,7 @@ msgid "Settings"
 msgstr "설정"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
+#, c-format
 msgid "Built-in"
 msgstr "내장"
 
@@ -557,6 +569,7 @@ msgid "by %s"
 msgstr "작성자: %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
+#, c-format
 msgid "No authors listed"
 msgstr "나열된 작성자 없음"
 
@@ -824,6 +837,7 @@ msgid ""
 msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
 
 #: src/panel/settings/settings_panel_applets.vala:21
+#, c-format
 msgid "Applet Settings"
 msgstr "애플릿 설정"
 
@@ -955,6 +969,7 @@ msgstr "아이콘 설정하기"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
+#, c-format
 msgid "Sorry, no items found"
 msgstr "검색 결과 없음"
 
@@ -965,13 +980,6 @@ msgstr "전원"
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
 msgstr "모두"
-
-#. Prepare label widget
-#. Caffeine Notification
-#: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:92
-msgid "Caffeine Mode"
-msgstr "카페인 모드"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1049,13 +1057,14 @@ msgid "Num lock is not active"
 msgstr "Num lock 꺼짐"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
+#: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
+msgstr[0] "읽지않은 알림 %u개"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:377
+#: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "읽지 않은 알림 없음"
 
@@ -1151,10 +1160,12 @@ msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "이 볼륨을 장착하는 동안 알 수 없는 오류가 발생했습니다"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+#, c-format
 msgid "Nothing to display right now"
 msgstr "현재 표시할 내용이 없습니다"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+#, c-format
 msgid "Mount some drives"
 msgstr "일부 드라이브 장착하기"
 
@@ -1162,38 +1173,9 @@ msgstr "일부 드라이브 장착하기"
 msgid "Enable more sections"
 msgstr "더 많은 섹션 활성화"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
 msgstr "바탕화면 전환하기"
-
-#. Settings button
-#: src/panel/applets/status/BluetoothIndicator.vala:55
-msgid "Bluetooth Settings"
-msgstr "블루투스 설정"
-
-#. Send files button
-#: src/panel/applets/status/BluetoothIndicator.vala:62
-msgid "Send Files"
-msgstr "파일 보내기"
-
-#. Airplane mode
-#: src/panel/applets/status/BluetoothIndicator.vala:72
-msgid "Bluetooth Airplane Mode"
-msgstr "블루투스 비행기 모드"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:182
-msgid "Bluetooth is disabled"
-msgstr "블루투스 꺼짐"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:186
-msgid "Bluetooth is active"
-msgstr "블루투스 켜짐"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:191
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "장치 %d개에 연결됨"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
@@ -1212,25 +1194,105 @@ msgstr "배터리 충전 중"
 msgid "Battery remaining"
 msgstr "남은 배터리"
 
-#: src/panel/applets/status/PowerIndicator.vala:198
+#: src/panel/applets/status/PowerIndicator.vala:191
+#, c-format
 msgid "Performance Mode"
-msgstr ""
+msgstr "성능 모드"
+
+#: src/panel/applets/status/PowerIndicator.vala:200
+msgid "Power Saver"
+msgstr "절전"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
-msgid "Power Saver"
-msgstr ""
+msgid "Balanced"
+msgstr "균형"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
-msgid "Balanced"
-msgstr ""
-
-#: src/panel/applets/status/PowerIndicator.vala:221
 msgid "Performance"
-msgstr ""
+msgstr "성능"
 
-#: src/panel/applets/status/PowerIndicator.vala:275
+#: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
 msgstr "전원 설정"
+
+#: src/panel/applets/status/BluetoothIndicator.vala:104
+msgid "Bluetooth"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:114
+msgid "Bluetooth Settings"
+msgstr "블루투스 설정"
+
+#. Bluetooth switch
+#: src/panel/applets/status/BluetoothIndicator.vala:120
+msgid "Turn Bluetooth on or off"
+msgstr ""
+
+#. Update the tray icon and placeholder text
+#. Airplane mode is on, so Bluetooth is disabled
+#: src/panel/applets/status/BluetoothIndicator.vala:279
+msgid "Airplane mode is on."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:280
+msgid "Bluetooth is disabled while airplane mode is on."
+msgstr ""
+
+#. Airplane mode is off, so Bluetooth is enabled
+#: src/panel/applets/status/BluetoothIndicator.vala:283
+msgid "No paired Bluetooth devices found."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:284
+msgid "Visit Bluetooth settings to pair a device."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:440
+msgid "Send file"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:465
+msgid "Disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:577
+msgid "Disconnecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:580
+msgid "Connecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to connect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Connected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Disconnected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:702
+#, c-format
+msgid "<b>Filename</b>: %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:709
+#, c-format
+msgid "Receiving… %s of %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:714
+#, c-format
+msgid "Sending… %s of %s"
+msgstr ""
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
@@ -1340,30 +1402,23 @@ msgstr "가장 오래된 것에서 최신으로"
 msgid "Newest to oldest"
 msgstr "최신에서 가장 오래된 것으로"
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "현재 표시할 알림이 없습니다"
-
-#: src/raven/notifications_view.vala:124
-msgid "No new notifications"
-msgstr "새 알림 없음"
-
-#: src/raven/notifications_view.vala:373
-#, c-format
-msgid "%u unread notifications"
-msgstr "읽지 않은 알림 %u개"
-
-#: src/raven/notifications_view.vala:375
-msgid "1 unread notification"
-msgstr "읽지 않은 알림 1개"
-
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "알림"
 
 #: src/raven/main_view.vala:68
+#, c-format
 msgid "No widgets added."
 msgstr "추가된 위젯이 없습니다."
+
+#: src/raven/notifications_view.vala:31
+#, c-format
+msgid "Nothing to see here"
+msgstr "현재 표시할 알림이 없습니다"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "새 알림 없음"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
@@ -1424,6 +1479,7 @@ msgid "Authentication failed"
 msgstr "인증 실패함"
 
 #: src/dialogs/polkit/polkitdialog.vala:284
+#, c-format
 msgid "Group:"
 msgstr "그룹:"
 
@@ -1455,6 +1511,248 @@ msgstr "컴퓨터 끄기(_D)"
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
 msgstr "이 시스템은 최대 절전모드를 지원하지 않습니다."
+
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr ""
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
+msgid "File name"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
+msgid "Transfer rate"
+msgstr ""
+
+#. Now add the dialog buttons
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+msgid "Close"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
+#, c-format
+msgid "<b>Transfer rate:</b> %s / s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
+#, c-format
+msgid "%s / %s: Time remaining: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
+#, c-format
+msgid "%u hour"
+msgid_plural "%u hours"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
+#, c-format
+msgid "%u minute"
+msgid_plural "%u minutes"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:58
+msgid "Send"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:111
+msgid "Speaker"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:113
+msgid "Controller"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:115
+msgid "Keyboard"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+msgid "Mouse"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:119
+msgid "Tablet"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:121
+msgid "Touchpad"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:123
+msgid "Phone"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:24
+#: src/dialogs/sendto/Dialog/FileSender.vala:29
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:26
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#. Update the labels
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:30
+#: src/dialogs/sendto/Dialog/FileSender.vala:100
+#: src/dialogs/sendto/Dialog/FileSender.vala:174
+#, c-format
+msgid "<b>From</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:31
+#: src/dialogs/sendto/Dialog/FileSender.vala:101
+#: src/dialogs/sendto/Dialog/FileSender.vala:175
+#, c-format
+msgid "<b>To</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:43
+#, c-format
+msgid "<b>File name</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:53
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:74
+msgid "File transfer failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:54
+#, c-format
+msgid "File '%s' not received from %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:75
+#, c-format
+msgid "File '%s' from %s not received: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:92
+#: src/dialogs/sendto/Dialog/FileSender.vala:274
+msgid "File transferred successfully"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:93
+#, c-format
+msgid "Saved file from %s to '%s'"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:33
+msgid "From"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:34
+msgid "To"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:103
+#, c-format
+msgid "Trying to connect to %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:136
+#, c-format
+msgid "Connecting to '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:139
+#: src/dialogs/sendto/Dialog/FileSender.vala:220
+msgid "The file has not been transferred."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:144
+#: src/dialogs/sendto/Dialog/FileSender.vala:225
+msgid "Retry"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:177
+#, c-format
+msgid "Waiting for acceptance on %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:217
+#, c-format
+msgid "Transferring '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:219
+#, c-format
+msgid "The transfer was interrupted or declined by %s."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:33
+msgid "Select a Bluetooth device to send files to"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:49
+msgid "Discovering…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:64
+msgid "<b>No devices found</b>"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:68
+msgid "Ensure that your devices are visable and ready for pairing"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:231
+msgid "Available Devices"
+msgstr ""
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1634,6 +1932,10 @@ msgstr "아이콘 간격"
 msgid "Show battery percentage"
 msgstr "배터리 잔량 퍼센티지로 표시하기"
 
+#: src/panel/applets/tray/settings.ui.h:2
+msgid "Scale icons with panel size"
+msgstr ""
+
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
 msgstr "\"추가하기\" 단추 가시성"
@@ -1676,27 +1978,27 @@ msgstr "2.0x"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "정렬 모드"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "유형별로 정렬"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "알파벳순으로 정렬"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "알파벳 역순으로 정렬"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "날짜 오름차순으로 정렬"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "날짜 내림차순으로 정렬"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -1729,15 +2031,15 @@ msgstr "인증이 필요합니다"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Details"
-msgstr ""
+msgstr "세부정보"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Action:"
-msgstr ""
+msgstr "작업:"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
@@ -1824,7 +2126,7 @@ msgstr "아이콘과 레이블이 있는 응용프로그램 작업 목록입니�
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "Freedesktop 상태 알림이 사양을 구현하는 시스템 트레이입니다."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -1836,7 +2138,7 @@ msgstr "작업공간을 표시하고 작업공간 간에 전환합니다."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "Budgie 패널에서 휴지통 관리하기"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"

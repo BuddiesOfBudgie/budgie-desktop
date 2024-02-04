@@ -38,7 +38,7 @@ namespace Budgie {
 	public const string SWITCHER_DBUS_OBJECT_PATH = "/org/budgie_desktop/TabSwitcher";
 
 	public uint64 get_time() {
-		return (uint64) new DateTime.now().to_unix();
+		return (uint64) Gdk.X11.get_server_time(Gdk.get_default_root_window() as Gdk.X11.Window);
 	}
 
 	/**
@@ -207,6 +207,9 @@ namespace Budgie {
 
 			/* Get everything into position prior to the first showing */
 			on_monitors_changed();
+
+			/* Ensure filtering from the start */
+			window_box.invalidate_filter(); // Re-filter
 		}
 
 		private void add_window(libxfce4windowing.Window window) {
@@ -220,8 +223,6 @@ namespace Budgie {
 			if (get_position_in_recency(id) == -1) recency.append(id);
 			window_box.insert(window_widget, -1);
 
-			window_box.set_max_children_per_line(ids.size() < 8 ? ids.size() : 8);
-
 			window_widget.window_activated.connect(set_window_as_activated);
 
 			window_widget.closed.connect(remove_window);
@@ -233,7 +234,7 @@ namespace Budgie {
 			window_box.invalidate_filter(); // Re-filter
 			window_box.invalidate_sort(); // Re-sort
 
-			queue_resize();
+			update_sizing();
 		}
 
 		private bool flowbox_filter(FlowBoxChild box_child) {
@@ -253,6 +254,16 @@ namespace Budgie {
 			int64 pos1 = get_position_in_recency(tab1.id);
 			int64 pos2 = get_position_in_recency(tab2.id);
 			return pos1 < pos2 ? -1 : 1;
+		}
+
+		private uint get_visible_children() {
+			uint visible_children = 0;
+			foreach (var child in window_box.get_children()) {
+				var tab = child as TabSwitcherWidget;
+				if (show_all_windows || window_on_active_workspace(tab.window)) visible_children++;
+			}
+
+			return visible_children;
 		}
 
 		// get_position_in_recency will get the position in recency
@@ -297,7 +308,9 @@ namespace Budgie {
 
 		private void on_workspace_changed() {
 			if (workspace_group != null) active_workspace = workspace_group.active_workspace;
+			update_show_all_windows();
 		}
+
 		public void move_switcher() {
 			/* Find the primary monitor bounds */
 			Gdk.Rectangle bounds = primary_monitor.get_geometry();
@@ -317,6 +330,7 @@ namespace Budgie {
 			window_box.remove(widget);
 			unowned List<string> entries = recency.find_custom(widget.id, strcmp);
 			recency.remove_link(entries);
+			update_sizing();
 		}
 
 		private void set_window_as_activated(libxfce4windowing.Window window) {
@@ -330,7 +344,16 @@ namespace Budgie {
 		private void update_show_all_windows() {
 			if (settings == null) return;
 			show_all_windows = settings.get_boolean(SHOW_ALL_WINDOWS_KEY);
+			window_box.invalidate_sort(); // Re-sort
 			window_box.invalidate_filter(); // Re-filter
+			update_sizing();
+		}
+
+		private void update_sizing() {
+			window_box.set_max_children_per_line(get_visible_children().clamp(1, 8));
+			window_box.queue_resize();
+			queue_resize();
+			move_switcher();
 		}
 
 		private bool window_on_active_workspace(libxfce4windowing.Window window) {

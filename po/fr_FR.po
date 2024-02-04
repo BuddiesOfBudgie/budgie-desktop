@@ -4,17 +4,19 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# linky, 2023
+# Patrice Genieys, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.7\n"
+"Project-Id-Version: budgie-desktop 10.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 13:33+0200\n"
+"POT-Creation-Date: 2024-01-28 14:21+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2023\n"
-"Language-Team: French (France) (https://www.transifex.com/buddiesofbudgie/teams/129844/fr_FR/)\n"
+"Language-Team: French (France) (https://app.transifex.com/buddiesofbudgie/teams/129844/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,23 +27,29 @@ msgstr ""
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:569
+#: src/daemon/notifications/dbus.vala:554
 msgid "Unread Notifications"
 msgstr ""
 
-#: src/daemon/notifications/dbus.vala:573
-msgid "You received 1 notification while an application was fullscreened."
-msgstr ""
-
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:557
 #, c-format
-msgid "You received %d notifications while an application was fullscreened."
-msgstr ""
+msgid "You received %d notification while an application was fullscreened."
+msgid_plural ""
+"You received %d notifications while an application was fullscreened."
+msgstr[0] ""
+"Vous avez reçu %d notification pendant qu'une application était en plein "
+"écran."
+msgstr[1] ""
+"Vous avez reçu %d notifications pendant qu'une application était en plein "
+"écran."
+msgstr[2] ""
+"Vous avez reçu %d notifications pendant qu'une application était en plein "
+"écran."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:587
+#: src/daemon/notifications/dbus.vala:571
 msgid "View Notifications"
 msgstr ""
 
@@ -66,94 +74,92 @@ msgstr "Paramètres du Bureau Budgie"
 #: src/daemon/menus.vala:51
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "Paramètres du système"
+msgstr "Réglages système"
 
 #. Should show a notification
-#: src/daemon/settings.vala:339
+#: src/daemon/settings.vala:352
 msgid "Turned on Caffeine Boost"
 msgstr "Injection de caféine activée"
 
-#: src/daemon/settings.vala:339
+#: src/daemon/settings.vala:352
 msgid "Turned off Caffeine Boost"
 msgstr "Injection de Caféine désactivée"
 
-#: src/daemon/settings.vala:344
-msgid "Will turn off in a minute"
-msgstr "S'éteindra dans dans une minute"
-
-#. use plural
-#: src/daemon/settings.vala:347
+#: src/daemon/settings.vala:357
 #, c-format
-msgid "Will turn off in %d minutes"
-msgstr "S'éteindra dans %d minutes"
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "S'éteindra dans une minute"
+msgstr[1] "S'éteindra dans %d minutes"
+msgstr[2] "S'éteindra dans %d minutes"
 
 #. If we have valid windows open
 #. Only one window and a valid AbominationRunningApp for it
 #. Budgie Screensaver reports as budgie-daemon, so at the very least fix here
 #. as a workaround
-#: src/daemon/screenshot.vala:333 src/daemon/screenshot.vala:844
-#: src/panel/applets/icon-tasklist/IconButton.vala:463
+#: src/daemon/screenshot.vala:332 src/daemon/screenshot.vala:844
 #: src/panel/applets/icon-tasklist/IconPopover.vala:226
+#: src/panel/applets/icon-tasklist/IconButton.vala:463
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Capture d'écran Budgie"
 
 #. Translators: be as brief as possible; popovers ar cut off if broader than
 #. the window
-#: src/daemon/screenshot.vala:438
+#: src/daemon/screenshot.vala:437
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Capture de tout l'écran"
+
+#: src/daemon/screenshot.vala:438
+msgid "Screenshot active window"
+msgstr "Capture de la fenêtre active"
 
 #: src/daemon/screenshot.vala:439
-msgid "Screenshot active window"
-msgstr ""
-
-#: src/daemon/screenshot.vala:440
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Capture de la zone sélectionnée"
 
 #. we cannot use areabuttons_labels, since these will be translated
 #. don't translate, internal use
 #. translate! These are the interface names
-#: src/daemon/screenshot.vala:548
+#: src/daemon/screenshot.vala:547
 msgid "Screen"
-msgstr ""
+msgstr "Écran"
 
-#: src/daemon/screenshot.vala:548
+#: src/daemon/screenshot.vala:547
 msgid "Window"
-msgstr ""
+msgstr "Fenêtre"
 
-#: src/daemon/screenshot.vala:548
+#: src/daemon/screenshot.vala:547
 msgid "Selection"
-msgstr ""
+msgstr "Sélection"
 
 #. translate
 #: src/daemon/screenshot.vala:898
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Annuler la capture d'écran"
 
 #: src/daemon/screenshot.vala:899
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Sauvegarder la capture d'écran dans le dossier sélectionné"
 
 #: src/daemon/screenshot.vala:900
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Copier la capture d'écran dans le presse-papier"
 
 #: src/daemon/screenshot.vala:901
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Ouvrir la capture d'écran dans l'application par défaut"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/daemon/screenshot.vala:1175
 msgid "Other..."
-msgstr ""
+msgstr "Autre..."
 
 #. set custom dir to found dir
 #: src/daemon/screenshot.vala:1259
 msgid "Open Folder"
-msgstr ""
+msgstr "Ouvrir le dossier"
 
 #: src/daemon/screenshot.vala:1260
 #: src/panel/settings/settings_autostart.vala:194
@@ -161,13 +167,23 @@ msgstr ""
 #: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:4
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
+#: src/dialogs/sendto/Dialog/FileSender.vala:143
+#: src/dialogs/sendto/Dialog/FileSender.vala:224 src/daemon/endsession.ui.h:3
+#: src/dialogs/polkit/dialog.ui.h:7
 msgid "Cancel"
 msgstr "Annuler"
 
 #: src/daemon/screenshot.vala:1260
 msgid "Open"
-msgstr ""
+msgstr "Ouvrir"
+
+#. Caffeine Notification
+#. Prepare label widget
+#: src/lib/notification.vala:80
+#: src/panel/applets/caffeine/CaffeineWindow.vala:37
+msgid "Caffeine Mode"
+msgstr "Mode caféine"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -481,12 +497,14 @@ msgstr "Conserver l'applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "Confirmer la suppression de l'applet"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
+"Voulez-vous vraiment supprimer cet applet ?\\n Cette action ne peut être "
+"annulée."
 
 #: src/panel/settings/settings_panel_dialogs.vala:157
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
@@ -494,16 +512,17 @@ msgid "Remove"
 msgstr "Supprimer"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
+#, c-format
 msgid "Widget Settings"
-msgstr ""
+msgstr "Paramètres de l'applet"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Ajouter une applet"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "Choisir une nouvelle applet à ajouter au panneau des Applets"
 
 #: src/panel/settings/settings_raven_widgets.vala:164
 #: src/panel/settings/settings_panel_applets.vala:250
@@ -515,6 +534,8 @@ msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
 msgstr ""
+"Erreur lors de la création de l'instance de l'applet. Le moteur du greffon "
+"n'a pas pu trouver l'info pour ce greffon."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -522,12 +543,17 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
+"Erreur lors de la création de l'instance de l'applet. Le nom du module doit "
+"être en format reverse-DNS, comme 'tld.domain.group.WidgetName.so' pour "
+"C/Vala ou 'tld_domain_group_WidgetName' pour Python."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
 msgstr ""
+"Erreur lors de la création de l'instance de l'applet. Le moteur du greffon "
+"n'a pas pu charger le greffon du disque."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -535,88 +561,22 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
+"Erreur lors de la création de l'instance de l'applet. Le greffon accepte les"
+" paramètres, mais n'installe pas un schéma de paramètres avec le même "
+"nom.\\n \\n Le nom du schéma devrait être identique à celui du nom du "
+"module, mais sans extension et (dans le cas de Python) les tirets bas "
+"remplacés par des points."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr ""
+"Erreur lors de la création de l'instance de l'applet en raison d'un problème"
+" inconnu."
 
-#: src/panel/settings/settings_style.vala:33
-msgid "Style"
-msgstr "Style"
-
-#: src/panel/settings/settings_style.vala:47
-#: src/panel/settings/settings_raven.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_raven.vala:47
+#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "Widgets"
-
-#: src/panel/settings/settings_style.vala:48
-msgid "Set the appearance of window decorations and controls"
-msgstr "Définit l'apparence des contrôles et des bordures des fenêtres"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Icons"
-msgstr "Icônes"
-
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the globally used icon theme"
-msgstr "Définit le pack d'icônes du système"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Cursors"
-msgstr "Curseurs"
-
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used mouse cursor theme"
-msgstr "Définit l'apparence du curseur"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Notification Position"
-msgstr "Position des Notifications"
-
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the location for notification popups"
-msgstr "Définir la position des notifications"
-
-#: src/panel/settings/settings_style.vala:72
-msgid "Dark theme"
-msgstr "Thème sombre"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "Built-in theme"
-msgstr "Thème Intégré"
-
-#: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
-"Lorsque cette option est activée, le style des éléments est remplacé par le "
-"style par défaut du bureau"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Animations"
-msgstr "Animations"
-
-#: src/panel/settings/settings_style.vala:88
-msgid "Control whether windows and controls use animations"
-msgstr ""
-"Lorsque cette option est activée, les fenêtres et les contrôles utiliseront "
-"des animations"
-
-#: src/panel/settings/settings_style.vala:205
-msgid "Top Left"
-msgstr "En haut à gauche"
-
-#: src/panel/settings/settings_style.vala:207
-msgid "Bottom Left"
-msgstr "En bas à gauche"
-
-#: src/panel/settings/settings_style.vala:209
-msgid "Bottom Right"
-msgstr "En bas à droite"
-
-#: src/panel/settings/settings_style.vala:212
-msgid "Top Right"
-msgstr "En haut à droite"
 
 #: src/panel/settings/settings_raven.vala:48
 #: src/panel/settings/settings_panel.vala:89
@@ -624,25 +584,27 @@ msgid "Settings"
 msgstr "Paramètres"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
+#, c-format
 msgid "Built-in"
-msgstr ""
+msgstr "Intégré"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "Choisissez un greffon"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Pas de description"
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "par %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
+#, c-format
 msgid "No authors listed"
-msgstr ""
+msgstr "Aucun auteur listé"
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
@@ -742,7 +704,7 @@ msgstr "Active le focus de la fenêtre au survol de la souris."
 
 #: src/panel/settings/settings_wm.vala:83
 msgid "Enable unredirection"
-msgstr ""
+msgstr "Activer la non-redirection"
 
 #: src/panel/settings/settings_wm.vala:84
 msgid ""
@@ -751,6 +713,11 @@ msgid ""
 "to keep enabled. Use this if you are having graphical or performance issues "
 "with dedicated GPUs."
 msgstr ""
+"Activer la non-redirection qui permettra aux cadres de contourner le "
+"compositeur pour les applications en plein écran. Cette option est pour les "
+"utilisateurs avancés et il est recommandée de la garder activée. Utilisez-la"
+" si vous avez un environnement graphique ou des problèmes de performance "
+"avec un processeur particulier."
 
 #: src/panel/settings/settings_wm.vala:89
 msgid "Show all windows in tab switcher"
@@ -868,11 +835,11 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:253
 msgid "Spacing"
-msgstr ""
+msgstr "Espacement"
 
 #: src/panel/settings/settings_panel.vala:254
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "Régler l'espacement entre les applets pour ce panneau"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Automatically hide"
@@ -924,8 +891,9 @@ msgstr ""
 " libérant de l'espace sur l'écran"
 
 #: src/panel/settings/settings_panel_applets.vala:21
+#, c-format
 msgid "Applet Settings"
-msgstr ""
+msgstr "Paramètres de l'applet"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
@@ -961,17 +929,88 @@ msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "Définir l'ordre de tri des notifications"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
 msgstr ""
+"Définir si les notifications sont triées de la plus ancienne à la plus "
+"récente, ou de la plus récente à la plus ancienne."
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:25
-msgid "All"
-msgstr "Tout"
+#: src/panel/settings/settings_style.vala:33
+msgid "Style"
+msgstr "Style"
+
+#: src/panel/settings/settings_style.vala:48
+msgid "Set the appearance of window decorations and controls"
+msgstr "Définit l'apparence des contrôles et des bordures des fenêtres"
+
+#: src/panel/settings/settings_style.vala:52
+msgid "Icons"
+msgstr "Icônes"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the globally used icon theme"
+msgstr "Définit le pack d'icônes du système"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Cursors"
+msgstr "Curseurs"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used mouse cursor theme"
+msgstr "Définit l'apparence du curseur"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Notification Position"
+msgstr "Position des Notifications"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the location for notification popups"
+msgstr "Définir la position des notifications"
+
+#: src/panel/settings/settings_style.vala:72
+msgid "Dark theme"
+msgstr "Thème sombre"
+
+#: src/panel/settings/settings_style.vala:79
+msgid "Built-in theme"
+msgstr "Thème Intégré"
+
+#: src/panel/settings/settings_style.vala:80
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Lorsque cette option est activée, le style des éléments est remplacé par le "
+"style par défaut du bureau"
+
+#: src/panel/settings/settings_style.vala:87
+msgid "Animations"
+msgstr "Animations"
+
+#: src/panel/settings/settings_style.vala:88
+msgid "Control whether windows and controls use animations"
+msgstr ""
+"Lorsque cette option est activée, les fenêtres et les contrôles utiliseront "
+"des animations"
+
+#: src/panel/settings/settings_style.vala:207
+msgid "Top Left"
+msgstr "En haut à gauche"
+
+#: src/panel/settings/settings_style.vala:209
+msgid "Bottom Left"
+msgstr "En bas à gauche"
+
+#: src/panel/settings/settings_style.vala:211
+msgid "Bottom Right"
+msgstr "En bas à droite"
+
+#: src/panel/settings/settings_style.vala:214
+msgid "Top Right"
+msgstr "En haut à droite"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -990,28 +1029,26 @@ msgid "Set icon"
 msgstr "Définir l'icône"
 
 #. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:101
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
+#, c-format
 msgid "Sorry, no items found"
 msgstr "Désolé, aucun résultat trouvé"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "Mise en route"
 
-#. Prepare label widget
-#. Caffeine Notification
-#: src/panel/applets/caffeine/CaffeineWindow.vala:37
-#: src/raven/notifications_group.vala:45
-msgid "Caffeine Mode"
-msgstr "Mode caféine"
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "Tout"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr "Minuteur"
+msgstr "Minuteur (minutes)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "Paramètres de l'horloge système et de la date"
 
 #: src/panel/applets/icon-tasklist/IconPopover.vala:107
 msgid "Launch New Instance"
@@ -1081,18 +1118,16 @@ msgid "Num lock is not active"
 msgstr "La touche Verr. Num. est désactivée"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:121
-#: src/raven/notifications_view.vala:336
+#: src/raven/notifications_view.vala:341
 #, c-format
-msgid "%u unread notifications"
-msgstr "%u notifications non lues"
+msgid "%u unread notification"
+msgid_plural "%u unread notifications"
+msgstr[0] "%unotification non lue"
+msgstr[1] "%unotifications non lues"
+msgstr[2] "%u notifications non lues"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:123
-#: src/raven/notifications_view.vala:338
-msgid "1 unread notification"
-msgstr "1 notification non lue"
-
-#: src/panel/applets/notifications/NotificationsApplet.vala:125
-#: src/raven/notifications_view.vala:340
+#: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "Aucune notification non lue"
 
@@ -1169,18 +1204,6 @@ msgstr "Erreur lors du démontage du volume"
 msgid "Places"
 msgstr "Emplacements"
 
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "Rien à afficher pour le moment"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "Monter des disques"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "Activer plus de sections"
-
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -1201,75 +1224,140 @@ msgstr ""
 "Une erreur inconnue s'est produite lors de la tentative de montage de ce "
 "volume"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:30
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+#, c-format
+msgid "Nothing to display right now"
+msgstr "Rien à afficher pour le moment"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+#, c-format
+msgid "Mount some drives"
+msgstr "Monter des disques"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Activer plus de sections"
+
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
 msgstr "Basculer vers le bureau"
 
-#. Settings button
-#: src/panel/applets/status/BluetoothIndicator.vala:55
-msgid "Bluetooth Settings"
-msgstr "Paramètres Bluetooth"
-
-#. Send files button
-#: src/panel/applets/status/BluetoothIndicator.vala:62
-msgid "Send Files"
-msgstr "Envoyer des fichiers"
-
-#. Airplane mode
-#: src/panel/applets/status/BluetoothIndicator.vala:72
-msgid "Bluetooth Airplane Mode"
-msgstr "Bluetooth en mode avion"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:182
-msgid "Bluetooth is disabled"
-msgstr "Bluetooth désactivé"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:186
-msgid "Bluetooth is active"
-msgstr "Bluetooth activé"
-
-#: src/panel/applets/status/BluetoothIndicator.vala:191
-#, c-format
-msgid "Connected to %d device"
-msgid_plural "Connected to %d devices"
-msgstr[0] "Connecté à %dappareil"
-msgstr[1] "Connecté à %dappareils"
-msgstr[2] "Connecté à %dappareils"
-
-#: src/panel/applets/status/PowerIndicator.vala:105
+#: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
 msgstr "Batterie entièrement chargée."
 
-#: src/panel/applets/status/PowerIndicator.vala:109
+#: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
 msgstr "Inconnu"
 
 #. Set inner charging duration to hours:minutes
-#: src/panel/applets/status/PowerIndicator.vala:118
+#: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
 msgstr "Batterie en charge"
 
-#: src/panel/applets/status/PowerIndicator.vala:123
+#: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
 msgstr "Batterie restante"
 
-#: src/panel/applets/status/PowerIndicator.vala:182
-msgid "Show battery percentage"
-msgstr "Afficher le pourcentage de la batterie"
+#: src/panel/applets/status/PowerIndicator.vala:191
+#, c-format
+msgid "Performance Mode"
+msgstr "Mode performance"
 
-#: src/panel/applets/status/PowerIndicator.vala:190
+#: src/panel/applets/status/PowerIndicator.vala:200
+msgid "Power Saver"
+msgstr "Économie d'énergie"
+
+#: src/panel/applets/status/PowerIndicator.vala:207
+msgid "Balanced"
+msgstr "Équilibré"
+
+#: src/panel/applets/status/PowerIndicator.vala:214
+msgid "Performance"
+msgstr "Performance"
+
+#: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
 msgstr "Paramètres d'alimentation"
 
-#. there's already an active tray, create an informative icon with a popover
-#: src/panel/applets/tray/TrayApplet.vala:114
-msgid "Only one instance of the System Tray can be active at a time."
+#: src/panel/applets/status/BluetoothIndicator.vala:104
+msgid "Bluetooth"
 msgstr ""
-"Seule une instance de la barre d'état système peut être active à la fois."
 
-#: src/panel/applets/tray/TrayApplet.vala:140
-msgid "The System Tray failed to initialize."
-msgstr "La barre d'état système n'a pas réussi à s'initialiser."
+#: src/panel/applets/status/BluetoothIndicator.vala:114
+msgid "Bluetooth Settings"
+msgstr "Paramètres Bluetooth"
+
+#. Bluetooth switch
+#: src/panel/applets/status/BluetoothIndicator.vala:120
+msgid "Turn Bluetooth on or off"
+msgstr ""
+
+#. Update the tray icon and placeholder text
+#. Airplane mode is on, so Bluetooth is disabled
+#: src/panel/applets/status/BluetoothIndicator.vala:279
+msgid "Airplane mode is on."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:280
+msgid "Bluetooth is disabled while airplane mode is on."
+msgstr ""
+
+#. Airplane mode is off, so Bluetooth is enabled
+#: src/panel/applets/status/BluetoothIndicator.vala:283
+msgid "No paired Bluetooth devices found."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:284
+msgid "Visit Bluetooth settings to pair a device."
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:440
+msgid "Send file"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:465
+msgid "Disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:577
+msgid "Disconnecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:580
+msgid "Connecting…"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to disconnect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:585
+msgid "Failed to connect"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Connected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:656
+msgid "Disconnected"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:702
+#, c-format
+msgid "<b>Filename</b>: %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:709
+#, c-format
+msgid "Receiving… %s of %s"
+msgstr ""
+
+#: src/panel/applets/status/BluetoothIndicator.vala:714
+#, c-format
+msgid "Sending… %s of %s"
+msgstr ""
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:103
@@ -1320,31 +1408,31 @@ msgstr "Écouter de la musique"
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr ""
+msgstr "Titre inconnu"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:110
 #: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr ""
+msgstr "Artiste inconnu"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr ""
+msgstr "Album inconnu"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "Playing -%s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "Pause - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "Pas de lecture audio en cours."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
@@ -1357,48 +1445,50 @@ msgstr "Périphériques"
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr ""
+msgstr "Contrôle d'utilisation"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr ""
+msgstr "RAM"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr ""
+msgstr "Swap"
+
+#: src/raven/raven.vala:49
+msgid "Oldest to newest"
+msgstr "Du plus ancien au plus récent"
+
+#: src/raven/raven.vala:52
+msgid "Newest to oldest"
+msgstr "Du plus récent au plus ancien"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "Notifications"
 
 #: src/raven/main_view.vala:68
+#, c-format
 msgid "No widgets added."
-msgstr ""
+msgstr "Aucune applet ajoutée"
 
 #: src/raven/notifications_view.vala:31
+#, c-format
 msgid "Nothing to see here"
 msgstr "Rien à voir ici"
 
-#: src/raven/notifications_view.vala:121
+#: src/raven/notifications_view.vala:123
 msgid "No new notifications"
 msgstr "Aucune nouvelle notification"
-
-#: src/raven/raven.vala:49
-msgid "Oldest to newest"
-msgstr ""
-
-#: src/raven/raven.vala:52
-msgid "Newest to oldest"
-msgstr ""
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "Nouvelle catégorie"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -1407,87 +1497,334 @@ msgstr ""
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Accessoires"
 
-#: src/appindexer/AppIndex.vala:170
+#: src/appindexer/AppIndex.vala:152
 msgid "Education"
-msgstr ""
+msgstr "Éducation"
 
-#: src/appindexer/AppIndex.vala:175
+#: src/appindexer/AppIndex.vala:157
 msgid "Games"
-msgstr ""
+msgstr "Jeux"
 
-#: src/appindexer/AppIndex.vala:179
+#: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
-msgstr ""
+msgstr "Graphisme"
 
-#: src/appindexer/AppIndex.vala:187
+#: src/appindexer/AppIndex.vala:169
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
+
+#: src/appindexer/AppIndex.vala:174
+msgid "Office"
+msgstr "Bureautique"
+
+#: src/appindexer/AppIndex.vala:178
+msgid "Programming"
+msgstr "Programmation"
+
+#: src/appindexer/AppIndex.vala:182
+msgid "Science"
+msgstr "Science"
+
+#: src/appindexer/AppIndex.vala:188
+msgid "Sound & Video"
+msgstr "Son & Vidéo"
 
 #: src/appindexer/AppIndex.vala:192
-msgid "Office"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:197
-msgid "Programming"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:201
-msgid "Science"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:207
-msgid "Sound & Video"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:211
 msgid "System Tools"
-msgstr ""
+msgstr "Outils système"
 
-#: src/appindexer/AppIndex.vala:222
+#: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
-msgstr ""
+msgstr "Accès universel"
 
-#: src/appindexer/AppIndex.vala:226
-msgid "Utilities"
-msgstr ""
-
-#: src/dialogs/polkit/polkitdialog.vala:126
+#: src/dialogs/polkit/polkitdialog.vala:195
 msgid "Authentication failed"
 msgstr "L'authentification a échouée"
 
-#: src/dialogs/polkit/polkitdialog.vala:215
+#: src/dialogs/polkit/polkitdialog.vala:284
+#, c-format
 msgid "Group:"
 msgstr "Groupe :"
 
 #. Create our buttons
-#: src/dialogs/power/window.vala:92
+#: src/dialogs/power/window.vala:87
 msgid "_Lock"
-msgstr ""
+msgstr "Verrouiller"
 
-#: src/dialogs/power/window.vala:95
+#: src/dialogs/power/window.vala:90
 msgid "L_og Out"
-msgstr ""
+msgstr "Se déconnecter"
 
-#: src/dialogs/power/window.vala:98
+#: src/dialogs/power/window.vala:93
 msgid "_Suspend"
-msgstr ""
+msgstr "Suspendre"
 
-#: src/dialogs/power/window.vala:102
+#: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
-msgstr ""
+msgstr "Mettre en veille"
 
-#: src/dialogs/power/window.vala:106
+#: src/dialogs/power/window.vala:101
 msgid "_Reboot"
-msgstr ""
+msgstr "Redémarrer"
 
-#: src/dialogs/power/window.vala:109
+#: src/dialogs/power/window.vala:104
 msgid "Shut_down"
+msgstr "Éteindre"
+
+#: src/dialogs/power/window.vala:156
+msgid "This system does not support hibernation."
+msgstr "Ce système ne supporte pas la mise en veille."
+
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
 msgstr ""
 
-#: src/dialogs/power/window.vala:161
-msgid "This system does not support hibernation."
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr ""
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr ""
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
+msgid "File name"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
+msgid "Transfer rate"
+msgstr ""
+
+#. Now add the dialog buttons
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+msgid "Close"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
+#, c-format
+msgid "<b>Transfer rate:</b> %s / s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
+#, c-format
+msgid "%s / %s: Time remaining: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
+#, c-format
+msgid "%u hour"
+msgid_plural "%u hours"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
+#, c-format
+msgid "%u minute"
+msgid_plural "%u minutes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:58
+msgid "Send"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:111
+msgid "Speaker"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:113
+msgid "Controller"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:115
+msgid "Keyboard"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+msgid "Mouse"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:119
+msgid "Tablet"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:121
+msgid "Touchpad"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/DeviceRow.vala:123
+msgid "Phone"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:24
+#: src/dialogs/sendto/Dialog/FileSender.vala:29
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:26
+msgid "Bluetooth File Transfer"
+msgstr ""
+
+#. Update the labels
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:30
+#: src/dialogs/sendto/Dialog/FileSender.vala:100
+#: src/dialogs/sendto/Dialog/FileSender.vala:174
+#, c-format
+msgid "<b>From</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:31
+#: src/dialogs/sendto/Dialog/FileSender.vala:101
+#: src/dialogs/sendto/Dialog/FileSender.vala:175
+#, c-format
+msgid "<b>To</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:43
+#, c-format
+msgid "<b>File name</b>: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:53
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:74
+msgid "File transfer failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:54
+#, c-format
+msgid "File '%s' not received from %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:75
+#, c-format
+msgid "File '%s' from %s not received: %s"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:92
+#: src/dialogs/sendto/Dialog/FileSender.vala:274
+msgid "File transferred successfully"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileReceiver.vala:93
+#, c-format
+msgid "Saved file from %s to '%s'"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:33
+msgid "From"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:34
+msgid "To"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:103
+#, c-format
+msgid "Trying to connect to %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:136
+#, c-format
+msgid "Connecting to '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:139
+#: src/dialogs/sendto/Dialog/FileSender.vala:220
+msgid "The file has not been transferred."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:144
+#: src/dialogs/sendto/Dialog/FileSender.vala:225
+msgid "Retry"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:177
+#, c-format
+msgid "Waiting for acceptance on %s…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:217
+#, c-format
+msgid "Transferring '%s' failed"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/FileSender.vala:219
+#, c-format
+msgid "The transfer was interrupted or declined by %s."
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:33
+msgid "Select a Bluetooth device to send files to"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:49
+msgid "Discovering…"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:64
+msgid "<b>No devices found</b>"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:68
+msgid "Ensure that your devices are visable and ready for pairing"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:231
+msgid "Available Devices"
 msgstr ""
 
 #: src/daemon/endsession.ui.h:2
@@ -1496,23 +1833,23 @@ msgstr "Êtes-vous sûr de vouloir mettre fin à votre session ?"
 
 #: src/daemon/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Nom:"
 
 #: src/daemon/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Dossier:"
 
 #: src/daemon/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr ""
+msgstr "Délai en secondes"
 
 #: src/daemon/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "Afficher le pointeur"
 
 #: src/daemon/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr ""
+msgstr "Jouer un son lors de la saisie"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1524,7 +1861,7 @@ msgstr "Étiquette du menu"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "Utiliser l'icône du menu par défaut"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1544,7 +1881,7 @@ msgstr "Survol de la souris"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "Affiche les options de paramétrage"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -1572,20 +1909,20 @@ msgstr "Utiliser le format 24 heures"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "Format personnalisé"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
+msgstr "%H:%M:%S %d.%m.%Y"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "Fuseau horaire personnalisé"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr ""
+msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
@@ -1664,13 +2001,21 @@ msgstr "Taille de l’espacement"
 msgid "Icon Spacing"
 msgstr "Espacement entre les icônes"
 
+#: src/panel/applets/status/settings.ui.h:2
+msgid "Show battery percentage"
+msgstr "Afficher le pourcentage de la batterie"
+
+#: src/panel/applets/tray/settings.ui.h:2
+msgid "Scale icons with panel size"
+msgstr ""
+
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
 msgstr "Visibilité du bouton \"Ajouter\""
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr ""
+msgstr "Augmenter la taille de l'objet"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
@@ -1686,39 +2031,64 @@ msgstr "Toujours montrer"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
-msgstr ""
+msgstr "0.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr ""
+msgstr "0.75x"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr ""
+msgstr "1.0x"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
-msgstr ""
+msgstr "1.5x"
 
 #: src/panel/applets/workspaces/settings.ui.h:10
 msgid "2.0x"
-msgstr ""
+msgstr "2.0x"
+
+#: src/panel/applets/trash/settings.ui.h:1
+msgid "Sort Mode"
+msgstr "Mode de tri"
+
+#: src/panel/applets/trash/settings.ui.h:2
+msgid "Sort by type"
+msgstr "Trier par type"
+
+#: src/panel/applets/trash/settings.ui.h:3
+msgid "Sort alphabetically"
+msgstr "Trier par ordre alphabétique"
+
+#: src/panel/applets/trash/settings.ui.h:4
+msgid "Sort reverse alphabetically"
+msgstr "Trier par ordre alphabétique inversé"
+
+#: src/panel/applets/trash/settings.ui.h:5
+msgid "Sort by date ascending"
+msgstr "Trier par date croissante"
+
+#: src/panel/applets/trash/settings.ui.h:6
+msgid "Sort by date descending"
+msgstr "Trier par date décroissante"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Affiche le numéro des semaines"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "Affiche le jour"
 
+#: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr ""
+msgstr "Autoriser le dépassement du volume maximal"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr ""
+msgstr "Afficher l'utilisation du Swap"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1732,13 +2102,25 @@ msgstr "Mot de passe :"
 msgid "Authentication is required"
 msgstr "L'authentification est requise"
 
+#: src/dialogs/polkit/dialog.ui.h:4
+msgid "Details"
+msgstr "Détails"
+
 #: src/dialogs/polkit/dialog.ui.h:5
+msgid "Action:"
+msgstr "Action:"
+
+#: src/dialogs/polkit/dialog.ui.h:6
+msgid "ID:"
+msgstr "ID:"
+
+#: src/dialogs/polkit/dialog.ui.h:8
 msgid "Authenticate"
 msgstr "Authentifier"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
+msgstr "Application de capture d'écran de Budgie"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
@@ -1758,75 +2140,84 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr ""
+msgstr "Chercher et démarrer une application."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr ""
+msgstr "Empêche le système et l'écran de se mettre en veille."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr ""
+msgstr "Une horloge digitale avec un format personnalisable."
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr ""
+msgstr "Une liste de tâches paramétrables pour l'application."
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr ""
+msgstr "Montre quelle disposition clavier est actuellement utilisée."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "Afficher l'état des clefs de verrouillage."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr ""
+msgstr "Basculer et modifier les paramètres de l'affichage nocturne."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr ""
+msgstr "Ouvrir le panneau d'affichage des notifications Raven."
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "Afficher les disques et dossiers favoris."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr ""
+msgstr "Ouvrir la barre latérale de Raven."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr ""
+msgstr "Séparateur visuel entre les applets."
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr ""
+msgstr "Un bouton qui change la visibilité du bureau."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr ""
+msgstr "Un espaceur ajustable à poser entre d'autres applets."
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
 msgstr ""
+"Afficher les indicateurs d'état du système, tel que le son, la batterie et "
+"le Bluetooth."
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
+msgstr "Une liste de tâches d'application avec icônes et étiquettes."
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
-msgid "System tray using the XEMBED protocol."
+msgid ""
+"System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
+"La Barre d'état système utilise les spécifications Freedesktop Status "
+"Notifier."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr ""
+msgstr "Ouvre la boîte de dialogue du bouton d'alimentation."
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr ""
+msgstr "Afficher les espaces de travail et passer de l'un à l'autre."
+
+#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
+msgid "Manage your trash from the Budgie panel"
+msgstr "Gérez votre corbeille depuis le panneau Budgie"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
@@ -1837,42 +2228,53 @@ msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
+"Un agenda simple avec vue du mois, utilisant l'applet intégrée Gtk.Calendar."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "Contrôle des médias"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
+"Cette applet utilise l'API Mpris pour afficher les médias en cours de "
+"lecture avec les métadonnées et les contrôles de lecture, avec prise en "
+"charge de l'audio et de la vidéo."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "Entrée audio"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
 msgstr ""
+"Permet de régler le volume de l'entrée audio et d'afficher une liste des "
+"périphériques d'entrée audio disponibles."
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "Sortie audio"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
 msgstr ""
+"Permet le contrôle global et par application du volume de sortie audio, et "
+"affiche une liste des périphériques de sortie audio disponibles."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
 msgstr ""
+"Une vue de l'utilisation des ressources système sous forme de tableau à "
+"barres. Comprenant le processeur, la RAM, et l'utilisation du Swap par "
+"défaut."
 
 #: src/session/budgie-desktop.desktop.in.in.h:1
 #: src/session/budgie-desktop.session.in.in.h:1

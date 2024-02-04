@@ -21,6 +21,7 @@ theme_versions = [
 ]
 
 sass_depend_files = files([
+    'common/_bluetooth.scss',
     'common/_borders.scss',
     'common/_colors.scss',
     'common/_dialogs.scss',

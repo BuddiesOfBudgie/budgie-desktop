@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.8.2',
+    version: '10.9.1',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -70,7 +70,8 @@ cdata = configuration_data()
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
 
-if fs.exists('.git')
+ci = get_option('ci')
+if fs.exists('.git') and ci == false
     git = find_program('git')
     git_version = run_command('git', ['rev-parse', 'HEAD'], check: true)
     package_version += ' (git-'+git_version.stdout().strip()+')'
@@ -132,11 +133,6 @@ if prefix == '/usr' or prefix == '/usr/local'
     cdata.set_quoted('RAVEN_PLUGIN_DATADIR_SECONDARY', join_paths(secondary_datadir_root, 'raven-plugins'))
 endif
 
-with_bluetooth = get_option('with-bluetooth')
-if with_bluetooth == true
-  add_project_arguments('-D', 'with_bluetooth', language: 'vala')
-endif
-
 with_hibernate = get_option('with-hibernate')
 if with_hibernate == true
   add_project_arguments('-D', 'WITH_HIBERNATE', language: 'vala')
@@ -159,6 +155,13 @@ if xdg_appdir == ''
     else
         xdg_appdir = join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
     endif
+endif
+
+# Bluetooth option. BSD systems have no Bluetooth stack, so this allows
+# BSD systems to compile and run Budgie.
+with_bluetooth = get_option('with-bluetooth')
+if with_bluetooth == true
+    add_project_arguments('-D', 'WITH_BLUETOOTH', language: 'vala')
 endif
 
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
@@ -221,6 +224,7 @@ report = [
     '',
     '    gtk-doc:                                                                     @0@'.format(with_gtk_doc),
     '    stateless:                                                                   @0@'.format(with_stateless),
+    '    bluetooth:                                                                   @0@'.format(with_bluetooth),
 ]
 
 
