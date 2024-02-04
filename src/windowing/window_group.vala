@@ -28,6 +28,11 @@ namespace Budgie.Windowing {
 		private unowned libxfce4windowing.Window? last_active_window = null;
 
 		/**
+		 * Emitted when the active window in the group changes.
+		 */
+		public signal void active_window_changed(libxfce4windowing.Window? window);
+
+		/**
 		 * Emitted when the icon of the application for this group changes.
 		 */
 		public signal void app_icon_changed();
@@ -252,6 +257,8 @@ namespace Budgie.Windowing {
 		 */
 		public void set_active_window(libxfce4windowing.Window? window) {
 			active_window = window;
+
+			active_window_changed(window);
 		}
 
 		/**

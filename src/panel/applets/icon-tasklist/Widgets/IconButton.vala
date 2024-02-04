@@ -82,9 +82,9 @@ public class IconButton : Gtk.ToggleButton {
 
 		popover.bind_property("pinned", this, "pinned", BindingFlags.BIDIRECTIONAL);
 
-		// TODO: connect signals
-
 		if (app != null) {
+			set_tooltip_text(app.name);
+
 			app.launch_failed.connect_after(() => {
 				icon.waiting = false;
 			});
@@ -607,14 +607,30 @@ public class IconButton : Gtk.ToggleButton {
 			popover.add_window(window);
 		}
 
+		// Set the button's tooltip text to the current (or previous) active window's name.
+		// We look for the last active window in case the panel was restarted or the tasklist
+		// was added to an already-running session with open windows, so that buttons will still
+		// have the correct tooltips.
+		var window = window_group.get_active_window();
+
+		if (window != null) {
+			set_tooltip_text(window.get_name());
+		} else if (window_group.get_last_active_window() != null) {
+			window = window_group.get_last_active_window();
+			set_tooltip_text(window.get_name());
+		}
+
+		window_group.active_window_changed.connect((window) => {
+			if (window != null) {
+				set_tooltip_text(window.get_name());
+			}
+		});
+
 		window_group.app_icon_changed.connect_after(() => {
 			update_icon();
 		});
 
 		window_group.window_added.connect((window) => {
-			var id = window.get_id();
-			var name = window.get_name() ?? "Loading...";
-
 			popover.add_window(window);
 
 			window.state_changed.connect((changed_mask, new_state) => {
@@ -648,6 +664,8 @@ public class IconButton : Gtk.ToggleButton {
 			} else {
 				return;
 			}
+
+			set_tooltip_text(app.name);
 		}
 
 		set_active(has_active_window);
