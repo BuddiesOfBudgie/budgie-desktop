@@ -144,6 +144,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				pinned = true,
 			};
 
+			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
 
 			add_icon_button(launcher, button);
@@ -326,6 +327,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			pinned = true,
 		};
 
+		button.button_release_event.connect(on_button_release);
 		button.notify["pinned"].connect(on_pinned_changed);
 
 		add_icon_button(launcher, button);
@@ -404,6 +406,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (button == null) { // create a new button
 			button = new IconButton.with_group(application, group, manager);
 
+			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
 
 			add_icon_button(application_id, button);
@@ -452,6 +455,55 @@ public class IconTasklistApplet : Budgie.Applet {
 
 			button.update();
 		}
+	}
+
+	private bool on_button_release(Gtk.Widget widget, Gdk.EventButton event) {
+		var button = widget as IconButton;
+
+		switch (event.button) {
+			case Gdk.BUTTON_PRIMARY:
+				if (button.get_window_group() != null) {
+					var group = button.get_window_group();
+
+					if (button.has_active_window) {
+						var window = group.get_active_window();
+
+						try {
+							window.set_minimized(!window.is_minimized());
+						} catch (Error e) {
+							warning("Unable to set minimized state of window %s: %s", window.get_name(), e.message);
+						}
+					} else {
+						var window = group.get_last_active_window();
+
+						try {
+							window.activate(event.time);
+						} catch (Error e) {
+							warning("Unable to activate window %s: %s", window.get_name(), e.message);
+						}
+					}
+				} else {
+					if (!button.pinned) {
+						warning("IconButton was clicked with no active windows, but is not pinned!");
+						break;
+					}
+
+					button.get_icon().animate_launch(panel_position);
+					button.get_icon().waiting = true;
+					button.get_icon().animate_wait();
+
+					if (!button.app.launch()) {
+						warning("Failed to launch application: %s", button.app.name);
+						break;
+					}
+				}
+				break;
+			case Gdk.BUTTON_SECONDARY:
+				manager.show_popover(button);
+				return Gdk.EVENT_STOP;
+		}
+
+		return Gdk.EVENT_STOP;
 	}
 
 	/**

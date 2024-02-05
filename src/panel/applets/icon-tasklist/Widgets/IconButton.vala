@@ -27,6 +27,7 @@ public class IconButton : Gtk.ToggleButton {
 	public Budgie.Application app { get; construct; }
 	public unowned Budgie.PopoverManager popover_manager { get; construct; }
 	public bool pinned { get; set; default = false; }
+	public bool has_active_window { get; private set; default = false; }
 
 	private Budgie.Windowing.WindowGroup? window_group = null;
 
@@ -40,7 +41,6 @@ public class IconButton : Gtk.ToggleButton {
 
 	private Gtk.Orientation orientation;
 
-	private bool has_active_window = false;
 	private int64 last_scroll_time = 0;
 	private bool urgent = false;
 
@@ -150,51 +150,6 @@ public class IconButton : Gtk.ToggleButton {
 		};
 
 		window.set_button_geometry(toplevel.get_window(), rect);
-	}
-
-	public override bool button_release_event(Gdk.EventButton event) {
-		switch (event.button) {
-			case Gdk.BUTTON_PRIMARY:
-				if (window_group != null) {
-					if (has_active_window) {
-						var window = window_group.get_active_window();
-
-						try {
-							window.set_minimized(!window.is_minimized());
-						} catch (Error e) {
-							warning("Unable to set minimized state of window %s: %s", window.get_name(), e.message);
-						}
-					} else {
-						var window = window_group.get_last_active_window();
-
-						try {
-							window.activate(event.time);
-						} catch (Error e) {
-							warning("Unable to activate window %s: %s", window.get_name(), e.message);
-						}
-					}
-				} else {
-					if (!pinned) {
-						warning("IconButton was clicked with no active windows, but is not pinned!");
-						break;
-					}
-
-					icon.animate_launch(panel_position);
-					icon.waiting = true;
-					icon.animate_wait();
-
-					if (!app.launch()) {
-						warning("Failed to launch application: %s", app.name);
-						break;
-					}
-				}
-				break;
-			case Gdk.BUTTON_SECONDARY:
-				popover_manager.show_popover(this);
-				return Gdk.EVENT_STOP;
-		}
-
-		return base.button_release_event(event);
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
