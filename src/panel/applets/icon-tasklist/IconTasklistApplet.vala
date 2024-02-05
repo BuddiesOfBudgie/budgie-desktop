@@ -144,6 +144,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				pinned = true,
 			};
 
+			button.button_press_event.connect(on_button_press);
 			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
 
@@ -327,6 +328,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			pinned = true,
 		};
 
+		button.button_press_event.connect(on_button_press);
 		button.button_release_event.connect(on_button_release);
 		button.notify["pinned"].connect(on_pinned_changed);
 
@@ -406,6 +408,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (button == null) { // create a new button
 			button = new IconButton.with_group(application, group, manager);
 
+			button.button_press_event.connect(on_button_press);
 			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
 
@@ -457,12 +460,29 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 	}
 
+	private bool on_button_press(Gtk.Widget widget, Gdk.EventButton event) {
+		if (event.button != Gdk.BUTTON_PRIMARY) return Gdk.EVENT_PROPAGATE;
+
+		if (!settings.get_boolean("require-double-click-to-launch")) return Gdk.EVENT_PROPAGATE;
+		if (event.type != Gdk.EventType.DOUBLE_BUTTON_PRESS) return Gdk.EVENT_PROPAGATE;
+
+		var button = widget as IconButton;
+
+		if (button.get_window_group() != null && button.get_window_group().has_windows()) return Gdk.EVENT_PROPAGATE;
+
+		if (!button.launch()) {
+			warning("Failed to launch application: %s", button.app.name);
+		}
+
+		return Gdk.EVENT_STOP;
+	}
+
 	private bool on_button_release(Gtk.Widget widget, Gdk.EventButton event) {
 		var button = widget as IconButton;
 
 		switch (event.button) {
 			case Gdk.BUTTON_PRIMARY:
-				if (button.get_window_group() != null) {
+				if (button.get_window_group() != null && button.get_window_group().has_windows()) {
 					var group = button.get_window_group();
 
 					if (button.has_active_window) {
@@ -483,27 +503,26 @@ public class IconTasklistApplet : Budgie.Applet {
 						}
 					}
 				} else {
-					if (!button.pinned) {
-						warning("IconButton was clicked with no active windows, but is not pinned!");
-						break;
-					}
+					if (settings.get_boolean("require-double-click-to-launch")) break;
 
-					button.get_icon().animate_launch(panel_position);
-					button.get_icon().waiting = true;
-					button.get_icon().animate_wait();
-
-					if (!button.app.launch()) {
+					if (!button.launch()) {
 						warning("Failed to launch application: %s", button.app.name);
-						break;
 					}
 				}
 				break;
 			case Gdk.BUTTON_SECONDARY:
 				manager.show_popover(button);
 				return Gdk.EVENT_STOP;
+			case Gdk.BUTTON_MIDDLE:
+				if (settings.get_boolean("middle-click-launch-new-instance")) {
+					if (!button.launch()) {
+						warning("Failed to launch application: %s", button.app.name);
+					}
+				}
+				break;
 		}
 
-		return Gdk.EVENT_STOP;
+		return Gdk.EVENT_PROPAGATE;
 	}
 
 	/**

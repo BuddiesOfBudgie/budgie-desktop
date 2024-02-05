@@ -513,6 +513,19 @@ public class IconButton : Gtk.ToggleButton {
 		return icon;
 	}
 
+	public bool launch() {
+		if (!pinned) {
+			warning("IconButton was clicked with no active windows, but is not pinned!");
+			return false;
+		}
+
+		icon.animate_launch(panel_position);
+		icon.waiting = true;
+		icon.animate_wait();
+
+		return app.launch();
+	}
+
 	public void set_active_window(bool active) {
 		has_active_window = active;
 	}
