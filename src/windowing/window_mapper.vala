@@ -14,6 +14,7 @@ namespace Budgie.Windowing {
 
 		private HashTable<string, DesktopAppInfo> applications;
 		private HashTable<string, DesktopAppInfo> started_applications;
+		private HashTable<string, string> simpletons;
 		private HashTable<int64?, string> pids;
 
 		private AppInfoMonitor monitor;
@@ -24,7 +25,16 @@ namespace Budgie.Windowing {
 		construct {
 			applications = new HashTable<string, DesktopAppInfo>(str_hash, str_equal);
 			started_applications = new HashTable<string, DesktopAppInfo>(str_hash, str_equal);
+			simpletons = new HashTable<string, string>(str_hash, str_equal);
 			pids = new HashTable<int64?, string>(str_hash, str_equal);
+
+			simpletons["google-chrome-stable"] = "google-chrome";
+			simpletons["calibre-gui"] = "calibre";
+			simpletons["code - oss"] = "vscode-oss";
+			simpletons["code"] = "vscode";
+			simpletons["psppire"] = "pspp";
+			simpletons["gnome-twitch"] = "com.vinszent.gnometwitch";
+			simpletons["anoise.py"] = "anoise";
 
 			Bus.@get.begin(BusType.SESSION, null, on_dbus_get);
 
@@ -107,6 +117,7 @@ namespace Budgie.Windowing {
 			applications.remove_all();
 			started_applications.remove_all();
 
+			// TODO: This doesn't do what I think it does
 			foreach (var app_info in AppInfo.get_all()) {
 				var desktop_info = app_info as DesktopAppInfo;
 				var desktop_id = desktop_info.get_id().down();
@@ -117,6 +128,46 @@ namespace Budgie.Windowing {
 
 				applications[desktop_id] = desktop_info;
 			}
+		}
+
+		/**
+		 * Try to get application group from its WM_CLASS property or fallback to using
+		 * the app name when WM_CLASS isn't set (e.g. LibreOffice, Google Chrome, Android Studio emulator, maybe others)
+		 */
+		private string get_group_name(libxfce4windowing.Window window) {
+			// Get the Wnck window from the libx4w window
+			unowned var wnck_window = Wnck.Window.@get((ulong) window.get_id());
+
+			// Try to use class group name from WM_CLASS as it's the most precise
+			// (Firefox Beta is a known offender, its class group will be the same as standard Firefox).
+			string name = wnck_window.get_class_group_name();
+
+			// Fallback to using class instance name (still from WM_CLASS),
+			// less precise, if app is part of a "family", like libreoffice,
+			// instance will always be libreoffice.
+			if (name == null || name == "") {
+				name = wnck_window.get_class_instance_name();
+			}
+
+			// Fallback to using name (when WM_CLASS isn't set).
+			// i.e. Chrome profile launcher, android studio emulator
+			if (name == null || name == "") {
+				name = window.get_name();
+			}
+
+			if (name != null) {
+				name = name.down();
+			}
+
+			// Chrome profile launcher doesn't have WM_CLASS, so name is used
+			// instead and is not the same as the group of the window opened afterward.
+			// Unfortunately there will still be a bit of a mess when using Chrome
+			// simultaneously with Chrome Beta or Canary as they have the same WM_NAME: "google chrome"
+			if (name == "google chrome") {
+				name = "google-chrome";
+			}
+
+			return name;
 		}
 
 		private string? query_atom_string(ulong xid, Gdk.Atom atom, bool utf8) {
@@ -157,6 +208,71 @@ namespace Budgie.Windowing {
 		}
 
 		/**
+		 * Try to get the DesktopAppInfo for a name by looking at our
+		 * list of simpletons. This function also tries some special
+		 * cases to try to get the correct match.
+		 */
+		private DesktopAppInfo? query_simpletons(string name) {
+			DesktopAppInfo? info = null;
+			string? desktop_name = null;
+
+			// Check if the name we've been given is in our list of simpletons
+			if (name.down() in simpletons) {
+				desktop_name = simpletons[name.down()] + ".desktop";
+
+				if (desktop_name in applications) {
+					info = applications[desktop_name];
+				} else if (desktop_name in started_applications) {
+					info = started_applications[desktop_name];
+				}
+			}
+
+			// The name wasn't, so now it's time for dirty hacks until Wayland
+			if (info == null) {
+				switch (name) {
+					case "google-chrome": // Flatpak is different from official sources
+						desktop_name = "com.google.Chrome";
+						info = new DesktopAppInfo(desktop_name + ".desktop");
+						break;
+					case "google-chrome-unstable": // Flatpak is different from official sources
+						desktop_name = "com.google.ChromeDev";
+						info = new DesktopAppInfo(desktop_name + ".desktop");
+						break;
+					default: // Do nothing
+						break;
+				}
+			}
+
+			return info;
+		}
+
+		/**
+		 * Try to get the DesktopAppInfo for a name. The name used
+		 * is generally the window's class group name or instance name.
+		 *
+		 * The function looks at our started applications and cached
+		 * applications. If both of those fail, then it looks at
+		 * the simpleton applications.
+		 */
+		private DesktopAppInfo? query_name(string name) {
+			if (name.down() in started_applications) {
+				return started_applications[name.down()];
+			}
+
+			if (name.down() + ".desktop" in applications) {
+				return applications[name.down() + ".desktop"];
+			}
+
+			var simpleton = query_simpletons(name);
+
+			if (simpleton != null) {
+				return simpleton;
+			}
+
+			return null;
+		}
+
+		/**
 		* Attempt to gain the DesktopAppInfo relating to a given window.
 		*/
 		public DesktopAppInfo? query_window(libxfce4windowing.Window window) {
@@ -188,16 +304,18 @@ namespace Budgie.Windowing {
 			}
 
 			unowned var wnck_window = Wnck.Window.@get((ulong) window.get_id());
-			unowned var class_group_name = wnck_window.get_class_group_name();
+			var class_group_name = wnck_window.get_class_group_name();
+
+			if (class_group_name == null) {
+				class_group_name = get_group_name(window);
+			}
 
 			// Try to match the class group name to an application
 			if (class_group_name != null) {
-				if (class_group_name.down() in started_applications) {
-					return started_applications[class_group_name.down()];
-				}
+				var info = query_name(class_group_name);
 
-				if (class_group_name.down() + ".desktop" in applications) {
-					return applications[class_group_name.down() + ".desktop"];
+				if (info != null) {
+					return info;
 				}
 			}
 
@@ -205,12 +323,10 @@ namespace Budgie.Windowing {
 			unowned var instance_name = wnck_window.get_class_instance_name();
 
 			if (instance_name != null) {
-				if (instance_name.down() in started_applications) {
-					return started_applications[instance_name.down()];
-				}
+				var info = query_name(instance_name);
 
-				if (instance_name.down() + ".desktop" in applications) {
-					return applications[instance_name.down() + ".desktop"];
+				if (info != null) {
+					return info;
 				}
 			}
 
