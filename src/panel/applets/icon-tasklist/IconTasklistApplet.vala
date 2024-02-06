@@ -462,7 +462,6 @@ public class IconTasklistApplet : Budgie.Applet {
 
 	private bool on_button_press(Gtk.Widget widget, Gdk.EventButton event) {
 		if (event.button != Gdk.BUTTON_PRIMARY) return Gdk.EVENT_PROPAGATE;
-
 		if (!settings.get_boolean("require-double-click-to-launch")) return Gdk.EVENT_PROPAGATE;
 		if (event.type != Gdk.EventType.DOUBLE_BUTTON_PRESS) return Gdk.EVENT_PROPAGATE;
 
@@ -482,9 +481,11 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		switch (event.button) {
 			case Gdk.BUTTON_PRIMARY:
+				// Check for open windows
 				if (button.get_window_group() != null && button.get_window_group().has_windows()) {
 					var group = button.get_window_group();
 
+					// If this button has the currently active window, minimize it
 					if (button.has_active_window) {
 						var window = group.get_active_window();
 
@@ -493,7 +494,7 @@ public class IconTasklistApplet : Budgie.Applet {
 						} catch (Error e) {
 							warning("Unable to set minimized state of window %s: %s", window.get_name(), e.message);
 						}
-					} else {
+					} else { // The button does not have the currently active window, so try to activate it's last active window
 						var window = group.get_last_active_window();
 
 						try {
@@ -502,7 +503,7 @@ public class IconTasklistApplet : Budgie.Applet {
 							warning("Unable to activate window %s: %s", window.get_name(), e.message);
 						}
 					}
-				} else {
+				} else { // No open windows, launch the application if we don't require double-click
 					if (settings.get_boolean("require-double-click-to-launch")) break;
 
 					if (!button.launch()) {
@@ -514,11 +515,12 @@ public class IconTasklistApplet : Budgie.Applet {
 				manager.show_popover(button);
 				return Gdk.EVENT_STOP;
 			case Gdk.BUTTON_MIDDLE:
-				if (settings.get_boolean("middle-click-launch-new-instance")) {
-					if (!button.launch()) {
-						warning("Failed to launch application: %s", button.app.name);
-					}
+				if (settings.get_boolean("middle-click-launch-new-instance")) break;
+
+				if (!button.launch()) {
+					warning("Failed to launch application: %s", button.app.name);
 				}
+
 				break;
 		}
 
