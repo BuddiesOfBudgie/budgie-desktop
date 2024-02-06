@@ -481,8 +481,41 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		switch (event.button) {
 			case Gdk.BUTTON_PRIMARY:
-				// Check for open windows
-				if (button.get_window_group() != null && button.get_window_group().has_windows()) {
+				var has_open_windows = button.get_window_group() != null && button.get_window_group().has_windows();
+
+				// Check for open windows, and handle showing all windows on click
+				if (has_open_windows && settings.get_boolean("show-all-windows-on-click")) {
+					var group = button.get_window_group();
+					var windows = group.get_windows();
+					var has_active = false;
+
+					// Check if there are any un-minimized windows in this group
+					foreach (var window in windows) {
+						if (!window.is_minimized()) {
+							has_active = true;
+							break;
+						}
+					}
+
+					// If there are un-minimized windows, minimize all windows in this group.
+					// Otherwise, un-minimize all of the windows in the group.
+					foreach (var window in windows) {
+						if (has_active) {
+							try {
+								window.set_minimized(true);
+							} catch (Error e) {
+								warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
+							}
+						} else {
+							try {
+								window.set_minimized(false);
+								window.activate(event.time);
+							} catch (Error e) {
+								warning("Unable to un-minimize or activate window '%s': %s", window.get_name(), e.message);
+							}
+						}
+					}
+				} else if (has_open_windows) { // Has open windows, toggle the visibility of the current/last active window
 					var group = button.get_window_group();
 
 					// If this button has the currently active window, minimize it
