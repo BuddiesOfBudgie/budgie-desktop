@@ -585,7 +585,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		ButtonWrapper wrapper = new ButtonWrapper(button);
 		wrapper.orient = get_orientation();
 
-		Gtk.drag_source_set(button, Gdk.ModifierType.BUTTON1_MASK, SOURCE_TARGET, Gdk.DragAction.MOVE);
 		Gtk.drag_dest_set(button, 0, DRAG_TARGETS, Gdk.DragAction.MOVE);
 
 		button.drag_data_get.connect(button_drag_data_get);
@@ -649,6 +648,12 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		if (only_show_pinned) {
 			visible = button.pinned;
+		}
+
+		if (lock_icons) {
+			Gtk.drag_source_unset(button);
+		} else {
+			Gtk.drag_source_set(button, Gdk.ModifierType.BUTTON1_MASK, SOURCE_TARGET, Gdk.DragAction.MOVE);
 		}
 
 		visible = visible || button.pinned;
