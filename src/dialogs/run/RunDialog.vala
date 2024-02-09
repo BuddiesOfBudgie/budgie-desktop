@@ -44,6 +44,8 @@ namespace Budgie {
 		construct {
 			set_keep_above(true);
 			set_position(Gtk.WindowPosition.CENTER);
+			set_skip_pager_hint(true);
+			set_skip_taskbar_hint(true);
 			Gdk.Visual? visual = screen.get_rgba_visual();
 			if (visual != null) {
 				this.set_visual(visual);
