@@ -163,7 +163,14 @@ internal class TrayItem : Gtk.EventBox {
 		}
 
 		if (icon_name != null && icon_name.length > 0) {
-			if (icon_theme_path != null && !Gtk.IconTheme.get_default().has_icon(icon_name)) {
+			if (FileUtils.test(icon_name, FileTest.IS_REGULAR)) {
+				// needed for noncompliant apps that use absolute paths for icon names
+				var pixbuf = new Gdk.Pixbuf.from_file(icon_name);
+				if (pixbuf != null) {
+					pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
+					icon.set_from_pixbuf(pixbuf);
+				}
+			} else if (icon_theme_path != null && !Gtk.IconTheme.get_default().has_icon(icon_name)) {
 				var icon_theme = new Gtk.IconTheme();
 				icon_theme.prepend_search_path(icon_theme_path);
 				try {
