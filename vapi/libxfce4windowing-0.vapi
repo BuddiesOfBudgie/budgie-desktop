@@ -6,13 +6,14 @@ namespace libxfce4windowing {
 	public abstract class Application : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected Application ();
+		[CCode (cname = "xfw_application_get_class_id")]
+		[Version (since = "4.19.3")]
+		public unowned string get_class_id ();
 		[CCode (cname = "xfw_application_get_gicon")]
 		[Version (since = "4.19.1")]
 		public unowned GLib.Icon get_gicon ();
 		[CCode (cname = "xfw_application_get_icon")]
 		public unowned Gdk.Pixbuf? get_icon (int size, int scale);
-		[CCode (cname = "xfw_application_get_id")]
-		public uint64 get_id ();
 		[CCode (cname = "xfw_application_get_instance")]
 		public unowned libxfce4windowing.ApplicationInstance? get_instance (libxfce4windowing.Window window);
 		[CCode (cname = "xfw_application_get_instances")]
@@ -25,9 +26,10 @@ namespace libxfce4windowing {
 		[Version (since = "4.19.1")]
 		public bool icon_is_fallback ();
 		[NoAccessorMethod]
-		public GLib.Icon gicon { owned get; }
+		[Version (since = "4.19.3")]
+		public string class_id { owned get; }
 		[NoAccessorMethod]
-		public uint64 id { get; }
+		public GLib.Icon gicon { owned get; }
 		[NoAccessorMethod]
 		public void* instances { get; }
 		[NoAccessorMethod]
@@ -87,6 +89,9 @@ namespace libxfce4windowing {
 		public unowned libxfce4windowing.Application get_application ();
 		[CCode (cname = "xfw_window_get_capabilities")]
 		public libxfce4windowing.WindowCapabilities get_capabilities ();
+		[CCode (array_length = false, array_null_terminated = true, cname = "xfw_window_get_class_ids")]
+		[Version (since = "4.19.3")]
+		public unowned string[] get_class_ids ();
 		[CCode (cname = "xfw_window_get_geometry")]
 		public unowned Gdk.Rectangle? get_geometry ();
 		[CCode (cname = "xfw_window_get_gicon")]
@@ -94,8 +99,6 @@ namespace libxfce4windowing {
 		public unowned GLib.Icon get_gicon ();
 		[CCode (cname = "xfw_window_get_icon")]
 		public unowned Gdk.Pixbuf? get_icon (int size, int scale);
-		[CCode (cname = "xfw_window_get_id")]
-		public uint64 get_id ();
 		[CCode (cname = "xfw_window_get_monitors")]
 		public unowned GLib.List<Gdk.Monitor>? get_monitors ();
 		[CCode (cname = "xfw_window_get_name")]
@@ -165,14 +168,19 @@ namespace libxfce4windowing {
 		public bool start_move () throws GLib.Error;
 		[CCode (cname = "xfw_window_start_resize")]
 		public bool start_resize () throws GLib.Error;
+		[CCode (cname = "xfw_window_x11_get_xid")]
+		[Version (since = "4.19.3")]
+		public X.Window x11_get_xid ();
 		[NoAccessorMethod]
 		public libxfce4windowing.Application application { owned get; }
 		[NoAccessorMethod]
 		public libxfce4windowing.WindowCapabilities capabilities { get; }
+		[CCode (array_length = false, array_null_terminated = true)]
+		[NoAccessorMethod]
+		[Version (since = "4.19.3")]
+		public string[] class_ids { owned get; }
 		[NoAccessorMethod]
 		public GLib.Icon gicon { owned get; }
-		[NoAccessorMethod]
-		public uint64 id { get; }
 		[NoAccessorMethod]
 		public void* monitors { get; }
 		[NoAccessorMethod]
@@ -186,6 +194,8 @@ namespace libxfce4windowing {
 		[NoAccessorMethod]
 		public libxfce4windowing.Workspace workspace { owned get; }
 		public signal void capabilities_changed (libxfce4windowing.WindowCapabilities changed_mask, libxfce4windowing.WindowCapabilities new_state);
+		[Version (since = "4.19.3")]
+		public signal void class_changed ();
 		public signal void closed ();
 		public signal void geometry_changed ();
 		public signal void icon_changed ();
@@ -313,6 +323,8 @@ namespace libxfce4windowing {
 	public interface Workspace : GLib.Object {
 		[CCode (cname = "xfw_workspace_activate")]
 		public bool activate () throws GLib.Error;
+		[CCode (cname = "xfw_workspace_assign_to_workspace_group")]
+		public bool assign_to_workspace_group (libxfce4windowing.WorkspaceGroup group) throws GLib.Error;
 		[CCode (cname = "xfw_workspace_get_capabilities")]
 		public libxfce4windowing.WorkspaceCapabilities get_capabilities ();
 		[CCode (cname = "xfw_workspace_get_geometry")]
@@ -332,13 +344,13 @@ namespace libxfce4windowing {
 		[CCode (cname = "xfw_workspace_get_state")]
 		public libxfce4windowing.WorkspaceState get_state ();
 		[CCode (cname = "xfw_workspace_get_workspace_group")]
-		public unowned libxfce4windowing.WorkspaceGroup get_workspace_group ();
+		public unowned libxfce4windowing.WorkspaceGroup? get_workspace_group ();
 		[CCode (cname = "xfw_workspace_remove")]
 		public bool remove () throws GLib.Error;
 		[NoAccessorMethod]
 		public abstract libxfce4windowing.WorkspaceCapabilities capabilities { get; set construct; }
 		[NoAccessorMethod]
-		public abstract libxfce4windowing.WorkspaceGroup group { owned get; construct; }
+		public abstract libxfce4windowing.WorkspaceGroup group { owned get; }
 		[NoAccessorMethod]
 		public abstract string id { owned get; }
 		[NoAccessorMethod]
@@ -348,6 +360,7 @@ namespace libxfce4windowing {
 		[NoAccessorMethod]
 		public abstract libxfce4windowing.WorkspaceState state { get; set construct; }
 		public signal void capabilities_changed (libxfce4windowing.WorkspaceCapabilities changed_mask, libxfce4windowing.WorkspaceCapabilities new_capabilities);
+		public signal void group_changed (libxfce4windowing.WorkspaceGroup previous_group);
 		public signal void name_changed ();
 		public signal void state_changed (libxfce4windowing.WorkspaceState changed_mask, libxfce4windowing.WorkspaceState new_state);
 	}
@@ -383,19 +396,31 @@ namespace libxfce4windowing {
 		public abstract void* workspaces { get; }
 		public signal void active_workspace_changed (libxfce4windowing.Workspace? previously_active_workspace);
 		public signal void capabilities_changed (libxfce4windowing.WorkspaceGroupCapabilities changed_mask, libxfce4windowing.WorkspaceGroupCapabilities new_capabilities);
+		public signal void monitor_added (Gdk.Monitor monitor);
+		public signal void monitor_removed (Gdk.Monitor monitor);
 		public signal void monitors_changed ();
 		public signal void viewports_changed ();
-		public signal void workspace_created (libxfce4windowing.Workspace workspace);
-		public signal void workspace_destroyed (libxfce4windowing.Workspace workspace);
+		public signal void workspace_added (libxfce4windowing.Workspace workspace);
+		public signal void workspace_removed (libxfce4windowing.Workspace workspace);
 	}
 	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "XfwWorkspaceManager", type_id = "xfw_workspace_manager_get_type ()")]
 	public interface WorkspaceManager : GLib.Object {
 		[CCode (cname = "xfw_workspace_manager_list_workspace_groups")]
 		public unowned GLib.List<libxfce4windowing.WorkspaceGroup>? list_workspace_groups ();
+		[CCode (cname = "xfw_workspace_manager_list_workspaces")]
+		public unowned GLib.List<libxfce4windowing.Workspace>? list_workspaces ();
 		[NoAccessorMethod]
 		public abstract Gdk.Screen screen { owned get; construct; }
+		public signal void workspace_created (libxfce4windowing.Workspace workspace);
+		public signal void workspace_destroyed (libxfce4windowing.Workspace workspace);
 		public signal void workspace_group_created (libxfce4windowing.WorkspaceGroup group);
 		public signal void workspace_group_destroyed (libxfce4windowing.WorkspaceGroup group);
+	}
+	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "XfwClientType", cprefix = "XFW_CLIENT_TYPE_", has_type_id = false)]
+	[Version (since = "4.19.3")]
+	public enum ClientType {
+		APPLICATION,
+		PAGER
 	}
 	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "XfwDirection", cprefix = "XFW_DIRECTION_", type_id = "xfw_direction_get_type ()")]
 	public enum Direction {
@@ -507,6 +532,9 @@ namespace libxfce4windowing {
 	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "xfw_screen_get_default")]
 	[Version (replacement = "Screen.get_default")]
 	public static libxfce4windowing.Screen screen_get_default ();
+	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "xfw_set_client_type")]
+	[Version (since = "4.19.3")]
+	public static void set_client_type (libxfce4windowing.ClientType client_type);
 	[CCode (cheader_filename = "libxfce4windowing/libxfce4windowing.h", cname = "xfw_windowing_get")]
 	public static libxfce4windowing.Windowing windowing_get ();
 }

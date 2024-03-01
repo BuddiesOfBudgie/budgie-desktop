@@ -61,7 +61,7 @@ namespace Budgie {
 		public TabSwitcherWidget(Budgie.AppSystem app_system, libxfce4windowing.Window? win) {
 			Object();
 			window = win;
-			var uid = window.get_id();
+			ulong uid = (ulong) window.x11_get_xid();
 			id = uid.to_string();
 			set_title();
 
@@ -334,7 +334,7 @@ namespace Budgie {
 		}
 
 		private void set_window_as_activated(libxfce4windowing.Window window) {
-			string id = window.get_id().to_string();
+			string id = ((ulong) window.x11_get_xid()).to_string();
 			unowned List<string> entries = recency.find_custom(id, strcmp);
 			recency.remove_link(entries);
 			recency.prepend(id);
@@ -365,7 +365,7 @@ namespace Budgie {
 		/* Switch focus to the item with the xid */
 		public void focus_item(bool backwards) {
 			unowned libxfce4windowing.Window? active_window = xfce_screen.get_active_window();
-			TabSwitcherWidget? widget = active_window != null ? ids.get(active_window.get_id().to_string()) : null;
+			TabSwitcherWidget? widget = active_window != null ? ids.get(((ulong) active_window.x11_get_xid()).to_string()) : null;
 
 			// Visible, each input should cycle to previous / next
 			if (visible) {
