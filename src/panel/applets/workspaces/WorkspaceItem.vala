@@ -179,7 +179,7 @@ namespace Workspaces {
 			if (data != null) {
 				try {
 					foreach (libxfce4windowing.Window window in WorkspacesApplet.xfce_screen.get_windows()) {
-						if (window.get_id() == *data) {
+						if (window.x11_get_xid() == *data) {
 							window.move_to_workspace(this.workspace);
 							dnd_success = true;
 							break;
