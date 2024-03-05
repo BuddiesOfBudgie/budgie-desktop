@@ -1,0 +1,24 @@
+# Global rule, if anything matches after this then that rule takes precedent
+* @BuddiesOfBudgie/best-buds
+
+# Mixed
+src/daemon/notifications @EbonJaeger @JoshStrobl @BuddiesOfBudgie/best-buds
+src/daemon/screenshot* @fossfreedom @JoshStrobl @BuddiesOfBudgie/best-buds
+
+# Campbell
+src/daemon/statusnotifier.vala @serebit @BuddiesOfBudgie/best-buds
+src/panel/applets/tray @serebit @BuddiesOfBudgie/best-buds
+src/plugin/raven @serebit @BuddiesOfBudgie/best-buds
+
+# David
+src/panel/applets/keyboard-layout @fossfreedom @BuddiesOfBudgie/best-buds
+
+# Evan
+src/appindexer @EbonJaeger @BuddiesOfBudgie/best-buds
+src/dialogs/power @EbonJaeger @BuddiesOfBudgie/best-buds
+src/panel/applets/trash @EbonJaeger @BuddiesOfBudgie/best-buds
+
+# Josh
+src/abomination @JoshStrobl @BuddiesOfBudgie/best-buds
+src/daemon/xdgdirtracker @JoshStrobl @BuddiesOfBudgie/best-buds
+src/panel/applets/icon-tasklist @JoshStrobl @BuddiesOfBudgie/best-buds
