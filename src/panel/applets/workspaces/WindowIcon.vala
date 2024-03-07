@@ -55,14 +55,10 @@ namespace Workspaces {
 		public override bool button_release_event(Gdk.EventButton event) {
 			if (event.button != 1) return Gdk.EVENT_STOP;
 
-			var workspace = WorkspacesApplet.workspace_group.get_active_workspace();
-			if (workspace != null && workspace == window.get_workspace()) {
-				try {
-					window.activate(event.time);
-				} catch (Error e) {
-					warning("Failed to activate window: %s", e.message);
-				}
-				return Gdk.EVENT_STOP;
+			try {
+				window.activate(event.time);
+			} catch (Error e) {
+				warning("Failed to activate window: %s", e.message);
 			}
 			return Gdk.EVENT_STOP;
 		}
@@ -76,7 +72,7 @@ namespace Workspaces {
 		}
 
 		public void on_drag_data_get(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
-			ulong window_xid = (ulong)window.get_id();
+			ulong window_xid = (ulong)window.x11_get_xid();
 			uchar[] buf;
 			convert_ulong_to_bytes(window_xid, out buf);
 			selection_data.set(

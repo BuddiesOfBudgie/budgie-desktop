@@ -278,8 +278,8 @@ namespace Workspaces {
 		}
 
 		private void connect_signals() {
-			connections += workspace_group.workspace_created.connect(workspace_added);
-			connections += workspace_group.workspace_destroyed.connect(workspace_removed);
+			connections += workspace_group.workspace_added.connect(workspace_added);
+			connections += workspace_group.workspace_removed.connect(workspace_removed);
 			connections += workspace_group.active_workspace_changed.connect(set_current_workspace);
 			connections += xfce_screen.active_window_changed.connect(update_workspaces);
 			connections += xfce_screen.window_opened.connect(window_opened);
@@ -403,7 +403,7 @@ namespace Workspaces {
 
 			libxfce4windowing.Window? window = null;
 			foreach (libxfce4windowing.Window win in xfce_screen.get_windows()) {
-				if (win.get_id() == *data) {
+				if (win.x11_get_xid() == *data) {
 					window = win;
 					break;
 				}
