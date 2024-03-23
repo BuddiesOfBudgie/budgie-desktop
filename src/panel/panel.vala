@@ -302,6 +302,11 @@ namespace Budgie {
 				}
 			});
 
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				GtkLayerShell.init_for_window(this);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.BOTTOM);
+			}
+
 			popover_manager = new PopoverManager();
 			pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
 			creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);

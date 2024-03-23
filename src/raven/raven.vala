@@ -360,6 +360,11 @@ namespace Budgie {
 				this.realize();
 			}
 
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				GtkLayerShell.init_for_window(this);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			}
+
 			this.get_child().show_all();
 
 			this.screen_edge = Gtk.PositionType.LEFT;
