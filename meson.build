@@ -12,6 +12,13 @@ project(
     ],
 )
 
+# Vala generates bad C code and missing these on gcc 14 will cause FTBFS
+am_cflags = [
+    '-Wno-incompatible-pointer-types',
+    '-Wno-implicit-function-declaration',
+]
+add_global_arguments(am_cflags, language: 'c')
+
 budgie_screensaver  = find_program('budgie-screensaver', required: false)
 gnome_screensaver = find_program('gnome-screensaver', required: false)
 with_gnome_screensaver = get_option('with-gnome-screensaver')
