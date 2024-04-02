@@ -19,7 +19,7 @@ namespace Budgie.Windowing {
 		public libxfce4windowing.Application application { get; construct; }
 
 		/** A copy of the application's ID. */
-		public uint64 group_id { get; construct; }
+		public string group_id { get; construct; }
 
 		public DesktopAppInfo? app_info { get; construct; default = null; }
 
@@ -56,7 +56,7 @@ namespace Budgie.Windowing {
 		 * Create a new WindowGroup for an application.
 		 */
 		public WindowGroup(libxfce4windowing.Application application, DesktopAppInfo? app_info) {
-			Object(application: application, group_id: application.get_id(), app_info: app_info);
+			Object(application: application, group_id: application.get_class_id(), app_info: app_info);
 		}
 
 		construct {
@@ -108,8 +108,8 @@ namespace Budgie.Windowing {
 				last_active_window = null;
 			}
 
-			windows.remove(window);
 			window_removed(window);
+			windows.remove(window);
 		}
 
 		/**
@@ -218,7 +218,8 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: true if the window is in this window group
 		 */
-		public bool has_window(libxfce4windowing.Window window) {
+		public bool has_window(libxfce4windowing.Window? window) {
+			if (window == null) return false;
 			return windows.find(window) != null;
 		}
 

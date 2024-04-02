@@ -136,7 +136,7 @@ namespace Budgie.Windowing {
 		 */
 		private string get_group_name(libxfce4windowing.Window window) {
 			// Get the Wnck window from the libx4w window
-			unowned var wnck_window = Wnck.Window.@get((ulong) window.get_id());
+			unowned var wnck_window = Wnck.Window.@get((ulong) window.x11_get_xid());
 
 			// Try to use class group name from WM_CLASS as it's the most precise
 			// (Firefox Beta is a known offender, its class group will be the same as standard Firefox).
@@ -293,7 +293,7 @@ namespace Budgie.Windowing {
 			check_invalidated();
 
 			// Try to get the application based on GtkApplication ID
-			var gtk_id = query_atom_string((ulong) window.get_id(), Gdk.Atom.intern("_GTK_APPLICATION_ID", false), true);
+			var gtk_id = query_atom_string((ulong) window.x11_get_xid(), Gdk.Atom.intern("_GTK_APPLICATION_ID", false), true);
 
 			if (gtk_id != null) {
 				var desktop_id = gtk_id.down() + ".desktop";
@@ -303,7 +303,7 @@ namespace Budgie.Windowing {
 				}
 			}
 
-			unowned var wnck_window = Wnck.Window.@get((ulong) window.get_id());
+			unowned var wnck_window = Wnck.Window.@get((ulong) window.x11_get_xid());
 			var class_group_name = wnck_window.get_class_group_name();
 
 			if (class_group_name == null) {

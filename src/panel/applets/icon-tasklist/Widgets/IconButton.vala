@@ -24,7 +24,7 @@ public class IconButton : Gtk.ToggleButton {
 
 	private const int64 SCROLL_TIMEOUT = 300000;
 
-	public Budgie.Application app { get; construct; }
+	public Budgie.Application? app { get; construct; }
 	public unowned Budgie.PopoverManager popover_manager { get; construct; }
 	public bool pinned { get; set; default = false; }
 	public bool has_active_window { get; private set; default = false; }
@@ -44,15 +44,14 @@ public class IconButton : Gtk.ToggleButton {
 	private int64 last_scroll_time = 0;
 	private bool urgent = false;
 
-	public IconButton(Budgie.Application app, Budgie.PopoverManager popover_manager) {
+	public IconButton(Budgie.PopoverManager popover_manager, Budgie.Application app) {
 		Object(
 			app: app,
 			popover_manager: popover_manager,
 			relief: Gtk.ReliefStyle.NONE
 		);
 	}
-
-	public IconButton.with_group(Budgie.Application app, Budgie.Windowing.WindowGroup window_group, Budgie.PopoverManager popover_manager) {
+	public IconButton.with_group(Budgie.Windowing.WindowGroup window_group, Budgie.PopoverManager popover_manager, Budgie.Application? app) {
 		Object(
 			app: app,
 			popover_manager: popover_manager,
@@ -88,6 +87,9 @@ public class IconButton : Gtk.ToggleButton {
 			app.launch_failed.connect_after(() => {
 				icon.waiting = false;
 			});
+		} else {
+			var window = window_group?.get_active_window() ?? window_group?.get_last_active_window();
+			if (window != null) set_tooltip_text(window.get_name());
 		}
 
 		popover_manager.register_popover(this, popover);
@@ -165,7 +167,7 @@ public class IconButton : Gtk.ToggleButton {
 		unowned libxfce4windowing.Window target_window = null;
 
 		// Get the currently active window in the group
-		unowned var active_window = window_group.get_active_window();
+		unowned var active_window = window_group?.get_active_window();
 
 		// If there is no currently active window, get the last active window
 		if (active_window == null) {
@@ -322,7 +324,7 @@ public class IconButton : Gtk.ToggleButton {
 			// Set the color of the indicator
 			Gdk.RGBA color;
 
-			if (has_active_window && window == window_group.get_active_window()) {
+			if (has_active_window && window == window_group?.get_active_window()) {
 				if (!get_style_context().lookup_color("budgie_tasklist_indicator_color_active_window", out color)) {
 					color.parse("#5294E2");
 				}
@@ -514,6 +516,8 @@ public class IconButton : Gtk.ToggleButton {
 	}
 
 	public bool launch() {
+		if (app == null) return false;
+
 		if (!pinned) {
 			warning("IconButton was clicked with no active windows, but is not pinned!");
 			return false;
@@ -579,7 +583,7 @@ public class IconButton : Gtk.ToggleButton {
 		// We look for the last active window in case the panel was restarted or the tasklist
 		// was added to an already-running session with open windows, so that buttons will still
 		// have the correct tooltips.
-		var window = window_group.get_active_window();
+		var window = window_group?.get_active_window();
 
 		if (window != null) {
 			set_tooltip_text(window.get_name());
@@ -616,7 +620,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		window_group.window_removed.connect((window) => {
 			popover.remove_window(window);
-
 			update();
 		});
 	}
@@ -633,7 +636,8 @@ public class IconButton : Gtk.ToggleButton {
 				return;
 			}
 
-			set_tooltip_text(app.name);
+			var active_window = window_group?.get_active_window() ?? window_group?.get_last_active_window();
+			set_tooltip_text(app?.name ?? active_window?.get_name() ?? "");
 		}
 
 		set_active(has_active_window);
@@ -647,7 +651,6 @@ public class IconButton : Gtk.ToggleButton {
 			icon.waiting = false;
 		}
 
-		unowned GLib.Icon? app_icon = app.icon;
 		Gdk.Pixbuf? pixbuf_icon = null;
 
 		if (window_group != null) {
@@ -655,8 +658,8 @@ public class IconButton : Gtk.ToggleButton {
 			pixbuf_icon = window_group.get_icon(size, 1);
 		}
 
-		if (app_icon != null) {
-			icon.set_from_gicon(app_icon, Gtk.IconSize.INVALID);
+		if (app?.icon != null) {
+			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
 			icon.set_from_pixbuf(pixbuf_icon);
 		} else {

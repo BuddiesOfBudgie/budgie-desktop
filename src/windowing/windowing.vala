@@ -145,8 +145,8 @@ namespace Budgie.Windowing {
 			if (group == null) return;
 
 			group.active_workspace_changed.connect(on_active_workspace_changed);
-			group.workspace_created.connect(on_workspace_created);
-			group.workspace_destroyed.connect(on_workspace_destroyed);
+			group.workspace_added.connect(on_workspace_created);
+			group.workspace_removed.connect(on_workspace_destroyed);
 		}
 
 		private void on_active_window_changed(Window? old_window) {
@@ -211,10 +211,7 @@ namespace Budgie.Windowing {
 
 			// Get the WindowGroup this window belongs to
 			var group = applications.lookup(application);
-			if (group == null) {
-				warning("A window was closed, but we could not find its WindowGroup");
-				return;
-			}
+			if (group == null) return;
 
 			// Remove the window from the group
 			group.remove_window(window);
@@ -226,8 +223,8 @@ namespace Budgie.Windowing {
 			// Remove the group if this was the last window
 			if (!group.has_windows()) {
 				debug(@"removing WindowGroup for application: $(application.get_name())");
-				applications.remove(application);
 				window_group_removed(group);
+				applications.remove(application);
 			}
 		}
 

@@ -18,7 +18,7 @@ public interface SettingsRemote : GLib.Object {
 }
 
 public class ButtonPopover : Budgie.Popover {
-	public Budgie.Application app { get; construct; }
+	public Budgie.Application? app { get; construct; }
 	public Budgie.Windowing.WindowGroup? group { get; construct set; }
 
 	private bool _pinned = false;
@@ -44,7 +44,7 @@ public class ButtonPopover : Budgie.Popover {
 	private Gtk.Button? new_instance_button;
 	private Gtk.Button? close_all_button;
 
-	public ButtonPopover(IconButton button, Budgie.Application app, Budgie.Windowing.WindowGroup? group) {
+	public ButtonPopover(IconButton button, Budgie.Application? app, Budgie.Windowing.WindowGroup? group) {
 		Object(relative_to: button, app: app, group: group);
 	}
 
@@ -57,21 +57,23 @@ public class ButtonPopover : Budgie.Popover {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
-		var app_info = new DesktopAppInfo(app.desktop_id);
+		if (app != null) {
+			var app_info = new DesktopAppInfo(app.desktop_id);
 
-		foreach (var action in app.actions) {
-			var action_label = app_info.get_action_name(action);
+			foreach (var action in app.actions) {
+				var action_label = app_info.get_action_name(action);
 
-			var action_button = new Gtk.Button.with_label(action_label) {
-				relief = Gtk.ReliefStyle.NONE,
-			};
+				var action_button = new Gtk.Button.with_label(action_label) {
+					relief = Gtk.ReliefStyle.NONE,
+				};
 
-			action_button.clicked.connect(() => {
-				app.launch_action(action);
-				hide();
-			});
+				action_button.clicked.connect(() => {
+					app.launch_action(action);
+					hide();
+				});
 
-			desktop_actions.add(action_button);
+				desktop_actions.add(action_button);
+			}
 		}
 
 		windows = new Gtk.ListBox() {
@@ -92,21 +94,6 @@ public class ButtonPopover : Budgie.Popover {
 			pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 		}
 
-		pin_button = new Gtk.Button() {
-			image = pinned_icon,
-			tooltip_text = _("Favorite"),
-			relief = Gtk.ReliefStyle.NONE,
-		};
-
-		pin_button.clicked.connect(on_pin_clicked);
-
-		new_instance_button = new Gtk.Button.from_icon_name("window-new-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
-			tooltip_text = _("Launch new instance"),
-			relief = Gtk.ReliefStyle.NONE,
-		};
-
-		new_instance_button.clicked.connect(on_new_instance_clicked);
-
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close all windows"),
 			relief = Gtk.ReliefStyle.NONE,
@@ -115,8 +102,27 @@ public class ButtonPopover : Budgie.Popover {
 		close_all_button.clicked.connect(on_close_all_clicked);
 
 		var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		button_box.pack_start(pin_button);
-		button_box.pack_start(new_instance_button);
+
+		if (app != null) {
+			pin_button = new Gtk.Button() {
+				image = pinned_icon,
+				tooltip_text = _("Favorite"),
+				relief = Gtk.ReliefStyle.NONE,
+			};
+
+			pin_button.clicked.connect(on_pin_clicked);
+
+			new_instance_button = new Gtk.Button.from_icon_name("window-new-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
+				tooltip_text = _("Launch new instance"),
+				relief = Gtk.ReliefStyle.NONE,
+			};
+
+			new_instance_button.clicked.connect(on_new_instance_clicked);
+
+			button_box.pack_start(pin_button);
+			button_box.pack_start(new_instance_button);
+		}
+
 		button_box.pack_start(close_all_button);
 
 		var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -149,6 +155,7 @@ public class ButtonPopover : Budgie.Popover {
 	}
 
 	private void on_new_instance_clicked() {
+		if (app == null) return;
 		app.launch();
 		hide();
 	}
@@ -190,19 +197,22 @@ public class ButtonPopover : Budgie.Popover {
 				controls_layout.destroy();
 			});
 
-			stack.add_named(controls_layout, window.get_id().to_string());
-			stack.set_visible_child_name(window.get_id().to_string());
+			string id = ((ulong) window.x11_get_xid()).to_string();
+			stack.add_named(controls_layout, id);
+			stack.set_visible_child_name(id);
 		});
 
 		windows.add(window_item);
 	}
 
 	public void remove_window(libxfce4windowing.Window window) {
+		ulong window_id = (ulong) window.x11_get_xid();
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			if (((WindowItem) child).window.get_id() == window.get_id()) {
+			ulong child_id = (ulong) ((WindowItem) child).window.x11_get_xid();
+			if (child_id == window_id) {
 				window_item = child as WindowItem;
 				break;
 			}
@@ -212,13 +222,15 @@ public class ButtonPopover : Budgie.Popover {
 
 		window_item.destroy();
 
+		string id = window_id.to_string();
+
 		// Set the stack page to the main layout if we happen to have this window's page open
-		if (stack.get_visible_child_name() == window.get_id().to_string()) {
+		if (stack.get_visible_child_name() == id) {
 			stack.set_visible_child_name("main");
 		}
 
 		// If a page for this window exists, remove it
-		var controls_layout = stack.get_child_by_name(window.get_id().to_string());
+		var controls_layout = stack.get_child_by_name(id);
 
 		if (controls_layout != null) {
 			stack.remove(controls_layout);

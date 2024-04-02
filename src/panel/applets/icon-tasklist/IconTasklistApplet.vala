@@ -140,7 +140,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			if (info == null) continue;
 
 			var application = new Budgie.Application(info);
-			var button = new IconButton(application, manager) {
+			var button = new IconButton(manager, application) {
 				pinned = true,
 			};
 
@@ -324,7 +324,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		var application = new Budgie.Application(info);
-		var button = new IconButton(application, manager) {
+		var button = new IconButton(manager, application) {
 			pinned = true,
 		};
 
@@ -375,15 +375,14 @@ public class IconTasklistApplet : Budgie.Applet {
 	private void on_app_opened(Budgie.Windowing.WindowGroup group) {
 		string application_id = group.group_id.to_string();
 
-		if (group.app_info == null) {
-			warning("Couldn't get app info from window");
-			return;
-		}
+		Budgie.Application? application = null;
 
-		var application = new Budgie.Application(group.app_info);
+		if (group.app_info != null) {
+			application = new Budgie.Application(group.app_info);
 
-		if (application.desktop_id in buttons) {
-			application_id = application.desktop_id;
+			if (application.desktop_id in buttons) {
+				application_id = application.desktop_id;
+			}
 		}
 
 		// Trigger an animation when a new instance of a window is launched while another is already open
@@ -406,7 +405,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		if (button == null) { // create a new button
-			button = new IconButton.with_group(application, group, manager);
+			button = new IconButton.with_group(group, manager, application);
 
 			button.button_press_event.connect(on_button_press);
 			button.button_release_event.connect(on_button_release);
