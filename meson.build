@@ -13,10 +13,9 @@ project(
 )
 
 # Vala generates bad C code and missing these on gcc 14 will cause FTBFS
-am_cflags = [
-    '-Wno-incompatible-pointer-types',
-    '-Wno-implicit-function-declaration',
-]
+# Additionally, Meson 1.4 unhides warnings from valac-generated C code,
+# which causes unreadable logspam. Reenables prior behavior.
+am_cflags = ['-w']
 add_global_arguments(am_cflags, language: 'c')
 
 budgie_screensaver  = find_program('budgie-screensaver', required: false)
