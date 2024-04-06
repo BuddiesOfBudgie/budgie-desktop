@@ -63,6 +63,9 @@ public class ButtonPopover : Budgie.Popover {
 					relief = Gtk.ReliefStyle.NONE,
 				};
 
+				var label = action_button.get_child() as Gtk.Label;
+				label.set_xalign(0);
+
 				action_button.clicked.connect(() => {
 					app.launch_action(action);
 					hide();
