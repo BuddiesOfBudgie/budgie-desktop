@@ -219,7 +219,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		var button = widget as IconButton;
 		int size = 0;
 
-		if (!Gtk.icon_size_lookup(Gtk.IconSize.DND,  out size, null)) {
+		if (!Gtk.icon_size_lookup(Gtk.IconSize.DND, out size, null)) {
 			size = 32;
 		}
 
