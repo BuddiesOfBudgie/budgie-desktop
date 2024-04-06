@@ -29,11 +29,10 @@ lib_applet_icontasklist_resources = static_library(
 
 applet_icontasklist_sources = [
     'IconTasklistApplet.vala',
-    'Widgets/Animation.vala',
-    'Widgets/ButtonPopover.vala',
-    'Widgets/ButtonWrapper.vala',
-    'Widgets/Icon.vala',
-    'Widgets/IconButton.vala',
+    'widgets/ButtonPopover.vala',
+    'widgets/ButtonWrapper.vala',
+    'widgets/Icon.vala',
+    'widgets/IconButton.vala',
 ]
 
 applet_icontasklist_deps = [
