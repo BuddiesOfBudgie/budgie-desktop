@@ -298,9 +298,7 @@ namespace Budgie.Windowing {
 			if (gtk_id != null) {
 				var desktop_id = gtk_id.down() + ".desktop";
 
-				if (desktop_id in applications) {
-					return applications[desktop_id];
-				}
+				if (desktop_id in applications) return applications[desktop_id];
 			}
 
 			unowned var wnck_window = Wnck.Window.@get((ulong) window.x11_get_xid());
@@ -314,9 +312,7 @@ namespace Budgie.Windowing {
 			if (class_group_name != null) {
 				var info = query_name(class_group_name);
 
-				if (info != null) {
-					return info;
-				}
+				if (info != null) return info;
 			}
 
 			// Try to match the class instance name to an application
@@ -325,9 +321,7 @@ namespace Budgie.Windowing {
 			if (instance_name != null) {
 				var info = query_name(instance_name);
 
-				if (info != null) {
-					return info;
-				}
+				if (info != null) return info;
 			}
 
 			return null;

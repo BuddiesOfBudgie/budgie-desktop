@@ -160,9 +160,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		// Nothing to do if there are no open windows
-		if (window_group == null) {
-			return Gdk.EVENT_STOP;
-		}
+		if (window_group == null) return Gdk.EVENT_STOP;
 
 		unowned libxfce4windowing.Window target_window = null;
 
@@ -232,15 +230,11 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		// No indicators if there are no windows
-		if (windows.is_empty()) {
-			return base.draw(ctx);
-		}
+		if (windows.is_empty()) return base.draw(ctx);
 
 		// If this button does not have any focused windows,
 		// draw the inactive versions of the window indicators
-		if (!get_active()) {
-			return draw_inactive(ctx);
-		}
+		if (!get_active()) return draw_inactive(ctx);
 
 		int count = int.min((int) windows.length(), 5);
 
@@ -630,11 +624,8 @@ public class IconButton : Gtk.ToggleButton {
 		} else {
 			get_style_context().remove_class("running");
 
-			if (pinned) {
-				window_group = null;
-			} else {
-				return;
-			}
+			if (!pinned) return;
+			window_group = null;
 
 			var active_window = window_group?.get_active_window() ?? window_group?.get_last_active_window();
 			set_tooltip_text(app?.name ?? active_window?.get_name() ?? "");
@@ -666,11 +657,7 @@ public class IconButton : Gtk.ToggleButton {
 			icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		if (target_icon_size > 0) {
-			icon.pixel_size = target_icon_size;
-		} else {
-			// prevents apps making the panel massive when the icon initially gets added
-			icon.pixel_size = DEFAULT_ICON_SIZE;
-		}
+		// prevents apps making the panel massive when the icon initially gets added
+		icon.pixel_size = (target_icon_size > 0) ? target_icon_size : DEFAULT_ICON_SIZE;
 	}
 }
