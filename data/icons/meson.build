@@ -26,6 +26,8 @@ app_icons = [
 status_icons = [
     join_paths('.', 'status', 'num-lock-symbolic.svg'),
     join_paths('.', 'status', 'caps-lock-symbolic.svg'),
+    join_paths('.', 'status', 'budgie-app-favorited.svg'),
+    join_paths('.', 'status', 'budgie-app-unfavorited.svg'),
     join_paths('.', 'status', 'budgie-caffeine-cup-full.svg'),
     join_paths('.', 'status', 'budgie-caffeine-cup-empty.svg'),
 ]

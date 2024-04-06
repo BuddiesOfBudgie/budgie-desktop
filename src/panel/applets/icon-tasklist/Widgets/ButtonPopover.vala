@@ -29,7 +29,7 @@ public class ButtonPopover : Budgie.Popover {
 
 			if (pin_button == null) return;
 
-			pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite" + (!_pinned ? "-symbolic" : ""), Gtk.IconSize.SMALL_TOOLBAR);
+			pin_button.image = new Gtk.Image.from_icon_name("budgie-app-" +(!_pinned ? "unfavorited" : "favorited"), Gtk.IconSize.SMALL_TOOLBAR);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class ButtonPopover : Budgie.Popover {
 
 		Gtk.Image pinned_icon;
 
-		pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite" + (!pinned ? "-symbolic" : ""), Gtk.IconSize.SMALL_TOOLBAR);
+		pinned_icon = new Gtk.Image.from_icon_name("budgie-app-" +(!_pinned ? "unfavorited" : "favorited"), Gtk.IconSize.SMALL_TOOLBAR);
 
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close all windows"),
