@@ -553,7 +553,6 @@ public class IconButton : Gtk.ToggleButton {
 
 		if (urgent) {
 			get_style_context().add_class("needs-attention");
-			// TODO: Can this be left to themes?
 			icon.animate_attention(panel_position);
 		} else {
 			get_style_context().remove_class("needs-attention");

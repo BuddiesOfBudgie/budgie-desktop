@@ -175,7 +175,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		windowing.get_window_groups().foreach(this.on_app_opened); // for each running apps
 	}
 
-	// TODO: Redo
 	private void on_settings_changed(string key) {
 		switch (key) {
 			case "lock-icons":
