@@ -29,11 +29,7 @@ public class ButtonPopover : Budgie.Popover {
 
 			if (pin_button == null) return;
 
-			if (_pinned) {
-				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite", Gtk.IconSize.SMALL_TOOLBAR);
-			} else {
-				pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			}
+			pin_button.image = new Gtk.Image.from_icon_name("emblem-favorite" + !_pinned ? "-symbolic" : "", Gtk.IconSize.SMALL_TOOLBAR);
 		}
 	}
 
@@ -88,11 +84,7 @@ public class ButtonPopover : Budgie.Popover {
 
 		Gtk.Image pinned_icon;
 
-		if (pinned) {
-			pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite", Gtk.IconSize.SMALL_TOOLBAR);
-		} else {
-			pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-		}
+		pinned_icon = new Gtk.Image.from_icon_name("emblem-favorite" + !pinned ? "-symbolic" : "", Gtk.IconSize.SMALL_TOOLBAR);
 
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close all windows"),
@@ -361,11 +353,7 @@ private class WindowControls : Gtk.Box {
 	}
 
 	private void update_maximize_label() {
-		if (window.is_maximized()) {
-			maximize_button.set_label(_("Unmaximize"));
-		} else {
-			maximize_button.set_label(_("Maximize"));
-		}
+		maximize_button.set_label(window.is_maximized() ? _("Unmaximize") : _("Maximize"));
 
 		var maximize_button_label = maximize_button.get_child() as Gtk.Label;
 		maximize_button_label.halign = Gtk.Align.START;
