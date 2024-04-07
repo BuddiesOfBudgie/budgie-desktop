@@ -13,7 +13,7 @@ namespace Budgie.Windowing {
 	public class WindowMapper : GLib.Object {
 
 		private HashTable<string, DesktopAppInfo> applications;
-		private HashTable<string, DesktopAppInfo> started_applications;
+		private HashTable<string, DesktopAppInfo> startup_infos;
 		private HashTable<string, string> simpletons;
 		private HashTable<int64?, string> pids;
 
@@ -24,7 +24,7 @@ namespace Budgie.Windowing {
 
 		construct {
 			applications = new HashTable<string, DesktopAppInfo>(str_hash, str_equal);
-			started_applications = new HashTable<string, DesktopAppInfo>(str_hash, str_equal);
+			startup_infos = new HashTable<string, DesktopAppInfo>(str_hash, str_equal);
 			simpletons = new HashTable<string, string>(str_hash, str_equal);
 			pids = new HashTable<int64?, string>(str_hash, str_equal);
 
@@ -115,15 +115,15 @@ namespace Budgie.Windowing {
 		*/
 		private void load_app_infos() {
 			applications.remove_all();
-			started_applications.remove_all();
+			startup_infos.remove_all();
 
-			// TODO: This doesn't do what I think it does
+			// Load all of the applications that set StartupWMClass in their .desktop files
 			foreach (var app_info in AppInfo.get_all()) {
 				var desktop_info = app_info as DesktopAppInfo;
 				var desktop_id = desktop_info.get_id().down();
 
 				if (desktop_info.get_startup_wm_class() != null) {
-					started_applications[desktop_info.get_startup_wm_class().down()] = desktop_info;
+					startup_infos[desktop_info.get_startup_wm_class().down()] = desktop_info;
 				}
 
 				applications[desktop_id] = desktop_info;
@@ -172,8 +172,8 @@ namespace Budgie.Windowing {
 
 		private string? query_atom_string(ulong xid, Gdk.Atom atom, bool utf8) {
 			uint8[]? data = null;
-			Gdk.Atom a_type;
-			int a_f; // TODO: wat?
+			Gdk.Atom type;
+			int format;
 			Gdk.X11.Display display = (Gdk.X11.Display) Gdk.Display.get_default();
 
 			Gdk.Atom req_type;
@@ -198,12 +198,11 @@ namespace Budgie.Windowing {
 				0,
 				(ulong)long.MAX,
 				0,
-				out a_type,
-				out a_f,
+				out type,
+				out format,
 				out data
 			);
 
-			// TODO: I feel like this could be made more readable
 			return data != null ? (string) data : null;
 		}
 
@@ -222,8 +221,8 @@ namespace Budgie.Windowing {
 
 				if (desktop_name in applications) {
 					info = applications[desktop_name];
-				} else if (desktop_name in started_applications) {
-					info = started_applications[desktop_name];
+				} else if (desktop_name in startup_infos) {
+					info = startup_infos[desktop_name];
 				}
 			}
 
@@ -255,8 +254,8 @@ namespace Budgie.Windowing {
 		 * the simpleton applications.
 		 */
 		private DesktopAppInfo? query_name(string name) {
-			if (name.down() in started_applications) {
-				return started_applications[name.down()];
+			if (name.down() in startup_infos) {
+				return startup_infos[name.down()];
 			}
 
 			if (name.down() + ".desktop" in applications) {
