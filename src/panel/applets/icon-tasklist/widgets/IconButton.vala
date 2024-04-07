@@ -9,10 +9,6 @@
  * (at your option) any later version.
  */
 
-public const string[] DESKTOP_IDS_TO_FORCE_WG_ICON = {
-	"org.libreoffice.LibreOffice.desktop"
-};
-
 public class IconButton : Gtk.ToggleButton {
 	private const double DEFAULT_OPACITY = 0.1;
 
@@ -652,7 +648,7 @@ public class IconButton : Gtk.ToggleButton {
 			pixbuf_icon = window_group.get_icon(size, 1);
 		}
 
-		if ((app?.icon != null) && !(app.desktop_id in DESKTOP_IDS_TO_FORCE_WG_ICON)) {
+		if (app?.icon != null) {
 			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
 		} else if (pixbuf_icon != null) {
 			icon.set_from_pixbuf(pixbuf_icon);
