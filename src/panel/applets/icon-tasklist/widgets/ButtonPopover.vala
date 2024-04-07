@@ -30,6 +30,7 @@ public class ButtonPopover : Budgie.Popover {
 			if (pin_button == null) return;
 
 			pin_button.image = new Gtk.Image.from_icon_name("budgie-app-" +(!_pinned ? "unfavorited" : "favorited"), Gtk.IconSize.SMALL_TOOLBAR);
+			pin_button.tooltip_text = _pinned ? _("Unfavorite") : _("Favorite");
 		}
 	}
 
@@ -101,7 +102,7 @@ public class ButtonPopover : Budgie.Popover {
 		if (app != null) {
 			pin_button = new Gtk.Button() {
 				image = pinned_icon,
-				tooltip_text = _("Favorite"),
+				tooltip_text = _pinned ? _("Unfavorite") : _("Favorite"),
 				relief = Gtk.ReliefStyle.NONE,
 			};
 
