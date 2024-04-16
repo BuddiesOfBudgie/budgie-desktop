@@ -69,7 +69,7 @@ public class MenuButton : Gtk.Button {
 			hexpand = true,
 		};
 
-		const Gtk.TargetEntry[] drag_targets = { {"text/uri-list", 0, 0 }, {"application/x-desktop", 0, 0 } };
+		const Gtk.TargetEntry[] drag_targets = { {"text/uri-list", 0, 0 } };
 		Gtk.drag_source_set(this, Gdk.ModifierType.BUTTON1_MASK, drag_targets, Gdk.DragAction.COPY);
 		base.drag_begin.connect(this.drag_begin);
 		base.drag_end.connect(this.drag_end);

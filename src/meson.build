@@ -6,13 +6,14 @@ subdir('config')
 subdir('libsession')
 
 # Needed for daemon + applets
-subdir('appindexer')
 subdir('appsys')
 subdir('abomination')
 
 subdir('theme')
 subdir('lib')
 subdir('raven')
+subdir('windowing')
+subdir('appindexer')
 
 # Executable components
 subdir('daemon')

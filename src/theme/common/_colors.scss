@@ -1,44 +1,68 @@
-$fg_color: if($variant == 'default', white, black);
+$fg_color: if($variant == "default", white, black);
 
-$selected_bg_color: if($variant =='default', rgb(107, 202, 129), black);
+$selected_bg_color: if($variant == "default", #6bca81, black);
 $selected_fg_color: black;
 
-$warning_color: #F27835;
-$error_color: #FC4138;
-$alert_color: rgb(107, 202, 129);
-$destructive_color: #F04A50;
-$suggested_color: rgb(107, 202, 129);
+$warning_color: #f27835;
+$error_color: #fc4138;
+$alert_color: #6bca81;
+$destructive_color: #f04a50;
+$suggested_color: #6bca81;
 
-$panel_bg: if($variant == 'default', #161616, white);
-$panel_border: if($variant == 'default', #0f1116, black);
+$panel_bg: if($variant == "default", #161616, white);
+$panel_border: if($variant == "default", #0f1116, black);
 $panel_shadow: transparentize(black, 0.7);
 
-$raven_bg: if($variant == 'default', #161616, $panel_bg);
-$raven_border: if($variant == 'default', transparentize($panel_border, 0.05), $panel_border);
+$raven_bg: if($variant == "default", #161616, $panel_bg);
+$raven_border: if(
+  $variant == "default",
+  transparentize($panel_border, 0.05),
+  $panel_border
+);
 
-$raven_expander_bg: if($variant == 'default', #262626, $raven_bg);
+$raven_expander_bg: if($variant == "default", #262626, $raven_bg);
 $raven_expander_fg: $fg_color;
-$raven_expander_border: if($variant == 'default', $raven_expander_bg, $raven_border);
+$raven_expander_border: if(
+  $variant == "default",
+  $raven_expander_bg,
+  $raven_border
+);
 
-$raven_background_bg: if($variant == 'default', #262626, $raven_bg);
-$raven_background_border: if($variant == 'default', $raven_background_bg, $raven_border);
+$raven_background_bg: if($variant == "default", #262626, $raven_bg);
+$raven_background_border: if(
+  $variant == "default",
+  $raven_background_bg,
+  $raven_border
+);
 
 $mpris_overlay_bg: transparentize(white, 0.9);
 $mpris_overlay_fg: $fg_color;
-$mpris_overlay_border: if($variant== 'default', opacify(darken($mpris_overlay_bg, 4%), 0.05), $raven_border);
+$mpris_overlay_border: if(
+  $variant== "default",
+  opacify(darken($mpris_overlay_bg, 4%), 0.05),
+  $raven_border
+);
 
 $button_bg: transparentize(lighten($raven_bg, 33%), 0.72);
 $button_fg: $fg_color;
-$button_border: if($variant == 'default', transparentize(darken($raven_bg, 10%), 0.31), mix($panel_bg,$fg_color,50%));
+$button_border: if(
+  $variant == "default",
+  transparentize(darken($raven_bg, 10%), 0.31),
+  mix($panel_bg, $fg_color, 50%)
+);
 
 $entry_bg: $button_bg;
 $entry_fg: $button_fg;
 $entry_border: $button_border;
 
-$scrollbar_bg: if($variant == 'default', white, black);
-$scrollbar_border: if($variant == 'default', black, white);
+$scrollbar_bg: if($variant == "default", white, black);
+$scrollbar_border: if($variant == "default", black, white);
 
-$trough_bg: if($variant == 'default', opacify($button_bg, 0.14), lighten($button_border, 20%));
+$trough_bg: if(
+  $variant == "default",
+  opacify($button_bg, 0.14),
+  lighten($button_border, 20%)
+);
 
 // budgie-specific colors
 @define-color budgie_tasklist_indicator_color #{"" + $selected_bg_color};

@@ -16,14 +16,7 @@
  * a very ugly effect of icons just "popping" off.
  */
 public class ButtonWrapper : Gtk.Revealer {
-	public unowned IconButton? button;
-
-	public ButtonWrapper(IconButton? button) {
-		this.button = button;
-		this.add(button);
-		this.set_reveal_child(false);
-		this.show_all();
-	}
+	public unowned IconButton? button { get; construct; }
 
 	public Gtk.Orientation orient {
 		set {
@@ -39,6 +32,16 @@ public class ButtonWrapper : Gtk.Revealer {
 			}
 			return Gtk.Orientation.HORIZONTAL;
 		}
+	}
+
+	public ButtonWrapper(IconButton? button) {
+		Object(button: button);
+	}
+
+	construct{
+		this.add(button);
+		this.set_reveal_child(false);
+		this.show_all();
 	}
 
 	public void gracefully_die() {

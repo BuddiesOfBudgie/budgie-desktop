@@ -27,6 +27,7 @@ namespace Budgie {
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
 		public bool dbus_activatable { get; private set; default = false; }
+		public unowned string[] actions { get; private set; }
 
 		/**
 		 * Emitted when the application is launched.
@@ -60,6 +61,7 @@ namespace Budgie {
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
 			this.should_show = app_info.should_show();
 			this.dbus_activatable = app_info.get_boolean("DBusActivatable");
+			this.actions = app_info.list_actions();
 
 			// Try to get an icon from the desktop file
 			var desktop_icon = app_info.get_icon();
@@ -76,13 +78,36 @@ namespace Budgie {
 			this.switcheroo = new Switcheroo();
 		}
 
+		public AppLaunchContext create_launch_context() {
+			// Create a launch context and try to apply a GPU profile
+			var context = new AppLaunchContext();
+
+			// Hook up our signals for rebroadcast
+			context.launched.connect((info, data) => {
+				this.launched(info, data);
+			});
+			context.launch_failed.connect((startup_id) => {
+				this.launch_failed(startup_id);
+			});
+
+			// Try to apply a GPU profile if necessary for multiple GPU setups
+			switcheroo.apply_gpu_profile(context, this.prefers_default_gpu);
+
+			return context;
+		}
+
+		public bool launch() {
+			var context = create_launch_context();
+			return launch_with_context(context);
+		}
+
 		/**
 		* Launch this application.
 		*
 		* Returns `true` if the application launched successfully,
 		* otherwise `false`.
 		*/
-		public bool launch() {
+		public bool launch_with_context(AppLaunchContext context) {
 			try {
 				var info = new DesktopAppInfo(this.desktop_id);
 				/*
@@ -117,21 +142,6 @@ namespace Budgie {
 					});
 				} else {
 					// No pkexec, use the DesktopAppInfo to launch the app
-					// Create a launch context and try to apply a GPU profile
-					var context = new AppLaunchContext();
-
-					// Hook up our signals for rebroadcast
-					context.launched.connect((info, data) => {
-						this.launched(info, data);
-					});
-					context.launch_failed.connect((startup_id) => {
-						this.launch_failed(startup_id);
-					});
-
-					// Try to apply a GPU profile if necessary for multiple GPU setups
-					switcheroo.apply_gpu_profile(context, this.prefers_default_gpu);
-
-					// Launch the application
 					new DesktopAppInfo(this.desktop_id).launch(null, context);
 				}
 			} catch (Error e) {
@@ -140,6 +150,22 @@ namespace Budgie {
 			}
 
 			return true;
+		}
+
+		/**
+		* Launch this application with the given action.
+		*/
+		public void launch_action(string action) {
+			var context = create_launch_context();
+
+			launch_action_with_context(action, context);
+		}
+
+		/**
+		* Launch this application with the given action and launch context.
+		*/
+		public void launch_action_with_context(string action, AppLaunchContext context) {
+			new DesktopAppInfo(this.desktop_id).launch_action(action, context);
 		}
 	}
 }
