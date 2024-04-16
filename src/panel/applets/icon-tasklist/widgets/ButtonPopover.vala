@@ -26,14 +26,18 @@ public class ButtonPopover : Budgie.Popover {
 		get { return _pinned; }
 		construct set {
 			_pinned = value;
-
 			if (pin_button == null) return;
-
-			pin_button.image = new Gtk.Image.from_icon_name("budgie-app-" +(!_pinned ? "unfavorited" : "favorited"), Gtk.IconSize.SMALL_TOOLBAR);
 			pin_button.tooltip_text = _pinned ? _("Unfavorite") : _("Favorite");
+
+			if (value) {
+				pin_icon.get_style_context().add_class("alert");
+			} else {
+				pin_icon.get_style_context().remove_class("alert");
+			}
 		}
 	}
 
+	private Gtk.Image pin_icon;
 	private Gtk.Stack? stack;
 	private Gtk.ListBox? desktop_actions;
 	private Gtk.ListBox? windows;
@@ -86,9 +90,8 @@ public class ButtonPopover : Budgie.Popover {
 			}
 		}
 
-		Gtk.Image pinned_icon;
-
-		pinned_icon = new Gtk.Image.from_icon_name("budgie-app-" +(!_pinned ? "unfavorited" : "favorited"), Gtk.IconSize.SMALL_TOOLBAR);
+		pin_icon = new Gtk.Image.from_icon_name("budgie-emblem-favorite-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+		pin_icon.get_style_context().add_class("icon-popover-pin");
 
 		close_all_button = new Gtk.Button.from_icon_name("list-remove-all-symbolic", Gtk.IconSize.SMALL_TOOLBAR) {
 			tooltip_text = _("Close all windows"),
@@ -101,7 +104,7 @@ public class ButtonPopover : Budgie.Popover {
 
 		if (app != null) {
 			pin_button = new Gtk.Button() {
-				image = pinned_icon,
+				image = pin_icon,
 				tooltip_text = _pinned ? _("Unfavorite") : _("Favorite"),
 				relief = Gtk.ReliefStyle.NONE,
 			};

@@ -26,10 +26,12 @@ app_icons = [
 status_icons = [
     join_paths('.', 'status', 'num-lock-symbolic.svg'),
     join_paths('.', 'status', 'caps-lock-symbolic.svg'),
-    join_paths('.', 'status', 'budgie-app-favorited.svg'),
-    join_paths('.', 'status', 'budgie-app-unfavorited.svg'),
     join_paths('.', 'status', 'budgie-caffeine-cup-full.svg'),
     join_paths('.', 'status', 'budgie-caffeine-cup-empty.svg'),
+]
+
+symbolic_emblems_icons = [
+    join_paths('.', 'emblems', 'budgie-emblem-favorite-symbolic.svg'),
 ]
 
 install_data(
@@ -45,4 +47,9 @@ install_data(
 install_data(
     status_icons,
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'status'),
+)
+
+install_data(
+    symbolic_emblems_icons,
+    install_dir: join_paths(datadir, 'icons', 'hicolor', 'symbolic', 'emblems'),
 )
