@@ -1,158 +1,178 @@
 // Container for both the "panel" area and the shadow. Wise to keep
 // this transparent..
-.budgie-container { background-color: transparent; }
+.budgie-container {
+  background-color: transparent;
+}
 
 // Underscores
 %underscores {
-    @include underscores('button.flat');
+  @include underscores("button.flat");
 }
 
 // Panel
 .budgie-panel {
-    @include budgie_panel(button, separator, 'background-color');
+  @include budgie_panel(button, separator, "background-color");
 }
 
 // Panel Borders
 @include borders($pos_list);
 
 // Workspace Switcher
-@include workspaces(frame,button);
+@include workspaces(frame, button);
 
 // Budgie Menu
 .budgie-menu {
-    @include budgie-menu('icon-effect', 'entry.search', 'image', 'disabled',
-                         'label', 'undershoot', 'overshoot');
+  @include budgie-menu(
+    "icon-effect",
+    "entry.search",
+    "image",
+    "disabled",
+    "label",
+    "undershoot",
+    "overshoot"
+  );
 }
 
 // Menu Button
-@include budgie_menu_button('button');
+@include budgie_menu_button("button");
 
 // User Menu
-@include budgie_user_menu(separator, 'background-color');
+@include budgie_user_menu(separator, "background-color");
 
 // Places Menu
 @include places_menu(button, list, row, entry);
 
-
 // Budgie styled Gtk Menus
 .budgie-menubar {
-    @include budgie_menubar(menu, arrow, menuitem, accelerator);
-    arrow {
-        min-width:16px;
-        min-height:16px;
-    }
+  @include budgie_menubar(menu, arrow, menuitem, accelerator);
+  arrow {
+    min-width: 16px;
+    min-height: 16px;
+  }
 
-    menuitem {
-        check, radio {
-            min-height: 16px;
-            min-width: 16px;
-        }
+  menuitem {
+    check,
+    radio {
+      min-height: 16px;
+      min-width: 16px;
     }
+  }
+}
+
+// Icon Popover
+.icon-popover {
+  .icon-popover-pin.alert {
+    color: $alert_color;
+  }
 }
 
 // Session Dialog
 .budgie-session-dialog {
-    @extend %widgets;
-    @include budgie_session_dialog(button);
+  @extend %widgets;
+  @include budgie_session_dialog(button);
 }
 
 // Power Dialog
 .budgie-power-dialog {
-    @extend %widgets;
-    @include budgie_power_dialog();
+  @extend %widgets;
+  @include budgie_power_dialog();
 }
 
 // Run Dialog
 .budgie-run-dialog {
-    @extend .budgie-session-dialog;
+  @extend .budgie-session-dialog;
 
-    > box {
-        border-radius: 8px;
-        background-color: lighten($panel_bg, 10%);
+  > box {
+    border-radius: 8px;
+    background-color: lighten($panel_bg, 10%);
+  }
+
+  entry.search,
+  entry.search:focus {
+    @extend %budgie_run_dialog_entry;
+
+    background-color: transparent;
+
+    image {
+      @extend %budgie_run_dialog_image;
     }
+  }
 
-    entry.search, entry.search:focus {
-        @extend %budgie_run_dialog_entry;
+  list row.activatable {
+    @extend %reset_style;
 
-        background-color: transparent;
+    background-color: transparent;
+    transition: background-color 170ms ease-out;
 
-        image {
-            @extend %budgie_run_dialog_image;
-        }
-    }
+    &:selected {
+      background-color: $selected_bg_color;
 
-    list row.activatable {
-        @extend %reset_style;
-
-        background-color: transparent;
-        transition: background-color 170ms ease-out;
-
-        &:selected {
-            background-color: $selected_bg_color;
-
-            .dim-label {
-                opacity: 1;
-            }
-        }
-
-        &:hover { background-color: transparentize(white, 0.9); }
-
-        &:hover .dim-label, &:active .dim-label {
-            opacity: 1;
-        }
-    }
-
-    list row:selected .dim-label {
+      .dim-label {
         opacity: 1;
+      }
     }
 
-    scrolledwindow {
-        background-color: $panel_bg;
-        border-top: 1px solid darken($entry_border, 5%);
+    &:hover {
+      background-color: transparentize(white, 0.9);
     }
+
+    &:hover .dim-label,
+    &:active .dim-label {
+      opacity: 1;
+    }
+  }
+
+  list row:selected .dim-label {
+    opacity: 1;
+  }
+
+  scrolledwindow {
+    background-color: $panel_bg;
+    border-top: 1px solid darken($entry_border, 5%);
+  }
 }
 
 // Alt+tab switcher in Budgie
 .budgie-switcher-window {
-    @extend .budgie-notification-window;
+  @extend .budgie-notification-window;
 
-    > decoration {
-        box-shadow: 0 2px 4px $panel_bg;
-        border-radius: 8px;
-    }
+  > decoration {
+    box-shadow: 0 2px 4px $panel_bg;
+    border-radius: 8px;
+  }
 
-    > box {
-        padding: 6px;
-        border-radius: 8px;
-    }
+  > box {
+    padding: 6px;
+    border-radius: 8px;
+  }
 
-    // Flowbox
-    flowbox {
-        color: $fg_color;
-        padding: 4px;
-    }
-    flowboxchild {
-        @include budgie_switcher_child(disabled, label);
-    }
+  // Flowbox
+  flowbox {
+    color: $fg_color;
+    padding: 4px;
+  }
+  flowboxchild {
+    @include budgie_switcher_child(disabled, label);
+  }
 }
 
 // Icon Tasklist
 .budgie-panel {
-    @include icon_tasklist('button.flat');
+  @include icon_tasklist("button.flat");
 
-    button.flat.launcher {
-        @extend %reset_style;
-        outline-color: transparent;
-        border-radius: 0;
-    }
+  button.flat.launcher {
+    @extend %reset_style;
+    outline-color: transparent;
+    border-radius: 0;
+  }
 }
 
 // Raven
 .raven {
-    @include raven(button);
-    .raven-header {
-        min-height: 32px;
-    }
+  @include raven(button);
+  .raven-header {
+    min-height: 32px;
+  }
 }
 @include raven-trigger(button);
 @include raven-mpris(button);
