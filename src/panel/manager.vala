@@ -1016,18 +1016,12 @@ namespace Budgie {
 					if (left != null) {
 						raven_screen.x += left.intended_size;
 					}
-					if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-						GtkLayerShell.set_anchor(raven, GtkLayerShell.Edge.LEFT, true);
-					}
 					break;
 				case RavenPosition.RIGHT:
 					/* Stick/maybe hug right */
 					raven.screen_edge = Gtk.PositionType.RIGHT;
 					if (right != null) {
 						raven_screen.width -= (right.intended_size);
-					}
-					if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-						GtkLayerShell.set_anchor(raven, GtkLayerShell.Edge.RIGHT, true);
 					}
 					break;
 				case RavenPosition.AUTOMATIC:

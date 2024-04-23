@@ -13,6 +13,20 @@ namespace Budgie {
 	public const string RAVEN_DBUS_NAME = "org.budgie_desktop.Raven";
 	public const string RAVEN_DBUS_OBJECT_PATH = "/org/budgie_desktop/Raven";
 
+	public GtkLayerShell.Edge gtk_position_to_layer_shell_edge(Gtk.PositionType position) {
+		switch (position) {
+			case Gtk.PositionType.TOP:
+				return GtkLayerShell.Edge.TOP;
+			case Gtk.PositionType.BOTTOM:
+				return GtkLayerShell.Edge.BOTTOM;
+			case Gtk.PositionType.LEFT:
+				return GtkLayerShell.Edge.LEFT;
+			case Gtk.PositionType.RIGHT:
+				return GtkLayerShell.Edge.RIGHT;
+		}
+		return GtkLayerShell.Edge.BOTTOM;
+	}
+
 	/**
 	 * Possible positions for Raven to be in.
 	 *
@@ -183,6 +197,14 @@ namespace Budgie {
 					this.get_style_context().remove_class(Budgie.position_class_name(PanelPosition.RIGHT));
 					this.shadow.position = Budgie.PanelPosition.LEFT;
 				}
+
+				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+					GtkLayerShell.set_anchor(
+						this,
+						Budgie.gtk_position_to_layer_shell_edge(value),
+						true
+					);
+				}
 			}
 			public get {
 				return this._screen_edge;
@@ -294,6 +316,11 @@ namespace Budgie {
 
 		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				GtkLayerShell.init_for_window(this);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			}
+
 			get_style_context().add_class("budgie-container");
 
 			settings = new Settings("com.solus-project.budgie-raven");
@@ -358,11 +385,6 @@ namespace Budgie {
 			set_size_request(-1, -1);
 			if (!this.get_realized()) {
 				this.realize();
-			}
-
-			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
 			}
 
 			this.get_child().show_all();

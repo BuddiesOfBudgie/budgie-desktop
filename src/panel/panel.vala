@@ -49,6 +49,20 @@ namespace Budgie {
 		HIDE
 	}
 
+	public GtkLayerShell.Edge panel_position_to_layer_shell_edge(Budgie.PanelPosition position) {
+		switch (position) {
+			case PanelPosition.TOP:
+				return GtkLayerShell.Edge.TOP;
+			case PanelPosition.BOTTOM:
+				return GtkLayerShell.Edge.BOTTOM;
+			case PanelPosition.LEFT:
+				return GtkLayerShell.Edge.LEFT;
+			case PanelPosition.RIGHT:
+				return GtkLayerShell.Edge.RIGHT;
+		}
+		return GtkLayerShell.Edge.BOTTOM;
+	}
+
 	/**
 	* The toplevel window for a panel
 	*/
@@ -159,6 +173,13 @@ namespace Budgie {
 			// Check if the position has been altered and notify our applets
 			if (position != this.position) {
 				this.position = position;
+				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+					GtkLayerShell.set_anchor(
+						this,
+						Budgie.panel_position_to_layer_shell_edge(position),
+						true
+					);
+				}
 				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 				this.update_positions();
 			}

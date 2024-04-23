@@ -92,6 +92,7 @@ libpanelplugin_vapi = gnome.generate_vapi(
         'gtk+-3.0',
         'gio-unix-2.0',
         'libpeas-1.0',
+        'gtk-layer-shell-0',
     ],
     install: true,
 )
