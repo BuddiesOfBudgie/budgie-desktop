@@ -105,7 +105,10 @@ namespace Budgie.Windowing {
 			}
 
 			if (last_active_window == window) {
-				last_active_window = null;
+				// Set the last window before this one as the last active window.
+				// We do this so there should always be a valid window to focus
+				// when tasklist buttons are clicked.
+				last_active_window = get_next_window(window, true);
 			}
 
 			window_removed(window);
