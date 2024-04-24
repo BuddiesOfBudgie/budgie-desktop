@@ -135,6 +135,10 @@ namespace Budgie.Windowing {
 		 * the app name when WM_CLASS isn't set (e.g. LibreOffice, Google Chrome, Android Studio emulator, maybe others)
 		 */
 		private string get_group_name(libxfce4windowing.Window window) {
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				return window.get_class_ids()[0] ?? window.get_name();
+			}
+
 			// Get the Wnck window from the libx4w window
 			unowned var wnck_window = Wnck.Window.@get((ulong) window.x11_get_xid());
 

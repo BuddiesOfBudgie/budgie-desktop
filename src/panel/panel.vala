@@ -53,12 +53,13 @@ namespace Budgie {
 		switch (position) {
 			case PanelPosition.TOP:
 				return GtkLayerShell.Edge.TOP;
-			case PanelPosition.BOTTOM:
-				return GtkLayerShell.Edge.BOTTOM;
 			case PanelPosition.LEFT:
 				return GtkLayerShell.Edge.LEFT;
 			case PanelPosition.RIGHT:
 				return GtkLayerShell.Edge.RIGHT;
+			case PanelPosition.BOTTOM:
+			case PanelPosition.NONE: // Note: NONE will never actually be hit because of checks where we are calling this function
+				return GtkLayerShell.Edge.BOTTOM;
 		}
 		return GtkLayerShell.Edge.BOTTOM;
 	}
@@ -174,11 +175,13 @@ namespace Budgie {
 			if (position != this.position) {
 				this.position = position;
 				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-					GtkLayerShell.set_anchor(
-						this,
-						Budgie.panel_position_to_layer_shell_edge(position),
-						true
-					);
+					if (position != PanelPosition.NONE) {
+						GtkLayerShell.set_anchor(
+							this,
+							Budgie.panel_position_to_layer_shell_edge(position),
+							true
+						);
+					}
 				}
 				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 				this.update_positions();

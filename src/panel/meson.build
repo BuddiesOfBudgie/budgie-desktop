@@ -49,7 +49,6 @@ panel_deps = [
     dep_gtk_layer_shell,
     dep_peas,
     dep_libuuid,
-    dep_wnck,
     dep_xfce4windowing,
     link_libconfig,
     link_libsession,
@@ -59,6 +58,7 @@ panel_deps = [
     link_libravenplugin,
     libravenplugin_vapi,
     link_libraven,
+    link_libwindowing,
     gvc.get_variable('libgvc_dep'),
 ]
 

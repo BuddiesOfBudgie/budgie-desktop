@@ -21,11 +21,12 @@ namespace Budgie.Windowing {
 	 * of the Budgie windowing library.
 	 */
 	public class Windowing : GLib.Object {
-		private libxfce4windowing.Screen screen;
-		private WorkspaceManager workspace_manager;
-		private HashTable<libxfce4windowing.Application, WindowGroup> applications;
-		private List<Window> fullscreen_windows;
-		private libxfce4windowing.Window? last_active_window;
+		public libxfce4windowing.Screen screen { public get; private set; }
+		public WorkspaceManager workspace_manager { public get; private set; }
+		public HashTable<libxfce4windowing.Application, WindowGroup> applications { public get; private set; }
+		public unowned List<Window> all_windows { public get; private set; }
+		public unowned List<Window> fullscreen_windows { public get; private set; }
+		public libxfce4windowing.Window? last_active_window { public get; private set; }
 
 		private Budgie.Windowing.WindowMapper window_mapper;
 		private Budgie.Windowing.NotificationDispatcher dispatcher;
@@ -37,6 +38,7 @@ namespace Budgie.Windowing {
 		private bool pause_night_light;
 		private bool pause_notifications;
 		private bool previous_color_setting;
+
 
 		/**
 		 * Emitted when the currently active window has changed.
@@ -181,6 +183,7 @@ namespace Budgie.Windowing {
 
 		private void window_added(Window window) {
 			if (window.is_skip_tasklist()) return;
+			all_windows.append(window);
 
 			var application = window.get_application();
 
@@ -206,6 +209,7 @@ namespace Budgie.Windowing {
 
 		private void window_removed(Window window) {
 			if (window.is_skip_tasklist()) return;
+			all_windows.remove(window);
 
 			var application = window.get_application();
 
