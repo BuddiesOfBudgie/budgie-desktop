@@ -150,6 +150,10 @@ namespace Budgie {
 			);
 		}
 
+		public void set_focus_quit(bool should_quit) {
+			this.focus_quit = should_quit;
+		}
+
 		/**
 		 * Create our launcher buttons from the Budgie AppIndexer.
 		 */
@@ -425,15 +429,41 @@ namespace Budgie {
 	* GtkApplication for single instance wonderness
 	*/
 	public class RunDialogApp : Gtk.Application {
+		private const OptionEntry[] OPTIONS = {
+			{ "focus-keep", 'f', 0, OptionArg.NONE, out focus_keep, "Do not quit when out of focus", null },
+			{ null },
+		};
+
+		private static bool focus_keep = false;
+
 		private RunDialog? rd = null;
 
 		public RunDialogApp() {
-			Object(application_id: "org.budgie_desktop.BudgieRunDialog", flags: 0);
+			Object(application_id: "org.budgie_desktop.BudgieRunDialog", flags: ApplicationFlags.HANDLES_COMMAND_LINE);
+		}
+
+		public override int command_line(GLib.ApplicationCommandLine cli) {
+			var args = cli.get_arguments();
+			var context = new OptionContext(null);
+			context.add_main_entries(OPTIONS, null);
+
+			// Try to parse the command args
+			try {
+				context.parse_strv(ref args);
+			} catch (Error e) {
+				warning("Unable to parse command args: %s", e.message);
+				return 1;
+			}
+
+			activate();
+
+			return 0;
 		}
 
 		public override void activate() {
 			if (rd == null) {
 				rd = new RunDialog(this);
+				rd.set_focus_quit(!focus_keep);
 			}
 			rd.show();
 		}
