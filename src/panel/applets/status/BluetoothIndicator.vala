@@ -18,7 +18,7 @@ using Gtk;
 public class BluetoothIndicator : Bin {
 	public Image? image = null;
 	public EventBox? ebox = null;
-	public Budgie.Popover? popover = null;
+	public Budgie.PopoverRedux? popover = null;
 
 	private ListBox? devices_box = null;
 	private Switch? bluetooth_switch = null;
@@ -83,7 +83,7 @@ public class BluetoothIndicator : Bin {
 		});
 
 		// Create our popover
-		popover = new Budgie.Popover(ebox);
+		popover = new Budgie.PopoverRedux(ebox);
 		popover.set_size_request(275, -1);
 		popover.get_style_context().add_class("bluetooth-popover");
 		var box = new Box(VERTICAL, 0);

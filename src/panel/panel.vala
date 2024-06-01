@@ -328,7 +328,8 @@ namespace Budgie {
 
 			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.BOTTOM);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 			}
 
 			popover_manager = new PopoverManager();
@@ -1105,6 +1106,8 @@ namespace Budgie {
 			} else {
 				Budgie.set_struts(this, position, intended_size);
 			}
+
+			GtkLayerShell.set_exclusive_zone(this, intended_size);
 		}
 
 		void placement() {

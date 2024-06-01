@@ -119,7 +119,7 @@ pkgconfig.generate(
     version: '2',
     filebase: 'budgie-theme-1.0',
     libraries: ['-L${libdir}', '-lbudgietheme'],
-    requires: ['gtk+-3.0 >= 3.22.0'],
+    requires: ['gtk+-3.0 >= 3.24.0'],
 )
 
 link_libtheme = declare_dependency(

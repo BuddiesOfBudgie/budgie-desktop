@@ -414,7 +414,7 @@ const gchar* budgie_applet_get_settings_schema(BudgieApplet* self) {
  * GtkPopover widgets, each one must be registered with the @manager.
  *
  * During this call, it is safe to store a reference to the @manager. In
- * this call you should invoke #BudgiePopoverManager::register_popover to
+ * this call you should invoke #BudgiePopoverManager::register_popover_v2 to
  * register your popover with the panel manager.
  *
  * Each registered popover joins the global menu system of popovers in the

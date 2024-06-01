@@ -10,7 +10,7 @@
  */
 
 namespace Caffeine {
-	public class CaffeineWindow : Budgie.Popover {
+	public class CaffeineWindow : Budgie.PopoverRedux {
 		private Gtk.Switch? mode = null;
 		private Gtk.SpinButton? timer = null;
 		private ulong mode_id;

@@ -1,0 +1,11 @@
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - ninja -j0 -C build
+
+  install:
+    cmds:
+      - task: build
+      - sudo ninja -C build install

@@ -25,7 +25,7 @@ public class SoundIndicator : Gtk.Bin {
 	public Gtk.EventBox? ebox;
 
 	/** GtkPopover in which to show a volume control */
-	public Budgie.Popover popover;
+	public Budgie.PopoverRedux popover;
 
 	private Gtk.ButtonBox buttons;
 	private Gtk.Button settings_button;
@@ -84,7 +84,7 @@ public class SoundIndicator : Gtk.Bin {
 	 * scale
 	 */
 	private void create_sound_popover() {
-		popover = new Budgie.Popover(ebox);
+		popover = new Budgie.PopoverRedux(ebox);
 
 		Gtk.Box? main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		main_box.border_width = 6;

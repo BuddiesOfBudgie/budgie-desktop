@@ -23,7 +23,7 @@ public class StatusSettings : Gtk.Grid {
 
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
-	
+
 	[GtkChild]
 	private unowned Gtk.Switch? switch_show_battery_percentage;
 
@@ -53,7 +53,7 @@ public class StatusApplet : Budgie.Applet {
 	/**
 	 * Set up an EventBox for popovers
 	 */
-	private void setup_popover(Gtk.Widget? parent_widget, Budgie.Popover? popover) {
+	private void setup_popover(Gtk.Widget? parent_widget, Budgie.PopoverRedux? popover) {
 		parent_widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
@@ -87,14 +87,14 @@ public class StatusApplet : Budgie.Applet {
 		show_all();
 
 		power = new PowerIndicator();
-		
+
 		gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
-		
+
 		power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
 		gnome_settings.changed["show-battery-percentage"].connect((key) => {
 			power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
 		});
-		
+
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 
@@ -125,10 +125,10 @@ public class StatusApplet : Budgie.Applet {
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover(power.ebox, power.popover);
-		manager.register_popover(sound.ebox, sound.popover);
+		manager.register_popover_v2(power.ebox, power.popover);
+		manager.register_popover_v2(sound.ebox, sound.popover);
 #if WITH_BLUETOOTH
-		manager.register_popover(blue.ebox, blue.popover);
+		manager.register_popover_v2(blue.ebox, blue.popover);
 #endif
 	}
 

@@ -30,7 +30,7 @@ public class ClockApplet : Budgie.Applet {
 	protected Settings settings;
 	protected Settings gnome_settings;
 
-	Budgie.Popover? popover = null;
+	Budgie.PopoverRedux? popover = null;
 
 	Gtk.Orientation orient = Gtk.Orientation.HORIZONTAL;
 
@@ -107,7 +107,7 @@ public class ClockApplet : Budgie.Applet {
 		get_style_context().add_class("budgie-clock-applet");
 
 		// Create a submenu system
-		popover = new Budgie.Popover(widget);
+		popover = new Budgie.PopoverRedux(widget);
 
 		var container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		container.get_style_context().add_class("clock-applet-stack");
@@ -182,7 +182,7 @@ public class ClockApplet : Budgie.Applet {
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover(widget, popover);
+		manager.register_popover_v2(widget, popover);
 	}
 
 	private void update_setting(string schema, string key) {

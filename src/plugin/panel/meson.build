@@ -7,7 +7,7 @@ panel_plugin_enums = gnome.mkenums(
     'budgie-enums',
     sources: [
         'applet.h',
-        'popover.h',
+        'popover-redux.h',
     ],
     c_template: 'budgie-enums.c.template',
     h_template: 'budgie-enums.h.template',
@@ -32,7 +32,7 @@ panel_plugin_headers = [
 	'plugin.h',
 	'applet.h',
 	'applet-info.h',
-    'popover.h',
+    'popover-redux.h',
 	'popover-manager.h',
 ]
 
@@ -40,12 +40,13 @@ panel_plugin_sources = [
     'applet.c',
     'applet-info.c',
     'plugin.c',
-    'popover.c',
+    'popover-redux.c',
     'popover-manager.c',
 ]
 
 panel_plugin_deps = [
     dep_gtk3,
+    dep_gtk_layer_shell,
     dep_peas,
 ]
 
@@ -78,11 +79,11 @@ libpanelplugin_gir = gnome.generate_gir(
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
+    header: 'plugin.h',
     install: true,
     extra_args: [
-        '--warn-all',
-        '--c-include', 'plugin.h',
-    ],
+        '--c-include=plugin.h',
+    ]
 )
 
 libpanelplugin_vapi = gnome.generate_vapi(
@@ -106,7 +107,7 @@ pkgconfig.generate(
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
-        'gtk+-3.0 >= 3.22.0',
+        'gtk+-3.0 >= 3.24.0',
         'libpeas-1.0 >= 1.8.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',

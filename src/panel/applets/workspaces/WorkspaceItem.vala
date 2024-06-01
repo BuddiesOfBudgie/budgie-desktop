@@ -16,7 +16,7 @@ namespace Workspaces {
 
 	public class WorkspaceItem : Gtk.EventBox {
 		private libxfce4windowing.Workspace workspace;
-		private Budgie.Popover popover;
+		private Budgie.PopoverRedux popover;
 		private Gtk.Stack popover_stack;
 		private Gtk.FlowBox rest_of_the_icons;
 		public signal void remove_workspace(uint index, uint32 time);
@@ -42,7 +42,7 @@ namespace Workspaces {
 			icon_grid.set_border_width(2);
 			this.add(icon_grid);
 
-			popover = new Budgie.Popover(this);
+			popover = new Budgie.PopoverRedux(this);
 			popover.get_style_context().add_class("workspace-popover");
 			popover.set_size_request(150, -1);
 
@@ -239,7 +239,7 @@ namespace Workspaces {
 					ebox.button_press_event.connect(() => {
 						popover_stack.set_visible_child(rest_of_the_icons);
 						WorkspacesApplet.dragging = true;
-						WorkspacesApplet.manager.register_popover(this, popover);
+						WorkspacesApplet.manager.register_popover_v2(this, popover);
 						WorkspacesApplet.manager.show_popover(this);
 						return true;
 					});
@@ -291,7 +291,7 @@ namespace Workspaces {
 					warning("Failed to activate workspace: %s", e.message);
 				}
 			} else if (event.button == 3) {
-				WorkspacesApplet.manager.register_popover(this, popover);
+				WorkspacesApplet.manager.register_popover_v2(this, popover);
 				WorkspacesApplet.manager.show_popover(this);
 			} else {
 				return Gdk.EVENT_PROPAGATE;

@@ -123,7 +123,7 @@ public class PlacesIndicatorApplet : Budgie.Applet {
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover(ebox, popover);
+		manager.register_popover_v2(ebox, popover);
 	}
 
 	protected void on_settings_changed(string key) {

@@ -16,7 +16,7 @@ public const string G_SESSION = "org.gnome.SessionManager";
 
 public const string UNABLE_CONTACT = "Unable to contact ";
 
-public class UserIndicatorWindow : Budgie.Popover {
+public class UserIndicatorWindow : Budgie.PopoverRedux {
 	public Gtk.Box? menu = null;
 	public Gtk.Revealer? user_section = null;
 
