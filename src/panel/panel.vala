@@ -171,6 +171,13 @@ namespace Budgie {
 			this.intended_size = size;
 			this.get_style_context().add_class(Budgie.position_class_name(position));
 
+			var default_display = Gdk.Display.get_default();
+			if (default_display != null) {
+				var monitor = default_display.get_primary_monitor() ?? default_display.get_monitor(0);
+				warning("have monitor? %b\n", monitor != null);
+				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
+			}
+
 			// Check if the position has been altered and notify our applets
 			if (position != this.position) {
 				this.position = position;
