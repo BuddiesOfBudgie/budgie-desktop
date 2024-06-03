@@ -109,7 +109,7 @@ public class UserIndicatorWindow : Budgie.Popover {
 		lock_menu = new IndicatorItem(_("Lock"), "system-lock-screen-symbolic", false);
 		suspend_menu = new IndicatorItem(_("Suspend"), "system-suspend-symbolic", false);
 		hibernate_menu = new IndicatorItem(_("Hibernate"), "system-hibernate-symbolic", false);
-		reboot_menu = new IndicatorItem(_("Restart"), "system-restart-symbolic", false);
+		reboot_menu = new IndicatorItem(_("Restart"), "system-reboot-symbolic", false);
 		shutdown_menu = new IndicatorItem(_("Shutdown"), "system-shutdown-symbolic", false);
 
 		// Adding stuff

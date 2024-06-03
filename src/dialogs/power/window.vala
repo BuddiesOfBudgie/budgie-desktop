@@ -98,7 +98,7 @@ namespace Budgie {
 			hibernate_button.clicked.connect(hibernate);
 #endif
 
-			reboot_button = new DialogButton(_("_Reboot"), "system-restart-symbolic");
+			reboot_button = new DialogButton(_("_Reboot"), "system-reboot-symbolic");
 			reboot_button.clicked.connect(reboot);
 
 			shutdown_button = new DialogButton(_("Shut_down"), "system-shutdown-symbolic");

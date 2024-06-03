@@ -5,7 +5,7 @@ actions_icons = [
     join_paths('.', 'actions', 'pane-hide-symbolic.svg'),
     join_paths('.', 'actions', 'pane-show-symbolic.svg'),
     join_paths('.', 'actions', 'system-log-out-symbolic.svg'),
-    join_paths('.', 'actions', 'system-restart-symbolic.svg'),
+    join_paths('.', 'actions', 'system-reboot-symbolic.svg'),
     join_paths('.', 'actions', 'system-suspend-symbolic.svg'),
     join_paths('.', 'actions', 'system-hibernate-symbolic.svg'),
 ]
