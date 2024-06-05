@@ -199,6 +199,7 @@ namespace Budgie {
 				}
 
 				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+					// TODO: Raven on left ends up taking up the whole screen, unlike right, so we need to fix this
 					GtkLayerShell.set_anchor(
 						this,
 						Budgie.gtk_position_to_layer_shell_edge(value),
@@ -213,8 +214,6 @@ namespace Budgie {
 
 		int our_width = 0;
 		int our_height = 0;
-		int our_x = 0;
-		int our_y = 0;
 
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
@@ -372,6 +371,8 @@ namespace Budgie {
 			main_view = new Budgie.MainView();
 			main_box.pack_start(main_view, true, true, 0);
 
+			set_default_size(400, -1);
+
 			main_view.requested_draw.connect(() => {
 				queue_draw();
 			});
@@ -382,14 +383,14 @@ namespace Budgie {
 			set_keep_above(true);
 			set_decorated(false);
 
-			set_size_request(-1, -1);
+			//set_size_request(-1, -1);
 			if (!this.get_realized()) {
 				this.realize();
 			}
 
 			this.get_child().show_all();
 
-			this.screen_edge = Gtk.PositionType.LEFT;
+			this.screen_edge = Gtk.PositionType.RIGHT;
 		}
 
 		public override void size_allocate(Gtk.Allocation rect) {
@@ -412,25 +413,13 @@ namespace Budgie {
 		* need to be on */
 		public void update_geometry(Gdk.Rectangle rect) {
 			int width = layout.get_allocated_width();
-			int x;
 
-			if (this.screen_edge == Gtk.PositionType.RIGHT) {
-				x = (rect.x+rect.width)-width;
-			} else {
-				x = rect.x;
-			}
-
-			int y = rect.y;
 			int height = rect.height;
 
 			this.old_rect = rect;
 
-			move(x, y);
-
 			our_height = height;
 			our_width = width;
-			our_x = x;
-			our_y = y;
 
 			if (!get_visible()) {
 				queue_resize();
@@ -491,23 +480,20 @@ namespace Budgie {
 		* Slide Raven in or out of view
 		*/
 		public void set_expanded(bool exp) {
+
 			if (exp == this.expanded) {
 				return;
 			}
-			double old_op, new_op;
+			double old_nscale_op, new_nscale_op;
 			if (exp) {
 				this.update_geometry(this.old_rect);
-				old_op = 0.0;
-				new_op = 1.0;
+				old_nscale_op = 0.0;
+				new_nscale_op = 1.0;
 			} else {
-				old_op = 1.0;
-				new_op = 0.0;
+				old_nscale_op = 1.0;
+				new_nscale_op = 0.0;
 			}
-			nscale = old_op;
-
-			if (exp) {
-				show();
-			}
+			nscale = old_nscale_op;
 
 			this.expanded = exp;
 			main_view.raven_expanded(this.expanded);
@@ -538,18 +524,31 @@ namespace Budgie {
 			anim.changes = new Budgie.PropChange[] {
 				Budgie.PropChange() {
 					property = "nscale",
-					old = old_op,
-					@new = new_op
-				}
+					old = old_nscale_op,
+					@new = new_nscale_op
+				},
 			};
+
+			if (!exp) { // Going to be hiding Raven
+				shadow.set_opacity(0.0); // Hide the shadow since it gets glitchy
+				shadow.hide();
+			} else {
+				shadow.show();
+			}
 
 			anim.start((a) => {
 				Budgie.Raven? r = a.widget as Budgie.Raven;
 				Gtk.Window? w = a.widget as Gtk.Window;
 
 				if (r != null && r.nscale == 0.0) {
-					r.hide();
+					set_opacity(0.0); // Mask scaling weirdness
+					Timeout.add(100, () => {
+						r.hide();
+						return false;
+					}); // Defer until opacity set otherwise it glitches
 				} else if (w != null) {
+					shadow.set_opacity(1.0);
+					set_opacity(1.0);
 					w.present();
 					w.grab_focus();
 					this.steal_focus();
