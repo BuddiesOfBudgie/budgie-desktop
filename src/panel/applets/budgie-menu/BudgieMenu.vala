@@ -275,7 +275,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover_v2(widget, popover);
+		manager.register_popover(widget, popover);
 	}
 }
 

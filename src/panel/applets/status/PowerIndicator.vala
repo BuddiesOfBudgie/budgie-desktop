@@ -246,7 +246,7 @@ public class PowerProfilesSelector : Gtk.Box {
 public class PowerIndicator : Gtk.Bin {
 	/** Widget containing battery icons to display */
 	public Gtk.EventBox? ebox = null;
-	public Budgie.PopoverRedux? popover = null;
+	public Budgie.Popover? popover = null;
 	private Gtk.Box widget = null;
 	private Gtk.Box box = null;
 
@@ -268,7 +268,7 @@ public class PowerIndicator : Gtk.Bin {
 		widget = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
 		ebox.add(widget);
 
-		popover = new Budgie.PopoverRedux(ebox);
+		popover = new Budgie.Popover(ebox);
 		box = new Gtk.Box(Gtk.Orientation.VERTICAL, 1);
 		box.border_width = 6;
 		popover.add(box);

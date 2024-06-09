@@ -72,7 +72,7 @@ static void trash_applet_constructed(GObject* object) {
 	self->settings = budgie_applet_get_applet_settings(BUDGIE_APPLET(self), self->priv->uuid);
 
 	// Create our popover widget
-	self->priv->popover = (GtkWidget*)budgie_popover_redux_new(GTK_WIDGET(self->priv->icon_button));
+	self->priv->popover = (GtkWidget*)budgie_popover_new(GTK_WIDGET(self->priv->icon_button));
 	popover_body = trash_popover_new(self->settings);
 	gtk_container_add(GTK_CONTAINER(self->priv->popover), GTK_WIDGET(popover_body));
 
@@ -147,7 +147,7 @@ static gboolean trash_applet_supports_settings(BudgieApplet* base) {
  */
 static void update_popovers(BudgieApplet* base, BudgiePopoverManager* manager) {
 	TrashApplet* self = TRASH_APPLET(base);
-	budgie_popover_manager_register_popover_v2(manager,
+	budgie_popover_manager_register_popover(manager,
 		GTK_WIDGET(self->priv->icon_button),
 		self->priv->popover);
 	self->priv->manager = manager;

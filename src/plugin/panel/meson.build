@@ -7,7 +7,7 @@ panel_plugin_enums = gnome.mkenums(
     'budgie-enums',
     sources: [
         'applet.h',
-        'popover-redux.h',
+        'popover.h',
     ],
     c_template: 'budgie-enums.c.template',
     h_template: 'budgie-enums.h.template',
@@ -32,7 +32,7 @@ panel_plugin_headers = [
 	'plugin.h',
 	'applet.h',
 	'applet-info.h',
-    'popover-redux.h',
+    'popover.h',
 	'popover-manager.h',
 ]
 
@@ -40,7 +40,7 @@ panel_plugin_sources = [
     'applet.c',
     'applet-info.c',
     'plugin.c',
-    'popover-redux.c',
+    'popover.c',
     'popover-manager.c',
 ]
 

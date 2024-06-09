@@ -20,7 +20,7 @@ namespace Caffeine {
 		private Gtk.EventBox event_box;
 		private Gtk.Image? applet_icon;
 
-		private Budgie.PopoverRedux? popover = null;
+		private Budgie.Popover? popover = null;
 		private unowned Budgie.PopoverManager? manager = null;
 
 		private Settings? interface_settings;
@@ -116,7 +116,7 @@ namespace Caffeine {
 		}
 
 		public override void update_popovers(Budgie.PopoverManager? manager) {
-			manager.register_popover_v2(event_box, popover);
+			manager.register_popover(event_box, popover);
 			this.manager = manager;
 		}
 

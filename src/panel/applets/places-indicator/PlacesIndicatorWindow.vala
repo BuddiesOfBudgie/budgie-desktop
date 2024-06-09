@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class PlacesIndicatorWindow : Budgie.PopoverRedux {
+public class PlacesIndicatorWindow : Budgie.Popover {
 	private VolumeMonitor volume_monitor;
 
 	private MessageRevealer message_bar;

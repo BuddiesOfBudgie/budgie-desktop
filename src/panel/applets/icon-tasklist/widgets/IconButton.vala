@@ -92,7 +92,7 @@ public class IconButton : Gtk.ToggleButton {
 			if (window != null) set_tooltip_text(window.get_name());
 		}
 
-		popover_manager.register_popover_v2(this, popover);
+		popover_manager.register_popover(this, popover);
 
 		add(icon);
 

@@ -52,7 +52,7 @@ namespace NightLight {
 		}
 
 		public override void update_popovers(Budgie.PopoverManager? manager) {
-			manager.register_popover_v2(event_box, popover);
+			manager.register_popover(event_box, popover);
 			this.manager = manager;
 		}
 	}

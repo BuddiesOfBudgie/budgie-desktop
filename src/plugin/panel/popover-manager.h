@@ -40,7 +40,7 @@ BudgiePopoverManager* budgie_popover_manager_new(void);
 
 GType budgie_popover_manager_get_type(void);
 
-void budgie_popover_manager_register_popover_v2(BudgiePopoverManager* manager, GtkWidget* parent_widget, GtkPopover* popover);
+void budgie_popover_manager_register_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget, GtkPopover* popover);
 void budgie_popover_manager_unregister_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
 void budgie_popover_manager_show_popover(BudgiePopoverManager* manager, GtkWidget* parent_widget);
 

@@ -15,7 +15,7 @@
 #include <applet.h>
 #include <budgie-enums.h>
 #include <popover-manager.h>
-#include <popover-redux.h>
+#include <popover.h>
 
 G_BEGIN_DECLS
 

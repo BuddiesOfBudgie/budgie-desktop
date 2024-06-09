@@ -53,7 +53,7 @@ public class StatusApplet : Budgie.Applet {
 	/**
 	 * Set up an EventBox for popovers
 	 */
-	private void setup_popover(Gtk.Widget? parent_widget, Budgie.PopoverRedux? popover) {
+	private void setup_popover(Gtk.Widget? parent_widget, Budgie.Popover? popover) {
 		parent_widget.button_press_event.connect((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;
@@ -125,10 +125,10 @@ public class StatusApplet : Budgie.Applet {
 
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover_v2(power.ebox, power.popover);
-		manager.register_popover_v2(sound.ebox, sound.popover);
+		manager.register_popover(power.ebox, power.popover);
+		manager.register_popover(sound.ebox, sound.popover);
 #if WITH_BLUETOOTH
-		manager.register_popover_v2(blue.ebox, blue.popover);
+		manager.register_popover(blue.ebox, blue.popover);
 #endif
 	}
 
