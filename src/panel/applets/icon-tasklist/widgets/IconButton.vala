@@ -620,14 +620,14 @@ public class IconButton : Gtk.ToggleButton {
 	public void update() {
 		if (window_group != null && window_group.has_windows()) {
 			get_style_context().add_class("running");
-		} else {
+		} else if (window_group != null && !window_group.has_windows()) {
 			get_style_context().remove_class("running");
 
 			if (!pinned) return;
-			window_group = null;
 
 			var active_window = window_group?.get_active_window() ?? window_group?.get_last_active_window();
 			set_tooltip_text(app?.name ?? active_window?.get_name() ?? "");
+			window_group = null;
 		}
 
 		set_active(has_active_window);
