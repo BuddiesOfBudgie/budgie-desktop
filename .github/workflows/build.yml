@@ -22,6 +22,7 @@ jobs:
             'pkgconfig(gnome-desktop-3.0)' \
             'pkgconfig(gnome-settings-daemon)' \
             'pkgconfig(gstreamer-1.0)' \
+            'pkgconfig(gtk-layer-shell-0)' \
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
             'pkgconfig(libnotify)' \

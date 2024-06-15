@@ -371,6 +371,7 @@ namespace Budgie {
 			main_view = new Budgie.MainView();
 			main_box.pack_start(main_view, true, true, 0);
 
+			// TODO HACK: see if there is an opportunity for improvement when on magpie v1
 			set_default_size(400, -1);
 
 			main_view.requested_draw.connect(() => {
