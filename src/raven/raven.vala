@@ -198,15 +198,13 @@ namespace Budgie {
 					this.shadow.position = Budgie.PanelPosition.LEFT;
 				}
 
-				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-					// TODO: Raven on left ends up taking up the whole screen, unlike right, so we need to fix this
-					GtkLayerShell.set_anchor(
-						this,
-						Budgie.gtk_position_to_layer_shell_edge(value),
-						true
-					);
-				}
-			}
+				// TODO: Raven on left ends up taking up the whole screen, unlike right, so we need to fix this
+				GtkLayerShell.set_anchor(
+					this,
+					Budgie.gtk_position_to_layer_shell_edge(value),
+					true
+				);
+		}
 			public get {
 				return this._screen_edge;
 			}
