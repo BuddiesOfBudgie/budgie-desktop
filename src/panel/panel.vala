@@ -436,7 +436,6 @@ namespace Budgie {
 			);
 
 			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
-			//GtkLayerShell.auto_exclusive_zone_enable(this);
 		}
 
 		void update_sizes() {
