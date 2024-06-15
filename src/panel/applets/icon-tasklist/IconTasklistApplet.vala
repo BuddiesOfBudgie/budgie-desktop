@@ -427,9 +427,18 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (button == null) { // Button might be pinned, try to get button from launcher instead
 			app_id = group.get_desktop_id();
 			button = buttons.get(app_id);
+
+			// Because the only way to get a desktop_id from an application on X11 is basically
+			// to just guess, the casing may not be correct, e.g. Nemo.desktop vs nemo.desktop.
+			// Try again to get the button, this time making the desktop_id all lowercase.
+			if (button == null) {
+				app_id = app_id.down();
+				button = buttons.get(app_id);
+			}
 		}
 
 		if (button == null) { // we don't manage this button
+			warning(@"an application ($(group.group_id)) was closed, but we couldn't find its button");
 			return;
 		}
 
