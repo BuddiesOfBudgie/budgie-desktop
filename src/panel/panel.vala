@@ -174,7 +174,7 @@ namespace Budgie {
 			// Check if the position has been altered and notify our applets
 			if (position != this.position) {
 				this.position = position;
-				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
+				this.set_position_setting(position);
 				this.update_positions();
 			}
 
@@ -185,6 +185,10 @@ namespace Budgie {
 			queue_draw();
 			placement();
 			update_sizes();
+		}
+
+		public void set_position_setting(PanelPosition position) {
+			this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 		}
 
 		public void update_transparency(PanelTransparency transparency) {
@@ -421,7 +425,7 @@ namespace Budgie {
 		void update_layer_shell_props() {
 			var default_display = Gdk.Display.get_default();
 			if (default_display != null) {
-				var monitor = default_display.get_primary_monitor() ?? default_display.get_monitor(0);
+				var monitor = default_display.get_primary_monitor();
 				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
 			}
 

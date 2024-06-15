@@ -699,6 +699,7 @@ namespace Budgie {
 		*/
 		void load_panel(string uuid, bool configure = false) {
 			if (panels.contains(uuid)) {
+				warning("Asked to load already loaded panel: %s", uuid);
 				return;
 			}
 
@@ -1051,6 +1052,7 @@ namespace Budgie {
 		bool load_panels() {
 			string[] panels = this.settings.get_strv(Budgie.ROOT_KEY_PANELS);
 			if (panels.length == 0) {
+				warning("No panels to load");
 				return false;
 			}
 
@@ -1083,12 +1085,7 @@ namespace Budgie {
 			this.panel_deleted(uuid);
 
 			var spath = this.create_panel_path(panel.uuid);
-			panels.steal(panel.uuid);
-			set_panels();
-			update_screen();
-			panel.destroy_children();
-			panel.destroy();
-
+			remove_panel(uuid, true);
 
 			var psettings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, spath);
 			this.reset_dconf_path(psettings);
@@ -1195,6 +1192,54 @@ namespace Budgie {
 			/* TODO: Pass off the configuration here.. */
 			panel.create_default_layout(name, new_defaults);
 			this.panel_added(uuid, panel);
+		}
+
+		public override void remove_panel(string uuid, bool remove_from_dconf = true) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+			if (panel == null) {
+				warning("Asked to remove non-existent panel: %s", uuid);
+				return;
+			}
+			panels.steal(panel.uuid);
+			if (remove_from_dconf) {
+				set_panels();
+				update_screen();
+				panel.destroy_children();
+				panel.destroy();
+			}
+		}
+
+		public override void move_panel(string uuid, PanelPosition position) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+			if (panel == null) {
+				warning("Asked to move non-existent panel: %s", uuid);
+				return;
+			}
+
+			// This is horrible and I know it
+			// This will destroy and recreate the panel to re-enable interactivity under Wayland
+
+			// Start by hiding the panel to mask recreation
+			panel.hide();
+			// Move the panel to the new position
+			set_placement(uuid, position);
+
+			// Ensure panel position is saved
+			panel.set_position_setting(position);
+
+			// Close the panel
+			panel.close();
+			// Steal so we can add new panel entry
+			panels.steal(panel.uuid);
+
+			// Load panel again
+			load_panel(uuid, true);
+
+			// Look up again
+			panel = panels.lookup(uuid);
+
+			// Show moved panel
+			panel.show();
 		}
 
 		/**
