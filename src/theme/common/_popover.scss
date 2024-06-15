@@ -1,11 +1,8 @@
 .budgie-popover,
 .budgie-popover.background {
+    @extend %reset_style;
     border-radius: 3px;
     background-clip: border-box;
     box-shadow: 0 2px 3px 1px transparentize(black, 0.65);
-}
-
-.budgie-popover .container {
-    @extend %reset_style;
     padding: 2px;
 }
