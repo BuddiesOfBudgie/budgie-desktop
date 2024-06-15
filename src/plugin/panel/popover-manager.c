@@ -9,7 +9,9 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
+#include "applet.h"
 #include "popover.h"
+#include <stdio.h>
 #define _GNU_SOURCE
 
 #include "util.h"
@@ -104,6 +106,21 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 	}
 
 	GtkWidget* w = GTK_WIDGET(popover);
+
+	GtkWidget * toplevel = gtk_widget_get_toplevel(parent_widget);
+
+	BudgiePanelPosition * position = NULL;
+	g_object_get(G_OBJECT(toplevel), "position", &position, NULL);
+
+	if (position == BUDGIE_PANEL_POSITION_TOP) {
+		gtk_popover_set_position(popover, GTK_POS_BOTTOM);
+	} else if (position == BUDGIE_PANEL_POSITION_BOTTOM) {
+		gtk_popover_set_position(popover, GTK_POS_TOP);
+	} else if (position == BUDGIE_PANEL_POSITION_LEFT) {
+		gtk_popover_set_position(popover, GTK_POS_RIGHT);
+	} else if (position == BUDGIE_PANEL_POSITION_RIGHT) {
+		gtk_popover_set_position(popover, GTK_POS_LEFT);
+	}
 
 	gtk_popover_popup(popover);
 

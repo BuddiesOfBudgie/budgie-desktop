@@ -171,30 +171,15 @@ namespace Budgie {
 			this.intended_size = size;
 			this.get_style_context().add_class(Budgie.position_class_name(position));
 
-			var default_display = Gdk.Display.get_default();
-			if (default_display != null) {
-				var monitor = default_display.get_primary_monitor() ?? default_display.get_monitor(0);
-				warning("have monitor? %b\n", monitor != null);
-				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
-			}
-
 			// Check if the position has been altered and notify our applets
 			if (position != this.position) {
 				this.position = position;
-				if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-					if (position != PanelPosition.NONE) {
-						GtkLayerShell.set_anchor(
-							this,
-							Budgie.panel_position_to_layer_shell_edge(position),
-							true
-						);
-					}
-				}
 				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 				this.update_positions();
 			}
 
 			this.shadow.position = position;
+			this.update_layer_shell_props();
 			this.layout.queue_resize();
 			queue_resize();
 			queue_draw();
@@ -431,6 +416,23 @@ namespace Budgie {
 				end_box.get_style_context().remove_class("end-region");
 			}
 			this.queue_draw();
+		}
+
+		void update_layer_shell_props() {
+			var default_display = Gdk.Display.get_default();
+			if (default_display != null) {
+				var monitor = default_display.get_primary_monitor() ?? default_display.get_monitor(0);
+				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
+			}
+
+			GtkLayerShell.set_anchor(
+				this,
+				Budgie.panel_position_to_layer_shell_edge(this.position),
+				true
+			);
+
+			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+			//GtkLayerShell.auto_exclusive_zone_enable(this);
 		}
 
 		void update_sizes() {
@@ -1114,7 +1116,7 @@ namespace Budgie {
 				Budgie.set_struts(this, position, intended_size);
 			}
 
-			GtkLayerShell.set_exclusive_zone(this, intended_size);
+			this.update_layer_shell_props();
 		}
 
 		void placement() {
