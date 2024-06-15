@@ -21,12 +21,11 @@ namespace Budgie.Windowing {
 	 * of the Budgie windowing library.
 	 */
 	public class Windowing : GLib.Object {
-		public libxfce4windowing.Screen screen { public get; private set; }
-		public WorkspaceManager workspace_manager { public get; private set; }
-		public HashTable<libxfce4windowing.Application, WindowGroup> applications { public get; private set; }
-		public unowned List<Window> all_windows { public get; private set; }
-		public unowned List<Window> fullscreen_windows { public get; private set; }
-		public libxfce4windowing.Window? last_active_window { public get; private set; }
+		private libxfce4windowing.Screen screen;
+		private WorkspaceManager workspace_manager;
+		private HashTable<libxfce4windowing.Application, WindowGroup> applications;
+		private List<Window> fullscreen_windows;
+		private libxfce4windowing.Window? last_active_window;
 
 		private Budgie.Windowing.WindowMapper window_mapper;
 		private Budgie.Windowing.NotificationDispatcher dispatcher;
@@ -39,6 +38,8 @@ namespace Budgie.Windowing {
 		private bool pause_notifications;
 		private bool previous_color_setting;
 
+		public bool has_windows { get; private set; }
+		public unowned List<libxfce4windowing.Window> windows { get { return screen.get_windows(); } }
 
 		/**
 		 * Emitted when the currently active window has changed.
@@ -59,6 +60,20 @@ namespace Budgie.Windowing {
 		 * Emitted when a WindowGroup has been removed.
 		 */
 		public signal void window_group_removed(WindowGroup group);
+
+		/**
+		 * Emitted when a window is added to the windowing system.
+		 */
+		public signal void window_added(Window window);
+		/**
+		 * Emitted when a window is removed from the windowing system.
+		 */
+		public signal void window_removed(Window window);
+
+		/**
+		 * Emitted when the state of a window has changed.
+		 */
+		public signal void window_state_changed(Window window, WindowState changed_mask, WindowState new_state);
 
 		/**
 		 * Emitted when a Workspace has been created.
@@ -98,11 +113,11 @@ namespace Budgie.Windowing {
 
 			screen = Screen.get_default();
 
-			screen.get_windows().foreach(window_added);
+			screen.get_windows().foreach(on_window_added);
 
 			screen.active_window_changed.connect(on_active_window_changed);
-			screen.window_opened.connect(window_added);
-			screen.window_closed.connect(window_removed);
+			screen.window_opened.connect(on_window_added);
+			screen.window_closed.connect(on_window_removed);
 
 			setup_workspace_listener();
 
@@ -181,9 +196,10 @@ namespace Budgie.Windowing {
 			workspace_destroyed(workspace);
 		}
 
-		private void window_added(Window window) {
+		private void on_window_added(Window window) {
 			if (window.is_skip_tasklist()) return;
-			all_windows.append(window);
+			window_added(window);
+			has_windows = true;
 
 			var application = window.get_application();
 
@@ -202,14 +218,16 @@ namespace Budgie.Windowing {
 			group = new WindowGroup(application, app_info);
 
 			group.add_window(window);
-			group.window_state_changed.connect(window_state_changed);
+			group.window_state_changed.connect(on_window_state_changed);
 			applications.insert(application, group);
 			window_group_added(group);
 		}
 
-		private void window_removed(Window window) {
+		private void on_window_removed(Window window) {
+			has_windows = screen.get_windows().length() > 0;
+
 			if (window.is_skip_tasklist()) return;
-			all_windows.remove(window);
+			window_removed(window);
 
 			var application = window.get_application();
 
@@ -232,7 +250,9 @@ namespace Budgie.Windowing {
 			}
 		}
 
-		private void window_state_changed(Window window, WindowState changed_mask, WindowState new_state) {
+		private void on_window_state_changed(Window window, WindowState changed_mask, WindowState new_state) {
+			window_state_changed(window, changed_mask, new_state);
+
 			// Check if fullscreen state changed
 			if (!(WindowState.FULLSCREEN in changed_mask)) return;
 

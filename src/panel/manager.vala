@@ -225,15 +225,13 @@ namespace Budgie {
 		* Executed after the initial setup of the panel manager
 		*/
 		private void do_dynamic_transparency_setup() {
-			windowing.all_windows.foreach((window) => {
-				window.state_changed.connect(() => {
-					if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-					check_windows();
-				});
+			windowing.window_state_changed.connect((window) => {
+				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
+				check_windows();
 			});
 
-			windowing.screen.window_opened.connect(window_opened);
-			windowing.screen.window_closed.connect(check_windows);
+			windowing.window_added.connect(window_opened);
+			windowing.window_removed.connect(check_windows);
 			windowing.active_window_changed.connect(active_window_changed);
 			windowing.active_workspace_changed.connect(check_windows);
 		}
@@ -272,7 +270,7 @@ namespace Budgie {
 		private bool window_intersects_panel(Budgie.Toplevel? panel, libxfce4windowing.Window? window) {
 			const int pad_amount = 15;
 
-			if (window == null && windowing.all_windows.is_empty()) return false;
+			if (window == null && !windowing.has_windows) return false;
 
 			if (window != windowing.get_active_window()) return false;
 
@@ -356,7 +354,7 @@ namespace Budgie {
 
 			libxfce4windowing.Workspace? active_workspace = windowing.get_active_workspace();
 
-			windowing.all_windows.foreach((window) => {
+			windowing.windows.foreach((window) => {
 				if (window.is_skip_pager()) return;
 				if (!this.window_on_primary(window)) return;
 				if (active_workspace == null || active_workspace != null && !window.is_on_workspace(active_workspace)) return;
