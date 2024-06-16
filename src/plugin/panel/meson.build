@@ -83,6 +83,7 @@ libpanelplugin_gir = gnome.generate_gir(
     install: true,
     extra_args: [
         '--c-include=plugin.h',
+        '--warn-all',
     ]
 )
 

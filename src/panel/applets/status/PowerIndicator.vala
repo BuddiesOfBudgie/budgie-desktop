@@ -151,7 +151,7 @@ public interface PowerProfilesDBus : Object {
 public class PowerProfilesOption : Gtk.RadioButton {
 	public PowerProfilesOption(PowerProfilesDBus profiles_proxy, string profile_name, string display_name) {
 		label = display_name;
-
+		
 		this.toggled.connect(() => {
 			if (this.get_active()) {
 				profiles_proxy.active_profile = profile_name;
@@ -180,7 +180,7 @@ public class PowerProfilesSelector : Gtk.Box {
 
 			profiles.add(profile_value.get_string());
 		}
-
+		
 		// need at least two options for it to be meaningful
 		if (profiles.length < 2) return;
 
@@ -307,7 +307,7 @@ public class PowerIndicator : Gtk.Bin {
 		try {
 			profiles_proxy = Bus.get_proxy.end(res);
 
-			if (profiles_proxy.active_profile != null)
+			if (profiles_proxy.active_profile != null) 
 				create_power_profiles_options();
 
 		} catch (Error e) {
@@ -334,7 +334,7 @@ public class PowerIndicator : Gtk.Bin {
 
 	public void update_labels(bool visible) {
 		this.label_visible = visible;
-
+		
 		unowned BatteryIcon? icon = null;
 		var iter = HashTableIter<string,BatteryIcon?>(this.devices);
 		while (iter.next(null, out icon)) {

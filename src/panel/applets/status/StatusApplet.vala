@@ -23,7 +23,7 @@ public class StatusSettings : Gtk.Grid {
 
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
-
+	
 	[GtkChild]
 	private unowned Gtk.Switch? switch_show_battery_percentage;
 
@@ -87,14 +87,14 @@ public class StatusApplet : Budgie.Applet {
 		show_all();
 
 		power = new PowerIndicator();
-
+		
 		gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
-
+		
 		power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
 		gnome_settings.changed["show-battery-percentage"].connect((key) => {
 			power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
 		});
-
+		
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 
