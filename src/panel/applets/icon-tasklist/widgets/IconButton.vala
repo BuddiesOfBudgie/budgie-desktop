@@ -359,7 +359,7 @@ public class IconButton : Gtk.ToggleButton {
 					}
 
 					// Draw a line from the start down to the end
-					ctx.line_to(indicator_y, to);
+					ctx.line_to(indicator_x, to);
 					break;
 				default:
 					if (i == count - 1) { // Last indicator
