@@ -2,10 +2,7 @@
     @extend %reset_style;
 
     background-color: $panel_bg;
-
-    .container {
-        padding: 8px;
-    }
+    padding: 8px;
 
     .button:hover { -gtk-#{$image-effect}: none; }
 
@@ -196,7 +193,7 @@
 // User Menu
 @mixin budgie_user_menu($separator, $color) {
     .user-menu {
-        .container { padding: 10px; }
+        padding: 10px;
 
         .content-box #{$separator} {
             #{$color}: #{"alpha(@theme_fg_color, 0.15)"};

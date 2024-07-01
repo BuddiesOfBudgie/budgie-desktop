@@ -1,7 +1,7 @@
 // Places Menu
 @mixin places_menu($button, $list, $row, $entry) {
     .places-menu {
-        .container { padding: 0; }
+        padding: 0;
 
         .message-bar {
             border-top-left-radius: 3px;

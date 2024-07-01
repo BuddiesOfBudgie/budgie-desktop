@@ -49,6 +49,21 @@ namespace Budgie {
 		HIDE
 	}
 
+	public GtkLayerShell.Edge panel_position_to_layer_shell_edge(Budgie.PanelPosition position) {
+		switch (position) {
+			case PanelPosition.TOP:
+				return GtkLayerShell.Edge.TOP;
+			case PanelPosition.LEFT:
+				return GtkLayerShell.Edge.LEFT;
+			case PanelPosition.RIGHT:
+				return GtkLayerShell.Edge.RIGHT;
+			case PanelPosition.BOTTOM:
+			case PanelPosition.NONE: // Note: NONE will never actually be hit because of checks where we are calling this function
+				return GtkLayerShell.Edge.BOTTOM;
+		}
+		return GtkLayerShell.Edge.BOTTOM;
+	}
+
 	/**
 	* The toplevel window for a panel
 	*/
@@ -159,16 +174,21 @@ namespace Budgie {
 			// Check if the position has been altered and notify our applets
 			if (position != this.position) {
 				this.position = position;
-				this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
+				this.set_position_setting(position);
 				this.update_positions();
 			}
 
 			this.shadow.position = position;
+			this.update_layer_shell_props();
 			this.layout.queue_resize();
 			queue_resize();
 			queue_draw();
 			placement();
 			update_sizes();
+		}
+
+		public void set_position_setting(PanelPosition position) {
+			this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 		}
 
 		public void update_transparency(PanelTransparency transparency) {
@@ -302,6 +322,12 @@ namespace Budgie {
 				}
 			});
 
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				GtkLayerShell.init_for_window(this);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+			}
+
 			popover_manager = new PopoverManager();
 			pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
 			creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
@@ -394,6 +420,22 @@ namespace Budgie {
 				end_box.get_style_context().remove_class("end-region");
 			}
 			this.queue_draw();
+		}
+
+		void update_layer_shell_props() {
+			var default_display = Gdk.Display.get_default();
+			if (default_display != null) {
+				var monitor = default_display.get_primary_monitor();
+				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
+			}
+
+			GtkLayerShell.set_anchor(
+				this,
+				Budgie.panel_position_to_layer_shell_edge(this.position),
+				true
+			);
+
+			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
 		}
 
 		void update_sizes() {
@@ -1076,6 +1118,8 @@ namespace Budgie {
 			} else {
 				Budgie.set_struts(this, position, intended_size);
 			}
+
+			this.update_layer_shell_props();
 		}
 
 		void placement() {

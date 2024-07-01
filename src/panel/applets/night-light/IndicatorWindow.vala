@@ -11,7 +11,7 @@
 
 namespace NightLight {
 	[GtkTemplate (ui="/org/budgie-desktop/night-light/indicator_window.ui")]
-	class IndicatorWindow : Budgie.Popover {
+	class IndicatorWindow : Gtk.Popover {
 		[GtkChild]
 		private unowned Gtk.Switch? nightlight_switch;
 

@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-public class BudgieMenuWindow : Budgie.Popover {
+public class BudgieMenuWindow : Gtk.Popover {
 	protected Gtk.Box main_layout;
 	protected Gtk.SearchEntry search_entry;
 	protected ApplicationView view;

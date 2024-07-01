@@ -11,6 +11,12 @@
 
 
 public static int main(string[] args) {
+	if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+		// Only set the env then die please
+		Environment.set_variable("GDK_BACKEND", "wayland", true);
+		return Meta.ExitCode.SUCCESS;
+	}
+
 	Budgie.BudgieWM.old_args = args;
 
 	Meta.Context ctx = Meta.create_context("Mutter(Budgie)");

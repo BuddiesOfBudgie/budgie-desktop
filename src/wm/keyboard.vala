@@ -79,9 +79,11 @@ namespace Budgie {
 			xkb = new Gnome.XkbInfo();
 
 			/* Only hook things up when ibus is setup, whether it failed or not */
-			ibus_manager = new IBusManager(this);
-			ibus_manager.ready.connect(on_ibus_ready);
-			ibus_manager.do_init();
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.X11) {
+				ibus_manager = new IBusManager(this);
+				ibus_manager.ready.connect(on_ibus_ready);
+				ibus_manager.do_init();
+			}
 		}
 
 		private void on_ibus_ready() {

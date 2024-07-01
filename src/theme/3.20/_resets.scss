@@ -1,7 +1,6 @@
 // Used to reset all style properties set by the gtk theme
 popover list,
 popover row,
-.budgie-popover .container,
 .budgie-popover border,
 .budgie-popover list,
 .budgie-popover row {
@@ -14,4 +13,4 @@ popover row,
          @include menu_reset_style(label,disabled);
      }
 }
-                    
+

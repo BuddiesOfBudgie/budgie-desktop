@@ -46,6 +46,7 @@ panel_plugin_sources = [
 
 panel_plugin_deps = [
     dep_gtk3,
+    dep_gtk_layer_shell,
     dep_peas,
 ]
 
@@ -68,7 +69,7 @@ libpanelplugin_gir = gnome.generate_gir(
     libpanelplugin,
     sources: panel_plugin_sources + panel_plugin_headers + panel_plugin_enums,
     namespace: 'Budgie',
-    nsversion: '1.0',
+    nsversion: '2.0',
     dependencies: panel_plugin_deps,
     includes: [
         'GObject-2.0',
@@ -78,20 +79,22 @@ libpanelplugin_gir = gnome.generate_gir(
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
+    header: 'plugin.h',
     install: true,
     extra_args: [
+        '--c-include=plugin.h',
         '--warn-all',
-        '--c-include', 'plugin.h',
-    ],
+    ]
 )
 
 libpanelplugin_vapi = gnome.generate_vapi(
-    'budgie-1.0',
+    'budgie-2.0',
     sources: [libpanelplugin_gir[0]],
     packages: [
         'gtk+-3.0',
         'gio-unix-2.0',
         'libpeas-1.0',
+        'gtk-layer-shell-0',
     ],
     install: true,
 )
@@ -100,12 +103,12 @@ libpanelplugin_vapi = gnome.generate_vapi(
 pkgconfig.generate(
     name: 'Budgie',
     description: 'Budgie Plugin Library',
-    version: '2',
-    filebase: 'budgie-1.0',
+    version: '3',
+    filebase: 'budgie-2.0',
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
-        'gtk+-3.0 >= 3.22.0',
+        'gtk+-3.0 >= 3.24.0',
         'libpeas-1.0 >= 1.8.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',

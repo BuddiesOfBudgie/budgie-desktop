@@ -459,7 +459,7 @@ namespace Budgie {
 			}
 
 			combobox_position.model.get(iter, 2, out position, -1);
-			this.manager.set_placement(toplevel.uuid, position);
+			this.manager.move_panel(toplevel.uuid, position);
 		}
 
 		/**
