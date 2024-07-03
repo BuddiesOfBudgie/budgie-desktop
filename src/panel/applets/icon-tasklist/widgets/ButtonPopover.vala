@@ -17,7 +17,7 @@ public interface SettingsRemote : GLib.Object {
 	public abstract async void Close() throws Error;
 }
 
-public class ButtonPopover : Budgie.Popover {
+public class ButtonPopover : Gtk.Popover {
 	public Budgie.Application? app { get; construct; }
 	public Budgie.Windowing.WindowGroup? group { get; construct set; }
 

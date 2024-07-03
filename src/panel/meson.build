@@ -46,9 +46,10 @@ panel_deps = [
     libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
+    dep_gtk_layer_shell,
     dep_peas,
     dep_libuuid,
-    dep_wnck,
+    dep_xfce4windowing,
     link_libconfig,
     link_libsession,
     link_libbudgieprivate,
@@ -57,6 +58,7 @@ panel_deps = [
     link_libravenplugin,
     libravenplugin_vapi,
     link_libraven,
+    link_libwindowing,
     gvc.get_variable('libgvc_dep'),
 ]
 
@@ -73,6 +75,8 @@ budgie_panel_vala_args = [
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
+        '--pkg', 'gtk-layer-shell-0',
+        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

@@ -60,6 +60,7 @@ budgie_wm_deps = [
     link_libconfig,
     dep_giounix,
     dep_wm,
+    dep_xfce4windowing,
     dep_gnomedesktop,
     dep_ibus,
 ]
