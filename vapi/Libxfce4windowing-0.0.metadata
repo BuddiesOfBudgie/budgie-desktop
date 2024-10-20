@@ -1,0 +1,6 @@
+Window.activate.seat nullable=true
+Workspace.get_workspace_group type="unowned libxfce4windowing.WorkspaceGroup?"
+Application.get_instance.window type="libxfce4windowing.Window"
+Workspace.assign_to_workspace_group.group type="libxfce4windowing.WorkspaceGroup"
+Window.get_screen type="unowned libxfce4windowing.Screen"
+WorkspaceGroup.get_workspace_manager type="unowned libxfce4windowing.WorkspaceManager"

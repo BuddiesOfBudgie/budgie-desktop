@@ -47,7 +47,6 @@ public static int main(string[] args) {
 	Budgie.ServiceManager? manager = null;
 	Budgie.EndSessionDialog? end_dialog = null;
 	Budgie.SettingsManager? settings = null;
-	Wnck.Screen? screen = null;
 
 	Intl.setlocale(LocaleCategory.ALL, "");
 	Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
@@ -66,15 +65,6 @@ public static int main(string[] args) {
 		return 0;
 	}
 
-	/* Initialise wnck after gtk-start */
-	Idle.add(() => {
-		screen = Wnck.Screen.get_default();
-		if (screen != null) {
-			screen.force_update();
-		}
-		return false;
-	});
-
 	/* Initialize libnotify */
 	Notify.init("com.solus-project.budgie-daemon");
 
@@ -92,7 +82,6 @@ public static int main(string[] args) {
 	manager = null;
 	end_dialog = null;
 	settings = null;
-	screen = null;
 
 	return 0;
 }

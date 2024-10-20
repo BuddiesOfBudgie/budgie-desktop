@@ -516,7 +516,7 @@ public class IconTasklistApplet : Budgie.Applet {
 						} else {
 							try {
 								window.set_minimized(false);
-								window.activate(event.time);
+								window.activate(null, event.time);
 							} catch (Error e) {
 								warning("Unable to un-minimize or activate window '%s': %s", window.get_name(), e.message);
 							}
@@ -538,7 +538,7 @@ public class IconTasklistApplet : Budgie.Applet {
 						var window = group.get_last_active_window();
 
 						try {
-							window.activate(event.time);
+							window.activate(null, event.time);
 						} catch (Error e) {
 							warning("Unable to activate window %s: %s", window.get_name(), e.message);
 						}
