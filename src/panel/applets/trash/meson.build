@@ -34,6 +34,7 @@ applet_trash_deps = [
     dep_gtk3,
     dep_notify,
     dep_peas,
+    link_libpanelenum,
     link_libpanelplugin,
 ]
 
