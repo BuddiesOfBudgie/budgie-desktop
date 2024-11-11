@@ -73,7 +73,7 @@ dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 
 # Needed for window tracking
-dep_xfce4windowing = dependency('libxfce4windowing-0')
+dep_xfce4windowing = dependency('libxfce4windowing-0', version: '>= 4.19.7')
 
 # Create config.h
 cdata = configuration_data()

@@ -16,8 +16,7 @@ Then have fun un-mangling it to support vala async syntax.
 To generate the libxfce4windowing vapi files:
 
 ```bash
-vapigen --library libxfce4windowing-0 /usr/share/gir-1.0/Libxfce4windowing-0-0.gir --metadatadir .
-```
+vapigen --library libxfce4windowing-0 /usr/share/gir-1.0/Libxfce4windowing-0.0.gir --girdir . -d .  --metadatadir . --vapidir . libxfce4windowing-0-custom.vala```
 
 ### UPower
 
