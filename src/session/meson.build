@@ -136,30 +136,6 @@ custom_target('desktop-file-nm-applet',
     install_dir : xdg_appdir,
 )
 
-# Write the budgie-desktop-screensaver.in file from the appropriate .in.in
-if with_gnome_screensaver == true
-    session_screensaver = configure_file(
-        input: 'budgie-desktop-screensaver-gnome.desktop.in.in',
-        output: 'budgie-desktop-screensaver.desktop.in',
-        configuration: session_data,
-    )
-else
-    session_screensaver = configure_file(
-        input: 'budgie-desktop-screensaver.desktop.in.in',
-        output: 'budgie-desktop-screensaver.desktop.in',
-        configuration: session_data,
-    )
-endif
-
-# Merge + install screensaver
-custom_target('desktop-file-screensaver',
-    input : session_screensaver,
-    output : 'org.buddiesofbudgie.BudgieDesktopScreensaver.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
-    install : true,
-    install_dir : xdg_appdir,
-)
-
 # Merge + install power dialog
 session_power_dialog_desktop = configure_file(
     input: 'budgie-desktop-powerdialog.desktop.in.in',
