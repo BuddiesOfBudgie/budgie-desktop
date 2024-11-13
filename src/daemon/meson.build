@@ -34,6 +34,7 @@ daemon_sources = [
     'menus.vala',
     'osd.vala',
     'settings.vala',
+    'screenlock.vala',
     'tabswitcher.vala',
     'xdgdirtracker/dbus.vala',
 ]

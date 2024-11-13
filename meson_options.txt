@@ -1,7 +1,6 @@
 option('ci', type: 'boolean', value: false, description: 'Continuous Integration flag (internal use only)')
 option('use-old-zenity', type: 'boolean', value: false, description: 'Use old zenity CLI API for out-of-process dialog handling')
 option('with-bluetooth', type: 'boolean', value: true, description: 'Enable Bluetooth (Vala option)')
-option('with-gnome-screensaver', type: 'boolean', value: false, description: 'Build using gnome-screensaver as a dependency')
 option('with-gtk-doc', type: 'boolean', value: true, description: 'Build gtk-doc documentation')
 option('with-hibernate', type: 'boolean', value: true, description: 'Include support for system hibernation')
 option('with-libuuid-time-safe', type: 'boolean', value: true, description: 'Enable use of LIBUUID.generate_time_safe (Vala option)')
