@@ -20,7 +20,7 @@ subdir('daemon')
 
 subdir('dialogs')
 
-subdir('wm')
+#subdir('wm')
 subdir('panel')
 
 # Finish up by doing the session
