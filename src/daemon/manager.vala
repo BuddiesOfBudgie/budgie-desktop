@@ -26,6 +26,7 @@ namespace Budgie {
 		Budgie.TabSwitcher? switcher;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
+		Budgie.Background? background;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -47,6 +48,7 @@ namespace Budgie {
 			menus.setup_dbus(replace);
 			switcher = new Budgie.TabSwitcher();
 			switcher.setup_dbus(replace);
+			background = new Budgie.Background();
 
 			try {
 				screenshotcontrol = new BudgieScr.ScreenshotServer();

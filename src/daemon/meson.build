@@ -28,6 +28,7 @@ daemon_sources = [
     'notifications/dbus.vala',
     'notifications/popup.vala',
     'screenshot.vala',
+    'background.vala',
     'statusnotifier.vala',
     'main.vala',
     'manager.vala',
@@ -45,6 +46,7 @@ daemon_deps = [
     dep_gtk3,
     dep_gdkx11,
     dep_notify,
+    dep_gnomedesktop,
     dep_wnck,
     dep_xfce4windowing,
     dep_gst,
@@ -60,7 +62,7 @@ daemon_deps = [
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml')
 
-daemon_vala_args = []
+daemon_vala_args = ['--pkg', 'gnome-desktop-3.0']
 
 dep_gsd_doubles = dependency('gnome-settings-daemon', version: '>=3.33.90', required: false)
 if dep_gsd.found()
@@ -94,6 +96,7 @@ executable(
     ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
+        '-DGNOME_DESKTOP_USE_UNSTABLE_API'
     ],
     install: true,
 )
