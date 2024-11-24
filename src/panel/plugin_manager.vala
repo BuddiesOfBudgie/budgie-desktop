@@ -34,7 +34,7 @@ namespace Budgie {
 				var repo = GI.Repository.get_default();
 				repo.require("Peas", "1.0", 0);
 				repo.require("PeasGtk", "1.0", 0);
-				repo.require("Budgie", "1.0", 0);
+				repo.require("Budgie", "2.0", 0);
 			} catch (Error e) {
 				message("Error loading typelibs: %s", e.message);
 			}
