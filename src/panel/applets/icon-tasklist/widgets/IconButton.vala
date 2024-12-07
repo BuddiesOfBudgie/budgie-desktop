@@ -641,17 +641,11 @@ public class IconButton : Gtk.ToggleButton {
 			icon.waiting = false;
 		}
 
-		Gdk.Pixbuf? pixbuf_icon = null;
-
 		if (window_group != null) {
-			var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
-			pixbuf_icon = window_group.get_icon(size, 1);
-		}
-
-		if (app?.icon != null) {
+			unowned var gicon = window_group.application.get_gicon();
+			icon.set_from_gicon(gicon, Gtk.IconSize.INVALID);
+		} else if (app?.icon != null) {
 			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
-		} else if (pixbuf_icon != null) {
-			icon.set_from_pixbuf(pixbuf_icon);
 		} else {
 			icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
