@@ -642,8 +642,9 @@ public class IconButton : Gtk.ToggleButton {
 		}
 
 		if (window_group != null) {
-			unowned var gicon = window_group.application.get_gicon();
-			icon.set_from_gicon(gicon, Gtk.IconSize.INVALID);
+			var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
+			unowned var pixbuf = window_group.application.get_icon(size, get_scale_factor());
+			icon.set_from_pixbuf(pixbuf);
 		} else if (app?.icon != null) {
 			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
 		} else {
