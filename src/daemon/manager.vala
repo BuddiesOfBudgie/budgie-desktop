@@ -28,6 +28,8 @@ namespace Budgie {
 		Budgie.XDGDirTracker? xdg_tracker;
 		Budgie.Background? background;
 
+		/* Screenlock */
+		Budgie.Screenlock? screenlock;
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
@@ -58,6 +60,10 @@ namespace Budgie {
 			}
 			xdg_tracker = new Budgie.XDGDirTracker();
 			xdg_tracker.setup_dbus(replace);
+
+
+			var screenlock = Screenlock.init();
+			screenlock.setup_dbus();
 		}
 
 		/**
