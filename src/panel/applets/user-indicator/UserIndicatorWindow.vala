@@ -67,14 +67,9 @@ public class UserIndicatorWindow : Budgie.Popover {
 		}
 
 		try {
-			saver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
+			saver = yield Bus.get_proxy(BusType.SESSION, "org.buddiesofbudgie.BudgieScreenlock", "/org/buddiesofbudgie/Screenlock");
 		} catch (Error e) {
-#if HAVE_GNOME_SCREENSAVER
-			warning(UNABLE_CONTACT + "gnome-screensaver: %s", e.message);
-#else
-			warning(UNABLE_CONTACT + "budgie-screensaver: %s", e.message);
-#endif
-			return;
+			warning(UNABLE_CONTACT + "budgie-screenlock: %s", e.message);
 		}
 
 		try {
@@ -369,17 +364,9 @@ public class UserIndicatorWindow : Budgie.Popover {
 		hide();
 		Idle.add(() => {
 			try {
-#if HAVE_GNOME_SCREENSAVER
-				if (saver == null) { // attempt to connect to dbus if not started previously
-					saver = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
-				}
-#endif
 				saver.lock();
 			} catch (Error e) {
 				warning("Cannot lock screen: %s", e.message);
-#if HAVE_GNOME_SCREENSAVER
-				saver = null; // allow another retry to lock the screen on a failure
-#endif
 			}
 			return false;
 		});
