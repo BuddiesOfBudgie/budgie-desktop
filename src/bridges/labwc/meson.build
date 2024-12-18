@@ -14,8 +14,17 @@ install_data(
     install_dir: xdg_appdir
 )
 
-
 install_data(
     'labwc_bridge.py',
     install_dir: libexecdir
+)
+
+install_data(
+    'rc.xml',
+    install_dir: join_paths(datadir, 'budgie-desktop')
+)
+
+install_data(
+    'environment',
+    install_dir: join_paths(datadir, 'budgie-desktop')
 )
