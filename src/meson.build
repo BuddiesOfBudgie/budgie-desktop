@@ -23,5 +23,7 @@ subdir('dialogs')
 subdir('wm')
 subdir('panel')
 
+subdir('bridges')
+
 # Finish up by doing the session
 subdir('session')
