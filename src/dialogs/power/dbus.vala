@@ -40,7 +40,7 @@ namespace Budgie {
 		public abstract async void Shutdown() throws Error;
 	}
 
-	[DBus (name="org.buddiesofbudgie.BudgieScreenlock")]
+	[DBus (name="org.gnome.ScreenSaver")]
 	public interface ScreensaverRemote : GLib.Object {
 		public abstract void lock() throws Error;
 	}
