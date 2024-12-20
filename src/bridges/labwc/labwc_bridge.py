@@ -95,8 +95,15 @@ class Bridge:
             self.log.critical("Could not find an existing environment or a shipped budgie equivalent")
             return
 
-        if path != search_path[0]:
-            shutil.copy(path, search_path[0])
+        try:
+            if path != search_path[0]:
+                folder = os.path.join(os.environ["HOME"], ".config", "labwc")
+                os.makedirs(folder, exist_ok=True)
+                shutil.copy(path, search_path[0])
+        except Exception as e:
+            self.log.critical("Failed to copy " + path + " to " + search_path[0])
+            self.log.critical(e)
+            return
 
         # Check if a local labwc config file exists - if so use it
         # otherwise use the budgie-desktop shared file - or the distro variant if it exists
