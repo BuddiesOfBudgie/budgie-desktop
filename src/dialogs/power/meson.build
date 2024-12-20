@@ -3,6 +3,7 @@ powerdialog_sources = [
     'dbus.vala',
     'dialog_button.vala',
     'main.vala',
+    'shim.vala',
     'window.vala'
 ]
 

@@ -20,8 +20,18 @@ namespace Budgie {
 
 		private bool grabbed = false;
 
+		private ShellShim? shim;
+
 		public PowerApplication() {
 			Object(application_id: "org.buddiesofbudgie.PowerDialog", flags: 0);
+
+			/* 	we need a separate process to connect budgie session with our
+				endsessiondialog in budgie-daemon via dbus to allow the confirmation dialog
+				to be displayed; connecting via the same process introduces a 30sec - 1 min delay
+				In v10.9.2 this was budgie_wm.  Under wayland the power app is the replacement choice
+			*/
+			shim = new ShellShim();
+			shim.serve();
 		}
 
 		public override void activate() {
