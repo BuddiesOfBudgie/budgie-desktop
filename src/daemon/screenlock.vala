@@ -26,24 +26,71 @@ namespace Budgie {
         // public functions should check this variable first and exit gracefully where needed
         bool all_apps = true;
 
+        // remember the locker to be used
+        private string locker = "";
+
         private string calculate_lockcommand() {
-            // grab the background picture and strip the file prefix
-            string current_wallpaper = screensaver.get_string("picture-uri").replace("file://","");
-
-            // swaylock interprets : as a delimiter for the output name
-            // recommendation by swaylock is to replace : with ::
-            current_wallpaper = current_wallpaper.replace(":", "::");
-
             string output = "";
-            File file = File.new_for_path(current_wallpaper);
-            if (current_wallpaper == "" || !file.query_exists()) {
-                output = "-c 000000";
-            }
-            else {
-                output = "-i " + current_wallpaper;
+
+            if (locker == "swaylock") {
+                // grab the background picture and strip the file prefix
+                string current_wallpaper = screensaver.get_string("picture-uri").replace("file://","");
+
+                // swaylock interprets : as a delimiter for the output name
+                // recommendation by swaylock is to replace : with ::
+                current_wallpaper = current_wallpaper.replace(":", "::");
+
+                File file = File.new_for_path(current_wallpaper);
+                if (current_wallpaper == "" || !file.query_exists()) {
+                    output = "-c 000000";
+                }
+                else {
+                    output = "-i " + current_wallpaper;
+                }
+
+                output = "swaylock -Fklf " + output;
             }
 
-            return "swaylock -Fklf " + output;
+            if (locker == "gtklock") {
+                output = "gtklock -d";
+
+                /**
+                * Try in order, and load the first one that exists:
+                * - /etc/budgie-desktop/[gtklock.ini | gtklock.css]
+                * - /usr/share/budgie-desktop/[gtklock.ini | gtklock.css]
+                */
+                string[] system_configs = {
+                    @"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.ini",
+                    @"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.ini"
+                };
+
+                foreach (string? filepath in system_configs) {
+                    File file = File.new_for_uri(filepath);
+                    warning(filepath);
+                    bool tmp = file.query_exists();
+                    if (tmp) {
+                        output += " -c " + file.get_path();
+                        break;
+                    }
+			    }
+
+                string[] style_configs = {
+                    @"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.css",
+                    @"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.css"
+                };
+
+                foreach (string? filepath in style_configs) {
+                    File file = File.new_for_uri(filepath);
+                    warning(filepath);
+                    bool tmp = file.query_exists();
+                    if (tmp) {
+                        output += " -s " + file.get_path();
+                        break;
+                    }
+			    }
+            }
+
+            return output;
         }
 
         private string calculate_sleep() {
@@ -184,16 +231,30 @@ namespace Budgie {
 		}
 
         private Screenlock() {
-            string check_apps[] = {"wayidle", "killall", "wlopm", "swaylock", "upower", "systemctl"};
+            string check_apps[] = {"swayidle", "killall", "wlopm", "upower", "systemctl"};
 
             foreach(unowned var app in check_apps) {
-                if (Environment.find_program_in_path("wayidle") != null) {
+                if (Environment.find_program_in_path(app) == null) {
                     warning(app + " is not found for screenlocking");
                     all_apps = false;
                 }
             }
 
-            if (!all_apps) {
+            string supported_lockers[] = {"gtklock", "swaylock"};
+
+
+            foreach(unowned var app in supported_lockers) {
+                if (Environment.find_program_in_path(app) != null) {
+                    locker = app;
+                    break;
+                }
+            }
+
+            if (locker == "") {
+                warning("No supported screen-locker has been found");
+            }
+
+            if (!all_apps || locker == "") {
                 return;
             }
 

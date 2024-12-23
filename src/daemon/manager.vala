@@ -62,7 +62,7 @@ namespace Budgie {
 			xdg_tracker.setup_dbus(replace);
 
 
-			var screenlock = Screenlock.init();
+			screenlock = Screenlock.init();
 			screenlock.setup_dbus();
 		}
 
