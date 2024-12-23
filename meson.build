@@ -22,17 +22,6 @@ am_cflags = [
 ]
 add_global_arguments(am_cflags, language: 'c')
 
-budgie_screensaver  = find_program('budgie-screensaver', required: false)
-gnome_screensaver = find_program('gnome-screensaver', required: false)
-with_gnome_screensaver = get_option('with-gnome-screensaver')
-if with_gnome_screensaver == false
-    assert(budgie_screensaver.found(), 'Budgie Screensaver is a required separate component of Budgie Desktop. Please ensure budgie-screensaver is available at configure and run time. You can find this at https://github.com/BuddiesOfBudgie/budgie-screensaver')
-    budgie_screensaver_vala_args = []
-else
-    assert(gnome_screensaver.found(), 'Either GNOME Screensaver or Budgie Screensaver is a required separate component of Budgie Desktop. Please ensure one of these is available at configure and run time.')
-    budgie_screensaver_vala_args = ['-D', 'HAVE_GNOME_SCREENSAVER']
-endif
-
 meson.add_install_script('scripts/mesonPostInstall.sh')
 
 fs = import('fs')
