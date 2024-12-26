@@ -64,6 +64,9 @@ dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 # Needed for window tracking
 dep_xfce4windowing = dependency('libxfce4windowing-0', version: '>= 4.19.7')
 
+# Needed for upower interaction
+dep_upower = dependency('upower-glib', version: '>= 0.99.8')
+
 # Create config.h
 cdata = configuration_data()
 

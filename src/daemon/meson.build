@@ -52,7 +52,7 @@ daemon_deps = [
     dep_xfce4windowing,
     dep_gst,
     dep_cairo,
-    dependency('upower-glib', version: '>= 0.99.8'),
+    dep_upower,
     link_libbudgieprivate,
     libpanelplugin_vapi,
     link_libappsys,
