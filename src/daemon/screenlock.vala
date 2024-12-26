@@ -29,6 +29,11 @@ namespace Budgie {
         // remember the locker to be used
         private string locker = "";
 
+        /** Our upower client */
+        private Up.Client client;
+        private GLib.GenericArray<Up.Device> devices;
+        private bool battery_mode;
+
         private string calculate_lockcommand() {
             string output = "";
 
@@ -66,7 +71,6 @@ namespace Budgie {
 
                 foreach (string? filepath in system_configs) {
                     File file = File.new_for_uri(filepath);
-                    warning(filepath);
                     bool tmp = file.query_exists();
                     if (tmp) {
                         output += " -c " + file.get_path();
@@ -81,7 +85,6 @@ namespace Budgie {
 
                 foreach (string? filepath in style_configs) {
                     File file = File.new_for_uri(filepath);
-                    warning(filepath);
                     bool tmp = file.query_exists();
                     if (tmp) {
                         output += " -s " + file.get_path();
@@ -110,12 +113,12 @@ namespace Budgie {
 
             if (sleep_inactive_battery_type == "suspend" && sleep_inactive_battery_timeout != 0) {
                 output = "timeout " + sleep_inactive_battery_timeout.to_string();
-                output += " 'if upower -i $(upower -e | grep '/battery') | grep --color=never -E 'state' | grep -e 'discharging'; then systemctl suspend; fi' ";
+                output += " 'if dbus-send --print-reply=literal --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.OnBattery | grep \"boolean true\" > /dev/null; then systemctl suspend; fi' ";
             }
 
             if (sleep_inactive_ac_type == "suspend" && sleep_inactive_ac_timeout !=0) {
                 output += " timeout " + sleep_inactive_ac_timeout.to_string();
-                output += " 'if upower -i $(upower -e | grep '/line_power') | grep --color=never -E 'online' | grep -e 'yes'; then systemctl suspend; fi' ";
+                output += " 'if dbus-send --print-reply=literal --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.OnBattery | grep \"boolean false\" > /dev/null; then systemctl suspend; fi' ";
             }
 
             return output;
@@ -162,27 +165,18 @@ namespace Budgie {
                 /* sometimes swayidle exists twice - so we run the kill Process
                    to make sure before starting swayidle again
                 */
-                Process.spawn_sync ("/",
-							spawn_args,
-							spawn_env,
-							SpawnFlags.SEARCH_PATH |
-                            SpawnFlags.STDERR_TO_DEV_NULL |
-                            SpawnFlags.STDOUT_TO_DEV_NULL,
-							null,
-							null,
-							null,
-							null);
-
-                Process.spawn_sync ("/",
-							spawn_args,
-							spawn_env,
-							SpawnFlags.SEARCH_PATH |
-                            SpawnFlags.STDERR_TO_DEV_NULL |
-                            SpawnFlags.STDOUT_TO_DEV_NULL,
-							null,
-							null,
-							null,
-							null);
+                for (var i = 0; i <= 1; i++) {
+                    Process.spawn_sync ("/",
+                                spawn_args,
+                                spawn_env,
+                                SpawnFlags.SEARCH_PATH |
+                                SpawnFlags.STDERR_TO_DEV_NULL |
+                                SpawnFlags.STDOUT_TO_DEV_NULL,
+                                null,
+                                null,
+                                null,
+                                null);
+                }
 
                 Process.spawn_command_line_async(new_idle);
             } catch (SpawnError e) {
@@ -230,8 +224,16 @@ namespace Budgie {
 			return instance;
 		}
 
+        public bool on_battery() throws GLib.Error {
+            return battery_mode;
+        }
+
+        private void client_daemon(GLib.Object obj, GLib.ParamSpec? sp) {
+            battery_mode = client.get_on_battery();
+        }
+
         private Screenlock() {
-            string check_apps[] = {"swayidle", "killall", "wlopm", "upower", "systemctl"};
+            string check_apps[] = {"swayidle", "killall", "wlopm", "systemctl", "dbus-send"};
 
             foreach(unowned var app in check_apps) {
                 if (Environment.find_program_in_path(app) == null) {
@@ -257,6 +259,18 @@ namespace Budgie {
             if (!all_apps || locker == "") {
                 return;
             }
+
+            // Connect to upower and get notifications for all batteries and power-supplies to see if on battery mode
+            client = new Up.Client();
+            client.notify.connect(this.client_daemon);
+            devices = client.get_devices2();
+            foreach (var device in devices) {
+                if (device.kind == Up.DeviceKind.LINE_POWER || device.kind == Up.DeviceKind.BATTERY) {
+                    device.notify.connect(this.client_daemon);
+                }
+            }
+
+            battery_mode = client.get_on_battery();
 
             this.power = new Settings("org.gnome.settings-daemon.plugins.power");
             this.power.changed.connect((key) => {
