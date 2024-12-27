@@ -637,6 +637,8 @@ class Bridge:
             if replacement[-1] == "-":
                 replacement = replacement[:-1]
 
+            replacement = replacement.replace("XF86XF86", "XF86")
+
         return replacement
 
     # all keybinds from various gsettings schemas are managed
@@ -666,6 +668,17 @@ class Bridge:
         path = "./keyboard/keybind/[@bridge='" + partial + "']"
         for bridge in root.findall(path):
             bridge.attrib["key"] = self.calc_keybind(keybind[0])
+
+            # GNOME defines settings-daemon media keys also with a -static suffix - if
+            # the key we calculate is "undefined" then grab the value
+            # from the equivalent -static gsettings key
+            # ... in most keys - so skip those keys that don't have -static suffixes here
+            if bridge.attrib["key"] == "undefined" and settings == self.gsd_media_keys_settings:
+                try:
+                    keybind = settings[key + "-static"]
+                    bridge.attrib["key"] = self.calc_keybind(keybind[0])
+                except KeyError:
+                    pass
 
             self.write_config()
 
