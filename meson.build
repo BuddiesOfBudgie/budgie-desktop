@@ -70,6 +70,15 @@ dep_upower = dependency('upower-glib', version: '>= 0.99.8')
 # Create config.h
 cdata = configuration_data()
 
+if get_option('with-runtime-dependencies')
+    find_program('wlopm', required: true)
+    find_program('swayidle', required: true)
+    found_gtklock = find_program('gtklock', required: false)
+    if found_gtklock.found() == false
+        find_program('swaylock', required: true)
+    endif
+endif
+
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
 

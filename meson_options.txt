@@ -7,3 +7,4 @@ option('with-libuuid-time-safe', type: 'boolean', value: true, description: 'Ena
 option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
 option('with-stateless', type: 'boolean', value: false, description: 'Enable stateless XDG paths')
 option('xdg-appdir', type: 'string', description: 'XDG autostart path')
+option('with-runtime-dependencies', type: 'boolean', value: true, description: 'Check during build for critical runtime dependencies')
