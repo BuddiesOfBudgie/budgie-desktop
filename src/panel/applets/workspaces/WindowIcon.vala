@@ -22,8 +22,8 @@ namespace Workspaces {
 			this.get_style_context().add_class("workspace-icon-button");
 			this.set_tooltip_text(window.get_name());
 
-			Gtk.Image icon = new Gtk.Image.from_gicon(window.get_gicon(), Gtk.IconSize.INVALID);
-			icon.set_pixel_size(WORKSPACE_ICON_SIZE);
+			unowned var pixbuf = window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor());
+			Gtk.Image icon = new Gtk.Image.from_pixbuf(pixbuf);
 			this.add(icon);
 			icon.show();
 
@@ -72,22 +72,7 @@ namespace Workspaces {
 		}
 
 		public void on_drag_data_get(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
-			ulong window_xid = (ulong)window.x11_get_xid();
-			uchar[] buf;
-			convert_ulong_to_bytes(window_xid, out buf);
-			selection_data.set(
-				selection_data.get_target(),
-				8,
-				buf
-			);
-		}
-
-		private void convert_ulong_to_bytes(ulong number, out uchar[] buffer) {
-			buffer = new uchar[sizeof(ulong)];
-			for (int i=0; i<sizeof(ulong); i++) {
-				buffer[i] = (uchar)(number & 0xFF);
-				number = number >> 8;
-			}
+			selection_data.set_text(string.joinv(",", window.get_class_ids()), -1);
 		}
 	}
 }
