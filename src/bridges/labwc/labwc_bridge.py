@@ -55,15 +55,16 @@ class Bridge:
         if sig == signal.SIGINT:
             mainloop=quit()
 
+    def user_config(self, config_file="rc.xml"):
+        return os.path.join(GLib.get_user_config_dir(), "labwc", config_file)
+
     # writes the labwc rc.xml file back
     def write_config(self):
         # Write back to file
         if self.delay_config_write:
             return
 
-        path = os.path.join(
-            os.environ["HOME"], ".config", "labwc", "rc.xml"
-        )
+        path = self.user_config()
         Et.indent(self.et, space="\t", level=0)
         self.et.write(path)
 
@@ -80,11 +81,10 @@ class Bridge:
         # use the budgie-desktop shared file - or the distro variant if it exists
         # to populate the local labwc environment file
 
-        search_path = [
-            os.path.join(os.environ["HOME"], ".config", "labwc", "environment"),
-            os.path.join("/usr", "share", "budgie-desktop", "distro-environment"),
-            os.path.join("/usr", "share", "budgie-desktop", "environment")
-        ]
+        search_path = [self.user_config("environment")]
+        for system_dir in GLib.get_system_data_dirs():
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "distro-environment"))
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "environment"))
 
         path = ""
         for path in search_path:
@@ -97,7 +97,7 @@ class Bridge:
 
         try:
             if path != search_path[0]:
-                folder = os.path.join(os.environ["HOME"], ".config", "labwc")
+                folder = self.user_config("")
                 os.makedirs(folder, exist_ok=True)
                 shutil.copy(path, search_path[0])
         except Exception as e:
@@ -109,11 +109,11 @@ class Bridge:
         # otherwise use the budgie-desktop shared file - or the distro variant if it exists
         # to populate the local labwc config
 
-        search_path = [
-            os.path.join(os.environ["HOME"], ".config", "labwc", "rc.xml"),
-            os.path.join("/usr", "share", "budgie-desktop", "distro-rc.xml"),
-            os.path.join("/usr", "share", "budgie-desktop", "rc.xml")
-        ]
+        search_path = [self.user_config()]
+
+        for system_dir in GLib.get_system_data_dirs():
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "distro-rc.xml"))
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "rc.xml"))
 
         path = ""
         for path in search_path:
@@ -276,7 +276,7 @@ class Bridge:
         if layout == "":
             layout = "us" # default to at least a known keyboard layout
 
-        path = os.path.join(os.environ["HOME"], ".config", "labwc", "environment")
+        path = self.user_config("environment")
         subprocess.call("sed -i 's/^XKB_DEFAULT_LAYOUT=.*/XKB_DEFAULT_LAYOUT="+layout+"/g' " + path, shell=True)
 
         if self.delay_config_write:

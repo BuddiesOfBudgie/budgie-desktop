@@ -285,10 +285,10 @@
 		</keybind>
 	</keyboard>
 	<theme>
-		<name>Pocillo-dark</name>
+		<name>theme_name</name>
 		<dropShadows>yes</dropShadows>
-		<font place="ActiveWindow" name="Noto Sans" weight="Bold" size="11" slant="Normal" />
-		<font place="InactiveWindow" name="Noto Sans" weight="Bold" size="11" slant="Normal" />
+		<font place="ActiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
+		<font place="InactiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
 		<titlebar>
 			<layout>:iconify,max,close:</layout>
 		</titlebar>
