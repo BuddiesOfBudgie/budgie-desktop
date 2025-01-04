@@ -39,14 +39,7 @@ namespace Workspaces {
 		}
 	}
 
-	[DBus (name="org.budgie_desktop.BudgieWM")]
-	public interface BudgieWM : GLib.Object {
-		public abstract void RemoveWorkspaceByIndex(int index, uint32 time) throws Error;
-		public abstract int AppendNewWorkspace(uint32 time) throws Error;
-	}
-
 	public class WorkspacesApplet : Budgie.Applet {
-		private BudgieWM? wm_proxy = null;
 		private Gtk.EventBox ebox;
 		private Gtk.Box main_layout;
 		private Gtk.Box workspaces_layout;
@@ -100,9 +93,6 @@ namespace Workspaces {
 			dynamically_created_workspaces = new List<int>();
 			window_connections = new HashTable<unowned libxfce4windowing.Window, ulong>(str_hash, str_equal);
 
-			Bus.watch_name(BusType.SESSION, "org.budgie_desktop.BudgieWM", BusNameWatcherFlags.NONE,
-				has_wm, lost_wm);
-
 			ebox = new Gtk.EventBox();
 			ebox.add_events(Gdk.EventMask.SCROLL_MASK);
 			this.add(ebox);
@@ -143,13 +133,12 @@ namespace Workspaces {
 
 			add_button.button_release_event.connect((event) => {
 				try {
-					int new_index = wm_proxy.AppendNewWorkspace(event.time);
+					add_new_workspace();
+					uint new_index = workspace_group.get_workspace_count() - 1;
 
-					if (new_index != -1) {
-						set_current_workspace();
-					} else if (!below_max_workspace_count()) { // Last workspace
-						add_button_revealer.set_reveal_child(false); // Hide add button
-					}
+					 if (new_index != -1) {
+					 	set_current_workspace();
+					 }
 				} catch (Error e) {
 					warning("Failed to append new workspace: %s", e.message);
 				}
@@ -171,24 +160,24 @@ namespace Workspaces {
 
 			ebox.enter_notify_event.connect(() => {
 				if (button_visibility != AddButtonVisibility.HOVER) {
-					return false;
+					return Gdk.EVENT_PROPAGATE;
 				}
 
-				if (below_max_workspace_count()) { // Is below max workspace count
+				if (below_max_workspaces()) {
 					add_button_revealer.set_transition_type(show_transition);
 					add_button_revealer.set_reveal_child(true);
 				}
 
-				return false;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
 			ebox.leave_notify_event.connect(() => {
 				if (dragging || button_visibility != AddButtonVisibility.HOVER) {
-					return false;
+					return Gdk.EVENT_PROPAGATE;
 				}
 				add_button_revealer.set_transition_type(hide_transition);
 				add_button_revealer.set_reveal_child(false);
-				return false;
+				return Gdk.EVENT_PROPAGATE;
 			});
 
 			ebox.scroll_event.connect((e) => {
@@ -225,8 +214,9 @@ namespace Workspaces {
 
 		private void on_settings_change(string key) {
 			if (key == "addbutton-visibility") {
-				button_visibility = (AddButtonVisibility)settings.get_enum(key);
-				add_button_revealer.set_reveal_child(((button_visibility == AddButtonVisibility.ALWAYS) && below_max_workspace_count()));
+				button_visibility = (AddButtonVisibility) settings.get_enum(key);
+				var should_show = below_max_workspaces() && button_visibility == AddButtonVisibility.ALWAYS;
+				add_button_revealer.set_reveal_child(should_show);
 			} else if (key == "item-size-multiplier") {
 				item_size_multiplier = (float) settings.get_enum(key) / 4;
 				foreach (Gtk.Widget widget in workspaces_layout.get_children()) {
@@ -253,28 +243,8 @@ namespace Workspaces {
 			}
 		}
 
-		private void lost_wm() {
-			wm_proxy = null;
-		}
-
-		private void on_wm_get(Object? o, AsyncResult? res) {
-			try {
-				wm_proxy = Bus.get_proxy.end(res);
-			} catch (Error e) {
-				warning("Failed to get BudgieWM proxy: %s", e.message);
-			}
-		}
-
-		private void has_wm() {
-			if (wm_proxy == null) {
-				Bus.get_proxy.begin<BudgieWM>(BusType.SESSION,
-					"org.budgie_desktop.BudgieWM",
-					"/org/budgie_desktop/BudgieWM", 0, null, on_wm_get);
-			}
-		}
-
-		private bool below_max_workspace_count() {
-			return (workspace_group.get_workspace_count() < 8);
+		private bool below_max_workspaces() {
+			return workspace_group.get_workspace_count() < 8;
 		}
 
 		private void connect_signals() {
@@ -320,7 +290,7 @@ namespace Workspaces {
 			workspaces_layout.pack_start(revealer, true, true, 0);
 			revealer.set_reveal_child(true);
 
-			if (!below_max_workspace_count()) {
+			if (!below_max_workspaces()) {
 				add_button_revealer.set_reveal_child(false);
 			}
 		}
@@ -347,6 +317,8 @@ namespace Workspaces {
 			if (window.get_window_type() != libxfce4windowing.WindowType.NORMAL) {
 				return;
 			}
+
+			if (libxfce4windowing.windowing_get() != libxfce4windowing.Windowing.WAYLAND) return;
 
 			if (window_connections.contains(window)) {
 				ulong conn = window_connections.get(window);
@@ -395,7 +367,7 @@ namespace Workspaces {
 				return;
 			}
 
-			ulong* data = (ulong*) selection_data.get_data();
+			string? data = selection_data.get_text();
 			if (data == null) {
 				Gtk.drag_finish(context, false, true, time);
 				return;
@@ -403,7 +375,8 @@ namespace Workspaces {
 
 			libxfce4windowing.Window? window = null;
 			foreach (libxfce4windowing.Window win in xfce_screen.get_windows()) {
-				if (win.x11_get_xid() == *data) {
+				string all_class_names = string.joinv(",", window.get_class_ids());
+				if (all_class_names == data) {
 					window = win;
 					break;
 				}
@@ -414,25 +387,20 @@ namespace Workspaces {
 				return;
 			}
 
-			try {
-				int index = wm_proxy.AppendNewWorkspace(time);
+			add_new_workspace();
+			uint new_index = workspace_group.get_workspace_count() - 1;
 
-				if (index != -1) { // Successfully added workspace
-					dynamically_created_workspaces.append(index);
-					Timeout.add(50, () => {
-						libxfce4windowing.Workspace? workspace = get_workspace_by_index(index);
-						try {
-							if (workspace != null) window.move_to_workspace(workspace);
-						} catch (Error e) {
-							warning("Failed to move window to workspace: %s", e.message);
-						}
-						return false;
-					});
-				}
-			} catch (Error e) {
-				warning("Failed to append new workspace: %s", e.message);
-				Gtk.drag_finish(context, false, true, time);
-				return;
+			if (new_index != -1) { // Successfully added workspace
+				dynamically_created_workspaces.append((int) new_index);
+				Timeout.add(50, () => {
+					libxfce4windowing.Workspace? workspace = get_workspace_by_index(new_index);
+					try {
+						if (workspace != null) window.move_to_workspace(workspace);
+					} catch (Error e) {
+						warning("Failed to move window to workspace: %s", e.message);
+					}
+					return false;
+				});
 			}
 
 			Gtk.drag_finish(context, true, true, time);
@@ -479,21 +447,20 @@ namespace Workspaces {
 			}
 		}
 
-		private void remove_workspace(uint index, uint32 time) {
-			if (wm_proxy == null) {
-				return;
+		private void add_new_workspace() {
+			try {
+				workspace_group.create_workspace("Workspace %lu".printf(workspace_group.get_workspace_count() + 1));
+				workspace_group.set_layout((int) workspace_group.get_workspace_count(), 1);
+			} catch (Error e) {
+				warning("Failed to append new workspace: %s", e.message);
 			}
+		}
 
+		private void remove_workspace(uint index, uint32 time) {
 			var workspace = get_workspace_by_index((uint)index);
 
 			try {
-				wm_proxy.RemoveWorkspaceByIndex((int)index, time);
-
-				var _workspace = workspace_group.get_active_workspace();
-				if (_workspace != null && _workspace == workspace) {
-					var previous = get_workspace_by_index((index == 0) ? index : index - 1);
-					if (previous != null) previous.activate();
-				}
+				workspace.remove();
 			} catch (Error e) {
 				warning("Failed to remove workspace at index %lu: %s", index, e.message);
 			}
@@ -525,31 +492,31 @@ namespace Workspaces {
 			foreach (Gtk.Widget widget in workspaces_layout.get_children()) {
 				Gtk.Revealer revealer = widget as Gtk.Revealer;
 				WorkspaceItem item = revealer.get_child() as WorkspaceItem;
-				List<unowned libxfce4windowing.Window> windows = xfce_screen.get_windows_stacked().copy();
-				windows.reverse();
-				List<unowned libxfce4windowing.Window> window_list = new List<unowned libxfce4windowing.Window>();
+				unowned List<libxfce4windowing.Window>? windows = xfce_screen.get_windows();
+				List<libxfce4windowing.Window> window_list = new List<libxfce4windowing.Window>();
+
 				windows.foreach((window) => {
 					if (window.get_workspace() == item.get_workspace() && !window.is_skip_tasklist() && !window.is_skip_pager() && window.get_window_type() == libxfce4windowing.WindowType.NORMAL) {
 						window_list.append(window);
 					}
 				});
+
 				int index = (int)item.get_workspace().get_number();
 				unowned List<int>? dyn = dynamically_created_workspaces.find(index);
+
 				if (window_list.is_empty() && dyn != null) {
 					dynamically_created_workspaces.remove(index);
 					dyn = dynamically_created_workspaces.find(index+1);
+
 					if (dyn == null) {
 						Timeout.add(200, () => {
-							try {
-								wm_proxy.RemoveWorkspaceByIndex(index, Gdk.CURRENT_TIME);
-							} catch (Error e) {
-								warning("Failed to remove workspace at index %i: %s", index, e.message);
-							}
+							remove_workspace(index, Gdk.CURRENT_TIME);
 
 							return false;
 						});
 					}
 				}
+
 				item.update_windows(window_list);
 			}
 
