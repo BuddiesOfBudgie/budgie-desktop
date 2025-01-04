@@ -51,5 +51,5 @@ jobs:
           submodules: true
       - name: Build Budgie Desktop
         run: |
-          meson build -Dci=true
+          meson build -Dci=true -Dwith-runtime-dependencies=false
           meson compile -C build
