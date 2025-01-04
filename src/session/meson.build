@@ -19,7 +19,6 @@ gnome_session_324_components = [
     'org.gnome.SettingsDaemon.Power',
     'org.gnome.SettingsDaemon.PrintNotifications',
     'org.gnome.SettingsDaemon.Rfkill',
-    'org.gnome.SettingsDaemon.ScreensaverProxy',
     'org.gnome.SettingsDaemon.Sharing',
     'org.gnome.SettingsDaemon.Smartcard',
     'org.gnome.SettingsDaemon.Sound',
@@ -44,7 +43,6 @@ gsd_324_max = [
 
 # Always in Budgie
 budgie_components = [
-    'org.buddiesofbudgie.BudgieWm',
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
     'org.buddiesofbudgie.BudgiePowerDialog'
@@ -97,22 +95,37 @@ configure_file(
     install_dir: join_paths(get_option('prefix'), get_option('bindir')),
 )
 
-# Configure the xsession file
-xsession_conf = configure_file(
+# Configure the default wayland-session file
+waylandsession_conf = configure_file(
     input: 'budgie-desktop.desktop.in.in',
     output: 'budgie-desktop.desktop.in',
     configuration: session_data,
 )
 
 # Now merge the translations of the .desktop.in to a .desktop
-custom_target('desktop-file-xsession',
-    input : xsession_conf,
+custom_target('desktop-file-waylandsession',
+    input : waylandsession_conf,
     output : 'budgie-desktop.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
-    install_dir : join_paths(datadir, 'xsessions'),
+    install_dir : join_paths(datadir, 'wayland-sessions'),
 )
 
+# Configure the labwc wayland-session file
+waylandlabwcsession_conf = configure_file(
+    input: 'budgie-desktop-labwc.desktop.in.in',
+    output: 'budgie-desktop-labwc.desktop.in',
+    configuration: session_data,
+)
+
+# Now merge the translations of the .desktop.in to a .desktop
+custom_target('desktop-file-waylandlabwcsession',
+    input : waylandlabwcsession_conf,
+    output : 'budgie-desktop-labwc.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : join_paths(datadir, 'wayland-sessions'),
+)
 
 # Merge + install nm-applet
 custom_target('desktop-file-nm-applet',
