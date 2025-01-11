@@ -5,6 +5,6 @@ option('with-gtk-doc', type: 'boolean', value: true, description: 'Build gtk-doc
 option('with-hibernate', type: 'boolean', value: true, description: 'Include support for system hibernation')
 option('with-libuuid-time-safe', type: 'boolean', value: true, description: 'Enable use of LIBUUID.generate_time_safe (Vala option)')
 option('with-polkit', type: 'boolean', value: true, description: 'Enable PolKit support')
+option('with-runtime-dependencies', type: 'boolean', value: true, description: 'Check during build for critical runtime dependencies')
 option('with-stateless', type: 'boolean', value: false, description: 'Enable stateless XDG paths')
 option('xdg-appdir', type: 'string', description: 'XDG autostart path')
-option('with-runtime-dependencies', type: 'boolean', value: true, description: 'Check during build for critical runtime dependencies')
