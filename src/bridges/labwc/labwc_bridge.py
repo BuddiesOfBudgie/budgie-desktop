@@ -644,6 +644,10 @@ class Bridge:
     # all keybinds from various gsettings schemas are managed
     def keybindings_changed(self, settings, key):
 
+        # do validation checks for the key
+        if key not in settings:
+            return
+
         if key == "custom-keybindings":
             self.customkeys_changed(self.gsd_media_keys_settings, None)
             return
