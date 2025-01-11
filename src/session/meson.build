@@ -5,6 +5,7 @@ session_data = configuration_data()
 session_data.set('PACKAGE_VERSION', package_version)
 session_data.set('libexecdir', libexecdir)
 
+<<<<<<< HEAD
 gnome_session_components = [
     'gnome-settings-daemon',
 ]
@@ -40,6 +41,20 @@ gsd_324_mc = [
 gsd_324_max = [
     'org.gnome.SettingsDaemon.Orientation',
     'org.gnome.SettingsDaemon.XRANDR',
+=======
+# mandatory gnome-settings-daemon components
+budgie_session_324_components = [
+    'org.buddiesofbudgie.SettingsDaemon.A11ySettings',
+    'org.buddiesofbudgie.SettingsDaemon.Datetime',
+    'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
+    'org.buddiesofbudgie.SettingsDaemon.Power',
+    'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
+    'org.buddiesofbudgie.SettingsDaemon.Rfkill',
+    'org.buddiesofbudgie.SettingsDaemon.Sharing',
+    'org.buddiesofbudgie.SettingsDaemon.Smartcard',
+    'org.buddiesofbudgie.SettingsDaemon.Sound',
+    'org.buddiesofbudgie.SettingsDaemon.Wacom',
+>>>>>>> cd1253a9 (Change our Desktop Current Session ID to Budgie from Budgie:GNOME (#647))
 ]
 
 # Always in Budgie
@@ -55,18 +70,7 @@ if with_polkit == true
 endif
 
 dep_gsd = dependency('gnome-settings-daemon', version: gnome_minimum_version)
-# Merge the list depending on the gnome-settings-daemon version.
-if dep_gsd.version().version_compare('>=3.33.90')
-    session_components = budgie_components + gnome_session_324_components
-elif dep_gsd.version().version_compare('>=3.27.90')
-    session_components = budgie_components + gnome_session_324_components + gsd_324_mc
-elif dep_gsd.version().version_compare('>=3.25.4')
-    session_components = budgie_components + gnome_session_324_components + gsd_324_mc + gsd_324_key
-elif dep_gsd.version().version_compare('>=3.23.3')
-    session_components = budgie_components + gnome_session_324_components + gsd_324_mc + gsd_324_key + gsd_324_max
-else
-    session_components = gnome_session_components + budgie_components
-endif
+session_components = budgie_components + budgie_session_324_components
 
 # Set the session list
 session_data.set('SESSION_COMPONENTS', ';'.join(session_components))
@@ -160,4 +164,12 @@ custom_target('desktop-file-powerdialog',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,
+)
+
+# install gnome-settings-daemon desktop files to ensure they autostart
+
+install_subdir(
+    'settingsdaemon',
+    install_dir: xdg_appdir,
+    strip_directory: true
 )
