@@ -5,4 +5,4 @@ Exec=@prefix@/bin/magpie-wm -s /usr/bin/budgie-desktop
 TryExec=@prefix@/bin/magpie-wm
 Icon=
 Type=Application
-DesktopNames=Budgie;GNOME
+DesktopNames=Budgie

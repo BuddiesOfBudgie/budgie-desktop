@@ -5,4 +5,4 @@ Exec=@prefix@/bin/labwc -S /usr/bin/budgie-desktop
 TryExec=@prefix@/bin/labwc
 Icon=
 Type=Application
-DesktopNames=Budgie;GNOME
+DesktopNames=Budgie
