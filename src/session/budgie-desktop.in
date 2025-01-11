@@ -9,7 +9,7 @@ if [ "$1" = "--version" ]; then
 fi
 
 if [ -z $XDG_CURRENT_DESKTOP ]; then
-  XDG_CURRENT_DESKTOP=Budgie:GNOME
+  XDG_CURRENT_DESKTOP=Budgie
   export XDG_CURRENT_DESKTOP
 fi
 
