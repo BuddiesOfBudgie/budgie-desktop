@@ -35,6 +35,7 @@ daemon_sources = [
     'menus.vala',
     'osd.vala',
     'settings.vala',
+    'screenlock.vala',
     'tabswitcher.vala',
     'xdgdirtracker/dbus.vala',
 ]
@@ -51,6 +52,7 @@ daemon_deps = [
     dep_xfce4windowing,
     dep_gst,
     dep_cairo,
+    dep_upower,
     link_libbudgieprivate,
     libpanelplugin_vapi,
     link_libappsys,
