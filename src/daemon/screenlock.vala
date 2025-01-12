@@ -90,16 +90,19 @@ namespace Budgie {
 
 				/**
 				* Try in order, and load the first one that exists:
+				* - ~/.config/budgie-desktop/[gtklock.ini | gtklock.css]
 				* - /etc/budgie-desktop/[gtklock.ini | gtklock.css]
 				* - /usr/share/budgie-desktop/[gtklock.ini | gtklock.css]
 				*/
-				string[] system_configs = {
+				string[] lock_configs = {
+					"file://" + Environment.get_user_config_dir() + "/budgie-desktop/gtklock.ini",
 					@"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.ini",
 					@"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.ini"
 				};
 
-				foreach (string? filepath in system_configs) {
+				foreach (string? filepath in lock_configs) {
 					File file = File.new_for_uri(filepath);
+					warning(filepath);
 					bool tmp = file.query_exists();
 					if (tmp) {
 						// -c load the config file
@@ -109,6 +112,7 @@ namespace Budgie {
 				}
 
 				string[] style_configs = {
+					"file://" + Environment.get_user_config_dir() + "/budgie-desktop/gtklock.css",
 					@"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.css",
 					@"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.css"
 				};
