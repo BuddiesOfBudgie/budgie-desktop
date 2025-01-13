@@ -7,6 +7,8 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
+ *
+ * based on the template described in https://docs.gtk.org/gobject/tutorial.html
  */
 
 #pragma once
@@ -16,16 +18,15 @@
 
 G_BEGIN_DECLS
 
-G_DECLARE_DERIVABLE_TYPE(BudgiePopover, budgie_popover, BUDGIE, POPOVER, GtkPopover)
+#define T_TYPE_BUDGIE_POPOVER (budgie_popover_get_type ())
+G_DECLARE_DERIVABLE_TYPE (BudgiePopover, budgie_popover, T, BUDGIE_POPOVER, GtkPopover)
 
 struct _BudgiePopoverClass {
 	GtkPopoverClass parent_class;
 
-	gpointer padding[4];
+	gpointer padding[12];
 };
 
-#define BUDGIE_TYPE_POPOVER (budgie_popover_get_type())
-
-GtkWidget* budgie_popover_new(GtkWidget* relative_to);
+BudgiePopover* budgie_popover_new(GtkWidget* relative_to);
 
 G_END_DECLS
