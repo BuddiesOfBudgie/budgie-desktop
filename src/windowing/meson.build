@@ -5,6 +5,7 @@ libwindowing_sources = [
 ]
 
 libwindowing_deps = [
+  dep_giounix,
   dep_xfce4windowing,
   dep_wnck,
 ]
