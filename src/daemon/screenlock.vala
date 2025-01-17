@@ -102,7 +102,6 @@ namespace Budgie {
 
 				foreach (string? filepath in lock_configs) {
 					File file = File.new_for_uri(filepath);
-					warning(filepath);
 					bool tmp = file.query_exists();
 					if (tmp) {
 						// -c load the config file
