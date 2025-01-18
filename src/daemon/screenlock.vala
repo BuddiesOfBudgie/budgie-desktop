@@ -12,10 +12,22 @@
 namespace Budgie {
 	const string DBUS_SCREENLOCK = "org.buddiesofbudgie.BudgieScreenlock";
 	const string DBUS_SCREENLOCK_PATH = "/org/buddiesofbudgie/Screenlock";
+	const string POWERSCREEN_DBUS_NAME = "org.gnome.SettingsDaemon.Power";
+	const string POWERSCREEN_DBUS_OBJECT_PATH = "/org/gnome/SettingsDaemon/Power";
+
+	[DBus (name="org.gnome.SettingsDaemon.Power.Screen")]
+	public interface PowerScreenRemote : GLib.Object {
+		public abstract int32 Brightness { get; set; }
+	}
 
 	[DBus (name="org.buddiesofbudgie.BudgieScreenlock")]
 	public class Screenlock {
 		static Screenlock? instance;
+
+		// Screen Dim capability
+		PowerScreenRemote? powerscreen_proxy = null;
+		bool isdimmable = false;
+		int32 current_brightness = 0;
 
 		// connections to various schemas used in screenlocking
 		private GLib.Settings power;
@@ -33,6 +45,16 @@ namespace Budgie {
 		private Up.Client client;
 		private GLib.GenericArray<Up.Device> devices;
 		private bool battery_mode;
+
+		private string calculate_dim() {
+			isdimmable = this.power.get_boolean("idle-dim");
+
+			if (!isdimmable) return "";
+
+			var dbus_call = "timeout 30 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Dim' ";
+			dbus_call += "resume 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Undim' ";
+			return dbus_call;
+		}
 
 		private string calculate_lockcommand() {
 			string output = "";
@@ -68,15 +90,17 @@ namespace Budgie {
 
 				/**
 				* Try in order, and load the first one that exists:
+				* - ~/.config/budgie-desktop/[gtklock.ini | gtklock.css]
 				* - /etc/budgie-desktop/[gtklock.ini | gtklock.css]
 				* - /usr/share/budgie-desktop/[gtklock.ini | gtklock.css]
 				*/
-				string[] system_configs = {
+				string[] lock_configs = {
+					"file://" + Environment.get_user_config_dir() + "/budgie-desktop/gtklock.ini",
 					@"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.ini",
 					@"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.ini"
 				};
 
-				foreach (string? filepath in system_configs) {
+				foreach (string? filepath in lock_configs) {
 					File file = File.new_for_uri(filepath);
 					bool tmp = file.query_exists();
 					if (tmp) {
@@ -87,6 +111,7 @@ namespace Budgie {
 				}
 
 				string[] style_configs = {
+					"file://" + Environment.get_user_config_dir() + "/budgie-desktop/gtklock.css",
 					@"file://$(Budgie.CONFDIR)/budgie-desktop/gtklock.css",
 					@"file://$(Budgie.DATADIR)/budgie-desktop/gtklock.css"
 				};
@@ -155,6 +180,8 @@ namespace Budgie {
 
 			new_idle = "swayidle -w ";
 
+			new_idle += calculate_dim();
+
 			if (idle_delay !=0 ) {
 				new_idle += "timeout " + idle_delay.to_string() + " 'wlopm --off \\*' resume 'wlopm --on \\*' ";
 			}
@@ -196,6 +223,15 @@ namespace Budgie {
 			}
 		}
 
+		/* Hold onto our PowerScreen proxy ref */
+		void on_powerscreen_get(Object? o, AsyncResult? res) {
+			try {
+				powerscreen_proxy = Bus.get_proxy.end(res);
+			} catch (Error e) {
+				warning("Failed to get PowerScreen proxy: %s", e.message);
+			}
+		}
+
 		[DBus (visible = false)]
 		public void setup_dbus() {
 			/* Hook up screenlock dbus */
@@ -203,6 +239,27 @@ namespace Budgie {
 				on_bus_acquired,
 				() => {},
 				() => {} );
+		}
+
+		public async void dim() throws GLib.DBusError, GLib.IOError {
+			if (powerscreen_proxy == null) {
+				return;
+			}
+
+			current_brightness = powerscreen_proxy.Brightness;
+			int32 idle_brightness = power.get_int("idle-brightness");
+
+			if (current_brightness > idle_brightness) {
+				powerscreen_proxy.Brightness = idle_brightness;
+			}
+		}
+
+		public async void undim() throws GLib.DBusError, GLib.IOError {
+			if (powerscreen_proxy == null) {
+				return;
+			}
+
+			powerscreen_proxy.Brightness = current_brightness;
 		}
 
 		void on_bus_acquired(DBusConnection conn) {
@@ -215,7 +272,6 @@ namespace Budgie {
 
 		public async void lock() throws GLib.DBusError, GLib.IOError {
 			if (!all_apps) {
-				yield;
 				return;
 			}
 
@@ -224,8 +280,6 @@ namespace Budgie {
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
-
-			yield;
 		}
 
 		[DBus (visible = false)]
@@ -272,6 +326,8 @@ namespace Budgie {
 				return;
 			}
 
+			Bus.get_proxy.begin<PowerScreenRemote>(BusType.SESSION, POWERSCREEN_DBUS_NAME, POWERSCREEN_DBUS_OBJECT_PATH, 0, null, on_powerscreen_get);
+
 			// Connect to upower and get notifications for all batteries and power-supplies to see if on battery mode
 			client = new Up.Client();
 			client.notify.connect(this.client_daemon);
@@ -289,7 +345,8 @@ namespace Budgie {
 				string[] search = { "sleep-inactive-ac-timeout",
 									"sleep-inactive-ac-type",
 									"sleep-inactive-battery-timeout",
-									"sleep-inactive-battery-type"};
+									"sleep-inactive-battery-type",
+									"idle-dim"};
 
 				if (key in search) {
 					calculate_idle();
