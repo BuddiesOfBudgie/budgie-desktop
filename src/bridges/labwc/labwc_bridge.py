@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # This file is part of budgie-desktop
 #
 # Copyright Budgie Desktop Developers
@@ -16,6 +17,7 @@ import logging
 from systemd.journal import JournalHandler
 import psutil
 import sys
+import gettext
 
 import gi
 from gi.repository import Gio, GLib
@@ -28,6 +30,7 @@ class Bridge:
 
     # element tree to read/write
     et = None
+    menuet = None
 
     # gsettings connections
     panel_settings = None
@@ -71,20 +74,15 @@ class Bridge:
         # reload config for labwc
         subprocess.call("labwc -r", shell=True)
 
-    # starting point for the bridge
-    def __init__(self):
-
-        self.log = logging.getLogger('labwc_bridge')
-        self.log.addHandler(JournalHandler())
-
-        # Check if a local labwc environment file exists - if doesn't
+    def search_for_config(self, config_file):
+        # Check if a local labwc config_file exists - if doesn't
         # use the budgie-desktop shared file - or the distro variant if it exists
-        # to populate the local labwc environment file
+        # to populate the local labwc config folder
 
-        search_path = [self.user_config("environment")]
+        search_path = [self.user_config(config_file)]
         for system_dir in GLib.get_system_data_dirs():
-            search_path.append(os.path.join(system_dir, "budgie-desktop", "distro-environment"))
-            search_path.append(os.path.join(system_dir, "budgie-desktop", "environment"))
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "distro-"+config_file))
+            search_path.append(os.path.join(system_dir, "budgie-desktop", config_file))
 
         path = ""
         for path in search_path:
@@ -92,7 +90,19 @@ class Bridge:
                 break
 
         if path == "":
-            self.log.critical("Could not find an existing environment or a shipped budgie equivalent")
+            self.log.critical("Could not find an existing "+config_file+" or a shipped budgie equivalent")
+            return None, None
+
+        return path, search_path
+
+    # starting point for the bridge
+    def __init__(self):
+
+        self.log = logging.getLogger('labwc_bridge')
+        self.log.addHandler(JournalHandler())
+
+        path,search_path = self.search_for_config("environment")
+        if path == None:
             return
 
         try:
@@ -105,23 +115,29 @@ class Bridge:
             self.log.critical(e)
             return
 
-        # Check if a local labwc config file exists - if so use it
-        # otherwise use the budgie-desktop shared file - or the distro variant if it exists
-        # to populate the local labwc config
+        path, search_path = self.search_for_config("menu.xml")
+        if path == None:
+            return
 
-        search_path = [self.user_config()]
+        try:
+            if path != search_path[0]:
+                shutil.copy(path, search_path[0])
+        except Exception as e:
+            self.log.critical("Failed to copy " + path + " to " + search_path[0])
+            self.log.critical(e)
+            return
 
-        for system_dir in GLib.get_system_data_dirs():
-            search_path.append(os.path.join(system_dir, "budgie-desktop", "distro-rc.xml"))
-            search_path.append(os.path.join(system_dir, "budgie-desktop", "rc.xml"))
+        try:
+            self.menuet = Et.parse(source=path)
+        except Exception as e:
+            self.log.warning("Cannot parse " + path + ":\n")
+            self.log.warning(e)
+            return
 
-        path = ""
-        for path in search_path:
-            if os.path.isfile(path):
-                break
+        self.translate_menu_labels(path)
 
-        if path == "":
-            self.log.critical("Could not find an existing rc.xml or a shipped budgie equivalent")
+        path,search_path = self.search_for_config("rc.xml")
+        if path == None:
             return
 
         try:
@@ -172,6 +188,32 @@ class Bridge:
         self.default_terminal_settings.connect('changed', self.default_terminal_changed)
 
         self.bridge_config()
+
+    # this translate all menu labels if not already done
+    def translate_menu_labels(self, path):
+        root = self.menuet.getroot()
+
+        # first scan the config file to find any custom entries.
+        matches = self.menuet.findall('./menu/item[@label]')
+
+        gettext.bindtextdomain("budgie-desktop", "/usr/share/locale")
+        gettext.textdomain("budgie-desktop")
+
+        # look for labels and translate them
+        # we save the original translation string with the menu and use that
+        # so we can retranslate if the locale changes
+        for matched in matches:
+            if "original" in matched.attrib:
+                label = matched.attrib["original"]
+            else:
+                label = matched.attrib["label"]
+                matched.attrib["original"] = label
+
+            translated = gettext.gettext(label)
+            matched.attrib["label"] = translated
+
+        Et.indent(self.menuet, space="\t", level=0)
+        self.menuet.write(path)
 
     # this manages the default terminal updates
     def default_terminal_changed(self, settings, key):

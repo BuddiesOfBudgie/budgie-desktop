@@ -1,0 +1,10 @@
+<openbox_menu>
+	<menu id="root-menu">
+		<item label="Budgie Desktop Settings" original="Budgie Desktop Settings">
+			<action name="Execute" command="budgie-desktop-settings" />
+		</item>
+		<item label="System Settings" original="System Settings">
+			<action name="Execute" command="budgie-control-center" />
+		</item>
+	</menu>
+</openbox_menu>
