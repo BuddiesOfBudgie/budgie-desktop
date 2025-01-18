@@ -124,6 +124,8 @@
 		private Settings panel_settings { private get; private set; default = null; }
 
 		private uint32 latest_popup_id { private get; private set; default = 0; }
+		private int32 latest_popup_x;
+		private int32 latest_popup_y;
 		private int paused_notifications { private get; private set; default = 0; }
 
 		private Notify.Notification unpaused_noti = null;
@@ -358,14 +360,15 @@
 		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
-			var screen = Gdk.Screen.get_default();
+			GtkLayerShell.init_for_window(popup);
+			GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
 
-			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
-			Gdk.Rectangle mon_rect = mon.get_geometry();
+			var mon = libxfce4windowing.Screen.get_default().get_primary_monitor();
+			Gdk.Rectangle mon_rect = mon.get_workarea();
 
 			ulong handler_id = 0;
 			handler_id = popup.get_child().size_allocate.connect((alloc) => {
-				// Diconnect from the signal to avoid trying to recalculate
+				// Disconnect from the signal to avoid trying to recalculate
 				// the position unexpectedly, which occurs when mousing over
 				// or clicking the close button with some GTK themes.
 				popup.get_child().disconnect(handler_id);
@@ -374,7 +377,11 @@
 				/* Set the x, y position of the notification */
 				int x = 0, y = 0;
 				calculate_position(popup, mon_rect, out x, out y);
-				popup.move(x, y);
+				GtkLayerShell.set_monitor(popup, mon.get_gdk_monitor());
+				GtkLayerShell.set_margin(popup, GtkLayerShell.Edge.LEFT, x);
+				GtkLayerShell.set_margin(popup, GtkLayerShell.Edge.TOP, y);
+				GtkLayerShell.set_anchor(popup, GtkLayerShell.Edge.LEFT, true);
+				GtkLayerShell.set_anchor(popup, GtkLayerShell.Edge.TOP, true);
 			});
 
 			popup.show_all();
@@ -392,7 +399,8 @@
 
 			if (latest_exists) {
 				existing_height = latest.get_child().get_allocated_height();
-				latest.get_position(out existing_x, out existing_y);
+				existing_x = this.latest_popup_x;
+				existing_y = this.latest_popup_y;
 			}
 
 			switch (pos) {
@@ -436,6 +444,8 @@
 					}
 					break;
 			}
+			this.latest_popup_x = x;
+			this.latest_popup_y = y;
 		}
 
 		/**
