@@ -142,7 +142,6 @@ namespace Budgie {
 			}
 
 			/* Update the primary monitor notion */
-			//screen.monitors_changed.connect(on_monitors_changed);
 			screen_id = libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
 
 			/* Set up size */
@@ -163,7 +162,7 @@ namespace Budgie {
 		* Monitors changed, find out the primary monitor, and schedule move of OSD
 		*/
 		private void on_monitors_changed() {
-			primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();//screen.get_display().get_primary_monitor();
+			primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
 			move_osd();
 		}
 
@@ -248,6 +247,7 @@ namespace Budgie {
 			if (params.contains("icon")) {
 				icon_name = params.lookup("icon").get_string();
 			}
+
 			if (params.contains("label")) {
 				label = params.lookup("label").get_string();
 			}
