@@ -20,9 +20,9 @@ namespace Budgie {
 
 		/* On Screen Display */
 		Budgie.OSDManager? osd;
+		Budgie.OSDKeys? osdkeys;
 		Budgie.Notifications.Server? notifications;
 		Budgie.StatusNotifier.FreedesktopWatcher? status_notifier;
-		Budgie.OSDKeys? osdkeys;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
 		Budgie.Background? background;
@@ -46,12 +46,10 @@ namespace Budgie {
 				}
 			});
 
-			Timeout.add(1000, () => {
-				osd = new Budgie.OSDManager();
-				osd.setup_dbus(replace);
-				osdkeys = new Budgie.OSDKeys();
-				return false;
-			});
+			osd = new Budgie.OSDManager();
+			osd.setup_dbus(replace);
+			osdkeys = new Budgie.OSDKeys();
+
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
 			background = new Budgie.Background();
