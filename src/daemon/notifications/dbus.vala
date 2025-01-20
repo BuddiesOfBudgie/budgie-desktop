@@ -417,44 +417,18 @@
 			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
 			bool latest_exists = latest != null && !latest.destroying;
-			int existing_height = 0, existing_y = 0;
 
 			if (latest_exists) {
-				existing_height = latest.get_child().get_allocated_height();
-				existing_y = this.latest_popup_y;
+				var existing_height = latest.get_child().get_allocated_height();
+				y = this.latest_popup_y + existing_height + BUFFER_ZONE;
+			}
+			else if  (pos == NotificationPosition.BOTTOM_LEFT || pos == NotificationPosition.BOTTOM_RIGHT ) {
+				y = INITIAL_BUFFER_ZONE;
+			}
+			else {
+				y = rect.y + INITIAL_BUFFER_ZONE;
 			}
 
-			switch (pos) {
-				case NotificationPosition.TOP_LEFT:
-					if (latest_exists) { // If a notification is already being displayed
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first notification on the screen
-						y = rect.y + INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.BOTTOM_LEFT:
-					if (latest_exists) { // If a notification is already being displayed
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						y = INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.BOTTOM_RIGHT:
-					if (latest_exists) { // If a notification is already being displayed
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						y = INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
-				default:
-					if (latest_exists) { // If a notification is already being displayed
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						y = rect.y + INITIAL_BUFFER_ZONE;
-					}
-					break;
-			}
 			this.latest_popup_y = y;
 		}
 
