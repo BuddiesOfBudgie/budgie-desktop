@@ -16,6 +16,13 @@
 		public abstract async void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError;
 	}
 
+	/*
+	  Controls the OSD for various controllable items
+	  volume
+	  brightness
+	  caps-lock
+	  num-lock
+	 */
 	class OSDKeys : Object {
 
 		// vars for the brightness handling
@@ -35,7 +42,8 @@
 		private Gvc.MixerStream? stream;
 		private ulong notify_id;
 
-		// need to handle initialisation of the class
+		// need to handle initialisation of various methods so ensure the OSD is not accidently
+		// activated when budgie-daemon is started.
 		private bool initialising;
 
 		public OSDKeys() {
@@ -66,12 +74,11 @@
 			mixer.default_sink_changed.connect(on_mixer_sink_changed);
 			mixer.open();
 
-			// wait a short while to allow the async mixer methods to complete otherwise we see the volume OSD on startup
+			// wait a short while to allow the async mixer methods to complete otherwise
+			// we see the volume OSD on startup accidently when keymap changes are invoked
 			Timeout.add(200, () => {
 				initialising = false;
 				map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
-				capslock = map.get_caps_lock_state();
-				numlock = map.get_num_lock_state();
 				map.state_changed.connect(on_keymap_state_changed);
 				return false;
 			});
@@ -151,12 +158,19 @@
 			osd.ShowOSD.begin(params);
 		}
 
+		/*
+		  we allow Gtk keymap to control when to display capslock/numlock state
+		  It does appear though that there is a bug under wayland where the
+		  state of the capslock/numlock is not set until another keymap is activated
+		  This can be ctrl/shift as well as the caps/numlock. If the latter is activated
+		  this can mean the OSD for keymap state is not activated on first use; only on
+		  subsequent keypresses.
+		 */
 		private void on_keymap_state_changed() {
 			if (!firstrun) {
 				capslock = map.get_caps_lock_state();
 				numlock = map.get_num_lock_state();
 				firstrun = true;
-				//return;
 			}
 
 			HashTable<string,Variant> params = new HashTable<string,Variant>(null, null);
