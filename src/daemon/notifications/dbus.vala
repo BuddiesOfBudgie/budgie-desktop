@@ -373,9 +373,8 @@
 				popup.get_child().disconnect(handler_id);
 				handler_id = 0;
 
-				/* Set the y position of the notification */
-				int y = 0;
-				calculate_position(popup, mon_rect, out y);
+				/* determine the y position for the latest notification */
+				calculate_position(mon_rect.y);
 				GtkLayerShell.set_monitor(popup, mon.get_gdk_monitor());
 				var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 				int edge_a, edge_b;
@@ -399,11 +398,11 @@
 						edge_b = GtkLayerShell.Edge.TOP;
 						break;
 				}
+
 				GtkLayerShell.set_margin(popup, edge_a, BUFFER_ZONE);
-				GtkLayerShell.set_margin(popup, edge_b, y);
+				GtkLayerShell.set_margin(popup, edge_b, this.latest_popup_y);
 				GtkLayerShell.set_anchor(popup, edge_a, true);
 				GtkLayerShell.set_anchor(popup, edge_b, true);
-
 			});
 
 			popup.show_all();
@@ -413,23 +412,21 @@
 		* Calculate the (y) position of a notification popup based on the setting for where on
 		* the screen notifications should appear.
 		*/
-		private void calculate_position(Popup window, Gdk.Rectangle rect, out int y) {
+		private void calculate_position(int monitor_height) {
 			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
 			bool latest_exists = latest != null && !latest.destroying;
 
 			if (latest_exists) {
 				var existing_height = latest.get_child().get_allocated_height();
-				y = this.latest_popup_y + existing_height + BUFFER_ZONE;
+				this.latest_popup_y = this.latest_popup_y + existing_height + BUFFER_ZONE;
 			}
 			else if  (pos == NotificationPosition.BOTTOM_LEFT || pos == NotificationPosition.BOTTOM_RIGHT ) {
-				y = INITIAL_BUFFER_ZONE;
+				this.latest_popup_y = INITIAL_BUFFER_ZONE;
 			}
 			else {
-				y = rect.y + INITIAL_BUFFER_ZONE;
+				this.latest_popup_y = monitor_height + INITIAL_BUFFER_ZONE;
 			}
-
-			this.latest_popup_y = y;
 		}
 
 		/**
