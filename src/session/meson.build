@@ -5,43 +5,6 @@ session_data = configuration_data()
 session_data.set('PACKAGE_VERSION', package_version)
 session_data.set('libexecdir', libexecdir)
 
-<<<<<<< HEAD
-gnome_session_components = [
-    'gnome-settings-daemon',
-]
-
-gnome_session_324_components = [
-    'org.gnome.SettingsDaemon.A11ySettings',
-    'org.gnome.SettingsDaemon.Color',
-    'org.gnome.SettingsDaemon.Datetime',
-    'org.gnome.SettingsDaemon.Housekeeping',
-    'org.gnome.SettingsDaemon.Keyboard',
-    'org.gnome.SettingsDaemon.MediaKeys',
-    'org.gnome.SettingsDaemon.Power',
-    'org.gnome.SettingsDaemon.PrintNotifications',
-    'org.gnome.SettingsDaemon.Rfkill',
-    'org.gnome.SettingsDaemon.ScreensaverProxy',
-    'org.gnome.SettingsDaemon.Sharing',
-    'org.gnome.SettingsDaemon.Smartcard',
-    'org.gnome.SettingsDaemon.Sound',
-    'org.gnome.SettingsDaemon.Wacom',
-    'org.gnome.SettingsDaemon.XSettings',
-]
-
-gsd_324_key = [
-    'org.gnome.SettingsDaemon.A11yKeyboard'
-]
-
-gsd_324_mc = [
-    'org.gnome.SettingsDaemon.Clipboard',
-    'org.gnome.SettingsDaemon.Mouse'
-]
-
-
-gsd_324_max = [
-    'org.gnome.SettingsDaemon.Orientation',
-    'org.gnome.SettingsDaemon.XRANDR',
-=======
 # mandatory gnome-settings-daemon components
 budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.A11ySettings',
@@ -54,7 +17,6 @@ budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.Smartcard',
     'org.buddiesofbudgie.SettingsDaemon.Sound',
     'org.buddiesofbudgie.SettingsDaemon.Wacom',
->>>>>>> cd1253a9 (Change our Desktop Current Session ID to Budgie from Budgie:GNOME (#647))
 ]
 
 # Always in Budgie
@@ -76,6 +38,30 @@ session_components = budgie_components + budgie_session_324_components
 session_data.set('SESSION_COMPONENTS', ';'.join(session_components))
 # Set the prefix
 session_data.set('prefix', join_paths(get_option('prefix')))
+# Set bindir to budgie-desktop
+session_data.set('bindir', bindir)
+
+# Set bindir to labwc
+labwc_bindir = get_option('labwc-bindir')
+if labwc_bindir == ''
+    labwc_bindir = bindir
+endif
+session_data.set('labwc_bindir', labwc_bindir)
+
+# Set bindir to magpie-wm
+#magpie_bindir = get_option('magpie-bindir')
+#if magpie_bindir == ''
+#    magpie_bindir = bindir
+#endif
+#session_data.set('magpie_bindir', magpie_bindir)
+
+# Set libexecdir to gnome-settings-daemon
+# Unfortunately this info is not provided by its pkgconfig file
+gsd_libexecdir = get_option('gsd-libexecdir')
+if gsd_libexecdir == ''
+    gsd_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+endif
+session_data.set('gsd_libexecdir', gsd_libexecdir)
 
 # Write the budgie-desktop.session.in file from the .in.in
 session_conf = configure_file(
@@ -168,8 +154,17 @@ custom_target('desktop-file-powerdialog',
 
 # install gnome-settings-daemon desktop files to ensure they autostart
 
-install_subdir(
-    'settingsdaemon',
-    install_dir: xdg_appdir,
-    strip_directory: true
-)
+settings_daemon_components = budgie_session_324_components + [
+    'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
+    'org.buddiesofbudgie.SettingsDaemon.UsbProtection',
+    'org.buddiesofbudgie.SettingsDaemon.Wwan',
+]
+
+foreach component: settings_daemon_components
+    configure_file(
+        input: join_paths('settingsdaemon', component + '.desktop.in'),
+        output: '@BASENAME@',
+        configuration: session_data,
+        install_dir: xdg_appdir,
+    )
+endforeach

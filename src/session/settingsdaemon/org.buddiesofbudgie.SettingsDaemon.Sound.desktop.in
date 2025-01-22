@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Budgie date & time
-Exec=/usr/libexec/gsd-datetime
+Name=Budgie Desktop sound sample caching
+Exec=@gsd_libexecdir@/gsd-sound
 OnlyShowIn=Budgie;
 NoDisplay=true
 X-GNOME-Autostart-Phase=Initialization
