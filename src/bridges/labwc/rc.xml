@@ -300,11 +300,6 @@
 		<windowRule identifier="nemo-desktop" title="nemo-desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
 			<action name="ToggleAlwaysOnBottom" />
 		</windowRule>
-		<windowRule identifier="budgie-daemon" title="BudgieNotification" skipTaskbar="yes" skipWindowSwitcher="yes">
-			<action name="SetDecorations" decorations="None" />
-			<action name="MoveToEdge" direction="down" snapWindows="no" />
-			<action name="MoveToEdge" direction="right" snapWindows="no" />
-		</windowRule>
 		<windowRule identifier="budgie-power-dialog" title="budgie-power-dialog" skipTaskbar="yes" skipWindowSwitcher="yes">
 			<action name="AutoPlace" policy="center" />
 		</windowRule>

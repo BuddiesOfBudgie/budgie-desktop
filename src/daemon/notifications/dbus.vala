@@ -124,6 +124,7 @@
 		private Settings panel_settings { private get; private set; default = null; }
 
 		private uint32 latest_popup_id { private get; private set; default = 0; }
+		private int32 latest_popup_y;
 		private int paused_notifications { private get; private set; default = 0; }
 
 		private Notify.Notification unpaused_noti = null;
@@ -358,83 +359,73 @@
 		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
-			var screen = Gdk.Screen.get_default();
+			GtkLayerShell.init_for_window(popup);
+			GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
 
-			Gdk.Monitor mon = screen.get_display().get_primary_monitor();
-			Gdk.Rectangle mon_rect = mon.get_geometry();
+			var mon = libxfce4windowing.Screen.get_default().get_primary_monitor();
+			Gdk.Rectangle mon_rect = mon.get_workarea();
 
 			ulong handler_id = 0;
 			handler_id = popup.get_child().size_allocate.connect((alloc) => {
-				// Diconnect from the signal to avoid trying to recalculate
+				// Disconnect from the signal to avoid trying to recalculate
 				// the position unexpectedly, which occurs when mousing over
 				// or clicking the close button with some GTK themes.
 				popup.get_child().disconnect(handler_id);
 				handler_id = 0;
 
-				/* Set the x, y position of the notification */
-				int x = 0, y = 0;
-				calculate_position(popup, mon_rect, out x, out y);
-				popup.move(x, y);
+				/* determine the y position for the latest notification */
+				calculate_position(mon_rect.y);
+				GtkLayerShell.set_monitor(popup, mon.get_gdk_monitor());
+				var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
+				int edge_a, edge_b;
+
+				switch (pos) {
+					case NotificationPosition.TOP_LEFT:
+						edge_a = GtkLayerShell.Edge.LEFT;
+						edge_b = GtkLayerShell.Edge.TOP;
+						break;
+					case NotificationPosition.BOTTOM_LEFT:
+						edge_a = GtkLayerShell.Edge.LEFT;
+						edge_b = GtkLayerShell.Edge.BOTTOM;
+						break;
+					case NotificationPosition.BOTTOM_RIGHT:
+						edge_a = GtkLayerShell.Edge.RIGHT;
+						edge_b = GtkLayerShell.Edge.BOTTOM;
+						break;
+					case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
+					default:
+						edge_a = GtkLayerShell.Edge.RIGHT;
+						edge_b = GtkLayerShell.Edge.TOP;
+						break;
+				}
+
+				GtkLayerShell.set_margin(popup, edge_a, BUFFER_ZONE);
+				GtkLayerShell.set_margin(popup, edge_b, this.latest_popup_y);
+				GtkLayerShell.set_anchor(popup, edge_a, true);
+				GtkLayerShell.set_anchor(popup, edge_b, true);
 			});
 
 			popup.show_all();
 		}
 
 		/**
-		* Calculate the (x, y) position of a notification popup based on the setting for where on
+		* Calculate the (y) position of a notification popup based on the setting for where on
 		* the screen notifications should appear.
 		*/
-		private void calculate_position(Popup window, Gdk.Rectangle rect, out int x, out int y) {
+		private void calculate_position(int monitor_height) {
 			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 			var latest = this.popups.get(this.latest_popup_id);
 			bool latest_exists = latest != null && !latest.destroying;
-			int existing_height = 0, existing_x = 0, existing_y = 0;
 
 			if (latest_exists) {
-				existing_height = latest.get_child().get_allocated_height();
-				latest.get_position(out existing_x, out existing_y);
+				var existing_height = latest.get_child().get_allocated_height();
+				this.latest_popup_y = this.latest_popup_y + existing_height + BUFFER_ZONE;
 			}
-
-			switch (pos) {
-				case NotificationPosition.TOP_LEFT:
-					if (latest_exists) { // If a notification is already being displayed
-						x = existing_x;
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						x = rect.x + BUFFER_ZONE;
-						y = rect.y + INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.BOTTOM_LEFT:
-					if (latest_exists) { // If a notification is already being displayed
-						x = existing_x;
-						y = existing_y - existing_height - BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						x = rect.x + BUFFER_ZONE;
-						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.BOTTOM_RIGHT:
-					if (latest_exists) { // If a notification is already being displayed
-						x = existing_x;
-						y = existing_y - existing_height - BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
-						x -= BUFFER_ZONE; // Don't touch edge of the screen
-						y = (rect.y + rect.height) - window.get_allocated_height() - INITIAL_BUFFER_ZONE;
-					}
-					break;
-				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
-				default:
-					if (latest_exists) { // If a notification is already being displayed
-						x = existing_x;
-						y = existing_y + existing_height + BUFFER_ZONE;
-					} else { // This is the first nofication on the screen
-						x = (rect.x + rect.width) - NOTIFICATION_WIDTH;
-						x -= BUFFER_ZONE; // Don't touch edge of the screen
-						y = rect.y + INITIAL_BUFFER_ZONE;
-					}
-					break;
+			else if  (pos == NotificationPosition.BOTTOM_LEFT || pos == NotificationPosition.BOTTOM_RIGHT ) {
+				this.latest_popup_y = INITIAL_BUFFER_ZONE;
+			}
+			else {
+				this.latest_popup_y = monitor_height + INITIAL_BUFFER_ZONE;
 			}
 		}
 
