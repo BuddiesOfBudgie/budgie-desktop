@@ -78,21 +78,21 @@ custom_target('desktop-file-waylandsession',
     install_dir : join_paths(datadir, 'wayland-sessions'),
 )
 
-# Configure the labwc wayland-session file
-waylandlabwcsession_conf = configure_file(
-    input: 'budgie-desktop-labwc.desktop.in.in',
-    output: 'budgie-desktop-labwc.desktop.in',
-    configuration: session_data,
-)
+# Configure the magpie wayland-session file
+#waylandmagpiesession_conf = configure_file(
+#    input: 'budgie-desktop-magpie.desktop.in.in',
+#    output: 'budgie-desktop-magpie.desktop.in',
+#    configuration: session_data,
+#)
 
 # Now merge the translations of the .desktop.in to a .desktop
-custom_target('desktop-file-waylandlabwcsession',
-    input : waylandlabwcsession_conf,
-    output : 'budgie-desktop-labwc.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
-    install : true,
-    install_dir : join_paths(datadir, 'wayland-sessions'),
-)
+#custom_target('desktop-file-waylandmagpiesession',
+#    input : waylandmagpiesession_conf,
+#    output : 'budgie-desktop-magpie.desktop',
+#    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+#    install : true,
+#    install_dir : join_paths(datadir, 'wayland-sessions'),
+#)
 
 # Merge + install nm-applet
 custom_target('desktop-file-nm-applet',
