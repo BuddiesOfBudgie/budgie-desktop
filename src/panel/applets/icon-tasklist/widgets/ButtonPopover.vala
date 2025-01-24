@@ -196,7 +196,7 @@ public class ButtonPopover : Gtk.Popover {
 				controls_layout.destroy();
 			});
 
-			string id = ((ulong) window.x11_get_xid()).to_string();
+			string id = window.get_class_ids()[0];
 			stack.add_named(controls_layout, id);
 			stack.set_visible_child_name(id);
 		});
@@ -205,12 +205,12 @@ public class ButtonPopover : Gtk.Popover {
 	}
 
 	public void remove_window(libxfce4windowing.Window window) {
-		ulong window_id = (ulong) window.x11_get_xid();
+		string window_id = window.get_class_ids()[0];
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			ulong child_id = (ulong) ((WindowItem) child).window.x11_get_xid();
+			string child_id = ((WindowItem) child).window.get_class_ids()[0];
 			if (child_id == window_id) {
 				window_item = child as WindowItem;
 				break;
@@ -256,6 +256,11 @@ private class WindowControls : Gtk.Box {
 		keep_on_top_button = new Gtk.CheckButton.with_label(_("Always on top")) {
 			relief = Gtk.ReliefStyle.NONE,
 		};
+
+		// Keep on top is not currently supported on Wayland
+		if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+			keep_on_top_button.sensitive = false;
+		}
 
 		maximize_button = new Gtk.Button.with_label("") {
 			relief = Gtk.ReliefStyle.NONE,
