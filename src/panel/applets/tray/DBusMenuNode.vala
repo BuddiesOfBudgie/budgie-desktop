@@ -333,7 +333,7 @@ private class Properties {
 				icon_data = Properties.parse_bytes(unbox(value), new Bytes({}));
 				return icon_data != old_value;
 			case "shortcut":
-				shortcut = Properties.parse_shortcuts(value);
+				shortcut = Properties.parse_shortcuts(unbox(value));
 				return true;
 			default:
 				return false;
@@ -367,13 +367,18 @@ private class Properties {
 		if (variant == null) return ret;
 
 		VariantIter prop_it = variant.iterator();
-		string key;
-		string[] values;
-		if (prop_it.next("{as}", out key, out values)) {
-			ret = new List<string>();
-			foreach (string val in values) {
-				ret.append(val);
-			}
+		VariantIter string_iter;
+
+		// The spec says this is an array of array of string, because apparently
+		// you're supposed to be able to do things like "Ctrl+Q, Alt+X" as a
+		// shortcut. We... kinda can't. So, only take the first key combination.
+		// Source: https://github.com/gnustep/libs-dbuskit/blob/master/Bundles/DBusMenu/com.canonical.dbusmenu.xml#L109-L122
+		prop_it.next("as", out string_iter);
+
+		string value;
+
+		while (string_iter.next("s", out value)) {
+			ret.append(value);
 		}
 
 		return ret;
