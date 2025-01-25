@@ -1,8 +1,0 @@
-[Desktop Entry]
-_Name=Budgie Desktop (labwc)
-_Comment=This session logs you into the Budgie Desktop using labwc as the window manager
-Exec=@prefix@/bin/labwc -S /usr/bin/budgie-desktop
-TryExec=@prefix@/bin/labwc
-Icon=
-Type=Application
-DesktopNames=Budgie
