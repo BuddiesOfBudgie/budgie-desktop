@@ -241,7 +241,6 @@ public class ButtonPopover : Gtk.Popover {
 private class WindowControls : Gtk.Box {
 	public libxfce4windowing.Window window { get; construct; }
 
-	private Gtk.CheckButton? keep_on_top_button;
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
 	private Gtk.Button? return_button;
@@ -253,15 +252,6 @@ private class WindowControls : Gtk.Box {
 	}
 
 	construct {
-		keep_on_top_button = new Gtk.CheckButton.with_label(_("Always on top")) {
-			relief = Gtk.ReliefStyle.NONE,
-		};
-
-		// Keep on top is not currently supported on Wayland
-		if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-			keep_on_top_button.sensitive = false;
-		}
-
 		maximize_button = new Gtk.Button.with_label("") {
 			relief = Gtk.ReliefStyle.NONE,
 		};
@@ -281,7 +271,6 @@ private class WindowControls : Gtk.Box {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
-		list_box.add(keep_on_top_button);
 		list_box.add(maximize_button);
 		list_box.add(minimize_button);
 
@@ -289,14 +278,6 @@ private class WindowControls : Gtk.Box {
 
 		pack_start(list_box);
 		pack_end(return_button, false, false, 0);
-
-		keep_on_top_button.toggled.connect(() => {
-			try {
-				window.set_above(keep_on_top_button.active);
-			} catch (Error e) {
-				warning("Unable to set keep on top for window %s: %s", window.get_name(), e.message);
-			}
-		});
 
 		maximize_button.clicked.connect(() => {
 			var maximized = window.is_maximized();
