@@ -72,7 +72,6 @@ namespace Budgie {
 		* Track the primary monitor to show on
 		*/
 		private libxfce4windowing.Monitor? primary_monitor = null;
-		private ulong screen_id;
 
 		/**
 		* Current text to display. NULL hides the widget.
@@ -131,8 +130,9 @@ namespace Budgie {
 			skip_taskbar_hint = true;
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, 80);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
 			set_decorated(false);
-			set_keep_above(true);
 			stick();
 
 			/* Set up an RGBA map for transparency styling */
@@ -142,7 +142,7 @@ namespace Budgie {
 			}
 
 			/* Update the primary monitor notion */
-			screen_id = libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
+			libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
 
 			/* Set up size */
 			set_default_size(OSD_SIZE, -1);
@@ -172,25 +172,8 @@ namespace Budgie {
 		public void move_osd() {
 			/* Find the primary monitor bounds */
 			if (primary_monitor == null) return;
-			Gdk.Rectangle bounds = primary_monitor.get_workarea();
-			Gtk.Allocation alloc;
 
-			get_child().get_allocation(out alloc);
-
-			/* For now just center it */
-			int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-			int y = bounds.y + ((int)(bounds.height * 0.85));
-
-			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
-				GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
-				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, x);
-				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
-			}
-			else {
-				move(x,y);
-			}
+			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
 		}
 	}
 
