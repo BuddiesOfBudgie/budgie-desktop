@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Budgie power management
-Exec=/usr/libexec/gsd-power
+Name=Budgie date & time
+Exec=@gsd_libexecdir@/gsd-datetime
 OnlyShowIn=Budgie;
 NoDisplay=true
 X-GNOME-Autostart-Phase=Initialization

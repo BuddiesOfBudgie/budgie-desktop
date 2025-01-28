@@ -1,10 +1,11 @@
 [Desktop Entry]
 Type=Application
-Name=Budgie Desktop WWan support
-Exec=/usr/libexec/gsd-wwan
+Name=Budgie Desktop accessibility
+Exec=@gsd_libexecdir@/gsd-a11y-settings
 OnlyShowIn=Budgie;
 NoDisplay=true
 X-GNOME-Autostart-Phase=Initialization
 X-GNOME-Autostart-Notify=true
 X-GNOME-AutoRestart=true
 X-GNOME-HiddenUnderSystemd=true
+
