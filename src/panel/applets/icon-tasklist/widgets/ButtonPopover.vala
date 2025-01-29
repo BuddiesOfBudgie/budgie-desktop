@@ -196,7 +196,7 @@ public class ButtonPopover : Gtk.Popover {
 				controls_layout.destroy();
 			});
 
-			string id = ((ulong) window.x11_get_xid()).to_string();
+			string id = window.get_class_ids()[0];
 			stack.add_named(controls_layout, id);
 			stack.set_visible_child_name(id);
 		});
@@ -205,12 +205,12 @@ public class ButtonPopover : Gtk.Popover {
 	}
 
 	public void remove_window(libxfce4windowing.Window window) {
-		ulong window_id = (ulong) window.x11_get_xid();
+		string window_id = window.get_class_ids()[0];
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			ulong child_id = (ulong) ((WindowItem) child).window.x11_get_xid();
+			string child_id = ((WindowItem) child).window.get_class_ids()[0];
 			if (child_id == window_id) {
 				window_item = child as WindowItem;
 				break;
@@ -241,7 +241,6 @@ public class ButtonPopover : Gtk.Popover {
 private class WindowControls : Gtk.Box {
 	public libxfce4windowing.Window window { get; construct; }
 
-	private Gtk.CheckButton? keep_on_top_button;
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
 	private Gtk.Button? return_button;
@@ -253,10 +252,6 @@ private class WindowControls : Gtk.Box {
 	}
 
 	construct {
-		keep_on_top_button = new Gtk.CheckButton.with_label(_("Always on top")) {
-			relief = Gtk.ReliefStyle.NONE,
-		};
-
 		maximize_button = new Gtk.Button.with_label("") {
 			relief = Gtk.ReliefStyle.NONE,
 		};
@@ -276,7 +271,6 @@ private class WindowControls : Gtk.Box {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
-		list_box.add(keep_on_top_button);
 		list_box.add(maximize_button);
 		list_box.add(minimize_button);
 
@@ -284,14 +278,6 @@ private class WindowControls : Gtk.Box {
 
 		pack_start(list_box);
 		pack_end(return_button, false, false, 0);
-
-		keep_on_top_button.toggled.connect(() => {
-			try {
-				window.set_above(keep_on_top_button.active);
-			} catch (Error e) {
-				warning("Unable to set keep on top for window %s: %s", window.get_name(), e.message);
-			}
-		});
 
 		maximize_button.clicked.connect(() => {
 			var maximized = window.is_maximized();
