@@ -69,11 +69,6 @@ namespace Budgie {
 		public unowned Gtk.ProgressBar progressbar;
 
 		/**
-		* Track the primary monitor to show on
-		*/
-		private libxfce4windowing.Monitor? primary_monitor = null;
-
-		/**
 		* Current text to display. NULL hides the widget.
 		*/
 		public string? osd_title {
@@ -141,9 +136,6 @@ namespace Budgie {
 				this.set_visual(vis);
 			}
 
-			/* Update the primary monitor notion */
-			libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
-
 			/* Set up size */
 			set_default_size(OSD_SIZE, -1);
 			realize();
@@ -154,15 +146,6 @@ namespace Budgie {
 			get_child().show_all();
 			set_visible(false);
 
-			/* Get everything into position prior to the first showing */
-			on_monitors_changed();
-		}
-
-		/**
-		* Monitors changed, find out the primary monitor, and schedule move of OSD
-		*/
-		private void on_monitors_changed() {
-			primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
 			move_osd();
 		}
 
@@ -170,10 +153,7 @@ namespace Budgie {
 		* Move the OSD into the correct position
 		*/
 		public void move_osd() {
-			/* Find the primary monitor bounds */
-			if (primary_monitor == null) return;
-
-			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+			GtkLayerShell.set_monitor(this, ServiceManager.primary_monitor.get_gdk_monitor());
 		}
 	}
 
