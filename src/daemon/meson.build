@@ -44,7 +44,6 @@ daemon_deps = [
     dep_canberra_gtk3,
     dep_giounix,
     dep_gtk3,
-    dep_gdkx11,
     dep_notify,
     dep_gnomedesktop,
     dep_xfce4windowing,
@@ -89,7 +88,6 @@ executable(
         '--pkg', 'budgie-config',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
         '--pkg', 'libxfce4windowing-0',
         '--pkg', 'gvc-1.0',
         # Make gresource work
@@ -109,7 +107,7 @@ main_sources = [
 ]
 
 ScreenshotMainDependencies = [
-    dependency('gtk+-3.0'),
+    dep_gtk3,
 ]
 
 executable(
