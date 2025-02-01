@@ -28,6 +28,7 @@ namespace Budgie {
 		PowerScreenRemote? powerscreen_proxy = null;
 		bool isdimmable = false;
 		int32 current_brightness = 0;
+		public static bool is_dimming { get; private set; default = false; }
 
 		// connections to various schemas used in screenlocking
 		private GLib.Settings power;
@@ -246,6 +247,8 @@ namespace Budgie {
 				return;
 			}
 
+			is_dimming = true;
+
 			current_brightness = powerscreen_proxy.Brightness;
 			int32 idle_brightness = power.get_int("idle-brightness");
 
@@ -260,6 +263,11 @@ namespace Budgie {
 			}
 
 			powerscreen_proxy.Brightness = current_brightness;
+
+			Timeout.add(200, ()=> {
+				is_dimming = false;
+				return false;
+			});
 		}
 
 		void on_bus_acquired(DBusConnection conn) {

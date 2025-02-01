@@ -202,13 +202,7 @@ namespace Budgie {
 
 			unowned Gdk.Window? win = get_window();
 			if (win != null) {
-				Gdk.Display? display = screen.get_display();
-
-				if (display is Gdk.X11.Display) {
-					win.focus(((Gdk.X11.Display) display).get_user_time());
-				} else {
-					win.focus(Gtk.get_current_event_time());
-				}
+				win.focus(Gtk.get_current_event_time());
 			}
 		}
 
