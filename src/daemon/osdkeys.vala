@@ -225,7 +225,7 @@
 
 			GLib.VariantDict dict = new GLib.VariantDict(parameters.get_child_value(1));
 			GLib.Variant? brightness = dict.lookup_value("Brightness", GLib.VariantType.INT32);
-			if (brightness == null) {
+			if (brightness == null || Screenlock.is_dimming) {
 				return;
 			}
 
