@@ -33,6 +33,7 @@ daemon_sources = [
     'main.vala',
     'manager.vala',
     'menus.vala',
+    'nightlight.vala',
     'osd.vala',
     'settings.vala',
     'screenlock.vala',
@@ -124,6 +125,10 @@ install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
 
 install_data('icons/org.buddiesofbudgie.BudgieScreenshot.svg',
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'apps')
+)
+
+install_data('gammastep.config',
+    install_dir: join_paths(datadir, 'budgie-desktop')
 )
 
 # Now merge the translations of the .desktop.in to a .desktop
