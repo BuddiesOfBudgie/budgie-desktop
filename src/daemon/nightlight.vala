@@ -12,7 +12,8 @@
 namespace Budgie {
 	public class NightLightManager : GLib.Object {
 		private Settings settings;
-		private const string config_file = "gammastep.config";
+		private const string local_config_file = "config.ini";
+		private const string search_config_file = "gammastep.config";
 		private string local_config_path;
 
 		public NightLightManager() {
@@ -20,7 +21,7 @@ namespace Budgie {
 			settings = new Settings("org.gnome.settings-daemon.plugins.color");
 
 			// Ensure the local configuration file exists
-			local_config_path = Path.build_filename(GLib.Environment.get_user_config_dir(), "budgie-desktop", config_file);
+			local_config_path = Path.build_filename(GLib.Environment.get_user_config_dir(), "gammastep", local_config_file);
 			ensure_local_config_exists();
 
 			// Connect to the "changed" signal for the relevant keys
@@ -46,8 +47,8 @@ namespace Budgie {
 
 			string[] search_path = {local_config_path};
 			foreach (string system_dir in GLib.Environment.get_system_data_dirs()) {
-				search_path += Path.build_filename(system_dir, "budgie-desktop", "distro-"+config_file);
-				search_path += Path.build_filename(system_dir, "budgie-desktop", config_file);
+				search_path += Path.build_filename(system_dir, "budgie-desktop", "distro-"+search_config_file);
+				search_path += Path.build_filename(system_dir, "budgie-desktop", search_config_file);
 			}
 
 			string path = "";
@@ -60,7 +61,7 @@ namespace Budgie {
 			}
 
 			if (path == "") {
-				critical("Could not find an existing "+config_file+" or a shipped budgie equivalent");
+				critical("Could not find an existing "+search_config_file+" or a shipped budgie equivalent");
 				return null;
 			}
 
@@ -133,7 +134,7 @@ namespace Budgie {
 		private void run_gammastep() {
 			try {
 				// Run gammastep with the configuration file
-				string[] spawn_args = {"gammastep", "-o", "-c", local_config_path};
+				string[] spawn_args = {"gammastep", "-o", "-P", "-c", local_config_path};
 				string[] spawn_env = Environ.get();
 
 				Process.spawn_async("/",
