@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container: "registry.fedoraproject.org/fedora:rawhide"
     steps:
+      - name: Swap in the full systemd
+        run: 'dnf swap --assumeyes systemd-standalone-sysusers systemd'
       - name: Install prerequisites
         run: |
           dnf install --assumeyes \
