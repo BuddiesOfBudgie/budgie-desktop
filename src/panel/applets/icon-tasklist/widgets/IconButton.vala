@@ -179,7 +179,7 @@ public class IconButton : Gtk.ToggleButton {
 
 				// Attempt to activate the target window
 				try {
-					target_window.activate(event.time);
+					target_window.activate(null, event.time);
 				} catch (Error e) {
 					warning("Error activating and unminimizing window '%s': %s", target_window.get_name(), e.message);
 				}
@@ -641,17 +641,12 @@ public class IconButton : Gtk.ToggleButton {
 			icon.waiting = false;
 		}
 
-		Gdk.Pixbuf? pixbuf_icon = null;
-
 		if (window_group != null) {
 			var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
-			pixbuf_icon = window_group.get_icon(size, 1);
-		}
-
-		if (app?.icon != null) {
+			unowned var pixbuf = window_group.application.get_icon(size, get_scale_factor());
+			icon.set_from_pixbuf(pixbuf);
+		} else if (app?.icon != null) {
 			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
-		} else if (pixbuf_icon != null) {
-			icon.set_from_pixbuf(pixbuf_icon);
 		} else {
 			icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}

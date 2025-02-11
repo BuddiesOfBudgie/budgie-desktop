@@ -1,0 +1,344 @@
+<labwc_config>
+	<desktops number="4" />
+	<keyboard>
+		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/toggle-contrast" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/increase-text-size" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/on-screen-keyboard" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/screenreader" key="A-W-s">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/magnifier" key="A-W-8">
+			<action name="ToggleMagnify" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/magnifier-zoom-in" key="A-W-equal">
+			<action name="ZoomIn" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/magnifier-zoom-out" key="A-W-minus">
+			<action name="ZoomOut" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/terminal" key="C-A-t">
+			<action name="Execute" command="xfce4-terminal" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/home" key="undefined">
+			<action name="Execute" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/calculator" key="undefined">
+			<action name="Execute" command="mate-calc" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/email" key="undefined">
+			<action name="Execute" command="xdg-email" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/help" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/www" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/search" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/control-center" key="undefined">
+			<action name="Execute" command="budgie-desktop-settings" />
+		</keybind>
+		<keybind bridge="wm.keybindings/show-desktop" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-monitor-down" key="W-S-Down">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-monitor-left" key="W-S-Left">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-monitor-right" key="W-S-Right">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-monitor-up" key="W-S-Up">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-left" key="W-S-Page_Up">
+			<action name="SendToDesktop" to="left" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-right" key="W-S-Page_Down">
+			<action name="SendToDesktop" to="right" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-last" key="W-S-End">
+			<action name="SendToDesktop" to="1" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-1" key="W-S-Home">
+			<action name="SendToDesktop" to="1" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-2" key="undefined">
+			<action name="SendToDesktop" to="2" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-3" key="undefined">
+			<action name="SendToDesktop" to="3" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-4" key="undefined">
+			<action name="SendToDesktop" to="4" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-last" key="W-End">
+			<action name="GoToDesktop" to="last" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-1" key="W-Home">
+			<action name="GoToDesktop" to="1" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-2" key="undefined">
+			<action name="GoToDesktop" to="2" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-3" key="undefined">
+			<action name="GoToDesktop" to="3" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-4" key="undefined">
+			<action name="GoToDesktop" to="4" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-left" key="W-Page_Up">
+			<action name="GoToDesktop" to="left" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-right" key="W-Page_Down">
+			<action name="GoToDesktop" to="right" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-applications" key="W-Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-applications-backward" key="S-W-Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-panels" key="C-A-Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-panels-backward" key="S-C-A-Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-panels" key="C-A-Escape">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-panels-backward" key="S-C-A-Escape">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-windows" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-windows-backward" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-windows" key="A-Escape">
+			<action name="NextWindow" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-windows-backward" key="S-A-Escape">
+			<action name="PreviousWindow" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-group" key="A-F6">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/cycle-group-backward" key="S-A-F6">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-group" key="W-Above_Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-group-backward" key="S-W-Above_Tab">
+			<action name="" command="" />
+		</keybind>
+		<keybind key="A-Tab">
+			<action name="NextWindow" />
+		</keybind>
+		<keybind key="A-S-Tab">
+			<action name="PreviousWindow" />
+		</keybind>
+		<keybind key="Super_L" onRelease="yes">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
+		</keybind>
+		<keybind key="W-c">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ClearNotifications" />
+		</keybind>
+		<keybind key="W-n">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleNotificationsView" />
+		</keybind>
+		<keybind key="W-a">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleAppletView" />
+		</keybind>
+		<keybind key="S-Print">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartAreaSelect" />
+		</keybind>
+		<keybind key="Print">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/eject" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/media" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/mic-mute" key="undefined">
+			<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/next" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/pause" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/play" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/previous" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/stop" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/volume-down" key="undefined">
+			<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/volume-mute" key="undefined">
+			<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/volume-up" key="undefined">
+			<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/screensaver" key="W-l">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Lock" />
+		</keybind>
+		<keybind bridge="plugins.media-keys/logout" key="C-A-Delete">
+			<action name="Execute" command="budgie-session-quit" />
+		</keybind>
+		<keybind key="S-W-p">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.PowerDialog /org/buddiesofbudgie/PowerDialog org.buddiesofbudgie.PowerDialog.Toggle" />
+		</keybind>
+		<keybind bridge="wm.keybindings/panel-run-dialog" key="A-F2">
+			<action name="Execute" command="budgie-run-dialog" />
+		</keybind>
+		<keybind key="A-Space">
+			<action name="ShowMenu" menu="client-menu" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-input-source" key="A-Shift_L">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-input-source-backward" key="W-S-space">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/close" key="A-F4">
+			<action name="Close" />
+		</keybind>
+		<keybind bridge="wm.keybindings/minimize" key="W-h">
+			<action name="Iconify" />
+		</keybind>
+		<keybind bridge="wm.keybindings/lower" key="undefined">
+			<action name="Lower" />
+		</keybind>
+		<keybind bridge="wm.keybindings/maximize" key="W-Up">
+			<action name="Maximize" direction="both" />
+		</keybind>
+		<keybind bridge="wm.keybindings/maximize-horizontally" key="undefined">
+			<action name="Maximize" direction="right" />
+		</keybind>
+		<keybind bridge="wm.keybindings/maximize-vertically" key="undefined">
+			<action name="Maximize" direction="left" />
+		</keybind>
+		<keybind bridge="wm.keybindings/begin-move" key="A-F7">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/raise" key="undefined">
+			<action name="Raise" />
+		</keybind>
+		<keybind bridge="wm.keybindings/raise-or-lower" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="wm.keybindings/begin-resize" key="A-F8">
+			<action name="Resize" />
+		</keybind>
+		<keybind bridge="wm.keybindings/unmaximize" key="W-Down">
+			<action name="UnMaximize" direction="both" />
+		</keybind>
+		<keybind bridge="wm.keybindings/toggle-fullscreen" key="undefined">
+			<action name="ToggleFullscreen" />
+		</keybind>
+		<keybind bridge="wm.keybindings/toggle-maximized" key="A-F10">
+			<action name="ToggleMaximize" direction="both" />
+		</keybind>
+		<keybind bridge="wm.keybindings/toggle-on-all-workspaces" key="undefined">
+			<action name="" command="" />
+		</keybind>
+		<keybind bridge="mutter.keybindings/toggle-tiled-left" key="W-Left">
+			<action name="ToggleSnapToEdge" direction="left" />
+		</keybind>
+		<keybind bridge="mutter.keybindings/toggle-tiled-right" key="W-Right">
+			<action name="ToggleSnapToEdge" direction="right" />
+		</keybind>
+		<keybind key="XF86MonBrightnessUp">
+			<action name="Execute" command="dbus-send --session --type=method_call --dest=org.gnome.SettingsDaemon.Power /org/gnome/SettingsDaemon/Power org.gnome.SettingsDaemon.Power.Screen.StepUp " />
+		</keybind>
+		<keybind key="XF86MonBrightnessDown">
+			<action name="Execute" command="dbus-send --session --type=method_call --dest=org.gnome.SettingsDaemon.Power /org/gnome/SettingsDaemon/Power org.gnome.SettingsDaemon.Power.Screen.StepDown " />
+		</keybind>
+		<keybind bridge="custom1" key="C-A-o">
+			<action name="Execute" command="mate-sysmonitor" />
+		</keybind>
+	</keyboard>
+	<theme>
+		<name>theme_name</name>
+		<dropShadows>yes</dropShadows>
+		<font place="ActiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
+		<font place="InactiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
+		<titlebar>
+			<layout>:iconify,max,close:</layout>
+		</titlebar>
+	</theme>
+	<windowRules>
+		<windowRule identifier="Nemo-desktop" title="Desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
+			<action name="ToggleAlwaysOnBottom" />
+		</windowRule>
+		<windowRule identifier="nemo-desktop" title="nemo-desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
+			<action name="ToggleAlwaysOnBottom" />
+		</windowRule>
+		<windowRule identifier="budgie-power-dialog" title="budgie-power-dialog" skipTaskbar="yes" skipWindowSwitcher="yes">
+			<action name="AutoPlace" policy="center" />
+		</windowRule>
+		<windowRule identifier="budgie-daemon" title="budgie-daemon" skipTaskbar="yes" skipWindowSwitcher="yes">
+			<action name="AutoPlace" policy="center" />
+		</windowRule>
+	</windowRules>
+	<placement>
+		<policy>automatic</policy>
+	</placement>
+	<focus>
+		<followMouse>no</followMouse>
+		<raiseOnFocus>no</raiseOnFocus>
+	</focus>
+	<windowSwitcher allWorkspaces="no" />
+	<mouse>
+		<doubleClickTime>400</doubleClickTime>
+	</mouse>
+	<libinput>
+		<device category="touchpad">
+			<naturalScroll>no</naturalScroll>
+			<leftHanded>yes</leftHanded>
+			<pointerSpeed>0.0</pointerSpeed>
+			<accelProfile>flat</accelProfile>
+			<tap>yes</tap>
+			<tapButtonMap>default</tapButtonMap>
+			<tapAndDrag>yes</tapAndDrag>
+			<dragLock>no</dragLock>
+			<middleEmulation>no</middleEmulation>
+			<disableWhileTyping>yes</disableWhileTyping>
+			<clickMethod>clickfinger</clickMethod>
+			<sendEventsMode>yes</sendEventsMode>
+		</device>
+		<device category="non-touch">
+			<naturalScroll>no</naturalScroll>
+			<leftHanded>no</leftHanded>
+			<pointerSpeed>0.051094890510948954</pointerSpeed>
+			<accelProfile>adaptive</accelProfile>
+			<middleEmulation>no</middleEmulation>
+		</device>
+	</libinput>
+</labwc_config>

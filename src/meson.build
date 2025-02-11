@@ -7,7 +7,6 @@ subdir('libsession')
 
 # Needed for daemon + applets
 subdir('appsys')
-subdir('abomination')
 
 subdir('theme')
 subdir('lib')
@@ -22,6 +21,8 @@ subdir('dialogs')
 
 subdir('wm')
 subdir('panel')
+
+subdir('bridges')
 
 # Finish up by doing the session
 subdir('session')

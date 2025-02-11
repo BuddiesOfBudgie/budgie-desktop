@@ -35,6 +35,8 @@ pkversion = '>= 0.105'
 polkit_deps = [
     dep_giounix,
     dep_gtk3,
+    dep_gtk_layer_shell,
+    dep_xfce4windowing,
     link_libconfig,
     link_libtheme,
     link_libsession,
@@ -59,6 +61,7 @@ executable(
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'budgie-config',
         '--pkg', 'gtk+-3.0',
+        '--pkg', 'libxfce4windowing-0',
         '--pkg', 'polkit-gobject-1',
         '--pkg', 'polkit-agent-1',
         '--pkg', 'posix',

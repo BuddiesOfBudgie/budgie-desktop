@@ -27,7 +27,6 @@ namespace Budgie.Windowing {
 		private List<Window> fullscreen_windows;
 		private libxfce4windowing.Window? last_active_window;
 
-		private Budgie.Windowing.WindowMapper window_mapper;
 		private Budgie.Windowing.NotificationDispatcher dispatcher;
 
 		private Settings color_settings;
@@ -108,8 +107,6 @@ namespace Budgie.Windowing {
 
 			applications = new HashTable<libxfce4windowing.Application, WindowGroup>(direct_hash, direct_equal);
 			fullscreen_windows = new List<Window>();
-
-			window_mapper = new WindowMapper();
 
 			screen = Screen.get_default();
 
@@ -214,7 +211,8 @@ namespace Budgie.Windowing {
 			// Not already open, create a new group
 			debug(@"creating new WindowGroup for application: $(application.get_name())");
 
-			var app_info = window_mapper.query_window(window);
+			unowned var app_id = application.get_class_id();
+			var app_info = new DesktopAppInfo(app_id + ".desktop");
 			group = new WindowGroup(application, app_info);
 
 			group.add_window(window);

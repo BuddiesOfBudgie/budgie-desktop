@@ -295,7 +295,7 @@ namespace Budgie {
 			window_box.unselect_child(current);
 
 			try {
-				tab.window.activate(get_time());
+				tab.window.activate(null, get_time());
 			} catch (GLib.Error e) {
 				warning("Failed to activate window: %s\n", e.message);
 			}

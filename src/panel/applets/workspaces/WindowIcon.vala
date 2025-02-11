@@ -56,7 +56,7 @@ namespace Workspaces {
 			if (event.button != 1) return Gdk.EVENT_STOP;
 
 			try {
-				window.activate(event.time);
+				window.activate(null, event.time);
 			} catch (Error e) {
 				warning("Failed to activate window: %s", e.message);
 			}

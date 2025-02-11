@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=Budgie Desktop (magpie)
+_Comment=This session logs you into the Budgie Desktop using magpie as the window manager
+Exec=@magpie_bindir@/magpie-wm -s @bindir@/budgie-desktop
+TryExec=@magpie_bindir@/magpie-wm
+Icon=
+Type=Application
+DesktopNames=Budgie
