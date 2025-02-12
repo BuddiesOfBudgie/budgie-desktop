@@ -30,6 +30,10 @@ namespace Budgie {
 
 		/* Screenlock */
 		Budgie.Screenlock? screenlock;
+
+		/* NightLight */
+		Budgie.NightLightManager? nightlight;
+
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
@@ -64,6 +68,8 @@ namespace Budgie {
 
 			screenlock = Screenlock.init();
 			screenlock.setup_dbus();
+
+			nightlight = new NightLightManager();
 		}
 
 		/**

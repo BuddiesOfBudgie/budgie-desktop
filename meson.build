@@ -73,6 +73,7 @@ cdata = configuration_data()
 if get_option('with-runtime-dependencies')
     find_program('wlopm', required: true)
     find_program('swayidle', required: true)
+    find_program('gammastep', required: true)
     found_gtklock = find_program('gtklock', required: false)
     if found_gtklock.found() == false
         find_program('swaylock', required: true)
