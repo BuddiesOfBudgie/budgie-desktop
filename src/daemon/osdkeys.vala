@@ -53,14 +53,14 @@
 															"/org/budgie_desktop/BudgieOSD");
 
 			} catch (Error e) {
-				stderr.printf ("%s\n", e.message);
+				warning("%s\n", e.message);
 			}
 
 			try {
 				conn = Bus.get_sync(GLib.BusType.SESSION, null);
 			}
 			catch(IOError e) {
-				print("%s", e.message);
+				info("%s", e.message);
 			}
 
 			signal_id = conn.signal_subscribe("org.gnome.SettingsDaemon.Power",
