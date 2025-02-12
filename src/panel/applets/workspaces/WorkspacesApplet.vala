@@ -115,6 +115,14 @@ namespace Workspaces {
 			add_button.get_style_context().add_class("workspace-add-button");
 			add_button.valign = Gtk.Align.CENTER;
 			add_button.halign = Gtk.Align.CENTER;
+
+			if (!(libxfce4windowing.WorkspaceGroupCapabilities.CREATE_WORKSPACE in workspace_group.get_capabilities())) {
+				add_button.sensitive = false;
+				add_button.set_tooltip_text(_("Not able to create new workspaces"));
+			} else {
+				add_button.set_tooltip_text(_("Create a new workspace"));
+			}
+
 			add_button_revealer.add(add_button);
 			main_layout.pack_start(add_button_revealer, false, false, 0);
 
@@ -209,6 +217,18 @@ namespace Workspaces {
 				}
 
 				return Gdk.EVENT_STOP;
+			});
+
+			workspace_group.capabilities_changed.connect((changed_mask, new_capabilities) => {
+				if (libxfce4windowing.WorkspaceGroupCapabilities.CREATE_WORKSPACE in changed_mask) {
+					if (!(libxfce4windowing.WorkspaceGroupCapabilities.CREATE_WORKSPACE in new_capabilities)) {
+						add_button.sensitive = false;
+						add_button.set_tooltip_text(_("Not able to create new workspaces"));
+					} else {
+						add_button.sensitive = true;
+						add_button.set_tooltip_text(_("Create a new workspace"));
+					}
+				}
 			});
 		}
 
