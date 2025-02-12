@@ -19,11 +19,11 @@ namespace Budgie {
 		private LibSession.SessionClient? sclient;
 
 		/* On Screen Display */
+		public static unowned libxfce4windowing.Monitor? primary_monitor { get; private set; }
 		Budgie.OSDManager? osd;
+		Budgie.OSDKeys? osdkeys;
 		Budgie.Notifications.Server? notifications;
 		Budgie.StatusNotifier.FreedesktopWatcher? status_notifier;
-		Budgie.MenuManager? menus;
-		Budgie.TabSwitcher? switcher;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
 		Budgie.Background? background;
@@ -34,6 +34,9 @@ namespace Budgie {
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
 		public ServiceManager(bool replace) {
+			libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
+			on_monitors_changed();
+
 			theme_manager = new Budgie.ThemeManager();
 			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
 			register_with_session.begin((o, res) => {
@@ -42,14 +45,13 @@ namespace Budgie {
 					message("Failed to register with Session manager");
 				}
 			});
+
 			osd = new Budgie.OSDManager();
 			osd.setup_dbus(replace);
+			osdkeys = new Budgie.OSDKeys();
+
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
-			menus = new Budgie.MenuManager();
-			menus.setup_dbus(replace);
-			switcher = new Budgie.TabSwitcher();
-			switcher.setup_dbus(replace);
 			background = new Budgie.Background();
 
 			try {
@@ -66,6 +68,9 @@ namespace Budgie {
 			screenlock.setup_dbus();
 		}
 
+		void on_monitors_changed() {
+			primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
+		}
 		/**
 		* Attempt registration with the Session Manager
 		*/
