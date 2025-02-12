@@ -71,7 +71,8 @@ namespace Budgie {
 		/**
 		* Track the primary monitor to show on
 		*/
-		private unowned Gdk.Monitor primary_monitor;
+		private libxfce4windowing.Monitor? primary_monitor = null;
+		private ulong screen_id;
 
 		/**
 		* Current text to display. NULL hides the widget.
@@ -128,6 +129,8 @@ namespace Budgie {
 			resizable = false;
 			skip_pager_hint = true;
 			skip_taskbar_hint = true;
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
 			set_decorated(false);
 			set_keep_above(true);
 			stick();
@@ -139,7 +142,8 @@ namespace Budgie {
 			}
 
 			/* Update the primary monitor notion */
-			screen.monitors_changed.connect(on_monitors_changed);
+			//screen.monitors_changed.connect(on_monitors_changed);
+			screen_id = libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
 
 			/* Set up size */
 			set_default_size(OSD_SIZE, -1);
@@ -159,8 +163,11 @@ namespace Budgie {
 		* Monitors changed, find out the primary monitor, and schedule move of OSD
 		*/
 		private void on_monitors_changed() {
-			primary_monitor = screen.get_display().get_primary_monitor();
+			warning("aa");
+			primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();//screen.get_display().get_primary_monitor();
+			warning("bb");
 			move_osd();
+			warning("cc");
 		}
 
 		/**
@@ -168,7 +175,12 @@ namespace Budgie {
 		*/
 		public void move_osd() {
 			/* Find the primary monitor bounds */
-			Gdk.Rectangle bounds = primary_monitor.get_geometry();
+			warning("a");
+			if (primary_monitor == null) return;
+			//var prim = libxfce4windowing.Screen.get_default().get_primary_monitor();
+			warning("b");
+			Gdk.Rectangle bounds = primary_monitor.get_workarea();
+			warning("c");
 			Gtk.Allocation alloc;
 
 			get_child().get_allocation(out alloc);
@@ -176,7 +188,21 @@ namespace Budgie {
 			/* For now just center it */
 			int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
 			int y = bounds.y + ((int)(bounds.height * 0.85));
-			move(x, y);
+			warning("d %d %d %d %d", bounds.x, bounds.y, bounds.width, bounds.height);
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				warning("e");
+				GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, x);
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y);
+				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
+				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+				warning("f");
+			}
+			else {
+				warning("g");
+				move(x,y);
+			}
+			warning("h");
 		}
 	}
 
@@ -227,6 +253,7 @@ namespace Budgie {
 		* monitor: int32 The monitor to display the OSD on (currently ignored)
 		*/
 		public void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError {
+			warning("1");
 			string? icon_name = null;
 			string? label = null;
 
@@ -249,8 +276,10 @@ namespace Budgie {
 			}
 
 			/* Update the OSD accordingly */
+			warning("2");
 			osd_window.osd_title = label;
 			osd_window.osd_icon = icon_name;
+			warning("3");
 
 			if (prog_value < 0) {
 				osd_window.progressbar.set_visible(false);
@@ -259,33 +288,46 @@ namespace Budgie {
 				osd_window.progressbar.set_visible(true);
 			}
 
+			warning("4");
+
 			this.reset_osd_expire(OSD_EXPIRE_TIME);
+			warning("5");
 		}
 
 		/**
 		* Reset and update the expiration for the OSD timeout
 		*/
 		private void reset_osd_expire(int timeout_length) {
+			warning("6");
 			if (expire_timeout > 0) {
 				Source.remove(expire_timeout);
 				expire_timeout = 0;
 			}
+			warning("7");
 			if (!osd_window.get_visible()) {
-				osd_window.move_osd();
+				warning("8");
+				
 			}
+			warning("9");
 			osd_window.show();
+			osd_window.move_osd();
+			warning("10");
 			expire_timeout = Timeout.add(timeout_length, this.osd_expire);
+			warning("11");
 		}
 
 		/**
 		* Expiration timeout was met, so hide the OSD Window
 		*/
 		private bool osd_expire() {
+			warning("12");
 			if (expire_timeout == 0) {
 				return false;
 			}
+			warning("13");
 			osd_window.hide();
 			expire_timeout = 0;
+			warning("14");
 			return false;
 		}
 	}

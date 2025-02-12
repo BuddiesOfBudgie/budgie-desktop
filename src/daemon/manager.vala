@@ -22,8 +22,7 @@ namespace Budgie {
 		Budgie.OSDManager? osd;
 		Budgie.Notifications.Server? notifications;
 		Budgie.StatusNotifier.FreedesktopWatcher? status_notifier;
-		Budgie.MenuManager? menus;
-		Budgie.TabSwitcher? switcher;
+		Budgie.OSDKeys? osdkeys;
 		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
 		Budgie.Background? background;
@@ -46,14 +45,15 @@ namespace Budgie {
 					message("Failed to register with Session manager");
 				}
 			});
-			osd = new Budgie.OSDManager();
-			osd.setup_dbus(replace);
+
+			Timeout.add(1000, () => {
+				osd = new Budgie.OSDManager();
+				osd.setup_dbus(replace);
+				osdkeys = new Budgie.OSDKeys();
+				return false;
+			});
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
-			menus = new Budgie.MenuManager();
-			menus.setup_dbus(replace);
-			switcher = new Budgie.TabSwitcher();
-			switcher.setup_dbus(replace);
 			background = new Budgie.Background();
 
 			try {
