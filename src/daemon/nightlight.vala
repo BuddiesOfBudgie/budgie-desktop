@@ -12,7 +12,7 @@
 namespace Budgie {
 	public class NightLightManager : GLib.Object {
 		private Settings settings;
-		private const string local_config_file = "config.ini";
+		private const string local_config_file = "budgie_config.ini";
 		private const string search_config_file = "gammastep.config";
 		private string local_config_path;
 
