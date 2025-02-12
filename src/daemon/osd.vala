@@ -153,7 +153,9 @@ namespace Budgie {
 		* Move the OSD into the correct position
 		*/
 		public void move_osd() {
-			GtkLayerShell.set_monitor(this, ServiceManager.primary_monitor.get_gdk_monitor());
+			var primary_monitor = ServiceManager.primary_monitor;
+			if (primary_monitor == null) return;
+			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
 		}
 	}
 
