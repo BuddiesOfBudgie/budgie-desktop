@@ -13,7 +13,7 @@
 
 	[DBus (name = "org.budgie_desktop.BudgieOSD")]
 	interface ShowOSD : GLib.Object {
-		public abstract async void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError;
+		public abstract async void Show(HashTable<string,Variant> params) throws DBusError, IOError;
 	}
 
 	/*
@@ -155,7 +155,7 @@
 			params.set("level", new Variant.double(pct));
 			params.set("icon", new Variant.string(image_name));
 
-			osd.ShowOSD.begin(params);
+			osd.Show.begin(params);
 		}
 
 		/*
@@ -211,7 +211,7 @@
 
 			if (caption != "") {
 				params.set("label", new Variant.string(caption));
-				osd.ShowOSD.begin(params);
+				osd.Show.begin(params);
 			}
 		}
 
@@ -248,7 +248,7 @@
 			params.set("level", new Variant.double(level));
 			params.set("icon", new Variant.string(icon));
 
-			osd.ShowOSD.begin(params);
+			osd.Show.begin(params);
 		}
 	}
  }

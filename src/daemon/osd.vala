@@ -36,7 +36,7 @@ namespace Budgie {
 	* private GNOME Settings Daemon -> GNOME Shell protocol.
 	*
 	* In short, all elements of the permanently present window should be able to hide or show
-	* depending on the updated ShowOSD message, including support for a progress bar (level),
+	* depending on the updated Show message, including support for a progress bar (level),
 	* icon, optional label.
 	*
 	* This OSD is used by gnome-settings-daemon to portray special events, such as brightness/volume
@@ -44,7 +44,7 @@ namespace Budgie {
 	* above all other windows and be non-interactive, allowing unobtrosive overlay of information
 	* even in full screen movies and games.
 	*
-	* Each request to ShowOSD will reset the expiration timeout for the OSD's current visibility,
+	* Each request to Show will reset the expiration timeout for the OSD's current visibility,
 	* meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
 	* users to "hold down" the volume change buttons, for example.
 	*/
@@ -203,7 +203,7 @@ namespace Budgie {
 		* level: Progress-level to display in the OSD (double or int32 depending on gsd release)
 		* monitor: int32 The monitor to display the OSD on (currently ignored)
 		*/
-		public void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError {
+		public void Show(HashTable<string,Variant> params) throws DBusError, IOError {
 			string? icon_name = null;
 			string? label = null;
 
