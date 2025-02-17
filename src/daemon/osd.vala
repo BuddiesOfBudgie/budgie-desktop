@@ -123,10 +123,12 @@ namespace Budgie {
 			resizable = false;
 			skip_pager_hint = true;
 			skip_taskbar_hint = true;
+
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
 			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, 80);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
+
 			set_decorated(false);
 			stick();
 
@@ -153,9 +155,7 @@ namespace Budgie {
 		* Move the OSD into the correct position
 		*/
 		public void move_osd() {
-			var primary_monitor = ServiceManager.primary_monitor;
-			if (primary_monitor == null) return;
-			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
 		}
 	}
 

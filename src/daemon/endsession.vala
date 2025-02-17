@@ -135,6 +135,12 @@ namespace Budgie {
 				this.cancel_clicked();
 				return Gdk.EVENT_STOP;
 			});
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 		}
 
 		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {
@@ -174,6 +180,8 @@ namespace Budgie {
 
 			/* Update the label */
 			this.label_end_title.set_text(title);
+
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
 
 			if (main_show != null) {
 				/* We have a specific type.. */
