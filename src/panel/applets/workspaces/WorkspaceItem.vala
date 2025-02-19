@@ -11,7 +11,7 @@
 
 namespace Workspaces {
 	const Gtk.TargetEntry[] target_list = {
-		{ "application/x-wnck-window-id", 0, 0 }
+		{ "text/plain", 0, 0 }
 	};
 
 	public class WorkspaceItem : Gtk.EventBox {
@@ -174,12 +174,13 @@ namespace Workspaces {
 		private void on_drag_data_received(Gtk.Widget widget, Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint target_type, uint time) {
 			bool dnd_success = false;
 
-			ulong* data = (ulong*)selection_data.get_data();
+			string? data = selection_data.get_text();
 
 			if (data != null) {
 				try {
 					foreach (libxfce4windowing.Window window in WorkspacesApplet.xfce_screen.get_windows()) {
-						if (window.x11_get_xid() == *data) {
+						string all_class_names = string.joinv(",", window.get_class_ids());
+						if (all_class_names == data) {
 							window.move_to_workspace(this.workspace);
 							dnd_success = true;
 							break;
@@ -193,7 +194,7 @@ namespace Workspaces {
 			Gtk.drag_finish(context, dnd_success, true, time);
 		}
 
-		public void update_windows(List<weak libxfce4windowing.Window> window_list) {
+		public void update_windows(List<libxfce4windowing.Window> window_list) {
 			int num_columns = (real_alloc.width - 4) / 20;
 			int num_rows = (real_alloc.height - 4) / 20;
 
