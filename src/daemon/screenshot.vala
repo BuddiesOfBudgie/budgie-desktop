@@ -346,8 +346,7 @@ namespace BudgieScr {
 		public ScreenshotHomeWindow() {
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-			var primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
-			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
@@ -882,8 +881,7 @@ namespace BudgieScr {
 		public AfterShotWindow() {
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-			var primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
-			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
@@ -1341,8 +1339,7 @@ namespace BudgieScr {
 
 	private int get_scaling() {
 		// not very sophisticated, but for now, we'll assume one scale
-		var monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
-		int curr_scale = (int)monitor.get_scale();
+		int curr_scale = (int)new Budgie.WaylandClient().scale;
 		return curr_scale;
 	}
 
