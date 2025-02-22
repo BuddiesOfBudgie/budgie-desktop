@@ -278,13 +278,14 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		settings = new Settings("org.gnome.desktop.input-sources");
 
 		/* Hook up the ibus manager */
-		this.ibus_manager = new AppletIBusManager();
+		this.ibus_manager = null;//new AppletIBusManager();
 		update_fallback();
-		this.ibus_manager.ready.connect(this.on_ibus_ready);
-		this.ibus_manager.do_init();
+		//this.ibus_manager.ready.connect(this.on_ibus_ready);
+		//this.ibus_manager.do_init();
 
 		/* Go show up */
 		show_all();
+		on_ibus_ready();
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -365,9 +366,6 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 	/*
 	 * Reset InputSource list and produce something consumable by xkb
-	 *
-	 * TODO: Share code between WM and plugin in private Budgie library in
-	 * the C rewrite, this is a joke now.
 	 */
 	void update_sources() {
 		sources = null;
