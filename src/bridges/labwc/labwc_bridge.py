@@ -293,7 +293,7 @@ class Bridge:
 
     # this handles keyboard layout changes
     def desktop_input_sources_changed(self, settings, key):
-        if key != "sources":
+        if key not in ["sources","current"]:
             return
 
         # grab the settings sources and reformat it
@@ -301,8 +301,8 @@ class Bridge:
         # converted to (variant)
         # and we ignore ibus keyboard layouts since the
         # window manager expects only xkb
-        layout = ""
-        for source in settings[key]:
+        layout_arr = []
+        for source in settings["sources"]:
             if source[0] == 'xkb':
                 extract = source[1].replace("'","")
 
@@ -310,13 +310,19 @@ class Bridge:
                     rhs = extract.split("+")
                     extract = rhs[0] + "(" + rhs[1] + ")"
 
-                if layout == "":
-                    layout = extract
-                else:
-                    layout += "," + extract
+                layout_arr.append(extract)
 
-        if layout == "":
+        current_source = settings["current"]
+
+        if not layout_arr:
             layout = "us" # default to at least a known keyboard layout
+        else:
+            if current_source != 0:
+                swap = layout_arr[0]
+                layout_arr[0] = layout_arr[current_source]
+                layout_arr[current_source] = swap
+
+            layout = ",".join(layout_arr)
 
         path = self.user_config("environment")
         subprocess.call("sed -i 's/^XKB_DEFAULT_LAYOUT=.*/XKB_DEFAULT_LAYOUT="+layout+"/g' " + path, shell=True)
