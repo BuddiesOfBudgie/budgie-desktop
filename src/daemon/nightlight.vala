@@ -76,7 +76,9 @@ namespace Budgie {
 				try {
 					// Copy the default configuration file to the local configuration file location
 					File dir = File.new_for_path(Path.get_dirname(local_config_path));
-					dir.make_directory_with_parents(null);
+					if (!dir.query_exists()) {
+						dir.make_directory_with_parents(null);
+					}
 					File default_config_file = File.new_for_path(default_config_path);
 					File local_config_file = File.new_for_path(local_config_path);
 					default_config_file.copy(local_config_file, FileCopyFlags.NONE, null, null);
