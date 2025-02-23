@@ -24,7 +24,7 @@ errordomain InputMethodError {
 }
 
 /**
- * Reflects the ibus-manager in budgie-wm, with very limited functionality,
+ * Reflects the ibus-manager in budgie-daemon, with very limited functionality,
  * simply to enable us to mimick the behavior over there.
  */
 class AppletIBusManager : GLib.Object {
@@ -228,6 +228,8 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	/* ibus interfacing */
 	private AppletIBusManager? ibus_manager = null;
 
+	private bool initialising = true;
+
 	public KeyboardLayoutApplet() {
 		/* Graphical stuff */
 		widget = new Gtk.EventBox();
@@ -286,6 +288,8 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		/* Go show up */
 		show_all();
 		on_ibus_ready();
+
+		initialising = false;
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -312,7 +316,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	}
 
 	/**
-	 * Tell the WM to change the keyboard to the current selection
+	 * Tell the active bridge to change the keyboard to the current selection
 	 */
 	private void on_row_activate(Gtk.Button item) {
 		var btn = item as InputSourceMenuItem;
@@ -353,6 +357,13 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 			menu_label.show_all();
 
 			listbox.add(menu_label);
+		}
+
+		if (!initialising) {
+			/* keyboard list has changed so current index is no longer valid
+			   so let just default to the primary keyboard
+			*/
+			this.settings.set_uint("current", 0);
 		}
 	}
 
