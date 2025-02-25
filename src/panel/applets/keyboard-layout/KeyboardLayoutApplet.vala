@@ -280,14 +280,14 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		settings = new Settings("org.gnome.desktop.input-sources");
 
 		/* Hook up the ibus manager */
-		this.ibus_manager = null;//new AppletIBusManager();
+		this.ibus_manager = new AppletIBusManager();
 		update_fallback();
-		//this.ibus_manager.ready.connect(this.on_ibus_ready);
-		//this.ibus_manager.do_init();
+		this.ibus_manager.ready.connect(this.on_ibus_ready);
+		this.ibus_manager.do_init();
 
 		/* Go show up */
 		show_all();
-		on_ibus_ready();
+		//on_ibus_ready();
 
 		initialising = false;
 	}

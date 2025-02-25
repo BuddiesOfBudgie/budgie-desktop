@@ -37,7 +37,9 @@ daemon_sources = [
     'settings.vala',
     'screenlock.vala',
     'xdgdirtracker/dbus.vala',
-    'osdkeys.vala'
+    'osdkeys.vala',
+    'ibus.vala',
+    'keyboard.vala'
 ]
 
 daemon_deps = [
@@ -50,6 +52,7 @@ daemon_deps = [
     dep_xfce4windowing,
     dep_gst,
     dep_cairo,
+    dep_ibus,
     gvc.get_variable('libgvc_dep'),
     meson.get_compiler('c').find_library('m', required: false),
     dep_upower,
@@ -91,6 +94,7 @@ executable(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libxfce4windowing-0',
         '--pkg', 'gvc-1.0',
+        '--pkg', 'ibus-1.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

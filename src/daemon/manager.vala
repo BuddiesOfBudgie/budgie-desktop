@@ -115,6 +115,8 @@ namespace Budgie {
 			screenlock.setup_dbus();
 
 			nightlight = new NightLightManager();
+
+			Budgie.KeyboardManager.init();
 		}
 
 		/**
