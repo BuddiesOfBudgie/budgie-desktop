@@ -228,8 +228,6 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	/* ibus interfacing */
 	private AppletIBusManager? ibus_manager = null;
 
-	private bool initialising = true;
-
 	public KeyboardLayoutApplet() {
 		/* Graphical stuff */
 		widget = new Gtk.EventBox();
@@ -287,9 +285,6 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 		/* Go show up */
 		show_all();
-		//on_ibus_ready();
-
-		initialising = false;
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -357,13 +352,6 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 			menu_label.show_all();
 
 			listbox.add(menu_label);
-		}
-
-		if (!initialising) {
-			/* keyboard list has changed so current index is no longer valid
-			   so let just default to the primary keyboard
-			*/
-			this.settings.set_uint("current", 0);
 		}
 	}
 
