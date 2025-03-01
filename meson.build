@@ -45,7 +45,7 @@ dep_gtk_layer_shell = dependency('gtk-layer-shell-0', version: '>= 0.8.0')
 dep_cairo = dependency('cairo', version: '>= 1.15.10')
 
 # Needed for keyboardy bits
-dep_ibus = dependency('ibus-1.0', version: '>= 1.5.10')
+dep_ibus = dependency('ibus-1.0', version: '>= 1.5.32')
 dep_notify = dependency('libnotify', version: '>= 0.7')
 dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_version)
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
