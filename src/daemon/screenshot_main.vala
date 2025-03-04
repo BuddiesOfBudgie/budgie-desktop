@@ -27,7 +27,7 @@ namespace Budgie {
 
 	const OptionEntry[] options = {
 		{ "interactive", 'i', 0, OptionArg.NONE, ref interactive, "Interactively set options" },
-		{ "window", 'w', 0, OptionArg.NONE, ref window, "Grab a window instead of the entire display" },
+		{ "window", 'w', 0, OptionArg.NONE, ref window, "Grab a window instead of the entire display. This capability only works for compatible window managers." },
 		{ "area", 'a', 0, OptionArg.NONE, ref area, "Grab an area of the display instead of the entire display" },
 		{ null }
 	};

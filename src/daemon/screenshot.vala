@@ -152,6 +152,7 @@ namespace BudgieScr {
 		public abstract async void Screenshot(bool include_cursor, bool flash, string filename, out bool success, out string filename_used) throws Error;
 		public abstract async void ScreenshotWindow(bool include_frame, bool include_cursor, bool flash, string filename,
 			out bool success, out string filename_used) throws Error;
+		public abstract bool SupportScreenshotWindow() throws Error;
 	}
 
 	class MakeScreenshot {
@@ -166,7 +167,7 @@ namespace BudgieScr {
 		CurrentState windowstate;
 		static ScreenshotClient? client = null;
 
-		public MakeScreenshot(int[]? area) {
+		private static void MakeClientConnection() {
 			if (client == null) {
 				try {
 					client = GLib.Bus.get_proxy_sync(BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshot", "/org/buddiesofbudgie/Screenshot");
@@ -175,6 +176,22 @@ namespace BudgieScr {
 					client = null;
 				}
 			}
+		}
+
+		public static bool ScreenshotWindowSupport() {
+			MakeClientConnection();
+
+			try {
+				return client.SupportScreenshotWindow();
+			}
+			catch {
+				warning("Unknown Screenshot Window support");
+				return false;
+			}
+		}
+
+		public MakeScreenshot(int[]? area) {
+			MakeClientConnection();
 
 			windowstate = new CurrentState();
 			this.area = area;
@@ -327,6 +344,15 @@ namespace BudgieScr {
 		private unowned Gtk.Switch? screenshotcapturesoundswitch;
 
 		public ScreenshotHomeWindow() {
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+
+			this.set_decorated(true);
+
 			windowstate = new CurrentState();
 			this.set_startup_id("org.buddiesofbudgie.BudgieScreenshot");
 			this.set_title(_("Budgie Screenshot"));
@@ -357,7 +383,7 @@ namespace BudgieScr {
 			topbar = new Gtk.HeaderBar();
 			topbar.show_close_button = true;
 			this.set_titlebar(topbar);
-			this.set_keep_above(true);
+			//this.set_keep_above(true);
 
 			/*
 			 * left or right windowbuttons, that's the question when
@@ -401,6 +427,7 @@ namespace BudgieScr {
 					return false;
 				});
 			});
+
 			this.show_all();
 		}
 
@@ -432,12 +459,14 @@ namespace BudgieScr {
 			Gtk.Popover newpopover = new Gtk.Popover(b);
 			Grid popovergrid = new Gtk.Grid();
 			set_margins(popovergrid, 15, 15, 15, 15);
-			Label[] shortcutnames = {
-				// Translators: be as brief as possible; popovers ar cut off if broader than the window
-				new Label(_("Screenshot entire screen") + ":\t"),
-				new Label(_("Screenshot active window") + ":\t"),
-				new Label(_("Screenshot selected area") + ":\t"),
-			};
+			bool window_support = MakeScreenshot.ScreenshotWindowSupport();
+			Label[] shortcutnames = {};
+			// Translators: be as brief as possible; popovers are cut off if broader than the window
+			shortcutnames += new Label(_("Screenshot entire screen") + ":\t");
+			if (window_support) {
+				shortcutnames += new Label(_("Screenshot active window") + ":\t");
+			}
+			shortcutnames += new Label(_("Screenshot selected area") + ":\t");
 
 			shortcutlabels = {};
 			// Shortcuts is about -keyboard- shortcuts
@@ -542,16 +571,20 @@ namespace BudgieScr {
 			string[] mode_options =  {"Screen", "Window", "Selection"}; // don't translate, internal use
 			int active = find_stringindex(mode, mode_options);
 
+			bool window_support = MakeScreenshot.ScreenshotWindowSupport();
 			// translate! These are the interface names
-			string[] areabuttons_labels = {
-				_("Screen"), _("Window"), _("Selection")
-			};
+			string[] areabuttons_labels = {};
+			string[] icon_names = {};
+			areabuttons_labels += _("Screen");
+			icon_names += "selectscreen-symbolic";
 
-			string[] icon_names = {
-				"selectscreen-symbolic",
-				"selectwindow-symbolic",
-				"selectselection-symbolic"
-			};
+			if (window_support) {
+				areabuttons_labels += _("Window");
+				icon_names += "selectwindow-symbolic";
+			}
+
+			areabuttons_labels += _("Selection");
+			icon_names += "selectselection-symbolic";
 
 			int i = 0;
 			ToggleButton[] selectbuttons = {};
@@ -595,7 +628,13 @@ namespace BudgieScr {
 		}
 
 		private void select_action(ToggleButton b, ToggleButton[] btns) {
-			string[] selectmodes = {"Screen", "Window", "Selection"};
+			string[] selectmodes = {};
+			bool window_support = MakeScreenshot.ScreenshotWindowSupport();
+			selectmodes += "Screen";
+			if (window_support) {
+				selectmodes += "Window";
+		 	}
+		  	selectmodes += "Selection";
 			int i = 0;
 
 			foreach (ToggleButton bt in btns) {
@@ -840,6 +879,15 @@ namespace BudgieScr {
 		}
 
 		public AfterShotWindow() {
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+
+			this.set_decorated(true);
+
 			this.set_startup_id("org.buddiesofbudgie.BudgieScreenshot");
 			this.set_title(_("Budgie Screenshot"));
 			this.set_wmclass("org.buddiesofbudgie.BudgieScreenshot", "org.buddiesofbudgie.BudgieScreenshot");
@@ -1291,9 +1339,7 @@ namespace BudgieScr {
 
 	private int get_scaling() {
 		// not very sophisticated, but for now, we'll assume one scale
-		Gdk.Monitor gdkmon = Gdk.Display.get_default().get_monitor(0);
-		int curr_scale = gdkmon.get_scale_factor();
-
+		int curr_scale = (int)new Budgie.WaylandClient().scale;
 		return curr_scale;
 	}
 
