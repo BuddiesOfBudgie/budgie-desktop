@@ -73,7 +73,6 @@ budgie_panel_vala_args = [
         '--pkg', 'gvc-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk-layer-shell-0',
         '--pkg', 'libxfce4windowing-0',
@@ -82,15 +81,10 @@ budgie_panel_vala_args = [
         '--gresources=' + gresource,
 ]
 
-budgie_panel_c_args = [
-    '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
-]
-
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
     vala_args: budgie_panel_vala_args,
-    c_args: budgie_panel_c_args,
     install: true,
 )
 
