@@ -33,6 +33,7 @@ public interface RavenRemote : GLib.Object {
 
 [DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 public interface DispatcherRemote : GLib.Object {
+	public abstract void toggle_do_not_disturb() throws DBusError, IOError;
 	public signal void DoNotDisturbChanged(bool value);
 }
 
@@ -141,23 +142,31 @@ public class NotificationsApplet : Budgie.Applet {
 	}
 
 	bool on_button_release(Gdk.EventButton? button) {
-		if (raven_proxy == null) {
-			return Gdk.EVENT_PROPAGATE;
+		if (raven_proxy == null) return Gdk.EVENT_PROPAGATE;
+		if (dispatcher == null) return Gdk.EVENT_PROPAGATE;
+
+		switch (button.button) {
+			case Gdk.BUTTON_PRIMARY:
+				raven_proxy.ToggleNotificationsView.begin((obj,res) => {
+					try {
+						raven_proxy.ToggleNotificationsView.end(res);
+					} catch (Error e) {
+						warning("Failed to toggle Raven: %s", e.message);
+					}
+				});
+
+				return Gdk.EVENT_STOP;
+			case Gdk.BUTTON_MIDDLE:
+				try {
+					dispatcher.toggle_do_not_disturb();
+				} catch (Error e) {
+					warning("Failed to toggle DoNotDisturb state: %s", e.message);
+				}
+
+				return Gdk.EVENT_STOP;
+			default:
+				return Gdk.EVENT_PROPAGATE;
 		}
-
-		if (button.button != 1) {
-			return Gdk.EVENT_PROPAGATE;
-		}
-
-		raven_proxy.ToggleNotificationsView.begin((obj,res) => {
-			try {
-				raven_proxy.ToggleNotificationsView.end(res);
-			} catch (Error e) {
-				message("Failed to toggle Raven: %s", e.message);
-			}
-		});
-
-		return Gdk.EVENT_STOP;
 	}
 }
 

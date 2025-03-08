@@ -15,7 +15,6 @@ public enum ThemeType {
 	CURSOR_THEME
 }
 
-[Compact]
 class ThemeInfo : GLib.Object {
 	private ThemeType theme_type;
 	private List<string> paths;

@@ -40,9 +40,7 @@ applet_icontasklist_deps = [
     dep_giounix,
     dep_gtk3,
     dep_peas,
-    dep_wnck,
     dep_xfce4windowing,
-    dep_gdkx11,
     link_libwindowing,
     link_libappsys,
     link_libpanelplugin,
@@ -60,9 +58,7 @@ shared_library(
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libwnck-3.0',
         '--pkg', 'libxfce4windowing-0',
         '--vapidir', dir_libappsys,
         '--vapidir', dir_libwindowing,
@@ -70,9 +66,6 @@ shared_library(
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-    ],
-    c_args: [
-        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_icontasklist_dir,
