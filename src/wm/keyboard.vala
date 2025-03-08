@@ -50,17 +50,21 @@ namespace Budgie {
 			if (e_variant != null && e_variant.length > 0) {
 				this.variant = e_variant;
 			}
+
 			this.layout = engine.layout;
 			this.ibus_engine = id;
 		}
 	}
 
-	public class KeyboardManager : GLib.Object {
-		public unowned Budgie.BudgieWM? wm { construct set ; public get; }
+	public class KeyboardManager : Object {
+		unowned Budgie.BudgieWM? wm;
+		static KeyboardManager? instance;
+		static VariantType sources_variant_type;
+		private static GLib.Settings settings;
+
 		private Gnome.XkbInfo? xkb;
 		string[] options = {};
 
-		Settings? settings = null;
 		Array<InputSource> sources = null;
 		InputSource fallback;
 
@@ -73,11 +77,36 @@ namespace Budgie {
 		/* Guard ourselves from any future potential derps */
 		private bool is_keyboard_held = false;
 
-		public KeyboardManager(Budgie.BudgieWM? wm) {
-			Object(wm: wm);
+		public static void init(Budgie.BudgieWM? wm) {
+			if (instance != null) return;
+
+			instance = new KeyboardManager(wm);
+
+			var display = wm.get_display();
+			display.modifiers_accelerator_activated.connect(instance.handle_modifiers_accelerator_activated);
+		}
+
+		static construct {
+			sources_variant_type = new VariantType("a(ss)");
+
+			var schema = GLib.SettingsSchemaSource.get_default ().lookup ("org.gnome.desktop.input-sources", true);
+			if (schema == null) {
+				critical ("org.gnome.desktop.input-sources not found.");
+			}
+
+			settings = new GLib.Settings.full (schema, null, null);
+		}
+
+		KeyboardManager(Budgie.BudgieWM? wm) {
+			Object();
+			this.wm = wm;
+
+			/* Hook into GNOME defaults */
+			var schema = new Settings("org.gnome.desktop.wm.keybindings");
+			wm.get_display().add_keybinding("switch-input-source", schema, Meta.KeyBindingFlags.NONE, switch_input_source);
+			wm.get_display().add_keybinding("switch-input-source-backward", schema, Meta.KeyBindingFlags.NONE, switch_input_source_backward);
 
 			xkb = new Gnome.XkbInfo();
-
 			/* Only hook things up when ibus is setup, whether it failed or not */
 			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.X11) {
 				ibus_manager = new IBusManager(this);
@@ -86,54 +115,62 @@ namespace Budgie {
 			}
 		}
 
-		private void on_ibus_ready() {
-			settings = new Settings("org.gnome.desktop.input-sources");
+		construct {
+			settings.changed.connect (set_keyboard_layout);
 
+			set_keyboard_layout (settings, "sources");
+			set_keyboard_layout (settings, "current");
+		}
+
+		[CCode (instance_pos = -1)]
+		private void on_ibus_ready() {
 			/* Special handling of the current source. */
 			sig_id = settings.changed["current"].connect(on_current_source_changed);
 
 			settings.changed.connect(on_settings_changed);
 			update_fallback();
 
-			on_settings_changed("xkb-options");
-			on_settings_changed("sources");
+			Timeout.add(500, () => {
+				/***
+				 * add a small delay to allow gnome-session keyboard handling to kick in
+				 * before switching to the current keyboard layout otherwise the layout
+				 * defaults to the first keyboard source
+				*/
+				on_settings_changed("xkb-options");
+				on_settings_changed("sources");
+				on_settings_changed("current");
+
+				return false;
+			});
 		}
 
 		public delegate void KeyHandlerFunc(Meta.Display display, Meta.Window? window, Clutter.KeyEvent? event, Meta.KeyBinding binding);
 
+		[CCode (instance_pos = -1)]
 		void switch_input_source(Meta.Display display,
 								Meta.Window? window, Clutter.KeyEvent? event,
 								Meta.KeyBinding binding) {
-			if (sources == null || sources.length == 0) {
-				return;
-			}
+			if (sources == null || sources.length == 0) return;
+
 			current_source = (current_source+1) % sources.length;
 			this.hold_keyboard();
 			this.apply_layout(current_source);
 			this.apply_ibus();
 		}
 
+		[CCode (instance_pos = -1)]
 		void switch_input_source_backward(Meta.Display display,
 										Meta.Window? window, Clutter.KeyEvent? event,
 										Meta.KeyBinding binding) {
-			if (sources == null || sources.length == 0) {
-				return;
-			}
+			if (sources == null || sources.length == 0) return;
+
 			current_source = (current_source-1) % sources.length;
 			this.hold_keyboard();
 			this.apply_layout(current_source);
 			this.apply_ibus();
 		}
 
-		public void hook_extra() {
-			var display = wm.get_display();
-
-			/* Hook into GNOME defaults */
-			var schema = new Settings("org.gnome.desktop.wm.keybindings");
-			display.add_keybinding("switch-input-source", schema, Meta.KeyBindingFlags.NONE, switch_input_source);
-			display.add_keybinding("switch-input-source-backward", schema, Meta.KeyBindingFlags.NONE, switch_input_source_backward);
-		}
-
+		[CCode (instance_pos = -1)]
 		void on_settings_changed(string key) {
 			switch (key) {
 				case "sources":
@@ -144,12 +181,16 @@ namespace Budgie {
 					/* Update our xkb-options */
 					this.options = settings.get_strv(key);
 					break;
+				case "current":
+					set_keyboard_layout(settings, key);
+					break;
 				default:
-					return;
+					break;
 			}
 		}
 
 		/* Reset InputSource list and produce something consumable by xkb */
+		[CCode (instance_pos = -1)]
 		void update_sources() {
 			sources = new Array<InputSource>();
 
@@ -163,10 +204,7 @@ namespace Budgie {
 
 				if (id == "xkb") {
 					string[] spl = type.split("+");
-					string? variant = "";
-					if (spl.length > 1) {
-						variant = spl[1];
-					}
+					string? variant = (spl.length > 1) ? spl[1] : "";
 
 					try {
 						source = new InputSource(this.ibus_manager, type, (uint)i, spl[0], variant, true);
@@ -181,6 +219,7 @@ namespace Budgie {
 						message("Error adding source %s|%s: %s", id, type, e.message);
 						continue;
 					}
+
 					sources.append_val(source);
 				}
 			}
@@ -196,12 +235,13 @@ namespace Budgie {
 			this.apply_layout_group();
 
 			/* Always start up with the last selected index if possible */
-			var default_idx = this.settings.get_uint("current");
+			var default_idx = settings.get_uint("current");
 			this.apply_layout(default_idx);
 			this.apply_ibus();
 		}
 
 		/* Apply our given layout groups to mutter */
+		[CCode (instance_pos = -1)]
 		void apply_layout_group() {
 			unowned InputSource? source;
 			string[] layouts = {};
@@ -222,10 +262,12 @@ namespace Budgie {
 		}
 
 		/* Apply an indexed layout, i.e. 0 for now */
+		[CCode (instance_pos = -1)]
 		void apply_layout(uint idx) {
 			if (idx > sources.length) {
 				idx = 0;
 			}
+
 			this.current_source = idx;
 			Meta.Display display = wm.get_display();
 			Meta.Context ctx = display.get_context();
@@ -234,7 +276,7 @@ namespace Budgie {
 			this.write_source_index(idx);
 		}
 
-
+		[CCode (instance_pos = -1)]
 		void update_fallback() {
 			string? type = null;
 			string? id = null;
@@ -270,18 +312,21 @@ namespace Budgie {
 		/**
 		* Update the index in gsettings so that clients know the current
 		*/
+		[CCode (instance_pos = -1)]
 		private void write_source_index(uint index) {
-			SignalHandler.block(this.settings, this.sig_id);
-			this.settings.set_uint("current", index);
-			this.settings.apply();
-			SignalHandler.unblock(this.settings, this.sig_id);
+			SignalHandler.block(settings, this.sig_id);
+			settings.set_uint("current", index);
+			settings.apply();
+			set_keyboard_layout(settings, "current");
+			SignalHandler.unblock(settings, this.sig_id);
 		}
 
 		/**
 		* Someone else changed the current source, do somethin' about it
 		*/
+		[CCode (instance_pos = -1)]
 		private void on_current_source_changed() {
-			uint new_source = this.settings.get_uint("current");
+			uint new_source = settings.get_uint("current");
 			this.hold_keyboard();
 			apply_layout(new_source);
 			this.apply_ibus();
@@ -290,24 +335,19 @@ namespace Budgie {
 		/**
 		* Apply the ibus engine and then release the keyboard
 		*/
+		[CCode (instance_pos = -1)]
 		private void apply_ibus() {
-			string engine_name;
 			InputSource? current = sources.index(current_source);
-			if (current != null && current.ibus_engine != null) {
-				engine_name = current.ibus_engine;
-			} else {
-				engine_name = DEFAULT_ENGINE;
-			}
-			this.ibus_manager.set_engine(engine_name);
+			this.ibus_manager.set_engine((current != null && current.ibus_engine != null) ? current.ibus_engine : DEFAULT_ENGINE);
 		}
 
 		/**
 		* Unfreeze the keyboard
 		*/
+		[CCode (instance_pos = -1)]
 		public void release_keyboard() {
-			if (!is_keyboard_held) {
-				return;
-			}
+			if (!is_keyboard_held) return;
+
 			wm.get_display().ungrab_keyboard(wm.get_display().get_current_time());
 			is_keyboard_held = false;
 		}
@@ -315,12 +355,67 @@ namespace Budgie {
 		/**
 		* Freeze the keyboard so we don't loose input events
 		*/
+		[CCode (instance_pos = -1)]
 		public void hold_keyboard() {
-			if (is_keyboard_held) {
-				return;
-			}
+			if (is_keyboard_held) return;
+
 			wm.get_display().freeze_keyboard(wm.get_display().get_current_time());
 			is_keyboard_held = true;
+		}
+
+		/**
+		* Respond correctly to ALT+SHIFT_L
+		*/
+		[CCode (instance_pos = -1)]
+		bool handle_modifiers_accelerator_activated(Meta.Display display) {
+			display.ungrab_keyboard(display.get_current_time ());
+
+			var sources = settings.get_value ("sources");
+			if (!sources.is_of_type(sources_variant_type)) return true;
+
+			var n_sources = (uint) sources.n_children();
+			if (n_sources < 2) return true;
+
+			var current = settings.get_uint ("current");
+			settings.set_uint("current", (current + 1) % n_sources);
+
+			return true;
+		}
+
+		/**
+		* Called whenever  the keyboard layout needs to be set/reset
+		*/
+		[CCode (instance_pos = -1)]
+		void set_keyboard_layout (GLib.Settings settings, string key) {
+			if (key == "sources" || key == "xkb-options") {
+				string[] layouts = {}, variants = {};
+
+				var sources = settings.get_value ("sources");
+				if (!sources.is_of_type (sources_variant_type)) {
+					return;
+				}
+
+				for (int i = 0; i < sources.n_children (); i++) {
+					unowned string? type = null, name = null;
+					sources.get_child (i, "(&s&s)", out type, out name);
+
+					if (type == "xkb") {
+						string[] arr = name.split ("+", 2);
+						layouts += arr[0];
+						variants += arr[1] ?? "";
+					}
+				}
+
+				var xkb_options = settings.get_strv ("xkb-options");
+
+				var layout = string.joinv (",", layouts);
+				var variant = string.joinv (",", variants);
+				var options = string.joinv (",", xkb_options);
+
+				Meta.Backend.get_backend ().set_keymap (layout, variant, options);
+			} else if (key == "current") {
+				Meta.Backend.get_backend ().lock_layout_group (settings.get_uint ("current"));
+			}
 		}
 	}
 }
