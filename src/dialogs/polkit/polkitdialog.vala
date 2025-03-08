@@ -149,6 +149,7 @@ namespace Budgie {
 			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
 			key_release_event.connect(on_key_release);
 
