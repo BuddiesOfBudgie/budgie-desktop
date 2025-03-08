@@ -359,11 +359,12 @@
 		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
+			if (!new WaylandClient().is_initialised()) return;
+
+			Gdk.Rectangle mon_rect = new WaylandClient().monitor_res;
+
 			GtkLayerShell.init_for_window(popup);
 			GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
-
-			var mon = libxfce4windowing.Screen.get_default().get_primary_monitor();
-			Gdk.Rectangle mon_rect = mon.get_workarea();
 
 			ulong handler_id = 0;
 			handler_id = popup.get_child().size_allocate.connect((alloc) => {
@@ -375,7 +376,7 @@
 
 				/* determine the y position for the latest notification */
 				calculate_position(mon_rect.y);
-				GtkLayerShell.set_monitor(popup, mon.get_gdk_monitor());
+				GtkLayerShell.set_monitor(popup, new WaylandClient().gdk_monitor);
 				var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
 				int edge_a, edge_b;
 
