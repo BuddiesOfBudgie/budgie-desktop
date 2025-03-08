@@ -23,7 +23,6 @@ namespace Budgie {
 	/**
 	* Available slots
 	*/
-	[Compact]
 	class Screen : GLib.Object {
 		public PanelPosition slots;
 		public Gdk.Rectangle area;
