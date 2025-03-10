@@ -27,7 +27,6 @@ daemon_sources = [
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
-    'screenshot.vala',
     'background.vala',
     'statusnotifier.vala',
     'main.vala',
@@ -103,40 +102,8 @@ executable(
     install_rpath: rpath_libdir,
 )
 
-main_sources = [
-  'screenshot_main.vala',
-]
-
-ScreenshotMainDependencies = [
-    dep_gtk3,
-]
-
-executable(
-    'org.buddiesofbudgie.BudgieScreenshot', main_sources,
-    dependencies: ScreenshotMainDependencies,
-    install: true,
-    vala_args: daemon_vala_args,
-)
-
-install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
-    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
-)
-
-install_data('icons/org.buddiesofbudgie.BudgieScreenshot.svg',
-    install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'apps')
-)
-
 install_data('gammastep.config',
     install_dir: join_paths(datadir, 'budgie-desktop')
-)
-
-# Now merge the translations of the .desktop.in to a .desktop
-custom_target('org.buddiesofbudgie.BudgieScreenshot',
-    input : 'org.buddiesofbudgie.BudgieScreenshot.desktop.in',
-    output : 'org.buddiesofbudgie.BudgieScreenshot.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
-    install : true,
-    install_dir : join_paths(datadir, 'applications'),
 )
 
 # gschemas

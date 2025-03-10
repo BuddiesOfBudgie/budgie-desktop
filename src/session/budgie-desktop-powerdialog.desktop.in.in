@@ -9,6 +9,3 @@ OnlyShowIn=Budgie;
 NoDisplay=true
 X-GNOME-Autostart-Phase=Application
 X-GNOME-Autostart-Notify=true
-X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=budgie-power-dialog
-X-GNOME-Bugzilla-Component=general

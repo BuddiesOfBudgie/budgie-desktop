@@ -14,7 +14,7 @@ using Gst;
  * (at your option) any later version.
  */
 
-namespace BudgieScr {
+namespace Budgie {
 	enum WindowState {
 		NONE,
 		MAINWINDOW,
@@ -27,6 +27,51 @@ namespace BudgieScr {
 		LEFT,
 		RIGHT,
 	}
+
+	/*
+	 The underlying WaylandClient does not appear to be fully thread-safe and either
+	 repeated calls very quickly, or calls within the same process where the
+	 reference was not release will result in mutex-locks causing the daemon to spin
+	 indefinitely.
+
+	 Our use in the daemon is limited so we can initialise variable we use within
+	 a singleton to make things thread-safe.
+	 */
+	 [SingleInstance]
+	 public class WaylandClient : GLib.Object {
+		 private unowned libxfce4windowing.Monitor? primary_monitor=null;
+
+		 public bool is_initialised() { return primary_monitor != null; }
+		 public unowned Gdk.Monitor gdk_monitor {get; private set; }
+		 public Gdk.Rectangle monitor_res { get; private set; }
+		 public int scale { get; private set; }
+
+		 public WaylandClient() {
+			 if (primary_monitor != null) return;
+			 libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
+			 on_monitors_changed();
+		 }
+
+		 void on_monitors_changed() {
+			 int loop = 0;
+
+			 /* it can take a short-time after first call for the underlying wayland client
+				to return a reference, so lets loop until we get a reference ... but
+				don't try indefinitely
+			 */
+			 Timeout.add(200, ()=> {
+				 primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
+				 if (primary_monitor != null || loop++ > 10) {
+					 monitor_res = primary_monitor.get_logical_geometry();
+					 gdk_monitor = primary_monitor.get_gdk_monitor();
+					 scale = (int)primary_monitor.get_scale();
+					 return false;
+				 }
+
+				 return true;
+			 });
+		 }
+	 }
 
 	[SingleInstance]
 	public class CurrentState : GLib.Object {
@@ -346,7 +391,7 @@ namespace BudgieScr {
 		public ScreenshotHomeWindow() {
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
@@ -881,7 +926,7 @@ namespace BudgieScr {
 		public AfterShotWindow() {
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-			GtkLayerShell.set_monitor(this, new Budgie.WaylandClient().gdk_monitor);
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
@@ -1339,7 +1384,7 @@ namespace BudgieScr {
 
 	private int get_scaling() {
 		// not very sophisticated, but for now, we'll assume one scale
-		int curr_scale = (int)new Budgie.WaylandClient().scale;
+		int curr_scale = (int)new WaylandClient().scale;
 		return curr_scale;
 	}
 
@@ -1351,5 +1396,27 @@ namespace BudgieScr {
 		}
 
 		return -1;
+	}
+
+	public static int main(string[] args) {
+		Gtk.init(ref args);
+		WaylandClient client = new WaylandClient();
+
+		Intl.setlocale(LocaleCategory.ALL, "");
+		Intl.bindtextdomain(Budgie.GETTEXT_PACKAGE, Budgie.LOCALEDIR);
+		Intl.bind_textdomain_codeset(Budgie.GETTEXT_PACKAGE, "UTF-8");
+		Intl.textdomain(Budgie.GETTEXT_PACKAGE);
+
+		Budgie.ScreenshotServer? screenshotcontrol;
+
+		try {
+			screenshotcontrol = new Budgie.ScreenshotServer();
+			screenshotcontrol.setup_dbus();
+		} catch (Error e) {
+			warning("ServiceManager %s\n", e.message);
+		}
+
+		Gtk.main();
+		return 0;
 	}
 }

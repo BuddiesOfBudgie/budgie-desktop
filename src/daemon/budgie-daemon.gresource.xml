@@ -7,19 +7,4 @@
         <gresource prefix="/com/solus-project/budgie/endsession">
                 <file>endsession.ui</file>
         </gresource>
-        <gresource prefix="/org/buddiesofbudgie/Screenshot/icons/scalable/apps">
-                <file alias="clipboard-shot-symbolic.svg">icons/clipboard-shot-symbolic.svg</file>
-                <file alias="selectscreen-symbolic.svg">icons/selectscreen-symbolic.svg</file>
-                <file alias="selectwindow-symbolic.svg">icons/selectwindow-symbolic.svg</file>
-                <file alias="trash-shot-symbolic.svg">icons/trash-shot-symbolic.svg</file>
-                <file alias="edit-shot-symbolic.svg">icons/edit-shot-symbolic.svg</file>
-                <file alias="save-shot-symbolic.svg">icons/save-shot-symbolic.svg</file>
-                <file alias="selectselection-symbolic.svg">icons/selectselection-symbolic.svg</file>
-                <file alias="shootscreen-symbolic.svg">icons/shootscreen-symbolic.svg</file>
-                <file alias="saveshot-noaccess-symbolic.svg">icons/saveshot-noaccess-symbolic.svg</file>
-        </gresource>
-        <gresource prefix="/org/buddiesofbudgie/Screenshot">
-                <file preprocess="xml-stripblanks" compressed="true">screenshothome.ui</file>
-                <file preprocess="xml-stripblanks" compressed="true">aftershot.ui</file>
-        </gresource>
 </gresources>
