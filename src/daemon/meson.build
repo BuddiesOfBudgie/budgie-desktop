@@ -35,6 +35,7 @@ daemon_sources = [
     'osd.vala',
     'settings.vala',
     'screenlock.vala',
+    'screenshot.vala',
     'xdgdirtracker/dbus.vala',
     'osdkeys.vala'
 ]

@@ -80,6 +80,9 @@ namespace Budgie {
 		/* NightLight */
 		Budgie.NightLightManager? nightlight;
 
+		/* screenshot */
+		ScreenshotManager? screenshot_manager;
+
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
@@ -110,6 +113,9 @@ namespace Budgie {
 			screenlock.setup_dbus();
 
 			nightlight = new NightLightManager();
+
+			screenshot_manager = new ScreenshotManager();
+			screenshot_manager.serve();
 		}
 
 		/**

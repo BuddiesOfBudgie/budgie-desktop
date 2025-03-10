@@ -4,7 +4,6 @@ powerdialog_sources = [
     'dialog_button.vala',
     'main.vala',
     'shim.vala',
-    'screenshot.vala',
     'window.vala'
 ]
 

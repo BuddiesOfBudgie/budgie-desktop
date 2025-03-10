@@ -22,8 +22,6 @@ namespace Budgie {
 
 		private ShellShim? shim;
 
-		private ScreenshotManager? screenshot_manager;
-
 		public PowerApplication() {
 			Object(application_id: "org.buddiesofbudgie.PowerDialog", flags: 0);
 
@@ -34,9 +32,6 @@ namespace Budgie {
 			*/
 			shim = new ShellShim();
 			shim.serve();
-
-			screenshot_manager = new ScreenshotManager();
-			screenshot_manager.serve();
 		}
 
 		public override void activate() {
