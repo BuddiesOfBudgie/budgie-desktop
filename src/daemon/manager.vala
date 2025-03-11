@@ -27,7 +27,6 @@ namespace Budgie {
 		public bool is_initialised() { return primary_monitor != null; }
 		public unowned Gdk.Monitor gdk_monitor {get; private set; }
 		public Gdk.Rectangle monitor_res { get; private set; }
-		public int scale { get; private set; }
 
 		public WaylandClient() {
 			if (primary_monitor != null) return;
@@ -47,7 +46,6 @@ namespace Budgie {
 				if (primary_monitor != null || loop++ > 10) {
 					monitor_res = primary_monitor.get_logical_geometry();
 					gdk_monitor = primary_monitor.get_gdk_monitor();
-					scale = (int)primary_monitor.get_scale();
 					return false;
 				}
 
