@@ -699,155 +699,58 @@ namespace Budgie {
 	}
 
 
-	class SelectLayer : Gtk.Window {
-		int startx;
-		int starty;
+	class SelectLayer : GLib.Object {
 		int topleftx;
 		int toplefty;
 		int width;
 		int height;
-		double red = 0; // fallback
-		double green = 0; // fallback
-		double blue = 1; // fallback
-		GLib.Settings? theme_settings;
+
 		CurrentState windowstate;
 
 		public SelectLayer(int? overrule_delay = null) {
 			windowstate = new CurrentState();
 			windowstate.statechanged(WindowState.SELECTINGAREA);
-			theme_settings = new GLib.Settings("org.gnome.desktop.interface");
-			this.set_type_hint(Gdk.WindowTypeHint.UTILITY);
-			this.set_decorated(false); // needed on libmutter-12
-			this.fullscreen();
-			this.set_keep_above(true);
-			get_theme_fillcolor();
 
-			// connect draw
-			Gtk.DrawingArea darea = new Gtk.DrawingArea();
-			darea.draw.connect((w, ctx)=> {
-				// draw: x, y, width, height
-				draw_rectangle(
-					w, ctx, topleftx, toplefty,
-					width, height
-				);
+			try {
+				string[] argv = {"slurp"};
+				string output = "", stderr = "";
+				int status = 0;
 
-				return true;
-			});
+				// Run slurp and capture the output
+				Process.spawn_sync(null, argv, null, SpawnFlags.SEARCH_PATH, null, out output, out stderr, out status);
 
-			this.add(darea);
-			// connect button & move
-			this.button_press_event.connect(determine_startpoint);
-			this.button_release_event.connect((e) => {
-				if (e.button == 1) {
-					take_shot.begin();
-				} else {
-					windowstate.statechanged(WindowState.NONE);
-					this.close();
+				if (status != 0) {
+					throw new Error(-1, 0, "Error: %s\n", stderr);
 				}
 
-				return true;
-			});
+				// Parse the output
+				string[] parts = output.strip().split(" ");
+				if (parts.length < 2) {
+					throw new Error(-1, 0, "Unexpected output format (1): %s\n", output);
+				}
 
-			this.motion_notify_event.connect(update_preview);
-			set_win_transparent();
-			this.show_all();
+				string[] position = parts[0].split(",");
+				string[] size = parts[1].split("x");
 
-			Gdk.Window gdk_win = this.get_window();
-			gdk_win.set_fullscreen_mode(FullscreenMode.ALL_MONITORS);
+				if (position.length != 2 || size.length != 2) {
+					throw new Error(-1, 0, "Unexpected output format (2): %s\n", output);
+				}
 
-			change_cursor();
-		}
+				topleftx = int.parse(position[0]);
+				toplefty = int.parse(position[1]);
+				width = int.parse(size[0]);
+				height = int.parse(size[1]);
 
-		private void get_theme_fillcolor(){
-			Gtk.StyleContext style_ctx = new Gtk.StyleContext();
-			Gtk.WidgetPath widget_path =  new Gtk.WidgetPath();
-			widget_path.append_type(typeof(Gtk.Button));
-			style_ctx.set_path(widget_path);
-			Gdk.RGBA fcolor = style_ctx.get_color(Gtk.StateFlags.LINK);
-			red = fcolor.red;
-			green = fcolor.green;
-			blue = fcolor.blue;
-		}
+			} catch (Error e) {
+				warning("Error: %s\n", e.message);
+				windowstate.statechanged(WindowState.NONE);
+				return;
+			}
 
-		private bool determine_startpoint(Gtk.Widget w, EventButton e) {
-			/*
-			/ determine first point of the selected rectangle, which is not
-			/ necessarily topleft(!)
-			*/
-			startx = (int) e.x;
-			starty = (int) e.y;
-
-			return true;
-		}
-
-		private bool update_preview(Gdk.EventMotion e) {
-			/*
-			/ determine end of selected area, which is not necessarily
-			/ bottom_right(!)
-			*/
-			int endx = (int) e.x;
-			int endy = (int) e.y;
-			// now make sure we define top-left -> bottom-right
-			int[] areageo = calculate_rectangle(
-				startx, starty, endx, endy
-			);
-			topleftx = areageo[0];
-			toplefty = areageo[1];
-			width = areageo[2];
-			height = areageo[3];
-			// update
-			Gdk.Window window = this.get_window();
-			var region = window.get_clip_region();
-			window.invalidate_region(region, true);
-
-			return true;
-		}
-
-		private int[] calculate_rectangle(int startx, int starty, int endx, int endy) {
-			/*
-			/ user might not move in the expected direction (top-left ->
-			/ bottom-right), so we need to convert & calculate into the
-			/ right format for drawing the rectangle or taking scrshot
-			*/
-			(endx < startx)? topleftx = endx : topleftx = startx;
-			(endy < starty)? toplefty = endy : toplefty = starty;
-
-			return {topleftx, toplefty, (startx-endx).abs(), (starty-endy).abs()};
-		}
-
-		private void draw_rectangle(Widget da, Cairo.Context ctx, int x1, int y1, int x2, int y2) {
-			ctx.set_source_rgba(red, green, blue, 0.3);
-			ctx.rectangle(x1, y1, x2, y2);
-			ctx.fill_preserve();
-			ctx.set_source_rgba(red, green, blue, 1.0);
-			ctx.set_line_width(0.5);
-			ctx.stroke();
-			ctx.fill();
-		}
-
-		private void set_win_transparent() {
-			this.set_app_paintable(true);
-			var visual = screen.get_rgba_visual();
-			this.set_visual(visual);
-
-			//  this.draw.connect(on_draw);
-			this.draw.connect((da, ctx) => {
-				ctx.set_source_rgba(0, 0, 0, 0);
-				ctx.set_operator(Cairo.Operator.SOURCE);
-				ctx.paint();
-				ctx.set_operator(Cairo.Operator.OVER);
-
-				return false;
-			});
-		}
-
-		private void change_cursor() {
-			Gdk.Cursor selectcursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "crosshair");
-			this.get_window().set_cursor(selectcursor);
+			take_shot.begin();
 		}
 
 		async void take_shot() {
-			this.destroy();
 			windowstate.statechanged(WindowState.WAITINGFORSHOT);
 			int[] area = {topleftx, toplefty, width, height};
 			new MakeScreenshot(area);
