@@ -177,7 +177,7 @@ namespace Budgie {
 			);
 		}
 
-		private int getcurrentstate() throws Error {
+		private int getcurrentstate() {
 			return windowstate.newstate;
 		}
 
