@@ -119,8 +119,8 @@ namespace Budgie {
 		public void statechanged(int n) {
 			newstate = n;
 
-			(newstate == 0) ? startedfromgui = false : startedfromgui;
-			(newstate == 1) ? startedfromgui = true : startedfromgui;
+			(newstate == WindowState.NONE) ? startedfromgui = false : startedfromgui;
+			(newstate == WindowState.MAINWINDOW) ? startedfromgui = true : startedfromgui;
 		}
 	}
 
@@ -133,27 +133,27 @@ namespace Budgie {
 		}
 
 		public async void StartMainWindow() throws Error {
-			if (getcurrentstate() == 0) {
+			if (getcurrentstate() == WindowState.NONE) {
 				new ScreenshotHomeWindow();
 			}
 		}
 
 		public async void StartAreaSelect() throws Error {
-			if (getcurrentstate() == 0) {
+			if (getcurrentstate() == WindowState.NONE) {
 				set_target("Selection");
 				new SelectLayer();
 			}
 		}
 
 		public async void StartWindowScreenshot() throws Error {
-			if (getcurrentstate() == 0) {
+			if (getcurrentstate() == WindowState.NONE) {
 				set_target("Window");
 				new MakeScreenshot(null);
 			}
 		}
 
 		public async void StartFullScreenshot() throws Error {
-			if (getcurrentstate() == 0) {
+			if (getcurrentstate() == WindowState.NONE) {
 				set_target("Screen");
 				new MakeScreenshot(null);
 			}
@@ -165,7 +165,7 @@ namespace Budgie {
 			try {
 				conn.register_object("/org/buddiesofbudgie/ScreenshotControl",	new ScreenshotServer());
 			} catch (IOError e) {
-				warning("on_bus_acquired Could not register service\n");
+				warning("on_bus_acquired Could not register service");
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace Budgie {
 			GLib.Bus.own_name (
 				BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshotControl",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE, on_bus_acquired,
-				() => {}, () => warning("setup_dbus Could not acquire name\n")
+				() => {}, () => warning("setup_dbus Could not acquire name")
 			);
 		}
 
@@ -214,7 +214,7 @@ namespace Budgie {
 				try {
 					client = GLib.Bus.get_proxy_sync(BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshot", "/org/buddiesofbudgie/Screenshot");
 				} catch (Error e) {
-					warning("MakeScreenshot get_proxy_sync %s\n", e.message);
+					warning("MakeScreenshot get_proxy_sync %s", e.message);
 					client = null;
 				}
 			}
@@ -274,7 +274,7 @@ namespace Budgie {
 			try {
 				yield client.ScreenshotWindow(include_frame, include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
 			} catch (Error e) {
-				warning("show_window %s, failed to make screenshot\n", e.message);
+				warning("show_window %s, failed to make screenshot", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -292,7 +292,7 @@ namespace Budgie {
 			try {
 				yield client.Screenshot(include_cursor, true, windowstate.tempfile_path, out success, out filename_used);
 			} catch (Error e) {
-				warning("shoot_screen %s, failed to make screenshot\n", e.message);
+				warning("shoot_screen %s, failed to make screenshot", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -320,7 +320,7 @@ namespace Budgie {
 					include_cursor, true, windowstate.tempfile_path, out success, out filename_used
 				);
 			} catch (Error e) {
-				warning("shoot_area %s, failed to make screenshot\n", e.message);
+				warning("shoot_area %s, failed to make screenshot", e.message);
 				windowstate.statechanged(WindowState.NONE);
 			}
 
@@ -443,7 +443,7 @@ namespace Budgie {
 				Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 			} catch (Error e) {
 				// not much to be done
-				warning("Error loading css data\n");
+				warning("Error loading css data");
 			}
 
 			// so, let's add some content - areabuttons
@@ -720,20 +720,20 @@ namespace Budgie {
 				Process.spawn_sync(null, argv, null, SpawnFlags.SEARCH_PATH, null, out output, out stderr, out status);
 
 				if (status != 0) {
-					throw new Error(-1, 0, "Error: %s\n", stderr);
+					throw new Error(-1, 0, "Error: %s", stderr);
 				}
 
 				// Parse the output
 				string[] parts = output.strip().split(" ");
 				if (parts.length < 2) {
-					throw new Error(-1, 0, "Unexpected output format (1): %s\n", output);
+					throw new Error(-1, 0, "Unexpected output format (1): %s", output);
 				}
 
 				string[] position = parts[0].split(",");
 				string[] size = parts[1].split("x");
 
 				if (position.length != 2 || size.length != 2) {
-					throw new Error(-1, 0, "Unexpected output format (2): %s\n", output);
+					throw new Error(-1, 0, "Unexpected output format (2): %s", output);
 				}
 
 				topleftx = int.parse(position[0]);
@@ -742,7 +742,7 @@ namespace Budgie {
 				height = int.parse(size[1]);
 
 			} catch (Error e) {
-				warning("Error: %s\n", e.message);
+				warning("Error: %s", e.message);
 				windowstate.statechanged(WindowState.NONE);
 				return;
 			}
@@ -814,7 +814,7 @@ namespace Budgie {
 
 						return pxb;
 					} catch (Error e) {
-						message("unable to load image from /tmp\n");
+						message("unable to load image from /tmp");
 					}
 				}
 				n += 1;
@@ -1010,7 +1010,7 @@ namespace Budgie {
 			try {
 				pxb.save(usedpath, extension);
 			} catch (Error e) {
-				warning("save_tofile %s\n", e.message);
+				warning("save_tofile %s", e.message);
 				Button savebutton = decisionbuttons[1];
 				set_buttoncontent(savebutton, "saveshot-noaccess-symbolic");
 				savebutton.set_tooltip_text("A permission error on the directory occurred");
@@ -1203,7 +1203,7 @@ namespace Budgie {
 
 				return get_icon_fromgicon(icon);
 			} catch (Error e) {
-				warning("lookup_icon_name %s\n", e.message);
+				warning("lookup_icon_name %s", e.message);
 
 				return "";
 			}
@@ -1313,7 +1313,7 @@ namespace Budgie {
 			screenshotcontrol = new Budgie.ScreenshotServer();
 			screenshotcontrol.setup_dbus();
 		} catch (Error e) {
-			warning("ServiceManager %s\n", e.message);
+			warning("ServiceManager %s", e.message);
 		}
 
 		Gtk.main();
