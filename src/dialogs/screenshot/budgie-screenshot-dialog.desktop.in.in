@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Budgie Screenshot UI
-Exec=sh -c "sleep 5 && @libexecdir@/budgie-screenshot-dialog &"
+Exec=@libexecdir@/budgie-screenshot-dialog"
 Terminal=false
 Categories=GNOME;GTK;System;Core;
 NoDisplay=true
