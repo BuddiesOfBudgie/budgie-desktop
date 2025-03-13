@@ -23,19 +23,24 @@ public class TasklistButton : ToggleButton {
 	private new Label label;
 	private Image icon;
 	private GLib.Settings settings;
+	private ButtonPopover popover;
 
 	private Allocation definite_allocation;
 
+	public Budgie.PopoverManager popover_manager { get; construct; }
 	public libxfce4windowing.Window window { get; construct; }
 
 	private int64 last_scroll_time = 0;
 
-	public TasklistButton(libxfce4windowing.Window window, GLib.Settings settings) {
-		Object(window: window);
+	public TasklistButton(libxfce4windowing.Window window, Budgie.PopoverManager popover_manager, GLib.Settings settings) {
+		Object(window: window, popover_manager: popover_manager);
 
 		this.settings = settings;
 		settings.bind("show-icons", this.icon, "visible", SettingsBindFlags.GET);
 		settings.bind("show-labels", this.label, "visible", SettingsBindFlags.GET);
+
+		popover = new ButtonPopover(this, window);
+		popover_manager.register_popover(this, popover);
 	}
 
 	construct {
@@ -98,7 +103,7 @@ public class TasklistButton : ToggleButton {
 		var time = event.time;
 
 		if (event.button == BUTTON_SECONDARY) {
-			//  TODO: show popover
+			popover_manager.show_popover(this);
 			return Gdk.EVENT_STOP;
 		}
 
