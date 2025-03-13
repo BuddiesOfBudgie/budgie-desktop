@@ -88,6 +88,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		settings_schema = "com.solus-project.simple-tasklist";
 		settings_prefix = "/com/solus-project/budgie-panel/instance/simple-tasklist";
 		settings = get_applet_settings(uuid);
+
+		foreach (var window in screen.get_windows()) {
+			on_app_opened(window);
+		}
 	}
 
 	construct {
