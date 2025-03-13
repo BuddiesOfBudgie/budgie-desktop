@@ -42,8 +42,8 @@ screenshot_deps = [
     dep_canberra_gtk3,
     dep_gtk3,
     dep_xfce4windowing,
-    dep_gst,
     dep_gtk_layer_shell,
+    dep_gst,
     link_libconfig,
 ]
 
@@ -58,9 +58,6 @@ executable(
     'budgie-screenshot-dialog', screenshot_sources,
     dependencies: screenshot_deps,
     vala_args: [
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'libxfce4windowing-0',
-        '--pkg', 'gtk-layer-shell-0',
         '--pkg', 'budgie-config',
         '--vapidir', top_vapidir,
         '--vapidir', dir_libconfig,
