@@ -20,7 +20,7 @@ private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 8;
 
 public class TasklistButton : ToggleButton {
-	private Label label;
+	private new Label label;
 	private Image icon;
 	private GLib.Settings settings;
 
@@ -120,7 +120,7 @@ public class TasklistButton : ToggleButton {
 				}
 			} else {
 				try {
-					window.activate(time);
+					window.activate(null, time);
 				} catch (GLib.Error e) {
 					warning("Unable to activate window '%s': %s", window.get_name(), e.message);
 				}
@@ -140,7 +140,7 @@ public class TasklistButton : ToggleButton {
 		switch (event.direction) {
 			case ScrollDirection.UP:
 				try {
-					window.activate(event.time);
+					window.activate(null, event.time);
 				} catch (GLib.Error e) {
 					warning("Unable to activate window '%s': %s", window.get_name(), e.message);
 				}
