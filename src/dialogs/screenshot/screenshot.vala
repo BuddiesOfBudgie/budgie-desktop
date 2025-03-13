@@ -336,34 +336,14 @@ namespace Budgie {
 		private void play_shuttersound(int timeout, string[]? args = null) {
 			if (!emit_capture_sound) return;
 
-			// todo: we should probably not hardcode the soundfile?
-			try {
-				var check = Gst.init_check(ref args);
-				if (!check) {
-					warning("Could not initialise gstreamer");
-					return;
-				}
-			} catch (Error e) {
-				error("Error: %s", e.message);
-			}
-			Gst.Element pipeline;
+			Canberra.Proplist props;
+			Canberra.Proplist.create(out props);
 
-			try {
-				pipeline = Gst.parse_launch("playbin uri = file:///usr/share/sounds/freedesktop/stereo/screen-capture.oga");
-			} catch (Error e) {
-				error("Error: %s", e.message);
-			}
+			props.sets(Canberra.PROP_CANBERRA_CACHE_CONTROL, "volatile");
+			props.sets(Canberra.PROP_EVENT_ID, "screen-capture");
+			props.sets(Canberra.PROP_CANBERRA_ENABLE, "1");
 
-			Timeout.add(timeout, () => {
-				// fake thread to make sure flash and shutter are in sync
-				pipeline.set_state(State.PLAYING);
-				Gst.Bus bus = pipeline.get_bus();
-				// time out after 2 seconds, in case the output is locked
-				bus.timed_pop_filtered(2000000000, Gst.MessageType.ERROR | Gst.MessageType.EOS);
-				pipeline.set_state(Gst.State.NULL);
-
-				return false;
-			});
+			CanberraGtk.context_get().play_full(0, props);
 		}
 	}
 
