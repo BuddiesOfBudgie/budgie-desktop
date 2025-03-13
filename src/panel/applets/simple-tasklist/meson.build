@@ -12,6 +12,7 @@ custom_target('plugin-file-simpletasklist',
 applet_simpletasklist_sources = [
     'SimpleTasklistApplet.vala',
     'Button.vala',
+    'ButtonPopover.vala',
 ]
 
 applet_simpletasklist_deps = [
