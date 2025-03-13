@@ -73,6 +73,7 @@ public class SimpleTasklistSettings : Gtk.Grid {
 public class SimpleTasklistApplet : Budgie.Applet {
 	public string uuid { public set; public get; }
 
+	private unowned Budgie.PopoverManager? popover_manager = null;
 	protected GLib.Settings settings;
 
 	private Box container;
@@ -89,9 +90,17 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		settings_prefix = "/com/solus-project/budgie-panel/instance/simple-tasklist";
 		settings = get_applet_settings(uuid);
 
-		foreach (var window in screen.get_windows()) {
-			on_app_opened(window);
-		}
+		// We have to wait to create buttons for open programs
+		// because it takes a little bit for the update_popovers
+		// function to be called. If we don't wait here, button
+		// creation fails and the log is spammed with errors.
+		Idle.add(() => {
+			foreach (var window in screen.get_windows()) {
+				on_app_opened(window);
+			}
+
+			return Source.REMOVE;
+		});
 	}
 
 	construct {
@@ -123,6 +132,10 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	public override bool supports_settings() {
 		return true;
+	}
+
+	public override void update_popovers(Budgie.PopoverManager? manager) {
+		this.popover_manager = manager;
 	}
 
 	private void setup_workspace_listener() {
@@ -241,7 +254,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
-		var button = new TasklistButton(window, settings);
+		var button = new TasklistButton(window, popover_manager, settings);
 
 		Gtk.drag_source_set(button, ModifierType.BUTTON1_MASK, SOURCE_TARGETS, DragAction.MOVE);
 		Gtk.drag_dest_set(button, (DestDefaults.DROP|DestDefaults.HIGHLIGHT), SOURCE_TARGETS, DragAction.MOVE);
