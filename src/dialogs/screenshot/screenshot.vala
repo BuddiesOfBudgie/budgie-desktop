@@ -28,6 +28,10 @@ namespace Budgie {
 		RIGHT,
 	}
 
+	const string SELECTION = "Selection";
+	const string WINDOW = "Window";
+	const string SCREEN = "Screen";
+
 	/*
 	 The underlying WaylandClient does not appear to be fully thread-safe and either
 	 repeated calls very quickly, or calls within the same process where the
@@ -140,21 +144,21 @@ namespace Budgie {
 
 		public async void StartAreaSelect() throws Error {
 			if (getcurrentstate() == WindowState.NONE) {
-				set_target("Selection");
+				set_target(SELECTION);
 				new SelectLayer();
 			}
 		}
 
 		public async void StartWindowScreenshot() throws Error {
 			if (getcurrentstate() == WindowState.NONE) {
-				set_target("Window");
+				set_target(WINDOW);
 				new MakeScreenshot(null);
 			}
 		}
 
 		public async void StartFullScreenshot() throws Error {
 			if (getcurrentstate() == WindowState.NONE) {
-				set_target("Screen");
+				set_target(SCREEN);
 				new MakeScreenshot(null);
 			}
 		}
@@ -245,19 +249,19 @@ namespace Budgie {
 			include_frame = windowstate.screenshot_settings.get_boolean("include-frame");
 
 			switch (screenshot_mode) {
-				case "Selection":
+				case SELECTION:
 					Timeout.add(200 + (delay * 1000), () => {
 						shoot_area.begin();
 						return false;
 					});
 					break;
-				case "Screen":
+				case SCREEN:
 					Timeout.add(200 + (delay * 1000), () => {
 						shoot_screen.begin();
 						return false;
 					});
 					break;
-				case "Window":
+				case WINDOW:
 					Timeout.add(200 + (delay * 1000), () => {
 						shoot_window.begin();
 						return false;
@@ -570,14 +574,14 @@ namespace Budgie {
 				// allow the window to gracefully disappear
 				Timeout.add(100, () => {
 					switch (shootmode) {
-						case "Selection":
+						case SELECTION:
 							new SelectLayer();
 							break;
-						case "Screen":
+						case SCREEN:
 							windowstate.statechanged(WindowState.WAITINGFORSHOT);
 							new MakeScreenshot(null);
 							break;
-						case "Window":
+						case WINDOW:
 							windowstate.statechanged(WindowState.WAITINGFORSHOT);
 							new MakeScreenshot(null);
 							break;
@@ -610,22 +614,22 @@ namespace Budgie {
 			string mode = windowstate.screenshot_settings.get_string("screenshot-mode");
 
 			// we cannot use areabuttons_labels, since these will be translated
-			string[] mode_options =  {"Screen", "Window", "Selection"}; // don't translate, internal use
+			string[] mode_options =  {SCREEN, WINDOW, SELECTION}; // don't translate, internal use
 			int active = find_stringindex(mode, mode_options);
 
 			bool window_support = MakeScreenshot.ScreenshotWindowSupport();
 			// translate! These are the interface names
 			string[] areabuttons_labels = {};
 			string[] icon_names = {};
-			areabuttons_labels += _("Screen");
+			areabuttons_labels += _(SCREEN);
 			icon_names += "selectscreen-symbolic";
 
 			if (window_support) {
-				areabuttons_labels += _("Window");
+				areabuttons_labels += _(WINDOW);
 				icon_names += "selectwindow-symbolic";
 			}
 
-			areabuttons_labels += _("Selection");
+			areabuttons_labels += _(SELECTION);
 			icon_names += "selectselection-symbolic";
 
 			int i = 0;
@@ -672,11 +676,11 @@ namespace Budgie {
 		private void select_action(ToggleButton b, ToggleButton[] btns) {
 			string[] selectmodes = {};
 			bool window_support = MakeScreenshot.ScreenshotWindowSupport();
-			selectmodes += "Screen";
+			selectmodes += SCREEN;
 			if (window_support) {
-				selectmodes += "Window";
+				selectmodes += WINDOW;
 		 	}
-		  	selectmodes += "Selection";
+		  	selectmodes += SELECTION;
 			int i = 0;
 
 			foreach (ToggleButton bt in btns) {
