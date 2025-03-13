@@ -77,7 +77,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	private Box container;
 
-	private HashTable<string, TasklistButton> buttons;
+	private List<TasklistButton> buttons;
 	private libxfce4windowing.Screen screen;
 	private unowned libxfce4windowing.WorkspaceManager workspace_manager;
 
@@ -93,7 +93,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	construct {
 		get_style_context().add_class("simple-tasklist");
 
-		this.buttons = new HashTable<string, TasklistButton>(str_hash, str_equal);
+		this.buttons = new List<TasklistButton>();
 
 		this.container = new Box(Orientation.HORIZONTAL, 0) {
 			homogeneous = true,
@@ -149,12 +149,12 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	/**
 	 * Handles the drag_data_get signal for a tasklist button.
 	 *
-	 * This sets the button's window XID as the drag data.
+	 * This sets the button's window desktop-id as the drag data.
 	 */
 	private void button_drag_data_get(Widget widget, DragContext context, SelectionData data, uint info, uint time) {
 		var button = widget as TasklistButton;
-		var xid = button.window.get_id();
-		data.set(data.get_target(), 8, (uint8[]) xid);
+		var id = button.window.get_application().get_class_id();
+		data.set(data.get_target(), 8, id.data);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 */
 	private void on_app_opened(libxfce4windowing.Window window) {
 		if (window.is_skip_tasklist()) return;
-		if (buttons.contains(window.get_id().to_string().to_string())) return;
+		if (get_button_for_window(window) != null) return;
 
 		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
 
@@ -250,7 +250,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		this.container.pack_start(button);
 
-		this.buttons.insert(window.get_id().to_string(), button);
+		this.buttons.append(button);
 	}
 
 	/**
@@ -258,14 +258,14 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * tracking map.
 	 */
 	private void on_app_closed(libxfce4windowing.Window window) {
-		var button = this.buttons.get(window.get_id().to_string());
+		var button = get_button_for_window(window);
 		if (button == null) {
 			return;
 		}
 
 		button.gracefully_die();
 
-		this.buttons.remove(window.get_id().to_string());
+		this.buttons.remove(button);
 	}
 
 	/**
@@ -274,15 +274,15 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 */
 	private void on_active_window_changed(libxfce4windowing.Window? old_window) {
 		if (old_window != null) {
-			var button = this.buttons.get(old_window.get_id().to_string());
+			var button = get_button_for_window(old_window);
 			if (button == null) return;
 			button.set_active(false);
 		}
 
-		var window = screen.get_active_window();
+		var active_window = screen.get_active_window();
 
-		if (window != null) {
-			var button = this.buttons.get(window.get_id().to_string());
+		if (active_window != null) {
+			var button = get_button_for_window(active_window);
 			if (button == null) return;
 			button.set_active(true);
 		}
@@ -293,7 +293,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * displayed for the current workspace.
 	 */
 	private void on_active_workspace_changed(libxfce4windowing.Workspace? previous_workspace) {
-		foreach (TasklistButton button in this.buttons.get_values()) {
+		foreach (var button in this.buttons) {
 			this.on_app_workspace_changed(button.window);
 		}
 	}
@@ -303,7 +303,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * current workspace.
 	 */
 	private void on_app_workspace_changed(libxfce4windowing.Window window) {
-		var button = this.buttons.get(window.get_id().to_string());
+		var button = get_button_for_window(window);
 		if (button == null) return;
 
 		if (window.workspace.get_state() == libxfce4windowing.WorkspaceState.ACTIVE) {
@@ -313,6 +313,21 @@ public class SimpleTasklistApplet : Budgie.Applet {
 			button.hide();
 			button.set_no_show_all(true); // make sure we don't randomly show buttons not belonging to the current workspace
 		}
+	}
+
+	/**
+	 * Get the tasklist button for a window, if one exists.
+	 *
+	 * @returns a TasklistButton, or NULL
+	 */
+	private TasklistButton? get_button_for_window(libxfce4windowing.Window window) {
+		foreach (var button in buttons) {
+			if (button.window == window) {
+				return button;
+			}
+		}
+
+		return null;
 	}
 }
 
