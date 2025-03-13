@@ -97,12 +97,12 @@ public class TasklistButton : ToggleButton {
 	protected override bool button_release_event(EventButton event) {
 		var time = event.time;
 
-		if (event.button == 3) { // Right click
+		if (event.button == BUTTON_SECONDARY) {
 			//  TODO: show popover
 			return Gdk.EVENT_STOP;
 		}
 
-		if (event.button == 2) { // Middle click
+		if (event.button == BUTTON_MIDDLE) {
 			try {
 				window.close(time);
 			} catch (GLib.Error e) {
@@ -111,7 +111,7 @@ public class TasklistButton : ToggleButton {
 			return Gdk.EVENT_STOP;
 		}
 
-		if (event.button == 1) { // Left click
+		if (event.button == BUTTON_PRIMARY) {
 			if (window.state == libxfce4windowing.WindowState.ACTIVE) {
 				try {
 					window.set_minimized(true);
