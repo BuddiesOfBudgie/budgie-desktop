@@ -1,6 +1,7 @@
 [org.gnome.mutter:Budgie]
 edge-tiling = true
 attach-modal-dialogs = true
+overlay-key = "Super_L"
 
 [org.gnome.desktop.background:Budgie]
 picture-uri = 'file:///usr/share/backgrounds/budgie/default.jpg'
