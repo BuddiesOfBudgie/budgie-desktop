@@ -23,6 +23,7 @@ applet_simpletasklist_deps = [
     dep_gdkx11, # via Abomination
     dep_xfce4windowing,
     link_libpanelplugin,
+    meson.get_compiler('c').find_library('m', required: false)
 ]
 
 gresource = join_paths(meson.current_source_dir(), 'plugin.gresource.xml')
