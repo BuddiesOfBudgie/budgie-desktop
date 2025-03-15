@@ -23,7 +23,6 @@ namespace Budgie {
 	/**
 	* Available slots
 	*/
-	[Compact]
 	class Screen : GLib.Object {
 		public PanelPosition slots;
 		public Gdk.Rectangle area;
@@ -163,8 +162,7 @@ namespace Budgie {
 		/* Manage all of the Budgie settings */
 		private Budgie.SettingsWindow? settings_window = null;
 
-		Wnck.Screen wnck_screen;
-		List<unowned Wnck.Window> window_list;
+		Budgie.Windowing.Windowing windowing;
 
 		private string default_layout = "default";
 
@@ -215,6 +213,8 @@ namespace Budgie {
 		public PanelManager(bool reset) {
 			Object();
 			this.reset = reset;
+			libxfce4windowing.set_client_type(libxfce4windowing.ClientType.PAGER);
+			windowing = new Budgie.Windowing.Windowing();
 			screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
 		}
@@ -224,70 +224,39 @@ namespace Budgie {
 		* Executed after the initial setup of the panel manager
 		*/
 		private void do_dynamic_transparency_setup() {
-			wnck_screen = Wnck.Screen.get_default();
-			window_list = new List<unowned Wnck.Window>();
-
-			wnck_screen.get_windows().foreach((window) => {
-				window_list.append(window);
-				window.state_changed.connect(() => {
-					if (window.is_skip_pager() || window.is_skip_tasklist()) {
-						return;
-					}
-					check_windows();
-				});
+			windowing.window_state_changed.connect((window) => {
+				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
+				check_windows();
 			});
 
-			wnck_screen.window_opened.connect(window_opened);
-			wnck_screen.window_closed.connect(window_closed);
-			wnck_screen.active_window_changed.connect(active_window_changed);
-			wnck_screen.active_workspace_changed.connect(check_windows);
+			windowing.window_added.connect(window_opened);
+			windowing.window_removed.connect(check_windows);
+			windowing.active_window_changed.connect(active_window_changed);
+			windowing.active_workspace_changed.connect(check_windows);
 		}
 
 		private void active_window_changed() {
 			// Handle transparency
 			check_windows();
-
-			check_window_intersections(wnck_screen.get_active_window());
+			libxfce4windowing.Window? window = windowing.get_active_window();
+			if (window == null) return;
+			check_window_intersections(window);
 		}
 
 		/*
 		* Callback for newly opened, not yet tracked windows
 		*/
-		private void window_opened(Wnck.Window window) {
-			unowned List<weak Wnck.Window>? element = window_list.find(window);
-			if (element != null) {
-				return;
-			}
-
-			window_list.append(window);
-
+		private void window_opened(libxfce4windowing.Window window) {
 			window.state_changed.connect(() => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) {
-					return;
-				}
+				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 				check_windows();
 			});
 
 			window.geometry_changed.connect_after((window) => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) {
-					return;
-				}
+				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 				this.check_window_intersections(window);
 			});
 
-			check_windows();
-		}
-
-		/*
-		* Callback for closed windows
-		*/
-		private void window_closed(Wnck.Window window) {
-			unowned List<weak Wnck.Window>? element = window_list.find(window);
-			if (element == null) {
-				return;
-			}
-
-			window_list.remove_all(window);
 			check_windows();
 		}
 
@@ -297,25 +266,18 @@ namespace Budgie {
 		* for intelligent hiding behavior, i.e. when the window gets close to
 		* the panel, it should start the hide.
 		*/
-		private bool window_intersects_panel(Budgie.Toplevel? panel, Wnck.Window? window) {
+		private bool window_intersects_panel(Budgie.Toplevel? panel, libxfce4windowing.Window? window) {
 			const int pad_amount = 15;
-			Gdk.Rectangle win = Gdk.Rectangle();
-			Gdk.Rectangle pan = Gdk.Rectangle();
 
-			if (window == null && this.window_list.is_empty()) {
-				return false;
-			}
+			if (window == null && !windowing.has_windows) return false;
 
-			if (window != wnck_screen.get_active_window()) {
-				return false;
-			}
+			if (window != windowing.get_active_window()) return false;
 
-			if (window.is_skip_pager() || window.is_skip_tasklist()) {
-				return false;
-			}
+			if (window.is_skip_pager() || window.is_skip_tasklist()) return false;
 
 			// Figure out where the window is
-			window.get_geometry(out win.x, out win.y, out win.width, out win.height);
+			Gdk.Rectangle win = window.get_geometry();
+			Gdk.Rectangle pan = Gdk.Rectangle();
 
 			// Figure out where the toplevel is
 			panel.get_position(out pan.x, out pan.y);
@@ -337,7 +299,7 @@ namespace Budgie {
 		* An intersection is classified by a buffer zone match to allow dodging
 		* "near" windows automatically.
 		*/
-		void check_window_intersections(Wnck.Window? window) {
+		void check_window_intersections(libxfce4windowing.Window? window) {
 			Budgie.Panel? panel = null;
 			var iter = HashTableIter<string,Budgie.Panel?>(panels);
 
@@ -358,11 +320,10 @@ namespace Budgie {
 		/**
 		* Determine if the window is on the primary screen, i.e. where the main
 		* budgie panels will show
-		* note wnck window geometry includes scale factors
+		* note libxfce4windowing window geometry includes scale factors
 		*/
-		bool window_on_primary(Wnck.Window? window) {
-			Gdk.Rectangle area = Gdk.Rectangle();
-			window.get_geometry(out area.x, out area.y, out area.width, out area.height);
+		bool window_on_primary(libxfce4windowing.Window? window) {
+			Gdk.Rectangle area = window.get_geometry();
 			var primary = screens.lookup(this.primary_monitor);
 
 			// get the geometry of the primary monitor including the scale factor
@@ -390,19 +351,13 @@ namespace Budgie {
 			}
 			bool found = false;
 
-			window_list.foreach((window) => {
-				bool is_maximized = (window.is_maximized_horizontally() || window.is_maximized_vertically());
+			libxfce4windowing.Workspace? active_workspace = windowing.get_active_workspace();
 
-				if (window.get_workspace() != wnck_screen.get_active_workspace()) {
-					return;
-				}
-				if (window.is_skip_pager() || window.is_skip_tasklist()) {
-					return;
-				}
-				if (!this.window_on_primary(window)) {
-					return;
-				}
-				if ((is_maximized && !window.is_minimized())) {
+			windowing.windows.foreach((window) => {
+				if (window.is_skip_pager()) return;
+				if (!this.window_on_primary(window)) return;
+				if (active_workspace == null || active_workspace != null && !window.is_on_workspace(active_workspace)) return;
+				if ((window.is_maximized() && !window.is_minimized())) {
 					found = true;
 					return;
 				}
@@ -616,9 +571,6 @@ namespace Budgie {
 			raven = new Budgie.Raven(this, raven_plugin_manager);
 			raven.request_settings_ui.connect(this.on_settings_requested);
 
-			/* Ensure we only have wnck initialised once otherwise everything goes cranky */
-			Wnck.set_client_type(Wnck.ClientType.PAGER);
-
 			this.on_monitors_changed();
 
 			/* Some applets might want raven */
@@ -744,6 +696,7 @@ namespace Budgie {
 		*/
 		void load_panel(string uuid, bool configure = false) {
 			if (panels.contains(uuid)) {
+				warning("Asked to load already loaded panel: %s", uuid);
 				return;
 			}
 
@@ -1096,6 +1049,7 @@ namespace Budgie {
 		bool load_panels() {
 			string[] panels = this.settings.get_strv(Budgie.ROOT_KEY_PANELS);
 			if (panels.length == 0) {
+				warning("No panels to load");
 				return false;
 			}
 
@@ -1128,12 +1082,7 @@ namespace Budgie {
 			this.panel_deleted(uuid);
 
 			var spath = this.create_panel_path(panel.uuid);
-			panels.steal(panel.uuid);
-			set_panels();
-			update_screen();
-			panel.destroy_children();
-			panel.destroy();
-
+			remove_panel(uuid, true);
 
 			var psettings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, spath);
 			this.reset_dconf_path(psettings);
@@ -1240,6 +1189,54 @@ namespace Budgie {
 			/* TODO: Pass off the configuration here.. */
 			panel.create_default_layout(name, new_defaults);
 			this.panel_added(uuid, panel);
+		}
+
+		public override void remove_panel(string uuid, bool remove_from_dconf = true) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+			if (panel == null) {
+				warning("Asked to remove non-existent panel: %s", uuid);
+				return;
+			}
+			panels.steal(panel.uuid);
+			if (remove_from_dconf) {
+				set_panels();
+				update_screen();
+				panel.destroy_children();
+				panel.destroy();
+			}
+		}
+
+		public override void move_panel(string uuid, PanelPosition position) {
+			Budgie.Panel? panel = panels.lookup(uuid);
+			if (panel == null) {
+				warning("Asked to move non-existent panel: %s", uuid);
+				return;
+			}
+
+			// This is horrible and I know it
+			// This will destroy and recreate the panel to re-enable interactivity under Wayland
+
+			// Start by hiding the panel to mask recreation
+			panel.hide();
+			// Move the panel to the new position
+			set_placement(uuid, position);
+
+			// Ensure panel position is saved
+			panel.set_position_setting(position);
+
+			// Close the panel
+			panel.close();
+			// Steal so we can add new panel entry
+			panels.steal(panel.uuid);
+
+			// Load panel again
+			load_panel(uuid, true);
+
+			// Look up again
+			panel = panels.lookup(uuid);
+
+			// Show moved panel
+			panel.show();
 		}
 
 		/**

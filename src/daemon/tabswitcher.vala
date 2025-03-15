@@ -256,7 +256,7 @@ namespace Budgie {
 			return pos1 < pos2 ? -1 : 1;
 		}
 
-		private uint get_visible_children() {
+		public uint get_visible_children() {
 			uint visible_children = 0;
 			foreach (var child in window_box.get_children()) {
 				var tab = child as TabSwitcherWidget;
@@ -295,7 +295,7 @@ namespace Budgie {
 			window_box.unselect_child(current);
 
 			try {
-				tab.window.activate(get_time());
+				tab.window.activate(null, get_time());
 			} catch (GLib.Error e) {
 				warning("Failed to activate window: %s\n", e.message);
 			}
@@ -456,6 +456,7 @@ namespace Budgie {
 			}
 
 			public void ShowSwitcher(bool backwards) throws DBusError, IOError {
+				if (switcher_window.get_visible_children() == 0) return;
 				this.add_mod_key_watcher();
 
 				switcher_window.move_switcher();

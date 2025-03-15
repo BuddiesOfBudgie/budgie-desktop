@@ -28,14 +28,16 @@ daemon_sources = [
     'notifications/dbus.vala',
     'notifications/popup.vala',
     'screenshot.vala',
+    'background.vala',
     'statusnotifier.vala',
     'main.vala',
     'manager.vala',
-    'menus.vala',
+    'nightlight.vala',
     'osd.vala',
     'settings.vala',
-    'tabswitcher.vala',
+    'screenlock.vala',
     'xdgdirtracker/dbus.vala',
+    'osdkeys.vala'
 ]
 
 daemon_deps = [
@@ -43,12 +45,14 @@ daemon_deps = [
     dep_canberra_gtk3,
     dep_giounix,
     dep_gtk3,
-    dep_gdkx11,
     dep_notify,
-    dep_wnck,
+    dep_gnomedesktop,
     dep_xfce4windowing,
     dep_gst,
     dep_cairo,
+    gvc.get_variable('libgvc_dep'),
+    meson.get_compiler('c').find_library('m', required: false),
+    dep_upower,
     link_libbudgieprivate,
     libpanelplugin_vapi,
     link_libappsys,
@@ -60,7 +64,7 @@ daemon_deps = [
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-daemon.gresource.xml')
 
-daemon_vala_args = []
+daemon_vala_args = ['--pkg', 'gnome-desktop-3.0']
 
 dep_gsd_doubles = dependency('gnome-settings-daemon', version: '>=3.33.90', required: false)
 if dep_gsd.found()
@@ -85,18 +89,18 @@ executable(
         '--pkg', 'budgie-config',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
-        '--pkg', 'libwnck-3.0',
         '--pkg', 'libxfce4windowing-0',
+        '--pkg', 'gvc-1.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
         daemon_vala_args,
     ],
     c_args: [
-        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
+        '-DGNOME_DESKTOP_USE_UNSTABLE_API'
     ],
     install: true,
+    install_rpath: rpath_libdir,
 )
 
 main_sources = [
@@ -104,7 +108,7 @@ main_sources = [
 ]
 
 ScreenshotMainDependencies = [
-    dependency('gtk+-3.0'),
+    dep_gtk3,
 ]
 
 executable(
@@ -120,6 +124,10 @@ install_data('org.buddiesofbudgie.budgie-desktop.screenshot.gschema.xml',
 
 install_data('icons/org.buddiesofbudgie.BudgieScreenshot.svg',
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'apps')
+)
+
+install_data('gammastep.config',
+    install_dir: join_paths(datadir, 'budgie-desktop')
 )
 
 # Now merge the translations of the .desktop.in to a .desktop

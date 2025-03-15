@@ -98,7 +98,7 @@ namespace Budgie {
 			hibernate_button.clicked.connect(hibernate);
 #endif
 
-			reboot_button = new DialogButton(_("_Reboot"), "system-restart-symbolic");
+			reboot_button = new DialogButton(_("_Reboot"), "system-reboot-symbolic");
 			reboot_button.clicked.connect(reboot);
 
 			shutdown_button = new DialogButton(_("Shut_down"), "system-shutdown-symbolic");
@@ -182,14 +182,9 @@ namespace Budgie {
 			}
 
 			try {
-				screensaver = yield Bus.get_proxy(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
+				screensaver = yield Bus.get_proxy(BusType.SESSION, "org.buddiesofbudgie.BudgieScreenlock", "/org/buddiesofbudgie/Screenlock");
 			} catch (Error e) {
-#if HAVE_GNOME_SCREENSAVER
-				warning("Unable to connect to gnome-screensaver: %s", e.message);
-#else
-				warning("Unable to connect to budgie-screensaver: %s", e.message);
-#endif
-				return;
+				warning("Unable to connect to budgie-screenlock: %s", e.message);
 			}
 
 			try {
@@ -296,17 +291,9 @@ namespace Budgie {
 			hide();
 			Idle.add(() => {
 				try {
-#if HAVE_GNOME_SCREENSAVER
-					if (screensaver == null) { // attempt to connect to dbus if not started previously
-						screensaver = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.ScreenSaver", "/org/gnome/ScreenSaver");
-					}
-#endif
 					screensaver.lock();
 				} catch (Error e) {
 					warning("Cannot lock screen: %s", e.message);
-#if HAVE_GNOME_SCREENSAVER
-					screensaver = null; // allow another retry to lock the screen on a failure
-#endif
 				}
 				return false;
 			});

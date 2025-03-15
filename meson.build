@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.9.1',
+    version: '10.9.2',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -12,16 +12,15 @@ project(
     ],
 )
 
-budgie_screensaver  = find_program('budgie-screensaver', required: false)
-gnome_screensaver = find_program('gnome-screensaver', required: false)
-with_gnome_screensaver = get_option('with-gnome-screensaver')
-if with_gnome_screensaver == false
-    assert(budgie_screensaver.found(), 'Budgie Screensaver is a required separate component of Budgie Desktop. Please ensure budgie-screensaver is available at configure and run time. You can find this at https://github.com/BuddiesOfBudgie/budgie-screensaver')
-    budgie_screensaver_vala_args = []
-else
-    assert(gnome_screensaver.found(), 'Either GNOME Screensaver or Budgie Screensaver is a required separate component of Budgie Desktop. Please ensure one of these is available at configure and run time.')
-    budgie_screensaver_vala_args = ['-D', 'HAVE_GNOME_SCREENSAVER']
-endif
+# Vala generates bad C code and missing these on gcc 14 will cause FTBFS
+# Additionally, Meson 1.4 unhides warnings from valac-generated C code,
+# which causes unreadable logspam. Reenables prior behavior.
+am_cflags = [
+    '-w',
+    '-Wno-incompatible-pointer-types',
+    '-Wno-implicit-function-declaration',
+]
+add_global_arguments(am_cflags, language: 'c')
 
 meson.add_install_script('scripts/mesonPostInstall.sh')
 
@@ -40,6 +39,7 @@ dep_libuuid = dependency('uuid')
 dep_vala = dependency('vapigen', version: '>= 0.52.5')
 dep_gst = dependency('gstreamer-1.0')
 dep_cairo = dependency('cairo')
+dep_gtk_layer_shell = dependency('gtk-layer-shell-0', version: '>= 0.8.0')
 
 # Needed for Budgie Menu
 dep_cairo = dependency('cairo', version: '>= 1.15.10')
@@ -62,10 +62,23 @@ dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 
 # Needed for window tracking
-dep_xfce4windowing = dependency('libxfce4windowing-0')
+dep_xfce4windowing = dependency('libxfce4windowing-0', version: '>= 4.19.7')
+
+# Needed for upower interaction
+dep_upower = dependency('upower-glib', version: '>= 0.99.8')
 
 # Create config.h
 cdata = configuration_data()
+
+if get_option('with-runtime-dependencies')
+    find_program('wlopm', required: true)
+    find_program('swayidle', required: true)
+    find_program('gammastep', required: true)
+    found_gtklock = find_program('gtklock', required: false)
+    if found_gtklock.found() == false
+        find_program('swaylock', required: true)
+    endif
+endif
 
 # Inspired by https://github.com/GNOME/recipes/blob/master/meson.build
 package_version = meson.project_version()
@@ -85,6 +98,7 @@ add_global_arguments('-DGETTEXT_PACKAGE="budgie-desktop"', language: 'c')
 
 # Globals that we need
 prefix = get_option('prefix')
+bindir = join_paths(prefix, get_option('bindir'))
 libdir = join_paths(prefix, get_option('libdir'))
 libexecdir = join_paths(prefix, get_option('libexecdir'), meson.project_name())
 confdir = join_paths(prefix, get_option('sysconfdir'))

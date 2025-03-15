@@ -2,10 +2,8 @@ subdir('fuzzer')
 
 appindexer_sources = [
     'AppIndex.vala',
-    'Application.vala',
     'Category.vala',
     'RelevancyService.vala',
-    'Switcheroo.vala'
 ]
 
 libappindexer = shared_library(
@@ -16,6 +14,9 @@ libappindexer = shared_library(
         dep_giounix,
         dep_gtk3,
         link_libfuzzer,
+        libpanelplugin_vapi,
+        link_libpanelplugin,
+        link_libbudgieprivate,
     ],
     vala_args: [
         '--pkg', 'gtk+-3.0',

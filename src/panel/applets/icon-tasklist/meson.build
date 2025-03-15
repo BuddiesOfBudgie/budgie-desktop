@@ -28,13 +28,11 @@ lib_applet_icontasklist_resources = static_library(
 )
 
 applet_icontasklist_sources = [
-    'ButtonWrapper.vala',
-    'DesktopHelper.vala',
     'IconTasklistApplet.vala',
-    'IconButton.vala',
-    'IconPopover.vala',
-    'Icon.vala',
-    'animation.vala',
+    'widgets/ButtonPopover.vala',
+    'widgets/ButtonWrapper.vala',
+    'widgets/Icon.vala',
+    'widgets/IconButton.vala',
 ]
 
 applet_icontasklist_deps = [
@@ -42,11 +40,11 @@ applet_icontasklist_deps = [
     dep_giounix,
     dep_gtk3,
     dep_peas,
-    dep_wnck,
-    dep_gdkx11,
-    link_libabomination,
+    dep_xfce4windowing,
+    link_libwindowing,
     link_libappsys,
     link_libpanelplugin,
+    link_libbudgieprivate,
     meson.get_compiler('c').find_library('m', required: false)
 ]
 
@@ -60,17 +58,14 @@ shared_library(
     vala_args: [
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libwnck-3.0',
+        '--pkg', 'libxfce4windowing-0',
         '--vapidir', dir_libappsys,
-        '--vapidir', dir_libabomination,
+        '--vapidir', dir_libwindowing,
+        '--vapidir', join_paths(meson.source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-    ],
-    c_args: [
-        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],
     install: true,
     install_dir: applet_icontasklist_dir,

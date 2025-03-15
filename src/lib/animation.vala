@@ -27,7 +27,6 @@ namespace Budgie {
 	* Utility to struct to enable easier animations
 	* Inspired by Clutter.
 	*/
-	[Compact]
 	public class Animation : GLib.Object {
 		public int64 start_time; /**<Start time (microseconds) of animation */
 		public int64 length; /**<Length of animation in microseconds */
@@ -127,61 +126,16 @@ namespace Budgie {
 	* and are available under the terms of the WTFPL
 	*/
 
-	public static double sine_ease_in_out(double p) {
-		return 0.5 * (1 - Math.cos(p * Math.PI));
-	}
-
 	public static double sine_ease_in(double p) {
 		return Math.sin((p - 1) * Math.PI_2) + 1;
-	}
-
-	public static double sine_ease_out(double p) {
-		return Math.sin(p * Math.PI_2);
-	}
-
-	public static double elastic_ease_in(double p) {
-		return Math.sin(13 * Math.PI_2 * p) * Math.pow(2, 10 * (p - 1));
 	}
 
 	public static double elastic_ease_out(double p) {
 		return Math.sin(-13 * Math.PI_2 * (p + 1)) * Math.pow(2, -10 * p) + 1;
 	}
 
-	public static double back_ease_in(double p) {
-		return p * p * p - p * Math.sin(p * Math.PI);
-	}
-
-	public static double back_ease_out(double p) {
-		double f = (1 - p);
-		return 1 - (f * f * f - f * Math.sin(f * Math.PI));
-	}
-
-	public static double expo_ease_in(double p) {
-		return (p == 0.0) ? p : Math.pow(2, 10 * (p - 1));
-	}
-
 	public static double expo_ease_out(double p) {
 		return (p == 1.0) ? p : 1 - Math.pow(2, -10 * p);
-	}
-
-	public static double quad_ease_in(double p) {
-		return p * p;
-	}
-
-	public static double quad_ease_out(double p) {
-		return -(p * (p - 2));
-	}
-
-	public static double quad_ease_in_out(double p) {
-		return p < 0.5 ? (2 * p * p) : (-2 * p * p) + (4 * p) - 1;
-	}
-
-	public static double circ_ease_in(double p) {
-		return 1 - Math.sqrt(1 - (p * p));
-	}
-
-	public static double circ_ease_out(double p) {
-		return Math.sqrt((2 - p) * p);
 	}
 
 	public const int64 MSECOND = 1000;

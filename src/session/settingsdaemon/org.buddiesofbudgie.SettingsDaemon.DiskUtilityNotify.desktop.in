@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=gnome-disk-utility notification plugin for GNOME Settings Daemon (Budgie)
+Exec=@gsd_libexecdir@/gsd-disk-utility-notify
+OnlyShowIn=Budgie;
+NoDisplay=true
+X-GNOME-AutoRestart=true

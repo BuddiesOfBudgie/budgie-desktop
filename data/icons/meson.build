@@ -5,7 +5,7 @@ actions_icons = [
     join_paths('.', 'actions', 'pane-hide-symbolic.svg'),
     join_paths('.', 'actions', 'pane-show-symbolic.svg'),
     join_paths('.', 'actions', 'system-log-out-symbolic.svg'),
-    join_paths('.', 'actions', 'system-restart-symbolic.svg'),
+    join_paths('.', 'actions', 'system-reboot-symbolic.svg'),
     join_paths('.', 'actions', 'system-suspend-symbolic.svg'),
     join_paths('.', 'actions', 'system-hibernate-symbolic.svg'),
 ]
@@ -30,6 +30,10 @@ status_icons = [
     join_paths('.', 'status', 'budgie-caffeine-cup-empty.svg'),
 ]
 
+symbolic_emblems_icons = [
+    join_paths('.', 'emblems', 'budgie-emblem-favorite-symbolic.svg'),
+]
+
 install_data(
     actions_icons,
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'actions'),
@@ -43,4 +47,9 @@ install_data(
 install_data(
     status_icons,
     install_dir: join_paths(datadir, 'icons', 'hicolor', 'scalable', 'status'),
+)
+
+install_data(
+    symbolic_emblems_icons,
+    install_dir: join_paths(datadir, 'icons', 'hicolor', 'symbolic', 'emblems'),
 )

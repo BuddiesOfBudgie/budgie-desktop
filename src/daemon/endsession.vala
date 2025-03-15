@@ -66,6 +66,7 @@ namespace Budgie {
 		void restart_clicked() {
 			Closed();
 			ConfirmedReboot();
+			hide();
 		}
 
 		[GtkCallback]
@@ -73,6 +74,7 @@ namespace Budgie {
 		void shutdown_clicked() {
 			Closed();
 			ConfirmedShutdown();
+			hide();
 		}
 
 		[DBus (visible=false)]
@@ -133,6 +135,12 @@ namespace Budgie {
 				this.cancel_clicked();
 				return Gdk.EVENT_STOP;
 			});
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 		}
 
 		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {
@@ -173,6 +181,8 @@ namespace Budgie {
 			/* Update the label */
 			this.label_end_title.set_text(title);
 
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
+
 			if (main_show != null) {
 				/* We have a specific type.. */
 				for (int i = 0; i < all_widgets.length; i++) {
@@ -200,13 +210,7 @@ namespace Budgie {
 
 			unowned Gdk.Window? win = get_window();
 			if (win != null) {
-				Gdk.Display? display = screen.get_display();
-
-				if (display is Gdk.X11.Display) {
-					win.focus(((Gdk.X11.Display) display).get_user_time());
-				} else {
-					win.focus(Gtk.get_current_event_time());
-				}
+				win.focus(Gtk.get_current_event_time());
 			}
 		}
 

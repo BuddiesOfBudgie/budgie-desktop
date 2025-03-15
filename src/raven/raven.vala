@@ -167,12 +167,13 @@ namespace Budgie {
 		public Gtk.PositionType screen_edge {
 			public set {
 				this._screen_edge = value;
+				bool is_right = this._screen_edge == Gtk.PositionType.RIGHT;
 
 				if (this.iface != null) {
 					this.iface.AnchorChanged(this.screen_edge == Gtk.PositionType.LEFT);
 				}
 
-				if (this._screen_edge == Gtk.PositionType.RIGHT) {
+				if (is_right) {
 					layout.child_set(shadow, "position", 0);
 					this.get_style_context().add_class(Budgie.position_class_name(PanelPosition.RIGHT));
 					this.get_style_context().remove_class(Budgie.position_class_name(PanelPosition.LEFT));
@@ -183,7 +184,22 @@ namespace Budgie {
 					this.get_style_context().remove_class(Budgie.position_class_name(PanelPosition.RIGHT));
 					this.shadow.position = Budgie.PanelPosition.LEFT;
 				}
-			}
+
+				GtkLayerShell.Edge raven_edge = is_right ? GtkLayerShell.Edge.RIGHT : GtkLayerShell.Edge.LEFT;
+				GtkLayerShell.Edge old_edge = is_right ? GtkLayerShell.Edge.LEFT : GtkLayerShell.Edge.RIGHT;
+
+				GtkLayerShell.set_anchor(
+					this,
+					old_edge,
+					false
+				);
+
+				GtkLayerShell.set_anchor(
+					this,
+					raven_edge,
+					true
+				);
+		}
 			public get {
 				return this._screen_edge;
 			}
@@ -191,8 +207,6 @@ namespace Budgie {
 
 		int our_width = 0;
 		int our_height = 0;
-		int our_x = 0;
-		int our_y = 0;
 
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
@@ -282,18 +296,18 @@ namespace Budgie {
 				return;
 			}
 			if (!has_toplevel_focus) {
-				/* X11 specific. */
 				Gdk.Display? display = screen.get_display();
-				if (display is Gdk.X11.Display) {
-					window.focus(((Gdk.X11.Display) display).get_user_time());
-				} else {
-					window.focus(Gtk.get_current_event_time());
-				}
+				window.focus(Gtk.get_current_event_time());
 			}
 		}
 
 		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
+			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+				GtkLayerShell.init_for_window(this);
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			}
+
 			get_style_context().add_class("budgie-container");
 
 			settings = new Settings("com.solus-project.budgie-raven");
@@ -362,7 +376,7 @@ namespace Budgie {
 
 			this.get_child().show_all();
 
-			this.screen_edge = Gtk.PositionType.LEFT;
+			this.screen_edge = Gtk.PositionType.RIGHT;
 		}
 
 		public override void size_allocate(Gtk.Allocation rect) {
@@ -385,25 +399,13 @@ namespace Budgie {
 		* need to be on */
 		public void update_geometry(Gdk.Rectangle rect) {
 			int width = layout.get_allocated_width();
-			int x;
 
-			if (this.screen_edge == Gtk.PositionType.RIGHT) {
-				x = (rect.x+rect.width)-width;
-			} else {
-				x = rect.x;
-			}
-
-			int y = rect.y;
 			int height = rect.height;
 
 			this.old_rect = rect;
 
-			move(x, y);
-
 			our_height = height;
 			our_width = width;
-			our_x = x;
-			our_y = y;
 
 			if (!get_visible()) {
 				queue_resize();
@@ -464,23 +466,20 @@ namespace Budgie {
 		* Slide Raven in or out of view
 		*/
 		public void set_expanded(bool exp) {
+
 			if (exp == this.expanded) {
 				return;
 			}
-			double old_op, new_op;
+			double old_nscale_op, new_nscale_op;
 			if (exp) {
 				this.update_geometry(this.old_rect);
-				old_op = 0.0;
-				new_op = 1.0;
+				old_nscale_op = 0.0;
+				new_nscale_op = 1.0;
 			} else {
-				old_op = 1.0;
-				new_op = 0.0;
+				old_nscale_op = 1.0;
+				new_nscale_op = 0.0;
 			}
-			nscale = old_op;
-
-			if (exp) {
-				show();
-			}
+			nscale = old_nscale_op;
 
 			this.expanded = exp;
 			main_view.raven_expanded(this.expanded);
@@ -511,18 +510,31 @@ namespace Budgie {
 			anim.changes = new Budgie.PropChange[] {
 				Budgie.PropChange() {
 					property = "nscale",
-					old = old_op,
-					@new = new_op
-				}
+					old = old_nscale_op,
+					@new = new_nscale_op
+				},
 			};
+
+			if (!exp) { // Going to be hiding Raven
+				shadow.set_opacity(0.0); // Hide the shadow since it gets glitchy
+				shadow.hide();
+			} else {
+				shadow.show();
+			}
 
 			anim.start((a) => {
 				Budgie.Raven? r = a.widget as Budgie.Raven;
 				Gtk.Window? w = a.widget as Gtk.Window;
 
 				if (r != null && r.nscale == 0.0) {
-					r.hide();
+					set_opacity(0.0); // Mask scaling weirdness
+					Timeout.add(100, () => {
+						r.hide();
+						return false;
+					}); // Defer until opacity set otherwise it glitches
 				} else if (w != null) {
+					shadow.set_opacity(1.0);
+					set_opacity(1.0);
 					w.present();
 					w.grab_focus();
 					this.steal_focus();

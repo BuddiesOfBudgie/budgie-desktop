@@ -36,7 +36,7 @@ namespace Budgie {
 	* private GNOME Settings Daemon -> GNOME Shell protocol.
 	*
 	* In short, all elements of the permanently present window should be able to hide or show
-	* depending on the updated ShowOSD message, including support for a progress bar (level),
+	* depending on the updated Show message, including support for a progress bar (level),
 	* icon, optional label.
 	*
 	* This OSD is used by gnome-settings-daemon to portray special events, such as brightness/volume
@@ -44,7 +44,7 @@ namespace Budgie {
 	* above all other windows and be non-interactive, allowing unobtrosive overlay of information
 	* even in full screen movies and games.
 	*
-	* Each request to ShowOSD will reset the expiration timeout for the OSD's current visibility,
+	* Each request to Show will reset the expiration timeout for the OSD's current visibility,
 	* meaning subsequent requests to the OSD will keep it on screen in a natural fashion, allowing
 	* users to "hold down" the volume change buttons, for example.
 	*/
@@ -67,11 +67,6 @@ namespace Budgie {
 		*/
 		[GtkChild]
 		public unowned Gtk.ProgressBar progressbar;
-
-		/**
-		* Track the primary monitor to show on
-		*/
-		private unowned Gdk.Monitor primary_monitor;
 
 		/**
 		* Current text to display. NULL hides the widget.
@@ -128,8 +123,13 @@ namespace Budgie {
 			resizable = false;
 			skip_pager_hint = true;
 			skip_taskbar_hint = true;
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, 80);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
+
 			set_decorated(false);
-			set_keep_above(true);
 			stick();
 
 			/* Set up an RGBA map for transparency styling */
@@ -137,9 +137,6 @@ namespace Budgie {
 			if (vis != null) {
 				this.set_visual(vis);
 			}
-
-			/* Update the primary monitor notion */
-			screen.monitors_changed.connect(on_monitors_changed);
 
 			/* Set up size */
 			set_default_size(OSD_SIZE, -1);
@@ -151,15 +148,6 @@ namespace Budgie {
 			get_child().show_all();
 			set_visible(false);
 
-			/* Get everything into position prior to the first showing */
-			on_monitors_changed();
-		}
-
-		/**
-		* Monitors changed, find out the primary monitor, and schedule move of OSD
-		*/
-		private void on_monitors_changed() {
-			primary_monitor = screen.get_display().get_primary_monitor();
 			move_osd();
 		}
 
@@ -167,16 +155,7 @@ namespace Budgie {
 		* Move the OSD into the correct position
 		*/
 		public void move_osd() {
-			/* Find the primary monitor bounds */
-			Gdk.Rectangle bounds = primary_monitor.get_geometry();
-			Gtk.Allocation alloc;
-
-			get_child().get_allocation(out alloc);
-
-			/* For now just center it */
-			int x = bounds.x + ((bounds.width / 2) - (alloc.width / 2));
-			int y = bounds.y + ((int)(bounds.height * 0.85));
-			move(x, y);
+			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
 		}
 	}
 
@@ -226,13 +205,14 @@ namespace Budgie {
 		* level: Progress-level to display in the OSD (double or int32 depending on gsd release)
 		* monitor: int32 The monitor to display the OSD on (currently ignored)
 		*/
-		public void ShowOSD(HashTable<string,Variant> params) throws DBusError, IOError {
+		public void Show(HashTable<string,Variant> params) throws DBusError, IOError {
 			string? icon_name = null;
 			string? label = null;
 
 			if (params.contains("icon")) {
 				icon_name = params.lookup("icon").get_string();
 			}
+
 			if (params.contains("label")) {
 				label = params.lookup("label").get_string();
 			}
@@ -270,10 +250,10 @@ namespace Budgie {
 				Source.remove(expire_timeout);
 				expire_timeout = 0;
 			}
-			if (!osd_window.get_visible()) {
-				osd_window.move_osd();
-			}
+
 			osd_window.show();
+			osd_window.move_osd();
+
 			expire_timeout = Timeout.add(timeout_length, this.osd_expire);
 		}
 
@@ -284,8 +264,10 @@ namespace Budgie {
 			if (expire_timeout == 0) {
 				return false;
 			}
+
 			osd_window.hide();
 			expire_timeout = 0;
+
 			return false;
 		}
 	}

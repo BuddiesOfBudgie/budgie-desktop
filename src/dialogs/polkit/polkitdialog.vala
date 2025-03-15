@@ -142,7 +142,14 @@ namespace Budgie {
 			combobox_idents.add_attribute(render, "text", 0);
 			combobox_idents.set_id_column(0);
 
-			window_position = Gtk.WindowPosition.CENTER_ALWAYS;
+			// center dialog on the primary screen
+			var primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
 			key_release_event.connect(on_key_release);
 

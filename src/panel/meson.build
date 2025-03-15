@@ -46,9 +46,10 @@ panel_deps = [
     libpanelplugin_vapi,
     dep_giounix,
     dep_gtk3,
+    dep_gtk_layer_shell,
     dep_peas,
     dep_libuuid,
-    dep_wnck,
+    dep_xfce4windowing,
     link_libconfig,
     link_libsession,
     link_libbudgieprivate,
@@ -57,6 +58,7 @@ panel_deps = [
     link_libravenplugin,
     libravenplugin_vapi,
     link_libraven,
+    link_libwindowing,
     gvc.get_variable('libgvc_dep'),
 ]
 
@@ -71,22 +73,18 @@ budgie_panel_vala_args = [
         '--pkg', 'gvc-1.0',
         '--pkg', 'libpeas-1.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gio-unix-2.0',
+        '--pkg', 'gtk-layer-shell-0',
+        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-]
-
-budgie_panel_c_args = [
-    '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
 
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
     vala_args: budgie_panel_vala_args,
-    c_args: budgie_panel_c_args,
     install: true,
 )
 
