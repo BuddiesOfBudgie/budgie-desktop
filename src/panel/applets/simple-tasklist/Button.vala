@@ -19,6 +19,11 @@ private const int BUTTON_MIN_WIDTH = 164;
 private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 8;
 
+private const int DEFAULT_ICON_SIZE = 32;
+private const int TARGET_ICON_PADDING = 18;
+private const double TARGET_ICON_SCALE = 2.0 / 3.0;
+private const int FORMULA_SWAP_POINT = TARGET_ICON_PADDING * 3;
+
 public class TasklistButton : ToggleButton {
 	private new Label label;
 	private Image icon;
@@ -31,6 +36,7 @@ public class TasklistButton : ToggleButton {
 	public libxfce4windowing.Window window { get; construct; }
 
 	private int64 last_scroll_time = 0;
+	private int target_icon_size = 0;
 
 	public TasklistButton(libxfce4windowing.Window window, Budgie.PopoverManager popover_manager, GLib.Settings settings) {
 		Object(window: window, popover_manager: popover_manager);
@@ -53,7 +59,6 @@ public class TasklistButton : ToggleButton {
 		this.icon = new Image() {
 			margin_start = BUTTON_PADDING,
 			margin_end = BUTTON_PADDING,
-			pixel_size = 16, // TODO: We should be able to handle panel resize and icon only mode
 		};
 		this.icon.get_style_context().add_class("icon");
 
@@ -172,8 +177,16 @@ public class TasklistButton : ToggleButton {
 
 		this.definite_allocation = allocation;
 
-		// TODO: Determine icon size
+		// Determine icon size
+		int max = (int) Math.fmin(allocation.width, allocation.height);
 
+		if (max > FORMULA_SWAP_POINT) {
+			target_icon_size = max - TARGET_ICON_PADDING;
+		} else {
+			target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
+		}
+
+		on_window_icon_changed();
 		base.size_allocate(definite_allocation);
 	}
 
@@ -184,7 +197,8 @@ public class TasklistButton : ToggleButton {
 	}
 
 	private void on_window_icon_changed() {
-		Pixbuf icon_pixbuf = window.get_icon(24, 1); // TODO: Icon sizes
-		icon.set_from_pixbuf(icon_pixbuf);
+		var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
+		unowned var pixbuf = window.get_icon(size, get_scale_factor());
+		icon.set_from_pixbuf(pixbuf);
 	}
 }
