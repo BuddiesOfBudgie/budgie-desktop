@@ -8,7 +8,4 @@ Terminal=false
 Type=Application
 NoDisplay=true
 OnlyShowIn=Budgie;
-X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=NetworkManager
-X-GNOME-Bugzilla-Component=nm-applet
 X-GNOME-UsesNotifications=true
