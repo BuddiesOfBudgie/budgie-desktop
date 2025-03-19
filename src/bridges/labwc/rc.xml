@@ -317,6 +317,9 @@
 		<followMouse>no</followMouse>
 		<raiseOnFocus>no</raiseOnFocus>
 	</focus>
+	<snapping>
+		<range>10</range>
+	</snapping>
 	<windowSwitcher allWorkspaces="no" />
 	<mouse>
 		<doubleClickTime>400</doubleClickTime>
