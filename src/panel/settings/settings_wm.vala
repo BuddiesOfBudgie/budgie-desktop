@@ -19,10 +19,8 @@ namespace Budgie {
 		private Gtk.Switch disable_night_light;
 		private Gtk.Switch pause_notifications;
 		private Gtk.ComboBox combo_layouts;
-		private Gtk.Switch switch_dialogs;
 		private Gtk.Switch switch_focus;
 		private Gtk.Switch switch_tiling;
-		private Gtk.Switch switch_unredirect;
 		private Gtk.Switch switch_all_windows_tabswitcher;
 
 		public WindowsPage() {
@@ -34,12 +32,6 @@ namespace Budgie {
 
 			var grid = new SettingsGrid();
 			this.add(grid);
-
-			switch_dialogs = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_dialogs,
-				_("Attach modal dialogs to windows"),
-				_("Modal dialogs will become attached to the parent window and move together when dragged.")
-			));
 
 			combo_layouts = new Gtk.ComboBox();
 			grid.add_row(new SettingsRow(combo_layouts,
@@ -77,13 +69,6 @@ namespace Budgie {
 				_("Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window.")
 			));
 
-			/* Unredirect.. */
-			switch_unredirect = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_unredirect,
-				_("Enable unredirection"),
-				_("Enable unredirection which will allow frames to bypass compositing for fullscreen applications. This option is for advanced users and recommended to keep enabled. Use this if you are having graphical or performance issues with dedicated GPUs.")
-			));
-
 			switch_all_windows_tabswitcher = new Gtk.Switch();
 			grid.add_row(new SettingsRow(switch_all_windows_tabswitcher,
 				_("Show all windows in tab switcher"),
@@ -107,14 +92,12 @@ namespace Budgie {
 
 			/* Hook up settings */
 			budgie_wm_settings = new Settings("com.solus-project.budgie-wm");
-			budgie_wm_settings.bind("attach-modal-dialogs", switch_dialogs, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("button-style", combo_layouts, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("center-windows", center_windows, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("pause-notifications-on-fullscreen", pause_notifications, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
-			budgie_wm_settings.bind("enable-unredirect", switch_unredirect, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("show-all-windows-tabswitcher", switch_all_windows_tabswitcher, "active", SettingsBindFlags.DEFAULT);
 		}
 	}
