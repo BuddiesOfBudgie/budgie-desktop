@@ -17,6 +17,7 @@
 #include "trash_notify.h"
 #include "trash_popover.h"
 #include "trash_settings.h"
+#include <budgie-enums.h>
 
 #define _GNU_SOURCE
 
