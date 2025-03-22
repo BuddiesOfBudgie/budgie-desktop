@@ -19,8 +19,6 @@ libappindexer = shared_library(
         link_libbudgieprivate,
     ],
     vala_args: [
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
         join_paths(meson.source_root(), 'src', 'appindexer', 'fuzzer', 'fuzzer-1.0.vapi'),
     ],

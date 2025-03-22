@@ -27,10 +27,6 @@ shared_library(
     applet_keyboardlayout_sources,
     dependencies: applet_keyboardlayout_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'ibus-1.0',
-        '--pkg', 'gnome-desktop-3.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
     ],
     c_args: [

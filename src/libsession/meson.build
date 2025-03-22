@@ -11,9 +11,6 @@ libsession = static_library(
         dep_glib,
         dep_giounix
     ],
-    vala_args: [
-        '--pkg', 'gio-unix-2.0',
-    ],
 )
 
 link_libsession = declare_dependency(

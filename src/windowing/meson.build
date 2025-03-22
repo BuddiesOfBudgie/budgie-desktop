@@ -14,10 +14,7 @@ libwindowing = shared_library(
   libwindowing_sources,
   dependencies: libwindowing_deps,
   vala_args: [
-    '--pkg', 'gio-unix-2.0',
-    '--pkg', 'gtk+-3.0',
-    '--pkg', 'libxfce4windowing-0',
-    '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
+    '--vapidir', join_paths(meson.source_root(), 'vapi'),
   ],
   version: '0.0.0',
   install: true,

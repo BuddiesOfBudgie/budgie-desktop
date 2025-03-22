@@ -24,10 +24,6 @@ shared_library(
     'notificationsapplet',
     applet_notifications_sources,
     dependencies: applet_notifications_deps,
-    vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-    ],
     install: true,
     install_dir: applet_notifications_dir,
 )
