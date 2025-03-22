@@ -19,11 +19,6 @@ libbudgieprivate = shared_library(
         meson.get_compiler('c').find_library('m', required: false),
         link_libpanelplugin,
     ],
-    vala_args: [
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'libpeas-1.0',
-    ],
     version: '0.0.0',
     install: true,
 )

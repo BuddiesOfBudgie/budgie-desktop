@@ -14,12 +14,6 @@ libappsys = static_library(
         dep_wnck,
         link_libconfig,
     ],
-    vala_args: [
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
-        '--pkg', 'libwnck-3.0',
-    ],
     c_args: [
         '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
     ],

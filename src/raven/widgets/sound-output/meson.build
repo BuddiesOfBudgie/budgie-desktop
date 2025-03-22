@@ -41,8 +41,6 @@ shared_library(
     dependencies: raven_plugin_sound_output_deps,
     vala_args: [
         '--vapidir', top_vapidir,
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
         '--pkg', 'gvc-1.0',
     ],
     install: true,

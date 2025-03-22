@@ -58,11 +58,6 @@ shared_library(
         lib_applet_icontasklist_resources,
     ],
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libwnck-3.0',
         '--vapidir', dir_libappsys,
         '--vapidir', dir_libabomination,
         # Make gresource work

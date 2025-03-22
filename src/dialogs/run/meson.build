@@ -20,7 +20,6 @@ executable(
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
         '--pkg', 'theme',
-        '--pkg', 'gio-unix-2.0',
         '--pkg', 'budgie-config',
     ],
     install: true,
