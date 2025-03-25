@@ -427,6 +427,7 @@ class Bridge:
 
         self.budgie_wm_changed(self.budgie_wm_settings, "focus-mode")
         self.budgie_wm_changed(self.budgie_wm_settings, "show-all-windows-tabswitcher")
+        self.budgie_wm_changed(self.budgie_wm_settings, "edge-tiling")
         self.mutter_changed(self.mutter_settings, "center-new-windows")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "titlebar-font")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "button-layout")
@@ -510,6 +511,20 @@ class Bridge:
                 bridge.attrib["allWorkspaces"] = "yes"
             else:
                 bridge.attrib["allWorkspaces"] = "no"
+
+            updated = True
+
+        if key == "edge-tiling":
+            path = "./snapping/range"
+            bridge = root.find(path)
+
+            if bridge == None:
+                return
+
+            if settings[key]:
+                bridge.text = "10"
+            else:
+                bridge.text = "0"
 
             updated = True
 
