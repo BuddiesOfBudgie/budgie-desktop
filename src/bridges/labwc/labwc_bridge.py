@@ -59,7 +59,7 @@ class Bridge:
             mainloop=quit()
 
     def user_config(self, config_file="rc.xml"):
-        return os.path.join(GLib.get_user_config_dir(), "labwc", config_file)
+        return os.path.join(GLib.get_user_config_dir(), "budgie-desktop", "labwc", config_file)
 
     # writes the labwc rc.xml file back
     def write_config(self):
@@ -134,7 +134,7 @@ class Bridge:
             self.log.warning(e)
             return
 
-        self.translate_menu_labels(path)
+        self.translate_menu_labels(search_path[0])
 
         path,search_path = self.search_for_config("rc.xml")
         if path == None:
