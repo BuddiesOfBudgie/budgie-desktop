@@ -42,10 +42,6 @@ shared_library(
     dependencies: applet_workspaces_deps,
     vala_args: [
         '--vapidir', top_vapidir,
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
