@@ -76,6 +76,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	private unowned Budgie.PopoverManager? popover_manager = null;
 	protected GLib.Settings settings;
 
+	private ScrolledWindow scroller;
 	private Box container;
 
 	private List<TasklistButton> buttons;
@@ -105,14 +106,24 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 	construct {
 		get_style_context().add_class("simple-tasklist");
+		add_events(EventMask.SCROLL_MASK);
 
 		this.buttons = new List<TasklistButton>();
 
+		this.scroller = new ScrolledWindow(null, null) {
+			overlay_scrolling = true,
+			propagate_natural_height = true,
+			propagate_natural_width = true,
+			shadow_type = ShadowType.NONE,
+			hscrollbar_policy = PolicyType.EXTERNAL,
+			vscrollbar_policy = PolicyType.NEVER,
+		};
 		this.container = new Box(Orientation.HORIZONTAL, 0) {
-			homogeneous = true,
+			// homogeneous = true,
 		};
 
-		add(container);
+		scroller.add(container);
+		add(scroller);
 
 		this.screen = libxfce4windowing.Screen.get_default();
 
@@ -123,6 +134,16 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		setup_workspace_listener();
 
 		show_all();
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		if (event.direction == Gdk.ScrollDirection.UP) { // Scrolling up
+			scroller.hadjustment.value-=50;
+		} else { // Scrolling down
+			scroller.hadjustment.value+=50; // Always increment by 50
+		}
+
+		return Gdk.EVENT_STOP;
 	}
 
 	public override Gtk.Widget? get_settings_ui() {
@@ -265,7 +286,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		button.drag_motion.connect(button_drag_motion);
 		button.drag_leave.connect(button_drag_leave);
 
-		this.container.pack_start(button);
+		this.container.add(button);
 
 		this.buttons.append(button);
 	}
