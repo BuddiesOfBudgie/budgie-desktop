@@ -48,9 +48,6 @@ shared_library(
         lib_applet_nightlight_resources,
     ],
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource
