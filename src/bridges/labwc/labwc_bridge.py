@@ -293,39 +293,51 @@ class Bridge:
 
     # this handles keyboard layout changes
     def desktop_input_sources_changed(self, settings, key):
-        if key != "sources":
+        if key != "sources" and key != "per-window":
             return
 
-        # grab the settings sources and reformat it
-        # i.e. variants expressed as "+variant" need to be
-        # converted to (variant)
-        # and we ignore ibus keyboard layouts since the
-        # window manager expects only xkb
-        layout = ""
-        for source in settings[key]:
-            if source[0] == 'xkb':
-                extract = source[1].replace("'","")
+        if key == "sources":
+            # grab the settings sources and reformat it
+            # i.e. variants expressed as "+variant" need to be
+            # converted to (variant)
+            # and we ignore ibus keyboard layouts since the
+            # window manager expects only xkb
+            layout = ""
+            for source in settings[key]:
+                if source[0] == 'xkb':
+                    extract = source[1].replace("'","")
 
-                if "+" in extract:
-                    rhs = extract.split("+")
-                    extract = rhs[0] + "(" + rhs[1] + ")"
+                    if "+" in extract:
+                        rhs = extract.split("+")
+                        extract = rhs[0] + "(" + rhs[1] + ")"
 
-                if layout == "":
-                    layout = extract
-                else:
-                    layout += "," + extract
+                    if layout == "":
+                        layout = extract
+                    else:
+                        layout += "," + extract
 
-        if layout == "":
-            layout = "us" # default to at least a known keyboard layout
+            if layout == "":
+                layout = "us" # default to at least a known keyboard layout
 
-        path = self.user_config("environment")
-        subprocess.call("sed -i 's/^XKB_DEFAULT_LAYOUT=.*/XKB_DEFAULT_LAYOUT="+layout+"/g' " + path, shell=True)
+            path = self.user_config("environment")
+            subprocess.call("sed -i 's/^XKB_DEFAULT_LAYOUT=.*/XKB_DEFAULT_LAYOUT="+layout+"/g' " + path, shell=True)
+            if self.delay_config_write:
+                return
 
-        if self.delay_config_write:
-            return
+            # reload config for labwc
+            subprocess.call("labwc -r", shell=True)s
+        else:
+            if settings[key]:
+                scope="window"
+            else:
+                scope = "global"
 
-        # reload config for labwc
-        subprocess.call("labwc -r", shell=True)
+            schema = "./keyboard"
+            bridge = self.et.find(schema)
+            bridge.attrib["layoutScope"] = scope
+
+            self.write_config()
+
 
     # changes to gsettings custom keys are managed with this method
     def customkeys_changed(self, settings, customkeypath):
@@ -435,6 +447,7 @@ class Bridge:
         self.desktop_interface_changed(self.desktop_interface_settings, "gtk-theme")
         self.panel_settings_changed(self.panel_settings, "notification-position")
         self.desktop_input_sources_changed(self.desktop_input_sources_settings, "sources")
+        self.desktop_input_sources_changed(self.desktop_input_sources_settings, "per-window")
 
         self.customkeys_changed(self.gsd_media_keys_settings, None)
 
