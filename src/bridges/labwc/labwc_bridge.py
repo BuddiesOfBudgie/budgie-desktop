@@ -293,9 +293,6 @@ class Bridge:
 
     # this handles keyboard layout changes
     def desktop_input_sources_changed(self, settings, key):
-        if key != "sources" and key != "per-window":
-            return
-
         if key == "sources":
             # grab the settings sources and reformat it
             # i.e. variants expressed as "+variant" need to be
@@ -325,8 +322,8 @@ class Bridge:
                 return
 
             # reload config for labwc
-            subprocess.call("labwc -r", shell=True)s
-        else:
+            subprocess.call("labwc -r", shell=True)
+        if key == 'per-window':
             if settings[key]:
                 scope="window"
             else:
@@ -338,6 +335,40 @@ class Bridge:
 
             self.write_config()
 
+        if key == 'xkb-options':
+            path = self.user_config("environment")
+            lookfor = "XKB_DEFAULT_OPTIONS="
+            current = ""
+            with open(path, 'r') as file:
+                for line in file:
+                    if line.startswith(lookfor):
+                        current = line.rstrip("\n")
+                        break
+
+            if current == "":
+                return # no current XKB Options
+
+            line = current.split(lookfor)[1] # grab the current XKB Options
+
+            # now iterate through the array looking for the keyboard toggle options
+            split_values = line.split(",")
+            filtered_values = [value for value in split_values if value.startswith("grp:")]
+            if len(filtered_values) == 0:
+                filtered_values=["grp:win_space_toggle"] # define a default if nothing is specified
+
+            # build up a new line to write with using any defined xkb_options in settings
+            new_line = ",".join(filtered_values)
+            existing_xkb = settings[key]
+            new_line += "," + ",".join(existing_xkb)
+            new_line = new_line.replace("'", "")
+
+            # finally write what we have calculated
+            subprocess.call("sed -i 's/^" + lookfor + ".*/" + lookfor + new_line +"/g' " + path, shell=True)
+            if self.delay_config_write:
+                return
+
+            # reload config for labwc
+            subprocess.call("labwc -r", shell=True)
 
     # changes to gsettings custom keys are managed with this method
     def customkeys_changed(self, settings, customkeypath):
@@ -448,6 +479,7 @@ class Bridge:
         self.panel_settings_changed(self.panel_settings, "notification-position")
         self.desktop_input_sources_changed(self.desktop_input_sources_settings, "sources")
         self.desktop_input_sources_changed(self.desktop_input_sources_settings, "per-window")
+        self.desktop_input_sources_changed(self.desktop_input_sources_settings, "xkb-options")
 
         self.customkeys_changed(self.gsd_media_keys_settings, None)
 
