@@ -1,5 +1,7 @@
 # Provides budgie's main panel component
 
+subdir('plugin')
+
 custom_target('desktop-file-panel',
     input : 'budgie-panel.desktop.in',
     output : 'org.buddiesofbudgie.BudgiePanel.desktop',
@@ -21,7 +23,6 @@ panel_sources = [
     'main.vala',
     'manager.vala',
     'panel.vala',
-    'plugin_manager.vala',
     'uuid.vala',
     'settings/settings_autostart.vala',
     'settings/settings_desktop.vala',
@@ -45,6 +46,7 @@ panel_sources = [
 panel_deps = [
     libpanelplugin_vapi,
     dep_giounix,
+    dep_gobject_introspection,
     dep_gtk3,
     dep_gtk_layer_shell,
     dep_peas,
@@ -53,6 +55,7 @@ panel_deps = [
     link_libconfig,
     link_libsession,
     link_libbudgieprivate,
+    link_libpanelpluginmanager,
     link_libtheme,
     link_libpanelplugin,
     link_libravenplugin,
@@ -74,6 +77,7 @@ budgie_panel_vala_args = [
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
+        join_paths(meson.project_source_root(), 'src', 'panel', 'plugin', 'plugin-manager.vapi'),
 ]
 
 executable(
