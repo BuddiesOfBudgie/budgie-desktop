@@ -28,7 +28,7 @@ jobs:
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
             'pkgconfig(libnotify)' \
-            'pkgconfig(libpeas-1.0)' \
+            'pkgconfig(libpeas-2)' \
             'pkgconfig(libpulse)' \
             'pkgconfig(libwnck-3.0)' \
             'pkgconfig(libxfce4windowing-0)' \

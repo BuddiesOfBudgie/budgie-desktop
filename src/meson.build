@@ -1,8 +1,8 @@
 # Control the order and relation between the subcomponents in Budgie
 
 # Library components
-subdir('plugin')
 subdir('config')
+subdir('plugin')
 subdir('libsession')
 
 # Needed for daemon + applets

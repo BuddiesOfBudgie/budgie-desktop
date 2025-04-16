@@ -10,7 +10,6 @@
  */
 
 #include "applet-info.h"
-#include <libpeas/peas.h>
 
 enum {
 	PROP_ICON = 1,
