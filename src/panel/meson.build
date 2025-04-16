@@ -45,6 +45,7 @@ panel_sources = [
 panel_deps = [
     libpanelplugin_vapi,
     dep_giounix,
+    dep_gobject_introspection,
     dep_gtk3,
     dep_gtk_layer_shell,
     dep_peas,
@@ -71,7 +72,8 @@ budgie_panel_vala_args = [
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
+        '--pkg', 'gobject-introspection-1.0',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk-layer-shell-0',

@@ -54,7 +54,7 @@ shared_library(
         lib_applet_placesindicator_resources,
     ],
     vala_args: [
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
         # Make gresource work
         '--target-glib=2.38',

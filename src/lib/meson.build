@@ -24,7 +24,7 @@ libbudgieprivate = shared_library(
     vala_args: [
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gtk+-3.0',
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
     ],
     version: '0.0.0',
     install: true,

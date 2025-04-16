@@ -25,7 +25,7 @@ shared_library(
     applet_notifications_sources,
     dependencies: applet_notifications_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
     ],
     install: true,

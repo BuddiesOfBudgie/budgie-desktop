@@ -25,7 +25,7 @@ shared_library(
     applet_raventrigger_sources,
     dependencies: applet_raventrigger_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
     ],
     install: true,

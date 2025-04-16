@@ -34,7 +34,7 @@ shared_library(
     raven_plugin_calendar_sources,
     dependencies: raven_plugin_calendar_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
     ],
     install: true,

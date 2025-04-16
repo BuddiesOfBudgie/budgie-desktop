@@ -26,7 +26,7 @@ shared_library(
     applet_userindicator_sources,
     dependencies: applet_userindicator_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
         '--vapidir', join_paths(meson.source_root(), 'vapi'),
     ],

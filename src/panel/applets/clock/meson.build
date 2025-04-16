@@ -51,7 +51,7 @@ shared_library(
         '--pkg', 'gtk+-3.0',
         '--pkg', 'glib-2.0',
         '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

@@ -13,7 +13,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "applet-info.h"
 #include "applet.h"

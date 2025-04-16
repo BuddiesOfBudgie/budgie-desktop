@@ -27,7 +27,7 @@ shared_library(
     dependencies: applet_showdesktop_deps,
     vala_args: [
         '--vapidir', top_vapidir,
-        '--pkg', 'libpeas-1.0',
+        '--pkg', 'libpeas-2',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'libxfce4windowing-0',
     ],
