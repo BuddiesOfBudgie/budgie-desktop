@@ -8,3 +8,4 @@ endif
 
 subdir('power')
 subdir('run')
+subdir('screenshot')

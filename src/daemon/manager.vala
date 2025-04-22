@@ -69,7 +69,6 @@ namespace Budgie {
 		Budgie.OSDKeys? osdkeys;
 		Budgie.Notifications.Server? notifications;
 		Budgie.StatusNotifier.FreedesktopWatcher? status_notifier;
-		BudgieScr.ScreenshotServer? screenshotcontrol;
 		Budgie.XDGDirTracker? xdg_tracker;
 		Budgie.Background? background;
 
@@ -78,6 +77,9 @@ namespace Budgie {
 
 		/* NightLight */
 		Budgie.NightLightManager? nightlight;
+
+		/* screenshot */
+		ScreenshotManager? screenshot_manager;
 
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
@@ -101,12 +103,6 @@ namespace Budgie {
 
 			background = new Budgie.Background();
 
-			try {
-				screenshotcontrol = new BudgieScr.ScreenshotServer();
-				screenshotcontrol.setup_dbus();
-			} catch (Error e) {
-				warning("ServiceManager %s\n", e.message);
-			}
 			xdg_tracker = new Budgie.XDGDirTracker();
 			xdg_tracker.setup_dbus(replace);
 
@@ -117,6 +113,8 @@ namespace Budgie {
 			nightlight = new NightLightManager();
 
 			Budgie.KeyboardManager.init();
+			screenshot_manager = new ScreenshotManager();
+			screenshot_manager.serve();
 		}
 
 		/**

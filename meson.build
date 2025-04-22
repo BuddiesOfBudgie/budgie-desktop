@@ -74,6 +74,8 @@ if get_option('with-runtime-dependencies')
     find_program('wlopm', required: true)
     find_program('swayidle', required: true)
     find_program('gammastep', required: true)
+    find_program('grim', required: true)
+    find_program('slurp', required: true)
     found_gtklock = find_program('gtklock', required: false)
     if found_gtklock.found() == false
         find_program('swaylock', required: true)

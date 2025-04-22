@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie Screenshot Dialog
+Comment=Screenshot interface
+Icon=budgie-screenshot
+Exec=@libexecdir@/budgie-screenshot-dialog
+TryExec=@libexecdir@/budgie-screenshot-dialog
+OnlyShowIn=Budgie;
+NoDisplay=true
+X-GNOME-Autostart-Phase=Application
+X-GNOME-Autostart-Notify=true
