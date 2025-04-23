@@ -29,6 +29,12 @@ namespace Budgie {
 		PREFER_LIGHT
 	}
 
+	struct NotificationInfo {
+		string icon;
+		string body;
+		string title;
+	}
+
 	/**
 	* The SettingsManager currently only has a very simple job, and looks for
 	* session wide settings changes to respond to
@@ -63,6 +69,7 @@ namespace Budgie {
 		private bool? default_idle_dim = false;
 		private int? default_sleep_inactive_ac_timeout = 0;
 		private int? default_sleep_inactive_battery_timeout = 0;
+		private NotificationInfo notificationinfo;
 
 		/**
 		* Other
@@ -349,31 +356,18 @@ namespace Budgie {
 			}
 
 			if (wm_settings.get_boolean("caffeine-mode-notification") && !disable_notification && !temporary_notification_disabled && Notify.is_initted()) { // Should show a notification
-				string title = (enabled) ? _("Turned on Caffeine Boost") : _("Turned off Caffeine Boost");
-				string body = "";
-				string icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
+				this.notificationinfo.title = (enabled) ? _("Turned on Caffeine Boost") : _("Turned off Caffeine Boost");
+				this.notificationinfo.body = "";
+				this.notificationinfo.icon = (enabled) ? caffeine_full_cup : caffeine_empty_cup;
 
 				if (enabled && (time > 0)) {
-					body = ngettext("Will turn off in a minute", "Will turn off in %d minutes", time).printf(time);
-				}
-
-				if (this.caffeine_notification == null) { // Caffeine Notification not yet created
-					this.caffeine_notification = new Notify.Notification(title, body, icon);
-					caffeine_notification.set_urgency(Notify.Urgency.CRITICAL);
-				} else {
-					try {
-						this.caffeine_notification.close(); // Ensure previous is closed
-					} catch (Error e) {
-						warning("Failed to close previous notification: %s", e.message);
-					}
-
-					this.caffeine_notification.update(title, body, icon); // Update the Notification
+					this.notificationinfo.body = ngettext("Will turn off in a minute", "Will turn off in %d minutes", time).printf(time);
 				}
 
 				try {
-					this.caffeine_notification.show();
+					new Thread<void*>.try("caffeine-show", this.show_notification);
 				} catch (Error e) {
-					warning("Failed to send our Caffeine notification: %s", e.message);
+					warning("Failed to start thread: %s", e.message);
 				}
 			}
 
@@ -383,6 +377,44 @@ namespace Budgie {
 					return false;
 				}, Priority.HIGH);
 			}
+		}
+
+		/* we have to use a thread to show notifications */
+		private void* update_notification() {
+			try {
+				this.caffeine_notification.show();
+			} catch (Error e) {
+				warning("Failed to send our Caffeine notification: %s", e.message);
+			}
+			return null;
+		}
+
+		private void* show_notification() {
+			if (this.caffeine_notification == null) { // Caffeine Notification not yet created
+					this.caffeine_notification = new Notify.Notification(
+						this.notificationinfo.title,
+						this.notificationinfo.body,
+						this.notificationinfo.icon);
+					caffeine_notification.set_urgency(Notify.Urgency.CRITICAL);
+			} else {
+				try {
+					this.caffeine_notification.close(); // Ensure previous is closed
+				} catch (Error e) {
+					warning("Failed to close previous notification: %s", e.message);
+				}
+
+				this.caffeine_notification.update(
+					this.notificationinfo.title,
+					this.notificationinfo.body,
+					this.notificationinfo.icon); // Update the Notification
+			}
+
+			try {
+				this.caffeine_notification.show();
+			} catch (Error e) {
+				warning("Failed to send our Caffeine notification: %s", e.message);
+			}
+			return null;
 		}
 
 		/**

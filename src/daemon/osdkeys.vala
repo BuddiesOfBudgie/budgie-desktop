@@ -42,6 +42,10 @@
 		private Gvc.MixerStream? stream;
 		private ulong notify_id;
 
+		// var for wm settings changes
+		private Settings? wm_settings = null;
+		private bool caffeine_was_enabled = false;
+
 		// need to handle initialisation of various methods so ensure the OSD is not accidently
 		// activated when budgie-daemon is started.
 		private bool initialising;
@@ -82,8 +86,30 @@
 				map.state_changed.connect(on_keymap_state_changed);
 				return false;
 			});
+
+			wm_settings = new Settings("com.solus-project.budgie-wm");
+			wm_settings.changed["caffeine-mode"].connect(on_caffeine_mode);
 		}
 
+		/* handle brightness changes due to caffeine mode - we
+		    don't want the brightness OSD to display when caffeine with brightness
+			changes is enabled
+		*/
+		void on_caffeine_mode() {
+			if (wm_settings.get_boolean("caffeine-mode")) {
+				caffeine_was_enabled = true;
+				return;
+			}
+
+			/* switching caffeine mode on/off invokes a series of events that can
+			   inadvertently trigger the brightness OSD.  We workaround this
+			   by letting caffeine events to complete first
+			*/
+			Timeout.add(1000, () => {
+				caffeine_was_enabled = false;
+				return false;
+			});
+		}
 		void on_mixer_sink_changed(uint id) {
 			set_default_mixer();
 		}
@@ -225,9 +251,11 @@
 
 			GLib.VariantDict dict = new GLib.VariantDict(parameters.get_child_value(1));
 			GLib.Variant? brightness = dict.lookup_value("Brightness", GLib.VariantType.INT32);
-			if (brightness == null || Screenlock.is_dimming) {
+			if (brightness == null || Screenlock.is_dimming || caffeine_was_enabled) {
 				return;
 			}
+
+			// we don't want brightness changes to be displayed if we are in caffeine mode
 
 			double level = (double) brightness.get_int32() / 100;
 			// nothing has changed therefore quit
