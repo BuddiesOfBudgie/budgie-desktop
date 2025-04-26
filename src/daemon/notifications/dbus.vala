@@ -220,7 +220,7 @@
 		 * If replaces_id is not 0, the returned value is the same value as replaces_id.
 		 */
 		[DBus (name="Notify")]
-		public uint32 notication_received(
+		public uint32 notification_received(
 			string app_name,
 			uint32 replaces_id,
 			string app_icon,
