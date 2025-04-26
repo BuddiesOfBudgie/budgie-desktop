@@ -125,6 +125,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="label_identity">
+                <property name="visible">False</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="margin-top">2</property>
+                <property name="margin-bottom">2</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label_error">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
