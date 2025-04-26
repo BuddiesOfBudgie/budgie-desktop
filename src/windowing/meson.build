@@ -14,7 +14,7 @@ libwindowing = shared_library(
   libwindowing_sources,
   dependencies: libwindowing_deps,
   vala_args: [
-    '--vapidir', join_paths(meson.source_root(), 'vapi'),
+    '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
   ],
   version: '0.0.0',
   install: true,

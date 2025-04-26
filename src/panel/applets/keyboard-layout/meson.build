@@ -27,7 +27,7 @@ shared_library(
     applet_keyboardlayout_sources,
     dependencies: applet_keyboardlayout_deps,
     vala_args: [
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
     ],
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',

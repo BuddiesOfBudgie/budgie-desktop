@@ -45,7 +45,7 @@ polkit_deps = [
 ]
 
 # polkit vapi files are in top vapi dir
-pkvapi = join_paths(meson.source_root(), 'vapi')
+pkvapi = join_paths(meson.project_source_root(), 'vapi')
 
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-polkit.gresource.xml')

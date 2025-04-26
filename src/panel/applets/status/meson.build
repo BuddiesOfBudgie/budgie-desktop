@@ -56,7 +56,7 @@ shared_library(
     ],
     vala_args: [
         '--pkg', 'gvc-1.0',
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
     ],
     install: true,
     install_dir: applet_status_dir,

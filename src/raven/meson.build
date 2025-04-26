@@ -50,7 +50,7 @@ libraven_deps = [
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 libraven = shared_library(
     'raven', libraven_sources,

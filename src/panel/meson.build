@@ -62,7 +62,7 @@ panel_deps = [
     gvc.get_variable('libgvc_dep'),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 budgie_panel_vala_args = [
         '--vapidir', dir_libtheme,

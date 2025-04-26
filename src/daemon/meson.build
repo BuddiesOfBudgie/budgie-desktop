@@ -72,7 +72,7 @@ if dep_gsd.found()
     message('Found GNOME Settings Daemon >= 3.33.90')
 endif
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 executable(
     'budgie-daemon', daemon_sources,

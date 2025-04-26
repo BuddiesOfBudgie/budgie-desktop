@@ -33,7 +33,7 @@ raven_plugin_sound_output_deps = [
     meson.get_compiler('c').find_library('m', required: true),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput',

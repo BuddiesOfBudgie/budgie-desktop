@@ -58,7 +58,7 @@ shared_library(
     vala_args: [
         '--vapidir', dir_libappsys,
         '--vapidir', dir_libwindowing,
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

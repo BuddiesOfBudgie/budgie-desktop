@@ -26,7 +26,7 @@ shared_library(
     applet_userindicator_sources,
     dependencies: applet_userindicator_deps,
     vala_args: [
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
     ],
     install: true,
     install_dir: applet_userindicator_dir,

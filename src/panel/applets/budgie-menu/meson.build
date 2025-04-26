@@ -58,7 +58,7 @@ shared_library(
     applet_budgiemenu_sources,
     dependencies: applet_budgiemenu_deps,
     vala_args: [
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
