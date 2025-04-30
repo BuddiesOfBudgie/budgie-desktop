@@ -25,6 +25,9 @@ namespace Budgie {
 		private unowned Gtk.ComboBox? combobox_idents;
 
 		[GtkChild]
+		private unowned Gtk.Label? label_username;
+
+		[GtkChild]
 		private unowned Gtk.Label? label_identity;
 
 		[GtkChild]
@@ -309,6 +312,7 @@ namespace Budgie {
 			}
 
 			if (length == 1) {
+				label_username.set_visible(true);
 				label_identity.set_visible(true);
 				label_identity.set_label(name);
 			}
