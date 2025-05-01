@@ -7,5 +7,6 @@ Exec=@libexecdir@/budgie-screenshot-dialog
 TryExec=@libexecdir@/budgie-screenshot-dialog
 OnlyShowIn=Budgie;
 NoDisplay=true
-X-GNOME-Autostart-Phase=Application
+X-GNOME-AutoRestart=true
 X-GNOME-Autostart-Notify=true
+X-GNOME-Autostart-Phase=Application
