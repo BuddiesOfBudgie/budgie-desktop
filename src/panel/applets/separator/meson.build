@@ -24,10 +24,6 @@ shared_library(
     'separatorapplet',
     applet_separator_sources,
     dependencies: applet_separator_deps,
-    vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-    ],
     install: true,
     install_dir: applet_separator_dir,
 )

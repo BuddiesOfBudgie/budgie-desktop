@@ -55,12 +55,8 @@ shared_library(
         '-lm'
     ],
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'accountsservice',
         '--pkg', 'gvc-1.0',
-        '--pkg', 'gio-unix-2.0',
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
     ],
     install: true,
     install_dir: applet_status_dir,

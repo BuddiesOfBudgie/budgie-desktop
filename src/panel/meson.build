@@ -62,7 +62,7 @@ panel_deps = [
     gvc.get_variable('libgvc_dep'),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 budgie_panel_vala_args = [
         '--vapidir', dir_libtheme,
@@ -71,11 +71,6 @@ budgie_panel_vala_args = [
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'gtk-layer-shell-0',
-        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

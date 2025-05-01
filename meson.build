@@ -106,7 +106,7 @@ libexecdir = join_paths(prefix, get_option('libexecdir'), meson.project_name())
 confdir = join_paths(prefix, get_option('sysconfdir'))
 datadir = join_paths(prefix, get_option('datadir'))
 localedir = join_paths(prefix, get_option('localedir'))
-podir = join_paths(meson.source_root(), 'po')
+podir = join_paths(meson.project_source_root(), 'po')
 
 cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
