@@ -25,6 +25,12 @@ namespace Budgie {
 		private unowned Gtk.ComboBox? combobox_idents;
 
 		[GtkChild]
+		private unowned Gtk.Label? label_username;
+
+		[GtkChild]
+		private unowned Gtk.Label? label_identity;
+
+		[GtkChild]
 		private unowned Gtk.Label? label_prompt;
 
 		[GtkChild]
@@ -280,9 +286,8 @@ namespace Budgie {
 
 			int length = 0;
 
+			string? name = null;
 			foreach (unowned Polkit.Identity? ident in idents) {
-				string? name = null;
-
 				if (ident is Polkit.UnixUser) {
 					unowned Posix.Passwd? pwd = Posix.getpwuid(((Polkit.UnixUser) ident).get_uid());
 					name = "%s".printf(pwd.pw_name);
@@ -304,6 +309,12 @@ namespace Budgie {
 			if (length < 2) {
 				combobox_idents.no_show_all = true;
 				combobox_idents.hide();
+			}
+
+			if (length == 1) {
+				label_username.set_visible(true);
+				label_identity.set_visible(true);
+				label_identity.set_label(name);
 			}
 		}
 
