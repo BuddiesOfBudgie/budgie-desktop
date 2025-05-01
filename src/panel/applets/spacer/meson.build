@@ -36,8 +36,6 @@ shared_library(
     applet_spacer_sources,
     dependencies: applet_spacer_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

@@ -50,7 +50,7 @@ libraven_deps = [
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 libraven = shared_library(
     'raven', libraven_sources,
@@ -66,11 +66,6 @@ libraven = shared_library(
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'gtk-layer-shell-0',
-        '--pkg', 'libxfce4windowing-0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
