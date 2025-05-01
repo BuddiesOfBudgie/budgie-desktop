@@ -61,7 +61,7 @@ namespace Budgie {
 				to return a reference, so lets loop until we get a reference ... but
 				don't try indefinitely
 			 */
-			 Timeout.add(200, ()=> {
+			 Timeout.add_seconds(1, ()=> {
 				 primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
 				 if (primary_monitor != null || loop++ > 10) {
 					 gdk_monitor = primary_monitor.get_gdk_monitor();
