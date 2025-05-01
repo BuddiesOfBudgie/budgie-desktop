@@ -56,13 +56,9 @@ shared_library(
         lib_applet_icontasklist_resources,
     ],
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gio-unix-2.0',
-        '--pkg', 'libxfce4windowing-0',
         '--vapidir', dir_libappsys,
         '--vapidir', dir_libwindowing,
-        '--vapidir', join_paths(meson.source_root(), 'vapi'),
+        '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
