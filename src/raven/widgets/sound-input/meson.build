@@ -32,7 +32,7 @@ raven_plugin_sound_input_deps = [
     meson.get_compiler('c').find_library('m', required: true),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundInput',
@@ -40,8 +40,6 @@ shared_library(
     dependencies: raven_plugin_sound_input_deps,
     vala_args: [
         '--vapidir', top_vapidir,
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
         '--pkg', 'gvc-1.0',
     ],
     install: true,

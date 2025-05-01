@@ -36,9 +36,6 @@ shared_library(
     'trayapplet',
     applet_tray_sources,
     dependencies: applet_tray_deps,
-    vala_args: [
-        '--pkg', 'libpeas-1.0',
-    ],
     install: true,
     install_dir: applet_tray_dir,
 )

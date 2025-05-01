@@ -50,7 +50,7 @@ screenshot_deps = [
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-screenshot.gresource.xml')
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 screenshot_vala_args = ['-D', 'USE_GSD_DOUBLES']
 
