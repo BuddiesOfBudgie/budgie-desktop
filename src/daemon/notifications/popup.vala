@@ -152,6 +152,7 @@ namespace Budgie.Notifications {
 		public bool did_interact { get; private set; default = false; }
 
 		private Body? body;
+		private bool actioned = false; /* only ActionInvoked once for each popup */
 
 		/**
 		 * Signal emitted when an action is clicked.
@@ -192,7 +193,10 @@ namespace Budgie.Notifications {
 			if (this.notification.actions.length > 0) {
 				var actions = new ActionBox(this.notification.actions, this.notification.hints.contains("action-icons"));
 				actions.ActionInvoked.connect((action_key) => {
-					this.ActionInvoked(action_key);
+					if (!this.actioned) {
+						this.ActionInvoked(action_key);
+					}
+					this.actioned = true;
 					this.dismiss();
 				});
 				content_box.pack_start(actions, true, true, 0);
@@ -218,7 +222,10 @@ namespace Budgie.Notifications {
 			// Handle interaction events
 			this.button_release_event.connect(() => {
 				if (has_default_action) {
-					this.ActionInvoked("default");
+					if (!this.actioned) {
+						this.ActionInvoked("default");
+					}
+					this.actioned = true;
 				} else if (this.notification.app_info != null && !has_actions) {
 					// Try to launch the application that generated the notification
 					try {
@@ -252,7 +259,10 @@ namespace Budgie.Notifications {
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
 				actions.ActionInvoked.connect((action_key) => {
-					this.ActionInvoked(action_key);
+					if (!this.actioned) {
+						this.ActionInvoked(action_key);
+					}
+					this.actioned = true;
 				});
 				content_box.pack_start(actions, false, true, 0);
 			}
