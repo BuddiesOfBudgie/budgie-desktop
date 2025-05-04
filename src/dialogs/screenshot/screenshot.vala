@@ -411,12 +411,14 @@ namespace Budgie {
 			this.set_titlebar(topbar);
 			//this.set_keep_above(true);
 
-			/*
-			 * left or right windowbuttons, that's the question when
-			 * (re-?) arranging headerbar buttons
-			*/
-			button_id = windowstate.buttonpos_changed.connect(() => {rearrange_headerbar();});
-			rearrange_headerbar();
+			 // Connect the key-press-event signal to close the window on escape
+			 this.key_press_event.connect((event) => {
+				if (event.keyval == Gdk.Key.Escape) {
+					this.close();
+					return true;
+				}
+				return false;
+			});
 
 			// css stuff
 			Gdk.Screen screen = this.get_screen();
@@ -453,6 +455,13 @@ namespace Budgie {
 					return false;
 				});
 			});
+
+			/*
+			 * left or right windowbuttons, that's the question when
+			 * (re-?) arranging headerbar buttons
+			*/
+			button_id = windowstate.buttonpos_changed.connect(() => {rearrange_headerbar();});
+			rearrange_headerbar();
 
 			this.show_all();
 		}
@@ -587,6 +596,7 @@ namespace Budgie {
 				topbar.pack_start(helpbutton);
 			}
 			this.show_all();
+			shootbutton.grab_focus();
 		}
 
 		private Gtk.Box setup_areabuttons() {
@@ -858,6 +868,16 @@ namespace Budgie {
 			});
 
 			setup_headerbar(decisionbar, filenameentry, clp, pxb);
+
+			// Connect the key-press-event signal invoke the trash button click on escape
+			this.key_press_event.connect((event) => {
+				if (event.keyval == Gdk.Key.Escape) {
+					decisionbuttons[0].clicked();
+					return true;
+				}
+				return false;
+			});
+
 		}
 
 		private void close_window() {
@@ -891,7 +911,7 @@ namespace Budgie {
 					decisionbutton.set_tooltip_text(tooltips[currbutton]);
 				}
 
-				decisionbutton.set_can_focus(false);
+				decisionbutton.set_can_focus(true);
 				set_buttoncontent(decisionbutton, s);
 				decisionbuttons += decisionbutton;
 				currbutton += 1;
@@ -928,6 +948,7 @@ namespace Budgie {
 			});
 
 			// save to file
+			decisionbuttons[1].set_can_default(true);
 			decisionbuttons[1].clicked.connect(() => {
 				if (save_tofile(filenameentry, pickdir_combo, pxb) != "fail") {
 					windowstate.statechanged(WindowState.NONE);
@@ -954,6 +975,8 @@ namespace Budgie {
 
 			this.set_titlebar(bar);
 			this.show_all();
+
+			decisionbuttons[1].grab_focus(); // make the save button the initial focus
 		}
 
 		private void open_indefaultapp(string path) {
