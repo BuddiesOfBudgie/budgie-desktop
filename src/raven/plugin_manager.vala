@@ -138,10 +138,15 @@ namespace Budgie {
 
 		public List<Peas.PluginInfo?> get_all_plugins() {
 			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
-			foreach (unowned string plugin_name in this.engine.loaded_plugins) {
-				var info = this.engine.get_plugin_info(plugin_name);
-				if (info != null) ret.append(info);
+
+			var list = this.engine.get_n_items();
+			for (int i=0; i < list; i++) {
+				Peas.PluginInfo? info = (Peas.PluginInfo)this.engine.get_item(i);
+				if (info != null) {
+					ret.append(info);
+				}
 			}
+
 			return ret;
 		}
 
