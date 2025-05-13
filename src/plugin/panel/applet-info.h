@@ -13,9 +13,8 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include <libpeas/peas.h>
+#include <libpeas-2/libpeas.h>
 
-#include "applet-info.h"
 #include "applet.h"
 
 G_BEGIN_DECLS
