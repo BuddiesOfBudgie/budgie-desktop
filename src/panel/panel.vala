@@ -516,13 +516,14 @@ namespace Budgie {
 				string? uuid = null;
 
 				while (iter.next(out uuid, null)) {
+					Budgie.AppletInfo? info = null;
 					string? uname = null;
-					Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(uuid, out uname);
-					if (info == null) {
+					try {
+						info = this.plugin_manager.load_applet_instance(uuid, null, out uname);
+						add_applet(info);
+					} catch (Error e) {
 						critical("Failed to load applet when we know it exists: %s", uname);
-						return;
 					}
-					this.add_applet(info);
 				}
 				pending.remove(name);
 			}
@@ -535,13 +536,15 @@ namespace Budgie {
 				string? uuid = null;
 
 				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = this.plugin_manager.create_new_applet(name, uuid);
-					if (info == null) {
+					Budgie.AppletInfo? info = null;
+
+					try {
+						info = this.plugin_manager.create_applet(name, uuid);
+						this.add_applet(info);
+						/* this.configure_applet(info); */
+					} catch (Error e) {
 						critical("Failed to load applet when we know it exists");
-						return;
 					}
-					this.add_applet(info);
-					/* this.configure_applet(info); */
 				}
 				creating.remove(name);
 			}
@@ -573,22 +576,28 @@ namespace Budgie {
 
 				for (int i = 0; i < applets.length; i++) {
 					string? name = null;
-					Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(applets[i], out name);
+					Budgie.AppletInfo? info = null;
 
-					if (info == null) {
+					try {
+						info = this.plugin_manager.load_applet_instance(applets[i], null, out name);
+					} catch (Error e) {
 						if (name == null) {
 							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
+
 							if (g != null) {
 								expected_uuids.remove_link(g);
 							}
-							message("Unable to load invalid applet: %s", applets[i]);
-							applet_removed(applets[i]);
-							continue;
-						}
 
-						info = this.add_pending(applets[i], name);
-						if (info == null) {
+							message("Unable to load invalid applet '%s': %s", applets[i], e.message);
+							applet_removed(applets[i]);
+
 							continue;
+						} else {
+							info = this.add_pending(applets[i], name);
+
+							if (info == null) {
+								continue;
+							}
 						}
 					}
 
@@ -934,7 +943,7 @@ namespace Budgie {
 			string? uuid = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
+			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
 				warning("Not loading invalid plugin: %s", plugin_name);
 				return;
 			}
@@ -944,7 +953,7 @@ namespace Budgie {
 				uuid = initial_uuid;
 			}
 
-			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = creating.lookup(plugin_name);
 				if (table != null) {
@@ -961,25 +970,25 @@ namespace Budgie {
 				return;
 			}
 			/* Already exists */
-			Budgie.AppletInfo? info = this.plugin_manager.create_new_applet(plugin_name, uuid);
-			if (info == null) {
+			try {
+				Budgie.AppletInfo? info = this.plugin_manager.create_applet(plugin_name, uuid);
+				this.add_applet(info);
+			} catch (Error e) {
 				critical("Failed to load applet when we know it exists");
 				return;
 			}
-			this.add_applet(info);
-			return;
 		}
 
 		Budgie.AppletInfo? add_pending(string uuid, string plugin_name) {
 			string? rname = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
+			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
 				return null;
 			}
 
-			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = pending.lookup(plugin_name);
 				if (table != null) {
@@ -997,11 +1006,14 @@ namespace Budgie {
 			}
 
 			/* Already exists */
-			Budgie.AppletInfo? info = this.plugin_manager.load_applet_instance(uuid, out rname);
-			if (info == null) {
+			Budgie.AppletInfo? info = null;
+
+			try {
+				info = this.plugin_manager.load_applet_instance(uuid, null, out rname);
+			} catch (Error e) {
 				critical("Failed to load applet when we know it exists");
-				return null;
 			}
+
 			return info;
 		}
 

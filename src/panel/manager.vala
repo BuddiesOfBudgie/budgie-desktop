@@ -48,17 +48,6 @@ namespace Budgie {
 	*/
 	public const string TOPLEVEL_PREFIX = "/com/solus-project/budgie-panel/panels";
 
-
-	/**
-	* Relocatable schema ID for applets
-	*/
-	public const string APPLET_SCHEMA = "com.solus-project.budgie-panel.applet";
-
-	/**
-	* Prefix for all relocatable applet settings
-	*/
-	public const string APPLET_PREFIX = "/com/solus-project/budgie-panel/applets";
-
 	/**
 	* Schema ID for Raven settings
 	*/
@@ -576,16 +565,11 @@ namespace Budgie {
 			/* Some applets might want raven */
 			raven.setup_dbus();
 
-			int current_migration_level = settings.get_int(PANEL_KEY_MIGRATION);
 			if (!load_panels()) {
 				message("Creating default panel layout");
 
 				// TODO: Add gsetting for this name
 				create_default(this.default_layout);
-
-			} else {
-				/* Migration required */
-				perform_migration(current_migration_level);
 			}
 
 			/* Whatever route we took, set the migration level to the current now */
@@ -597,46 +581,6 @@ namespace Budgie {
 					message("Failed to register with Session manager");
 				}
 			});
-		}
-
-		/**
-		* Attempts to perform the relevant migration operations by
-		* finding a migratable panel and calling its migratory function
-		*/
-		private void perform_migration(int current_migration_level) {
-			Budgie.Panel? top = null;
-			Budgie.Panel? last = null;
-
-			/* Minimum migration level met, proceed as normal. */
-			if (current_migration_level >= BUDGIE_MIGRATION_LEVEL) {
-				return;
-			}
-
-			/* Manual configuration from user met the expected migration path. Proceed as normal. */
-			if (panel_plugin_manager.migrate_load_requirements_met) {
-				message("Budgie Migration skipped due to user meeting migration requirements");
-				return;
-			}
-
-			message("Budgie Migration initiated");
-
-			string? key = null;
-			Budgie.Panel? val = null;
-			var iter = HashTableIter<string,Budgie.Panel?>(panels);
-			while (iter.next(out key, out val)) {
-				if (val.position == Budgie.PanelPosition.TOP) {
-					top = val;
-				}
-				last = val;
-			}
-
-			/* Prefer the top panel for consistency */
-			if (top != null) {
-				last = top;
-			}
-
-			/* Ask this panel to perform migratory tasks(add applets) */
-			((Budgie.Panel) last).perform_migration(current_migration_level);
 		}
 
 		public override List<Peas.PluginInfo?> get_panel_plugins() {
