@@ -227,9 +227,6 @@ namespace Budgie {
 		private void active_window_changed() {
 			// Handle transparency
 			check_windows();
-			libxfce4windowing.Window? window = windowing.get_active_window();
-			if (window == null) return;
-			check_window_intersections(window);
 		}
 
 		/*
@@ -241,69 +238,7 @@ namespace Budgie {
 				check_windows();
 			});
 
-			window.geometry_changed.connect_after((window) => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-				this.check_window_intersections(window);
-			});
-
 			check_windows();
-		}
-
-		/**
-		* Determine if the given panel and window intersect in geometry.
-		* The panel is buffered by a predetermined pad amount which allows
-		* for intelligent hiding behavior, i.e. when the window gets close to
-		* the panel, it should start the hide.
-		*/
-		private bool window_intersects_panel(Budgie.Toplevel? panel, libxfce4windowing.Window? window) {
-			const int pad_amount = 15;
-
-			if (window == null && !windowing.has_windows) return false;
-
-			if (window != windowing.get_active_window()) return false;
-
-			if (window.is_skip_pager() || window.is_skip_tasklist()) return false;
-
-			// Figure out where the window is
-			Gdk.Rectangle win = window.get_geometry();
-			Gdk.Rectangle pan = Gdk.Rectangle();
-
-			// Figure out where the toplevel is
-			panel.get_position(out pan.x, out pan.y);
-			panel.get_size(out pan.width, out pan.height);
-
-			// Pad our values to get some "near" behavior
-			pan.x -= pad_amount;
-			pan.width += 2 * pad_amount;
-
-			pan.y -= pad_amount;
-			pan.height += 2 * pad_amount;
-
-			return win.intersect(pan, null);
-		}
-
-		/**
-		* Check all windows against all panels for intersections
-		*
-		* An intersection is classified by a buffer zone match to allow dodging
-		* "near" windows automatically.
-		*/
-		void check_window_intersections(libxfce4windowing.Window? window) {
-			Budgie.Panel? panel = null;
-			var iter = HashTableIter<string,Budgie.Panel?>(panels);
-
-			while (iter.next(null, out panel)) {
-				// Let the panel know it has been intersected
-				if (panel.autohide != AutohidePolicy.INTELLIGENT) {
-					continue;
-				}
-				bool b = panel.intersected;
-				bool bn = this.window_intersects_panel(panel, window);
-				if (b == bn) {
-					continue;
-				}
-				panel.intersected = bn;
-			}
 		}
 
 		/**
