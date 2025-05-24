@@ -303,7 +303,7 @@ namespace Budgie {
 
 		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
-			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
 				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
 			}
