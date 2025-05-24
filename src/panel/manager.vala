@@ -241,22 +241,43 @@ namespace Budgie {
 			check_windows();
 		}
 
+		private unowned Gdk.Monitor? get_primary_monitor() {
+			Budgie.Panel? panel = null;
+
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			iter.next(null, out panel);
+
+			if (panel == null) return null;
+
+			var display = ((Gtk.Window) panel).get_display();
+			var gdk_window = ((Gtk.Widget) panel).get_window();
+
+			return display.get_monitor_at_window(gdk_window);
+		}
+
 		/**
 		* Determine if the window is on the primary screen, i.e. where the main
 		* budgie panels will show
-		* note libxfce4windowing window geometry includes scale factors
 		*/
 		bool window_on_primary(libxfce4windowing.Window? window) {
-			Gdk.Rectangle area = window.get_geometry();
-			var primary = screens.lookup(this.primary_monitor);
+			unowned Gdk.Monitor? primary_monitor = this.get_primary_monitor();
 
-			// get the geometry of the primary monitor including the scale factor
-			var scr = Gdk.Screen.get_default();
-			var dis = scr.get_display();
+			if (primary_monitor == null) {
+				debug("Primary monitor is NULL");
+				return false;
+			}
 
-			int scale = dis.get_monitor(this.primary_monitor).get_scale_factor();
-			Gdk.Rectangle calc = {primary.area.x * scale, primary.area.y * scale, primary.area.width *scale, primary.area.height * scale};
-			return area.intersect(calc, null);
+			unowned var monitors = window.get_monitors();
+
+			foreach (var monitor in monitors) {
+				unowned var gdk_monitor = monitor.get_gdk_monitor();
+
+				if (gdk_monitor == primary_monitor) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		/*
@@ -266,7 +287,6 @@ namespace Budgie {
 		* - a window fills these requirements:
 		*   - Maximized horizontally or verically
 		*   - Not minimized/iconified
-		*   - On the current active workspace
 		*/
 		public void check_windows() {
 			if (raven.get_expanded()) {
@@ -280,7 +300,6 @@ namespace Budgie {
 			windowing.windows.foreach((window) => {
 				if (window.is_skip_pager()) return;
 				if (!this.window_on_primary(window)) return;
-				if (active_workspace == null || active_workspace != null && !window.is_on_workspace(active_workspace)) return;
 				if ((window.is_maximized() && !window.is_minimized())) {
 					found = true;
 					return;
