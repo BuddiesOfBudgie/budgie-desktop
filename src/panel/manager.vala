@@ -202,7 +202,7 @@ namespace Budgie {
 		public PanelManager(bool reset) {
 			Object();
 			this.reset = reset;
-			libxfce4windowing.set_client_type(libxfce4windowing.ClientType.PAGER);
+			Xfw.set_client_type(Xfw.ClientType.PAGER);
 			windowing = new Budgie.Windowing.Windowing();
 			screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
@@ -232,7 +232,7 @@ namespace Budgie {
 		/*
 		* Callback for newly opened, not yet tracked windows
 		*/
-		private void window_opened(libxfce4windowing.Window window) {
+		private void window_opened(Xfw.Window window) {
 			window.state_changed.connect(() => {
 				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 				check_windows();
@@ -258,8 +258,9 @@ namespace Budgie {
 		/**
 		* Determine if the window is on the primary screen, i.e. where the main
 		* budgie panels will show
+		* note Xfw window geometry includes scale factors
 		*/
-		bool window_on_primary(libxfce4windowing.Window? window) {
+		bool window_on_primary(Xfw.Window? window) {
 			unowned Gdk.Monitor? primary_monitor = this.get_primary_monitor();
 
 			if (primary_monitor == null) {
@@ -295,7 +296,7 @@ namespace Budgie {
 			}
 			bool found = false;
 
-			libxfce4windowing.Workspace? active_workspace = windowing.get_active_workspace();
+			Xfw.Workspace? active_workspace = windowing.get_active_workspace();
 
 			windowing.windows.foreach((window) => {
 				if (window.is_skip_pager()) return;

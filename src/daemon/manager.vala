@@ -22,8 +22,8 @@ namespace Budgie {
 	 */
 	[SingleInstance]
 	public class WaylandClient : GLib.Object {
-		private libxfce4windowing.Screen? screen = null;
-		private unowned libxfce4windowing.Monitor? primary_monitor=null;
+		private Xfw.Screen? screen = null;
+		private unowned Xfw.Monitor? primary_monitor=null;
 
 		public bool is_initialised() { return primary_monitor != null; }
 		public unowned Gdk.Monitor gdk_monitor {get; private set; }
@@ -32,7 +32,7 @@ namespace Budgie {
 		public WaylandClient() {
 			if (primary_monitor != null) return;
 
-			screen = libxfce4windowing.Screen.get_default();
+			screen = Xfw.Screen.get_default();
 			screen.monitors_changed.connect(on_monitors_changed);
 			on_monitors_changed();
 		}

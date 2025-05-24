@@ -9,7 +9,7 @@
  * (at your option) any later version.
  */
 
-using libxfce4windowing;
+using Xfw;
 
 namespace Budgie.Windowing {
 
@@ -21,11 +21,11 @@ namespace Budgie.Windowing {
 	 * of the Budgie windowing library.
 	 */
 	public class Windowing : GLib.Object {
-		private libxfce4windowing.Screen screen;
+		private Xfw.Screen screen;
 		private WorkspaceManager workspace_manager;
-		private HashTable<libxfce4windowing.Application, WindowGroup> applications;
+		private HashTable<Xfw.Application, WindowGroup> applications;
 		private List<Window> fullscreen_windows;
-		private libxfce4windowing.Window? last_active_window;
+		private Xfw.Window? last_active_window;
 
 		private Budgie.Windowing.NotificationDispatcher dispatcher;
 
@@ -38,7 +38,7 @@ namespace Budgie.Windowing {
 		private bool previous_color_setting;
 
 		public bool has_windows { get; private set; }
-		public unowned List<libxfce4windowing.Window> windows { get { return screen.get_windows(); } }
+		public unowned List<Xfw.Window> windows { get { return screen.get_windows(); } }
 
 		/**
 		 * Emitted when the currently active window has changed.
@@ -105,7 +105,7 @@ namespace Budgie.Windowing {
 				on_dbus_get
 			);
 
-			applications = new HashTable<libxfce4windowing.Application, WindowGroup>(direct_hash, direct_equal);
+			applications = new HashTable<Xfw.Application, WindowGroup>(direct_hash, direct_equal);
 			fullscreen_windows = new List<Window>();
 
 			screen = Screen.get_default();
@@ -149,7 +149,7 @@ namespace Budgie.Windowing {
 
 			unowned var element = groups.first();
 
-			return element.data as libxfce4windowing.WorkspaceGroup;
+			return element.data as Xfw.WorkspaceGroup;
 		}
 
 		private void setup_workspace_listener() {

@@ -135,7 +135,7 @@ public class IconButton : Gtk.ToggleButton {
 	 *
 	 * Throws: if the button geometry could not be set
 	 */
-	private void set_window_button_geometry(libxfce4windowing.Window window) throws Error {
+	private void set_window_button_geometry(Xfw.Window window) throws Error {
 		int x, y;
 		var toplevel = get_toplevel();
 
@@ -162,7 +162,7 @@ public class IconButton : Gtk.ToggleButton {
 		// Nothing to do if there are no open windows
 		if (window_group == null) return Gdk.EVENT_STOP;
 
-		unowned libxfce4windowing.Window target_window = null;
+		unowned Xfw.Window target_window = null;
 
 		// Get the currently active window in the group
 		unowned var active_window = window_group?.get_active_window();
@@ -220,13 +220,13 @@ public class IconButton : Gtk.ToggleButton {
 		int width = definite_allocation.width;
 		int height = definite_allocation.height;
 
-		List<unowned libxfce4windowing.Window> windows;
+		List<unowned Xfw.Window> windows;
 
 		// Get the windows in this group, if any
 		if (window_group != null && window_group.has_windows()) {
 			windows = window_group.get_windows();
 		} else {
-			windows = new List<unowned libxfce4windowing.Window>();
+			windows = new List<unowned Xfw.Window>();
 		}
 
 		// No indicators if there are no windows
@@ -387,13 +387,13 @@ public class IconButton : Gtk.ToggleButton {
 		int width = definite_allocation.width;
 		int height = definite_allocation.height;
 
-		List<unowned libxfce4windowing.Window> windows;
+		List<unowned Xfw.Window> windows;
 
 		// Get the windows in this group, if any
 		if (window_group != null && window_group.has_windows()) {
 			windows = window_group.get_windows();
 		} else {
-			windows = new List<unowned libxfce4windowing.Window>();
+			windows = new List<unowned Xfw.Window>();
 		}
 
 		// No windows, no indicators
@@ -501,7 +501,7 @@ public class IconButton : Gtk.ToggleButton {
 		}
 	}
 
-	public bool has_window(libxfce4windowing.Window window) {
+	public bool has_window(Xfw.Window window) {
 		return window_group != null && window_group.has_window(window);
 	}
 
@@ -599,11 +599,11 @@ public class IconButton : Gtk.ToggleButton {
 			popover.add_window(window);
 
 			window.state_changed.connect((changed_mask, new_state) => {
-				if (!(libxfce4windowing.WindowState.URGENT in changed_mask)) {
+				if (!(Xfw.WindowState.URGENT in changed_mask)) {
 					return;
 				}
 
-				urgent = (new_state & libxfce4windowing.WindowState.URGENT) != 0;
+				urgent = (new_state & Xfw.WindowState.URGENT) != 0;
 
 				set_urgent(urgent);
 			});
