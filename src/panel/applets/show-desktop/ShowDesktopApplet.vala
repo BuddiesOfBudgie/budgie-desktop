@@ -18,7 +18,7 @@ public class ShowDesktopPlugin : Budgie.Plugin, Peas.ExtensionBase {
 public class ShowDesktopApplet : Budgie.Applet {
 	protected Gtk.ToggleButton widget;
 	protected Gtk.Image img;
-	private libxfce4windowing.Screen xfce_screen;
+	private Xfw.Screen xfce_screen;
 
 	public ShowDesktopApplet() {
 		widget = new Gtk.ToggleButton();
@@ -28,7 +28,7 @@ public class ShowDesktopApplet : Budgie.Applet {
 		widget.add(img);
 		widget.set_tooltip_text(_("Toggle the desktop"));
 
-		xfce_screen = libxfce4windowing.Screen.get_default();
+		xfce_screen = Xfw.Screen.get_default();
 
 		xfce_screen.window_opened.connect((window) => {
 			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
@@ -48,7 +48,7 @@ public class ShowDesktopApplet : Budgie.Applet {
 				try {
 					window.set_minimized(!showing_desktop);
 				} catch (Error e) {
-					// Note: This is intentionally set to debug instead of warning because libxfce4windowing will create noise otherwise
+					// Note: This is intentionally set to debug instead of warning because Xfw will create noise otherwise
 					// Unminimize operations can end up being noisy when they fail due to the window not yet reporting the capability to support CAN_MINIMIZE
 					// https://gitlab.xfce.org/xfce/libxfce4windowing/-/blob/main/libxfce4windowing/xfw-window-x11.c#L363
 					debug("Failed to change state of window \"%s\": %s", window.get_name(), e.message);
