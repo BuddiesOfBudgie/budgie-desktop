@@ -1026,7 +1026,7 @@ namespace Budgie {
 			if (policy != this.autohide) {
 				this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
 				this.autohide = policy;
-				this.apply_strut_policy();
+				this.update_layer_shell_props();
 				this.update_dock_behavior();
 			}
 		}
@@ -1124,18 +1124,8 @@ namespace Budgie {
 			this.queue_draw();
 		}
 
-		void apply_strut_policy() {
-			if (this.autohide != AutohidePolicy.NONE) {
-				Budgie.unset_struts(this);
-			} else {
-				Budgie.set_struts(this, position, intended_size);
-			}
-
-			this.update_layer_shell_props();
-		}
-
 		void placement() {
-			this.apply_strut_policy();
+			this.update_layer_shell_props();
 			bool horizontal = false;
 			Gtk.Allocation alloc;
 			main_layout.get_allocation(out alloc);
