@@ -15,22 +15,22 @@ namespace Budgie.Windowing {
 	 * application.
 	 */
 	public class WindowGroup : GLib.Object {
-		/** The libxfce4windowing.Application that this group belongs to. */
-		public libxfce4windowing.Application application { get; construct; }
+		/** The Xfw.Application that this group belongs to. */
+		public Xfw.Application application { get; construct; }
 
 		/** A copy of the application's ID. */
 		public string group_id { get; construct; }
 
 		public DesktopAppInfo? app_info { get; construct; default = null; }
 
-		private List<unowned libxfce4windowing.Window> windows;
-		private unowned libxfce4windowing.Window? active_window = null;
-		private unowned libxfce4windowing.Window? last_active_window = null;
+		private List<unowned Xfw.Window> windows;
+		private unowned Xfw.Window? active_window = null;
+		private unowned Xfw.Window? last_active_window = null;
 
 		/**
 		 * Emitted when the active window in the group changes.
 		 */
-		public signal void active_window_changed(libxfce4windowing.Window? window);
+		public signal void active_window_changed(Xfw.Window? window);
 
 		/**
 		 * Emitted when the icon of the application for this group changes.
@@ -40,27 +40,27 @@ namespace Budgie.Windowing {
 		/**
 		 * Emitted when the state of a window in this group changes.
 		 */
-		public signal void window_state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state);
+		public signal void window_state_changed(Xfw.Window window, Xfw.WindowState changed_mask, Xfw.WindowState new_state);
 
 		/**
 		 * Emitted when a window has been added to this group.
 		 */
-		public signal void window_added(libxfce4windowing.Window window);
+		public signal void window_added(Xfw.Window window);
 
 		/**
 		 * Emitted when a window has been removed from this group.
 		 */
-		public signal void window_removed(libxfce4windowing.Window window);
+		public signal void window_removed(Xfw.Window window);
 
 		/**
 		 * Create a new WindowGroup for an application.
 		 */
-		public WindowGroup(libxfce4windowing.Application application, DesktopAppInfo? app_info) {
+		public WindowGroup(Xfw.Application application, DesktopAppInfo? app_info) {
 			Object(application: application, group_id: application.get_class_id(), app_info: app_info);
 		}
 
 		construct {
-			windows = new List<unowned libxfce4windowing.Window>();
+			windows = new List<unowned Xfw.Window>();
 
 			application.icon_changed.connect(icon_changed);
 		}
@@ -69,14 +69,14 @@ namespace Budgie.Windowing {
 			app_icon_changed();
 		}
 
-		private void state_changed(libxfce4windowing.Window window, libxfce4windowing.WindowState changed_mask, libxfce4windowing.WindowState new_state) {
+		private void state_changed(Xfw.Window window, Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
 			window_state_changed(window, changed_mask, new_state);
 		}
 
 		/**
 		 * Adds a window to this WindowGroup.
 		 */
-		public void add_window(libxfce4windowing.Window window) {
+		public void add_window(Xfw.Window window) {
 			debug(@"adding window to group '$(application.get_name())': $(window.get_name())");
 
 			window.state_changed.connect(state_changed);
@@ -97,7 +97,7 @@ namespace Budgie.Windowing {
 		 * Removed a window from this WindowGroup, typically when the window
 		 * has been closed.
 		 */
-		public void remove_window(libxfce4windowing.Window window) {
+		public void remove_window(Xfw.Window window) {
 			debug(@"removing window from group '$(application.get_name())': $(window.get_name())");
 
 			if (active_window == window) {
@@ -130,7 +130,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: the currently active window, or NULL
 		 */
-		 public unowned libxfce4windowing.Window? get_active_window() {
+		 public unowned Xfw.Window? get_active_window() {
 			return active_window;
 		}
 
@@ -139,7 +139,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: the last active window, or NULL
 		 */
-		public unowned libxfce4windowing.Window? get_last_active_window() {
+		public unowned Xfw.Window? get_last_active_window() {
 			return last_active_window;
 		}
 
@@ -148,7 +148,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: the first opened window or null
 		 */
-		public libxfce4windowing.Window? get_first_window() {
+		public Xfw.Window? get_first_window() {
 			unowned var first = windows.first();
 			if (first == null) return null;
 			return first.data;
@@ -171,7 +171,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: The next (or technically previous, if reversed) window in the group
 		 */
-		public unowned libxfce4windowing.Window get_next_window(libxfce4windowing.Window? window, bool reverse = false) {
+		public unowned Xfw.Window get_next_window(Xfw.Window? window, bool reverse = false) {
 			// Make a copy of the window list to operate on
 			var copy = get_windows();
 
@@ -212,7 +212,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: a list of open windows
 		 */
-		public List<unowned libxfce4windowing.Window> get_windows() {
+		public List<unowned Xfw.Window> get_windows() {
 			return windows.copy();
 		}
 
@@ -221,7 +221,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: true if the window is in this window group
 		 */
-		public bool has_window(libxfce4windowing.Window? window) {
+		public bool has_window(Xfw.Window? window) {
 			if (window == null) return false;
 			return windows.find(window) != null;
 		}
@@ -232,7 +232,7 @@ namespace Budgie.Windowing {
 		 *
 		 * Returns: true if there is a window on the workspace
 		 */
-		public bool has_window_on_workspace(libxfce4windowing.Workspace workspace) {
+		public bool has_window_on_workspace(Xfw.Workspace workspace) {
 			if (windows.is_empty()) return false;
 
 			foreach (unowned var window in windows) {
@@ -259,7 +259,7 @@ namespace Budgie.Windowing {
 		/**
 		 * Set the currently active window.
 		 */
-		public void set_active_window(libxfce4windowing.Window? window) {
+		public void set_active_window(Xfw.Window? window) {
 			active_window = window;
 
 			active_window_changed(window);
@@ -268,7 +268,7 @@ namespace Budgie.Windowing {
 		/**
 		 * Set the previously active window.
 		 */
-		public void set_last_active_window(libxfce4windowing.Window? window) {
+		public void set_last_active_window(Xfw.Window? window) {
 			last_active_window = window;
 		}
 	}
