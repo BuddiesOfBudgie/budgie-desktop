@@ -149,8 +149,8 @@ public class ButtonPopover : Gtk.Popover {
 	}
 
 	private void on_pin_clicked() {
-		pinned = !pinned;
 		hide();
+		pinned = !pinned;
 	}
 
 	private void on_new_instance_clicked() {
