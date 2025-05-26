@@ -116,6 +116,66 @@ namespace Budgie {
 
 			wm_settings.changed.connect(this.on_wm_settings_changed);
 			this.on_wm_settings_changed("button-style");
+
+			gnome_desktop_settings.changed.connect(this.on_gnome_desktop_settings_changed);
+			this.on_gnome_desktop_settings_changed("gtk-theme");
+		}
+
+		/**
+		* sync gnome-desktop settings to the local settings.ini file; this ensures
+		  apps such
+		*/
+		private void on_gnome_desktop_settings_changed(string key) {
+			string[] keys = {
+				"gtk-theme",
+				"icon-theme",
+				"cursor-theme",
+				"cursor-size"
+			};
+			if (!(key in keys)) return;
+
+			string config_dir = Environment.get_home_dir() + "/.config/gtk-3.0";
+			string settings_file = config_dir + "/settings.ini";
+			KeyFile keyfile = new KeyFile();
+
+			// Make sure the settings file exists
+			if (FileUtils.test(settings_file, FileTest.EXISTS)) {
+				try {
+					keyfile.load_from_file(settings_file, KeyFileFlags.NONE);
+				} catch (Error e) {
+					warning("Failed to load_from_file: %s", e.message);
+					return;
+				}
+			}
+
+			// Section is always 'Settings'
+			string section = "Settings";
+
+			string theme = gnome_desktop_settings.get_string("gtk-theme");
+			if (theme != null && theme != "") {
+				keyfile.set_string(section, "gtk-theme-name", theme);
+			}
+			string icon_theme = gnome_desktop_settings.get_string("icon-theme");
+			if (icon_theme != null && icon_theme != "") {
+				keyfile.set_string(section, "gtk-icon-theme-name", icon_theme);
+			}
+			string cursor_theme = gnome_desktop_settings.get_string("cursor-theme");
+			if (cursor_theme != null && cursor_theme != "") {
+				keyfile.set_string(section, "gtk-cursor-theme-name", cursor_theme);
+			}
+			string cursor_size = gnome_desktop_settings.get_int("cursor-size").to_string();
+			if (cursor_size != null && cursor_size != "") {
+				keyfile.set_string(section, "gtk-cursor-theme-size", cursor_size);
+			}
+
+			// Save changes
+			try {
+				// Ensure directory exists
+				DirUtils.create_with_parents(config_dir, 0700);
+				keyfile.save_to_file(settings_file);
+			} catch (Error e) {
+				warning("Failed to save settings.ini: %s\n", e.message);
+			}
 		}
 
 		/**
