@@ -152,21 +152,16 @@ namespace Budgie {
 			string section = "Settings";
 
 			string theme = gnome_desktop_settings.get_string("gtk-theme");
-			if (theme != null && theme != "") {
-				keyfile.set_string(section, "gtk-theme-name", theme);
-			}
+			keyfile.set_string(section, "gtk-theme-name", theme);
+
 			string icon_theme = gnome_desktop_settings.get_string("icon-theme");
-			if (icon_theme != null && icon_theme != "") {
-				keyfile.set_string(section, "gtk-icon-theme-name", icon_theme);
-			}
+			keyfile.set_string(section, "gtk-icon-theme-name", icon_theme);
+
 			string cursor_theme = gnome_desktop_settings.get_string("cursor-theme");
-			if (cursor_theme != null && cursor_theme != "") {
-				keyfile.set_string(section, "gtk-cursor-theme-name", cursor_theme);
-			}
-			string cursor_size = gnome_desktop_settings.get_int("cursor-size").to_string();
-			if (cursor_size != null && cursor_size != "") {
-				keyfile.set_string(section, "gtk-cursor-theme-size", cursor_size);
-			}
+			keyfile.set_string(section, "gtk-cursor-theme-name", cursor_theme);
+
+			int cursor_size = gnome_desktop_settings.get_int("cursor-size");
+			keyfile.set_string(section, "gtk-cursor-theme-size", cursor_size.to_string());
 
 			// Save changes
 			try {
