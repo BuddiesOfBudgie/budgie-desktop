@@ -262,7 +262,7 @@
 		<keybind bridge="wm.keybindings/unmaximize" key="W-Down">
 			<action name="UnMaximize" direction="both" />
 		</keybind>
-		<keybind bridge="wm.keybindings/toggle-fullscreen" key="undefined">
+		<keybind bridge="wm.keybindings/toggle-fullscreen" key="A-F11">
 			<action name="ToggleFullscreen" />
 		</keybind>
 		<keybind bridge="wm.keybindings/toggle-maximized" key="A-F10">
