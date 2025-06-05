@@ -467,6 +467,7 @@ class Bridge:
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "button-layout")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "num-workspaces")
         self.desktop_interface_changed(self.desktop_interface_settings, "gtk-theme")
+        self.desktop_interface_changed(self.desktop_interface_settings, "icon-theme")
         self.desktop_interface_changed(self.desktop_interface_settings, "cursor-theme")
         self.desktop_interface_changed(self.desktop_interface_settings, "cursor-size")
         self.panel_settings_changed(self.panel_settings, "notification-position")
@@ -652,9 +653,12 @@ class Bridge:
 
     # all gnome desktop interface gsettings changes are managed
     def desktop_interface_changed(self, settings, key):
+        search = ""
         match key:
             case "gtk-theme":
-                pass
+                search = "./theme/name"
+            case "icon-theme":
+                search = "./theme/icon"
             case "cursor-size":
                 self.cursor_changed(settings, key)
                 return
@@ -667,7 +671,7 @@ class Bridge:
         interface = settings[key]
         root = self.et.getroot()
 
-        bridge = root.find("./theme/name")
+        bridge = root.find(search)
         if bridge == None:
             return
 
