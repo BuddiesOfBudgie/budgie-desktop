@@ -295,6 +295,7 @@
 		<titlebar>
 			<layout>:iconify,max,close:</layout>
 		</titlebar>
+		<icon>icon_name</icon>
 	</theme>
 	<windowRules>
 		<windowRule identifier="Nemo-desktop" title="Desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
