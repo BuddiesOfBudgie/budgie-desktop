@@ -21,15 +21,15 @@ install_data(
 
 install_data(
     'rc.xml',
-    install_dir: join_paths(datadir, 'budgie-desktop')
+    install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
 )
 
 install_data(
     'environment',
-    install_dir: join_paths(datadir, 'budgie-desktop')
+    install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
 )
 
 install_data(
     'menu.xml',
-    install_dir: join_paths(datadir, 'budgie-desktop')
+    install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
 )

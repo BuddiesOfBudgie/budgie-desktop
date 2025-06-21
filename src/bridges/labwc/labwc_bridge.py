@@ -59,7 +59,7 @@ class Bridge:
             mainloop=quit()
 
     def user_config(self, config_file="rc.xml"):
-        return os.path.join(GLib.get_user_config_dir(), "labwc", config_file)
+        return os.path.join(GLib.get_user_config_dir(), "budgie-desktop", "labwc", config_file)
 
     # writes the labwc rc.xml file back
     def write_config(self):
@@ -101,30 +101,8 @@ class Bridge:
         self.log = logging.getLogger('labwc_bridge')
         self.log.addHandler(JournalHandler())
 
-        path,search_path = self.search_for_config("environment")
-        if path == None:
-            return
-
-        try:
-            if path != search_path[0]:
-                folder = self.user_config("")
-                os.makedirs(folder, exist_ok=True)
-                shutil.copy(path, search_path[0])
-        except Exception as e:
-            self.log.critical("Failed to copy " + path + " to " + search_path[0])
-            self.log.critical(e)
-            return
-
         path, search_path = self.search_for_config("menu.xml")
         if path == None:
-            return
-
-        try:
-            if path != search_path[0]:
-                shutil.copy(path, search_path[0])
-        except Exception as e:
-            self.log.critical("Failed to copy " + path + " to " + search_path[0])
-            self.log.critical(e)
             return
 
         try:
