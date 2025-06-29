@@ -279,6 +279,7 @@ private class UsageMonitorRow {
 		label.set_markup(name);
 
 		bar = new Gtk.LevelBar();
+		bar.name="usagemonitorlevel";
 		bar.add_offset_value("full", 0.8);
 		bar.add_offset_value("high", 0.9);
 		bar.add_offset_value("low", 1.0);
@@ -288,6 +289,23 @@ private class UsageMonitorRow {
 		bar.margin_bottom = 6;
 		bar.hexpand = true;
 		bar.set_size_request(-1, 10);
+
+		try {
+			// alot of themes set the min-width for a level-bar - which isn't great since it
+			// limits the granularity - rather than asking each individual theme to change lets
+			// override a themes wishes in this very specific use-case
+			var css = new Gtk.CssProvider ();
+			css.load_from_data ("""
+				levelbar#usagemonitorlevel trough block {min-width: 0px; }
+			""");
+			Gtk.StyleContext.add_provider_for_screen (
+				Gdk.Screen.get_default (),
+				css,
+				Gtk.STYLE_PROVIDER_PRIORITY_USER
+			);
+		} catch (Error e) {
+			warning("Could not load levelbar CSS %s", e.message);
+		}
 
 		percentage = new Gtk.Label(null);
 		percentage.xalign = 1.0f;
