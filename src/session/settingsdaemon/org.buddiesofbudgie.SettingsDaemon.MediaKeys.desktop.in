@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie Desktop keyboard shortcuts
+Exec=@gsd_libexecdir@/gsd-media-keys
+OnlyShowIn=Budgie;
+NoDisplay=true
+X-GNOME-Autostart-Phase=Initialization
+X-GNOME-Autostart-Notify=true
+X-GNOME-AutoRestart=true
+X-GNOME-HiddenUnderSystemd=true
+
