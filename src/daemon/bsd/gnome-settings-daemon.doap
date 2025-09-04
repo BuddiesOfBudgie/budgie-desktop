@@ -1,0 +1,40 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <name xml:lang="en">gnome-settings-daemon</name>
+  <shortdesc xml:lang="en">GNOME Settings Daemon</shortdesc>
+  <description xml:lang="en">The GNOME Settings Daemon is responsible for setting various parameters of a
+GNOME Session and the applications that run under it.</description>
+  <homepage rdf:resource="https://www.gnome.org/" />
+  <developer-forum rdf:resource="https://discourse.gnome.org/c/platform/5" />
+  <download-page rdf:resource="https://download.gnome.org/sources/gnome-settings-daemon/" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gnome-settings-daemon/issues/" />
+
+  <category rdf:resource="http://api.gnome.org/doap-extensions#core" />
+  <programming-language>C</programming-language>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Carlos Garnacho</foaf:name>
+      <foaf:mbox rdf:resource="mailto:carlosg@gnome.org" />
+      <gnome:userid>carlosg</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Benjamin Berg</foaf:name>
+      <foaf:mbox rdf:resource="mailto:bberg@gnome.org" />
+      <gnome:userid>bberg</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <author>
+    <foaf:Person>
+      <foaf:name>Bastien Nocera</foaf:name>
+      <foaf:mbox rdf:resource="mailto:hadess@hadess.net" />
+      <gnome:userid>hadess</gnome:userid>
+    </foaf:Person>
+  </author>
+</Project>

@@ -1,0 +1,536 @@
+<!DOCTYPE node PUBLIC
+'-//freedesktop//DTD D-BUS Object Introspection 1.0//EN'
+'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
+<node>
+  <!--
+      org.gnome.Mutter.DisplayConfig:
+      @short_description: display configuration interface
+
+      This interface is used by mutter and gnome-settings-daemon
+      to apply multiple monitor configuration.
+  -->
+
+  <interface name="org.gnome.Mutter.DisplayConfig">
+
+    <!--
+        GetResources:
+	@serial: configuration serial
+	@crtcs: available CRTCs
+	@outputs: available outputs
+	@modes: available modes
+	@max_screen_width:
+	@max_screen_height:
+
+        Retrieves the current layout of the hardware.
+
+        @serial is an unique identifier representing the current state
+        of the screen. It must be passed back to ApplyConfiguration()
+	and will be increased for every configuration change (so that
+	mutter can detect that the new configuration is based on old
+	state).
+
+	A CRTC (CRT controller) is a logical monitor, ie a portion
+	of the compositor coordinate space. It might correspond
+	to multiple monitors, when in clone mode, but not that
+	it is possible to implement clone mode also by setting different
+	CRTCs to the same coordinates.
+
+	The number of CRTCs represent the maximum number of monitors
+	that can be set to expand and it is a HW constraint; if more
+	monitors are connected,	then necessarily some will clone. This
+	is complementary to the concept of the encoder (not exposed in
+	the API), which groups outputs that necessarily will show the
+	same image (again a HW constraint).
+
+	A CRTC is represented by a DBus structure with the following
+	layout:
+	* u ID: the ID in the API of this CRTC
+	* x winsys_id: the low-level ID of this CRTC (which might
+	               be a XID, a KMS handle or something entirely
+		       different)
+	* i x, y, width, height: the geometry of this CRTC
+	                         (might be invalid if the CRTC is not in
+				 use)
+	* i current_mode: the current mode of the CRTC, or -1 if this
+	                  CRTC is not used
+			  Note: the size of the mode will always correspond
+			  to the width and height of the CRTC
+	* u current_transform: the current transform (espressed according
+	                       to the wayland protocol)
+	* au transforms: all possible transforms
+	* a{sv} properties: other high-level properties that affect this
+	                    CRTC; they are not necessarily reflected in
+			    the hardware.
+			    No property is specified in this version of the API.
+
+        Note: all geometry information refers to the untransformed
+	display.
+
+	An output represents a physical screen, connected somewhere to
+	the computer. Floating connectors are not exposed in the API.
+	An output is a DBus struct with the following fields:
+	* u ID: the ID in the API
+	* x winsys_id: the low-level ID of this output (XID or KMS handle)
+	* i current_crtc: the CRTC that is currently driving this output,
+	                  or -1 if the output is disabled
+	* au possible_crtcs: all CRTCs that can control this output
+	* s name: the name of the connector to which the output is attached
+	          (like VGA1 or HDMI)
+	* au modes: valid modes for this output
+	* au clones: valid clones for this output, ie other outputs that
+	             can be assigned the same CRTC as this one; if you
+	             want to mirror two outputs that don't have each other
+	             in the clone list, you must configure two different
+	             CRTCs for the same geometry
+	* a{sv} properties: other high-level properties that affect this
+	                    output; they are not necessarily reflected in
+			    the hardware.
+			    Known properties:
+                            - "vendor" (s): (readonly) the human readable name
+                                            of the manufacturer
+                            - "product" (s): (readonly) the human readable name
+                                             of the display model
+                            - "serial" (s): (readonly) the serial number of this
+                                            particular hardware part
+			    - "display-name" (s): (readonly) a human readable name
+			                          of this output, to be shown in the UI
+	                    - "backlight" (i): (readonly, use the specific interface)
+                                               the backlight value as a percentage
+                                               (-1 if not supported)
+			    - "primary" (b): whether this output is primary
+			                     or not
+			    - "presentation" (b): whether this output is
+			                          for presentation only
+			    Note: properties might be ignored if not consistently
+			    applied to all outputs in the same clone group. In
+			    general, it's expected that presentation or primary
+			    outputs will not be cloned.
+
+        A mode represents a set of parameters that are applied to
+	each output, such as resolution and refresh rate. It is a separate
+	object so that it can be referenced by CRTCs and outputs.
+	Multiple outputs in the same CRTCs must all have the same mode.
+	A mode is exposed as:
+	* u ID: the ID in the API
+	* x winsys_id: the low-level ID of this mode
+	* u width, height: the resolution
+	* d frequency: refresh rate
+        * u flags: mode flags as defined in xf86drmMode.h and randr.h
+
+        Output and modes are read-only objects (except for output properties),
+	they can change only in accordance to HW changes (such as hotplugging
+	a monitor), while CRTCs can be changed with ApplyConfiguration().
+
+        XXX: actually, if you insist enough, you can add new modes
+	through xrandr command line or the KMS API, overriding what the
+	kernel driver and the EDID say.
+	Usually, it only matters with old cards with broken drivers, or
+	old monitors with broken EDIDs, but it happens more often with
+	projectors (if for example the kernel driver doesn't add the
+	640x480 - 800x600 - 1024x768 default modes). Probably something
+	that we need to handle in mutter anyway.
+    -->
+    <method name="GetResources">
+      <arg name="serial" direction="out" type="u" />
+      <arg name="crtcs" direction="out" type="a(uxiiiiiuaua{sv})" />
+      <arg name="outputs" direction="out" type="a(uxiausauaua{sv})" />
+      <arg name="modes" direction="out" type="a(uxuudu)" />
+      <arg name="max_screen_width" direction="out" type="i" />
+      <arg name="max_screen_height" direction="out" type="i" />
+    </method>
+
+    <!--
+        ApplyConfiguration:
+	@serial: configuration serial
+	@persistent: whether this configuration should be saved on disk
+	@crtcs: new data for CRTCs
+	@outputs: new data for outputs
+
+	Applies the requested configuration changes.
+
+	@serial must match the serial from the last GetResources() call,
+	or org.freedesktop.DBus.AccessDenied will be generated.
+
+	If @persistent is true, mutter will attempt to replicate this
+	configuration the next time this HW layout appears.
+
+	@crtcs represents the new logical configuration, as a list
+	of structures containing:
+	- u ID: the API ID from the corresponding GetResources() call
+	- i new_mode: the API ID of the new mode to configure the CRTC
+	              with, or -1 if the CRTC should be disabled
+        - i x, y: the new coordinates of the top left corner
+	          the geometry will be completed with the size information
+		  from @new_mode
+        - u transform: the desired transform
+	- au outputs: the API ID of outputs that should be assigned to
+	              this CRTC
+        - a{sv} properties: properties whose value should be changed
+
+	Note: CRTCs not referenced in the array will be	disabled.
+
+	@outputs represent the output property changes as:
+	- u ID: the API ID of the output to change
+	- a{sv} properties: properties whose value should be changed
+
+	Note: both for CRTCs and outputs, properties not included in
+	the dictionary will not be changed.
+
+	Note: unrecognized properties will have no effect, but if the
+	configuration change succeeds the property will be reported
+	by the next GetResources() call, and if @persistent is true,
+	it will also be saved to disk.
+
+	If the configuration is invalid according to the previous
+	GetResources() call, for example because a CRTC references
+	an output it cannot drive, or not all outputs support the
+	chosen mode, the error org.freedesktop.DBus.InvalidArgs will
+	be generated.
+
+	If the configuration cannot be applied for any other reason
+	(eg. the screen size would exceed texture limits), the error
+	org.freedesktop.DBus.Error.LimitsExceeded will be generated.
+    -->
+    <method name="ApplyConfiguration">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="persistent" direction="in" type="b" />
+      <arg name="crtcs" direction="in" type="a(uiiiuaua{sv})" />
+      <arg name="outputs" direction="in" type="a(ua{sv})" />
+    </method>
+
+    <!--
+        ChangeBacklight:
+	@serial: configuration serial
+	@output: the API id of the output
+	@value: the new backlight value
+
+	Changes the backlight of @output to @value, which is
+	expressed as a percentage and rounded to the HW limits.
+
+        Returns the new value after rounding.
+    -->
+    <method name="ChangeBacklight">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="output" direction="in" type="u" />
+      <arg name="value" direction="in" type="i" />
+      <arg name="new_value" direction="out" type="i" />
+    </method>
+
+    <!--
+	SetBacklight:
+	@serial: configuration serial
+	@connector: the connector name
+	@value: the new backlight value
+
+	Changes the backlight of @output to @value.
+    -->
+    <method name="SetBacklight">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="connector" direction="in" type="s" />
+      <arg name="value" direction="in" type="i" />
+    </method>
+
+    <!--
+	Backlight:
+
+	A set of backlights. Each backlight is a dictionary with the following
+	entries. If an entry is only a connector, it means there is no way to
+	control it via this D-Bus interface.
+
+	  * 'connector' (s) - An associated monitor connector
+	  * 'active' (s) - True if the monitor is active
+	  * 'min_step' (i) - Minimum step amount (optional)
+	  * 'value' (i) - Current value (optional)
+
+	The initial 'u' is a serial number used when setting the backlight.
+    -->
+    <property name="Backlight" type="(uaa{sv})" access="read" />
+
+    <!--
+        GetCrtcGamma:
+	@serial: configuration serial
+	@crtc: API id of the crtc
+	@red: red gamma ramp
+	@green: green gamma ramp
+	@blue: blue gamma ramp
+
+	Requests the current gamma ramps of @crtc.
+    -->
+    <method name="GetCrtcGamma">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="crtc" direction="in" type="u" />
+      <arg name="red" direction="out" type="aq" />
+      <arg name="green" direction="out" type="aq" />
+      <arg name="blue" direction="out" type="aq" />
+    </method>
+
+    <!--
+        SetCrtcGamma:
+	@serial: configuration serial
+	@crtc: API id of the crtc
+	@red: red gamma ramp
+	@green: green gamma ramp
+	@blue: blue gamma ramp
+
+	Changes the gamma ramps of @crtc.
+    -->
+    <method name="SetCrtcGamma">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="crtc" direction="in" type="u" />
+      <arg name="red" direction="in" type="aq" />
+      <arg name="green" direction="in" type="aq" />
+      <arg name="blue" direction="in" type="aq" />
+    </method>
+
+    <!--
+        PowerSaveMode:
+
+	Contains the current power saving mode for the screen, and
+	allows changing it.
+
+        Possible values:
+	- 0: on
+	- 1: standby
+	- 2: suspend
+	- 3: off
+	- -1: unknown (unsupported)
+
+        A client should not attempt to change the powersave mode
+	from -1 (unknown) to any other value, and viceversa.
+	Note that the actual effects of the different values
+	depend on the hardware and the kernel driver in use, and
+	it's perfectly possible that all values different than on
+	have the same effect.
+	Also, setting the PowerSaveMode to 3 (off) may or may
+	not have the same effect as disabling all outputs by
+	setting no CRTC on them with ApplyConfiguration(), and
+	may or may not cause a configuration change.
+
+        Also note that this property might become out of date
+	if changed through different means (for example using the
+	XRandR interface directly).
+    -->
+    <property name="PowerSaveMode" type="i" access="readwrite" />
+
+    <!--
+        PanelOrientationManaged:
+
+        Whether the built-in panel orientation is automatically managed
+        by mutter.
+    -->
+    <property name="PanelOrientationManaged" type="b" access="read" />
+
+    <!--
+        ApplyMonitorsConfigAllowed:
+
+        Whether calling the ApplyMonitorsConfig method is allowed.
+    -->
+    <property name="ApplyMonitorsConfigAllowed" type="b" access="read" />
+
+    <!--
+        NightLightSupported:
+
+        Whether night light is supported by this system.
+    -->
+    <property name="NightLightSupported" type="b" access="read" />
+
+    <!--
+        MonitorsChanged:
+
+	The signal is emitted every time the screen configuration
+	changes.
+	The client should then call GetResources() to read the new layout.
+    -->
+    <signal name="MonitorsChanged" />
+
+    <!--
+	GetCurrentState:
+	@serial: configuration serial
+	@monitors: available monitors
+	@logical_monitors: current logical monitor configuration
+	@properties: display configuration properties
+
+	@monitors represent connected physical monitors
+
+	* s connector: connector name (e.g. HDMI-1, DP-1, etc)
+	* s vendor: vendor name
+	* s product: product name
+	* s serial: product serial
+	* a(siiddada{sv}) modes: available modes
+	    * s id: mode ID
+	    * i width: width in physical pixels
+	    * i height: height in physical pixels
+	    * d refresh rate: refresh rate
+	    * d preferred scale: scale preferred as per calculations
+	    * ad supported scales: scales supported by this mode
+	    * a{sv} properties: optional properties, including:
+	       - "is-current" (b): the mode is currently active mode
+	       - "is-preferred" (b): the mode is the preferred mode
+	       - "is-interlaced" (b): the mode is an interlaced mode
+	       - "refresh-rate-mode" (s): the refresh rate mode, either
+					  "variable" or "fixed" (absence
+					  of this means "fixed")
+	* a{sv} properties: optional properties, including:
+	    - "width-mm" (i): physical width of monitor in millimeters
+	    - "height-mm" (i): physical height of monitor in millimeters
+	    - "is-underscanning" (b): whether underscanning is enabled
+				      (absence of this means underscanning
+				      not being supported)
+	    - "max-screen-size" (ii): the maximum size a screen may have
+				      (absence of this means unlimited screen
+				      size)
+	    - "is-builtin" (b): whether the monitor is built in, e.g. a
+				laptop panel (absence of this means it is
+				not built in)
+	    - "display-name" (s): a human readable display name of the monitor
+	    - "privacy-screen-state" (bb): the state of the privacy screen
+				     (absence of this means it is not being
+				     supported) first value indicates whether
+				     it's enabled and second value whether it's
+				     hardware locked (and so can't be changed
+				     via gsettings)
+	    - "min-refresh-rate" (i): minimum refresh rate of monitor when
+	                              Variable Refresh Rate is active (absence
+	                              of this means unknown)
+
+        Possible mode flags:
+	  1 : preferred mode
+	  2 : current mode
+
+
+	@logical_monitors represent current logical monitor configuration
+
+	* i x: x position
+	* i y: y position
+	* d scale: scale
+	* u transform: transform (see below)
+	* b primary: true if this is the primary logical monitor
+	* a(sss) monitors: monitors displaying this logical monitor
+	    * connector: name of the connector (e.g. DP-1, eDP-1 etc)
+	    * vendor: vendor name
+	    * product: product name
+	    * serial: product serial
+	* a{sv} properties: possibly other properties
+
+	Posisble transform values:
+	  0: normal
+	  1: 90°
+	  2: 180°
+	  3: 270°
+	  4: flipped
+	  5: 90° flipped
+	  6: 180° flipped
+	  7: 270° flipped
+
+
+	@layout_mode current layout mode represents the way logical monitors
+	are laid out on the screen. Possible modes include:
+
+	  1 : logical
+	  2 : physical
+
+	With physical layout mode, each logical monitor has the same dimensions
+	as the monitor modes of the associated monitors assigned to it, no
+	matter what scale is in use.
+
+	With logical mode, the dimension of a logical monitor is the dimension
+	of the monitor mode, divided by the logical monitor scale.
+
+
+	Possible @properties are:
+
+	* "layout-mode" (u): Represents in what way logical monitors are laid
+			     out on the screen. The layout mode can be either
+			     of the ones listed below. Absence of this property
+			     means the layout mode cannot be changed, and that
+			     "logical" mode is assumed to be used.
+	    * 1 : logical  - the dimension of a logical monitor is derived from
+			     the monitor modes associated with it, then scaled
+			     using the logical monitor scale.
+	    * 2 : physical - the dimension of a logical monitor is derived from
+			     the monitor modes associated with it.
+	* "supports-changing-layout-mode" (b): True if the layout mode can be
+					       changed. Absence of this means the
+					       layout mode cannot be changed.
+	* "global-scale-required" (b): True if all the logical monitors must
+				       always use the same scale. Absence of
+				       this means logical monitor scales can
+				       differ.
+	* "legacy-ui-scaling-factor" (i): The legacy scaling factor traditionally
+				          used to scale X11 clients (commonly
+					  communicated via the
+					  Gdk/WindowScalingFactor XSetting entry).
+    -->
+    <method name="GetCurrentState">
+      <arg name="serial" direction="out" type="u" />
+      <arg name="monitors" direction="out" type="a((ssss)a(siiddada{sv})a{sv})" />
+      <arg name="logical_monitors" direction="out" type="a(iiduba(ssss)a{sv})" />
+      <arg name="properties" direction="out" type="a{sv}" />
+    </method>
+
+    <!--
+	ApplyMonitorsConfig:
+	@serial: configuration serial
+	@method: configuration method
+	@logical_monitors: monitors configuration
+	@properties: properties
+
+	@method represents the way the configuration should be handled.
+
+	Possible methods:
+	  0: verify
+	  1: temporary
+	  2: persistent
+
+	@logical_monitors consists of a list of logical monitor configurations.
+	Each logical monitor configuration consists of:
+
+	* i: layout x position
+	* i: layout y position
+	* d: scale
+	* u: transform (see GetCurrentState)
+	* b primary: true if this is the primary logical monitor
+	* a(ssa{sv}): a list of monitors, each consisting of:
+	    * s: connector
+	    * s: monitor mode ID
+	    * a{sv}: monitor properties, including:
+	        - "enable_underscanning" (b): enable monitor underscanning;
+					      may only be set when underscanning
+					      is supported (see GetCurrentState).
+
+	@properties may effect the global monitor configuration state. Possible
+	properties are:
+
+	* "layout-mode" (u): layout mode the passed configuration is in; may
+			     only be set when changing the layout mode is
+			     supported (see GetCurrentState).
+    -->
+    <method name="ApplyMonitorsConfig">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="method" direction="in" type="u" />
+      <arg name="logical_monitors" direction="in" type="a(iiduba(ssa{sv}))" />
+      <arg name="properties" direction="in" type="a{sv}" />
+    </method>
+
+    <!--
+        SetOutputCTM:
+        @serial: configuration serial
+        @output: API id of the output
+        @ctm: 3x3 matrix in fixed-point sign-magnitude S31.32
+
+        Changes the color transform matrix of @output
+    -->
+    <method name="SetOutputCTM">
+      <arg name="serial" direction="in" type="u" />
+      <arg name="output" direction="in" type="u" />
+      <arg name="ctm" direction="in" type="(ttttttttt)" />
+    </method>
+
+    <!--
+	HasExternalmonitor:
+
+        True if there is an external monitor connected and activated.
+    -->
+    <property name="HasExternalMonitor" type="b" access="read" />
+  </interface>
+</node>

@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="org.buddiesofbudgie.settings-daemon.plugins.media-keys.deprecated">
+    <key name="calculator" type="s">
+      <default>'XF86Calculator'</default>
+      <summary>Launch calculator</summary>
+      <description>Binding to launch the calculator.</description>
+    </key>
+    <key name="control-center" type="s">
+      <default>'XF86Tools'</default>
+      <summary>Launch settings</summary>
+      <description>Binding to launch GNOME Settings.</description>
+    </key>
+    <key name="email" type="s">
+      <default>'XF86Mail'</default>
+      <summary>Launch email client</summary>
+      <description>Binding to launch the email client.</description>
+    </key>
+    <key name="eject" type="s">
+      <default>'XF86Eject'</default>
+      <summary>Eject</summary>
+      <description>Binding to eject an optical disc.</description>
+    </key>
+    <key name="help" type="s">
+      <default>''</default>
+      <summary>Launch help browser</summary>
+      <description>Binding to launch the help browser.</description>
+    </key>
+    <key name="home" type="s">
+      <default>'XF86Explorer'</default>
+      <summary>Home folder</summary>
+      <description>Binding to open the Home folder.</description>
+    </key>
+    <key name="media" type="s">
+      <default>'XF86AudioMedia'</default>
+      <summary>Launch media player</summary>
+      <description>Binding to launch the media player.</description>
+    </key>
+    <key name="next" type="s">
+      <default>'XF86AudioNext'</default>
+      <summary>Next track</summary>
+      <description>Binding to skip to next track.</description>
+    </key>
+    <key name="pause" type="s">
+      <default>'XF86AudioPause'</default>
+      <summary>Pause playback</summary>
+      <description>Binding to pause playback.</description>
+    </key>
+    <key name="play" type="s">
+      <default>'XF86AudioPlay'</default>
+      <summary>Play (or play/pause)</summary>
+      <description>Binding to start playback (or toggle play/pause).</description>
+    </key>
+    <key name="logout" type="s">
+      <default>'&lt;Control&gt;&lt;Alt&gt;Delete'</default>
+      <summary>Log out</summary>
+      <description>Binding to log out.</description>
+    </key>
+    <key name="previous" type="s">
+      <default>'XF86AudioPrev'</default>
+      <summary>Previous track</summary>
+      <description>Binding to skip to previous track.</description>
+    </key>
+    <key name="screensaver" type="s">
+      <default>'&lt;Super&gt;l'</default>
+      <summary>Lock screen</summary>
+      <description>Binding to lock the screen.</description>
+    </key>
+    <key name="search" type="s">
+      <default>'XF86Search'</default>
+      <summary>Search</summary>
+      <description>Binding to launch the search tool.</description>
+    </key>
+    <key name="stop" type="s">
+      <default>'XF86AudioStop'</default>
+      <summary>Stop playback</summary>
+      <description>Binding to stop playback.</description>
+    </key>
+    <key name="volume-down" type="s">
+      <default>'XF86AudioLowerVolume'</default>
+      <summary>Volume down</summary>
+      <description>Binding to lower the volume.</description>
+    </key>
+    <key name="volume-mute" type="s">
+      <default>'XF86AudioMute'</default>
+      <summary>Volume mute/unmute</summary>
+      <description>Binding to mute/unmute the volume.</description>
+    </key>
+    <key name="volume-up" type="s">
+      <default>'XF86AudioRaiseVolume'</default>
+      <summary>Volume up</summary>
+      <description>Binding to raise the volume.</description>
+    </key>
+    <key name="mic-mute" type="s">
+      <default>'XF86AudioMicMute'</default>
+      <summary>Microphone mute/unmute</summary>
+      <description>Binding to mute/unmute the microphone.</description>
+    </key>
+    <key name="terminal" type="s">
+      <default>'&lt;Primary&gt;&lt;Alt&gt;t'</default>
+      <summary>Launch terminal</summary>
+      <description>Binding to launch the terminal.</description>
+    </key>
+    <key name="www" type="s">
+      <default>'XF86WWW'</default>
+      <summary>Launch web browser</summary>
+      <description>Binding to launch the web browser.</description>
+    </key>
+    <key name="magnifier" type="s">
+      <default>'&lt;Alt&gt;&lt;Super&gt;8'</default>
+      <summary>Toggle magnifier</summary>
+      <description>Binding to show the screen magnifier</description>
+    </key>
+    <key name="screenreader" type="s">
+      <default>'&lt;Alt&gt;&lt;Super&gt;s'</default>
+      <summary>Toggle screen reader</summary>
+      <description>Binding to start the screen reader</description>
+    </key>
+    <key name="on-screen-keyboard" type="s">
+      <default>''</default>
+      <summary>Toggle on-screen keyboard</summary>
+      <description>Binding to show the on-screen keyboard</description>
+    </key>
+    <key name="increase-text-size" type="s">
+      <default>''</default>
+      <summary>Increase text size</summary>
+      <description>Binding to increase the text size</description>
+    </key>
+    <key name="decrease-text-size" type="s">
+      <default>''</default>
+      <summary>Decrease text size</summary>
+      <description>Binding to decrease the text size</description>
+    </key>
+    <key name="toggle-contrast" type="s">
+      <default>''</default>
+      <summary>Toggle contrast</summary>
+      <description>Binding to toggle the interface contrast</description>
+    </key>
+    <key name="magnifier-zoom-in" type="s">
+      <default>'&lt;Alt&gt;&lt;Super&gt;equal'</default>
+      <summary>Magnifier zoom in</summary>
+      <description>Binding for the magnifier to zoom in</description>
+    </key>
+    <key name="magnifier-zoom-out" type="s">
+      <default>'&lt;Alt&gt;&lt;Super&gt;minus'</default>
+      <summary>Magnifier zoom out</summary>
+      <description>Binding for the magnifier to zoom out</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="org.buddiesofbudgie.settings-daemon.plugins.media-keys" path="/org/buddiesofbudgie/settings-daemon/plugins/media-keys/">
+    <key name="custom-keybindings" type="as">
+      <default>[]</default>
+      <summary>Custom keybindings</summary>
+      <description>List of custom keybindings</description>
+    </key>
+    <key name="calculator" type="as">
+      <default>['']</default>
+      <summary>Launch calculator</summary>
+      <description>Binding to launch the calculator.</description>
+    </key>
+    <key name="control-center" type="as">
+      <default>['']</default>
+      <summary>Launch settings</summary>
+      <description>Binding to launch GNOME Settings.</description>
+    </key>
+    <key name="email" type="as">
+      <default>['']</default>
+      <summary>Launch email client</summary>
+      <description>Binding to launch the email client.</description>
+    </key>
+    <key name="eject" type="as">
+      <default>['']</default>
+      <summary>Eject</summary>
+      <description>Binding to eject an optical disc.</description>
+    </key>
+    <key name="help" type="as">
+      <default>['', '&lt;Super&gt;F1']</default>
+      <summary>Launch help browser</summary>
+      <description>Binding to launch the help browser.</description>
+    </key>
+    <key name="home" type="as">
+      <default>['']</default>
+      <summary>Home folder</summary>
+      <description>Binding to open the Home folder.</description>
+    </key>
+    <key name="media" type="as">
+      <default>['']</default>
+      <summary>Launch media player</summary>
+      <description>Binding to launch the media player.</description>
+    </key>
+    <key name="next" type="as">
+      <default>['']</default>
+      <summary>Next track</summary>
+      <description>Binding to skip to next track.</description>
+    </key>
+    <key name="pause" type="as">
+      <default>['']</default>
+      <summary>Pause playback</summary>
+      <description>Binding to pause playback.</description>
+    </key>
+    <key name="play" type="as">
+      <default>['']</default>
+      <summary>Play (or play/pause)</summary>
+      <description>Binding to start playback (or toggle play/pause).</description>
+    </key>
+    <key name="logout" type="as">
+      <default>['&lt;Control&gt;&lt;Alt&gt;Delete']</default>
+      <summary>Log out</summary>
+      <description>Binding to log out.</description>
+    </key>
+    <key name="reboot" type="as">
+      <default>['']</default>
+      <summary>Reboot</summary>
+      <description>Binding to reboot.</description>
+    </key>
+    <key name="shutdown" type="as">
+      <default>['']</default>
+      <summary>Shut down</summary>
+      <description>Binding to shut down.</description>
+    </key>
+    <key name="previous" type="as">
+      <default>['']</default>
+      <summary>Previous track</summary>
+      <description>Binding to skip to previous track.</description>
+    </key>
+    <key name="screensaver" type="as">
+      <default>['&lt;Super&gt;l']</default>
+      <summary>Lock screen</summary>
+      <description>Binding to lock the screen.</description>
+    </key>
+    <key name="search" type="as">
+      <default>['']</default>
+      <summary>Search</summary>
+      <description>Binding to launch the search tool.</description>
+    </key>
+    <key name="stop" type="as">
+      <default>['']</default>
+      <summary>Stop playback</summary>
+      <description>Binding to stop playback.</description>
+    </key>
+
+    <!-- Change volume -->
+    <key name="volume-down" type="as">
+      <default>['']</default>
+      <summary>Volume down</summary>
+      <description>Binding to lower the volume.</description>
+    </key>
+    <key name="volume-mute" type="as">
+      <default>['']</default>
+      <summary>Volume mute/unmute</summary>
+      <description>Binding to mute/unmute the volume.</description>
+    </key>
+    <key name="volume-up" type="as">
+      <default>['']</default>
+      <summary>Volume up</summary>
+      <description>Binding to raise the volume.</description>
+    </key>
+    <key name="volume-step" type="i">
+      <default>6</default>
+      <range min="1" max="20"/>
+      <summary>Size of volume step</summary>
+      <description>Size of the volume step for each volume change</description>
+    </key>
+
+    <!-- Change volume without sound effect -->
+    <key name="volume-down-quiet" type="as">
+      <default>['']</default>
+      <summary>Quiet volume down</summary>
+      <description>Binding to lower the volume without emitting a sound effect.</description>
+    </key>
+    <key name="volume-mute-quiet" type="as">
+      <default>['']</default>
+      <summary>Quiet volume mute/unmute</summary>
+      <description>Binding to mute/unmute the volume without emitting a sound effect.</description>
+    </key>
+    <key name="volume-up-quiet" type="as">
+      <default>['']</default>
+      <summary>Quiet volume up</summary>
+      <description>Binding to raise the volume without emitting a sound effect.</description>
+    </key>
+
+    <!-- Change volume with high precision -->
+    <key name="volume-down-precise" type="as">
+      <default>['']</default>
+      <summary>Precise volume down</summary>
+      <description>Binding to lower the volume with higher precision.</description>
+    </key>
+    <key name="volume-up-precise" type="as">
+      <default>['']</default>
+      <summary>Precise volume up</summary>
+      <description>Binding to raise the volume with higher precision.</description>
+    </key>
+
+    <key name="mic-mute" type="as">
+      <default>['']</default>
+      <summary>Microphone mute/unmute</summary>
+      <description>Binding to mute/unmute the microphone.</description>
+    </key>
+    <key name="terminal" type="as">
+      <default>['&lt;Primary&gt;&lt;Alt&gt;t']</default>
+      <summary>Launch terminal</summary>
+      <description>Binding to launch the terminal.</description>
+    </key>
+    <key name="www" type="as">
+      <default>['']</default>
+      <summary>Launch web browser</summary>
+      <description>Binding to launch the web browser.</description>
+    </key>
+    <key name="screenreader" type="as">
+      <default>['&lt;Alt&gt;&lt;Super&gt;s']</default>
+      <summary>Toggle screen reader</summary>
+      <description>Binding to start the screen reader</description>
+    </key>
+    <key name="on-screen-keyboard" type="as">
+      <default>['']</default>
+      <summary>Toggle on-screen keyboard</summary>
+      <description>Binding to show the on-screen keyboard</description>
+    </key>
+    <key name="increase-text-size" type="as">
+      <default>['']</default>
+      <summary>Increase text size</summary>
+      <description>Binding to increase the text size</description>
+    </key>
+    <key name="decrease-text-size" type="as">
+      <default>['']</default>
+      <summary>Decrease text size</summary>
+      <description>Binding to decrease the text size</description>
+    </key>
+    <key name="toggle-contrast" type="as">
+      <default>['']</default>
+      <summary>Toggle contrast</summary>
+      <description>Binding to toggle the interface contrast</description>
+    </key>
+    <key name="magnifier" type="as">
+      <default>['&lt;Alt&gt;&lt;Super&gt;8']</default>
+      <summary>Toggle magnifier</summary>
+      <description>Binding to show the screen magnifier</description>
+    </key>
+    <key name="magnifier-zoom-in" type="as">
+      <default>['&lt;Alt&gt;&lt;Super&gt;equal']</default>
+      <summary>Magnifier zoom in</summary>
+      <description>Binding for the magnifier to zoom in</description>
+    </key>
+    <key name="magnifier-zoom-out" type="as">
+      <default>['&lt;Alt&gt;&lt;Super&gt;minus']</default>
+      <summary>Magnifier zoom out</summary>
+      <description>Binding for the magnifier to zoom out</description>
+    </key>
+    <key name="touchpad-toggle" type="as">
+      <default>['']</default>
+      <summary>Toggle touchpad on/off</summary>
+      <description>Binding to toggle the touchpad on/off.</description>
+    </key>
+    <key name="touchpad-on" type="as">
+      <default>['']</default>
+      <summary>Switch touchpad on</summary>
+      <description>Binding to switch the touchpad on.</description>
+    </key>
+    <key name="touchpad-off" type="as">
+      <default>['']</default>
+      <summary>Switch touchpad off</summary>
+      <description>Binding to switch the touchpad off.</description>
+    </key>
+
+    <key name="playback-rewind" type="as">
+      <default>['']</default>
+      <summary>Skip backward in current track</summary>
+      <description>Binding to skip backward in current track.</description>
+    </key>
+    <key name="playback-forward" type="as">
+      <default>['']</default>
+      <summary>Skip forward in current track</summary>
+      <description>Binding to skip forward in current track.</description>
+    </key>
+    <key name="playback-repeat" type="as">
+      <default>['']</default>
+      <summary>Toggle repeat playback mode</summary>
+      <description>Binding to toggle repeat mode in media player.</description>
+    </key>
+    <key name="playback-random" type="as">
+      <default>['']</default>
+      <summary>Toggle random playback mode</summary>
+      <description>Binding to toggle random playback mode in media player.</description>
+    </key>
+
+    <key name="rotate-video-lock" type="as">
+      <default>['']</default>
+      <summary>Toggle automatic screen orientation</summary>
+      <description>Binding to toggle automatic screen orientation.</description>
+    </key>
+    <key name="power" type="as">
+      <default>['']</default>
+      <summary>Power button</summary>
+      <description>Binding for power button.</description>
+    </key>
+    <key name="hibernate" type="as">
+      <default>['']</default>
+      <summary>Hibernate button</summary>
+      <description>Binding to hibernate the machine.</description>
+    </key>
+    <key name="suspend" type="as">
+      <default>['']</default>
+      <summary>Suspend button</summary>
+      <description>Binding to suspend the machine.</description>
+    </key>
+
+    <key name="screen-brightness-up" type="as">
+      <default>['']</default>
+      <summary>Screen brightness up</summary>
+      <description>Binding to increase the screen brightness.</description>
+    </key>
+    <key name="screen-brightness-down" type="as">
+      <default>['']</default>
+      <summary>Screen brightness down</summary>
+      <description>Binding to decrease the screen brightness.</description>
+    </key>
+    <key name="screen-brightness-cycle" type="as">
+      <default>['']</default>
+      <summary>Screen brightness cycle</summary>
+      <description>Binding to cycle the screen brightness.</description>
+    </key>
+
+    <key name="keyboard-brightness-up" type="as">
+      <default>['']</default>
+      <summary>Keyboard brightness up</summary>
+      <description>Binding to increase the keyboard brightness.</description>
+    </key>
+    <key name="keyboard-brightness-down" type="as">
+      <default>['']</default>
+      <summary>Keyboard brightness down</summary>
+      <description>Binding to decrease the keyboard brightness.</description>
+    </key>
+    <key name="keyboard-brightness-toggle" type="as">
+      <default>['']</default>
+      <summary>Keyboard brightness toggle</summary>
+      <description>Binding to toggle the keyboard brightness.</description>
+    </key>
+
+    <key name="battery-status" type="as">
+      <default>['']</default>
+      <summary>Show battery status</summary>
+      <description>Binding to show current battery status.</description>
+    </key>
+
+    <key name="rfkill" type="as">
+      <default>['']</default>
+      <summary>RF kill</summary>
+      <description>Binding to toggle airplane mode.</description>
+    </key>
+    <key name="rfkill-bluetooth" type="as">
+      <default>['']</default>
+      <summary>Bluetooth RF kill</summary>
+      <description>Binding to toggle bluetooth airplane mode.</description>
+    </key>
+
+    <!--
+      The following bindings are considered static versions of the above.
+      Overriding these keys will likely result in unexpected behaviour on at
+      least some hardware.
+      We assume that no user will ever modify these. It is therefore legal to
+      assume that an update of the default value will reach all users.
+    -->
+    <key name="calculator-static" type="as">
+      <default>['XF86Calculator']</default>
+      <summary>Launch calculator</summary>
+      <description>Static binding to launch the calculator.</description>
+    </key>
+    <key name="control-center-static" type="as">
+      <default>['XF86Tools']</default>
+      <summary>Launch settings</summary>
+      <description>Static binding to launch GNOME Settings.</description>
+    </key>
+    <key name="email-static" type="as">
+      <default>['XF86Mail']</default>
+      <summary>Launch email client</summary>
+      <description>Static binding to launch the email client.</description>
+    </key>
+    <key name="eject-static" type="as">
+      <default>['XF86Eject']</default>
+      <summary>Eject</summary>
+      <description>Static binding to eject an optical disc.</description>
+    </key>
+    <key name="home-static" type="as">
+      <default>['XF86Explorer']</default>
+      <summary>Home folder</summary>
+      <description>Static binding to open the Home folder.</description>
+    </key>
+    <key name="media-static" type="as">
+      <default>['XF86AudioMedia']</default>
+      <summary>Launch media player</summary>
+      <description>Static binding to launch the media player.</description>
+    </key>
+    <key name="next-static" type="as">
+      <default>['XF86AudioNext', '&lt;Ctrl&gt;XF86AudioNext']</default>
+      <summary>Next track</summary>
+      <description>Static binding to skip to next track.</description>
+    </key>
+    <key name="pause-static" type="as">
+      <default>['XF86AudioPause']</default>
+      <summary>Pause playback</summary>
+      <description>Static binding to pause playback.</description>
+    </key>
+    <key name="play-static" type="as">
+      <default>['XF86AudioPlay', '&lt;Ctrl&gt;XF86AudioPlay']</default>
+      <summary>Play (or play/pause)</summary>
+      <description>Static binding to start playback (or toggle play/pause).</description>
+    </key>
+    <key name="previous-static" type="as">
+      <default>['XF86AudioPrev', '&lt;Ctrl&gt;XF86AudioPrev']</default>
+      <summary>Previous track</summary>
+      <description>Static binding to skip to previous track.</description>
+    </key>
+    <key name="screensaver-static" type="as">
+      <default>['XF86ScreenSaver']</default>
+      <summary>Lock screen</summary>
+      <description>Static binding to lock the screen.</description>
+    </key>
+    <key name="search-static" type="as">
+      <default>['XF86Search']</default>
+      <summary>Search</summary>
+      <description>Static binding to launch the search tool.</description>
+    </key>
+    <key name="stop-static" type="as">
+      <default>['XF86AudioStop']</default>
+      <summary>Stop playback</summary>
+      <description>Static binding to stop playback.</description>
+    </key>
+
+    <!-- Change volume, "Ctrl" is always emitted on some weird keyboards -->
+    <key name="volume-down-static" type="as">
+      <default>['XF86AudioLowerVolume', '&lt;Ctrl&gt;XF86AudioLowerVolume']</default>
+      <summary>Volume down</summary>
+      <description>Static binding to lower the volume.</description>
+    </key>
+    <key name="volume-mute-static" type="as">
+      <default>['XF86AudioMute']</default>
+      <summary>Volume mute/unmute</summary>
+      <description>Static binding to mute/unmute the volume.</description>
+    </key>
+    <key name="volume-up-static" type="as">
+      <default>['XF86AudioRaiseVolume', '&lt;Ctrl&gt;XF86AudioRaiseVolume']</default>
+      <summary>Volume up</summary>
+      <description>Static binding to raise the volume.</description>
+    </key>
+
+    <!-- Change volume without sound effect -->
+    <key name="volume-down-quiet-static" type="as">
+      <default>['&lt;Alt&gt;XF86AudioLowerVolume', '&lt;Alt&gt;&lt;Ctrl&gt;XF86AudioLowerVolume']</default>
+      <summary>Quiet volume down</summary>
+      <description>Static binding to lower the volume without emitting a sound effect.</description>
+    </key>
+    <key name="volume-mute-quiet-static" type="as">
+      <default>['&lt;Alt&gt;XF86AudioMute']</default>
+      <summary>Quiet volume mute/unmute</summary>
+      <description>Static binding to mute/unmute the volume.</description>
+    </key>
+    <key name="volume-up-quiet-static" type="as">
+      <default>['&lt;Alt&gt;XF86AudioRaiseVolume', '&lt;Alt&gt;&lt;Ctrl&gt;XF86AudioRaiseVolume']</default>
+      <summary>Quiet volume up</summary>
+      <description>Static binding to raise the volume without emitting a sound effect.</description>
+    </key>
+
+    <!-- Change volume with high precision -->
+    <key name="volume-down-precise-static" type="as">
+      <default>['&lt;Shift&gt;XF86AudioLowerVolume', '&lt;Ctrl&gt;&lt;Shift&gt;XF86AudioLowerVolume']</default>
+      <summary>Precise volume down</summary>
+      <description>Static binding to lower the volume with higher precision.</description>
+    </key>
+    <key name="volume-up-precise-static" type="as">
+      <default>['&lt;Shift&gt;XF86AudioRaiseVolume', '&lt;Ctrl&gt;&lt;Shift&gt;XF86AudioRaiseVolume']</default>
+      <summary>Precise volume up</summary>
+      <description>Static binding to raise the volume with higher precision.</description>
+    </key>
+
+    <key name="mic-mute-static" type="as">
+      <default>['XF86AudioMicMute']</default>
+      <summary>Microphone mute/unmute</summary>
+      <description>Static binding to mute/unmute the microphone.</description>
+    </key>
+    <key name="www-static" type="as">
+      <default>['XF86WWW']</default>
+      <summary>Launch web browser</summary>
+      <description>Static binding to launch the web browser.</description>
+    </key>
+
+    <key name="touchpad-toggle-static" type="as">
+      <default>['XF86TouchpadToggle', '&lt;Ctrl&gt;&lt;Super&gt;XF86TouchpadToggle']</default>
+      <summary>Magnifier zoom out</summary>
+      <description>Static binding to toggle the touchpad on/off.</description>
+    </key>
+    <key name="touchpad-on-static" type="as">
+      <default>['XF86TouchpadOn']</default>
+      <summary>Switch touchpad on</summary>
+      <description>Static binding to switch the touchpad on.</description>
+    </key>
+    <key name="touchpad-off-static" type="as">
+      <default>['XF86TouchpadOff']</default>
+      <summary>Switch touchpad off</summary>
+      <description>Static binding to switch the touchpad off.</description>
+    </key>
+
+    <key name="playback-rewind-static" type="as">
+      <default>['XF86AudioRewind']</default>
+      <summary>Skip backward in current track</summary>
+      <description>Static binding to skip backward in current track.</description>
+    </key>
+    <key name="playback-forward-static" type="as">
+      <default>['XF86AudioForward']</default>
+      <summary>Skip forward in current track</summary>
+      <description>Static binding to skip forward in current track.</description>
+    </key>
+    <key name="playback-repeat-static" type="as">
+      <default>['XF86AudioRepeat']</default>
+      <summary>Toggle repeat playback mode</summary>
+      <description>Static binding to toggle repeat mode in media player.</description>
+    </key>
+    <key name="playback-random-static" type="as">
+      <default>['XF86AudioRandomPlay']</default>
+      <summary>Toggle random playback mode</summary>
+      <description>Static binding to toggle random playback mode in media player.</description>
+    </key>
+
+    <key name="rotate-video-lock-static" type="as">
+      <default>['&lt;Super&gt;o', 'XF86RotationLockToggle']</default>
+      <summary>Toggle automatic screen orientation</summary>
+      <description>Static binding to toggle automatic screen orientation.</description>
+    </key>
+    <key name="power-static" type="as">
+      <default>['XF86PowerOff']</default>
+      <summary>Power button</summary>
+      <description>Static binding for power button.</description>
+    </key>
+    <key name="hibernate-static" type="as">
+      <default>['XF86Suspend', 'XF86Hibernate']</default>
+      <summary>Hibernate button</summary>
+      <description>Static binding to hibernate the machine.</description>
+    </key>
+    <key name="suspend-static" type="as">
+      <default>['XF86Sleep']</default>
+      <summary>Suspend button</summary>
+      <description>Static binding to suspend the machine.</description>
+    </key>
+
+    <key name="screen-brightness-up-static" type="as">
+      <default>['XF86MonBrightnessUp']</default>
+      <summary>Screen brightness up</summary>
+      <description>Static binding to increase the screen brightness.</description>
+    </key>
+    <key name="screen-brightness-down-static" type="as">
+      <default>['XF86MonBrightnessDown']</default>
+      <summary>Screen brightness down</summary>
+      <description>Static binding to decrease the screen brightness.</description>
+    </key>
+    <key name="screen-brightness-cycle-static" type="as">
+      <default>['XF86MonBrightnessCycle']</default>
+      <summary>Screen brightness cycle</summary>
+      <description>Static binding to cycle the screen brightness.</description>
+    </key>
+
+    <key name="keyboard-brightness-up-static" type="as">
+      <default>['XF86KbdBrightnessUp']</default>
+      <summary>Keyboard brightness up</summary>
+      <description>Static binding to increase the keyboard brightness.</description>
+    </key>
+    <key name="keyboard-brightness-down-static" type="as">
+      <default>['XF86KbdBrightnessDown']</default>
+      <summary>Keyboard brightness down</summary>
+      <description>Static binding to decrease the keyboard brightness.</description>
+    </key>
+    <key name="keyboard-brightness-toggle-static" type="as">
+      <default>['XF86KbdLightOnOff']</default>
+      <summary>Keyboard brightness toggle</summary>
+      <description>Static binding to toggle the keyboard brightness.</description>
+    </key>
+
+    <key name="battery-status-static" type="as">
+      <default>['XF86Battery']</default>
+      <summary>Show battery status</summary>
+      <description>Static binding to show current battery status.</description>
+    </key>
+
+    <key name="rfkill-static" type="as">
+      <default>['XF86WLAN', 'XF86UWB', 'XF86RFKill']</default>
+      <summary>RF kill</summary>
+      <description>Static binding to toggle airplane mode.</description>
+    </key>
+    <key name="rfkill-bluetooth-static" type="as">
+      <default>['XF86Bluetooth']</default>
+      <summary>Bluetooth RF kill</summary>
+      <description>Static binding to toggle bluetooth airplane mode.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="org.buddiesofbudgie.settings-daemon.plugins.media-keys.custom-keybinding">
+    <key name="name" type="s">
+      <default>''</default>
+      <summary>Name</summary>
+      <description>Name of the custom binding</description>
+    </key>
+    <key name="binding" type="s">
+      <default>''</default>
+      <summary>Binding</summary>
+      <description>Binding for the custom binding</description>
+    </key>
+    <key name="command" type="s">
+      <default>''</default>
+      <summary>Command</summary>
+      <description>Command to run when the binding is invoked</description>
+    </key>
+    <key name="enable-in-lockscreen" type="b">
+      <default>false</default>
+      <summary>Enable in Lockscreen</summary>
+      <description>Whether the command can be invoked while the lockscreen is shown</description>
+    </key>
+  </schema>
+</schemalist>

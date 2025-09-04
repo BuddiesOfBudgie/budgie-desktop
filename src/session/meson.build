@@ -12,15 +12,12 @@ budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.Datetime',
     'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
     'org.buddiesofbudgie.SettingsDaemon.Keyboard',
-    'org.buddiesofbudgie.SettingsDaemon.MediaKeys',
-    'org.buddiesofbudgie.SettingsDaemon.Power',
     'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
     'org.buddiesofbudgie.SettingsDaemon.Rfkill',
     'org.buddiesofbudgie.SettingsDaemon.ScreensaverProxy',
     'org.buddiesofbudgie.SettingsDaemon.Sharing',
     'org.buddiesofbudgie.SettingsDaemon.Smartcard',
     'org.buddiesofbudgie.SettingsDaemon.Sound',
-    'org.buddiesofbudgie.SettingsDaemon.Wacom',
     'org.buddiesofbudgie.SettingsDaemon.XSettings',
 ]
 
@@ -29,7 +26,10 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieWm',
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
-    'org.buddiesofbudgie.BudgiePowerDialog'
+    'org.buddiesofbudgie.BudgiePowerDialog',
+    'org.buddiesofbudgie.SettingsDaemon.MediaKeys',
+    'org.buddiesofbudgie.SettingsDaemon.Power',
+    'org.buddiesofbudgie.SettingsDaemon.Wacom',
 ]
 
 if with_polkit == true
