@@ -41,6 +41,7 @@ jobs:
             git \
             gtk-doc \
             intltool \
+            libgudev-devel \
             magpie-devel \
             meson \
             sassc \
