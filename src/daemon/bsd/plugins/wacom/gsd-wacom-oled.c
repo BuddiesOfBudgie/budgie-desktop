@@ -241,7 +241,7 @@ set_oled (const gchar  *device_path,
 
 	g_debug ("Setting OLED label '%s' on button %d (device %s)", label, button, device_path);
 
-	command = g_strdup_printf ("pkexec " LIBEXECDIR "/gsd-wacom-oled-helper --path %s --button %d --buffer %s",
+	command = g_strdup_printf ("pkexec " LIBEXECDIR "/bsd-wacom-oled-helper --path %s --button %d --buffer %s",
 				   device_path, button, buffer);
 	ret = g_spawn_command_line_sync (command,
 					 NULL,

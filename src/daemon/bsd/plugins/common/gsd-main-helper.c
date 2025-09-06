@@ -283,7 +283,7 @@ gsd_main_helper (GType        manager_type,
                  * See also
                  *  https://bugzilla.gnome.org/show_bug.cgi?id=792432
                  */
-                setlinebuf (stdout);
+                setvbuf (stdout, NULL, _IOLBF, 0);
         }
 
         manager = g_object_new (manager_type,

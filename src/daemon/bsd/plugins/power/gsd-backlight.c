@@ -391,7 +391,7 @@ gsd_backlight_run_set_helper (GsdBacklight *backlight, GTask *task)
                 proc = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE,
                                          &error,
                                          "pkexec",
-                                         LIBEXECDIR "/gsd-backlight-helper",
+                                         LIBEXECDIR "/bsd-backlight-helper",
                                          device,
                                          data->value_str, NULL);
         } else {
