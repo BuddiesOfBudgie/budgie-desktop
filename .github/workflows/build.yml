@@ -22,11 +22,13 @@ jobs:
             'pkgconfig(gnome-desktop-3.0)' \
             'pkgconfig(gnome-settings-daemon)' \
             'pkgconfig(gstreamer-1.0)' \
+            'pkgconfig(gudev-1.0)' \
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
             'pkgconfig(libnotify)' \
             'pkgconfig(libpeas-1.0)' \
             'pkgconfig(libpulse)' \
+            'pkgconfig(libwacom)' \
             'pkgconfig(libwnck-3.0)' \
             'pkgconfig(libxfce4windowing-0)' \
             'pkgconfig(polkit-agent-1)' \
