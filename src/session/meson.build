@@ -62,11 +62,11 @@ session_data.set('labwc_bindir', labwc_bindir)
 
 # Set libexecdir to gnome-settings-daemon
 # Unfortunately this info is not provided by its pkgconfig file
-gsd_libexecdir = get_option('gsd-libexecdir')
-if gsd_libexecdir == ''
-    gsd_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+bsd_libexecdir = get_option('bsd-libexecdir')
+if bsd_libexecdir == ''
+    bsd_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
 endif
-session_data.set('gsd_libexecdir', gsd_libexecdir)
+session_data.set('gsd_libexecdir', bsd_libexecdir)
 
 # Write the budgie-desktop.session.in file from the .in.in
 session_conf = configure_file(
