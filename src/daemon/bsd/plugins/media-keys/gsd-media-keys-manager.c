@@ -3088,7 +3088,6 @@ migrate_keybinding_settings (void)
                 { "volume-mute",                "volume-mute",                  map_keybinding },
                 { "volume-up",                  "volume-up",                    map_keybinding },
                 { "mic-mute",                   "mic-mute",                     map_keybinding },
-                { "terminal",                   "terminal",                     map_keybinding },
                 { "www",                        "www",                          map_keybinding },
                 { "magnifier",                  "magnifier",                    map_keybinding },
                 { "screenreader",               "screenreader",                 map_keybinding },

@@ -96,11 +96,6 @@
       <summary>Microphone mute/unmute</summary>
       <description>Binding to mute/unmute the microphone.</description>
     </key>
-    <key name="terminal" type="s">
-      <default>'&lt;Primary&gt;&lt;Alt&gt;t'</default>
-      <summary>Launch terminal</summary>
-      <description>Binding to launch the terminal.</description>
-    </key>
     <key name="www" type="s">
       <default>'XF86WWW'</default>
       <summary>Launch web browser</summary>
