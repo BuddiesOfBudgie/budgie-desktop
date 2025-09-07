@@ -1,0 +1,39 @@
+[org.gnome.settings-daemon.peripherals.smartcard]
+removal-action = /desktop/gnome/peripherals/smartcard/removal_action
+
+[org.gnome.settings-daemon.plugins.housekeeping]
+free-percent-notify = /apps/gnome_settings_daemon/plugins/housekeeping/free_percent_notify
+free-percent-notify-again = /apps/gnome_settings_daemon/plugins/housekeeping/free_percent_notify_again
+free-size-gb-no-notify = /apps/gnome_settings_daemon/plugins/housekeeping/free_size_gb_no_notify
+ignore-paths = /apps/gnome_settings_daemon/plugins/housekeeping/ignore_paths
+min-notify-period = /apps/gnome_settings_daemon/plugins/housekeeping/min_notify_period
+
+[org.gnome.settings-daemon.plugins.media-keys]
+calculator = /apps/gnome_settings_daemon/keybindings/calculator
+email = /apps/gnome_settings_daemon/keybindings/email
+eject = /apps/gnome_settings_daemon/keybindings/eject
+help = /apps/gnome_settings_daemon/keybindings/help
+home = /apps/gnome_settings_daemon/keybindings/home
+logout = /apps/gnome_settings_daemon/keybindings/power
+media = /apps/gnome_settings_daemon/keybindings/media
+next = /apps/gnome_settings_daemon/keybindings/next
+pause = /apps/gnome_settings_daemon/keybindings/pause
+play = /apps/gnome_settings_daemon/keybindings/play
+previous = /apps/gnome_settings_daemon/keybindings/previous
+screensaver = /apps/gnome_settings_daemon/keybindings/screensaver
+search = /apps/gnome_settings_daemon/keybindings/search
+stop = /apps/gnome_settings_daemon/keybindings/stop
+touchpad = /apps/gnome_settings_daemon/keybindings/touchpad
+volume-down = /apps/gnome_settings_daemon/keybindings/volume_down
+volume-mute = /apps/gnome_settings_daemon/keybindings/volume_mute
+volume-up = /apps/gnome_settings_daemon/keybindings/volume_up
+www = /apps/gnome_settings_daemon/keybindings/www
+
+[org.gnome.settings-daemon.peripherals.mouse]
+double-click = /desktop/gnome/peripherals/mouse/double_click
+drag-threshold = /desktop/gnome/peripherals/mouse/drag_threshold
+
+[org.gnome.settings-daemon.plugins.xsettings]
+antialiasing = /desktop/gnome/font_rendering/antialiasing
+hinting = /desktop/gnome/font_rendering/hinting
+rgba-order = /desktop/gnome/font_rendering/rgba_order

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Budgie Settings Daemon's @pluginname@ dummy autostart file
+Exec=false
+OnlyShowIn=Budgie;
+NoDisplay=true
+Hidden=true

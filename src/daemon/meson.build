@@ -1,4 +1,7 @@
 # Provides budgie-daemon component
+# We use a portion of gnome-settings-daemon forked at version 48
+# that removed essential budgie-desktop capability in subsequent versions
+subdir('bsd')
 
 custom_target('desktop-file-daemon',
     input : 'budgie-daemon.desktop.in',

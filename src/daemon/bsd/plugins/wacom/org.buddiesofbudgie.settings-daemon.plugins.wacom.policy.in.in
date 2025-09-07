@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+
+  <!--
+    Policy definitions for gnome-settings-daemon system-wide actions.
+  -->
+
+  <vendor>Budgie Settings Daemon</vendor>
+  <vendor_url>https://github.com/buddiesofbudgie/budgie-desktop</vendor_url>
+  <icon_name>input-tablet</icon_name>
+
+  <action id="org.buddiesofbudgie.settings-daemon.plugins.wacom.wacom-led-helper">
+    <!-- SECURITY:
+          - A normal active user on the local machine does not need permission
+            to change the LED setting for a Wacom tablet
+     -->
+    <description>Modify the lit LED for a Wacom tablet</description>
+    <message>Authentication is required to modify the lit LED for a Wacom tablet</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/bsd-wacom-led-helper</annotate>
+  </action>
+
+  <action id="org.buddiesofbudgie.settings-daemon.plugins.wacom.wacom-oled-helper">
+    <!-- SECURITY:
+          - A normal active user on the local machine does not need permission
+            to change the OLED images for a Wacom tablet
+     -->
+    <description>Modify the OLED image for a Wacom tablet</description>
+    <message>Authentication is required to modify the OLED image for a Wacom tablet</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/bsd-wacom-oled-helper</annotate>
+  </action>
+
+</policyconfig>
+
