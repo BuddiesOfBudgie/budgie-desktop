@@ -63,7 +63,7 @@ namespace Budgie {
 
 			extensions.extension_added.connect(on_extension_added);
 			engine.load_plugin.connect_after((i) => {
-				Peas.Extension? e = extensions.get_extension(i);
+				var e = extensions.get_extension(i);
 				if (e == null) {
 					critical("Failed to find extension for: %s", i.get_name());
 					return;
@@ -133,7 +133,7 @@ namespace Budgie {
 		/**
 		* PeasEngine.get_plugin_info == completely broken
 		*/
-		private unowned Peas.PluginInfo? get_plugin_info(string name) {
+		private Peas.PluginInfo? get_plugin_info(string name) {
 			var list = this.engine.get_n_items();
 			for (int i=0; i < list; i++) {
 				Peas.PluginInfo? info = (Peas.PluginInfo)this.engine.get_item(i);
@@ -175,7 +175,7 @@ namespace Budgie {
 					name = null;
 					return null;
 				}
-				engine.try_load_plugin(pinfo);
+				engine.load_plugin(pinfo);
 				name = pname;
 				return null;
 			}

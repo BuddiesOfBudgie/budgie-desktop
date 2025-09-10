@@ -41,6 +41,7 @@ libraven_deps = [
     dep_giounix,
     dep_gobject_introspection,
     dep_gtk3,
+    dep_gdkx11,
     dep_libuuid,
     dep_peas,
     link_libconfig,
@@ -65,6 +66,7 @@ libraven = shared_library(
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
+        '--pkg', 'gdk-x11-3.0',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,

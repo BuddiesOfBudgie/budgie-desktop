@@ -477,7 +477,7 @@ namespace Budgie {
 					Budgie.AppletInfo? info = null;
 					string? uname = null;
 					try {
-						info = this.plugin_manager.load_applet_instance(uuid, null, out uname);
+						info = this.plugin_manager.load_applet_instance(uuid, out uname);
 						add_applet(info);
 					} catch (Error e) {
 						critical("Failed to load applet when we know it exists: %s", uname);
@@ -496,7 +496,7 @@ namespace Budgie {
 				while (iter.next(out uuid, null)) {
 					Budgie.AppletInfo? info = null;
 					try {
-						info = this.plugin_manager.create_applet(name, uuid);
+						info = this.plugin_manager.create_new_applet(name, uuid);
 						add_applet(info);
 					} catch (Error e) {
 						critical("Failed to load applet when we know it exists");
@@ -536,7 +536,7 @@ namespace Budgie {
 					Budgie.AppletInfo? info = null;
 
 					try {
-						info = this.plugin_manager.load_applet_instance(applets[i], null, out name);
+						info = this.plugin_manager.load_applet_instance(applets[i], out name);
 					} catch (Error e) {
 						if (name == null) {
 							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
@@ -900,7 +900,7 @@ namespace Budgie {
 			string? uuid = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {{
+			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
 				warning("Not loading invalid plugin: %s", plugin_name);
 				return;
 			}
@@ -910,7 +910,7 @@ namespace Budgie {
 				uuid = initial_uuid;
 			}
 
-			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = creating.lookup(plugin_name);
 				if (table != null) {
@@ -928,7 +928,7 @@ namespace Budgie {
 			}
 			/* Already exists */
 			try {
-				Budgie.AppletInfo? info = this.plugin_manager.create_applet(plugin_name, uuid);
+				Budgie.AppletInfo? info = this.plugin_manager.create_new_applet(plugin_name, uuid);
 				this.add_applet(info);
 			} catch (Error e) {
 				critical("Failed to load applet when we know it exists");
@@ -940,12 +940,12 @@ namespace Budgie {
 			string? rname = null;
 			unowned HashTable<string,string>? table = null;
 
-			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
+			if (!this.plugin_manager.is_extension_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
 				return null;
 			}
 
-			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
+			if (!this.plugin_manager.is_extension_loaded(plugin_name)) {
 				/* Request a load of the new guy */
 				table = pending.lookup(plugin_name);
 				if (table != null) {
@@ -964,11 +964,13 @@ namespace Budgie {
 
 			/* Already exists */
 			Budgie.AppletInfo? info = null;
+
 			try {
-				info = this.plugin_manager.load_applet_instance(uuid, null, out rname);
+				info = this.plugin_manager.load_applet_instance(uuid, out rname);
 			} catch (Error e) {
 				critical("Failed to load applet when we know it exists");
 			}
+
 			return info;
 		}
 
