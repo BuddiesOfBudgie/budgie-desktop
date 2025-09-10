@@ -27,13 +27,12 @@ namespace Budgie {
 			settings = new Settings(Budgie.ROOT_SCHEMA);
 
 			engine = new Peas.Engine();
-			engine.enable_loader("python3");
+			engine.enable_loader("python");
 
 			/* Ensure libpeas doesn't freak the hell out for Python extensions */
 			try {
 				var repo = GI.Repository.get_default();
-				repo.require("Peas", "1.0", 0);
-				repo.require("PeasGtk", "1.0", 0);
+				repo.require("Peas", "2", 0);
 				repo.require("Budgie", "1.0", 0);
 			} catch (Error e) {
 				message("Error loading typelibs: %s", e.message);
@@ -60,7 +59,7 @@ namespace Budgie {
 			}
 			engine.rescan_plugins();
 
-			extensions = new Peas.ExtensionSet(engine, typeof(Budgie.Plugin));
+			extensions = new Peas.ExtensionSet.with_properties(engine, typeof(Budgie.Plugin), {}, {});
 
 			extensions.extension_added.connect(on_extension_added);
 			engine.load_plugin.connect_after((i) => {
@@ -115,9 +114,14 @@ namespace Budgie {
 
 		public List<Peas.PluginInfo?> get_all_plugins() {
 			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
-			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
-				ret.append(info);
+			var list = this.engine.get_n_items();
+			for (int i=0; i < list; i++) {
+				Peas.PluginInfo? info = (Peas.PluginInfo)this.engine.get_item(i);
+				if (info != null) {
+					ret.append(info);
+				}
 			}
+			
 			return ret;
 		}
 
@@ -130,7 +134,9 @@ namespace Budgie {
 		* PeasEngine.get_plugin_info == completely broken
 		*/
 		private unowned Peas.PluginInfo? get_plugin_info(string name) {
-			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
+			var list = this.engine.get_n_items();
+			for (int i=0; i < list; i++) {
+				Peas.PluginInfo? info = (Peas.PluginInfo)this.engine.get_item(i);
 				if (info.get_name() == name) {
 					return info;
 				}
@@ -144,7 +150,7 @@ namespace Budgie {
 				warning("budgie_panel_modprobe called for non existent module: %s", name);
 				return;
 			}
-			this.engine.try_load_plugin(i);
+			this.engine.load_plugin(i);
 		}
 
 		/**

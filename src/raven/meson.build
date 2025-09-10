@@ -39,6 +39,7 @@ libraven_deps = [
     libravenplugin_vapi,
     libpanelplugin_vapi,
     dep_giounix,
+    dep_gobject_introspection,
     dep_gtk3,
     dep_libuuid,
     dep_peas,

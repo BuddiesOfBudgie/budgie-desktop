@@ -74,7 +74,7 @@ libpanelplugin_gir = gnome.generate_gir(
         'GObject-2.0',
         'Gio-2.0',
         'Gtk-3.0',
-        'Peas-1.0',
+        'Peas-2',
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
@@ -91,7 +91,7 @@ libpanelplugin_vapi = gnome.generate_vapi(
     packages: [
         'gtk+-3.0',
         'gio-unix-2.0',
-        'libpeas-1.0',
+        'libpeas-2',
     ],
     install: true,
 )
@@ -106,7 +106,7 @@ pkgconfig.generate(
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
         'gtk+-3.0 >= 3.22.0',
-        'libpeas-1.0 >= 1.8.0',
+        'libpeas-2 >= 1.99.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',
     ],
