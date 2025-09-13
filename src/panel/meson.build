@@ -1,5 +1,7 @@
 # Provides budgie's main panel component
 
+subdir('plugin')
+
 custom_target('desktop-file-panel',
     input : 'budgie-panel.desktop.in',
     output : 'org.buddiesofbudgie.BudgiePanel.desktop',
@@ -21,7 +23,6 @@ panel_sources = [
     'main.vala',
     'manager.vala',
     'panel.vala',
-    'plugin_manager.vala',
     'uuid.vala',
     'settings/settings_autostart.vala',
     'settings/settings_desktop.vala',
@@ -50,9 +51,11 @@ panel_deps = [
     dep_peas,
     dep_libuuid,
     dep_wnck,
+    dep_xfce4windowing,
     link_libconfig,
     link_libsession,
     link_libbudgieprivate,
+    link_libpanelpluginmanager,
     link_libtheme,
     link_libpanelplugin,
     link_libravenplugin,
@@ -61,7 +64,7 @@ panel_deps = [
     gvc.get_variable('libgvc_dep'),
 ]
 
-top_vapidir = join_paths(meson.source_root(), 'vapi')
+top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 budgie_panel_vala_args = [
         '--vapidir', dir_libtheme,
@@ -73,17 +76,16 @@ budgie_panel_vala_args = [
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
-]
-
-budgie_panel_c_args = [
-    '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
+        join_paths(meson.project_source_root(), 'src', 'panel', 'plugin', 'plugin-manager.vapi'),
 ]
 
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
     vala_args: budgie_panel_vala_args,
-    c_args: budgie_panel_c_args,
+    c_args: [
+      '-DWNCK_I_KNOW_THIS_IS_UNSTABLE',
+    ],
     install: true,
 )
 
