@@ -24,7 +24,8 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
     'org.buddiesofbudgie.BudgiePowerDialog',
-    'org.buddiesofbudgie.BudgieScreenshotDialog'
+    'org.buddiesofbudgie.BudgieScreenshotDialog',
+    'org.buddiesofbudgie.BudgieDaemonv2'
 ]
 
 if with_polkit == true
@@ -168,6 +169,20 @@ custom_target('desktop-file-screenshotdialog',
     install_dir : xdg_appdir,
 )
 
+# Merge + install BudgieDaemonv2
+budgie_daemonv2_desktop = configure_file(
+    input: 'budgie-desktop-daemonv2.desktop.in.in',
+    output: 'budgie-desktop-daemonv2.desktop.in',
+    configuration: session_data,
+)
+
+custom_target('desktop-file-daemonv2',
+    input : budgie_daemonv2_desktop,
+    output : 'org.buddiesofbudgie.BudgieDaemonv2.desktop',
+    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    install : true,
+    install_dir : xdg_appdir,
+)
 
 # install gnome-settings-daemon desktop files to ensure they autostart
 
