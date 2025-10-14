@@ -200,3 +200,8 @@ foreach component: settings_daemon_components
         install_dir: xdg_appdir,
     )
 endforeach
+
+install_data(
+    'org.buddiesofbudgie.settings-daemon.plugins.media-keys.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
+)
