@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 OPTS=""
 for OPT in "$@"; do
     if test "${OPT}" = "--help"; then
@@ -18,9 +17,6 @@ for OPT in "$@"; do
     fi
 done
 
-BUDGIE_SESSION_COMPOSITOR="1"
-export BUDGIE_SESSION_COMPOSITOR
-
 # Set the XDG_RUNTIME_DIR if we can not get it in systems
 # without systemd
 if [ -z "${XDG_RUNTIME_DIR}" ]; then
@@ -38,19 +34,19 @@ if [ -z "${XDG_RUNTIME_DIR}" ]; then
     fi
 fi
 if [ ! -e "${XDG_RUNTIME_DIR}" ]; then
-    echo "XDG_RUNTIME_DIR is invalid or does not exist!"
-    echo "Creating XDG_RUNTIME_DIR..."
+    logger "XDG_RUNTIME_DIR is invalid or does not exist!"
+    logger "Creating XDG_RUNTIME_DIR..."
     mkdir -p -m 0700 "${XDG_RUNTIME_DIR}" || {
-        echo "Unable to create runtime directory ${XDG_RUNTIME_DIR}!"
+        logger "Unable to create runtime directory ${XDG_RUNTIME_DIR}!"
         exit 1
     }
 fi
+
 
 # freedesktop specifications mandate that the definition
 # of XDG_SESSION_TYPE should be respected
 XDG_SESSION_TYPE="wayland"
 export XDG_SESSION_TYPE
-
 # Make sure all toolkits use their Wayland backend
 #
 # For Gtk applications also the x11 backend as a safe fallback
@@ -80,10 +76,6 @@ export MOZ_ENABLE_WAYLAND
 
 default_compositor="labwc"
 
-# See if we can use the --session option of labwc (available since 0.7.2)
-startup_option="--session"
-"$default_compositor" --help | grep -q -- "$startup_option" || startup_option="--startup"
-
 # Create specific labwc directory for Budgie
 if [ ! -d "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc" ]; then
     mkdir -p "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc"
@@ -107,7 +99,7 @@ fi
 # Budgie will use its own config directory and config file to avoid
 # conflict with current labwc setup and avoid launching anything
 # from ~/.config/labwc/autostart
-BUDGIE_SESSION_COMPOSITOR="${OPTS:-labwc --config-dir ${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc --config ${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/rc.xml $startup_option @bindir@/budgie-desktop}"
+BUDGIE_SESSION_COMPOSITOR="${OPTS:-labwc --config-dir ${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc}"
 
 # Start a D-Bus session if there isn't one already.
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
@@ -124,12 +116,30 @@ if [ -n "$XDG_VTNR" ] && [ -f "/sys/devices/virtual/tty/tty0/active" ]; then
         fi
         VT_TEST_CNT=$((VT_TEST_CNT + 1))
         if [ "$VT_TEST_CNT" -gt 100 ]; then
-            echo "VT $XDG_VTNR is expected but the switch did not happen in the last second, continuing anyway."
+            logger "VT $XDG_VTNR is expected but the switch did not happen in the last second, continuing anyway."
             break
         fi
         sleep 0.01
     done
 fi
 
-# start budgie-session normally
-exec ${BUDGIE_SESSION_COMPOSITOR}
+# start the budgie compositor
+${BUDGIE_SESSION_COMPOSITOR} &
+
+labwc_pid=$!
+
+# Wait until the server starts
+if [ ! compositor-ready ]; then
+  kill $labwc_pid
+  exit 1
+fi
+
+# short delay to allow the compositor-ready wayland-client to release
+sleep 0.8
+
+budgie-desktop "$@"
+budgie_desktop_exit_code=$?
+
+kill $labwc_pid
+
+exit $budgie_desktop_exit_code
