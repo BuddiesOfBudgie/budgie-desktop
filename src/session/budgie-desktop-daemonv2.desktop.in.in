@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=Budgie Daemon v2
 Comment=Budgie Daemon v2
-Exec=@libexecdir@/budgie-desktop/budgie-daemonv2
-TryExec=@libexecdir@/budgie-desktop/budgie-daemonv2
+Exec=@bindir@/org.buddiesofbudgie.BudgieDaemonV2
+TryExec=@bindir@/org.buddiesofbudgie.BudgieDaemonV2
 Terminal=false
 Type=Application
 X-GNOME-Autostart-Phase=DisplayServer
