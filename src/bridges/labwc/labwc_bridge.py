@@ -132,7 +132,7 @@ class Bridge:
         self.panel_settings = Gio.Settings.new('com.solus-project.budgie-panel')
         self.panel_settings.connect('changed', self.panel_settings_changed)
 
-        self.gsd_media_keys_settings = Gio.Settings.new('org.gnome.settings-daemon.plugins.media-keys')
+        self.gsd_media_keys_settings = Gio.Settings.new('org.buddiesofbudgie.settings-daemon.plugins.media-keys')
         self.gsd_media_keys_settings.connect('changed', self.keybindings_changed)
 
         self.desktop_wm_keybindings_settings = Gio.Settings.new('org.gnome.desktop.wm.keybindings')
@@ -355,7 +355,7 @@ class Bridge:
 
             if len(result) > 0:
                 customkeypath = result[0]
-                schema = Gio.Settings.new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
+                schema = Gio.Settings.new_with_path("org.buddiesofbudgie.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
                 schema_command = schema["command"]
                 schema_binding = schema["binding"]
                 customkey = customkeypath.split("/")[-2]
@@ -378,7 +378,7 @@ class Bridge:
         # so that modifications are notified
         self.custom_keys_settings = {}
         for customkeypath in self.gsd_media_keys_settings.get_strv("custom-keybindings"):
-            schema = Gio.Settings.new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
+            schema = Gio.Settings.new_with_path("org.buddiesofbudgie.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
             schema_command = schema["command"]
             schema_binding = schema["binding"]
             customkey = customkeypath.split("/")[-2]
@@ -424,7 +424,7 @@ class Bridge:
                     short_schema = short_schemakey.split("/")[0]
                     key = short_schemakey.split("/")[1]
 
-                    if short_schema in "org.gnome.settings-daemon.plugins.media-keys":
+                    if short_schema in "org.buddiesofbudgie.settings-daemon.plugins.media-keys":
                         self.keybindings_changed(self.gsd_media_keys_settings, key)
                     if short_schema in "org.gnome.desktop.wm.keybindings":
                         self.keybindings_changed(self.desktop_wm_keybindings_settings, key)
