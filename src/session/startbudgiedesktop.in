@@ -129,13 +129,10 @@ ${BUDGIE_SESSION_COMPOSITOR} &
 labwc_pid=$!
 
 # Wait until the server starts
-if [ ! compositor-ready ]; then
+if [ ! @gsd_libexecdir@/budgie-session-compositor-ready ]; then
   kill $labwc_pid
   exit 1
 fi
-
-# short delay to allow the compositor-ready wayland-client to release
-sleep 0.8
 
 budgie-desktop "$@"
 budgie_desktop_exit_code=$?
