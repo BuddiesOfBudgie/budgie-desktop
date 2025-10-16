@@ -82,10 +82,10 @@ custom_target('desktop-file-session-main',
     install_dir : join_paths(datadir, 'gnome-session', 'sessions'),
 )
 
-# Write /usr/bin/startbudgiedesktop script
+# Write /usr/bin/startbudgielabwc script
 configure_file(
-    input: 'startbudgiedesktop.in',
-    output: 'startbudgiedesktop',
+    input: 'startbudgielabwc.in',
+    output: 'startbudgielabwc',
     configuration: session_data,
     install_dir: join_paths(get_option('prefix'), get_option('bindir')),
 )

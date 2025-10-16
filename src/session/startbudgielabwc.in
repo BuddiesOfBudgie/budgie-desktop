@@ -4,7 +4,7 @@ for OPT in "$@"; do
     if test "${OPT}" = "--help"; then
         # Print help and exit
         echo "Usage:"
-        echo "  startbudgiedesktop [OPTIONS...]"
+        echo "  startbudgielabwc [OPTIONS...]"
         echo
         echo "Options:"
         echo "  --help                   Show help options"
@@ -57,6 +57,12 @@ fi
 if [ -z "${QT_QPA_PLATFORM}" ]; then
     QT_QPA_PLATFORM="wayland"
     export QT_QPA_PLATFORM
+fi
+
+# allow compatible Qt6 apps to theme with gtk3
+if [ -z "${QT_QPA_PLATFORMTHEME}" ]; then
+    QT_QPA_PLATFORMTHEME="gtk3"
+    export QT_QPA_PLATFORMTHEME
 fi
 
 # In many OS the wayland backend for clutter does not work, so
