@@ -65,6 +65,12 @@ if [ -z "${QT_QPA_PLATFORMTHEME}" ]; then
     export QT_QPA_PLATFORMTHEME
 fi
 
+# Improves the appearance of QT apps when using the QT Oxygen style
+if [ -z "${QT_STYLE_OVERRIDE}" ]; then
+    QT_STYLE_OVERRIDE="Oxygen"
+    export QT_STYLE_OVERRIDE
+fi
+
 # In many OS the wayland backend for clutter does not work, so
 # use the safe "gdk" backend instead
 if [ -z "${CLUTTER_BACKEND}" ]; then
