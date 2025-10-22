@@ -105,7 +105,7 @@ fi
 # Budgie will use its own config directory and config file to avoid
 # conflict with current labwc setup and avoid launching anything
 # from ~/.config/labwc/autostart
-BUDGIE_SESSION_COMPOSITOR="${OPTS:-labwc --config-dir ${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc}"
+BUDGIE_SESSION_COMPOSITOR="${OPTS:-labwc --config-dir ${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc} -S budgie-desktop"
 
 # Start a D-Bus session if there isn't one already.
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
@@ -130,19 +130,6 @@ if [ -n "$XDG_VTNR" ] && [ -f "/sys/devices/virtual/tty/tty0/active" ]; then
 fi
 
 # start the budgie compositor
-${BUDGIE_SESSION_COMPOSITOR} &
+exec ${BUDGIE_SESSION_COMPOSITOR}
 
-labwc_pid=$!
-
-# Wait until the server starts
-if [ ! @gsd_libexecdir@/budgie-session-compositor-ready ]; then
-  kill $labwc_pid
-  exit 1
-fi
-
-budgie-desktop "$@"
-budgie_desktop_exit_code=$?
-
-kill $labwc_pid
-
-exit $budgie_desktop_exit_code
+exit 0
