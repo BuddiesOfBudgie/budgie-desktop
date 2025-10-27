@@ -15,8 +15,7 @@ budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.Rfkill',
     'org.buddiesofbudgie.SettingsDaemon.Sharing',
     'org.buddiesofbudgie.SettingsDaemon.Smartcard',
-    'org.buddiesofbudgie.SettingsDaemon.Sound',
-    'org.buddiesofbudgie.SettingsDaemon.Wacom',
+    'org.buddiesofbudgie.SettingsDaemon.Sound'
 ]
 
 # Always in Budgie
