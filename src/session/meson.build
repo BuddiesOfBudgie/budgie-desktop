@@ -9,13 +9,16 @@ session_data.set('libexecdir', libexecdir)
 budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.A11ySettings',
     'org.buddiesofbudgie.SettingsDaemon.Datetime',
+    'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
     'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
     'org.buddiesofbudgie.SettingsDaemon.Power',
     'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
     'org.buddiesofbudgie.SettingsDaemon.Rfkill',
     'org.buddiesofbudgie.SettingsDaemon.Sharing',
     'org.buddiesofbudgie.SettingsDaemon.Smartcard',
-    'org.buddiesofbudgie.SettingsDaemon.Sound'
+    'org.buddiesofbudgie.SettingsDaemon.Sound',
+    'org.buddiesofbudgie.SettingsDaemon.UsbProtection',
+    'org.buddiesofbudgie.SettingsDaemon.Wwan'
 ]
 
 # Always in Budgie
