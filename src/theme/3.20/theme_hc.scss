@@ -1,5 +1,22 @@
 $variant: 'hc';
 
+// Used to reset all style properties set by the gtk theme
+%reset_style {
+    background: none;
+    box-shadow: none;
+    margin: 0;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+    -gtk-icon-transform: none;
+    opacity: 1;
+    min-width: 0;
+    min-height: 0;
+    padding: unset;
+    font-size: unset;
+    font-weight: unset;
+}
+
+
 @import 'settings';
 @import '../common/imports';
 @import 'widgets';
