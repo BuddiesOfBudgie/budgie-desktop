@@ -44,7 +44,7 @@ namespace Budgie {
 			try {
 				var repo = GI.Repository.get_default();
 				repo.require("Peas", "2", 0);
-				repo.require("BudgieRaven", "2.0", 0);
+				repo.require("BudgieRaven", "3.0", 0);
 			} catch (Error e) {
 				message("Error loading typelibs: %s", e.message);
 			}
