@@ -1,5 +1,6 @@
 // Base class for dialogs
 @mixin budgie_dialog() {
+    color: $fg_color;
     background-color: transparent;
     font-weight: normal;
 
