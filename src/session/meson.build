@@ -40,6 +40,8 @@ session_data.set('SESSION_COMPONENTS', ';'.join(session_components))
 session_data.set('prefix', join_paths(get_option('prefix')))
 # Set bindir to budgie-desktop
 session_data.set('bindir', bindir)
+# Set datadir to budgie-desktop
+session_data.set('datadir', datadir)
 
 # Set bindir to labwc
 labwc_bindir = get_option('labwc-bindir')
@@ -77,6 +79,14 @@ custom_target('desktop-file-session-main',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'gnome-session', 'sessions'),
+)
+
+# Write /usr/bin/startbudgiedesktop script
+configure_file(
+    input: 'startbudgiedesktop.in',
+    output: 'startbudgiedesktop',
+    configuration: session_data,
+    install_dir: join_paths(get_option('prefix'), get_option('bindir')),
 )
 
 # Write /usr/bin/budgie-desktop script
