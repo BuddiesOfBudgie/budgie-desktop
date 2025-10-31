@@ -107,7 +107,7 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
 		g_clear_error(error);
 	}
 
-	g_irepository_require(NULL, "Budgie", "1.0", 0, &error);
+	g_irepository_require(NULL, "Budgie", "2.0", 0, &error);
 
 	if G_UNLIKELY (error) {
 		g_warning("Error loading typelibs: %s", error->message);
