@@ -48,6 +48,14 @@
         > row {
             padding: 0;
             margin: 0;
+
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
+
         }
 
         button.flat {
@@ -96,6 +104,12 @@
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
         }
 
         .user-icon-button {
@@ -108,6 +122,12 @@
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
         }
     }
 
@@ -118,6 +138,13 @@
         border-radius: 6px;
         margin-bottom: 6px;
         padding: 8px;
+
+        > row:focus {
+            image, label {
+                color: $selected_fg_color;
+            }
+            background-color: $selected_bg_color;
+        }
 
         button {
             @extend %reset_style;
@@ -160,7 +187,7 @@
         transition: 170ms ease-out;
 
         &:hover { background-color: transparentize(white, 0.9); }
-        &:active, &:checked {
+        &:active, &:checked, &:focus {
             label {
                 color: $selected_fg_color;
             }
