@@ -276,7 +276,10 @@ public class ThemeScanner : GLib.Object {
 		}
 		/* Check if its an icon theme */
 		try {
-			if (!f.has_key("Icon Theme", "Directories")) {
+			if (
+				!f.has_key("Icon Theme", "Directories") ||
+				(f.has_key("Icon Theme", "Hidden") && f.get_boolean("Icon Theme", "Hidden"))
+			) {
 				icon_theme = false;
 			}
 		} catch (Error e) {
