@@ -66,6 +66,7 @@ public class ThemeScanner : GLib.Object {
 		"Papirus-Adapta",
 		"Papirus-Adapta-Nokto",
 		"breeze",
+		"hicolor",
 		"solus-sc"
 	};
 
