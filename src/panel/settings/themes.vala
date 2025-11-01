@@ -187,6 +187,11 @@ public class ThemeScanner : GLib.Object {
 	 * Attempt to add a unique theme into the set
 	 */
 	private async bool maybe_add_gtk_theme(string path, string theme_name) {
+		var test_path = "%s%s%s".printf(path, Path.DIR_SEPARATOR_S, "gtk.css");
+		if (!FileUtils.test(test_path, FileTest.EXISTS)) {
+			return false;
+		}
+
 		for (int index = 0; index < gtk_theme_blacklist.length; index++) {
 			string blacklisted_item = gtk_theme_blacklist[index];
 
@@ -271,7 +276,10 @@ public class ThemeScanner : GLib.Object {
 		}
 		/* Check if its an icon theme */
 		try {
-			if (!f.has_key("Icon Theme", "Directories")) {
+			if (
+				!f.has_key("Icon Theme", "Directories") ||
+				(f.has_key("Icon Theme", "Hidden") && f.get_boolean("Icon Theme", "Hidden"))
+			) {
 				icon_theme = false;
 			}
 		} catch (Error e) {
