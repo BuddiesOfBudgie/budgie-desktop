@@ -2,7 +2,7 @@ libpanelpluginmanager_deps = [
   link_libconfig,
   link_libpanelplugin,
   dep_glib,
-  dep_gobject_introspection,
+  dep_girepository,
   dep_peas,
 ]
 
