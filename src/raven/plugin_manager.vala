@@ -38,16 +38,6 @@ namespace Budgie {
 		*/
 		public void setup_plugins() {
 			engine = new Peas.Engine();
-			engine.enable_loader("python");
-
-			/* Ensure libpeas doesn't freak the hell out for Python plugins */
-			try {
-				var repo = GI.Repository.get_default();
-				repo.require("Peas", "2", 0);
-				repo.require("BudgieRaven", "3.0", 0);
-			} catch (Error e) {
-				message("Error loading typelibs: %s", e.message);
-			}
 
 			/* System path */
 			var dir = Environment.get_user_data_dir();
