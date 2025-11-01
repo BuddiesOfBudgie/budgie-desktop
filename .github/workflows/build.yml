@@ -26,7 +26,7 @@ jobs:
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
             'pkgconfig(libnotify)' \
-            'pkgconfig(libpeas-1.0)' \
+            'pkgconfig(libpeas-2)' \
             'pkgconfig(libpulse)' \
             'pkgconfig(libwacom)' \
             'pkgconfig(libwnck-3.0)' \

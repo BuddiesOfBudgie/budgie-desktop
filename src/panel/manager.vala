@@ -50,16 +50,6 @@ namespace Budgie {
 
 
 	/**
-	* Relocatable schema ID for applets
-	*/
-	public const string APPLET_SCHEMA = "com.solus-project.budgie-panel.applet";
-
-	/**
-	* Prefix for all relocatable applet settings
-	*/
-	public const string APPLET_PREFIX = "/com/solus-project/budgie-panel/applets";
-
-	/**
 	* Schema ID for Raven settings
 	*/
 	public const string RAVEN_SCHEMA = "com.solus-project.budgie-raven";
@@ -656,12 +646,6 @@ namespace Budgie {
 
 			/* Minimum migration level met, proceed as normal. */
 			if (current_migration_level >= BUDGIE_MIGRATION_LEVEL) {
-				return;
-			}
-
-			/* Manual configuration from user met the expected migration path. Proceed as normal. */
-			if (panel_plugin_manager.migrate_load_requirements_met) {
-				message("Budgie Migration skipped due to user meeting migration requirements");
 				return;
 			}
 
