@@ -7,3 +7,4 @@ Icon=org.buddiesofbudgie.BudgieScreenshot
 Categories=Utility;
 Keywords=Screenshot;Snip;
 StartupWMClass=org.buddiesofbudgie.BudgieScreenshot
+OnlyShowIn=Budgie
