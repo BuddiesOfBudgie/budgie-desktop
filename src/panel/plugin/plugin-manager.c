@@ -15,7 +15,7 @@
 #include "applet.h"
 #include "plugin.h"
 
-#include <gobject-introspection-1.0/girepository.h>
+#include <glib-2.0/girepository/girepository.h>
 #include <libpeas-2/libpeas.h>
 
 /**
