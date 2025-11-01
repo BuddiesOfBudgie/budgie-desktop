@@ -69,7 +69,7 @@ libpanelplugin_gir = gnome.generate_gir(
     libpanelplugin,
     sources: panel_plugin_sources + panel_plugin_headers + panel_plugin_enums,
     namespace: 'Budgie',
-    nsversion: '2.0',
+    nsversion: '3.0',
     dependencies: panel_plugin_deps,
     includes: [
         'GObject-2.0',
@@ -88,7 +88,7 @@ libpanelplugin_gir = gnome.generate_gir(
 )
 
 libpanelplugin_vapi = gnome.generate_vapi(
-    'budgie-2.0',
+    'budgie-3.0',
     sources: [libpanelplugin_gir[0]],
     packages: [
         'gtk+-3.0',
@@ -103,8 +103,8 @@ libpanelplugin_vapi = gnome.generate_vapi(
 pkgconfig.generate(
     name: 'Budgie',
     description: 'Budgie Plugin Library',
-    version: '3',
-    filebase: 'budgie-2.0',
+    version: '4',
+    filebase: 'budgie-3.0',
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
