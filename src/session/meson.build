@@ -27,7 +27,6 @@ budgie_components = [
     'org.buddiesofbudgie.BudgiePanel',
     'org.buddiesofbudgie.BudgiePowerDialog',
     'org.buddiesofbudgie.BudgieScreenshotDialog',
-    'org.buddiesofbudgie.BudgieDaemonv2'
 ]
 
 if with_polkit == true
@@ -166,21 +165,6 @@ session_screenshot_dialog_desktop = configure_file(
 custom_target('desktop-file-screenshotdialog',
     input : session_screenshot_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgieScreenshotDialog.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
-    install : true,
-    install_dir : xdg_appdir,
-)
-
-# Merge + install BudgieDaemonv2
-budgie_daemonv2_desktop = configure_file(
-    input: 'budgie-desktop-daemonv2.desktop.in.in',
-    output: 'budgie-desktop-daemonv2.desktop.in',
-    configuration: session_data,
-)
-
-custom_target('desktop-file-daemonv2',
-    input : budgie_daemonv2_desktop,
-    output : 'org.buddiesofbudgie.BudgieDaemonv2.desktop',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : xdg_appdir,

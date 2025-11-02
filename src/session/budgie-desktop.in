@@ -13,7 +13,11 @@ if [ -z $XDG_CURRENT_DESKTOP ]; then
   export XDG_CURRENT_DESKTOP
 fi
 
+@bindir@/org.buddiesofbudgie.BudgieDaemonV2 &
+sleep 2
+
 # Wait until the server starts before launching the session
-if [ @gsd_libexecdir@/budgie-session-compositor-ready ]; then
+compositor="@gsd_libexecdir@/budgie-session-compositor-ready"
+if command -v "$compositor" > /dev/null 2>&1 && "$compositor"; then
   exec budgie-session --builtin --session=org.buddiesofbudgie.BudgieDesktop $*
 fi
