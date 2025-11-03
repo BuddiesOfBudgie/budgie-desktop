@@ -24,10 +24,6 @@ shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.MediaControls',
     raven_plugin_mediacontrols_sources,
     dependencies: raven_plugin_mediacontrols_deps,
-    vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-    ],
     install: true,
     install_dir: raven_plugin_mediacontrols_dir,
 )

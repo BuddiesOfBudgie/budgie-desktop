@@ -61,13 +61,13 @@ libravenplugin_gir = gnome.generate_gir(
     libravenplugin,
     sources: ravenplugin_sources + ravenplugin_headers + ravenplugin_enums,
     namespace: 'BudgieRaven',
-    nsversion: '1.0',
+    nsversion: '2.0',
     dependencies: ravenplugin_deps,
     includes: [
         'GObject-2.0',
         'Gio-2.0',
         'Gtk-3.0',
-        'Peas-1.0',
+        'Peas-2',
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
@@ -76,12 +76,12 @@ libravenplugin_gir = gnome.generate_gir(
 )
 
 libravenplugin_vapi = gnome.generate_vapi(
-    'budgie-raven-plugin-1.0',
+    'budgie-raven-plugin-2.0',
     sources: [libravenplugin_gir[0]],
     packages: [
         'gtk+-3.0',
         'gio-unix-2.0',
-        'libpeas-1.0',
+        'libpeas-2',
     ],
     install: true,
 )
@@ -90,13 +90,13 @@ libravenplugin_vapi = gnome.generate_vapi(
 pkgconfig.generate(
     name: 'budgie-raven-plugin',
     description: 'Budgie Raven Plugin Library',
-    version: '1',
+    version: '2',
     filebase: 'budgie-raven-plugin-1.0',
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-raven-plugin'],
     requires: [
         'gtk+-3.0 >= 3.22.0',
-        'libpeas-1.0 >= 1.8.0',
+        'libpeas-2 >= 1.99.0',
         'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',
     ],

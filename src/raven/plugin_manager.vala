@@ -38,17 +38,6 @@ namespace Budgie {
 		*/
 		public void setup_plugins() {
 			engine = new Peas.Engine();
-			engine.enable_loader("python3");
-
-			/* Ensure libpeas doesn't freak the hell out for Python plugins */
-			try {
-				var repo = GI.Repository.get_default();
-				repo.require("Peas", "1.0", 0);
-				repo.require("PeasGtk", "1.0", 0);
-				repo.require("BudgieRaven", "1.0", 0);
-			} catch (Error e) {
-				message("Error loading typelibs: %s", e.message);
-			}
 
 			/* System path */
 			var dir = Environment.get_user_data_dir();
@@ -64,7 +53,7 @@ namespace Budgie {
 
 			engine.rescan_plugins();
 
-			plugin_set = new Peas.ExtensionSet(engine, typeof(Budgie.RavenPlugin));
+			plugin_set = new Peas.ExtensionSet.with_properties(engine, typeof(Budgie.RavenPlugin), {}, {});
 			plugin_set.extension_added.connect(on_plugin_loaded);
 		}
 
@@ -107,7 +96,7 @@ namespace Budgie {
 			if (instance_settings_schema_name.split(".").length < 3) return RavenWidgetCreationResult.INVALID_MODULE_NAME;
 
 			if (!is_plugin_loaded(module_name)) {
-				if (!engine.try_load_plugin(plugin_info)) return RavenWidgetCreationResult.PLUGIN_LOAD_FAILED;
+				engine.load_plugin(plugin_info);
 			}
 			var extension = plugin_set.get_extension(plugin_info);
 			var plugin = extension as Budgie.RavenPlugin;
@@ -139,8 +128,12 @@ namespace Budgie {
 
 		public List<Peas.PluginInfo?> get_all_plugins() {
 			List<Peas.PluginInfo?> ret = new List<Peas.PluginInfo?>();
-			foreach (unowned Peas.PluginInfo? info in this.engine.get_plugin_list()) {
-				ret.append(info);
+			var list = this.engine.get_n_items();
+			for (int i=0; i < list; i++) {
+				Peas.PluginInfo? info = (Peas.PluginInfo)this.engine.get_item(i);
+				if (info != null) {
+					ret.append(info);
+				}
 			}
 			return ret;
 		}
@@ -156,7 +149,7 @@ namespace Budgie {
 				warning("budgie_panel_modprobe called for non existent module: %s", module_name);
 				return;
 			}
-			this.engine.try_load_plugin(i);
+			this.engine.load_plugin(i);
 		}
 
 		private static string module_name_to_schema_name(string module_name) {

@@ -25,8 +25,6 @@ shared_library(
     applet_lockkeys_sources,
     dependencies: applet_lockkeys_deps,
     vala_args: [
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
         '--vapidir', dir_libpanelplugin,
     ],
     install: true,
