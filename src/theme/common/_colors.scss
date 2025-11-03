@@ -1,7 +1,7 @@
 $fg_color: if($variant == "default", white, black);
 
 $selected_bg_color: if($variant == "default", #6bca81, black);
-$selected_fg_color: black;
+$selected_fg_color: if($variant == "default", black, white);
 
 $warning_color: #f27835;
 $error_color: #fc4138;
