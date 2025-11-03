@@ -7,10 +7,10 @@
     .button:hover { -gtk-#{$image-effect}: none; }
 
     label, #{$search} {
-        color: darken(white, 0.1);
+        color: darken($fg_color, 0.1);
 
         &:disabled {
-            color: transparentize(white, 0.4);
+            color: transparentize($fg_color, 0.4);
         }
     }
 
@@ -48,6 +48,14 @@
         > row {
             padding: 0;
             margin: 0;
+
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
+
         }
 
         button.flat {
@@ -87,6 +95,7 @@
         .image-button {
             @extend %reset_style;
 
+            color: $fg_color;
             transition-property: background-color;
             transition: 170ms ease-out;
             padding: 4px;
@@ -96,6 +105,12 @@
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
         }
 
         .user-icon-button {
@@ -108,6 +123,12 @@
 
             &:hover { background-color: transparentize(white, 0.9); }
             &:active { background-color: transparentize(white, 0.8); }
+            &:focus {
+                image, label {
+                    color: $selected_fg_color;
+                }
+                background-color: $selected_bg_color;
+            }
         }
     }
 
@@ -119,9 +140,17 @@
         margin-bottom: 6px;
         padding: 8px;
 
+        > row:focus {
+            image, label {
+                color: $selected_fg_color;
+            }
+            background-color: $selected_bg_color;
+        }
+
         button {
             @extend %reset_style;
 
+            color: $fg_color;
             transition-property: background-color, color;
             transition: 170ms ease-out;
             padding: 4px 8px 4px 2px;
@@ -160,7 +189,7 @@
         transition: 170ms ease-out;
 
         &:hover { background-color: transparentize(white, 0.9); }
-        &:active, &:checked {
+        &:active, &:checked, &:focus {
             label {
                 color: $selected_fg_color;
             }

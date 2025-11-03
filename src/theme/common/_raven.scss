@@ -31,6 +31,10 @@
     .raven-notifications-view > .raven-background > .frame > list {
         @extend %reset_style;
 
+        .dim-label {
+            color: $fg_color;
+        }
+
         .raven-notifications-group {
             .raven-notifications-group-header {
                 padding: 0 4px;
