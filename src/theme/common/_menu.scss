@@ -95,6 +95,7 @@
         .image-button {
             @extend %reset_style;
 
+            color: $fg_color;
             transition-property: background-color;
             transition: 170ms ease-out;
             padding: 4px;
@@ -149,6 +150,7 @@
         button {
             @extend %reset_style;
 
+            color: $fg_color;
             transition-property: background-color, color;
             transition: 170ms ease-out;
             padding: 4px 8px 4px 2px;
