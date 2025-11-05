@@ -213,10 +213,12 @@ namespace Budgie {
 		* do_disable_quietly will quietly disable Caffeine Mode
 		*/
 		public void do_disable_quietly() {
-			temporary_notification_disabled = true;
-			wm_settings.set_boolean("caffeine-mode", false);
-			Settings.sync();
-			reset_values(); // Immediately reset values
+			if (get_caffeine_mode()) {
+				temporary_notification_disabled = true;
+				wm_settings.set_boolean("caffeine-mode", false);
+				Settings.sync();
+				reset_values(); // Immediately reset values
+			}
 		}
 
 		/**
