@@ -14,7 +14,7 @@ namespace Workspaces {
 	public const string FALLBACK_ICON_NAME = "image-missing";
 
 	public class WindowIcon : Gtk.Button {
-		public libxfce4windowing.Window window { get; construct; }
+		public Xfw.Window window { get; construct; }
 
 		construct {
 			this.set_relief(Gtk.ReliefStyle.NONE);
@@ -63,7 +63,7 @@ namespace Workspaces {
 			this.show_all();
 		}
 
-		public WindowIcon(libxfce4windowing.Window window) {
+		public WindowIcon(Xfw.Window window) {
 			Object(window: window);
 		}
 

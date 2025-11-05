@@ -149,7 +149,7 @@ namespace Budgie {
 			combobox_idents.set_id_column(0);
 
 			// center dialog on the primary screen
-			var primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
+			var primary_monitor = Xfw.Screen.get_default().get_primary_monitor();
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
 			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
