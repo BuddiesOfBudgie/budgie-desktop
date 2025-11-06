@@ -91,7 +91,7 @@ pkgconfig.generate(
     name: 'budgie-raven-plugin',
     description: 'Budgie Raven Plugin Library',
     version: '2',
-    filebase: 'budgie-raven-plugin-1.0',
+    filebase: 'budgie-raven-plugin-2.0',
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-raven-plugin'],
     requires: [
