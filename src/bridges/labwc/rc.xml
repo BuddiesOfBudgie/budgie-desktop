@@ -1,7 +1,4 @@
 <labwc_config>
-	<core>
-		<autoEnableOutputs>no</autoEnableOutputs>
-	</core>
 	<desktops number="4" />
 	<keyboard>
 		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">

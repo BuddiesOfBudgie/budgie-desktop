@@ -9,6 +9,7 @@ session_data.set('libexecdir', libexecdir)
 budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.A11ySettings',
     'org.buddiesofbudgie.SettingsDaemon.Datetime',
+    'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
     'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
     'org.buddiesofbudgie.SettingsDaemon.Power',
     'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
@@ -16,7 +17,8 @@ budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.Sharing',
     'org.buddiesofbudgie.SettingsDaemon.Smartcard',
     'org.buddiesofbudgie.SettingsDaemon.Sound',
-    'org.buddiesofbudgie.SettingsDaemon.Wacom',
+    'org.buddiesofbudgie.SettingsDaemon.UsbProtection',
+    'org.buddiesofbudgie.SettingsDaemon.Wwan'
 ]
 
 # Always in Budgie
@@ -24,7 +26,7 @@ budgie_components = [
     'org.buddiesofbudgie.BudgieDaemon',
     'org.buddiesofbudgie.BudgiePanel',
     'org.buddiesofbudgie.BudgiePowerDialog',
-    'org.buddiesofbudgie.BudgieScreenshotDialog'
+    'org.buddiesofbudgie.BudgieScreenshotDialog',
 ]
 
 if with_polkit == true
@@ -40,6 +42,8 @@ session_data.set('SESSION_COMPONENTS', ';'.join(session_components))
 session_data.set('prefix', join_paths(get_option('prefix')))
 # Set bindir to budgie-desktop
 session_data.set('bindir', bindir)
+# Set datadir to budgie-desktop
+session_data.set('datadir', datadir)
 
 # Set bindir to labwc
 labwc_bindir = get_option('labwc-bindir')
@@ -77,6 +81,14 @@ custom_target('desktop-file-session-main',
     command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
     install : true,
     install_dir : join_paths(datadir, 'gnome-session', 'sessions'),
+)
+
+# Write /usr/bin/startbudgielabwc script
+configure_file(
+    input: 'startbudgielabwc.in',
+    output: 'startbudgielabwc',
+    configuration: session_data,
+    install_dir: join_paths(get_option('prefix'), get_option('bindir')),
 )
 
 # Write /usr/bin/budgie-desktop script
@@ -158,7 +170,6 @@ custom_target('desktop-file-screenshotdialog',
     install_dir : xdg_appdir,
 )
 
-
 # install gnome-settings-daemon desktop files to ensure they autostart
 
 settings_daemon_components = budgie_session_324_components + [
@@ -175,3 +186,8 @@ foreach component: settings_daemon_components
         install_dir: xdg_appdir,
     )
 endforeach
+
+install_data(
+    'org.buddiesofbudgie.settings-daemon.plugins.media-keys.gschema.xml',
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas'),
+)
