@@ -13,7 +13,7 @@ if [ -z $XDG_CURRENT_DESKTOP ]; then
   export XDG_CURRENT_DESKTOP
 fi
 
-@bindir@/org.buddiesofbudgie.BudgieDaemonV2 &
+@bindir@/org.buddiesofbudgie.Services &
 sleep 2
 
 # Wait until the server starts before launching the session
