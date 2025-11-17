@@ -226,6 +226,13 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		var icon_theme = Gtk.IconTheme.get_default();
 		var icon_info = icon_theme.lookup_icon(button.app.icon.to_string(), size, Gtk.IconLookupFlags.USE_BUILTIN);
+
+		// Check if icon_info is null (e.g., broken symlink or missing icon)
+		if (icon_info == null) {
+			warning("Unable to find icon: %s", button.app.icon.to_string());
+			return;
+		}
+
 		Gdk.Pixbuf? pixbuf;
 
 		try {
@@ -299,7 +306,14 @@ public class IconTasklistApplet : Budgie.Applet {
 			return;
 		}
 
-		app_id = app_id.split("://")[1];
+		var parts = app_id.split("://");
+		if (parts.length < 2) {
+			warning("Malformed URI: %s", app_id);
+			Gtk.drag_finish(context, false, false, time);
+			return;
+		}
+
+		app_id = parts[1];
 		app_id = app_id.strip();
 
 		DesktopAppInfo? info = new DesktopAppInfo.from_filename(app_id);

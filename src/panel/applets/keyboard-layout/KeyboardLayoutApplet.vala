@@ -421,13 +421,18 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 	void update_fallback() {
 		string? type = null;
 		string? id = null;
-		string? locale = Intl.get_language_names()[0];
+		string? locale = null;
+		string[] language_names = Intl.get_language_names();
+		if (language_names != null && language_names.length > 0) {
+			locale = language_names[0];
+		}
+
 		string? display_name = null;
 		string? short_name = null;
 		string? xkb_layout = null;
 		string? xkb_variant = null;
 
-		if (!locale.contains("_")) {
+		if (locale == null || !locale.contains("_")) {
 			locale = DEFAULT_LOCALE;
 		}
 
