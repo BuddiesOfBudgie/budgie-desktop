@@ -444,6 +444,11 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 	 */
 	private void add_place(string path, string class) {
 		string[] arr = path.split(" ");
+		if (arr.length == 0) {
+			warning("Empty path provided to add_place");
+			return;
+		}
+
 		string place = arr[0];
 		string place_name = "";
 

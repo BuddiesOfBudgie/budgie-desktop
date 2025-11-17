@@ -210,22 +210,31 @@ namespace Budgie {
 			string? label = null;
 
 			if (params.contains("icon")) {
-				icon_name = params.lookup("icon").get_string();
+				var icon_variant = params.lookup("icon");
+				if (icon_variant != null) {
+					icon_name = icon_variant.get_string();
+				}
 			}
 
 			if (params.contains("label")) {
-				label = params.lookup("label").get_string();
+				var label_variant = params.lookup("label");
+				if (label_variant != null) {
+					label = label_variant.get_string();
+				}
 			}
 
 			double prog_value = -1;
 
 			if (params.contains("level")) {
+				var level_variant = params.lookup("level");
+				if (level_variant != null) {
 	#if USE_GSD_DOUBLES
-				prog_value = params.lookup("level").get_double();
+					prog_value = level_variant.get_double();
 	#else
-				int32 prog_int = params.lookup("level").get_int32();
-				prog_value = prog_int.clamp(0, 100) / 100.0;
+					int32 prog_int = level_variant.get_int32();
+					prog_value = prog_int.clamp(0, 100) / 100.0;
 	#endif
+				}
 			}
 
 			/* Update the OSD accordingly */

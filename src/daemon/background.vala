@@ -77,6 +77,12 @@ namespace Budgie {
 				return;
 			}
 
+			// Validate variant structure before accessing
+			if (variant == null || variant.n_children() == 0) {
+				warning("Invalid response from AccountsService for user '%s'", Environment.get_user_name());
+				return;
+			}
+
 			string object_path = variant.get_child_value(0).get_string();
 
 			try {
