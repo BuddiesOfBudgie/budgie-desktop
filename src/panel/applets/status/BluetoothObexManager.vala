@@ -94,7 +94,7 @@ public class ObexManager : Object {
 
 			// Verify session was successfully created
 			if (session == null) {
-				warning("Bluetooth Obex session is null after proxy creation");
+				critical("Bluetooth Obex session is null after proxy creation");
 				return;
 			}
 
