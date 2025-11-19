@@ -198,7 +198,7 @@ public class ButtonPopover : Gtk.Popover {
 
 			var class_ids = window.get_class_ids();
 			if (class_ids == null || class_ids.length == 0) {
-				warning("Window has no class IDs");
+				warning("Window '%s' has no class IDs", window.get_name());
 				return;
 			}
 
@@ -213,7 +213,7 @@ public class ButtonPopover : Gtk.Popover {
 	public void remove_window(libxfce4windowing.Window window) {
 		var class_ids = window.get_class_ids();
 		if (class_ids == null || class_ids.length == 0) {
-			warning("Window has no class IDs in remove_window");
+			warning("Window '%s' has no class IDs in remove_window", window.get_name());
 			return;
 		}
 
