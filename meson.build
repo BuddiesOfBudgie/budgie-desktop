@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.9.2',
+    version: '10.10.preview.1',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -77,6 +77,7 @@ if get_option('with-runtime-dependencies')
     find_program('gammastep', required: true)
     find_program('grim', required: true)
     find_program('slurp', required: true)
+    find_program('swaybg', required: true)
     found_gtklock = find_program('gtklock', required: false)
     if found_gtklock.found() == false
         find_program('swaylock', required: true)
