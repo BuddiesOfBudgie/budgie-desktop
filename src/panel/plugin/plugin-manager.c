@@ -378,7 +378,10 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 	}
 
 	plugin_name = g_settings_get_string(settings, BUDGIE_APPLET_KEY_NAME);
-	info = g_hash_table_lookup(self->plugins, plugin_name);
+
+	if (g_hash_table_contains(self->plugins, plugin_name)) {
+		info = g_object_ref(g_hash_table_lookup(self->plugins, plugin_name));
+	}
 
 	// Check if the plugin has been loaded
 	if (!PEAS_IS_PLUGIN_INFO(info)) {
