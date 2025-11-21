@@ -28,7 +28,10 @@ namespace Budgie {
 		/**
 		* Determine if the wallpaper is a colour wallpaper or not
 		*/
-		private bool is_color_wallpaper(string bg_filename) {
+		private bool is_color_wallpaper(string? bg_filename) {
+			if (bg_filename == null) {
+				return false;
+			}
 			if (gnome_bg.get_placement() == GDesktop.BackgroundStyle.NONE || bg_filename.has_suffix(GNOME_COLOR_HACK)) {
 				return true;
 			}
@@ -77,6 +80,12 @@ namespace Budgie {
 				return;
 			}
 
+			// Validate variant structure before accessing
+			if (variant == null || variant.n_children() == 0) {
+				warning("Invalid response from AccountsService for user '%s'", Environment.get_user_name());
+				return;
+			}
+
 			string object_path = variant.get_child_value(0).get_string();
 
 			try {
@@ -91,6 +100,13 @@ namespace Budgie {
 
 		void update() {
 			string? bg_filename = gnome_bg.get_filename();;
+
+			// Check if background filename is valid before using it
+			if (bg_filename == null) {
+				warning("No background filename available");
+				return;
+			}
+
 			/* Set background image when appropriate, and for now dont parse .xml files */
 			if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
 				// we use swaybg to define the wallpaper - we need to keep track

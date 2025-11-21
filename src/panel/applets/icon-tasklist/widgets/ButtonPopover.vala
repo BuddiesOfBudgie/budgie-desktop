@@ -196,7 +196,13 @@ public class ButtonPopover : Gtk.Popover {
 				controls_layout.destroy();
 			});
 
-			string id = window.get_class_ids()[0];
+			var class_ids = window.get_class_ids();
+			if (class_ids == null || class_ids.length == 0) {
+				warning("Window '%s' has no class IDs", window.get_name());
+				return;
+			}
+
+			string id = class_ids[0];
 			stack.add_named(controls_layout, id);
 			stack.set_visible_child_name(id);
 		});
@@ -205,15 +211,24 @@ public class ButtonPopover : Gtk.Popover {
 	}
 
 	public void remove_window(libxfce4windowing.Window window) {
-		string window_id = window.get_class_ids()[0];
+		var class_ids = window.get_class_ids();
+		if (class_ids == null || class_ids.length == 0) {
+			warning("Window '%s' has no class IDs in remove_window", window.get_name());
+			return;
+		}
+
+		string window_id = class_ids[0];
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			string child_id = ((WindowItem) child).window.get_class_ids()[0];
-			if (child_id == window_id) {
-				window_item = child as WindowItem;
-				break;
+			var child_class_ids = ((WindowItem) child).window.get_class_ids();
+			if (child_class_ids != null && child_class_ids.length > 0) {
+				string child_id = child_class_ids[0];
+				if (child_id == window_id) {
+					window_item = child as WindowItem;
+					break;
+				}
 			}
 		}
 

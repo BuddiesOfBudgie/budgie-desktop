@@ -91,6 +91,13 @@
 			wm_settings.changed["caffeine-mode"].connect(on_caffeine_mode);
 		}
 
+	~OSDKeys() {
+		// Cleanup DBus signal subscription to prevent resource leak
+		if (conn != null && signal_id != 0) {
+			conn.signal_unsubscribe(signal_id);
+		}
+	}
+
 		/* handle brightness changes due to caffeine mode - we
 		    don't want the brightness OSD to display when caffeine with brightness
 			changes is enabled
