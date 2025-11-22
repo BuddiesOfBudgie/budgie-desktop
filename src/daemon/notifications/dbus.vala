@@ -247,12 +247,21 @@
 			// If this notification has a desktop entry in the hints,
 			// set the app name to get the settings for to it.
 			if ("desktop-entry" in hints) {
-				settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
+				var desktop_entry = hints.lookup("desktop-entry");
+				if (desktop_entry != null) {
+					settings_app_name = desktop_entry.get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
+				}
 			}
 
 			// Get the application settings
+			var schema = SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true);
+			if (schema == null) {
+				warning("Application notification schema '%s' not found", APPLICATION_SCHEMA);
+				return id;
+			}
+
 			var app_notification_settings = new Settings.full(
-				SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
+				schema,
 				null,
 				"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
 			);
@@ -460,7 +469,10 @@
 
 			// Look for a sound name in the hints
 			if ("sound-name" in notification.hints) {
-				sound_name = notification.hints.get("sound-name").get_string();
+				var sound_hint = notification.hints.get("sound-name");
+				if (sound_hint != null) {
+					sound_name = sound_hint.get_string();
+				}
 			}
 
 			// Try to map the notification's category to a sound name to use
