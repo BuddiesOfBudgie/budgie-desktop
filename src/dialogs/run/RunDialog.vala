@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+using GtkLayerShell;
+
 namespace Budgie {
 	/**
 	* We need to probe the dbus daemon directly, hence this interface
@@ -109,14 +111,100 @@ namespace Budgie {
 			this.load_buttons();
 
 			/* Set size properties */
+			var display = Gdk.Display.get_default();
+			var screen = Gdk.Screen.get_default();
 			int x, y;
-			get_position(out x, out y);
-			var monitor = get_screen().get_display().get_monitor_at_point(x, y);
-			var rect = monitor.get_workarea();
+			bool have_pos = false;
+			// using the display seat should be reliable to find the point position
+			var seat = display.get_default_seat();
+			if (seat != null) {
+				var pointer = seat.get_pointer();
+				if (pointer != null) {
+					pointer.get_position( out screen, out x, out y);
+					have_pos = true;
+				}
+			}
+
+			Gdk.Rectangle? rect = null;
+
+			if (!have_pos) {
+				// if for some reason we can't determine the pointer position
+				// then assume we are placing on the primary monitor
+				var primary = display.get_primary_monitor();
+				if (primary != null) {
+					rect = primary.get_workarea();
+					x = rect.x + rect.width / 2;
+					y = rect.y + rect.height / 2;
+				}
+			}
+
+			Gdk.Monitor? monitor_obj = null;
+			int monitor_index = 0;
+
+			// get the monitor for the pointer location
+			if (display.get_monitor_at_point != null) {
+				monitor_obj = display.get_monitor_at_point(x, y);
+			}
+
+			if (monitor_obj == null) {
+				// we still don't know the monitor ... so try to get the primary
+				monitor_obj = display.get_primary_monitor();
+			}
+
+			// ultimate fallback - just use monitor index of zero to find the monitor
+			if (monitor_obj == null) {
+				if (display.get_monitor != null) {
+					monitor_obj = display.get_monitor(0);
+				}
+			}
+
+			// if we have a handle on the current monitor try to get its dimensions
+			if (monitor_obj != null) {
+				rect = monitor_obj.get_workarea();
+			} else {
+				// ultimate fallback - use deprecated methods to get screen width and height
+				rect = Gdk.Rectangle();
+				rect.x = 0;
+				rect.y = 0;
+				rect.width = screen.get_width();
+				rect.height = screen.get_height();
+			}
+
 			var width = (rect.width / 3).clamp(420, 840);
 
 			set_size_request(width, -1);
 			set_default_size(width, -1);
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+
+			if (monitor_obj != null) {
+				GtkLayerShell.set_monitor(this, monitor_obj);
+			} else {
+				return;
+			}
+
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+			// ensure opposite anchors are false so it doesn't stretch
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+
+			// calculate where to place the window in the monitor horizontally
+			int margin_left = rect.x;
+			margin_left += (rect.width - width) / 2;
+			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin_left - rect.x);
+
+			// we don't know the run dialog height until its displayed
+			// so wait and then set the vertical position
+			this.size_allocate.connect((allocation) => {
+				int real_h = allocation.height;
+				if (real_h <= 0) return;
+
+				int y_pos = rect.y + (rect.height - real_h) / 2;
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y_pos - rect.y);
+			});
 
 			/* Connect events */
 			focus_out_event.connect(() => {
