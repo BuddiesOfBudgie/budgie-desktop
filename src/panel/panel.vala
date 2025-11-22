@@ -322,7 +322,7 @@ namespace Budgie {
 				}
 			});
 
-			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.WAYLAND) {
+			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
 				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
 				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);

@@ -15,7 +15,7 @@ namespace Workspaces {
 	};
 
 	public class WorkspaceItem : Gtk.EventBox {
-		private libxfce4windowing.Workspace workspace;
+		private Xfw.Workspace workspace;
 		private Budgie.Popover popover;
 		private Gtk.Stack popover_stack;
 		private Gtk.FlowBox rest_of_the_icons;
@@ -25,7 +25,7 @@ namespace Workspaces {
 		private Gtk.Allocation real_alloc;
 		private float size_multiplier;
 
-		public WorkspaceItem(libxfce4windowing.Workspace space, float multiplier) {
+		public WorkspaceItem(Xfw.Workspace space, float multiplier) {
 			this.get_style_context().add_class("workspace-item");
 			this.workspace = space;
 			this.size_multiplier = multiplier;
@@ -178,7 +178,7 @@ namespace Workspaces {
 
 			if (data != null) {
 				try {
-					foreach (libxfce4windowing.Window window in WorkspacesApplet.xfce_screen.get_windows()) {
+					foreach (Xfw.Window window in WorkspacesApplet.xfce_screen.get_windows()) {
 						string all_class_names = string.joinv(",", window.get_class_ids());
 						if (all_class_names == data) {
 							window.move_to_workspace(this.workspace);
@@ -194,7 +194,7 @@ namespace Workspaces {
 			Gtk.drag_finish(context, dnd_success, true, time);
 		}
 
-		public void update_windows(List<libxfce4windowing.Window> window_list) {
+		public void update_windows(List<Xfw.Window> window_list) {
 			int num_columns = (real_alloc.width - 4) / 20;
 			int num_rows = (real_alloc.height - 4) / 20;
 
@@ -323,7 +323,7 @@ namespace Workspaces {
 			real_alloc.height = (int) (height * 2 * size_multiplier);
 		}
 
-		public libxfce4windowing.Workspace get_workspace() {
+		public Xfw.Workspace get_workspace() {
 			return workspace;
 		}
 	}
