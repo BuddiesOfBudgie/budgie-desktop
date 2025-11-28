@@ -22,7 +22,8 @@ namespace Budgie {
 	 */
 	[SingleInstance]
 	public class WaylandClient : GLib.Object {
-		private unowned libxfce4windowing.Monitor? primary_monitor=null;
+		private Xfw.Screen? screen = null;
+		private unowned Xfw.Monitor? primary_monitor=null;
 
 		public bool is_initialised() { return primary_monitor != null; }
 		public unowned Gdk.Monitor gdk_monitor {get; private set; }
@@ -30,7 +31,9 @@ namespace Budgie {
 
 		public WaylandClient() {
 			if (primary_monitor != null) return;
-			libxfce4windowing.Screen.get_default().monitors_changed.connect(on_monitors_changed);
+
+			screen = Xfw.Screen.get_default();
+			screen.monitors_changed.connect(on_monitors_changed);
 			on_monitors_changed();
 		}
 
@@ -42,7 +45,7 @@ namespace Budgie {
 			   don't try indefinitely
 			*/
 			Timeout.add(200, ()=> {
-				primary_monitor = libxfce4windowing.Screen.get_default().get_primary_monitor();
+				primary_monitor = screen.get_primary_monitor();
 				if (primary_monitor != null || loop++ > 10) {
 					monitor_res = primary_monitor.get_logical_geometry();
 					gdk_monitor = primary_monitor.get_gdk_monitor();

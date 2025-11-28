@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.9.2',
+    version: '10.10.preview.1',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
@@ -33,7 +33,7 @@ dep_gtk3 = dependency('gtk+-3.0', version: '>= 3.24.0')
 dep_glib = dependency('glib-2.0', version: '>= 2.64.0')
 dep_gee = dependency('gee-0.8', version: '>= 0.20.0')
 dep_giounix = dependency('gio-unix-2.0', version: '>= 2.64.0')
-dep_gobject_introspection = dependency('gobject-introspection-1.0', version: '>= 1.84.0')
+dep_girepository = dependency('girepository-2.0', version: '>= 1.84.0')
 dep_peas = dependency('libpeas-2', version: '>= 1.99.0')
 dep_gdkx11 = dependency('gdk-x11-3.0', version: '>= 3.24.0')
 dep_libuuid = dependency('uuid')
@@ -63,7 +63,7 @@ dep_canberra = dependency('libcanberra')
 dep_canberra_gtk3 = dependency('libcanberra-gtk3')
 
 # Needed for window tracking
-dep_xfce4windowing = dependency('libxfce4windowing-0', version: '>= 4.19.7')
+dep_xfce4windowing = dependency('libxfce4windowing-0', version: '>= 4.20.4')
 
 # Needed for upower interaction
 dep_upower = dependency('upower-glib', version: '>= 0.99.8')
@@ -77,6 +77,7 @@ if get_option('with-runtime-dependencies')
     find_program('gammastep', required: true)
     find_program('grim', required: true)
     find_program('slurp', required: true)
+    find_program('swaybg', required: true)
     found_gtklock = find_program('gtklock', required: false)
     if found_gtklock.found() == false
         find_program('swaylock', required: true)

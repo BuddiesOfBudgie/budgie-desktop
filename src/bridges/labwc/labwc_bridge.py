@@ -59,7 +59,7 @@ class Bridge:
             mainloop=quit()
 
     def user_config(self, config_file="rc.xml"):
-        return os.path.join(GLib.get_user_config_dir(), "labwc", config_file)
+        return os.path.join(GLib.get_user_config_dir(), "budgie-desktop", "labwc", config_file)
 
     # writes the labwc rc.xml file back
     def write_config(self):
@@ -101,30 +101,8 @@ class Bridge:
         self.log = logging.getLogger('labwc_bridge')
         self.log.addHandler(JournalHandler())
 
-        path,search_path = self.search_for_config("environment")
-        if path == None:
-            return
-
-        try:
-            if path != search_path[0]:
-                folder = self.user_config("")
-                os.makedirs(folder, exist_ok=True)
-                shutil.copy(path, search_path[0])
-        except Exception as e:
-            self.log.critical("Failed to copy " + path + " to " + search_path[0])
-            self.log.critical(e)
-            return
-
         path, search_path = self.search_for_config("menu.xml")
         if path == None:
-            return
-
-        try:
-            if path != search_path[0]:
-                shutil.copy(path, search_path[0])
-        except Exception as e:
-            self.log.critical("Failed to copy " + path + " to " + search_path[0])
-            self.log.critical(e)
             return
 
         try:
@@ -154,7 +132,7 @@ class Bridge:
         self.panel_settings = Gio.Settings.new('com.solus-project.budgie-panel')
         self.panel_settings.connect('changed', self.panel_settings_changed)
 
-        self.gsd_media_keys_settings = Gio.Settings.new('org.gnome.settings-daemon.plugins.media-keys')
+        self.gsd_media_keys_settings = Gio.Settings.new('org.buddiesofbudgie.settings-daemon.plugins.media-keys')
         self.gsd_media_keys_settings.connect('changed', self.keybindings_changed)
 
         self.desktop_wm_keybindings_settings = Gio.Settings.new('org.gnome.desktop.wm.keybindings')
@@ -377,7 +355,7 @@ class Bridge:
 
             if len(result) > 0:
                 customkeypath = result[0]
-                schema = Gio.Settings.new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
+                schema = Gio.Settings.new_with_path("org.buddiesofbudgie.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
                 schema_command = schema["command"]
                 schema_binding = schema["binding"]
                 customkey = customkeypath.split("/")[-2]
@@ -400,7 +378,7 @@ class Bridge:
         # so that modifications are notified
         self.custom_keys_settings = {}
         for customkeypath in self.gsd_media_keys_settings.get_strv("custom-keybindings"):
-            schema = Gio.Settings.new_with_path("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
+            schema = Gio.Settings.new_with_path("org.buddiesofbudgie.settings-daemon.plugins.media-keys.custom-keybinding", customkeypath)
             schema_command = schema["command"]
             schema_binding = schema["binding"]
             customkey = customkeypath.split("/")[-2]
@@ -446,7 +424,7 @@ class Bridge:
                     short_schema = short_schemakey.split("/")[0]
                     key = short_schemakey.split("/")[1]
 
-                    if short_schema in "org.gnome.settings-daemon.plugins.media-keys":
+                    if short_schema in "org.buddiesofbudgie.settings-daemon.plugins.media-keys":
                         self.keybindings_changed(self.gsd_media_keys_settings, key)
                     if short_schema in "org.gnome.desktop.wm.keybindings":
                         self.keybindings_changed(self.desktop_wm_keybindings_settings, key)

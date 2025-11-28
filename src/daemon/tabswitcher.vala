@@ -12,7 +12,7 @@
 
 using Gdk;
 using Gtk;
-using libxfce4windowing;
+using Xfw;
 
 namespace Budgie {
 	public const string SHOW_ALL_WINDOWS_KEY = "show-all-windows-tabswitcher";
@@ -47,18 +47,18 @@ namespace Budgie {
 	public class TabSwitcherWidget : Gtk.FlowBoxChild {
 		private Gtk.Image image;
 		private uint64 activation_timestamp;
-		private libxfce4windowing.Application? application;
+		private Xfw.Application? application;
 		private DesktopAppInfo? info;
 		public string id;
 		public string title;
 
-		public unowned libxfce4windowing.Window? window = null;
+		public unowned Xfw.Window? window = null;
 
 		public signal void closed(TabSwitcherWidget widget);
-		public signal void window_activated(libxfce4windowing.Window window);
+		public signal void window_activated(Xfw.Window window);
 		public signal void workspace_changed();
 
-		public TabSwitcherWidget(Budgie.AppSystem app_system, libxfce4windowing.Window? win) {
+		public TabSwitcherWidget(Budgie.AppSystem app_system, Xfw.Window? win) {
 			Object();
 			window = win;
 			ulong uid = (ulong) window.x11_get_xid();
@@ -68,7 +68,7 @@ namespace Budgie {
 			application = win.get_application();
 
 			// Running under X11
-			if (libxfce4windowing.windowing_get() == libxfce4windowing.Windowing.X11) {
+			if (Xfw.windowing_get() == Xfw.Windowing.X11) {
 				info = app_system.query_window_by_xid((ulong)uid);
 			}
 
@@ -82,8 +82,8 @@ namespace Budgie {
 
 			window.state_changed.connect((changed_mask, new_state) => {
 				if (
-					(libxfce4windowing.WindowState.ACTIVE in changed_mask) &&
-					(libxfce4windowing.WindowState.ACTIVE in new_state)
+					(Xfw.WindowState.ACTIVE in changed_mask) &&
+					(Xfw.WindowState.ACTIVE in new_state)
 				) {
 					activation_timestamp = get_time();
 					window_activated(window);
@@ -127,11 +127,11 @@ namespace Budgie {
 		[GtkChild]
 		private unowned Label window_title;
 
-		private libxfce4windowing.Workspace? active_workspace = null;
-		private unowned libxfce4windowing.WorkspaceGroup? workspace_group = null;
+		private Xfw.Workspace? active_workspace = null;
+		private unowned Xfw.WorkspaceGroup? workspace_group = null;
 		private Gdk.Screen? default_screen;
-		private libxfce4windowing.Screen xfce_screen;
-		private unowned libxfce4windowing.WorkspaceManager workspace_manager;
+		private Xfw.Screen xfce_screen;
+		private unowned Xfw.WorkspaceManager workspace_manager;
 		private Budgie.AppSystem? app_system = null;
 
 		private Gdk.Monitor primary_monitor;
@@ -163,7 +163,7 @@ namespace Budgie {
 
 			default_screen = Gdk.Screen.get_default();
 
-			xfce_screen = libxfce4windowing.Screen.get_default();
+			xfce_screen = Xfw.Screen.get_default();
 
 			xfce_screen.get_windows().foreach(add_window);
 			xfce_screen.window_opened.connect(add_window);
@@ -212,7 +212,7 @@ namespace Budgie {
 			window_box.invalidate_filter(); // Re-filter
 		}
 
-		private void add_window(libxfce4windowing.Window window) {
+		private void add_window(Xfw.Window window) {
 			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 
 			var window_widget = new TabSwitcherWidget(app_system, window);
@@ -333,7 +333,7 @@ namespace Budgie {
 			update_sizing();
 		}
 
-		private void set_window_as_activated(libxfce4windowing.Window window) {
+		private void set_window_as_activated(Xfw.Window window) {
 			string id = ((ulong) window.x11_get_xid()).to_string();
 			unowned List<string> entries = recency.find_custom(id, strcmp);
 			recency.remove_link(entries);
@@ -356,15 +356,15 @@ namespace Budgie {
 			move_switcher();
 		}
 
-		private bool window_on_active_workspace(libxfce4windowing.Window window) {
-			unowned libxfce4windowing.Workspace? win_workspace = window.get_workspace(); // Get workspace
+		private bool window_on_active_workspace(Xfw.Window window) {
+			unowned Xfw.Workspace? win_workspace = window.get_workspace(); // Get workspace
 			if (active_workspace == null || win_workspace == null) return true;
 			return win_workspace.get_id() == active_workspace.get_id();
 		}
 
 		/* Switch focus to the item with the xid */
 		public void focus_item(bool backwards) {
-			unowned libxfce4windowing.Window? active_window = xfce_screen.get_active_window();
+			unowned Xfw.Window? active_window = xfce_screen.get_active_window();
 			TabSwitcherWidget? widget = active_window != null ? ids.get(((ulong) active_window.x11_get_xid()).to_string()) : null;
 
 			// Visible, each input should cycle to previous / next

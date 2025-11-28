@@ -109,7 +109,7 @@ public class BudgieMenuWindow : Gtk.Popover {
 		});
 
 		this.system_settings_button.clicked.connect(() => {
-			this.open_desktop_entry("budgie-control-center.desktop");
+			this.open_desktop_entry("org.buddiesofbudgie.ControlCenter.desktop");
 			this.hide();
 		});
 

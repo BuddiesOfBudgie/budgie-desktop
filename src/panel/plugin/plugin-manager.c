@@ -15,7 +15,7 @@
 #include "applet.h"
 #include "plugin.h"
 
-#include <gobject-introspection-1.0/girepository.h>
+#include <girepository/girepository.h>
 #include <libpeas-2/libpeas.h>
 
 /**
@@ -100,14 +100,22 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
 
 	/* Ensure libpeas doesn't freak the hell out for Python extensions */
 
-	g_irepository_require(NULL, "Peas", "2", 0, &error);
+	static GIRepository* repository;
+	
+#if GLIB_CHECK_VERSION(2, 85, 0)
+    repository = gi_repository_dup_default ();
+#else
+    repository = gi_repository_new ();
+#endif
+
+	gi_repository_require(repository, "Peas", "2", 0, &error);
 
 	if G_UNLIKELY (error) {
 		g_warning("Error loading typelibs: %s", error->message);
 		g_clear_error(error);
 	}
 
-	g_irepository_require(NULL, "Budgie", "2.0", 0, &error);
+	gi_repository_require(repository, "Budgie", "3.0", 0, &error);
 
 	if G_UNLIKELY (error) {
 		g_warning("Error loading typelibs: %s", error->message);
@@ -370,7 +378,10 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 	}
 
 	plugin_name = g_settings_get_string(settings, BUDGIE_APPLET_KEY_NAME);
-	info = g_hash_table_lookup(self->plugins, plugin_name);
+
+	if (g_hash_table_contains(self->plugins, plugin_name)) {
+		info = g_object_ref(g_hash_table_lookup(self->plugins, plugin_name));
+	}
 
 	// Check if the plugin has been loaded
 	if (!PEAS_IS_PLUGIN_INFO(info)) {

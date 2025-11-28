@@ -17,9 +17,14 @@ public class PlaceItem : ListItem {
 		if (bookmark_name != null) {
 			name = bookmark_name;
 		} else if (file.get_basename() == "/" && file.get_uri() != "file:///") {
-			name = file.get_uri().split("://")[1];
-			if (name.has_suffix("/")) {
-				name = name[0:name.length - 1];
+			var uri_parts = file.get_uri().split("://");
+			if (uri_parts.length >= 2) {
+				name = uri_parts[1];
+				if (name.has_suffix("/")) {
+					name = name[0:name.length - 1];
+				}
+			} else {
+				name = file.get_basename();
 			}
 		} else {
 			name = file.get_basename();

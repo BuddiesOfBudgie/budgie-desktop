@@ -89,6 +89,13 @@ public class ObexManager : Object {
 				);
 			} catch (Error e) {
 				critical("Error getting Obex session proxy: %s", e.message);
+				return; // Cannot proceed without valid session
+			}
+
+			// Verify session was successfully created
+			if (session == null) {
+				critical("Bluetooth Obex session is null after proxy creation");
+				return;
 			}
 
 			active_transfers[transfer] = session.destination;

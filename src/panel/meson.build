@@ -46,7 +46,7 @@ panel_sources = [
 panel_deps = [
     libpanelplugin_vapi,
     dep_giounix,
-    dep_gobject_introspection,
+    dep_girepository,
     dep_gtk3,
     dep_gtk_layer_shell,
     dep_peas,

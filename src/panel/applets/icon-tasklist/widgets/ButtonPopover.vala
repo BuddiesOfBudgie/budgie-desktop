@@ -184,7 +184,7 @@ public class ButtonPopover : Gtk.Popover {
 		}
 	}
 
-	public void add_window(libxfce4windowing.Window window) {
+	public void add_window(Xfw.Window window) {
 		var window_item = new WindowItem(window);
 
 		window_item.page_switch_clicked.connect(() => {
@@ -196,7 +196,13 @@ public class ButtonPopover : Gtk.Popover {
 				controls_layout.destroy();
 			});
 
-			string id = window.get_class_ids()[0];
+			var class_ids = window.get_class_ids();
+			if (class_ids == null || class_ids.length == 0) {
+				warning("Window '%s' has no class IDs", window.get_name());
+				return;
+			}
+
+			string id = class_ids[0];
 			stack.add_named(controls_layout, id);
 			stack.set_visible_child_name(id);
 		});
@@ -204,16 +210,25 @@ public class ButtonPopover : Gtk.Popover {
 		windows.add(window_item);
 	}
 
-	public void remove_window(libxfce4windowing.Window window) {
-		string window_id = window.get_class_ids()[0];
+	public void remove_window(Xfw.Window window) {
+		var class_ids = window.get_class_ids();
+		if (class_ids == null || class_ids.length == 0) {
+			warning("Window '%s' has no class IDs in remove_window", window.get_name());
+			return;
+		}
+
+		string window_id = class_ids[0];
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			string child_id = ((WindowItem) child).window.get_class_ids()[0];
-			if (child_id == window_id) {
-				window_item = child as WindowItem;
-				break;
+			var child_class_ids = ((WindowItem) child).window.get_class_ids();
+			if (child_class_ids != null && child_class_ids.length > 0) {
+				string child_id = child_class_ids[0];
+				if (child_id == window_id) {
+					window_item = child as WindowItem;
+					break;
+				}
 			}
 		}
 
@@ -239,7 +254,7 @@ public class ButtonPopover : Gtk.Popover {
 }
 
 private class WindowControls : Gtk.Box {
-	public libxfce4windowing.Window window { get; construct; }
+	public Xfw.Window window { get; construct; }
 
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
@@ -247,7 +262,7 @@ private class WindowControls : Gtk.Box {
 
 	public signal void return_clicked();
 
-	public WindowControls(libxfce4windowing.Window window) {
+	public WindowControls(Xfw.Window window) {
 		Object(window: window, orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 	}
 
@@ -302,7 +317,7 @@ private class WindowControls : Gtk.Box {
 		});
 
 		window.state_changed.connect((changed_mask, new_state) => {
-			if (libxfce4windowing.WindowState.MAXIMIZED in changed_mask) {
+			if (Xfw.WindowState.MAXIMIZED in changed_mask) {
 				update_maximize_label();
 			}
 		});
@@ -354,7 +369,7 @@ private class WindowControls : Gtk.Box {
 }
 
 private class WindowItem : Gtk.ListBoxRow {
-	public libxfce4windowing.Window window { get; construct; }
+	public Xfw.Window window { get; construct; }
 
 	private Gtk.Label? name_label;
 	private Gtk.Button? name_button;
@@ -363,7 +378,7 @@ private class WindowItem : Gtk.ListBoxRow {
 
 	public signal void page_switch_clicked();
 
-	public WindowItem(libxfce4windowing.Window window) {
+	public WindowItem(Xfw.Window window) {
 		Object(window: window);
 	}
 
