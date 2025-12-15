@@ -32,6 +32,7 @@ namespace Budgie {
 		unowned Budgie.Toplevel? toplevel;
 		Gtk.Stack stack;
 		Gtk.StackSwitcher switcher;
+		Gtk.ListStore position_model;
 		Gtk.ComboBox combobox_position;
 		ulong position_id;
 		Gtk.ComboBox combobox_autohide;
@@ -65,6 +66,7 @@ namespace Budgie {
 
 			this.manager = manager;
 			this.toplevel = toplevel;
+			this.position_model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelPosition));
 
 			border_width = 0;
 			margin_top = 8;
@@ -104,6 +106,7 @@ namespace Budgie {
 			this.show_all();
 
 			on_panels_changed(); // Call our on_panels_changed so we can immediately set the sensitivity and hide our Remove Panel button if necessary.
+			update_from_property("position");
 		}
 
 		void on_panels_changed() {
@@ -115,6 +118,45 @@ namespace Budgie {
 				button_remove_panel.show(); // Show the button
 			} else { // Only one panel
 				button_remove_panel.hide(); // Don't even show the Remove Panel button, regardless of sensitivity
+			}
+
+			rebuild_position_model();
+		}
+
+		void rebuild_position_model() {
+			position_model.clear();
+			Gtk.TreeIter iter;
+			const Budgie.PanelPosition[] positions = {
+				Budgie.PanelPosition.TOP,
+				Budgie.PanelPosition.BOTTOM,
+				Budgie.PanelPosition.LEFT,
+				Budgie.PanelPosition.RIGHT,
+			};
+
+			foreach (var pos in positions) {
+				var used = false;
+
+				foreach (var panel in manager.get_panels()) {
+					if (panel == null) {
+						continue;
+					}
+
+					if (panel.uuid == this.toplevel.uuid) {
+						continue;
+					}
+
+					if (panel.position == pos) {
+						used = true;
+						break;
+					}
+				}
+
+				if (used) {
+					continue;
+				}
+
+				position_model.append(out iter);
+				position_model.set(iter, 0, pos.to_string(), 1, PanelPage.pos_to_display(pos), 2, pos, -1);
 			}
 		}
 
@@ -296,25 +338,14 @@ namespace Budgie {
 			var render = new Gtk.CellRendererText();
 
 			/* Now let's sort out some models */
-			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelPosition));
-			Gtk.TreeIter iter;
-			const Budgie.PanelPosition[] positions = {
-				Budgie.PanelPosition.TOP,
-				Budgie.PanelPosition.BOTTOM,
-				Budgie.PanelPosition.LEFT,
-				Budgie.PanelPosition.RIGHT,
-			};
-			foreach (var pos in positions) {
-				model.append(out iter);
-				model.set(iter, 0, pos.to_string(), 1, PanelPage.pos_to_display(pos), 2, pos, -1);
-			}
-			combobox_position.set_model(model);
+			combobox_position.set_model(position_model);
 			combobox_position.pack_start(render, true);
 			combobox_position.add_attribute(render, "text", 1);
 			combobox_position.set_id_column(0);
 
 			/* Transparency types */
-			model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelTransparency));
+			Gtk.TreeIter iter;
+			var model = new Gtk.ListStore(3, typeof(string), typeof(string), typeof(Budgie.PanelTransparency));
 			const Budgie.PanelTransparency transps[] = {
 				Budgie.PanelTransparency.ALWAYS,
 				Budgie.PanelTransparency.DYNAMIC,
@@ -381,6 +412,7 @@ namespace Budgie {
 			switch (property) {
 				case "position":
 					SignalHandler.block(this.combobox_position, this.position_id);
+					rebuild_position_model();
 					this.combobox_position.active_id = this.toplevel.position.to_string();
 					this.title = PanelPage.get_panel_name(toplevel);
 					SignalHandler.unblock(this.combobox_position, this.position_id);
