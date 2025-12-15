@@ -1112,30 +1112,26 @@ namespace Budgie {
 				return;
 			}
 
-			// This is horrible and I know it
-			// This will destroy and recreate the panel to re-enable interactivity under Wayland
+			// This is really really horrible and I know it
+			// This will destroy and recreate the panel to:
+			// 1. Ensure interactivity under Wayland
+			// 2. Ensure that direct positional flips (top / bottom, left / right) work as gtk otherwise blows up
+			// Please note that this may result in conflicting panels
 
 			// Start by hiding the panel to mask recreation
 			panel.hide();
-			// Move the panel to the new position
-			set_placement(uuid, position);
 
-			// Ensure panel position is saved
+			// Steal so we can add new panel entry
+			panels.steal(panel.uuid);
+
+			// Store it so we get correct new position on panel restart
 			panel.set_position_setting(position);
 
 			// Close the panel
 			panel.close();
-			// Steal so we can add new panel entry
-			panels.steal(panel.uuid);
 
 			// Load panel again
 			load_panel(uuid, true);
-
-			// Look up again
-			panel = panels.lookup(uuid);
-
-			// Show moved panel
-			panel.show();
 		}
 
 		/**
