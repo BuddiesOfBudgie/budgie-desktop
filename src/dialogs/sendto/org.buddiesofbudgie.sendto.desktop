@@ -6,4 +6,4 @@ Icon=bluetooth-active
 Type=Application
 NoDisplay=true
 Categories=System;
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;

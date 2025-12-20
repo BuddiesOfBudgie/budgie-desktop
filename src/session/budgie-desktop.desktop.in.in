@@ -5,4 +5,4 @@ _Comment=This session logs you into the Budgie Desktop using labwc as the window
 Exec=@bindir@/startbudgielabwc
 Icon=
 Type=Application
-DesktopNames=Budgie
+DesktopNames=@DESKTOP_NAME@

@@ -12,6 +12,9 @@ project(
     ],
 )
 
+global_data = configuration_data()
+global_data.set('DESKTOP_NAME', 'bdGTK')
+
 # Vala generates bad C code and missing these on gcc 14 will cause FTBFS
 # Additionally, Meson 1.4 unhides warnings from valac-generated C code,
 # which causes unreadable logspam. Reenables prior behavior.

@@ -7,5 +7,5 @@ TryExec=nm-applet
 Terminal=false
 Type=Application
 NoDisplay=true
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;
 X-GNOME-UsesNotifications=true

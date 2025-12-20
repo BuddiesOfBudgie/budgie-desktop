@@ -2,7 +2,7 @@
 Type=Application
 Name=Budgie date & time
 Exec=@gsd_libexecdir@/gsd-datetime
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;
 NoDisplay=true
 X-GNOME-Autostart-Phase=Initialization
 X-GNOME-Autostart-Notify=true

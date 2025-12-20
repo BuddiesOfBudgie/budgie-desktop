@@ -9,4 +9,4 @@ Categories=System;
 X-GNOME-Autostart-Notify=false
 X-GNOME-AutoRestart=true
 X-GNOME-Autostart-enabled=true
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;

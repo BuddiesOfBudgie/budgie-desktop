@@ -7,6 +7,6 @@ TryExec=budgie-desktop-settings
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;System;
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;
 StartupWMClass=budgie-desktop-settings
 Keywords=Preferences;Settings;

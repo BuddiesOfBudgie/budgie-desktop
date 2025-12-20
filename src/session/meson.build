@@ -2,6 +2,7 @@
 
 # We bash-quote already.
 session_data = configuration_data()
+session_data.merge_from(global_data)
 session_data.set('PACKAGE_VERSION', package_version)
 session_data.set('libexecdir', libexecdir)
 

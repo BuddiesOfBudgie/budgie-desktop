@@ -9,4 +9,4 @@ X-GNOME-Autostart-Notify=false
 X-GNOME-AutoRestart=true
 X-GNOME-Autostart-enabled=true
 X-GNOME-Autostart-Delay=10
-OnlyShowIn=Budgie;
+OnlyShowIn=@DESKTOP_NAME@;
