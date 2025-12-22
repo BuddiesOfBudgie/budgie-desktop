@@ -13,6 +13,8 @@ if [ -z $XDG_CURRENT_DESKTOP ]; then
   export XDG_CURRENT_DESKTOP
 fi
 
+export BUDGIE_SESSION_VERSION=${BUDGIE_VERSION}
+
 @bindir@/org.buddiesofbudgie.Services &
 sleep 2
 
