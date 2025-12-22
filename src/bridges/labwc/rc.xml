@@ -316,7 +316,7 @@
 		<raiseOnFocus>no</raiseOnFocus>
 	</focus>
 	<snapping>
-		<range>10</range>
+		<range inner="10" outer="10" />
 	</snapping>
 	<windowSwitcher style="thumbnail" allWorkspaces="no" />
 	<mouse>
