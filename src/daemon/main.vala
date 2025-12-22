@@ -75,6 +75,24 @@ public static int main(string[] args) {
 	end_dialog.Opened.connect(settings.do_disable_quietly); // When we've opened the EndSession dialog, disable Caffeine Mode
 	end_dialog.Closed.connect(settings.do_disable_quietly); // When we've closed the EndSession dialog as well, ensure Caffeine mode is disabled
 
+
+	string[] cmd = { "/usr/libexec/budgie-desktop/wlr-display-manager" };
+	var env = Environ.get();
+	Pid pid;
+
+	try {
+		Process.spawn_async(
+			null,
+			cmd,
+			env,
+			SEARCH_PATH_FROM_ENVP,
+			null,
+			out pid
+		);
+	} catch (SpawnError e) {
+		warning("Error starting wlr-display-manager: %s", e.message);
+	}
+
 	/* Enter main loop */
 	Gtk.main();
 

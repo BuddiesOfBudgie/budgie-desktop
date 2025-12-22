@@ -109,3 +109,42 @@ install_data(
     files('notifications/20_buddiesofbudgie.budgie-desktop.notifications.gschema.override'),
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
+
+wayland_client = dependency('wayland-client')
+wayland_scanner = dependency('wayland-scanner', native: true)
+wayland_protocols = dependency('wayland-protocols')
+
+# Get wayland-scanner executable
+prog_scanner = find_program(
+  wayland_scanner.get_variable('wayland_scanner'),
+  native: true,
+)
+
+# Protocol XML file
+protocol_xml = files('wlr-output-management-unstable-v1.xml')
+
+# Generate protocol header
+protocol_header = custom_target(
+  'wlr-output-management-unstable-v1-client-protocol.h',
+  input: protocol_xml,
+  output: '@BASENAME@-client-protocol.h',
+  command: [prog_scanner, 'client-header', '@INPUT@', '@OUTPUT@'],
+)
+
+# Generate protocol code
+protocol_code = custom_target(
+  'wlr-output-management-unstable-v1-protocol.c',
+  input: protocol_xml,
+  output: '@BASENAME@-protocol.c',
+  command: [prog_scanner, 'private-code', '@INPUT@', '@OUTPUT@'],
+)
+
+# Build the executable
+executable('wlr-display-manager',
+  'wlr-display-manager.c',
+  protocol_header,
+  protocol_code,
+  dependencies: [wayland_client],
+  install: true,
+  install_dir: libexecdir,
+)
