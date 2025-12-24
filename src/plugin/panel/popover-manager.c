@@ -30,6 +30,7 @@ struct _BudgiePopoverManagerPrivate {
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
 
 static void budgie_popover_manager_widget_died(BudgiePopoverManager* self, GtkWidget* child);
+static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover);
 
 /**
  * budgie_popover_manager_new:
@@ -109,6 +110,8 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 
 	GtkWidget * toplevel = gtk_widget_get_toplevel(parent_widget);
 
+	g_signal_connect(toplevel, "focus-out-event", G_CALLBACK(on_focus_out), popover);
+
 	BudgiePanelPosition * position = NULL;
 	g_object_get(G_OBJECT(toplevel), "position", &position, NULL);
 
@@ -141,6 +144,13 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 
 	gtk_layer_set_layer(popover_win, GTK_LAYER_SHELL_LAYER_TOP);
 	gtk_layer_set_keyboard_mode(popover_win, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+}
+
+static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover) {
+	g_return_val_if_fail(popover != NULL, GDK_EVENT_PROPAGATE);
+
+	gtk_widget_hide(GTK_WIDGET(popover));
+	return GDK_EVENT_PROPAGATE;
 }
 
 /**
