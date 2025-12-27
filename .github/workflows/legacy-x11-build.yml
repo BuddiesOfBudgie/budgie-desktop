@@ -1,15 +1,15 @@
-name: Build on Fedora Rawhide
+name: Build on Fedora 43
 on:
   push:
     branches:
-      - main
+      - v10.9.x
   pull_request:
     branches:
-      - main
+      - v10.9.x
 jobs:
   fedora:
     runs-on: ubuntu-latest
-    container: "registry.fedoraproject.org/fedora:rawhide"
+    container: "registry.fedoraproject.org/fedora:43"
     steps:
       - name: Swap in the full systemd
         run: 'dnf swap --assumeyes systemd-standalone-sysusers systemd'
@@ -35,26 +35,23 @@ jobs:
             'pkgconfig(uuid)' \
             'pkgconfig(vapigen)' \
             budgie-desktop-view \
+            budgie-screensaver \
             desktop-file-utils \
-            gammastep \
             gcc \
             gettext \
             git \
             grim \
             gtk-doc \
-            gtklock \
             intltool \
+            magpie-devel \
             meson \
             sassc \
-            slurp \
-            swaybg \
-            swayidle \
-            wlopm
+            zenity
       - name: Checkout
         uses: actions/checkout@v6
         with:
           submodules: true
-      - name: Build Budgie Desktop
+      - name: Build Budgie Desktop (Legacy X11 v10.9.x)
         run: |
-          meson build -Dci=true -Dwith-runtime-dependencies=true
+          meson build -Dci=true
           meson compile -C build
