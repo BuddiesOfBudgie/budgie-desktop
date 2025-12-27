@@ -1,17 +1,15 @@
-name: Build on Ubuntu 22.04
+name: Build on Fedora 43
 on:
   push:
     branches:
-      - main
       - v10.9.x
   pull_request:
     branches:
-      - main
       - v10.9.x
 jobs:
   fedora:
     runs-on: ubuntu-latest
-    container: "registry.fedoraproject.org/fedora:rawhide"
+    container: "registry.fedoraproject.org/fedora:43"
     steps:
       - name: Install prerequisites
         run: |
