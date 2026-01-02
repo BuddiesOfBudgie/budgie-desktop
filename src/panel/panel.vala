@@ -167,14 +167,6 @@ namespace Budgie {
 			}
 			updating_constraints = false;
 		}
-
-		public override void size_allocate(Gtk.Allocation allocation) {
-			// Call base allocation first
-			base.size_allocate(allocation);
-			
-			// Note: update_box_constraints is NOT called here to avoid infinite loops.
-			// It's only called manually when applets are moved via update_box_size_constraints().
-		}
 	}
 
 	/**
