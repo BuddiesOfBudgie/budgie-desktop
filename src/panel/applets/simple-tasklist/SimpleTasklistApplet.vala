@@ -11,7 +11,7 @@
 
 using Gdk;
 using Gtk;
-using libxfce4windowing;
+using Xfw;
 
 public const int MAX_BUTTON_LENGTH = 200;
 public const int MIN_BUTTON_LENGTH = MAX_BUTTON_LENGTH / 4;
@@ -21,6 +21,7 @@ public const int ARROW_BUTTON_SIZE = 20;
 public const Gtk.TargetEntry[] SOURCE_TARGETS  = {
 	{ "application/x-wnck-window-id", 0, 0 }
 };
+
 
 public class SimpleTasklistPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
@@ -76,15 +77,19 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	private unowned Budgie.PopoverManager? popover_manager = null;
 	protected GLib.Settings settings;
 
-	private ScrolledWindow scroller;
+	private ScrolledWindow scrolled_window;
 	private Box container;
+	private Box main_container;
+	private Button left_scroll_button;
+	private Button right_scroll_button;
 
 	private List<TasklistButton> buttons;
-	private libxfce4windowing.Screen screen;
-	private unowned libxfce4windowing.WorkspaceManager workspace_manager;
+	private Xfw.Screen screen;
+	private unowned Xfw.WorkspaceManager workspace_manager;
 
 	public SimpleTasklistApplet(string uuid) {
-		Object(uuid: uuid, hexpand: false);
+		Object(uuid: uuid);
+		hexpand = true;
 
 		// Hook up our settings
 		settings_schema = "com.solus-project.simple-tasklist";
@@ -110,22 +115,75 @@ public class SimpleTasklistApplet : Budgie.Applet {
 
 		this.buttons = new List<TasklistButton>();
 
-		this.scroller = new ScrolledWindow(null, null) {
-			overlay_scrolling = true,
-			propagate_natural_height = true,
-			propagate_natural_width = true,
-			shadow_type = ShadowType.NONE,
-			hscrollbar_policy = PolicyType.EXTERNAL,
-			vscrollbar_policy = PolicyType.NEVER,
-		};
 		this.container = new Box(Orientation.HORIZONTAL, 0) {
-			// homogeneous = true,
+			hexpand = true,
+			vexpand = true,
+		};
+		//  this.viewport = new Viewport(null, null) {
+		//  	shadow_type = ShadowType.NONE,
+		//  	hscroll_policy = ScrollablePolicy.MINIMUM,
+		//  	vscroll_policy = ScrollablePolicy.MINIMUM,
+		//  };
+		this.scrolled_window = new ScrolledWindow(null, null) {
+			shadow_type = ShadowType.NONE,
+			hscrollbar_policy = PolicyType.AUTOMATIC,
+			vscrollbar_policy = PolicyType.AUTOMATIC,
+			hexpand = true,
+			vexpand = true,
+			propagate_natural_width = true,
+			propagate_natural_height = true,
 		};
 
-		scroller.add(container);
-		add(scroller);
+		//  viewport.add(container);
+		//  scrolled_window.add(viewport);
+		scrolled_window.add(container);
 
-		this.screen = libxfce4windowing.Screen.get_default();
+		// Create scroll buttons
+		this.left_scroll_button = new Button.from_icon_name("go-previous-symbolic", IconSize.DND) {
+			valign = Align.CENTER,
+			no_show_all = true,
+			visible = false,
+		};
+		this.right_scroll_button = new Button.from_icon_name("go-next-symbolic", IconSize.DND) {
+			valign = Align.CENTER,
+			no_show_all = true,
+			visible = false,
+		};
+
+		// Connect button clicks to scroll
+		this.left_scroll_button.clicked.connect(() => {
+			scroll_beginning();
+		});
+
+		this.right_scroll_button.clicked.connect(() => {
+			scroll_end();
+		});
+
+		// Create main container with buttons and scrolled window
+		this.main_container = new Box(Orientation.HORIZONTAL, 0) {
+			hexpand = true,
+			vexpand = true,
+		};
+		this.main_container.pack_start(left_scroll_button, false, false, 0);
+		this.main_container.pack_start(scrolled_window, true, true, 0);
+		this.main_container.pack_end(right_scroll_button, false, false, 0);
+
+		add(main_container);
+
+		// Monitor scrollability for both horizontal and vertical
+		// Need both 'changed' (for bounds) and 'value_changed' (for scroll position)
+		scrolled_window.hadjustment.changed.connect(update_scroll_buttons_visibility);
+		scrolled_window.hadjustment.value_changed.connect(update_scroll_buttons_visibility);
+		scrolled_window.vadjustment.changed.connect(update_scroll_buttons_visibility);
+		scrolled_window.vadjustment.value_changed.connect(update_scroll_buttons_visibility);
+		scrolled_window.size_allocate.connect(() => {
+			Idle.add(() => {
+				update_scroll_buttons_visibility();
+				return Source.REMOVE;
+			});
+		});
+
+		this.screen = Xfw.Screen.get_default();
 
 		this.screen.window_opened.connect(on_app_opened);
 		this.screen.window_closed.connect(on_app_closed);
@@ -137,10 +195,32 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	}
 
 	public override bool scroll_event(Gdk.EventScroll event) {
-		if (event.direction == Gdk.ScrollDirection.UP) { // Scrolling up
-			scroller.hadjustment.value-=50;
-		} else { // Scrolling down
-			scroller.hadjustment.value+=50; // Always increment by 50
+		Adjustment? adjustment = null;
+
+		// Get the appropriate adjustment from scrolled_window based on orientation
+		if (container.get_orientation() == Orientation.HORIZONTAL) {
+			adjustment = scrolled_window.hadjustment;
+		} else {
+			adjustment = scrolled_window.vadjustment;
+		}
+
+		if (adjustment == null) return Gdk.EVENT_PROPAGATE;
+
+		// Scroll left/up decreases (moves earlier), scroll right/down increases (moves later)
+		switch (event.direction) {
+			case Gdk.ScrollDirection.UP:
+			case Gdk.ScrollDirection.LEFT:
+				// Scroll towards beginning
+				adjustment.value = double.max(adjustment.lower, adjustment.value - 50);
+				break;
+			case Gdk.ScrollDirection.DOWN:
+			case Gdk.ScrollDirection.RIGHT:
+				// Scroll towards end
+				adjustment.value = double.min(adjustment.upper - adjustment.page_size, adjustment.value + 50);
+				break;
+			default:
+				// For smooth scroll or unknown, do nothing special
+				break;
 		}
 
 		return Gdk.EVENT_STOP;
@@ -165,7 +245,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		if (groups == null) return;
 
 		unowned var element = groups.first();
-		var group = element.data as libxfce4windowing.WorkspaceGroup;
+		var group = element.data as Xfw.WorkspaceGroup;
 
 		if (group == null) return;
 
@@ -182,6 +262,54 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		}
 
 		this.container.set_orientation(orientation);
+		
+		// Update scroll policies on scrolled_window based on orientation
+		if (orientation == Orientation.HORIZONTAL) {
+			scrolled_window.hscrollbar_policy = PolicyType.AUTOMATIC;
+			scrolled_window.vscrollbar_policy = PolicyType.NEVER;
+			// Update button icons for horizontal scrolling
+			var left_image = left_scroll_button.get_image() as Image;
+			if (left_image != null) {
+				left_image.set_from_icon_name("go-previous-symbolic", IconSize.DND);
+			} else {
+				left_scroll_button.set_image(new Image.from_icon_name("go-previous-symbolic", IconSize.DND));
+			}
+			var right_image = right_scroll_button.get_image() as Image;
+			if (right_image != null) {
+				right_image.set_from_icon_name("go-next-symbolic", IconSize.DND);
+			} else {
+				right_scroll_button.set_image(new Image.from_icon_name("go-next-symbolic", IconSize.DND));
+			}
+			// Update main container orientation
+			main_container.set_orientation(Orientation.HORIZONTAL);
+		} else {
+			scrolled_window.hscrollbar_policy = PolicyType.NEVER;
+			scrolled_window.vscrollbar_policy = PolicyType.AUTOMATIC;
+			// Update button icons for vertical scrolling
+			var left_image = left_scroll_button.get_image() as Image;
+			if (left_image != null) {
+				left_image.set_from_icon_name("go-up-symbolic", IconSize.DND);
+			} else {
+				left_scroll_button.set_image(new Image.from_icon_name("go-up-symbolic", IconSize.DND));
+			}
+			var right_image = right_scroll_button.get_image() as Image;
+			if (right_image != null) {
+				right_image.set_from_icon_name("go-down-symbolic", IconSize.DND);
+			} else {
+				right_scroll_button.set_image(new Image.from_icon_name("go-down-symbolic", IconSize.DND));
+			}
+			// Update main container orientation
+			main_container.set_orientation(Orientation.VERTICAL);
+		}
+		
+		// Force recalculation of adjustments
+		scrolled_window.queue_resize();
+		
+		// Update scroll button visibility after orientation change
+		Idle.add(() => {
+			update_scroll_buttons_visibility();
+			return Source.REMOVE;
+		});
 	}
 
 	/**
@@ -269,7 +397,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	/**
 	 * Create a button for the newly opened app and add it to our tracking map.
 	 */
-	private void on_app_opened(libxfce4windowing.Window window) {
+	private void on_app_opened(Xfw.Window window) {
 		if (window.is_skip_tasklist()) return;
 		if (get_button_for_window(window) != null) return;
 
@@ -285,17 +413,24 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		button.drag_data_received.connect(button_drag_data_received);
 		button.drag_motion.connect(button_drag_motion);
 		button.drag_leave.connect(button_drag_leave);
+		button.button_release_event.connect(on_button_release);
 
 		this.container.add(button);
 
 		this.buttons.append(button);
+
+		// Update scroll button visibility after adding a button
+		Idle.add(() => {
+			update_scroll_buttons_visibility();
+			return Source.REMOVE;
+		});
 	}
 
 	/**
 	 * Gracefully remove button associated with app and remove it from our
 	 * tracking map.
 	 */
-	private void on_app_closed(libxfce4windowing.Window window) {
+	private void on_app_closed(Xfw.Window window) {
 		var button = get_button_for_window(window);
 		if (button == null) {
 			return;
@@ -304,13 +439,19 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		button.gracefully_die();
 
 		this.buttons.remove(button);
+
+		// Update scroll button visibility after removing a button
+		Idle.add(() => {
+			update_scroll_buttons_visibility();
+			return Source.REMOVE;
+		});
 	}
 
 	/**
 	 * Manage active state of buttons, mark button associated with new active
 	 * app as active and previous active button as inactive.
 	 */
-	private void on_active_window_changed(libxfce4windowing.Window? old_window) {
+	private void on_active_window_changed(Xfw.Window? old_window) {
 		if (old_window != null) {
 			var button = get_button_for_window(old_window);
 			if (button == null) return;
@@ -330,7 +471,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Go through the managed buttons list and check if they should be
 	 * displayed for the current workspace.
 	 */
-	private void on_active_workspace_changed(libxfce4windowing.Workspace? previous_workspace) {
+	private void on_active_workspace_changed(Xfw.Workspace? previous_workspace) {
 		foreach (var button in this.buttons) {
 			this.on_app_workspace_changed(button.window);
 		}
@@ -340,11 +481,11 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 * Show / Hide button attached to the app depending on if it is in the
 	 * current workspace.
 	 */
-	private void on_app_workspace_changed(libxfce4windowing.Window window) {
+	private void on_app_workspace_changed(Xfw.Window window) {
 		var button = get_button_for_window(window);
 		if (button == null) return;
 
-		if (window.workspace.get_state() == libxfce4windowing.WorkspaceState.ACTIVE) {
+		if (window.workspace.get_state() == Xfw.WorkspaceState.ACTIVE) {
 			button.show();
 			button.set_no_show_all(false);
 		} else {
@@ -358,7 +499,7 @@ public class SimpleTasklistApplet : Budgie.Applet {
 	 *
 	 * @returns a TasklistButton, or NULL
 	 */
-	private TasklistButton? get_button_for_window(libxfce4windowing.Window window) {
+	private TasklistButton? get_button_for_window(Xfw.Window window) {
 		foreach (var button in buttons) {
 			if (button.window == window) {
 				return button;
@@ -366,6 +507,104 @@ public class SimpleTasklistApplet : Budgie.Applet {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Scroll towards the beginning (left for horizontal, up for vertical).
+	 */
+	private void scroll_beginning() {
+		Adjustment? adjustment = null;
+		if (container.get_orientation() == Orientation.HORIZONTAL) {
+			adjustment = scrolled_window.hadjustment;
+		} else {
+			adjustment = scrolled_window.vadjustment;
+		}
+
+		if (adjustment != null) {
+			adjustment.value = double.max(adjustment.lower, adjustment.value - adjustment.page_size);
+		}
+	}
+
+	/**
+	 * Scroll towards the end (right for horizontal, down for vertical).
+	 */
+	private void scroll_end() {
+		Adjustment? adjustment = null;
+		if (container.get_orientation() == Orientation.HORIZONTAL) {
+			adjustment = scrolled_window.hadjustment;
+		} else {
+			adjustment = scrolled_window.vadjustment;
+		}
+
+		if (adjustment != null) {
+			adjustment.value = double.min(adjustment.upper - adjustment.page_size, adjustment.value + adjustment.page_size);
+		}
+	}
+
+	/**
+	 * Update the visibility and enabled state of scroll buttons based on whether scrolling is possible.
+	 */
+	private void update_scroll_buttons_visibility() {
+		Adjustment? adjustment = null;
+		if (container.get_orientation() == Orientation.HORIZONTAL) {
+			adjustment = scrolled_window.hadjustment;
+		} else {
+			adjustment = scrolled_window.vadjustment;
+		}
+
+		if (adjustment == null) {
+			left_scroll_button.visible = false;
+			right_scroll_button.visible = false;
+			return;
+		}
+
+		bool is_scrollable = adjustment.upper > adjustment.page_size;
+		bool can_scroll_beginning = adjustment.value > adjustment.lower;
+		bool can_scroll_end = adjustment.value < (adjustment.upper - adjustment.page_size);
+
+		// Always show both buttons when scrollable, but disable when they can't scroll
+		left_scroll_button.visible = is_scrollable;
+		right_scroll_button.visible = is_scrollable;
+		left_scroll_button.sensitive = can_scroll_beginning;
+		right_scroll_button.sensitive = can_scroll_end;
+	}
+
+	/**
+	 * Handle button release events for tasklist buttons.
+	 */
+	private bool on_button_release(Gtk.Widget widget, Gdk.EventButton event) {
+		var button = widget as TasklistButton;
+		var time = event.time;
+
+		switch (event.button) {
+			case Gdk.BUTTON_PRIMARY:
+				if (button.window.state == Xfw.WindowState.ACTIVE) {
+					try {
+						button.window.set_minimized(true);
+					} catch (GLib.Error e) {
+						warning("Unable to minimize window '%s': %s", button.window.get_name(), e.message);
+					}
+				} else {
+					try {
+						button.window.activate(null, time);
+					} catch (GLib.Error e) {
+						warning("Unable to activate window '%s': %s", button.window.get_name(), e.message);
+					}
+				}
+				break;
+			case Gdk.BUTTON_SECONDARY:
+				popover_manager.show_popover(button);
+				return Gdk.EVENT_STOP;
+			case Gdk.BUTTON_MIDDLE:
+				try {
+					button.window.close(time);
+				} catch (GLib.Error e) {
+					warning("Unable to close window '%s': %s", button.window.get_name(), e.message);
+				}
+				return Gdk.EVENT_STOP;
+		}
+
+		return Gdk.EVENT_PROPAGATE;
 	}
 }
 

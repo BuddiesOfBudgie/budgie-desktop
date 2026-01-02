@@ -9,13 +9,13 @@
  * (at your option) any later version.
  */
 
-public class ButtonPopover : Gtk.Popover {
-	public libxfce4windowing.Window window { get; construct; }
+public class SimpleTasklistButtonPopover : Gtk.Popover {
+	public Xfw.Window window { get; construct; }
 
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
 
-	public ButtonPopover(TasklistButton button, libxfce4windowing.Window window) {
+	public SimpleTasklistButtonPopover(TasklistButton button, Xfw.Window window) {
 		Object(relative_to: button, window: window);
 	}
 
@@ -65,7 +65,7 @@ public class ButtonPopover : Gtk.Popover {
 		});
 
 		window.state_changed.connect((changed_mask, new_state) => {
-			if (libxfce4windowing.WindowState.MAXIMIZED in changed_mask) {
+			if (Xfw.WindowState.MAXIMIZED in changed_mask) {
 				update_maximize_label();
 			}
 		});

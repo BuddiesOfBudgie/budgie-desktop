@@ -11,11 +11,11 @@
 
 using Gdk;
 using Gtk;
-using libxfce4windowing;
+using Xfw;
 using Pango;
 
 private const int BUTTON_MAX_WIDTH = 232;
-private const int BUTTON_MIN_WIDTH = 164;
+public const int BUTTON_MIN_WIDTH = 164;
 private const int LABEL_MAX_WIDTH = 24;
 private const int BUTTON_PADDING = 8;
 
@@ -28,20 +28,19 @@ public class TasklistButton : ToggleButton {
 	private new Label label;
 	private Image icon;
 	private GLib.Settings settings;
-	private ButtonPopover popover;
+	private SimpleTasklistButtonPopover popover;
 
 	private Allocation definite_allocation;
 
 	public Budgie.PopoverManager popover_manager { get; construct; }
-	public libxfce4windowing.Window window { get; construct; }
+	public Xfw.Window window { get; construct; }
 
 	public bool show_label { get; set; }
 	public bool show_icon { get; set; }
 
-	private int64 last_scroll_time = 0;
 	private int target_icon_size = 0;
 
-	public TasklistButton(libxfce4windowing.Window window, Budgie.PopoverManager popover_manager, GLib.Settings settings) {
+	public TasklistButton(Xfw.Window window, Budgie.PopoverManager popover_manager, GLib.Settings settings) {
 		Object(window: window, popover_manager: popover_manager);
 
 		this.settings = settings;
@@ -50,13 +49,13 @@ public class TasklistButton : ToggleButton {
 		on_settings_changed("show-labels");
 		on_settings_changed("show-icons");
 
-		popover = new ButtonPopover(this, window);
+		popover = new SimpleTasklistButtonPopover(this, window);
 		popover_manager.register_popover(this, popover);
 	}
 
 	construct {
 		get_style_context().add_class("launcher");
-		add_events(Gdk.EventMask.SCROLL_MASK);
+		add_events(EventMask.SCROLL_MASK);
 
 		var container = new Box(Orientation.HORIZONTAL, 0);
 		add(container);
@@ -98,71 +97,7 @@ public class TasklistButton : ToggleButton {
 		this.destroy();
 	}
 
-	protected override bool button_release_event(EventButton event) {
-		var time = event.time;
 
-		if (event.button == BUTTON_SECONDARY) {
-			popover_manager.show_popover(this);
-			return Gdk.EVENT_STOP;
-		}
-
-		if (event.button == BUTTON_MIDDLE) {
-			try {
-				window.close(time);
-			} catch (GLib.Error e) {
-				warning("Unable to close window '%s': %s", window.get_name(), e.message);
-			}
-			return Gdk.EVENT_STOP;
-		}
-
-		if (event.button == BUTTON_PRIMARY) {
-			if (window.state == libxfce4windowing.WindowState.ACTIVE) {
-				try {
-					window.set_minimized(true);
-				} catch (GLib.Error e) {
-					warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
-				}
-			} else {
-				try {
-					window.activate(null, time);
-				} catch (GLib.Error e) {
-					warning("Unable to activate window '%s': %s", window.get_name(), e.message);
-				}
-			}
-
-			// Don't return on purpose
-		}
-
-		return base.button_release_event(event);
-	}
-
-	public override bool scroll_event(Gdk.EventScroll event) {
-		if (get_monotonic_time() - last_scroll_time < 300000) {
-			return Gdk.EVENT_STOP;
-		}
-
-		switch (event.direction) {
-		case ScrollDirection.UP:
-			try {
-				window.activate(null, event.time);
-			} catch (GLib.Error e) {
-				warning("Unable to activate window '%s': %s", window.get_name(), e.message);
-			}
-			break;
-		case ScrollDirection.DOWN:
-			try {
-				window.set_minimized(true);
-			} catch (GLib.Error e) {
-				warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
-			}
-			break;
-		default:
-			break;
-		}
-
-		last_scroll_time = get_monotonic_time();
-		return Gdk.EVENT_STOP;
-	}
 
 	private void on_settings_changed(string key) {
 		switch (key) {
@@ -217,7 +152,7 @@ public class TasklistButton : ToggleButton {
 
 	public override void get_preferred_width(out int minimum_width, out int natural_width) {
 		var min_width = get_css_width(this);
-		message("min_width 1: %d", min_width);
+		//  message("min_width 1: %d", min_width);
 		// min_width += get_css_width(this.get_child());
 		// message("min_width 2: %d", min_width);
 		var char_width = get_char_width();
@@ -230,7 +165,7 @@ public class TasklistButton : ToggleButton {
 			natural_width += char_width * LABEL_MAX_WIDTH;
 		}
 
-		message("minimum_width: %d | natural_width: %d", minimum_width, natural_width);
+		//  message("minimum_width: %d | natural_width: %d", minimum_width, natural_width);
 	}
 
 	private bool update_state_cb() {
@@ -251,7 +186,7 @@ public class TasklistButton : ToggleButton {
 
 	private void on_window_icon_changed() {
 		var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
-		message("icon_size: %d", size);
+		//  message("icon_size: %d", size);
 		unowned var pixbuf = window.get_icon(size, get_scale_factor());
 		icon.set_from_pixbuf(pixbuf);
 	}
@@ -268,7 +203,7 @@ public class TasklistButton : ToggleButton {
 		min_width += padding.left + padding.right;
 		min_width += border.left + border.right;
 
-		return min_width;
+		return min_width + BUTTON_MIN_WIDTH;
 	}
 
 	private int get_char_width() {
@@ -280,9 +215,13 @@ public class TasklistButton : ToggleButton {
 
 		var width = metrics.get_approximate_char_width();
 
-		message("width: %d", ((int) (width) + 512) >> 10);
+		//  message("width: %d", ((int) (width) + 512) >> 10);
 
 		// Taken from here: https://gitlab.gnome.org/GNOME/pango/-/blob/main/pango/pango-types.h#L97
 		return ((int) (width) + 512) >> 10;
+	}
+
+	public override bool scroll_event(Gdk.EventScroll event) {
+		return Gdk.EVENT_PROPAGATE;
 	}
 }

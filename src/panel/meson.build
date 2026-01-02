@@ -22,6 +22,7 @@ panel_resources = gnome.compile_resources(
 panel_sources = [
     'main.vala',
     'manager.vala',
+    'ConstrainedBox.vala',
     'panel.vala',
     'uuid.vala',
     'settings/settings_autostart.vala',
