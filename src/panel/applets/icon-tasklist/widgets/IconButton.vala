@@ -32,7 +32,7 @@ public class IconButton : Gtk.ToggleButton {
 	private Budgie.Windowing.WindowGroup? window_group = null;
 
 	private Icon? icon;
-	private ButtonPopover? popover;
+	private IconTasklistButtonPopover? popover;
 
 	private Gtk.Allocation definite_allocation;
 	private int target_icon_size = 0;
@@ -75,7 +75,7 @@ public class IconButton : Gtk.ToggleButton {
 
 		icon.get_style_context().add_class("icon");
 
-		popover = new ButtonPopover(this, app, window_group) {
+		popover = new IconTasklistButtonPopover(this, app, window_group) {
 			pinned = this.pinned,
 		};
 

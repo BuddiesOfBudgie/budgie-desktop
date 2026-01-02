@@ -17,7 +17,7 @@ public interface SettingsRemote : GLib.Object {
 	public abstract async void Close() throws Error;
 }
 
-public class ButtonPopover : Gtk.Popover {
+public class IconTasklistButtonPopover : Gtk.Popover {
 	public Budgie.Application? app { get; construct; }
 	public Budgie.Windowing.WindowGroup? group { get; construct set; }
 
@@ -45,7 +45,7 @@ public class ButtonPopover : Gtk.Popover {
 	private Gtk.Button? new_instance_button;
 	private Gtk.Button? close_all_button;
 
-	public ButtonPopover(IconButton button, Budgie.Application? app, Budgie.Windowing.WindowGroup? group) {
+	public IconTasklistButtonPopover(IconButton button, Budgie.Application? app, Budgie.Windowing.WindowGroup? group) {
 		Object(relative_to: button, app: app, group: group);
 	}
 

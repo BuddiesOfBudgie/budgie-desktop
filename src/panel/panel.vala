@@ -37,6 +37,130 @@ namespace Budgie {
 				get_style_context().remove_class("dock-mode");
 			}
 		}
+
+		public override void size_allocate(Gtk.Allocation allocation) {
+			// Call base allocation first
+			base.size_allocate(allocation);
+			
+			// Then constrain each box to panel size minus other boxes' sizes
+			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
+				// Find start, center, and end boxes by their halign
+				Gtk.Widget? start_widget = null;
+				Gtk.Widget? center_widget = null;
+				Gtk.Widget? end_widget = null;
+				
+				foreach (var child in get_children()) {
+					var halign = child.get_halign();
+					if (halign == Gtk.Align.START) {
+						start_widget = child;
+					} else if (halign == Gtk.Align.CENTER) {
+						center_widget = child;
+					} else if (halign == Gtk.Align.END) {
+						end_widget = child;
+					}
+				}
+				
+				// Get current allocations
+				Gtk.Allocation start_alloc = Gtk.Allocation();
+				Gtk.Allocation center_alloc = Gtk.Allocation();
+				Gtk.Allocation end_alloc = Gtk.Allocation();
+				
+				if (start_widget != null) {
+					start_widget.get_allocation(out start_alloc);
+				}
+				if (center_widget != null) {
+					center_widget.get_allocation(out center_alloc);
+				}
+				if (end_widget != null) {
+					end_widget.get_allocation(out end_alloc);
+				}
+				
+				// Constrain each box: max = panel_size - sum of other boxes' sizes
+				if (start_widget != null) {
+					int other_boxes_size = center_alloc.width + end_alloc.width;
+					int max_start_width = int.max(0, allocation.width - other_boxes_size);
+					if (start_alloc.width > max_start_width) {
+						start_alloc.width = max_start_width;
+						start_widget.size_allocate(start_alloc);
+					}
+				}
+				
+				if (center_widget != null) {
+					int other_boxes_size = start_alloc.width + end_alloc.width;
+					int max_center_width = int.max(0, allocation.width - other_boxes_size);
+					if (center_alloc.width > max_center_width) {
+						center_alloc.width = max_center_width;
+						center_widget.size_allocate(center_alloc);
+					}
+				}
+				
+				if (end_widget != null) {
+					int other_boxes_size = start_alloc.width + center_alloc.width;
+					int max_end_width = int.max(0, allocation.width - other_boxes_size);
+					if (end_alloc.width > max_end_width) {
+						end_alloc.width = max_end_width;
+						end_widget.size_allocate(end_alloc);
+					}
+				}
+			} else {
+				// Vertical layout - same logic but for height
+				Gtk.Widget? start_widget = null;
+				Gtk.Widget? center_widget = null;
+				Gtk.Widget? end_widget = null;
+				
+				foreach (var child in get_children()) {
+					var valign = child.get_valign();
+					if (valign == Gtk.Align.START) {
+						start_widget = child;
+					} else if (valign == Gtk.Align.CENTER) {
+						center_widget = child;
+					} else if (valign == Gtk.Align.END) {
+						end_widget = child;
+					}
+				}
+				
+				Gtk.Allocation start_alloc = Gtk.Allocation();
+				Gtk.Allocation center_alloc = Gtk.Allocation();
+				Gtk.Allocation end_alloc = Gtk.Allocation();
+				
+				if (start_widget != null) {
+					start_widget.get_allocation(out start_alloc);
+				}
+				if (center_widget != null) {
+					center_widget.get_allocation(out center_alloc);
+				}
+				if (end_widget != null) {
+					end_widget.get_allocation(out end_alloc);
+				}
+				
+				if (start_widget != null) {
+					int other_boxes_size = center_alloc.height + end_alloc.height;
+					int max_start_height = int.max(0, allocation.height - other_boxes_size);
+					if (start_alloc.height > max_start_height) {
+						start_alloc.height = max_start_height;
+						start_widget.size_allocate(start_alloc);
+					}
+				}
+				
+				if (center_widget != null) {
+					int other_boxes_size = start_alloc.height + end_alloc.height;
+					int max_center_height = int.max(0, allocation.height - other_boxes_size);
+					if (center_alloc.height > max_center_height) {
+						center_alloc.height = max_center_height;
+						center_widget.size_allocate(center_alloc);
+					}
+				}
+				
+				if (end_widget != null) {
+					int other_boxes_size = start_alloc.height + center_alloc.height;
+					int max_end_height = int.max(0, allocation.height - other_boxes_size);
+					if (end_alloc.height > max_end_height) {
+						end_alloc.height = max_end_height;
+						end_widget.size_allocate(end_alloc);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -96,11 +220,11 @@ namespace Budgie {
 		int scale = 1;
 
 		/* Box for the start of the panel */
-		Gtk.Box? start_box;
+		ConstrainedBox? start_box;
 		/* Box for the center of the panel */
-		Gtk.Box? center_box;
+		ConstrainedBox? center_box;
 		/* Box for the end of the panel */
-		Gtk.Box? end_box;
+		ConstrainedBox? end_box;
 
 		int[] icon_sizes = {
 			16, 24, 32, 48, 96, 128, 256
@@ -372,12 +496,12 @@ namespace Budgie {
 			this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
 
 			/* Assign our applet holder boxes */
-			start_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			start_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
 			start_box.halign = Gtk.Align.START;
 			layout.pack_start(start_box, false, false, 0);
-			center_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			center_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
 			layout.set_center_widget(center_box);
-			end_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+			end_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
 			layout.pack_end(end_box, false, false, 0);
 			end_box.halign = Gtk.Align.END;
 			update_spacing();
@@ -1134,11 +1258,29 @@ namespace Budgie {
 			int x = 0, y = 0;
 			int shadow_position = 0;
 
+			// Get monitor geometry to constrain panel size
+			Gdk.Rectangle monitor_geom = orig_scr;
+			var screen = get_screen();
+			if (screen != null) {
+				var display = screen.get_display();
+				if (display != null) {
+					var monitor = display.get_primary_monitor();
+					if (monitor != null) {
+						monitor_geom = monitor.get_geometry();
+					}
+				}
+			}
+
+			// Constrain orig_scr to monitor dimensions
+			int max_width = monitor_geom.width;
+			int max_height = monitor_geom.height;
+			
+			message("max_width: %d | max_height: %d", max_width, max_height);
 			switch (position) {
 				case Budgie.PanelPosition.TOP:
 					x = orig_scr.x;
 					y = orig_scr.y;
-					width = orig_scr.width;
+					width = int.min(orig_scr.width, max_width);
 					height = intended_size;
 					shadow_position = 1;
 					horizontal = true;
@@ -1147,21 +1289,21 @@ namespace Budgie {
 					x = orig_scr.x;
 					y = orig_scr.y;
 					width = intended_size;
-					height = orig_scr.height;
+					height = int.min(orig_scr.height, max_height);
 					shadow_position = 1;
 					break;
 				case Budgie.PanelPosition.RIGHT:
 					x = (orig_scr.x + orig_scr.width) - alloc.width;
 					y = orig_scr.y;
 					width = intended_size;
-					height = orig_scr.height;
+					height = int.min(orig_scr.height, max_height);
 					shadow_position = 0;
 					break;
 				case Budgie.PanelPosition.BOTTOM:
 				default:
 					x = orig_scr.x;
 					y = orig_scr.y + (orig_scr.height - alloc.height);
-					width = orig_scr.width;
+					width = int.min(orig_scr.width, max_width);
 					height = intended_size;
 					shadow_position = 0;
 					horizontal = true;
@@ -1171,19 +1313,23 @@ namespace Budgie {
 			// Special considerations for dock mode
 			if (this.dock_mode) {
 				if (horizontal) {
-					if (alloc.width > orig_scr.width) {
-						width = orig_scr.width;
+					if (alloc.width > max_width) {
+						width = max_width;
 					} else {
 						width = 100;
 					}
 				} else {
-					if (alloc.height > orig_scr.height) {
-						height = orig_scr.height;
+					if (alloc.height > max_height) {
+						height = max_height;
 					} else {
 						height = 100;
 					}
 				}
 			}
+
+			// Ensure width and height don't exceed monitor dimensions
+			width = int.min(width, max_width);
+			height = int.min(height, max_height);
 
 			main_layout.child_set(shadow, "position", shadow_position);
 
@@ -1237,6 +1383,62 @@ namespace Budgie {
 			layout.set_size_request(width, height);
 			set_size_request(width, height);
 			this.update_screen_edge();
+		}
+
+		public override void get_preferred_width(out int minimum_width, out int natural_width) {
+			// Get monitor geometry to constrain panel size
+			Gdk.Rectangle monitor_geom = orig_scr;
+			var screen = get_screen();
+			if (screen != null) {
+				var display = screen.get_display();
+				if (display != null) {
+					var monitor = display.get_primary_monitor();
+					if (monitor != null) {
+						monitor_geom = monitor.get_geometry();
+					}
+				}
+			}
+
+			int max_width = monitor_geom.width;
+			bool horizontal = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
+
+			if (horizontal) {
+				// For horizontal panels, constrain width to monitor width
+				minimum_width = int.min(orig_scr.width, max_width);
+				natural_width = int.min(orig_scr.width, max_width);
+			} else {
+				// For vertical panels, width is the intended_size
+				minimum_width = intended_size;
+				natural_width = intended_size;
+			}
+		}
+
+		public override void get_preferred_height(out int minimum_height, out int natural_height) {
+			// Get monitor geometry to constrain panel size
+			Gdk.Rectangle monitor_geom = orig_scr;
+			var screen = get_screen();
+			if (screen != null) {
+				var display = screen.get_display();
+				if (display != null) {
+					var monitor = display.get_primary_monitor();
+					if (monitor != null) {
+						monitor_geom = monitor.get_geometry();
+					}
+				}
+			}
+
+			int max_height = monitor_geom.height;
+			bool horizontal = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
+
+			if (horizontal) {
+				// For horizontal panels, height is the intended_size
+				minimum_height = intended_size;
+				natural_height = intended_size;
+			} else {
+				// For vertical panels, constrain height to monitor height
+				minimum_height = int.min(orig_scr.height, max_height);
+				natural_height = int.min(orig_scr.height, max_height);
+			}
 		}
 
 		private bool applet_at_start_of_region(Budgie.AppletInfo? info) {
