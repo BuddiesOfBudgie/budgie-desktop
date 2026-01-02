@@ -16,6 +16,8 @@ namespace Budgie {
 	* The main panel area - i.e. the bit that's rendered
 	*/
 	public class MainPanel : Gtk.Box {
+		private bool updating_constraints = false;
+		
 		public MainPanel() {
 			Object(orientation: Gtk.Orientation.HORIZONTAL);
 			get_style_context().add_class("budgie-panel");
@@ -38,11 +40,14 @@ namespace Budgie {
 			}
 		}
 
-		public override void size_allocate(Gtk.Allocation allocation) {
-			// Call base allocation first
-			base.size_allocate(allocation);
+		public void update_box_constraints(Gtk.Allocation allocation) {
+			// Prevent infinite recursion
+			if (updating_constraints) {
+				return;
+			}
+			updating_constraints = true;
 			
-			// Then constrain each box to panel size minus other boxes' sizes
+			// Constrain each box to panel size minus other boxes' sizes
 			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
 				// Find start, center, and end boxes by their halign
 				Gtk.Widget? start_widget = null;
@@ -160,6 +165,15 @@ namespace Budgie {
 					}
 				}
 			}
+			updating_constraints = false;
+		}
+
+		public override void size_allocate(Gtk.Allocation allocation) {
+			// Call base allocation first
+			base.size_allocate(allocation);
+			
+			// Note: update_box_constraints is NOT called here to avoid infinite loops.
+			// It's only called manually when applets are moved via update_box_size_constraints().
 		}
 	}
 
@@ -1033,18 +1047,36 @@ namespace Budgie {
 			/* Don't needlessly reparent */
 			Gtk.Box current_parent = (Gtk.Box) info.applet.get_parent();
 			if (new_parent != current_parent) {
-				current_parent.remove(info.applet);
-				new_parent.add(info.applet);
+			current_parent.remove(info.applet);
+			new_parent.add(info.applet);
 
-				toggle_container_visibilities(); // Update the containers
+			toggle_container_visibilities(); // Update the containers
 
 				info.applet.queue_resize();
+				update_sizes();
+				update_box_size_constraints();
 			}
 		}
 
 		void applet_reposition(Budgie.AppletInfo? info) {
 			info.applet.get_parent().child_set(info.applet, "position", info.position);
 			toggle_container_visibilities(); // Update the containers
+		}
+
+		void update_box_size_constraints() {
+			// Force boxes to recalculate preferred sizes
+			start_box.queue_resize();
+			center_box.queue_resize();
+			end_box.queue_resize();
+			layout.queue_resize();
+			
+			// Use a timeout to ensure allocations are updated before constraining
+			Timeout.add(10, () => {
+				Gtk.Allocation layout_alloc;
+				layout.get_allocation(out layout_alloc);
+				layout.update_box_constraints(layout_alloc);
+				return false;
+			});
 		}
 
 		void applet_updated(Object o, ParamSpec p) {
@@ -1569,6 +1601,8 @@ namespace Budgie {
 				info.position = new_position;
 				conflict_swap(info, old_position);
 				applets_changed();
+				update_sizes();
+				update_box_size_constraints();
 				return;
 			}
 			if ((new_home = get_box_left(info)) != null) {
@@ -1591,6 +1625,8 @@ namespace Budgie {
 				info.position = (int)len;
 				budge_em_left(old_home, 0);
 				applets_changed();
+				update_sizes();
+				update_box_size_constraints();
 			}
 		}
 
@@ -1609,6 +1645,8 @@ namespace Budgie {
 				info.position = new_position;
 				conflict_swap(info, old_position);
 				applets_changed();
+				update_sizes();
+				update_box_size_constraints();
 				return;
 			}
 			if ((new_home = get_box_right(info)) != null) {
@@ -1617,6 +1655,8 @@ namespace Budgie {
 				info.position = 0;
 				this.reinforce_positions();
 				applets_changed();
+				update_sizes();
+				update_box_size_constraints();
 			}
 		}
 
