@@ -50,7 +50,7 @@ public class ShowDesktopApplet : Budgie.Applet {
 				} catch (Error e) {
 					// Note: This is intentionally set to debug instead of warning because Xfw will create noise otherwise
 					// Unminimize operations can end up being noisy when they fail due to the window not yet reporting the capability to support CAN_MINIMIZE
-					// https://gitlab.xfce.org/xfce/Xfw/-/blob/main/Xfw/xfw-window-x11.c#L363
+					// https://gitlab.xfce.org/xfce/libxfce4windowing/-/blob/main/libxfce4windowing/xfw-window-x11.c#L363
 					debug("Failed to change state of window \"%s\": %s", window.get_name(), e.message);
 				}
 			});
