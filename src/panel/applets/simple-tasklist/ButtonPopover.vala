@@ -14,6 +14,7 @@ public class SimpleTasklistButtonPopover : Gtk.Popover {
 
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
+	private Gtk.Button? close_button;
 
 	public SimpleTasklistButtonPopover(TasklistButton button, Xfw.Window window) {
 		Object(relative_to: button, window: window);
@@ -35,12 +36,20 @@ public class SimpleTasklistButtonPopover : Gtk.Popover {
 		var minimize_button_label = minimize_button.get_child() as Gtk.Label;
 		minimize_button_label.halign = Gtk.Align.START;
 
+		close_button = new Gtk.Button.with_label(_("Close")) {
+			relief = Gtk.ReliefStyle.NONE,
+		};
+
+		var close_button_label = close_button.get_child() as Gtk.Label;
+		close_button_label.halign = Gtk.Align.START;
+
 		var list_box = new Gtk.ListBox() {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
 		list_box.add(maximize_button);
 		list_box.add(minimize_button);
+		list_box.add(close_button);
 
 		build_workspace_buttons(list_box);
 
@@ -61,6 +70,14 @@ public class SimpleTasklistButtonPopover : Gtk.Popover {
 				window.set_minimized(true);
 			} catch (Error e) {
 				warning("Unable to set minimized on window %s: %s", window.get_name(), e.message);
+			}
+		});
+
+		close_button.clicked.connect(() => {
+			try {
+				window.close(Gtk.get_current_event_time());
+			} catch (Error e) {
+				warning("Unable to close window '%s': %s", window.get_name(), e.message);
 			}
 		});
 
