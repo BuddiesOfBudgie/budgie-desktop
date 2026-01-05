@@ -28,7 +28,7 @@ public class TasklistButton : ToggleButton {
 	private new Label label;
 	private Image icon;
 	private GLib.Settings settings;
-	private SimpleTasklistButtonPopover popover;
+	private TasklistButtonPopover popover;
 
 	private Allocation definite_allocation;
 
@@ -49,7 +49,7 @@ public class TasklistButton : ToggleButton {
 		on_settings_changed("show-labels");
 		on_settings_changed("show-icons");
 
-		popover = new SimpleTasklistButtonPopover(this, window);
+		popover = new TasklistButtonPopover(this, window);
 		popover_manager.register_popover(this, popover);
 	}
 
