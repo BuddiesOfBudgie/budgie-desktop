@@ -1299,7 +1299,6 @@ namespace Budgie {
 			int max_width = monitor_geom.width;
 			int max_height = monitor_geom.height;
 			
-			message("max_width: %d | max_height: %d", max_width, max_height);
 			switch (position) {
 				case Budgie.PanelPosition.TOP:
 					x = orig_scr.x;

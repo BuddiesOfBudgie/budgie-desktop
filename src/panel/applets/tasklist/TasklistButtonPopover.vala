@@ -9,14 +9,14 @@
  * (at your option) any later version.
  */
 
-public class SimpleTasklistButtonPopover : Gtk.Popover {
+public class TasklistButtonPopover : Gtk.Popover {
 	public Xfw.Window window { get; construct; }
 
 	private Gtk.Button? maximize_button;
 	private Gtk.Button? minimize_button;
 	private Gtk.Button? close_button;
 
-	public SimpleTasklistButtonPopover(TasklistButton button, Xfw.Window window) {
+	public TasklistButtonPopover(TasklistButton button, Xfw.Window window) {
 		Object(relative_to: button, window: window);
 	}
 
