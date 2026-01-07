@@ -93,12 +93,16 @@ namespace Budgie {
 
 		private Settings budgie_settings;
 		private Settings raven_settings;
+		private Settings interface_settings;
+		private HashTable<string, Settings> app_settings_cache;
 
 		private RavenInterface raven;
 
 		construct {
 			this.budgie_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 			this.raven_settings = new Settings(BUDGIE_RAVEN_SCHEMA);
+			this.interface_settings = new Settings("org.gnome.desktop.interface");
+			this.app_settings_cache = new HashTable<string, Settings>(str_hash, str_equal);
 
 			this.orientation = Gtk.Orientation.VERTICAL;
 			this.spacing = 0;
@@ -227,17 +231,24 @@ namespace Budgie {
 				settings_app_name = hints.lookup("desktop-entry").get_string().replace(".", "-").down(); // This is necessary because Notifications application-children change . to - as well
 			}
 
-			Settings application_settings = new Settings.full(
-				SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true),
-				null,
-				"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
-			);
+			Settings? application_settings = app_settings_cache.lookup(settings_app_name);
+			if (application_settings == null) {
+				var schema = SettingsSchemaSource.get_default().lookup(APPLICATION_SCHEMA, true);
+				if (schema != null) {
+					application_settings = new Settings.full(
+						schema,
+						null,
+						"%s/%s/".printf(APPLICATION_PREFIX, settings_app_name)
+					);
+					app_settings_cache.insert(settings_app_name, application_settings);
+				}
+			}
 
 			// If popups aren't being shown, immediately call our close function to put
 			// the notification in Raven.
 			bool no_popup = this.do_not_disturb ||
 							this.dispatcher.notifications_paused ||
-							!application_settings.get_boolean("show-banners");
+							(application_settings != null && !application_settings.get_boolean("show-banners"));
 
 			if (no_popup) {
 				on_notification_closed(id, notification.app_name, NotificationCloseReason.EXPIRED);
@@ -264,7 +275,7 @@ namespace Budgie {
 			// Look for an existing group. If one doesn't exist, create it
 			var group = get_notification_group(notification.app_name) ?? get_notification_group(notification.app_id);
 			if (group == null) {
-				group = new NotificationGroup(notification, sort_mode, max_per_group);
+				group = new NotificationGroup(notification, sort_mode, max_per_group, interface_settings);
 				listbox.add(group);
 
 				group.dismissed_group.connect((name) => { // When we dismiss the group

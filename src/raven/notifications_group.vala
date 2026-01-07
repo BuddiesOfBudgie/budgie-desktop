@@ -25,6 +25,7 @@ namespace Budgie {
 		public uint tokeep { get; construct set; }
 		public NotificationSort noti_sort_mode { get; construct set; default = NEW_OLD; }
 		public int noti_count { get; private set; default = 0; }
+		public Settings interface_settings { get; construct; }
 
 		/* Signals */
 
@@ -84,12 +85,13 @@ namespace Budgie {
 			add(box);
 		}
 
-		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep) {
+		public NotificationGroup(Budgie.Notification notification, NotificationSort sort_mode, uint keep, Settings interface_settings) {
 			Object(
 				app_name: notification.app_name,
 				image: notification.app_image ?? notification.image ?? new Gtk.Image.from_icon_name("applications-internet", Gtk.IconSize.DND),
 				tokeep: keep,
 				noti_sort_mode: sort_mode,
+				interface_settings: interface_settings,
 				activatable: false,
 				selectable: false,
 				can_focus: false,
@@ -105,7 +107,7 @@ namespace Budgie {
 				remove_notification(id); // Remove the current one first
 			}
 
-			var widget = new NotificationWidget(notification);
+			var widget = new NotificationWidget(notification, interface_settings);
 			notifications.insert(id, widget);
 			noti_box.prepend(widget);
 

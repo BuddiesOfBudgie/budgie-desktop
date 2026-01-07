@@ -11,11 +11,12 @@
 
 public class NotificationWidget : Gtk.ListBoxRow {
 	public Budgie.Notification notification { get; construct; }
+	public Settings interface_settings { get; construct; }
 
 	public signal void closed_individually();
 
-	public NotificationWidget(Budgie.Notification notification) {
-		Object(notification: notification);
+	public NotificationWidget(Budgie.Notification notification, Settings interface_settings) {
+		Object(notification: notification, interface_settings: interface_settings);
 	}
 
 	construct {
@@ -53,8 +54,7 @@ public class NotificationWidget : Gtk.ListBoxRow {
 
 		var date = new DateTime.from_unix_local(notification.timestamp);
 
-		var gnome_settings = new Settings("org.gnome.desktop.interface");
-		string clock_format = gnome_settings.get_string("clock-format");
+		string clock_format = interface_settings.get_string("clock-format");
 		clock_format = (clock_format == "12h") ? date.format("%l:%M %p") : date.format("%H:%M");
 
 		var label_timestamp = new Gtk.Label(clock_format) {
