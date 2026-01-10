@@ -203,7 +203,7 @@ public class TasklistButton : ToggleButton {
 		min_width += padding.left + padding.right;
 		min_width += border.left + border.right;
 
-		return min_width + BUTTON_MIN_WIDTH;
+		return min_width;
 	}
 
 	private int get_char_width() {

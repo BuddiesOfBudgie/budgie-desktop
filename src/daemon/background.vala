@@ -111,7 +111,7 @@ namespace Budgie {
 			if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
 				// we use swaybg to define the wallpaper - we need to keep track
 				// of what we create so that we kill it the next time a background is defined
-				string[] cmdline = { "swaybg", "-i", bg_filename };
+				string[] cmdline = { "swaybg", "-i", bg_filename, "--mode", "fill" };
 				Subprocess new_bg;
 				try {
 					new_bg = new Subprocess.newv(cmdline, SubprocessFlags.NONE);
