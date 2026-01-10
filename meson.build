@@ -1,7 +1,7 @@
 project(
     'budgie-desktop',
     ['c', 'vala'],
-    version: '10.10.preview.2',
+    version: '10.10.0',
     license: [
         'GPL-2.0',
         'LGPL-2.1',
