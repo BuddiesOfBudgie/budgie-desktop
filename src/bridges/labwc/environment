@@ -1,4 +1,0 @@
-#XKB_DEFAULT_LAYOUT=gb
-XKB_DEFAULT_LAYOUT=gb,us(intl)
-XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle
-#XKB_DEFAULT_OPTIONS=grp:shift_caps_toggle
