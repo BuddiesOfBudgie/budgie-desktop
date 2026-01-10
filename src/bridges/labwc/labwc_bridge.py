@@ -284,7 +284,7 @@ class Bridge:
 
                     if "+" in extract:
                         rhs = extract.split("+")
-                        extract = rhs[0] + "(" + rhs[1] + ")"
+                        extract = f"{rhs[0]}({rhs[1]})"
 
                     if layout == "":
                         layout = extract
@@ -301,11 +301,11 @@ class Bridge:
         if self.desktop_interface_settings:
             cursor_theme = self.desktop_interface_settings["cursor-theme"]
             if cursor_theme:
-                lines.append("XCURSOR_THEME=" + str(cursor_theme) + "\n")
+                lines.append(f"XCURSOR_THEME={cursor_theme}\n")
 
             cursor_size = self.desktop_interface_settings["cursor-size"]
             if cursor_size:
-                lines.append("XCURSOR_SIZE=" + str(cursor_size) + "\n")
+                lines.append(f"XCURSOR_SIZE={cursor_size}\n")
 
         # Ensure directory exists
         os.makedirs(os.path.dirname(path), exist_ok=True)
