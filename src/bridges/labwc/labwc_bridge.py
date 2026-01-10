@@ -294,7 +294,7 @@ class Bridge:
         if layout == "":
             layout = "us" # default to at least a known keyboard layout
 
-        lines.append("XKB_DEFAULT_LAYOUT=" + layout + "\n")
+        lines.append(f"XKB_DEFAULT_LAYOUT={layout}\n")
         lines.append("XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle\n")
 
         # Get cursor settings from desktop_interface_settings
