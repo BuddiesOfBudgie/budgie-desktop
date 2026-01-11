@@ -98,16 +98,20 @@ fi
 # Copy specific labwc configuration file for Budgie
 if [ ! -f "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/rc.xml" ]; then
     cp -p @datadir@/budgie-desktop/labwc/rc.xml "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/rc.xml"
+    # This is needed on some immutable distributions like NixOS.
+    chmod u+w "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/rc.xml"
 fi
 
 # Copy specific labwc environment file for Budgie
 if [ ! -f "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/environment" ]; then
     cp -p @datadir@/budgie-desktop/labwc/environment "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/environment"
+    chmod u+w "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/environment"
 fi
 
 # Copy specific labwc menu file for Budgie
 if [ ! -f "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/menu.xml" ]; then
     cp -p @datadir@/budgie-desktop/labwc/menu.xml "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/menu.xml"
+    chmod u+w "${XDG_CONFIG_HOME:-${HOME}/.config}/budgie-desktop/labwc/menu.xml"
 fi
 
 # Budgie will use its own config directory and config file to avoid
