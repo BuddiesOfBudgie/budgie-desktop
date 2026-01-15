@@ -38,6 +38,49 @@ namespace Budgie {
 			return false;
 		}
 
+		// Add this method to the Background class after is_color_wallpaper()
+
+		/**
+		* Translate GNOME desktop background picture-options to swaybg mode
+		*/
+		private string get_swaybg_mode() {
+			var placement = gnome_bg.get_placement();
+
+			switch (placement) {
+				case GDesktop.BackgroundStyle.NONE:
+					// No background image, but shouldn't reach here due to is_color_wallpaper check
+					return "fill";
+
+				case GDesktop.BackgroundStyle.WALLPAPER:
+					// Tiled wallpaper
+					return "tile";
+
+				case GDesktop.BackgroundStyle.CENTERED:
+					// Image centered on screen
+					return "center";
+
+				case GDesktop.BackgroundStyle.SCALED:
+					// Scale to fit screen while maintaining aspect ratio
+					return "fit";
+
+				case GDesktop.BackgroundStyle.STRETCHED:
+					// Stretch to fill screen, ignoring aspect ratio
+					return "stretch";
+
+				case GDesktop.BackgroundStyle.ZOOM:
+					// Scale to fill screen while maintaining aspect ratio (crop if needed)
+					return "fill";
+
+				case GDesktop.BackgroundStyle.SPANNED:
+					// Span across multiple monitors - swaybg doesn't have direct equivalent
+					// Use fill as closest approximation
+					return "fill";
+
+				default:
+					return "fill";
+			}
+		}
+
 		public Background() {
 			settings = new Settings(BACKGROUND_SCHEMA);
 			gnome_bg = new Gnome.BG();
@@ -111,7 +154,9 @@ namespace Budgie {
 			if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
 				// we use swaybg to define the wallpaper - we need to keep track
 				// of what we create so that we kill it the next time a background is defined
-				string[] cmdline = { "swaybg", "-i", bg_filename, "--mode", "fill" };
+				string swaybg_mode = get_swaybg_mode();
+				string[] cmdline = { "swaybg", "-i", bg_filename, "--mode", swaybg_mode };
+
 				Subprocess new_bg;
 				try {
 					new_bg = new Subprocess.newv(cmdline, SubprocessFlags.NONE);
