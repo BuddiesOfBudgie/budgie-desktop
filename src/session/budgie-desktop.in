@@ -8,18 +8,16 @@ if [ "$1" = "--version" ]; then
     exit 0
 fi
 
-if [ -z $XDG_CURRENT_DESKTOP ]; then
+if [ -z "${XDG_CURRENT_DESKTOP:-}" ] || ! printf %s "$XDG_CURRENT_DESKTOP" | grep -qi 'budgie'; then
   XDG_CURRENT_DESKTOP=Budgie
   export XDG_CURRENT_DESKTOP
 fi
 
 export BUDGIE_SESSION_VERSION=${BUDGIE_VERSION}
 
-@bindir@/org.buddiesofbudgie.Services &
-sleep 2
-
 # Wait until the server starts before launching the session
 compositor="@gsd_libexecdir@/budgie-session-compositor-ready"
 if command -v "$compositor" > /dev/null 2>&1 && "$compositor"; then
+  @bindir@/org.buddiesofbudgie.Services &
   exec budgie-session --builtin --session=org.buddiesofbudgie.BudgieDesktop $*
 fi
