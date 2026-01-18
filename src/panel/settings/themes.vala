@@ -44,22 +44,6 @@ class ThemeInfo : GLib.Object {
 public class ThemeScanner : GLib.Object {
 	string[]? xdg_paths = null;
 
-	string[] gtk_theme_blacklist = {
-		"Adwaita",
-		"Breeze",
-		"Clearlooks",
-		"Crux",
-		"Default",
-		"Emacs",
-		"Industrial",
-		"Kv",
-		"Mist",
-		"Murrina",
-		"Raleigh",
-		"Redmond",
-		"ThinIce"
-	};
-
 	string[] icon_theme_blacklist = {
 		"Adwaita",
 		"HighContrast",
@@ -190,14 +174,6 @@ public class ThemeScanner : GLib.Object {
 		var test_path = "%s%s%s".printf(path, Path.DIR_SEPARATOR_S, "gtk.css");
 		if (!FileUtils.test(test_path, FileTest.EXISTS)) {
 			return false;
-		}
-
-		for (int index = 0; index < gtk_theme_blacklist.length; index++) {
-			string blacklisted_item = gtk_theme_blacklist[index];
-
-			if ((blacklisted_item == theme_name) || (theme_name.index_of(blacklisted_item) != -1)) {
-				return false;
-			}
 		}
 
 		unowned ThemeInfo? info = gtk_themes.lookup(theme_name);
