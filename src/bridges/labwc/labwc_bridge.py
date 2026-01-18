@@ -291,6 +291,20 @@ class Bridge:
                     else:
                         layout += "," + extract
 
+        # Get keyboard layout from systemd-localed service
+        if layout == "":
+            try:
+                layout = Gio.DBusProxy.new_sync(
+                    Gio.bus_get_sync(Gio.BusType.SYSTEM, None),
+                    0, None,
+                    "org.freedesktop.locale1",
+                    "/org/freedesktop/locale1",
+                    "org.freedesktop.locale1",
+                    None
+                ).get_cached_property("X11Layout").unpack()
+            except:
+                pass
+
         if layout == "":
             layout = "us" # default to at least a known keyboard layout
 
