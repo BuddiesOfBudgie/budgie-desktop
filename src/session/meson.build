@@ -11,6 +11,7 @@ budgie_session_324_components = [
     'org.buddiesofbudgie.SettingsDaemon.Datetime',
     'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
     'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
+    'org.buddiesofbudgie.SettingsDaemon.Keyboard',
     'org.buddiesofbudgie.SettingsDaemon.Power',
     'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
     'org.buddiesofbudgie.SettingsDaemon.Rfkill',
