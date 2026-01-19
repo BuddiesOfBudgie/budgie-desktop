@@ -118,7 +118,6 @@ namespace Budgie {
 			this.on_wm_settings_changed("button-style");
 
 			gnome_desktop_settings.changed.connect(this.on_gnome_desktop_settings_changed);
-			panel_settings.changed["sync-gtksettings-file"].connect(this.on_gnome_desktop_settings_changed);
 			this.on_gnome_desktop_settings_changed("gtk-theme");
 		}
 
@@ -127,10 +126,7 @@ namespace Budgie {
 		  apps such
 		*/
 		private void on_gnome_desktop_settings_changed(string key) {
-			if (!panel_settings.get_boolean("sync-gtksettings-file")) return;
-
 			string[] keys = {
-				"sync-gtksettings-file",
 				"gtk-theme",
 				"icon-theme",
 				"cursor-theme",

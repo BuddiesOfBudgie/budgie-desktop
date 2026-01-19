@@ -153,12 +153,6 @@
       <description>Enabling this will show the built-in theme option for legacy theme, which is no longer fully supported.</description>
     </key>
 
-    <key type="b" name="sync-gtksettings-file">
-      <default>true</default>
-      <summary>Sync settings with GtkSettings file</summary>
-      <description>Enabling this will save the current cursor and theme settings in the user's local config settings.ini file.</description>
-    </key>
-
     <key enum="com.solus-project.budgie-panel.NotificationPosition" name="notification-position">
       <default>'BUDGIE_NOTIFICATION_POSITION_TOP_RIGHT'</default>
       <summary>Set the location of notifications</summary>
