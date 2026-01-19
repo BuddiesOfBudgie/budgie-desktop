@@ -19,6 +19,7 @@ namespace Budgie {
 		private Gtk.ComboBox? combobox_icon;
 		private Gtk.ComboBox? combobox_cursor;
 		private Gtk.ComboBox? combobox_notification_position;
+		private Gtk.ComboBox? combobox_color_scheme;
 		private Gtk.Switch? switch_dark;
 		private Gtk.Switch? switch_builtin;
 		private Gtk.Switch? switch_animations;
@@ -67,14 +68,20 @@ namespace Budgie {
 				_("Notification Position"),
 				_("Set the location for notification popups")));
 
+			combobox_color_scheme = new Gtk.ComboBox();
+			grid.add_row(new SettingsRow(combobox_color_scheme,
+				_("Color Scheme"),
+				_("Set the dark theme preference for applications")));
+
 			/* Stick the combos in a size group */
 			group.add_widget(combobox_gtk);
 			group.add_widget(combobox_icon);
 			group.add_widget(combobox_cursor);
 			group.add_widget(combobox_notification_position);
+			group.add_widget(combobox_color_scheme);
 
 			switch_dark = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_dark, _("Dark theme")));
+			grid.add_row(new SettingsRow(switch_dark, _("Dark theme for panel")));
 
 			bool show_builtin = budgie_settings.get_boolean("show-builtin-theme-option");
 
@@ -117,6 +124,20 @@ namespace Budgie {
 			combobox_notification_position.set_model(model);
 			combobox_notification_position.set_id_column(0);
 
+			/* Add options for color scheme */
+			var color_scheme_model = new Gtk.ListStore(2, typeof(string), typeof(string));
+
+			Gtk.TreeIter color_scheme_iter;
+			string[] color_schemes = { "default", "prefer-light", "prefer-dark" };
+
+			foreach (var color_scheme in color_schemes) {
+				color_scheme_model.append(out color_scheme_iter);
+				color_scheme_model.set(color_scheme_iter, 0, color_scheme, 1, color_scheme_to_display(color_scheme), -1);
+			}
+
+			combobox_color_scheme.set_model(color_scheme_model);
+			combobox_color_scheme.set_id_column(0);
+
 			/* Sort out renderers for all of our dropdowns */
 			var render = new Gtk.CellRendererText();
 			render.width_chars = 1;
@@ -129,6 +150,8 @@ namespace Budgie {
 			combobox_cursor.add_attribute(render, "text", 0);
 			combobox_notification_position.pack_start(render, true);
 			combobox_notification_position.add_attribute(render, "text", 1);
+			combobox_color_scheme.pack_start(render, true);
+			combobox_color_scheme.add_attribute(render, "text", 1);
 
 			/* Hook up settings */
 			budgie_settings.bind("dark-theme", switch_dark, "active", SettingsBindFlags.DEFAULT);
@@ -138,6 +161,7 @@ namespace Budgie {
 			}
 
 			budgie_settings.bind("notification-position", combobox_notification_position, "active-id", SettingsBindFlags.DEFAULT);
+			ui_settings.bind("color-scheme", combobox_color_scheme, "active-id", SettingsBindFlags.DEFAULT);
 			ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
 			this.theme_scanner = new ThemeScanner();
 
@@ -394,6 +418,21 @@ namespace Budgie {
 				default:
 					return _("Top Right");
 			}
+		}
+
+		/**
+		* Get a user-friendly name for each color scheme.
+		*/
+		private string color_scheme_to_display(string color_scheme) {
+			switch (color_scheme) {
+				case "prefer-light":
+					return _("Prefer Light");
+				case "prefer-dark":
+					return _("Prefer Dark");
+				case "default":
+				default:
+					return _("Default");
+				}
 		}
 	}
 }
