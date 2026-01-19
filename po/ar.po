@@ -6,16 +6,16 @@
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # Oukiki Saleh <salehoukiki@gmail.com>, 2024
-# Ziad El-sayed <ziadelsayed1797@tutamail.com>, 2025
+# 875b1970203299e98a0dd7b1ef41b937_7a48b01 <3b5201209baf0a7d0baf46c1aedcce86_1177167>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Ziad El-sayed <ziadelsayed1797@tutamail.com>, 2025\n"
+"Last-Translator: 875b1970203299e98a0dd7b1ef41b937_7a48b01 <3b5201209baf0a7d0baf46c1aedcce86_1177167>, 2025\n"
 "Language-Team: Arabic (https://app.transifex.com/buddiesofbudgie/teams/129844/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -263,6 +263,7 @@ msgstr "معدل النقل"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "إغلاق"
 
@@ -475,16 +476,16 @@ msgstr "الذاكرة العشوائية"
 msgid "Swap"
 msgstr "الذاكرة المتبادلة"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "يسار"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "يمين"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "تلقائي"
 
@@ -578,19 +579,19 @@ msgstr "الوصول الشامل"
 msgid "Caffeine Mode"
 msgstr "وضع كافيين"
 
-#: src/daemon/osdkeys.vala:208
+#: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
 msgstr "مفتاح الأحرف الكبيرة مفعل"
 
-#: src/daemon/osdkeys.vala:215
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
 msgstr "مفتاح الأحرف الكبيرة غير مفعّل"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
 msgstr "لوحة مفاتيح الأرقام مفعلة"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
 msgstr "لوحة مفاتيح الأرقام غير مفعلة"
 
@@ -610,11 +611,11 @@ msgstr "إيقاف التشغيل"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "الإشعارات غير المقروءة"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -629,20 +630,20 @@ msgstr[5] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "عرض الإشعارات"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr "تم تفعيل وضع كافيين"
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr "تم إيقاف وضع كافيين"
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -705,30 +706,34 @@ msgstr "إغلاق جميع النوافذ"
 msgid "Launch new instance"
 msgstr "فتح نافذة جديدة"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "تصغير"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "نقل إلي %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "إستعادة الحجم"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "تكبير"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
 msgstr "أغلق النافذة"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
 msgstr "عرض عناصر التحكم بالنافذة"
 
@@ -850,7 +855,7 @@ msgid "Unmount"
 msgstr "إلغاء التوصيل"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "فتح \"%s\""
@@ -1086,138 +1091,138 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "فشل إنشاء مثيل عنصر واجهة المستخدم بسبب فشل غير معروف."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
-msgstr "البريمجات"
+msgstr "التطبيقات المصغرة"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "الإعدادات"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "إزالة شريط المهام"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "إزالة شريط المهام هذا من الشاشة"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "حامل البرامج العلوي"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "حامل البرامج الأيمن"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "حامل البرامج الأيسر"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "حامل البرامج السفلي"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "شريط المهام العلوي"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "شريط المهام الأيمن"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "شريط المهام الأيسر"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "شريط المهام السفلي"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "أعلى"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "أسفل"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "دائمًا"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "متفاعل"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "لا شيء"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "ذكي"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "مطلقًا"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "الموضع"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "ضبط حافة الشاشة التي سيبقي عليها شريط المهام هذا"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "الحجم"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr "ضبط الحجم (عرض أو ارتفاع، حسب الاتجاه) لشريط المهام هذا"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "تباعد"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "تعيين المسافة بين التطبيقات المصغرة لشريط المهام هذا"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "إخفاء تلقائي"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr "عند الإختيار، سيُخفى شريط المهام هذا لزيادة مساحة الشاشة"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "الشفافية"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "تحكم في شفافية هذه اللوحة"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "الظل"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "إضافة ظل زخرفي, مثالي لشريط المهام الغير شفاف"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "تنسيق"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1225,11 +1230,11 @@ msgstr ""
 "إضافة تلميح لشريط المهام حتى يتم تغير مظهر كل من المناطق الثلاثة الأساسية "
 "لشريط المهام بشكل مختلف."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "وضع حامل البرامج"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1262,7 +1267,8 @@ msgstr "تأكيد إزالة التطبيق المصغر"
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
-"هل أنت متأكد من رغبتك في إزالة هذا البريمح؟ لا يمكن التراجع عن هذه العملية."
+"هل أنت متأكد من رغبتك في إزالة هذا التطبيق المصغر؟ لا يمكن التراجع عن هذه "
+"العملية."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 #: src/panel/settings/settings_panel_dialogs.vala:148
@@ -1665,15 +1671,15 @@ msgstr "ضخم"
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr "إعدادات البرنامج المصغر"
+msgstr "إعدادات التطبيق المصغر"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
-msgstr "إضافة برنامج مصغر"
+msgstr "إضافة تطبيق مصغر"
 
 #: src/panel/settings/settings_panel_applets.vala:236
 msgid "Choose a new applet to add to this panel"
-msgstr "اختيار برنامج مصغر جديد لإضافته لشريط المهام هذا"
+msgstr "اختيار تطبيق مصغر جديد لإضافته لشريط المهام هذا"
 
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
@@ -1740,19 +1746,19 @@ msgstr "الرسوم المتحركة"
 msgid "Control whether windows and controls use animations"
 msgstr "تحكم في استخدام النوافذ و مفاتيح التحكم للرسوم المتحركة"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "أعلى اليسار"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "أسفل اليسار"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "أسفل اليمين"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "أعلى اليمين"
 
@@ -1925,7 +1931,7 @@ msgstr "المنطقة الزمنية المخصصة"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr "التوقيت العالمي"
+msgstr "التوقيت العالمي الموحد"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
@@ -2068,6 +2074,14 @@ msgstr "تباعد الأيقونة"
 msgid "Scale icons with panel size"
 msgstr "تغيير حجم الأيقونات ليناسب حجم شريط المهام"
 
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
+
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "إظهار نسبة البطارية"
@@ -2177,7 +2191,7 @@ msgstr "منع النظام والشاشة من النوم."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr "فاصل قابل للتعديل لوضعه بين التطبيقات الأخرى."
+msgstr "فاصل قابل للتعديل لوضعه بين التطبيقات المصغرة الأخرى."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
@@ -2222,7 +2236,7 @@ msgstr "قائمة مهام التطبيق مع الرموز والتسميات.
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr "فاصل مرئي بين التطبيقات الصغيرة."
+msgstr "فاصل مرئي بين التطبيقات المصغرة"
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."

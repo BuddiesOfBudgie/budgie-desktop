@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Moo, 2023
+# Moo, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Moo, 2023\n"
+"Last-Translator: Moo, 2026\n"
 "Language-Team: Lithuanian (https://app.transifex.com/buddiesofbudgie/teams/129844/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -126,35 +126,35 @@ msgstr "Grupė:"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
-msgstr ""
+msgstr "Siųsti"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:111
 msgid "Speaker"
-msgstr ""
+msgstr "Garsiakalbis"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:113
 msgid "Controller"
-msgstr ""
+msgstr "Pultas"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:115
 msgid "Keyboard"
-msgstr ""
+msgstr "Klaviatūra"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
 msgid "Mouse"
-msgstr ""
+msgstr "Pelė"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:119
 msgid "Tablet"
-msgstr ""
+msgstr "Planšetė"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:121
 msgid "Touchpad"
-msgstr ""
+msgstr "Jutiklinis kilimėlis"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:123
 msgid "Phone"
-msgstr ""
+msgstr "Telefonas"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:24
 #: src/dialogs/sendto/Dialog/FileSender.vala:29
@@ -218,12 +218,12 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
 msgid "Trying to connect to %s…"
-msgstr ""
+msgstr "Bandoma prisijungti prie %s…"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:136
 #, c-format
 msgid "Connecting to '%s' failed"
-msgstr ""
+msgstr "Nepavyko prisijungti prie „%s“"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:139
 #: src/dialogs/sendto/Dialog/FileSender.vala:220
@@ -233,7 +233,7 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr ""
+msgstr "Bandyti dar kartą"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
@@ -261,8 +261,9 @@ msgstr ""
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
-msgstr ""
+msgstr "Užverti"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:156
 #, c-format
@@ -278,38 +279,38 @@ msgstr ""
 #, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%u valanda"
+msgstr[1] "%u valandos"
+msgstr[2] "%u valandų"
+msgstr[3] "%u valanda"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:170
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:175
 #, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%u minutė"
+msgstr[1] "%u minutės"
+msgstr[2] "%u minučių"
+msgstr[3] "%u minutė"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:176
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%u sekundė"
+msgstr[1] "%u sekundės"
+msgstr[2] "%u sekundžių"
+msgstr[3] "%u sekundė"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:180
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d sekundė"
+msgstr[1] "%d sekundės"
+msgstr[2] "%d sekundžių"
+msgstr[3] "%d sekundė"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
@@ -329,7 +330,7 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr ""
+msgstr "Prieinami įrenginiai"
 
 #: src/dialogs/sendto/Application.vala:75
 msgid "Files to send"
@@ -337,33 +338,33 @@ msgstr ""
 
 #: src/dialogs/sendto/Application.vala:78
 msgid "_Cancel"
-msgstr ""
+msgstr "_Atsisakyti"
 
 #: src/dialogs/sendto/Application.vala:79
 msgid "_Open"
-msgstr ""
+msgstr "A_tverti"
 
 #: src/dialogs/sendto/Application.vala:193
 msgid "Send Files via Bluetooth"
-msgstr ""
+msgstr "Siųsti failus per Bluetooth"
 
 #: src/dialogs/sendto/Application.vala:195
 msgid "Send files to device…"
-msgstr ""
+msgstr "Siųsti failus į įrenginį…"
 
 #: src/dialogs/sendto/Application.vala:301
 msgid "Rejected file"
-msgstr ""
+msgstr "Atmestas failas"
 
 #: src/dialogs/sendto/Application.vala:302
 #, c-format
 msgid "File already exists: %s"
-msgstr ""
+msgstr "Failas jau yra: %s"
 
 #. Create a notification prompting the user what to do
 #: src/dialogs/sendto/Application.vala:314
 msgid "Receiving file"
-msgstr ""
+msgstr "Gaunamas failas"
 
 #: src/dialogs/sendto/Application.vala:315
 #, c-format
@@ -372,11 +373,11 @@ msgstr ""
 
 #: src/dialogs/sendto/Application.vala:317
 msgid "Accept"
-msgstr ""
+msgstr "Priimti"
 
 #: src/dialogs/sendto/Application.vala:321
 msgid "Reject"
-msgstr ""
+msgstr "Atmesti"
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
@@ -463,16 +464,16 @@ msgstr ""
 msgid "Swap"
 msgstr ""
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "Kairėje"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "Dešinėje"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "Automatiškai"
 
@@ -566,21 +567,21 @@ msgstr "Universalioji prieiga"
 msgid "Caffeine Mode"
 msgstr ""
 
-#: src/daemon/osdkeys.vala:208
-msgid "Caps Lock is on"
-msgstr ""
-
 #: src/daemon/osdkeys.vala:215
+msgid "Caps Lock is on"
+msgstr "Didžiosios raidės įjungtos"
+
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Didžiosios raidės išjungtos"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Skaitmenų klaviatūra įjungta"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
-msgstr ""
+msgstr "Skaitmenų klaviatūra išjungta"
 
 #: src/daemon/endsession.vala:162
 msgid "Log out"
@@ -598,11 +599,11 @@ msgstr "Išjungti"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "Neskaityti pranešimai"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -615,20 +616,20 @@ msgstr[3] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "Rodyti pranešimus"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr ""
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr ""
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -683,38 +684,42 @@ msgstr ""
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Užverti visus langus"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "Paleisti naują egzempliorių"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Suskleisti"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "Perkelti į %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Grąžinti iš išskleidimo"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Išskleisti"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Užverti langą"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Rodyti lango valdiklius"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
@@ -834,7 +839,7 @@ msgid "Unmount"
 msgstr "Atjungti"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Atverti „%s“"
@@ -883,7 +888,7 @@ msgstr "Įrašykite slaptažodį"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
-msgstr ""
+msgstr "Bluetooth"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:114
 msgid "Bluetooth Settings"
@@ -892,7 +897,7 @@ msgstr "Bluetooth nustatymai"
 #. Bluetooth switch
 #: src/panel/applets/status/BluetoothIndicator.vala:120
 msgid "Turn Bluetooth on or off"
-msgstr ""
+msgstr "Įjungti arba išjungti Bluetooth"
 
 #. Update the tray icon and placeholder text
 #. Airplane mode is on, so Bluetooth is disabled
@@ -915,40 +920,40 @@ msgstr ""
 
 #: src/panel/applets/status/BluetoothIndicator.vala:440
 msgid "Send file"
-msgstr ""
+msgstr "Siųsti failą"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:465
 msgid "Disconnect"
-msgstr ""
+msgstr "Atsijungti"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:577
 msgid "Disconnecting…"
-msgstr ""
+msgstr "Atsijungiama…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:580
 msgid "Connecting…"
-msgstr ""
+msgstr "Prisijungiama…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to disconnect"
-msgstr ""
+msgstr "Nepavyko atsijungti"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to connect"
-msgstr ""
+msgstr "Nepavyko prisijungti"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Connected"
-msgstr ""
+msgstr "Prisijungta"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Disconnected"
-msgstr ""
+msgstr "Atsijungta"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:702
 #, c-format
 msgid "<b>Filename</b>: %s"
-msgstr ""
+msgstr "<b>Failo pavadinimas</b>: %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:709
 #, c-format
@@ -1060,142 +1065,142 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Nepavyko sukurti valdiklio egzemplioriaus dėl nežinomos nesėkmės."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Programėlės"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "Nustatymai"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "Šalinti skydelį"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "Šalinti šį skydelį iš ekrano"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "Viršutinis dokas"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "Dešinysis dokas"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "Kairysis dokas"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "Apatinis dokas"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "Viršutinis skydelis"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "Dešinysis skydelis"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "Kairysis skydelis"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "Apatinis skydelis"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "Viršuje"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "Apačioje"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "Visada"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "Dinaminis"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "Nėra"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "Išmaniai"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "Niekada"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "Pozicija"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Nustatyti ekrano kraštą, kuriame bus šis skydelis"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "Dydis"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
 "Nustatyti šio skydelio dydį (plotį arba aukštį, priklausomai nuo "
 "orientacijos)"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "Tarpai"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "Nustatyti tarpus tarp šio skydelio programėlių"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "Automatiškai slėpti"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr "Kai nustatyta, šis skydelis bus slepiamas, kad padidintų plotą ekrane"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "Permatomumas"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "Valdyti, kada šio skydelio fonas turėtų būti vientisos spalvos"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "Šešėlis"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr ""
 "Prideda dekoratyvinį metamą šešėlį, kuris puikiai tinka nepermatomiems "
 "skydeliams"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "Stilizuoti sritis"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1203,11 +1208,11 @@ msgstr ""
 "Prideda užuominas į skydelį taip, kad kiekvieną iš trijų skydelio sričių "
 "būtų galima skirtingai apipavidalinti."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "Doko veiksena"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1733,19 +1738,19 @@ msgstr "Animacijos"
 msgid "Control whether windows and controls use animations"
 msgstr "Valdyti, ar langai ir valdikliai naudos animacijas"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "Viršuje kairėje"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "Apačioje kairėje"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "Apačioje dešinėje"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Viršuje dešinėje"
 
@@ -2059,6 +2064,14 @@ msgstr "Tarpai tarp piktogramų"
 
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
 msgstr ""
 
 #: src/panel/applets/status/settings.ui.h:2

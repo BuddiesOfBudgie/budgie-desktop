@@ -6,16 +6,16 @@
 # Translators:
 # rexhent 1, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Green <usergreen@users.osdn.me>, 2024
+# green <usergreen@users.osdn.me>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Green <usergreen@users.osdn.me>, 2024\n"
+"Last-Translator: green <usergreen@users.osdn.me>, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -263,6 +263,7 @@ msgstr "転送速度"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "閉じる"
 
@@ -450,16 +451,16 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Swap"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "左"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "右"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "自動"
 
@@ -553,21 +554,21 @@ msgstr "ユニバーサルアクセス"
 msgid "Caffeine Mode"
 msgstr "カフェインモード"
 
-#: src/daemon/osdkeys.vala:208
-msgid "Caps Lock is on"
-msgstr ""
-
 #: src/daemon/osdkeys.vala:215
+msgid "Caps Lock is on"
+msgstr "Caps Lock がオンです"
+
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Caps Lock がオフです"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Num Lock がオンです"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
-msgstr ""
+msgstr "Num Lock がオフです"
 
 #: src/daemon/endsession.vala:162
 msgid "Log out"
@@ -585,11 +586,11 @@ msgstr "電源オフ"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "未読通知"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -599,20 +600,20 @@ msgstr[0] "すべて調べたところ、%d 件の通知があります。"
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "通知の表示"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr "カフェインブースト ON"
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr "カフェインブースト OFF"
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -664,38 +665,42 @@ msgstr "パネルへ追加"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "すべてのウィンドウを閉じる"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "新しいインスタンスを開始"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "ウィンドウを最小化"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "%s へ移動"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "最大化しない"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "ウィンドウを最大化"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "ウィンドウを閉じる"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "ウィンドウコントロールを表示"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
@@ -747,12 +752,12 @@ msgstr "電源"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "新規ワークスペースを作成できません"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "新規ワークスペースを作成"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
@@ -815,7 +820,7 @@ msgid "Unmount"
 msgstr "アンマウント"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "\"%s\" を開く"
@@ -1046,148 +1051,148 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "不明な障害によって、ウィジェットのインスタンス作成に失敗しました。"
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "アプレット"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "設定"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "パネルを削除する"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "画面上からこのパネルを削除します。"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "上部のドック"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "右端のドック"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "左端のドック"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "下部のドック"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "トップパネル"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "右端パネル"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "左端パネル"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "ボトムパネル"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "上"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "下"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "常時"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "動的"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "なし"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "おまかせ"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "なし"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "位置"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "このパネルを表示する画面の端を設定します。"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "大きさ"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr "パネルの大きさ（幅か高さかは向きによります）を設定します。"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "余白"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "パネル上のアプレット同士の間隔を設定"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "自動的に隠す"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr "この設定で、ウィンドウを最大限に表示するためパネルを自動的に隠します。"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "透過度"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "このパネルが単一色の背景と調和するように設定します。"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "シャドウ（影）"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "不透明なパネルに適した装飾的なドロップシャドウを追加します。"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "領域に合わせる"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr "パネルにヒントを追加して、パネルの3つの主要エリアに各々異なるテーマが設定できるようにします。"
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "ドックモード"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1682,19 +1687,19 @@ msgstr "アニメーション"
 msgid "Control whether windows and controls use animations"
 msgstr "ウィンドウとコントールでアニメーション表示するかどうかを設定します。"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "左上"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "左下"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "右下"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "右上"
 
@@ -1749,7 +1754,7 @@ msgstr "パスワード:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "ユーザネーム:"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
@@ -2010,6 +2015,14 @@ msgstr "アイコンの間隔"
 msgid "Scale icons with panel size"
 msgstr "パネルの大きさに合わせてアイコンを拡大縮小する"
 
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
+
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "バッテリ容量をパーセントで表示"
@@ -2021,13 +2034,13 @@ msgstr "Budgie 用の画面撮影アプリ"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie Desktop (magpie)"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using magpie as the window "
 "manager"
-msgstr ""
+msgstr "このセッションでは、ウィンドウマネージャに magpie を使用して Budgie Desktop にログインします"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -2038,7 +2051,7 @@ msgstr "Budgie デスクトップ"
 msgid ""
 "This session logs you into the Budgie Desktop using labwc as the window "
 "manager"
-msgstr ""
+msgstr "このセッションでは、ウィンドウマネージャに labwce を使用して Budgie Desktop にログインします"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"

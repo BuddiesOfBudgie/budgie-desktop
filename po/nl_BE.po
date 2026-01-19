@@ -13,9 +13,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2025\n"
 "Language-Team: Dutch (Belgium) (https://app.transifex.com/buddiesofbudgie/teams/129844/nl_BE/)\n"
@@ -265,6 +265,7 @@ msgstr "Overdracht snelheid"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "Sluiten"
 
@@ -457,16 +458,16 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Swap"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "Links"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "Rechts"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -560,19 +561,19 @@ msgstr "Universele Toegang"
 msgid "Caffeine Mode"
 msgstr "Cafeïne Mode"
 
-#: src/daemon/osdkeys.vala:208
+#: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
 msgstr "Caps Lock staat aan"
 
-#: src/daemon/osdkeys.vala:215
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
 msgstr "Caps Lock staat uit"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
 msgstr "Num Lock staat aan"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
 msgstr "Num Lock staat uit"
 
@@ -592,11 +593,11 @@ msgstr "Afsluiten"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "Ongelezen Meldingen"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -610,20 +611,20 @@ msgstr[1] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "Bekijk Meldingen"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr "Cafeïne Boost werd ingeschakeld"
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr "Cafeïne Boost werd uitgeschakeld"
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -682,30 +683,34 @@ msgstr "Alle vensters sluiten"
 msgid "Launch new instance"
 msgstr "Nieuwe instantie opstarten"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimaliseren"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "Verplaatsen naar %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Verkleinen"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maximaliseren"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
 msgstr "Venster sluiten"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
 msgstr "Vensterbediening weergeven"
 
@@ -828,7 +833,7 @@ msgid "Unmount"
 msgstr "Ontkoppelen"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Open \"%s\""
@@ -1063,143 +1068,143 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Mislukt een widget-instantie te starten door onbekende fout."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Applets"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "Instellingen"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "Paneel verwijderen"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "Verwijder dit paneel van het scherm"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "Bovenste Dock"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "Rechtse Dock"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "Linkse Dock"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "Onderste Dock"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "Paneel Boven"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "Paneel Rechts"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "Paneel Links"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "Paneel Onder"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "Boven"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "Onder"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "Altijd"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "Dynamisch"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "Geen"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "Slim"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "Nooit"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "Positie"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Op welke rand van het scherm moet het paneel vastgepind worden"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "Grootte"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
 "Bepaal het formaat (hoogte of breedte, afhankelijk van de oriëntatie) van "
 "dit paneel"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "Tussenruimte"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "Wijzig de ruimte tussen applets in dit paneel"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "Automatisch verbergen"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
 "Wanneer zo ingesteld zal het paneel zich verbergen om maximale "
 "schermoppervlakte te voorzien"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "Transparantie"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "Bepaal de opaciteit van het paneel"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "Schaduw"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr ""
 "Voegt onderaan een decoratieve schaduw toe, ideaal voor opaque panelen"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "Paneelzones stileren"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1207,11 +1212,11 @@ msgstr ""
 "Geeft een speciale toets aan het paneel om de drie hoofdzones te "
 "onderscheiden."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "Dock modus"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1741,19 +1746,19 @@ msgstr "Animatie"
 msgid "Control whether windows and controls use animations"
 msgstr "Bepaal of vensters of bedieningen animatie gebruiken"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "Boven Links"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "Onder Links"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "Onder Rechts"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Boven Rechts"
 
@@ -2068,6 +2073,14 @@ msgstr "Ruimte tussen iconen"
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
 msgstr "Schaal pictogrammen met paneelgrootte"
+
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"

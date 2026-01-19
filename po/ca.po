@@ -5,16 +5,16 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Davidmp <medipas@gmail.com>, 2025
+# Davidmp <medipas@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Davidmp <medipas@gmail.com>, 2025\n"
+"Last-Translator: Davidmp <medipas@gmail.com>, 2026\n"
 "Language-Team: Catalan (https://app.transifex.com/buddiesofbudgie/teams/129844/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -262,6 +262,7 @@ msgstr "Taxa de transferència"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "Tanca"
 
@@ -456,16 +457,16 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Intercanvi"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "Esquerra"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "Dreta"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "Automàtic"
 
@@ -559,19 +560,19 @@ msgstr "Accés universal"
 msgid "Caffeine Mode"
 msgstr "Mode de la Cafeïna"
 
-#: src/daemon/osdkeys.vala:208
+#: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
 msgstr "El blocatge de majúscules està activat."
 
-#: src/daemon/osdkeys.vala:215
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
 msgstr "El blocatge de majúscules està desactivat."
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
 msgstr "El blocatge numèric està activat."
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
 msgstr "El blocatge numèric està desactivat."
 
@@ -591,11 +592,11 @@ msgstr "Atura't"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "Notificacions per llegir"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -608,20 +609,20 @@ msgstr[1] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "Mostra les notificacions"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr "S'ha activat l'empenta de la Cafeïna."
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr "S'ha desactivat l'empenta de la Cafeïna."
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -680,30 +681,34 @@ msgstr "Tanca totes les finestres."
 msgid "Launch new instance"
 msgstr "Obre'n una instància nova."
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimitza"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "Mou a %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Desmaximitza"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maximitza"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
 msgstr "Tanca la finestra."
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
 msgstr "Mostra els controls de les finestres."
 
@@ -826,7 +831,7 @@ msgid "Unmount"
 msgstr "Desmunta"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Obre %s"
@@ -1062,141 +1067,141 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Ha fallat crear la instància del giny a causa d'un error desconegut."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Miniaplicacions"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "Paràmetres"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "Suprimeix el plafó."
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "Suprimeix aquest plafó de la pantalla."
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "Acoblador superior"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "Acoblador dret"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "Acoblador esquerre"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "Acoblador inferior"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "Plafó superior"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "Plafó dret"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "Plafó esquerre"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "Plafó inferior"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "A dalt"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "A baix"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "Sempre"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "Dinàmic"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "Cap"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "Intel·ligent"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "Mai"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "Posició"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Establiu la vora de la pantalla on se situarà aquest plafó."
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "Mida"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
 "Establiu la mida (amplada o alçada, segons l'orientació) d'aquest plafó."
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "Espaiat"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "Estableix l'espai entre les miniaplicacions per a aquest plafó."
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "Amaga'l automàticament."
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
 "Quan estigui establert, aquest plafó s'amagarà per maximitzar l'espai de la "
 "pantalla."
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "Transparència"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "Controleu quan aquest plafó hauria de tenir un color de fons sòlid."
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "Ombra"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "Afegeix una ombra de fons decorativa, ideal per a plafons opacs."
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "Estilitza les regions."
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1204,11 +1209,11 @@ msgstr ""
 "Afegeix un suggeriment al plafó de manera que cada una de les tres àrees "
 "principals pugui tenir un tema diferent."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "Mode d'acoblador"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1737,19 +1742,19 @@ msgstr "Animacions"
 msgid "Control whether windows and controls use animations"
 msgstr "Controleu si les finestres i els controls usen animacions."
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "A dalt a l'esquerra"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "A baix a l'esquerra"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "A baix a la dreta"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "A dalt a la dreta"
 
@@ -2064,6 +2069,14 @@ msgstr "Espaiament de les icones"
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
 msgstr "Escala les icones segons la mida del plafó."
+
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr "Mostra les icones dels botons."
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr "Mostra les etiquetes dels botons."
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"

@@ -5,14 +5,15 @@
 # 
 # Translators:
 # vaba <vaba@riseup.net>, 2023
+# kaurman <kaurman@outlook.com>, 2025
 # Priit Jõerüüt <transifex@joeruut.com>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Priit Jõerüüt <transifex@joeruut.com>, 2025\n"
 "Language-Team: Estonian (https://app.transifex.com/buddiesofbudgie/teams/129844/et/)\n"
@@ -56,38 +57,38 @@ msgstr "See süsteem ei toeta talveunerežiimi."
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr "Budgie ekraanipilt"
+msgstr "Budgie kuvatõmmis"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
 #: src/dialogs/screenshot/screenshot.vala:500
 msgid "Screenshot entire screen"
-msgstr "Tee ekranipilt tervest ekraanist"
+msgstr "Tee kuvatõmmis tervest ekraanist"
 
 #: src/dialogs/screenshot/screenshot.vala:502
 msgid "Screenshot active window"
-msgstr "Tee ekraanipilt aktiivsest aknast"
+msgstr "Tee kuvatõmmis aktiivsest aknast"
 
 #: src/dialogs/screenshot/screenshot.vala:504
 msgid "Screenshot selected area"
-msgstr "Tee ekraanipilt valitud piirkonnast"
+msgstr "Tee kuvatõmmis valitud alast"
 
 #. translate
 #: src/dialogs/screenshot/screenshot.vala:895
 msgid "Cancel screenshot"
-msgstr "Tühista ekraanipilt"
+msgstr "Tühista kuvatõmmis"
 
 #: src/dialogs/screenshot/screenshot.vala:896
 msgid "Save screenshot to the selected directory"
-msgstr "Salvesta ekraanipilt valitud kausta"
+msgstr "Salvesta kuvatõmmis valitud kausta"
 
 #: src/dialogs/screenshot/screenshot.vala:897
 msgid "Copy screenshot to the clipboard"
-msgstr "Kopeeri ekraanipilt lõikelauale"
+msgstr "Kopeeri kuvatõmmis lõikelauale"
 
 #: src/dialogs/screenshot/screenshot.vala:898
 msgid "Open screenshot in default application"
-msgstr "Ava ekraanipilt vaikerakenduses"
+msgstr "Ava kuvatõmmis vaikerakenduses"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
@@ -262,6 +263,7 @@ msgstr "Edastuskiirus"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "Sulge"
 
@@ -456,16 +458,16 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Saaleala"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "Vasakul"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "Paremal"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "Automaatne"
 
@@ -559,19 +561,19 @@ msgstr "Universaalne ligipääs"
 msgid "Caffeine Mode"
 msgstr "Caffeine laad"
 
-#: src/daemon/osdkeys.vala:208
+#: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sees"
 
-#: src/daemon/osdkeys.vala:215
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
 msgstr "Caps Lock on väljas"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
 msgstr "Numbrilukk on sees"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
 msgstr "Numbrilukk on väljas"
 
@@ -591,11 +593,11 @@ msgstr "Lülita välja"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "Lugemata teatised"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -603,25 +605,25 @@ msgid_plural ""
 msgstr[0] ""
 "Sel ajal, kui kasutasid rakendust täisekraanivaates, saabus sulle %d teade."
 msgstr[1] ""
-"Sel ajal, kui kasutasid rakendust täisekraanivaates, saabus sulle %d teadet."
+"Ajal, kui kasutasid üht rakendust täisekraanivaates, saabus sulle %d teadet."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "Kuva teated"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
-msgstr "Caffeine Boost on sisse lülitatud"
+msgstr "Kofeiinilaks on sisse lülitatud"
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
-msgstr "Caffeine Boost on välja lülitatud"
+msgstr "Kofeiinilaks on välja lülitatud"
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -680,30 +682,34 @@ msgstr "Sulge kõik aknad"
 msgid "Launch new instance"
 msgstr "Käivita uus eksemplar"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimeeri"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "Teisalda siia töölauale: %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Tühista maksimeerimine"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maksimeeri"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
 msgstr "Sulge aken"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
 msgstr "Näita akna juhtnuppe"
 
@@ -825,7 +831,7 @@ msgid "Unmount"
 msgstr "Ühenda lahti"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Ava „%s“"
@@ -1061,143 +1067,143 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Vidina eksemplari loomine nurjus tundmatu vea tõttu."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Rakendid"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "Seadistused"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "Eemalda paneel"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "Eemalda see paneel ekraanilt"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "Ülemine dokk"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "Parem dokk"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "Vasak dokk"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "Alumine dokk"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "Ülemine paneel"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "Parem paneel"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "Vasak paneel"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "Alumine paneel"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "Üleval"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "All"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "Alati"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "Dünaamiline"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "Ei joondata"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "Nutikalt"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "Positsioon"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Määra ekraani serv, kuhu see paneel jääb"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "Suurus"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
 "Määra selle paneeli suurus (laius või kõrgus, olenevalt orientatsioonist)"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "Vaheruum"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "Määra selle paneeli jaoks rakendite vaheline kaugus"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "Automaatne peitmine"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
 "Kui see on seadistatud, peidab see paneel kuvamise eest, et maksimeerida "
 "ekraani omadusi"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "Läbipaistvus"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "Määra, millal sellel paneelil peab olema kindel taust"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "Vari"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr ""
 "Lisab dekoratiivse varju, mis sobib ideaalselt läbipaistmatute paneelide "
 "jaoks"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "Stiliseeri piirkondi"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1205,11 +1211,11 @@ msgstr ""
 "Lisab paneelile vihje, nii et paneeli iga kolme põhipiirkonna teema võib "
 "olla erinev."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "Dokirežiim"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1312,7 +1318,7 @@ msgstr "Joonda aken ekraani keskele"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Center newly launched windows on the current screen."
-msgstr "Keskenda äsja käivitatud aknad praegusele ekraanile."
+msgstr "Joonda äsja käivitatud aknad praegusele ekraanile."
 
 #: src/panel/settings/settings_wm.vala:50
 msgid "Disable Night Light mode when windows are fullscreen"
@@ -1323,8 +1329,8 @@ msgid ""
 "Disables Night Light mode when a window is fullscreen. Re-enables when "
 "leaving fullscreen."
 msgstr ""
-"Keelab öövalguse režiimi, kui aken on täisekraanil. Lubab uuesti "
-"täisekraanilt lahkumisel."
+"Keelab öövalguse režiimi, kui aken on täisekraanil. Täisekraanilt lahkumisel"
+" lubatakse režiim taas."
 
 #: src/panel/settings/settings_wm.vala:56
 msgid "Pause notifications when windows are fullscreen"
@@ -1335,8 +1341,8 @@ msgid ""
 "Prevents notifications from appearing when a window is fullscreen. Unpauses "
 "when leaving fullscreen."
 msgstr ""
-"Takistab märguannete ilmumist, kui aken on täisekraanil. Tühistab pausi "
-"täisekraanilt lahkumisel."
+"Takistab märguannete ilmumist, kui aken on täisekraanil. Täisekraanilt "
+"lahkumisel lubatakse märguanded taas."
 
 #: src/panel/settings/settings_wm.vala:62
 msgid "Automatic tiling"
@@ -1733,19 +1739,19 @@ msgstr "Animatsioonid"
 msgid "Control whether windows and controls use animations"
 msgstr "Saad juhtida, kas aknad ja juhtelemendid kasutavad animatsioone"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "Üleval vasakul"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "All vasakul"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "Paremalt alumine"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Üleval paremal"
 
@@ -2061,6 +2067,14 @@ msgstr "Ikoonide vahe"
 msgid "Scale icons with panel size"
 msgstr "Muuda ikoonide suurust koos paneeliga"
 
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
+
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "Näita aku protsenti"
@@ -2068,7 +2082,7 @@ msgstr "Näita aku protsenti"
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:2
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr "Budgie ekraanipildi rakendus"
+msgstr "Budgie kuvatõmmise rakendus"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"

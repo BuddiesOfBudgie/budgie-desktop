@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-15 19:59+0000\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Quentin PAGÈS, 2025\n"
 "Language-Team: Occitan (post 1500) (https://app.transifex.com/buddiesofbudgie/teams/129844/oc/)\n"
@@ -262,6 +262,7 @@ msgstr "Taus de transferiment"
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
 msgstr "Tampar"
 
@@ -454,16 +455,16 @@ msgstr "RAM"
 msgid "Swap"
 msgstr "Swap"
 
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
+#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84
 msgid "Left"
 msgstr "Esquèrra"
 
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
+#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:227
 msgid "Right"
 msgstr "Drecha"
 
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
+#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:256
 msgid "Automatic"
 msgstr "Automaticament"
 
@@ -557,21 +558,21 @@ msgstr "Accès universal"
 msgid "Caffeine Mode"
 msgstr "Mòde cafeïna"
 
-#: src/daemon/osdkeys.vala:208
-msgid "Caps Lock is on"
-msgstr ""
-
 #: src/daemon/osdkeys.vala:215
+msgid "Caps Lock is on"
+msgstr "Verr. Maj. es activat"
+
+#: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Verr. Maj. es desactivat"
 
-#: src/daemon/osdkeys.vala:225
+#: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Verr. Num. es activat"
 
-#: src/daemon/osdkeys.vala:231
+#: src/daemon/osdkeys.vala:238
 msgid "Num Lock is off"
-msgstr ""
+msgstr "Verr. Num. es desactivat"
 
 #: src/daemon/endsession.vala:162
 msgid "Log out"
@@ -589,11 +590,11 @@ msgstr "Atudar"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:546
+#: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
 msgstr "Notificacions non legidas"
 
-#: src/daemon/notifications/dbus.vala:549
+#: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -606,20 +607,20 @@ msgstr[1] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:563
+#: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
 msgstr "Veire las notificacions"
 
 #. Should show a notification
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
 msgstr "Dòsi de cafeïna ajustada"
 
-#: src/daemon/settings.vala:414
+#: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
 msgstr "Dòsi de cafeïna tirada"
 
-#: src/daemon/settings.vala:419
+#: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
@@ -672,38 +673,42 @@ msgstr "Favorit"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Tampar totas las fenèstras"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "Aviar una instància novèla"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Reduire"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "Desplaçar cap a %s"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Reduire"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Tampar la fenèstra"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Afichar los contraròtles de la fenèstra"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
@@ -711,7 +716,7 @@ msgstr "Paramètres d’ora e de data del sistèma"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr "Temporizador"
+msgstr "Temporizador (minutas)"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
@@ -755,12 +760,12 @@ msgstr "Alimentacion"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "Creacion d’un espaci de trabalh novèl impossibla"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "Crear un espaci de trabalh novèl"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
@@ -824,7 +829,7 @@ msgid "Unmount"
 msgstr "Desmontar"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Dobrir « %s »"
@@ -1062,141 +1067,141 @@ msgstr ""
 "Fracàs de la creacion de l’instance del widget a causa d’un fracàs "
 "desconegut."
 
-#: src/panel/settings/settings_panel.vala:88
+#: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Applets"
 
-#: src/panel/settings/settings_panel.vala:89
+#: src/panel/settings/settings_panel.vala:91
 #: src/panel/settings/settings_raven.vala:48
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
 msgstr "Levar panèl"
 
-#: src/panel/settings/settings_panel.vala:92
+#: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
 msgstr "Tirar aqueste panèl"
 
-#: src/panel/settings/settings_panel.vala:129
+#: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
 msgstr "Dock superior"
 
-#: src/panel/settings/settings_panel.vala:131
+#: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
 msgstr "Dock drech"
 
-#: src/panel/settings/settings_panel.vala:133
+#: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
 msgstr "Dock esquèrre"
 
-#: src/panel/settings/settings_panel.vala:135
+#: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
 msgstr "Dock inferiror"
 
-#: src/panel/settings/settings_panel.vala:140
+#: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
 msgstr "Panèl superior"
 
-#: src/panel/settings/settings_panel.vala:142
+#: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
 msgstr "Panèl drech"
 
-#: src/panel/settings/settings_panel.vala:144
+#: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
 msgstr "Panèl esquèr"
 
-#: src/panel/settings/settings_panel.vala:146
+#: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
 msgstr "Panèl inferior"
 
-#: src/panel/settings/settings_panel.vala:183
+#: src/panel/settings/settings_panel.vala:225
 msgid "Top"
 msgstr "Naut"
 
-#: src/panel/settings/settings_panel.vala:189
+#: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
 msgstr "Bas"
 
-#: src/panel/settings/settings_panel.vala:199
+#: src/panel/settings/settings_panel.vala:241
 msgid "Always"
 msgstr "Totjorn"
 
-#: src/panel/settings/settings_panel.vala:201
+#: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
 msgstr "Dinamic"
 
-#: src/panel/settings/settings_panel.vala:204
+#: src/panel/settings/settings_panel.vala:246
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 msgid "None"
 msgstr "Cap"
 
-#: src/panel/settings/settings_panel.vala:216
+#: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
 msgstr "Intelligent"
 
-#: src/panel/settings/settings_panel.vala:219
+#: src/panel/settings/settings_panel.vala:261
 msgid "Never"
 msgstr "Pas jamai"
 
-#: src/panel/settings/settings_panel.vala:236
+#: src/panel/settings/settings_panel.vala:278
 msgid "Position"
 msgstr "Posicion"
 
-#: src/panel/settings/settings_panel.vala:237
+#: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
 msgstr "Definir lo canton de l’ecran ont demorarà aqueste panèl"
 
-#: src/panel/settings/settings_panel.vala:245
+#: src/panel/settings/settings_panel.vala:287
 msgid "Size"
 msgstr "Talha"
 
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
 "Definir la talha (largor o nautor, segon l’orientacion) d’aqueste panèl"
 
-#: src/panel/settings/settings_panel.vala:253
+#: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
 msgstr "Espaçament"
 
-#: src/panel/settings/settings_panel.vala:254
+#: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
 msgstr "Definir l’espaçament entre las applets per aqueste panèl"
 
-#: src/panel/settings/settings_panel.vala:261
+#: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
 msgstr "Amagar automaticament"
 
-#: src/panel/settings/settings_panel.vala:262
+#: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
 "Quand es definit, aqueste panèl serà amagat de la vista per ganhar d’espaci "
 "d’ecran"
 
-#: src/panel/settings/settings_panel.vala:269
+#: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
 msgstr "Transparéncia"
 
-#: src/panel/settings/settings_panel.vala:270
+#: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
 msgstr "Indica s’aqueste panèl deu aver un fons transparent"
 
-#: src/panel/settings/settings_panel.vala:275
+#: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
 msgstr "Ombra"
 
-#: src/panel/settings/settings_panel.vala:276
+#: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
 msgstr "Ajusta una ombra parallèla, ideal pels panèls opacs"
 
-#: src/panel/settings/settings_panel.vala:282
+#: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
 msgstr "Estilizar las regions"
 
-#: src/panel/settings/settings_panel.vala:283
+#: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
@@ -1204,11 +1209,11 @@ msgstr ""
 "Ajusta una suggestion al panèl per que cada zòna de las tres principalas del"
 " panèl sián estilizadas diferentament."
 
-#: src/panel/settings/settings_panel.vala:290
+#: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
 msgstr "Mòde Dock"
 
-#: src/panel/settings/settings_panel.vala:291
+#: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
@@ -1381,7 +1386,7 @@ msgstr "Drecha (estandard)"
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
-msgstr "Poliças"
+msgstr "Polissas"
 
 #: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
@@ -1734,19 +1739,19 @@ msgstr "Animacions"
 msgid "Control whether windows and controls use animations"
 msgstr "Indica se las fenèstras e los contraròtles utilizan las animacions"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "Amont a esquèrra"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "Aval a esquèrra"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "Enbàs a drecha"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Ennaut a drecha"
 
@@ -1801,7 +1806,7 @@ msgstr "Senhal :"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "Nom d’utilizaire :"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
@@ -2062,6 +2067,14 @@ msgstr "Espaçament de las icònas"
 msgid "Scale icons with panel size"
 msgstr "Juntar las icònas amb la talha de panèl"
 
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
+
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "Mostrar lo percentatge de batariá"
@@ -2073,13 +2086,15 @@ msgstr "Aplicacion de captura d’ecran Budgie"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie Desktop (magpie)"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using magpie as the window "
 "manager"
 msgstr ""
+"Aquesta session vos connècta al burèu Budgie en utilizant magpie coma "
+"gestionari de fenèstra"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
@@ -2091,6 +2106,8 @@ msgid ""
 "This session logs you into the Budgie Desktop using labwc as the window "
 "manager"
 msgstr ""
+"Aquesta session vos connècta al burèu Budgie en utilizant labwc coma "
+"gestionari de fenèstra"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
