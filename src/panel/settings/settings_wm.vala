@@ -14,6 +14,7 @@ namespace Budgie {
 	* WindowsPage allows users to control window manager settings
 	*/
 	public class WindowsPage : Budgie.SettingsPage {
+		private Settings gnome_wm_settings;
 		private Settings budgie_wm_settings;
 		private Gtk.Switch center_windows;
 		private Gtk.Switch disable_night_light;
@@ -79,9 +80,9 @@ namespace Budgie {
 			var model = new Gtk.ListStore(2, typeof(string), typeof(string));
 			Gtk.TreeIter iter;
 			model.append(out iter);
-			model.set(iter, 0, "traditional", 1, _("Right (standard)"), -1);
+			model.set(iter, 0, "appmenu:minimize,maximize,close", 1, _("Right (standard)"), -1);
 			model.append(out iter);
-			model.set(iter, 0, "left", 1, _("Left"), -1);
+			model.set(iter, 0, "close,minimize,maximize:appmenu", 1, _("Left"), -1);
 			combo_layouts.set_model(model);
 			combo_layouts.set_id_column(0);
 
@@ -91,8 +92,9 @@ namespace Budgie {
 			combo_layouts.set_id_column(0);
 
 			/* Hook up settings */
+			gnome_wm_settings = new Settings("org.gnome.desktop.wm.preferences");
+			gnome_wm_settings.bind("button-layout", combo_layouts, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings = new Settings("com.solus-project.budgie-wm");
-			budgie_wm_settings.bind("button-style", combo_layouts, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("center-windows", center_windows, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("pause-notifications-on-fullscreen", pause_notifications, "active", SettingsBindFlags.DEFAULT);

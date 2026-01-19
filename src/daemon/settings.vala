@@ -114,9 +114,6 @@ namespace Budgie {
 			gnome_power_settings.changed["sleep-inactive-ac-timeout"].connect(this.update_ac_timeout);
 			gnome_power_settings.changed["sleep-inactive-battery-timeout"].connect(this.update_battery_timeout);
 
-			wm_settings.changed.connect(this.on_wm_settings_changed);
-			this.on_wm_settings_changed("button-style");
-
 			gnome_desktop_settings.changed.connect(this.on_gnome_desktop_settings_changed);
 			this.on_gnome_desktop_settings_changed("gtk-theme");
 		}
@@ -308,10 +305,6 @@ namespace Budgie {
 					bool attach = wm_settings.get_boolean(key); // Get our attach value
 					mutter_settings.set_boolean("attach-modal-dialogs", attach); // Update GNOME WM settings
 					break;
-				case "button-style":
-					ButtonPosition style = (ButtonPosition)wm_settings.get_enum(key);
-					this.set_button_style(style);
-					break;
 				case "center-windows":
 					bool center = wm_settings.get_boolean(key);
 					mutter_settings.set_boolean("center-new-windows", center);
@@ -342,30 +335,6 @@ namespace Budgie {
 			gnome_power_settings.set_int("sleep-inactive-ac-timeout", default_sleep_inactive_ac_timeout);
 			gnome_power_settings.set_int("sleep-inactive-battery-timeout", default_sleep_inactive_battery_timeout);
 			caffeine_settings_sync();
-		}
-
-		/**
-		* Set the button layout to one of left or traditional
-		*/
-		void set_button_style(ButtonPosition style) {
-			Variant? xset = null;
-			string? wm_set = null;
-
-			switch (style) {
-			case ButtonPosition.LEFT:
-				xset = this.new_filtered_xsetting("close,minimize,maximize:menu");
-				wm_set = "close,minimize,maximize:appmenu";
-				break;
-			case ButtonPosition.TRADITIONAL:
-			default:
-				xset = this.new_filtered_xsetting("menu:minimize,maximize,close");
-				wm_set = "appmenu:minimize,maximize,close";
-				break;
-			}
-
-			this.xoverrides.set_value("overrides", xset);
-			this.wm_settings.set_string("button-layout", wm_set);
-			this.gnome_wm_settings.set_value("button-layout", wm_set);
 		}
 
 		/**

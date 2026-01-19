@@ -92,9 +92,9 @@ namespace Budgie {
 		public CurrentState() {
 			screenshot_settings = new GLib.Settings("org.buddiesofbudgie.budgie-desktop.screenshot");
 
-			buttonplacement = new GLib.Settings("com.solus-project.budgie-wm");
+			buttonplacement = new GLib.Settings("org.gnome.desktop.wm.preferences");
 
-			buttonplacement.changed["button-style"].connect(() => {
+			buttonplacement.changed["button-layout"].connect(() => {
 				fill_buttonpos();
 				buttonpos_changed();
 			});
@@ -117,7 +117,11 @@ namespace Budgie {
 		}
 
 		private void fill_buttonpos() {
-			buttonpos = (buttonplacement.get_string("button-style") =="left") ? ButtonPlacement.LEFT : ButtonPlacement.RIGHT;
+			if (buttonplacement.get_string("button-layout").has_prefix("close")) {
+				buttonpos = ButtonPlacement.LEFT;
+			} else {
+				buttonpos = ButtonPlacement.RIGHT;
+			}
 		}
 
 		public void statechanged(int n) {
