@@ -59,6 +59,7 @@ daemon_deps = [
     link_libconfig,
     link_libtheme,
     link_libsession,
+    link_libbudgiewayland
 ]
 
 # Need absolute path to gresource

@@ -45,6 +45,7 @@ screenshot_deps = [
     dep_gtk_layer_shell,
     dep_gst,
     link_libconfig,
+    link_libbudgiewayland,
 ]
 
 # Need absolute path to gresource

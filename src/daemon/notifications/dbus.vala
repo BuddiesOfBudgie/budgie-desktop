@@ -368,54 +368,69 @@
 		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
-			if (!new WaylandClient().is_initialised()) return;
+			var wayland_client = new WaylandClient();
 
-			Gdk.Rectangle mon_rect = new WaylandClient().monitor_res;
+			if (!wayland_client.is_initialised()) {
+				warning("Cannot configure notification window: WaylandClient not initialized");
+				return;
+			}
 
-			GtkLayerShell.init_for_window(popup);
-			GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
+			bool configured = wayland_client.with_valid_monitor(() => {
+				Gdk.Rectangle mon_rect = wayland_client.monitor_res;
+				var monitor = wayland_client.gdk_monitor;
 
-			ulong handler_id = 0;
-			handler_id = popup.get_child().size_allocate.connect((alloc) => {
-				// Disconnect from the signal to avoid trying to recalculate
-				// the position unexpectedly, which occurs when mousing over
-				// or clicking the close button with some GTK themes.
-				popup.get_child().disconnect(handler_id);
-				handler_id = 0;
-
-				/* determine the y position for the latest notification */
-				calculate_position(mon_rect.y);
-				GtkLayerShell.set_monitor(popup, new WaylandClient().gdk_monitor);
-				var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
-				int edge_a, edge_b;
-
-				switch (pos) {
-					case NotificationPosition.TOP_LEFT:
-						edge_a = GtkLayerShell.Edge.LEFT;
-						edge_b = GtkLayerShell.Edge.TOP;
-						break;
-					case NotificationPosition.BOTTOM_LEFT:
-						edge_a = GtkLayerShell.Edge.LEFT;
-						edge_b = GtkLayerShell.Edge.BOTTOM;
-						break;
-					case NotificationPosition.BOTTOM_RIGHT:
-						edge_a = GtkLayerShell.Edge.RIGHT;
-						edge_b = GtkLayerShell.Edge.BOTTOM;
-						break;
-					case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
-					default:
-						edge_a = GtkLayerShell.Edge.RIGHT;
-						edge_b = GtkLayerShell.Edge.TOP;
-						break;
+				if (monitor == null) {
+					warning("Monitor is null during window configuration");
+					return false;
 				}
 
-				GtkLayerShell.set_margin(popup, edge_a, BUFFER_ZONE);
-				GtkLayerShell.set_margin(popup, edge_b, this.latest_popup_y);
-				GtkLayerShell.set_anchor(popup, edge_a, true);
-				GtkLayerShell.set_anchor(popup, edge_b, true);
+				GtkLayerShell.init_for_window(popup);
+				GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
+
+				ulong handler_id = 0;
+				handler_id = popup.get_child().size_allocate.connect((alloc) => {
+					popup.get_child().disconnect(handler_id);
+					handler_id = 0;
+
+					calculate_position(mon_rect.y);
+					GtkLayerShell.set_monitor(popup, monitor);
+
+					var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
+					int edge_a, edge_b;
+
+					switch (pos) {
+						case NotificationPosition.TOP_LEFT:
+						edge_a = GtkLayerShell.Edge.LEFT;
+						edge_b = GtkLayerShell.Edge.TOP;
+						break;
+						case NotificationPosition.BOTTOM_LEFT:
+						edge_a = GtkLayerShell.Edge.LEFT;
+						edge_b = GtkLayerShell.Edge.BOTTOM;
+						break;
+						case NotificationPosition.BOTTOM_RIGHT:
+						edge_a = GtkLayerShell.Edge.RIGHT;
+						edge_b = GtkLayerShell.Edge.BOTTOM;
+						break;
+						case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
+						default:
+						edge_a = GtkLayerShell.Edge.RIGHT;
+						edge_b = GtkLayerShell.Edge.TOP;
+						break;
+					}
+
+					GtkLayerShell.set_margin(popup, edge_a, BUFFER_ZONE);
+					GtkLayerShell.set_margin(popup, edge_b, this.latest_popup_y);
+					GtkLayerShell.set_anchor(popup, edge_a, true);
+					GtkLayerShell.set_anchor(popup, edge_b, true);
+				});
+
+				popup.show_all();
+				return true;
 			});
 
-			popup.show_all();
+			if (!configured) {
+				warning("Failed to configure notification popup window");
+			}
 		}
 
 		/**

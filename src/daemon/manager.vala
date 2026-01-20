@@ -10,52 +10,6 @@
  */
 
 namespace Budgie {
-
-	/*
-	 The underlying WaylandClient does not appear to be fully thread-safe and either
-	 repeated calls very quickly, or calls within the same process where the
-	 reference was not release will result in mutex-locks causing the daemon to spin
-	 indefinitely.
-
-	 Our use in the daemon is limited so we can initialise variable we use within
-	 a singleton to make things thread-safe.
-	 */
-	[SingleInstance]
-	public class WaylandClient : GLib.Object {
-		private Xfw.Screen? screen = null;
-		private unowned Xfw.Monitor? primary_monitor=null;
-
-		public bool is_initialised() { return primary_monitor != null; }
-		public unowned Gdk.Monitor gdk_monitor {get; private set; }
-		public Gdk.Rectangle monitor_res { get; private set; }
-
-		public WaylandClient() {
-			if (primary_monitor != null) return;
-
-			screen = Xfw.Screen.get_default();
-			screen.monitors_changed.connect(on_monitors_changed);
-			on_monitors_changed();
-		}
-
-		void on_monitors_changed() {
-			int loop = 0;
-
-			/* it can take a short-time after first call for the underlying wayland client
-			   to return a reference, so lets loop until we get a reference ... but
-			   don't try indefinitely
-			*/
-			Timeout.add(200, ()=> {
-				primary_monitor = screen.get_primary_monitor();
-				if (primary_monitor != null || loop++ > 10) {
-					monitor_res = primary_monitor.get_logical_geometry();
-					gdk_monitor = primary_monitor.get_gdk_monitor();
-					return false;
-				}
-
-				return true;
-			});
-		}
-	}
 	/**
 	* Main lifecycle management, handle all the various session and GTK+ bits
 	*/
