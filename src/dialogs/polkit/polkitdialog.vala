@@ -148,14 +148,30 @@ namespace Budgie {
 			combobox_idents.add_attribute(render, "text", 0);
 			combobox_idents.set_id_column(0);
 
-			// center dialog on the primary screen
-			var primary_monitor = Xfw.Screen.get_default().get_primary_monitor();
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-			GtkLayerShell.set_monitor(this, primary_monitor.get_gdk_monitor());
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+
+			var wayland_client = new WaylandClient();
+
+			if (!wayland_client.is_initialised()) {
+				warning("WaylandClient not initialized for polkit dialog");
+				// Fallback: just init the window without positioning
+			} else {
+				// Safe initialization with monitor
+				wayland_client.with_valid_monitor(() => {
+					var monitor = wayland_client.gdk_monitor;
+					if (monitor == null) {
+						warning("Failed to get monitor for polkit dialog");
+						return false;
+					}
+
+					GtkLayerShell.set_monitor(this, monitor);
+					return true;
+				});
+			}
 
 			key_release_event.connect(on_key_release);
 
@@ -443,6 +459,7 @@ public static int main(string[] args) {
 		subject = new Polkit.UnixSession.for_process_sync(pid, null);
 	} catch (Error e) {
 		stdout.printf("Unable to initiate PolKit: %s", e.message);
+		Gtk.main_quit();
 		return 1;
 	}
 
@@ -455,6 +472,7 @@ public static int main(string[] args) {
 		});
 	} catch (Error e) {
 		stderr.printf("Unable to register listener: %s", e.message);
+		Gtk.main_quit();
 		return 1;
 	}
 
@@ -462,3 +480,4 @@ public static int main(string[] args) {
 
 	return 0;
 }
+

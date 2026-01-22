@@ -144,7 +144,6 @@ namespace Budgie {
 		}
 
 		public void Open(uint type, uint timestamp, uint open_length, ObjectPath[] inhibiters) throws DBusError, IOError {
-			Opened(); // Indicate that we've opened the EndSession dialog
 			/* Right now we ignore type, time and inhibitors. Shush */
 			unowned Gtk.Widget? main_show = null;
 
@@ -181,7 +180,21 @@ namespace Budgie {
 			/* Update the label */
 			this.label_end_title.set_text(title);
 
-			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
+			var wayland_client = new WaylandClient();
+			bool monitor_set = wayland_client.with_valid_monitor(() => {
+				var monitor = wayland_client.gdk_monitor;
+				if (monitor != null) {
+					GtkLayerShell.set_monitor(this, monitor);
+					return true;
+				}
+				return false;
+			});
+
+			if (!monitor_set) {
+				warning("Failed to set monitor for EndSessionDialog");
+				Closed();
+				return;
+			}
 
 			if (main_show != null) {
 				/* We have a specific type.. */
@@ -212,6 +225,8 @@ namespace Budgie {
 			if (win != null) {
 				win.focus(Gtk.get_current_event_time());
 			}
+
+			Opened(); // Indicate that we've opened the EndSession dialog
 		}
 
 		public void Close() throws DBusError, IOError {
