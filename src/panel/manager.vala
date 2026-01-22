@@ -405,22 +405,22 @@ namespace Budgie {
 			if (primary == null) {
 				warning("Primary monitor not found (primary_monitor=%d). Cannot reposition panels.", primary_monitor);
 
-				// This in theory shouldn't be reached - but we probably should be safe
-				// than sorry here - lets be helpful and try to find any valid screen as fallback
-				if (screens.size() > 0) {
-					var first_screen = screens.lookup(0);
-					if (first_screen != null) {
-						warning("Using first available screen as fallback");
-						primary = first_screen;
-						primary_monitor = 0;
-					} else {
-						warning("No valid screens available. Skipping panel repositioning.");
-						return;
-					}
-				} else {
+				if (screens.size() == 0) {
 					warning("No screens in hashtable. Skipping panel repositioning.");
 					return;
 				}
+
+				// This in theory shouldn't be reached - but we probably should be safe
+				// than sorry here - lets be helpful and try to find any valid screen as fallback
+				var first_screen = screens.lookup(0);
+				if (first_screen == null) {
+					warning("No valid screens available. Skipping panel repositioning.");
+					return;
+				}
+
+				warning("Using first available screen as fallback");
+				primary = first_screen;
+				primary_monitor = 0;
 			}
 
 			/* Fix all existing panels here */
