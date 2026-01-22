@@ -18,6 +18,7 @@ from systemd.journal import JournalHandler
 import psutil
 import sys
 import gettext
+from enum import StrEnum
 
 import gi
 from gi.repository import Gio, GLib
@@ -441,7 +442,7 @@ class Bridge:
                 except IndexError:
                     pass
 
-        self.budgie_wm_changed(self.budgie_wm_settings, "focus-mode")
+        self.budgie_wm_changed(self.budgie_wm_settings, "window-focus-mode")
         self.budgie_wm_changed(self.budgie_wm_settings, "show-all-windows-tabswitcher")
         self.budgie_wm_changed(self.budgie_wm_settings, "edge-tiling")
         self.mutter_changed(self.mutter_settings, "center-new-windows")
@@ -494,14 +495,21 @@ class Bridge:
 
         updated = False
 
-        if key == "focus-mode":
+        if key == "window-focus-mode":
             path = "./focus/followMouse"
             bridge = root.find(path)
 
             if bridge == None:
                 return
 
-            if settings[key]:
+            class Mode(StrEnum):
+                CLICK = 'click'
+                SLOPPY = 'sloppy'
+                MOUSE = 'mouse'
+
+            focus_mode = settings[key]
+
+            if focus_mode != Mode.CLICK:
                 bridge.text = "yes"
             else:
                 bridge.text = "no"
@@ -514,7 +522,7 @@ class Bridge:
             if bridgeraise == None:
                 return
 
-            if settings[key]:
+            if focus_mode == Mode.MOUSE:
                 bridgeraise.text = "yes"
             else:
                 bridgeraise.text = "no"

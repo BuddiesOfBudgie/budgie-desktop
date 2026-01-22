@@ -19,7 +19,7 @@ namespace Budgie {
 		private Gtk.Switch disable_night_light;
 		private Gtk.Switch pause_notifications;
 		private Gtk.ComboBox combo_layouts;
-		private Gtk.Switch switch_focus;
+		private Gtk.ComboBox combo_window_focus_mode;
 		private Gtk.Switch switch_tiling;
 		private Gtk.Switch switch_all_windows_tabswitcher;
 
@@ -63,10 +63,10 @@ namespace Budgie {
 				_("Windows will automatically tile when dragged into the top of the screen or the far corners.")
 			));
 
-			switch_focus = new Gtk.Switch();
-			grid.add_row(new SettingsRow(switch_focus,
-				_("Enable window focus change on mouse enter and leave"),
-				_("Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window.")
+			combo_window_focus_mode = new Gtk.ComboBox();
+			grid.add_row(new SettingsRow(combo_window_focus_mode,
+				_("Window focus mode"),
+				_("Choose how windows receive focus: click to focus; sloppy to focus without raising windows; mouse to focus with raising.")
 			));
 
 			switch_all_windows_tabswitcher = new Gtk.Switch();
@@ -75,7 +75,7 @@ namespace Budgie {
 				_("All tabs will be displayed in tab switcher regardless of the workspace in use.")
 			));
 
-			/* Button layout  */
+			/* Button layout */
 			var model = new Gtk.ListStore(2, typeof(string), typeof(string));
 			Gtk.TreeIter iter;
 			model.append(out iter);
@@ -90,14 +90,31 @@ namespace Budgie {
 			combo_layouts.add_attribute(render, "text", 1);
 			combo_layouts.set_id_column(0);
 
+			/* Window Focus Mode */
+			var focus_model = new Gtk.ListStore(2, typeof(string), typeof(string));
+			Gtk.TreeIter focus_iter;
+			focus_model.append(out focus_iter);
+			focus_model.set(focus_iter, 0, "click", 1, _("Click"), -1);
+			focus_model.append(out focus_iter);
+			focus_model.set(focus_iter, 0, "sloppy", 1, _("Sloppy"), -1);
+			focus_model.append(out focus_iter);
+			focus_model.set(focus_iter, 0, "mouse", 1, _("Mouse"), -1);
+			combo_window_focus_mode.set_model(focus_model);
+			combo_window_focus_mode.set_id_column(0);
+
+			var focus_render = new Gtk.CellRendererText();
+			combo_window_focus_mode.pack_start(focus_render, true);
+			combo_window_focus_mode.add_attribute(focus_render, "text", 1);
+			combo_window_focus_mode.set_id_column(0);
+
 			/* Hook up settings */
 			budgie_wm_settings = new Settings("com.solus-project.budgie-wm");
 			budgie_wm_settings.bind("button-style", combo_layouts, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("center-windows", center_windows, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("disable-night-light-on-fullscreen", disable_night_light, "active", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("pause-notifications-on-fullscreen", pause_notifications, "active", SettingsBindFlags.DEFAULT);
-			budgie_wm_settings.bind("edge-tiling", switch_tiling,  "active", SettingsBindFlags.DEFAULT);
-			budgie_wm_settings.bind("focus-mode", switch_focus, "active", SettingsBindFlags.DEFAULT);
+			budgie_wm_settings.bind("edge-tiling", switch_tiling, "active", SettingsBindFlags.DEFAULT);
+			budgie_wm_settings.bind("window-focus-mode", combo_window_focus_mode, "active-id", SettingsBindFlags.DEFAULT);
 			budgie_wm_settings.bind("show-all-windows-tabswitcher", switch_all_windows_tabswitcher, "active", SettingsBindFlags.DEFAULT);
 		}
 	}

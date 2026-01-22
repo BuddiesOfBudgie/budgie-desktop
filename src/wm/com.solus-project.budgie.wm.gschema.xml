@@ -13,6 +13,12 @@
 		<value nick="nemo" value="3" />
 	</enum>
 
+	<enum id="com.solus-project.budgie-wm.FocusMode">
+		<value nick="click" value="0" />
+		<value nick="sloppy" value="1" />
+		<value nick="mouse" value="2" />
+  	</enum>
+
 	<schema path="/com/solus-project/budgie-wm/" id="com.solus-project.budgie-wm">
 		<key type="b" name="edge-tiling">
 			<default>true</default>
@@ -82,8 +88,14 @@
 
 		<key type="b" name="focus-mode">
 			<default>false</default>
-			<summary>Window focus mode to indicate how windows are activated</summary>
-			<description>This key overrides the key in org.gnome.desktop.wm.preferences when running Budgie.</description>
+			<summary>Enable window focus change on mouse enter and leave (DEPRECATED)</summary>
+			<description>This key is deprecated. Use 'focus-new-mode' instead.</description>
+		</key>
+
+		<key enum="com.solus-project.budgie-wm.FocusMode" name="window-focus-mode">
+			<default>'click'</default>
+			<summary>Window focus mode</summary>
+			<description>Determines how windows receive focus: 'click' requires clicking to focus, 'sloppy' focuses on mouse enter but requires click to raise, 'mouse' focuses and raises on mouse enter.</description>
 		</key>
 
 		<key type="b" name="enable-unredirect">
