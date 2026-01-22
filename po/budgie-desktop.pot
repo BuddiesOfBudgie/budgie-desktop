@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-22 22:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,18 +100,6 @@ msgstr[1] ""
 msgid "View Notifications"
 msgstr ""
 
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr ""
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr ""
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr ""
-
 #: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
 msgstr ""
@@ -143,6 +131,18 @@ msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
 msgstr[0] ""
 msgstr[1] ""
+
+#: src/daemon/endsession.vala:162
+msgid "Log out"
+msgstr ""
+
+#: src/daemon/endsession.vala:166
+msgid "Restart device"
+msgstr ""
+
+#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr ""
 
 #: src/dialogs/polkit/polkitdialog.vala:208
 msgid "Authentication failed"
@@ -312,6 +312,7 @@ msgid "Keyboard"
 msgstr ""
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr ""
 
@@ -1320,75 +1321,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:51
-msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:57
-msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:63
-msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:69
-msgid "Enables window focus to apply when the mouse enters the window and unfocus when the mouse leaves the window."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:75
-msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr ""
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr ""
@@ -1439,6 +1371,11 @@ msgstr ""
 
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
 msgstr ""
 
 #: src/panel/settings/settings_panel.vala:231
@@ -1595,6 +1532,78 @@ msgstr ""
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:51
+msgid "Disables Night Light mode when a window is fullscreen. Re-enables when leaving fullscreen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:57
+msgid "Prevents notifications from appearing when a window is fullscreen. Unpauses when leaving fullscreen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:63
+msgid "Windows will automatically tile when dragged into the top of the screen or the far corners."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid "Choose how windows receive focus: click to focus; sloppy to focus without raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:75
+msgid "All tabs will be displayed in tab switcher regardless of the workspace in use."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
 msgstr ""
 
 #: src/raven/main_view.vala:56
