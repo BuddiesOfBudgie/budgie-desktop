@@ -373,11 +373,22 @@ namespace Budgie {
 
 			screens.remove_all();
 
+			int n_monitors = dis.get_n_monitors();
+			if (n_monitors == 0) {
+				warning("No monitors detected. Skipping panel repositioning.");
+				return;
+			}
+
 			/* When we eventually get monitor-specific panels we'll find the ones that
 			* were left stray and find new homes, or temporarily disable
 			* them */
-			for (int i = 0; i < dis.get_n_monitors(); i++) {
+			for (int i = 0; i < n_monitors; i++) {
 				Gdk.Monitor mon = dis.get_monitor(i);
+				if (mon == null) {
+					warning("Monitor %d is null, skipping", i);
+					continue;
+				}
+
 				Gdk.Rectangle usable_area = mon.get_geometry();
 				Budgie.Screen? screen = new Budgie.Screen();
 				screen.area = usable_area;
@@ -391,11 +402,37 @@ namespace Budgie {
 
 			primary = screens.lookup(primary_monitor);
 
+			if (primary == null) {
+				warning("Primary monitor not found (primary_monitor=%d). Cannot reposition panels.", primary_monitor);
+
+				// This in theory shouldn't be reached - but we probably should be safe
+				// than sorry here - lets be helpful and try to find any valid screen as fallback
+				if (screens.size() > 0) {
+					var first_screen = screens.lookup(0);
+					if (first_screen != null) {
+						warning("Using first available screen as fallback");
+						primary = first_screen;
+						primary_monitor = 0;
+					} else {
+						warning("No valid screens available. Skipping panel repositioning.");
+						return;
+					}
+				} else {
+					warning("No screens in hashtable. Skipping panel repositioning.");
+					return;
+				}
+			}
+
 			/* Fix all existing panels here */
 			Gdk.Rectangle raven_screen;
 
 			iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(out uuid, out panel)) {
+				if (panel == null) {
+					warning("Null panel found with uuid %s", uuid);
+					continue;
+				}
+
 				/* Force existing panels to update to new primary display */
 				panel.update_geometry(primary.area, panel.position);
 				if (panel.position == Budgie.PanelPosition.TOP) {
