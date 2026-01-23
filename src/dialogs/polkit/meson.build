@@ -40,6 +40,7 @@ polkit_deps = [
     link_libconfig,
     link_libtheme,
     link_libsession,
+    link_libbudgiewayland,
     dependency('polkit-gobject-1', version: pkversion),
     dependency('polkit-agent-1', version: pkversion),
 ]

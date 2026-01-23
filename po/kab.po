@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Joshua Strobl <joshua.strobl@outlook.com>, 2023
+# Massi aqvayli, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,13 +13,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-20 00:29+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2023\n"
-"Language-Team: Irish (https://app.transifex.com/buddiesofbudgie/teams/129844/ga/)\n"
+"Last-Translator: Massi aqvayli, 2026\n"
+"Language-Team: Kabyle (https://app.transifex.com/buddiesofbudgie/teams/129844/kab/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ga\n"
-"Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);\n"
+"Language: kab\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -27,7 +27,7 @@ msgstr ""
 #: src/panel/applets/places-indicator/MountItem.vala:32
 #: src/panel/applets/places-indicator/VolumeItem.vala:34
 msgid "Other"
-msgstr "Eile"
+msgstr "Ayen nniḍen"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -36,52 +36,52 @@ msgstr "Eile"
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr ""
+msgstr "Imerniyen"
 
 #: src/appindexer/AppIndex.vala:152
 msgid "Education"
-msgstr ""
+msgstr "Asegmi"
 
 #: src/appindexer/AppIndex.vala:157
 msgid "Games"
-msgstr ""
+msgstr "Uraren"
 
 #: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
-msgstr ""
+msgstr "Udlifen"
 
 #: src/appindexer/AppIndex.vala:169
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: src/appindexer/AppIndex.vala:174
 msgid "Office"
-msgstr ""
+msgstr "Awurmahil"
 
 #: src/appindexer/AppIndex.vala:178
 msgid "Programming"
-msgstr ""
+msgstr "Asihel"
 
 #: src/appindexer/AppIndex.vala:182
 msgid "Science"
-msgstr ""
+msgstr "Tussna"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr ""
+msgstr "Imesli akked uvidyu"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
-msgstr ""
+msgstr "Ifecka n unagraw"
 
 #: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
-msgstr ""
+msgstr "Addaf ameɣradu"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr ""
+msgstr "Taggayt tamaynut"
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
@@ -89,45 +89,42 @@ msgstr ""
 #. mode
 #: src/daemon/notifications/dbus.vala:558
 msgid "Unread Notifications"
-msgstr ""
+msgstr "Alɣuten ur nettwaɣri ara"
 
 #: src/daemon/notifications/dbus.vala:561
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "Yewweḍ-ak·am-d %d n yilɣa mi yella usnas s ugdil aččuran."
+msgstr[1] "Yewweḍ-ak·am-d %d n yilɣa mi yella usnas s ugdil aččuran."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:575
 msgid "View Notifications"
-msgstr ""
+msgstr "Wali ilɣa"
 
 #: src/daemon/endsession.vala:162
 msgid "Log out"
-msgstr "Logáil amach"
+msgstr "Ffeɣ"
 
 #: src/daemon/endsession.vala:166
 msgid "Restart device"
-msgstr "Atosaigh an gléas"
+msgstr "Ales asekker n yibenk"
 
 #: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Múch"
+msgstr "Sens"
 
 #: src/daemon/osdkeys.vala:215
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Isekkilen imeqqranen remden"
 
 #: src/daemon/osdkeys.vala:222
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Isekkilen imeqqranen nsan"
 
 #: src/daemon/osdkeys.vala:232
 msgid "Num Lock is on"
@@ -140,11 +137,11 @@ msgstr ""
 #. Should show a notification
 #: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
-msgstr "Steall Chaiféine i bhfeidhm"
+msgstr ""
 
 #: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
-msgstr "Steall Chaiféine as feidhm"
+msgstr ""
 
 #: src/daemon/settings.vala:421
 #, c-format
@@ -152,108 +149,105 @@ msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: src/dialogs/polkit/polkitdialog.vala:208
 msgid "Authentication failed"
-msgstr "Theip ar fíordheimhniú"
+msgstr "Asesteb ur yeddi ara"
 
 #: src/dialogs/polkit/polkitdialog.vala:296
 msgid "Group:"
-msgstr "Grúpa:"
+msgstr "Agraw:"
 
 #. Create our buttons
 #: src/dialogs/power/window.vala:87
 msgid "_Lock"
-msgstr ""
+msgstr "_Sekkeṛ"
 
 #: src/dialogs/power/window.vala:90
 msgid "L_og Out"
-msgstr ""
+msgstr "Ffeɣ (_o)"
 
 #: src/dialogs/power/window.vala:93
 msgid "_Suspend"
-msgstr ""
+msgstr "Se_ḥbes"
 
 #: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
-msgstr ""
+msgstr "Sgen (_H)"
 
 #: src/dialogs/power/window.vala:101
 msgid "_Reboot"
-msgstr ""
+msgstr "Ales asenker (_R)"
 
 #: src/dialogs/power/window.vala:104
 msgid "Shut_down"
-msgstr ""
+msgstr "Sexsi (_d)"
 
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
-msgstr ""
+msgstr "Anagraw-agi ur issefrak ara asgen"
 
 #: src/dialogs/sendto/Application.vala:75
 msgid "Files to send"
-msgstr ""
+msgstr "Ifuyla ara tazneḍ"
 
 #: src/dialogs/sendto/Application.vala:78
 msgid "_Cancel"
-msgstr ""
+msgstr "Se_fsex"
 
 #: src/dialogs/sendto/Application.vala:79
 msgid "_Open"
-msgstr ""
+msgstr "Ldi (_O)"
 
 #: src/dialogs/sendto/Application.vala:193
 msgid "Send Files via Bluetooth"
-msgstr ""
+msgstr "Azen ifuyla s Bluetooth"
 
 #: src/dialogs/sendto/Application.vala:195
 msgid "Send files to device…"
-msgstr ""
+msgstr "Azen ifuyla ɣer yibenk.."
 
 #: src/dialogs/sendto/Application.vala:301
 msgid "Rejected file"
-msgstr ""
+msgstr "Afaylu yettwagi"
 
 #: src/dialogs/sendto/Application.vala:302
 #, c-format
 msgid "File already exists: %s"
-msgstr ""
+msgstr "Afaylu yella yakan: %s"
 
 #. Create a notification prompting the user what to do
 #: src/dialogs/sendto/Application.vala:314
 msgid "Receiving file"
-msgstr ""
+msgstr "Armas n ufaylu"
 
 #: src/dialogs/sendto/Application.vala:315
 #, c-format
 msgid "Device '%s' wants to send a file: %s %s"
-msgstr ""
+msgstr "Ibenk '%s' yebɣa ad yazen afaylu: %s %s"
 
 #: src/dialogs/sendto/Application.vala:317
 msgid "Accept"
-msgstr ""
+msgstr "Qbel"
 
 #: src/dialogs/sendto/Application.vala:321
 msgid "Reject"
-msgstr ""
+msgstr "Ḍeqqer"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
-msgstr ""
+msgstr "Isem n ufaylu"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:69
 msgid "Transfer rate"
-msgstr ""
+msgstr "Atug n usiweḍ"
 
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
-msgstr ""
+msgstr "Mdel"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
@@ -266,66 +260,54 @@ msgstr ""
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:8
 msgid "Cancel"
-msgstr "Cealaigh"
+msgstr "Sefsex"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:156
 #, c-format
 msgid "<b>Transfer rate:</b> %s / s"
-msgstr ""
+msgstr "<b>Atug n usiweḍ:</b> %s / s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:158
 #, c-format
 msgid "%s / %s: Time remaining: %s"
-msgstr ""
+msgstr "%s / %s: Akud i d-yeqqimen: %s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:169
 #, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%u usrag"
+msgstr[1] "%u n yisragen"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:170
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:175
 #, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%u n tesdat"
+msgstr[1] "%u n tesdatin"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:176
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%u n tasint"
+msgstr[1] "%u n tsinin"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:180
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%d n tasint"
+msgstr[1] "%d n tsinin"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
-msgstr ""
+msgstr "Azen"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:111
 msgid "Speaker"
-msgstr ""
+msgstr "Ameɣri n yimesli"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:113
 msgid "Controller"
@@ -333,11 +315,11 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:115
 msgid "Keyboard"
-msgstr ""
+msgstr "Anasiw"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
 msgid "Mouse"
-msgstr ""
+msgstr "Taɣerdayt"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:119
 msgid "Tablet"
@@ -349,13 +331,13 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:123
 msgid "Phone"
-msgstr ""
+msgstr "Tiliɣri"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:24
 #: src/dialogs/sendto/Dialog/FileSender.vala:29
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:26
 msgid "Bluetooth File Transfer"
-msgstr ""
+msgstr "Asiweḍ n yifuyla Bluetooth"
 
 #. Update the labels
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:30
@@ -363,237 +345,237 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileSender.vala:174
 #, c-format
 msgid "<b>From</b>: %s"
-msgstr ""
+msgstr "<b>Seg</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:31
 #: src/dialogs/sendto/Dialog/FileSender.vala:101
 #: src/dialogs/sendto/Dialog/FileSender.vala:175
 #, c-format
 msgid "<b>To</b>: %s"
-msgstr ""
+msgstr "<b>Ɣer</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:43
 #, c-format
 msgid "<b>File name</b>: %s"
-msgstr ""
+msgstr "<b>Isem ufaylu</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:53
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:74
 msgid "File transfer failed"
-msgstr ""
+msgstr "Asiweḍ n ufaylu ur yeddi ara"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:54
 #, c-format
 msgid "File '%s' not received from %s"
-msgstr ""
+msgstr "Afaylu '%s' ur d-yettwarmes ara seg %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:75
 #, c-format
 msgid "File '%s' from %s not received: %s"
-msgstr ""
+msgstr "Afaylu '%s' seg %s ur d-yettwarmes ara: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:92
 #: src/dialogs/sendto/Dialog/FileSender.vala:274
 msgid "File transferred successfully"
-msgstr ""
+msgstr "Afaylu yettwasiweḍ akken iwata"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:93
 #, c-format
 msgid "Saved file from %s to '%s'"
-msgstr ""
+msgstr "Yettwasekles ufaylu seg %s ɣer '%s'"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:33
 msgid "From"
-msgstr ""
+msgstr "Seg"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:34
 msgid "To"
-msgstr ""
+msgstr "Ɣer"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
 msgid "Trying to connect to %s…"
-msgstr ""
+msgstr "Ɛreḍ ad teqqneḍ ɣer %s..."
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:136
 #, c-format
 msgid "Connecting to '%s' failed"
-msgstr ""
+msgstr "Tuqqna ɣer '%s' ur teddi ara"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:139
 #: src/dialogs/sendto/Dialog/FileSender.vala:220
 msgid "The file has not been transferred."
-msgstr ""
+msgstr "Afaylu ur yettwasiweḍ ara."
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr ""
+msgstr "Ɛreḍ tikelt nniḍen"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
 msgid "Waiting for acceptance on %s…"
-msgstr ""
+msgstr "Araǧu ad yettwaqbel deg %s..."
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:217
 #, c-format
 msgid "Transferring '%s' failed"
-msgstr ""
+msgstr "Asiweḍ n '%s' ur yeddi ara"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:219
 #, c-format
 msgid "The transfer was interrupted or declined by %s."
-msgstr ""
+msgstr "Asiweḍ yettwaḥbes neɣ yettwagi sɣur %s."
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
-msgstr ""
+msgstr "Fren ibenk n Bluetooth ara tazneḍ ifuyla ɣer"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:49
 msgid "Discovering…"
-msgstr ""
+msgstr "Asnirem..."
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:64
 msgid "<b>No devices found</b>"
-msgstr ""
+msgstr "<b>Ulac ibenkan yettwafen</b>"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:68
 msgid "Ensure that your devices are visable and ready for pairing"
-msgstr ""
+msgstr "Tḥeqqeq belli ibenkan-ik·im ttbanen u tewjed i tayuga"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr ""
+msgstr "Ibenkan yellan"
 
 #: src/dialogs/screenshot/screenshot.vala:384
 #: src/dialogs/screenshot/screenshot.vala:831
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr ""
+msgstr "Tuṭṭfa n ugdil Budgie"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
 #: src/dialogs/screenshot/screenshot.vala:500
 msgid "Screenshot entire screen"
-msgstr ""
+msgstr "Tuṭṭfa n ugdil meṛṛa"
 
 #: src/dialogs/screenshot/screenshot.vala:502
 msgid "Screenshot active window"
-msgstr ""
+msgstr "Tuṭṭfa n ugdil i usfaylu urmid"
 
 #: src/dialogs/screenshot/screenshot.vala:504
 msgid "Screenshot selected area"
-msgstr ""
+msgstr "Tuṭṭfa n ugdil i tamnaḍt yettwafernen"
 
 #. translate
 #: src/dialogs/screenshot/screenshot.vala:895
 msgid "Cancel screenshot"
-msgstr ""
+msgstr "Sefsex tuṭṭfa n ugdil"
 
 #: src/dialogs/screenshot/screenshot.vala:896
 msgid "Save screenshot to the selected directory"
-msgstr ""
+msgstr "Sekles tuṭṭfa n ugdil ɣer ukaram yettwafernen"
 
 #: src/dialogs/screenshot/screenshot.vala:897
 msgid "Copy screenshot to the clipboard"
-msgstr ""
+msgstr "Nɣel tuṭṭfa n ugdil ɣer tecfawit"
 
 #: src/dialogs/screenshot/screenshot.vala:898
 msgid "Open screenshot in default application"
-msgstr ""
+msgstr "Ldi tuṭṭfa n ugdil deg usnas amezwer"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/dialogs/screenshot/screenshot.vala:1175
 msgid "Other..."
-msgstr ""
+msgstr "Wayeḍ..."
 
 #. set custom dir to found dir
 #: src/dialogs/screenshot/screenshot.vala:1259
 msgid "Open Folder"
-msgstr ""
+msgstr "Ldi akaram"
 
 #: src/dialogs/screenshot/screenshot.vala:1260
 msgid "Open"
-msgstr ""
+msgstr "Ldi"
 
 #. Caffeine Notification
 #. Prepare label widget
 #: src/lib/notification.vala:80
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
-msgstr "Mód Caiféine"
+msgstr "Askar n Kafiyin"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
-msgstr "Socraigh deilbhín don roghchlár ó chomhad"
+msgstr "Sbadu tignit n wumuɣ seg ufaylu"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
-msgstr "Comhaid Íomhá"
+msgstr "Ifuyla n tugna"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
-msgstr "Gach comhad"
+msgstr "Yal afaylu"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
-msgstr "Socraigh deilbhín"
+msgstr "Sbadu tignit"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
-msgstr "Brón orm, ní bhfuarthas dada"
+msgstr "Suref-aɣ, ulac iferdisen i yettwafen"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
-msgstr "Gach rud"
+msgstr "Akk"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr "Socruithe Deasc Budgie"
+msgstr "Iɣewwaṛen n tnarit Budgie"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "Socruithe Córais"
+msgstr "Iɣewwaṛen n unagraw"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr ""
+msgstr "Tazmert"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr "Uaineadóir (nóiméid)"
+msgstr "Amakud (tisdatin)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr ""
+msgstr "Akud n unagraw akked iɣewwaṛen n uzemz"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Unfavorite"
-msgstr "Bain de na Ceanáin"
+msgstr "Kkes asmenyif"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Favorite"
-msgstr "Cuir leis na Ceanáin"
+msgstr "Asmenyif"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Mdel akk isfuyla"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "Sekker tummant tamaynutt"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
-msgstr "Íoslaghdaigh"
+msgstr "Semẓi"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
@@ -601,181 +583,176 @@ msgstr "Íoslaghdaigh"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "Smutti ɣer %s"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
-msgstr "Dí-uasmhéadaigh"
+msgstr "Kkes asemɣeṛ"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
-msgstr "Uasmhéadaigh"
+msgstr "Ssemɣeṛ"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Mdel asfaylu"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Sken isenqaden n usfaylu"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "Caps Lock i bhfeidhm"
+msgstr ""
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "Caps Lock as feidhm"
+msgstr ""
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "Num Lock i bhfeidhm"
+msgstr ""
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "Num Lock as feidhm"
+msgstr ""
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:122
 #: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%u n wulɣu ur nettwaɣri ara"
+msgstr[1] "%u n yilɣa ur nettwaɣri ara"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:124
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
-msgstr "Gach fógra léite"
+msgstr "Ulac tilɣa ur nettwaɣri ara"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr "Tá an t-imleabhar sin in úsáid ag próisis eile"
+msgstr "Ableɣ yettwaseqdec deg ukala-nniḍen"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
-msgstr "Thobscoireadh an oibríocht"
+msgstr "Tamhelt tettwaḥbes"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:51
 msgid "Type your password"
-msgstr "Cuir isteach d’fhocal faire"
+msgstr "Aru awal-ik·im uffir"
 
 #: src/panel/applets/places-indicator/MountItem.vala:23
 #: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
-msgstr "Gléasanna inbhainte"
+msgstr ""
 
 #: src/panel/applets/places-indicator/MountItem.vala:25
 #: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
-msgstr "Imleabhair áitiúla"
+msgstr "Iblaɣen idiganen"
 
 #: src/panel/applets/places-indicator/MountItem.vala:29
 #: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
-msgstr "Fillteáin líonra"
+msgstr "Ikaramen n uẓeṭṭa"
 
 #: src/panel/applets/places-indicator/MountItem.vala:58
 #: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
-msgstr "Díchuir"
+msgstr "Ḍeqqer"
 
 #: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
-msgstr "Dífheistigh"
+msgstr "Kkes aserkeb"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
 #: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
-msgstr "Oscail \"%s\""
+msgstr "Ldi \"%s\""
 
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
-msgstr "Is féidir an gléas seo a bhaint anois gan bhaol"
+msgstr "Tzemreḍ tura ad tekkseḍ s tɣellist"
 
 #: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
-msgstr "Gléas anaithnid"
+msgstr "Ibenk arussin"
 
 #: src/panel/applets/places-indicator/MountItem.vala:84
 msgid "Error while ejecting device"
-msgstr "Tharla earráid agus an gléas á dhíchur"
+msgstr "Tuccḍa deg uḍeqqer n yibenk"
 
 #: src/panel/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
-msgstr "Tharla earráid agus an t-imleabhar á dhífheistiú"
+msgstr "Tuccḍa deg tukksa n userkeb n ubleɣ"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: src/panel/applets/places-indicator/PlacesSection.vala:22
 #: src/panel/applets/places-indicator/PlacesSection.vala:44
 msgid "Places"
-msgstr "Áiteanna"
+msgstr "Idigen"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Feistigh agus oscail \"%s\""
+msgstr "Serkeb sakin ldi \"%s\""
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:73
 #: src/panel/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
 msgstr ""
-"Cuir isteach an pasfhrása criptiúcháin chun an t-imleabhar seo a dhíghlasáil"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
-msgstr "Níor chuir tú isteach an focal faire ceart"
+msgstr "Awal uffir i teskecmeḍ d armeɣtu"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
-"Tharla earráid anaithnid le linn iarracht ar fheistiú an imleabhair seo"
+msgstr "Teḍra-d tuccḍa tarussint deg uneɛruḍ n userkeb n ubleɣ-a"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
-msgstr "Níl dada le taispeáint faoi láthair"
+msgstr "Ulac acu ara yettwabeqqeḍen tura"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Mount some drives"
-msgstr "Feistigh roinnt tiomantán"
+msgstr "Serkeb kra n yimeɣriyen"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Enable more sections"
-msgstr "Cumasaigh tuilleadh rann"
+msgstr "Sermed ugar n tgezmiwin"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
-msgstr "Scoránaigh an deasc"
+msgstr ""
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
-msgstr ""
+msgstr "Bluetooth"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:114
 msgid "Bluetooth Settings"
-msgstr "Socruithe Bluetooth"
+msgstr "Iγewwaṛen n Bluetooth"
 
 #. Bluetooth switch
 #: src/panel/applets/status/BluetoothIndicator.vala:120
 msgid "Turn Bluetooth on or off"
-msgstr ""
+msgstr "Rmed neɣ sens Bluetooth"
 
 #. Update the tray icon and placeholder text
 #. Airplane mode is on, so Bluetooth is disabled
 #: src/panel/applets/status/BluetoothIndicator.vala:279
 msgid "Airplane mode is on."
-msgstr ""
+msgstr "Askar n temsrifegt yermed."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:280
 msgid "Bluetooth is disabled while airplane mode is on."
-msgstr ""
+msgstr "Bluetooth yensa ticki yermed uskar n temsrifegt."
 
 #. Airplane mode is off, so Bluetooth is enabled
 #: src/panel/applets/status/BluetoothIndicator.vala:283
@@ -788,67 +765,67 @@ msgstr ""
 
 #: src/panel/applets/status/BluetoothIndicator.vala:440
 msgid "Send file"
-msgstr ""
+msgstr "Azen afaylu"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:465
 msgid "Disconnect"
-msgstr ""
+msgstr "Ffeɣ si tuqqna"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:577
 msgid "Disconnecting…"
-msgstr ""
+msgstr "Tuffɣa si tuqqna..."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:580
 msgid "Connecting…"
-msgstr ""
+msgstr "Tuqqna..."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to disconnect"
-msgstr ""
+msgstr "Tuccḍa deg tuffɣa si tuqqna"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to connect"
-msgstr ""
+msgstr "Tecceḍ tuqqna"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Connected"
-msgstr ""
+msgstr "Yettwaqqen"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Disconnected"
-msgstr ""
+msgstr "Yenser seg tuqqna"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:702
 #, c-format
 msgid "<b>Filename</b>: %s"
-msgstr ""
+msgstr "<b>Isem n ufaylu</b>: %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:709
 #, c-format
 msgid "Receiving… %s of %s"
-msgstr ""
+msgstr "Armas... %s n %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:714
 #, c-format
 msgid "Sending… %s of %s"
-msgstr ""
+msgstr "Tuzna... %s n %s"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
-msgstr "Cadhnra luchtaithe."
+msgstr "Adɣaɣ yeččur akk."
 
 #: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
-msgstr "Anaithnid"
+msgstr "Arussin"
 
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
-msgstr "Cadhnra á luchtú"
+msgstr "Adɣaɣ yettɛebbi"
 
 #: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
-msgstr "Lucht fágtha"
+msgstr "Adɣaɣ i d-yegran"
 
 #: src/panel/applets/status/PowerIndicator.vala:191
 msgid "Performance Mode"
@@ -868,128 +845,128 @@ msgstr ""
 
 #: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
-msgstr "Socruithe Cumhachta"
+msgstr ""
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:98
 msgid "User"
-msgstr "Úsáideoir"
+msgstr "Aseqdac"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Lock"
-msgstr "Glasáil"
+msgstr "Sekkeṛ"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Suspend"
-msgstr "Cuir ar Fionraí"
+msgstr "Seḥbes deg leεḍil"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:106
 msgid "Hibernate"
-msgstr "Suanaigh"
+msgstr "Sgen"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:107
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "Atosaigh"
+msgstr "Ales asekker"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:108
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Múch"
+msgstr "Sexsi"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:207
 #: src/daemon/endsession.ui.h:4
 msgid "Logout"
-msgstr "Logáil Amach"
+msgstr "Tuffɣa"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr "Athainmnigh"
+msgstr "Snifel isem"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
 #: src/panel/settings/settings_panel_dialogs.vala:157
 msgid "Remove"
-msgstr "Bain"
+msgstr "Kkes"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "Ur yezmir ara ad d-yesnulfu tallunin n umahil timaynutin"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "Snulfu-d tallunt n umahil tamaynut"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
-msgstr "Gan teideal"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:141
 msgid "No description"
-msgstr "Gan cur síos"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:164
 msgid "running"
-msgstr "ag rith"
+msgstr ""
 
 #: src/panel/settings/settings_autostart.vala:185
 msgid "Applications"
-msgstr "Feidhmchláir"
+msgstr "Isnasen"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_plugin_chooser.vala:106
 msgid "Add"
-msgstr "Cuir leis"
+msgstr "Rnu"
 
 #: src/panel/settings/settings_autostart.vala:354
 #: src/panel/settings/settings_autostart.vala:387
 msgid "Command"
-msgstr "Ordú"
+msgstr "Taladna"
 
 #: src/panel/settings/settings_autostart.vala:370
 msgid "An entry with that title already exists"
-msgstr "Tá iontráil ann cheana leis an teideal sin"
+msgstr "Anekcum s uzwel-agi yella yakan"
 
 #: src/panel/settings/settings_autostart.vala:373
 msgid "Title"
-msgstr "Teideal"
+msgstr "Azwel"
 
 #: src/panel/settings/settings_autostart.vala:377
 #: src/panel/settings/settings_autostart.vala:391
 msgid "Required"
-msgstr "Riachtanach"
+msgstr "Yettwasra"
 
 #: src/panel/settings/settings_autostart.vala:380
 msgid "Description"
-msgstr "Cur Síos"
+msgstr "Aglam"
 
 #: src/panel/settings/settings_autostart.vala:384
 msgid "Optional"
-msgstr "Roghnach"
+msgstr "Afrayan"
 
 #: src/panel/settings/settings_autostart.vala:446
 msgid "Autostart"
-msgstr "Uath-thosú"
+msgstr "Asenker awurman"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr "Aipeanna Uath-thosaithe"
+msgstr "Asenker awurman n yisnasen"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
-msgstr "Feidhmchláir Nua"
+msgstr "Rnu asnas"
 
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
-msgstr "Ordú Nua"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
-msgstr "Deasc"
+msgstr ""
 
 #. Budgie native implementation
 #. Get the settings for Budgie Desktop View
@@ -1004,11 +981,11 @@ msgstr "Deasc"
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
-msgstr "Deilbhíní Deisce"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
-msgstr "Rialaigh an mbeidh deilbhíní le feiceáil ar an deasc."
+msgstr ""
 
 #. DesktopFolder doesn't support fancy options like showing home folder,
 #. trash, or active mounts
@@ -1016,29 +993,29 @@ msgstr "Rialaigh an mbeidh deilbhíní le feiceáil ar an deasc."
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr "Ionaid Ghléasta Gníomhacha"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
-msgstr "Taispeáin gach ionad gléasta gníomhach ar an deasc."
+msgstr ""
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr "Fillteán Baile"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Cuir aicearra chuig d’fhillteán baile ar an deasc."
+msgstr ""
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
 msgid "Trash"
-msgstr "Bruscar"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Cuir aicearra chuig an fillteán Bruscair ar an deasc."
+msgstr ""
 
 #. DesktopType doesn't support icon size changing. Nemo might but needs
 #. validation.
@@ -1046,242 +1023,240 @@ msgstr "Cuir aicearra chuig an fillteán Bruscair ar an deasc."
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
 msgid "Icon Size"
-msgstr "Méid Deilbhíní"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
-msgstr "Socraigh méid do dheilbhíní ar an deasc."
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr "Líon na ndeasc fíorúil"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:149
 msgid ""
 "Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
-"Líon na ndeasc fíorúil / spásanna oibre fíorúla le cruthú ar am tosaithe."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
-msgstr "Clic amháin"
+msgstr ""
 
 #. If the click policy is to double click
 #: src/panel/settings/settings_desktop.vala:221
 msgid "Double"
-msgstr "Déchliceáil"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr "Polasaí Cliceála"
+msgstr ""
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
 "Click Policy determines if we should open items on a single or double click."
 msgstr ""
-"Socraíonn an Polasaí Cliceála cé acu clic amháin nó déchliceáil a osclóidh "
-"míreanna."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
-msgstr "Gnách"
+msgstr "Amagnu"
 
 #. Small
 #: src/panel/settings/settings_desktop.vala:292
 msgid "Small"
-msgstr "Beag"
+msgstr "Meẓẓi"
 
 #. Large
 #: src/panel/settings/settings_desktop.vala:294
 msgid "Large"
-msgstr "Mór"
+msgstr "Ahrawan"
 
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr "Ollmhór"
+msgstr "Meqqar"
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
-msgstr "Clófhoirne"
+msgstr "Tisefsiyin"
 
 #: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
-msgstr "Teidil Fuinneog"
+msgstr "Izwal n isfuyla"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
-msgstr "Socraigh an clófhoireann le húsáid i mbarraí teidil."
+msgstr "Sbadu tasefsit yettwasqedcen deg ufeggag n uzwel n isnasen."
 
 #: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
-msgstr "Cáipéisí"
+msgstr "Isemliyen"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
-msgstr "Socraigh an clófhoireann le húsáid i gcáipéisí."
+msgstr "Sbadu tasefsit n ubeqqeḍ yettwasqedcen i isemliyen."
 
 #: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
-msgstr "Comhéadan"
+msgstr "Agrudem"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
-msgstr "Socraigh an príomhchlófhoireann le húsáid ar rialtáin feidhmchláir."
+msgstr "Sbadu tasefsit tagejdant i yettwasqedcen s isenqaden n usnas."
 
 #: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
-msgstr "Cló Aonleithid"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Socraigh an cló aonleithid le húsáid i bhfeidhmchláir téacs."
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
-msgstr "Scálú Téacs"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
-msgstr "Socraigh an mhéid scálú téacs."
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
-msgstr "Iomlán"
+msgstr "Ačuran"
 
 #: src/panel/settings/settings_fonts.vala:81
 msgid "Medium"
-msgstr "Meánach"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:82
 msgid "Slight"
-msgstr "Éadrom"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 #: src/panel/settings/settings_panel.vala:246
 msgid "None"
-msgstr "As"
+msgstr "Ula yiwen"
 
 #: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
-msgstr "Clóshlánú"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
-msgstr "Socraigh an cineál clóshlánaithe le húsáid."
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
-msgstr "Fophicteilín (le haghaidh scáileán LCD)"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
-msgstr "Caighdeánach (liathscála)"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:124
 msgid "Antialiasing"
-msgstr "Frithailiasáil"
+msgstr ""
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
-msgstr "Socraigh an cineál frithailiasála le húsáid."
+msgstr ""
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
-msgstr "Cuma"
+msgstr "Arwes"
 
 #: src/panel/settings/settings_main.vala:58
 msgid "Panels"
-msgstr "Painéil"
+msgstr "Igalisen"
 
 #: src/panel/settings/settings_main.vala:59
 msgid "Session"
-msgstr "Seisiún"
+msgstr "Tiɣimit"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
-msgstr "Cruthaigh painéal nua"
+msgstr "Snulfu-d agalis amaynut"
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr ""
+msgstr "Iɣewwaṛen n teplaḍin"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
-msgstr "Cuir feidhmchláirín leis"
+msgstr "Rnu tapliḍt"
 
 #: src/panel/settings/settings_panel_applets.vala:236
 msgid "Choose a new applet to add to this panel"
-msgstr "Roghnaigh feidhmchláirín nua le cur leis an bpainéal seo"
+msgstr "Fren tapliḍt tamaynut ara ternuḍ ɣer ugalis-agi"
 
 #: src/panel/settings/settings_panel_applets.vala:250
 #: src/panel/settings/settings_raven_widgets.vala:164
 msgid "No settings available"
-msgstr "Níl socrú ar bith le fáil"
+msgstr "Ulac iɣewwaren iwejden"
 
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
-msgstr "Tús"
+msgstr "Bdu"
 
 #: src/panel/settings/settings_panel_applets.vala:406
 msgid "Center"
-msgstr "Lár"
+msgstr "Talemmast"
 
 #: src/panel/settings/settings_panel_applets.vala:409
 msgid "End"
-msgstr "Bun"
+msgstr "Tagara"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
-msgstr "Dearbhaigh baint painéil"
+msgstr "Sentem tukksa n ugalis"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr ""
-"An bhfuil tú cinnte gur maith leat an painéal seo a bhaint? \n"
-"Ní féidir an gníomh seo a chur ar ceal."
+"D tidet tebɣiḍ ad tekkseḍ agalis-agi? Tigawt-agi ulamek ara tettwasefsex."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
-msgstr "Bain painéal"
+msgstr "Kkes agalis"
 
 #: src/panel/settings/settings_panel_dialogs.vala:43
 msgid "Keep panel"
-msgstr "Coinnigh painéal"
+msgstr "Eǧǧ agalis"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "Dearbhaigh baint feidhmchláirín"
+msgstr "Sentem tukksa n tepliḍt"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
-"An bhfuil tú cinnte gur maith leat an feidhmchláirín seo a bhaint? \n"
-"Ní féidir an gníomh seo a chur ar ceal."
+"D tidet tebɣiḍ ad tekkseḍ Tapliḍt-agi? Tigawt-agi ur tezmir ara ad "
+"tettwasefsex."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 #: src/panel/settings/settings_panel_dialogs.vala:148
 msgid "Don't ask me again"
-msgstr "Ná cuir an cheist seo orm arís"
+msgstr "Ur iyi-d-ssutur ara tikkelt-nniḍen"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
-msgstr "Bain feidhmchláirín"
+msgstr "Kkes tapliḍt"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid "Keep applet"
-msgstr "Coinnigh feidhmchláirín"
+msgstr "Eǧǧ tapliḍt"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr ""
+msgstr "Sentem tukksa n uwiǧit"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
+"D tidet tebɣiḍ ad tekkseḍ awiǧit-a? Tigawt-agi ur tezmir ara ad "
+"tettwasefsex."
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
@@ -1289,70 +1264,72 @@ msgstr ""
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr ""
+msgstr "Fren azegrir"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr ""
+msgstr "Ulac aglam."
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "sɣur %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
-msgstr ""
+msgstr "Ulac imeskaren yettwafen"
 
 #: src/panel/settings/settings_raven.vala:47
 #: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
-msgstr "Giuirléidí"
+msgstr "Iwiǧiten"
 
 #: src/panel/settings/settings_raven.vala:48
 #: src/panel/settings/settings_panel.vala:91
 msgid "Settings"
-msgstr "Socruithe"
+msgstr "Iɣewwaṛen"
 
 #: src/panel/settings/settings_raven_settings.vala:47
 msgid "Set Raven position"
-msgstr "Socraigh suíomh Raven"
+msgstr ""
 
 #: src/panel/settings/settings_raven_settings.vala:48
 msgid ""
 "Set which side of the screen Raven will open on. If set to Automatic, Raven "
 "will open where its parent panel is."
 msgstr ""
-"Socraigh an taobh scáileáin ar a n-osclófar Raven. Más Uathoibríoch an "
-"rogha, osclóidh Raven san áit ina bhfuil a mháthairphainéal."
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr ""
+msgstr "Sbadu amizzwer n wulɣu"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
 msgstr ""
+"Sbadu ma yella tilɣa ad myazwaren seg uqbur ɣer umaynut, neɣ seg umaynut ɣer"
+" uqbur."
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr ""
+msgstr "Iɣewwaṛen n uwiǧit"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr ""
+msgstr "Rnu awiǧit"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
+msgstr "Fren awiǧit amaynut iwakken ad ternuḍ ɣer teskant n yiwiǧiten"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
 msgstr ""
+"Ulamek asnulfu n tummant n uwiǧit. Amsedday n uzegrir ur izmir ara ad yaf "
+"talɣut i uzegrir-agi."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -1366,6 +1343,8 @@ msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
 msgstr ""
+"Ulamek asnulfu n tummant n uwiǧit. Amsedday n uzegrir ur yezmir ara ad "
+"d-isali azegrir seg uḍebsi."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -1380,370 +1359,357 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
-msgstr "Fuinneoga"
+msgstr "Isfuyla"
 
 #: src/panel/settings/settings_wm.vala:38
 msgid "Button layout"
-msgstr "Leagan amach Cnaipí"
+msgstr "Taneɣruft n tqeffalt"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars."
-msgstr "Athraigh leagan amach na gcnaipí i mbarraí teidil."
+msgstr "Snifel taneɣruft n teqfalin deg ufeggag n uzwel n usnas."
 
 #: src/panel/settings/settings_wm.vala:44
 msgid "Center new windows on screen"
-msgstr "Cuir fuinneoga nua i lár an scáileáin"
+msgstr "Slemmes isfuyla imaynuten deg ugdil"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Center newly launched windows on the current screen."
-msgstr "Cuir fuinneoga nualainseáilte i lár an scáileáin."
+msgstr "Slemmes asekker n isfuyla imaynuten deg ugdil amiran."
 
 #: src/panel/settings/settings_wm.vala:50
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Díchumasaigh mód Sholas Oíche nuair atá fuinneoga lánscáileáin ann"
+msgstr "Sens askar n tafat n yiḍ mi ara ilin isfuyla deg agdil aččuran"
 
 #: src/panel/settings/settings_wm.vala:51
 msgid ""
 "Disables Night Light mode when a window is fullscreen. Re-enables when "
 "leaving fullscreen."
 msgstr ""
-"Díchumasaítear mód Sholas Oíche nuair atá fuinneog i mód lánscáileáin. "
-"Cumasaítear arís é ag fágáil lánscáileán."
 
 #: src/panel/settings/settings_wm.vala:56
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Cuir fógraí ar sos agus fuinneoga lánscáileáin ann"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:57
 msgid ""
 "Prevents notifications from appearing when a window is fullscreen. Unpauses "
 "when leaving fullscreen."
 msgstr ""
-"Cuirtear cosc ar fhógraí agus fuinneog i mód lánscáileáin. Cuirtear i "
-"bhfeidhm iad arís ag fágáil lánscáileán."
 
 #: src/panel/settings/settings_wm.vala:62
 msgid "Automatic tiling"
-msgstr "Tíliú uathoibríoch"
+msgstr "Afser s wudem awurman"
 
 #: src/panel/settings/settings_wm.vala:63
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners."
 msgstr ""
-"Tíleofar fuinneoga go huathoibríoch nuair a tharraingíonn tú iad go barr an "
-"scáileán nó chuig a chúinní."
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Enable window focus change on mouse enter and leave"
-msgstr "Cumasaigh athrú fhócas fuinneoige ar dul isteach nó fágáil na luiche"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Enables window focus to apply when the mouse enters the window and unfocus "
 "when the mouse leaves the window."
 msgstr ""
-"Cumasaítear fócas fuinneoige a bheith ann nuair a thagann an luch isteach "
-"san fhuinneog agus díchumasaítear é nuair a fhágann an luch an fhuinneog."
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
-msgstr "Taispeáin gach fuinneog sa mhalartóir cluaisín"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:75
 msgid ""
 "All tabs will be displayed in tab switcher regardless of the workspace in "
 "use."
-msgstr "Taispeánfar cluaisíní ó gach aon spás oibre."
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:82
 msgid "Right (standard)"
-msgstr "Deas (caighdeánach)"
+msgstr ""
 
 #: src/panel/settings/settings_wm.vala:84
 #: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
 msgid "Left"
-msgstr "Clé"
+msgstr "Azelmaḍ"
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
-msgstr "Feidhmchláiríní"
+msgstr "Tiplaḍin"
 
 #: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
-msgstr "Bain painéal"
+msgstr "Kkes agalis"
 
 #: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
-msgstr "Bain an painéal seo den scáileán"
+msgstr "Kkes agalis-agi seg ugdil"
 
 #: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
-msgstr "Duga Uachtair"
+msgstr "Adekkan ufella"
 
 #: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
-msgstr "Duga ar Dheis"
+msgstr "Adekkan ayeffus"
 
 #: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
-msgstr "Duga ar Chlé"
+msgstr "Adekkan azelmaḍ"
 
 #: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
-msgstr "Duga Íochtair"
+msgstr "Adekkan n wadda"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
-msgstr "Painéal Uachtair"
+msgstr "Agalis n ufella"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
-msgstr "Painéal ar Dheis"
+msgstr "Agalis ayeffus"
 
 #: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
-msgstr "Painéal ar Chlé"
+msgstr "Agalis azelmaḍ"
 
 #: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
-msgstr "Painéal Íochtair"
+msgstr "Agalis n wadda"
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Top"
-msgstr "Uachtar"
+msgstr "Uksawen"
 
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
-msgstr "Deas"
+msgstr "Azelmaḍ"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
-msgstr "Íochtar"
+msgstr "Ukessar"
 
 #: src/panel/settings/settings_panel.vala:241
 msgid "Always"
-msgstr "I gCónaí"
+msgstr "Yal tikelt"
 
 #: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
-msgstr "Dinimiciúil"
+msgstr "Asmussan"
 
 #: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
 msgid "Automatic"
-msgstr "Uathoibríoch"
+msgstr "Awurman"
 
 #: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
-msgstr "Cliste"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Never"
-msgstr "Ná ceil"
+msgstr "Werǧin"
 
 #: src/panel/settings/settings_panel.vala:278
 msgid "Position"
-msgstr "Suíomh"
+msgstr "Ideg"
 
 #: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Socraigh imeall den scáileán a mbeidh an painéal seo ann"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:287
 msgid "Size"
-msgstr "Méid"
+msgstr "Tiddi"
 
 #: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
-"Socraigh méid an phainéil seo (leithead nó airde, de réir a threoshuímh)"
+msgstr "Sbadu tiddi (tehri neɣ teɣzi,cudd ɣer teɣda) n ugalis-agi "
 
 #: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
-msgstr ""
+msgstr "Tallunt gar"
 
 #: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
-msgstr ""
+msgstr "Sbadu tallunt gar tpliḍin i ugalis-agi"
 
 #: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
-msgstr "Ceil go huathoibríoch"
+msgstr "Ffer s wudem awurman"
 
 #: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
-"I bhfeidhm, ceilfear an painéal seo chun an méid is mó scáileáin a "
-"thaispeáint"
+"Mi ara yermed, agalis-agi ad yeffer seg teskant i usemɣeṛ n tallunt n ugdil"
 
 #: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
-msgstr "Trédhearcacht"
+msgstr "Tafrawant"
 
 #: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
-msgstr "Rialaigh cén uair ba cheart trédhearcacht a chur ar an bpainéal seo"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
-msgstr "Scáth"
+msgstr "Tili"
 
 #: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Cuir scáth ornáideach leis, oiriúnach le painéil theimhneacha"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
-msgstr "Stíligh réigiúin"
+msgstr ""
 
 #: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr ""
-"Cuir leid leis an bpainéal sa chaoi gur féidir stíl ar leith a chur ar na "
-"trí réigiún sa phainéal."
 
 #: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
-msgstr "Mód Duga"
+msgstr "Askar n udekkan"
 
 #: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
 msgstr ""
-"Nuair atá mód duga i bhfeidhm, úsáideann an painéal an mhéid is lú scáileáin"
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
-msgstr "Stíl"
+msgstr "Aɣanib"
 
 #: src/panel/settings/settings_style.vala:48
 msgid "Set the appearance of window decorations and controls"
-msgstr "Socraigh cuma mhaisiúcháin is rialtáin fuinneog"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:52
 msgid "Icons"
-msgstr "Deilbhíní"
+msgstr "Tignitin"
 
 #: src/panel/settings/settings_style.vala:53
 msgid "Set the globally used icon theme"
-msgstr "Socraigh an téama uilíoch deilbhíní"
+msgstr "Sbadu asentel amatu yettwasqedcen di tignit"
 
 #: src/panel/settings/settings_style.vala:57
 msgid "Cursors"
-msgstr "Cúrsóirí"
+msgstr "Tiḥnaccaṭ"
 
 #: src/panel/settings/settings_style.vala:58
 msgid "Set the globally used mouse cursor theme"
-msgstr "Socraigh an téama uilíoch do chúrsóirí luch"
+msgstr "Sbadu asentel n teḥnaccaḍt n tɣerdayt amatu yettwasqedcen"
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Notification Position"
-msgstr "Suíomh Fógraí"
+msgstr "Ideg n tilɣa"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Set the location for notification popups"
-msgstr "Socraigh an suíomh do na fógraí"
+msgstr "Sbadu adig i usfaylu udhimen n yilɣa"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
-msgstr "Téama dorcha"
+msgstr "Asentel ubrik"
 
 #: src/panel/settings/settings_style.vala:79
 msgid "Built-in theme"
-msgstr "Téama ionsuite"
+msgstr "Asentel usliɣ"
 
 #: src/panel/settings/settings_style.vala:80
 msgid ""
 "When enabled, the built-in theme will override the desktop component styling"
-msgstr "Sáróidh an téama ionsuite an stíl do na comhpháirteanna deisce"
+msgstr ""
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Animations"
-msgstr "Beochaintí"
+msgstr "Imrayen"
 
 #: src/panel/settings/settings_style.vala:88
 msgid "Control whether windows and controls use animations"
-msgstr "Rialaigh úsáid beochana ar fhuinneoga agus rialtáin"
+msgstr "Senqed ma yella isfuyla akked isenqaden ad seqdcen imrayen"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
-msgstr "Barr Clé"
+msgstr "Uksawen ɣer zelmaḍ"
 
 #: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
-msgstr "Bun Clé"
+msgstr "Ukessar ɣer zelmaḍ"
 
 #: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
-msgstr "Bun Deas"
+msgstr "Ukessar ɣer yefus"
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
-msgstr "Barr Deas"
+msgstr "Uksawen ɣer yefus"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
-msgstr "Fógraí"
+msgstr "Ilɣa"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr ""
+msgstr "Ulac iwiǧiten i yettwarnan."
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
-msgstr "Níl dada le feiceáil anseo"
+msgstr "Ulac d acu ara twaliḍ dagi"
 
 #: src/raven/notifications_view.vala:123
 msgid "No new notifications"
-msgstr "Gan fógra nua"
+msgstr "Ulac tilɣa timaynutin"
 
 #: src/raven/widgets/media-controls/media_controls.vala:155
 msgid "No apps are currently playing audio."
-msgstr "Níl aip ar bith ag úsáid fuaime faoi láthair."
+msgstr "Ulac isnasen i la tturaren ameslaw akka tura."
 
 #: src/raven/widgets/media-controls/media_controls.vala:164
 msgid "Play some music"
-msgstr "Seinn roinnt ceoil"
+msgstr "Ɣeṛ kra n uẓawan"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr ""
+msgstr "Azwel arussin"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:110
 #: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr ""
+msgstr "Anaẓur arussin"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr ""
+msgstr "Album arussin"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr ""
+msgstr "Taɣuri - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr ""
+msgstr "Yettwaseḥbes - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr ""
+msgstr "Ulac isnasen i tturaren ameslaw."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
-msgstr "Aipeanna"
+msgstr "Isnasen"
 
 #: src/raven/widgets/sound-output/sound_output.vala:190
 msgid "Devices"
-msgstr "Gléasanna"
+msgstr "Ibenkan"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
@@ -1764,55 +1730,55 @@ msgstr ""
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr ""
+msgstr "Seg uqbur ɣer umaynut"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr ""
+msgstr "Seg umaynut ɣer uqbur"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "An bhfuil tú cinnte gur maith leat deireadh a chur le do sheisiún?"
+msgstr "Tebɣiḍ ad tfakeḍ tiɣimit-ik·im?"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Fíordheimhniú Riachtanach"
+msgstr "Asesteb yettwasra"
 
 #: src/dialogs/polkit/dialog.ui.h:2
 msgid "Password:"
-msgstr "Focal Faire:"
+msgstr "Awal n uɛeddi:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "Isem n useqdac:"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
-msgstr "Is riachtanach fíordheimhniú"
+msgstr "Asesteb yettwasra"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Details"
-msgstr ""
+msgstr "Ifatusen"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "Action:"
-msgstr ""
+msgstr "Tigawt:"
 
 #: src/dialogs/polkit/dialog.ui.h:7
 msgid "ID:"
-msgstr ""
+msgstr "ASULAY:"
 
 #: src/dialogs/polkit/dialog.ui.h:9
 msgid "Authenticate"
-msgstr "Fíordheimhnigh"
+msgstr "Sesteb"
 
 #: src/dialogs/screenshot/aftershot.ui.h:1
 msgid "Name:"
-msgstr ""
+msgstr "Isem:"
 
 #: src/dialogs/screenshot/aftershot.ui.h:2
 msgid "Folder:"
-msgstr ""
+msgstr "Akaram:"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:1
 msgid "Delay in seconds"
@@ -1820,7 +1786,7 @@ msgstr ""
 
 #: src/dialogs/screenshot/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr ""
+msgstr "Sken asewwaṛ"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:3
 msgid "Play sound when capturing"
@@ -1828,63 +1794,63 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "Taispeáin Lipéad Roghchláir"
+msgstr "Sken tabzimt n wumuɣ"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:2
 msgid "Menu Label"
-msgstr "Lipéad Roghchláir"
+msgstr "Tabzimt n wumuɣ"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr ""
+msgstr "Seqdec umuɣ n tignit tamezwart"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
-msgstr "Deilbhín Roghchláir"
+msgstr "Tignit n wumuɣ"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:5
 msgid "Compact Mode"
-msgstr "Mód Néata"
+msgstr "Askar akussim"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:6
 msgid "Show Headers"
-msgstr "Taispeáin Ceannteidil"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:7
 msgid "Roll-over mouse"
-msgstr "Roghchlár Mear"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr ""
+msgstr "Sken iferdisen n iɣewwaṛen"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
-msgstr "Cumasaigh fógra"
+msgstr "Rmed ilγa"
 
 #: src/panel/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
-msgstr "Uasmhéadaigh an ghile"
+msgstr ""
 
 #: src/panel/applets/caffeine/settings.ui.h:3
 msgid "Brightness Level"
-msgstr "Leibhéal Gile"
+msgstr ""
 
 #: src/panel/applets/clock/settings.ui.h:1
 msgid "Show date"
-msgstr "Taispeáin an dáta"
+msgstr "Sken azemz"
 
 #: src/panel/applets/clock/settings.ui.h:2
 msgid "Show seconds"
-msgstr "Taispeáin soicindí"
+msgstr "Sken tisinin"
 
 #: src/panel/applets/clock/settings.ui.h:3
 msgid "Use 24 hour time"
-msgstr "Úsáid Am 24-uair"
+msgstr "Seqdec akud n 24 n usrag"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr ""
+msgstr "Amasal yugnen"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
@@ -1893,7 +1859,7 @@ msgstr ""
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr ""
+msgstr "Tamnaḍt tasragant yugnen"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
@@ -1901,108 +1867,108 @@ msgstr ""
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
-msgstr "Taispeáin gach fuinneog ar cliceáil"
+msgstr "Sken akk isfuyla s usiti"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:2
 msgid "Only show favorited"
-msgstr "Ná taispeáin ach ceanáin"
+msgstr "Sken-d kan ismenyafen"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
-msgstr "Cuir deilbhíní faoi ghlas"
+msgstr "Sekkeṛ tignitin"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
-msgstr "Teorannaigh don Spás Oibre"
+msgstr "Ukrif ɣer tallunt n umahil"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
-msgstr "Lainseáil fuinneog nua ar lárchliceáil"
+msgstr "Asiti alemmas i usekker n usfaylu amaynut"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
-msgstr "Lainseáil fuinneog nua ar déchliceáil"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
-msgstr "Solas Oíche"
+msgstr "Tafat n yiḍ"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr "Teocht"
+msgstr "Tafesna n teẓɣelt"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "Sceideal"
+msgstr "Sɣiwes"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "Ó Luí go hÉirí na Gréine"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "De Láimh"
+msgstr "Awfusan"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "Socruithe Taispeána"
+msgstr "Beqqeḍ iɣewwaṛen"
 
 #: src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Taispeáin lipéad"
+msgstr "Sken tabzimt"
 
 #: src/panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Taispeáin áiteanna"
+msgstr "Sken imukan"
 
 #: src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "Taispeáin fillteáin líonra"
+msgstr "Sken ikaramen n uzeṭṭa"
 
 #: src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
-msgstr "Taispeáin tiomántáin inbhainte"
+msgstr "Sken iḍebsiyen izirazen"
 
 #: src/panel/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "Fairsingigh áiteanna i gcónaí"
+msgstr ""
 
 #: src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Méid an Spásaire"
+msgstr ""
 
 #: src/panel/applets/status/settings.ui.h:1
 #: src/panel/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr "Spásáil Deilbhíní"
+msgstr ""
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
-msgstr "Taispeáin céatadán cadhnra"
+msgstr ""
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "Askar n umizzwer"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "Smizzwer s wanaw"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Smizzwer s ugemmay"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "Smizzwer s ugemmay yettin"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "Smizzwer s uzemz yettalin"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "Smizzwer s uzemz yettadren"
 
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
@@ -2010,7 +1976,7 @@ msgstr ""
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
-msgstr "Cnaipe Breis infheicthe"
+msgstr ""
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
@@ -2018,15 +1984,15 @@ msgstr ""
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
-msgstr "Ná taispeáin"
+msgstr "Ur d-skan ara"
 
 #: src/panel/applets/workspaces/settings.ui.h:4
 msgid "Show on mouseover"
-msgstr "Taispeáin ar ainliú luiche"
+msgstr ""
 
 #: src/panel/applets/workspaces/settings.ui.h:5
 msgid "Always show"
-msgstr "Taispeáin I gCónaí"
+msgstr "Skan yal tikelt"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
@@ -2050,19 +2016,19 @@ msgstr ""
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "Sken tignitin n tqeffalt"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "Sken tibzimin n tqeffalt"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Sken uṭṭunen n umalas"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr ""
+msgstr "Sken ismawen n wass"
 
 #: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
@@ -2100,7 +2066,7 @@ msgstr ""
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr ""
+msgstr "Sken addad n tisura n usekkeṛ."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
@@ -2112,7 +2078,7 @@ msgstr ""
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr ""
+msgstr "Sken iḍebsiyen d yikaramen imenyafen."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
@@ -2157,23 +2123,21 @@ msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
-msgstr "Athraigh cuma agus iompraíocht na deisce"
+msgstr "Snifel arwes n tnarit akked Tiddin"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Painéal Budgie"
+msgstr "Agalis Budgie"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
 msgstr ""
-"Lainseáil feidhmchláir agus cuir áirgí ar fáil chun fuinneoga a bhainistiú, "
-"an t-am a thaispeáint, srl."
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
-msgstr "Féilire"
+msgstr "Awitay"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:2
 msgid ""
@@ -2183,7 +2147,7 @@ msgstr ""
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr ""
+msgstr "Isenqaden n umidya"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
@@ -2193,7 +2157,7 @@ msgstr ""
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr ""
+msgstr "Anekcum n imesli"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
@@ -2203,7 +2167,7 @@ msgstr ""
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr ""
+msgstr "Tuffɣa n imesli"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
@@ -2220,11 +2184,11 @@ msgstr ""
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Deasc Budgie"
+msgstr "Tanarit Budgie"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Tanarit Budgie (magpie)"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""

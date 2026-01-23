@@ -155,7 +155,22 @@ namespace Budgie {
 		* Move the OSD into the correct position
 		*/
 		public void move_osd() {
-			GtkLayerShell.set_monitor(this, new WaylandClient().gdk_monitor);
+			var wayland_client = new WaylandClient();
+
+			if (!wayland_client.is_initialised()) {
+				warning("Cannot move OSD: WaylandClient not initialized");
+				return;
+			}
+
+			wayland_client.with_valid_monitor(() => {
+				var monitor = wayland_client.gdk_monitor;
+				if (monitor != null) {
+					GtkLayerShell.set_monitor(this, monitor);
+				} else {
+					warning("Failed to get valid monitor for OSD");
+				}
+				return true;
+			});
 		}
 	}
 

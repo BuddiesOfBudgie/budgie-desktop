@@ -9,9 +9,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.9.2\n"
+"Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 21:08+0100\n"
+"POT-Creation-Date: 2026-01-20 00:29+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Joshua Strobl <joshua.strobl@outlook.com>, 2023\n"
 "Language-Team: Indonesian (https://app.transifex.com/buddiesofbudgie/teams/129844/id/)\n"
@@ -20,6 +20,141 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Create our misc category, but don't add it to the list until it actually
+#. has apps in it
+#: src/appindexer/AppIndex.vala:44
+#: src/panel/applets/places-indicator/MountItem.vala:32
+#: src/panel/applets/places-indicator/VolumeItem.vala:34
+msgid "Other"
+msgstr "Lainnya"
+
+#. * Add our categories, adhearing to the Freedesktop Menu spec.
+#. *
+#. * Inclusions and exclusions are sourced from multiple places,
+#. * including the UbuntuBudgie fork of applications-menu, gnome-menus,
+#. * the Freedeskop Menus spec, and by ourselves.
+#: src/appindexer/AppIndex.vala:142
+msgid "Accessories"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:152
+msgid "Education"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:157
+msgid "Games"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:161
+msgid "Graphics"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:169
+msgid "Internet"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:174
+msgid "Office"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:178
+msgid "Programming"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:182
+msgid "Science"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:188
+msgid "Sound & Video"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:192
+msgid "System Tools"
+msgstr ""
+
+#: src/appindexer/AppIndex.vala:202
+msgid "Universal Access"
+msgstr ""
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr ""
+
+#. Do nothing if there were no held notifications
+#. translators: This is the title of a notification that is shown after
+#. notifications have been blocked because an application was in fullscreen
+#. mode
+#: src/daemon/notifications/dbus.vala:558
+msgid "Unread Notifications"
+msgstr ""
+
+#: src/daemon/notifications/dbus.vala:561
+#, c-format
+msgid "You received %d notification while an application was fullscreened."
+msgid_plural ""
+"You received %d notifications while an application was fullscreened."
+msgstr[0] ""
+
+#. No existing ref, make a new notification
+#. translators: Text for a button on the notification to open Raven to the
+#. notifications view
+#: src/daemon/notifications/dbus.vala:575
+msgid "View Notifications"
+msgstr ""
+
+#: src/daemon/endsession.vala:162
+msgid "Log out"
+msgstr "Keluar"
+
+#: src/daemon/endsession.vala:166
+msgid "Restart device"
+msgstr "Nyalakan ulang perangkat"
+
+#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Matikan"
+
+#: src/daemon/osdkeys.vala:215
+msgid "Caps Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:222
+msgid "Caps Lock is off"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:232
+msgid "Num Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:238
+msgid "Num Lock is off"
+msgstr ""
+
+#. Should show a notification
+#: src/daemon/settings.vala:416
+msgid "Turned on Caffeine Boost"
+msgstr "Nyalakan Stimulus Kafein"
+
+#: src/daemon/settings.vala:416
+msgid "Turned off Caffeine Boost"
+msgstr "Matikan Stimulus Kafein"
+
+#: src/daemon/settings.vala:421
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] ""
+
+#: src/dialogs/polkit/polkitdialog.vala:208
+msgid "Authentication failed"
+msgstr "Autentikasi gagal"
+
+#: src/dialogs/polkit/polkitdialog.vala:296
+msgid "Group:"
+msgstr "Grup:"
 
 #. Create our buttons
 #: src/dialogs/power/window.vala:87
@@ -50,79 +185,115 @@ msgstr ""
 msgid "This system does not support hibernation."
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
-#: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
-#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
-msgid "Budgie Screenshot"
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
 msgstr ""
 
-#. Translators: be as brief as possible; popovers are cut off if broader than
-#. the window
-#: src/dialogs/screenshot/screenshot.vala:500
-msgid "Screenshot entire screen"
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:502
-msgid "Screenshot active window"
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:504
-msgid "Screenshot selected area"
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
 msgstr ""
 
-#. translate
-#: src/dialogs/screenshot/screenshot.vala:895
-msgid "Cancel screenshot"
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:896
-msgid "Save screenshot to the selected directory"
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:897
-msgid "Copy screenshot to the clipboard"
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:898
-msgid "Open screenshot in default application"
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
 msgstr ""
 
-#. Other -> call Filebrowser (path = null)
-#. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
-msgid "Other..."
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
 msgstr ""
 
-#. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
-msgid "Open Folder"
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
+msgid "File name"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
+msgid "Transfer rate"
+msgstr ""
+
+#. Now add the dialog buttons
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
+#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
+msgid "Close"
+msgstr ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:109
+#: src/dialogs/screenshot/screenshot.vala:1260
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
-#: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
+#: src/panel/settings/settings_panel_dialogs.vala:158
 #: src/panel/settings/settings_plugin_chooser.vala:105
-#: src/dialogs/polkit/dialog.ui.h:8 src/daemon/endsession.ui.h:3
+#: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:8
 msgid "Cancel"
 msgstr "Batal"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
-msgid "Open"
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
+#, c-format
+msgid "<b>Transfer rate:</b> %s / s"
 msgstr ""
 
-#: src/dialogs/polkit/polkitdialog.vala:208
-msgid "Authentication failed"
-msgstr "Autentikasi gagal"
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
+#, c-format
+msgid "%s / %s: Time remaining: %s"
+msgstr ""
 
-#: src/dialogs/polkit/polkitdialog.vala:296
-msgid "Group:"
-msgstr "Grup:"
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
+#, c-format
+msgid "%u hour"
+msgid_plural "%u hours"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
+#, c-format
+msgid "%u minute"
+msgid_plural "%u minutes"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] ""
+
+#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
@@ -250,55 +421,6 @@ msgstr ""
 msgid "The transfer was interrupted or declined by %s."
 msgstr ""
 
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:62
-msgid "File name"
-msgstr ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:69
-msgid "Transfer rate"
-msgstr ""
-
-#. Now add the dialog buttons
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:108
-#: src/dialogs/sendto/Dialog/ScanDialog.vala:114
-msgid "Close"
-msgstr ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:156
-#, c-format
-msgid "<b>Transfer rate:</b> %s / s"
-msgstr ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:158
-#, c-format
-msgid "%s / %s: Time remaining: %s"
-msgstr ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:169
-#, c-format
-msgid "%u hour"
-msgid_plural "%u hours"
-msgstr[0] ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:170
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:175
-#, c-format
-msgid "%u minute"
-msgid_plural "%u minutes"
-msgstr[0] ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:176
-#, c-format
-msgid "%u second"
-msgid_plural "%u seconds"
-msgstr[0] ""
-
-#: src/dialogs/sendto/Dialog/BaseDialog.vala:180
-#, c-format
-msgid "%d second"
-msgid_plural "%d seconds"
-msgstr[0] ""
-
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
 msgstr ""
@@ -319,229 +441,57 @@ msgstr ""
 msgid "Available Devices"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:75
-msgid "Files to send"
+#: src/dialogs/screenshot/screenshot.vala:384
+#: src/dialogs/screenshot/screenshot.vala:831
+#: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
+#: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
+msgid "Budgie Screenshot"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:78
-msgid "_Cancel"
+#. Translators: be as brief as possible; popovers are cut off if broader than
+#. the window
+#: src/dialogs/screenshot/screenshot.vala:500
+msgid "Screenshot entire screen"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:79
-msgid "_Open"
+#: src/dialogs/screenshot/screenshot.vala:502
+msgid "Screenshot active window"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:193
-msgid "Send Files via Bluetooth"
+#: src/dialogs/screenshot/screenshot.vala:504
+msgid "Screenshot selected area"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:195
-msgid "Send files to device…"
+#. translate
+#: src/dialogs/screenshot/screenshot.vala:895
+msgid "Cancel screenshot"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:301
-msgid "Rejected file"
+#: src/dialogs/screenshot/screenshot.vala:896
+msgid "Save screenshot to the selected directory"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:302
-#, c-format
-msgid "File already exists: %s"
+#: src/dialogs/screenshot/screenshot.vala:897
+msgid "Copy screenshot to the clipboard"
 msgstr ""
 
-#. Create a notification prompting the user what to do
-#: src/dialogs/sendto/Application.vala:314
-msgid "Receiving file"
+#: src/dialogs/screenshot/screenshot.vala:898
+msgid "Open screenshot in default application"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:315
-#, c-format
-msgid "Device '%s' wants to send a file: %s %s"
+#. Other -> call Filebrowser (path = null)
+#. 'Other' is about setting a custom directory on a dropdown list
+#: src/dialogs/screenshot/screenshot.vala:1175
+msgid "Other..."
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:317
-msgid "Accept"
+#. set custom dir to found dir
+#: src/dialogs/screenshot/screenshot.vala:1259
+msgid "Open Folder"
 msgstr ""
 
-#: src/dialogs/sendto/Application.vala:321
-msgid "Reject"
-msgstr ""
-
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "Tak ada apa pun di sini"
-
-#: src/raven/notifications_view.vala:123
-msgid "No new notifications"
-msgstr "Tak ada notifikasi baru"
-
-#: src/raven/notifications_view.vala:341
-#: src/panel/applets/notifications/NotificationsApplet.vala:122
-#, c-format
-msgid "%u unread notification"
-msgid_plural "%u unread notifications"
-msgstr[0] ""
-
-#: src/raven/notifications_view.vala:343
-#: src/panel/applets/notifications/NotificationsApplet.vala:124
-msgid "No unread notifications"
-msgstr "Tak ada notifikasi yang belum dibaca"
-
-#: src/raven/widgets/media-controls/mpris_gui.vala:107
-#: src/raven/widgets/media-controls/mpris_gui.vala:430
-msgid "Unknown Title"
-msgstr ""
-
-#: src/raven/widgets/media-controls/mpris_gui.vala:110
-#: src/raven/widgets/media-controls/mpris_gui.vala:434
-msgid "Unknown Artist"
-msgstr ""
-
-#: src/raven/widgets/media-controls/mpris_gui.vala:113
-#: src/raven/widgets/media-controls/mpris_gui.vala:438
-msgid "Unknown Album"
-msgstr ""
-
-#: src/raven/widgets/media-controls/mpris_gui.vala:302
-#, c-format
-msgid "Playing - %s"
-msgstr ""
-
-#: src/raven/widgets/media-controls/mpris_gui.vala:309
-#, c-format
-msgid "Paused - %s"
-msgstr ""
-
-#: src/raven/widgets/media-controls/media_controls.vala:155
-msgid "No apps are currently playing audio."
-msgstr "Tak ada aplikasi yang sedang memutar audio."
-
-#: src/raven/widgets/media-controls/media_controls.vala:164
-msgid "Play some music"
-msgstr "Mainkan musik"
-
-#: src/raven/widgets/sound-output/sound_output.vala:173
-msgid "No apps are playing audio."
-msgstr ""
-
-#: src/raven/widgets/sound-output/sound_output.vala:189
-msgid "Apps"
-msgstr "Aplikasi"
-
-#: src/raven/widgets/sound-output/sound_output.vala:190
-msgid "Devices"
-msgstr "Perangkat"
-
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
-#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
-msgid "Usage Monitor"
-msgstr ""
-
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
-msgid "CPU"
-msgstr ""
-
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
-msgid "RAM"
-msgstr ""
-
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
-msgid "Swap"
-msgstr ""
-
-#: src/raven/raven.vala:33 src/panel/settings/settings_panel.vala:187
-#: src/panel/settings/settings_wm.vala:84
-msgid "Left"
-msgstr "Kiri"
-
-#: src/raven/raven.vala:35 src/panel/settings/settings_panel.vala:185
-msgid "Right"
-msgstr "Kanan"
-
-#: src/raven/raven.vala:38 src/panel/settings/settings_panel.vala:214
-msgid "Automatic"
-msgstr "Otomatis"
-
-#: src/raven/raven.vala:49
-msgid "Oldest to newest"
-msgstr ""
-
-#: src/raven/raven.vala:52
-msgid "Newest to oldest"
-msgstr ""
-
-#: src/raven/main_view.vala:53 src/panel/settings/settings_raven.vala:47
-#: src/panel/settings/settings_style.vala:47
-msgid "Widgets"
-msgstr "Widget"
-
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "Notifikasi"
-
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr ""
-
-#. Make sure we have a default name
-#: src/appindexer/Category.vala:51
-msgid "New Category"
-msgstr ""
-
-#. Create our misc category, but don't add it to the list until it actually
-#. has apps in it
-#: src/appindexer/AppIndex.vala:44
-#: src/panel/applets/places-indicator/VolumeItem.vala:34
-#: src/panel/applets/places-indicator/MountItem.vala:32
-msgid "Other"
-msgstr "Lainnya"
-
-#. * Add our categories, adhearing to the Freedesktop Menu spec.
-#. *
-#. * Inclusions and exclusions are sourced from multiple places,
-#. * including the UbuntuBudgie fork of applications-menu, gnome-menus,
-#. * the Freedeskop Menus spec, and by ourselves.
-#: src/appindexer/AppIndex.vala:142
-msgid "Accessories"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:152
-msgid "Education"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:157
-msgid "Games"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:161
-msgid "Graphics"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:169
-msgid "Internet"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:174
-msgid "Office"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:178
-msgid "Programming"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:182
-msgid "Science"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:188
-msgid "Sound & Video"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:192
-msgid "System Tools"
-msgstr ""
-
-#: src/appindexer/AppIndex.vala:202
-msgid "Universal Access"
+#: src/dialogs/screenshot/screenshot.vala:1260
+msgid "Open"
 msgstr ""
 
 #. Caffeine Notification
@@ -550,163 +500,6 @@ msgstr ""
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
 msgstr "Mode Kafein"
-
-#: src/daemon/osdkeys.vala:208
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:225
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:231
-msgid "Num Lock is off"
-msgstr ""
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "Keluar"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "Nyalakan ulang perangkat"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Matikan"
-
-#. Do nothing if there were no held notifications
-#. translators: This is the title of a notification that is shown after
-#. notifications have been blocked because an application was in fullscreen
-#. mode
-#: src/daemon/notifications/dbus.vala:546
-msgid "Unread Notifications"
-msgstr ""
-
-#: src/daemon/notifications/dbus.vala:549
-#, c-format
-msgid "You received %d notification while an application was fullscreened."
-msgid_plural ""
-"You received %d notifications while an application was fullscreened."
-msgstr[0] ""
-
-#. No existing ref, make a new notification
-#. translators: Text for a button on the notification to open Raven to the
-#. notifications view
-#: src/daemon/notifications/dbus.vala:563
-msgid "View Notifications"
-msgstr ""
-
-#. Should show a notification
-#: src/daemon/settings.vala:414
-msgid "Turned on Caffeine Boost"
-msgstr "Nyalakan Stimulus Kafein"
-
-#: src/daemon/settings.vala:414
-msgid "Turned off Caffeine Boost"
-msgstr "Matikan Stimulus Kafein"
-
-#: src/daemon/settings.vala:419
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-
-#. User Menu Creation
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:98
-msgid "User"
-msgstr "Pengguna"
-
-#. Default to "User" and symbolic icon
-#. The rest
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
-msgid "Lock"
-msgstr "Kunci"
-
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
-msgid "Suspend"
-msgstr "Tidur"
-
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:106
-msgid "Hibernate"
-msgstr "Hibernasi"
-
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:107
-#: src/daemon/endsession.ui.h:5
-msgid "Restart"
-msgstr "Nyalakan ulang"
-
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:108
-#: src/daemon/endsession.ui.h:6
-msgid "Shutdown"
-msgstr "Matikan"
-
-#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:207
-#: src/daemon/endsession.ui.h:4
-msgid "Logout"
-msgstr "Keluar"
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
-msgid "Unfavorite"
-msgstr "Batal Favorit"
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
-msgid "Favorite"
-msgstr "Favorit"
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
-msgid "Close all windows"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
-msgid "Launch new instance"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:259
-msgid "Minimize"
-msgstr "Perkecil"
-
-#. Translators: This is used for buttons to move applications to another
-#. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:326
-#, c-format
-msgid "Move to %s"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
-msgid "Unmaximize"
-msgstr "Kecilkan kembali"
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:349
-msgid "Maximize"
-msgstr "Perbesar"
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:388
-msgid "Close window"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:393
-msgid "Show window controls"
-msgstr ""
-
-#: src/panel/applets/clock/ClockApplet.vala:122
-msgid "System time and date settings"
-msgstr ""
-
-#: src/panel/applets/caffeine/CaffeineWindow.vala:39
-msgid "Timer (minutes)"
-msgstr "Timer (menit)"
-
-#. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:111
-msgid "Sorry, no items found"
-msgstr "Maaf, tidak ada item yang ditemukan"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -723,6 +516,11 @@ msgstr "Berkas apa pun"
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
 msgstr "Setel ikon"
+
+#. placeholder in case of no results
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
+msgid "Sorry, no items found"
+msgstr "Maaf, tidak ada item yang ditemukan"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
@@ -742,82 +540,137 @@ msgstr "Pengaturan Sistem"
 msgid "Power"
 msgstr ""
 
-#: src/panel/applets/workspaces/WorkspacesApplet.vala:121
-#: src/panel/applets/workspaces/WorkspacesApplet.vala:226
-msgid "Not able to create new workspaces"
+#: src/panel/applets/caffeine/CaffeineWindow.vala:39
+msgid "Timer (minutes)"
+msgstr "Timer (menit)"
+
+#: src/panel/applets/clock/ClockApplet.vala:122
+msgid "System time and date settings"
 msgstr ""
 
-#: src/panel/applets/workspaces/WorkspacesApplet.vala:123
-#: src/panel/applets/workspaces/WorkspacesApplet.vala:229
-msgid "Create a new workspace"
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+msgid "Unfavorite"
+msgstr "Batal Favorit"
+
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+msgid "Favorite"
+msgstr "Favorit"
+
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
+msgid "Close all windows"
 msgstr ""
 
-#: src/panel/applets/workspaces/WorkspaceItem.vala:72
-msgid "Rename"
-msgstr "Ubah nama"
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
+msgid "Launch new instance"
+msgstr ""
 
-#: src/panel/applets/workspaces/WorkspaceItem.vala:80
-#: src/panel/settings/settings_panel_dialogs.vala:157
-msgid "Remove"
-msgstr "Hapus"
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
+msgid "Minimize"
+msgstr "Perkecil"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
-msgid "Toggle the desktop"
-msgstr "Alihkan desktop"
+#. Translators: This is used for buttons to move applications to another
+#. Workspace
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
+#, c-format
+msgid "Move to %s"
+msgstr ""
 
-#: src/panel/applets/places-indicator/VolumeItem.vala:25
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
+msgid "Unmaximize"
+msgstr "Kecilkan kembali"
+
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
+msgid "Maximize"
+msgstr "Perbesar"
+
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
+msgid "Close window"
+msgstr ""
+
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
+msgid "Show window controls"
+msgstr ""
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:68
+msgid "Caps lock is active"
+msgstr "Caps lock aktif"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:71
+msgid "Caps lock is not active"
+msgstr "Caps lock nonaktif"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:80
+msgid "Num lock is active"
+msgstr "Num lock aktif"
+
+#: src/panel/applets/lock-keys/LockKeysApplet.vala:83
+msgid "Num lock is not active"
+msgstr "Num lock nonaktif"
+
+#: src/panel/applets/notifications/NotificationsApplet.vala:122
+#: src/raven/notifications_view.vala:341
+#, c-format
+msgid "%u unread notification"
+msgid_plural "%u unread notifications"
+msgstr[0] ""
+
+#: src/panel/applets/notifications/NotificationsApplet.vala:124
+#: src/raven/notifications_view.vala:343
+msgid "No unread notifications"
+msgstr "Tak ada notifikasi yang belum dibaca"
+
+#: src/panel/applets/places-indicator/MountHelper.vala:35
+msgid "Volume is in use by other processes"
+msgstr "Volume sedang digunakan oleh proses lain"
+
+#: src/panel/applets/places-indicator/MountHelper.vala:40
+msgid "Operation aborted"
+msgstr "Tindakan dibatalkan"
+
+#: src/panel/applets/places-indicator/MountHelper.vala:51
+msgid "Type your password"
+msgstr "Ketikkan kata sandi Anda"
+
 #: src/panel/applets/places-indicator/MountItem.vala:23
+#: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
 msgstr "Perangkat lepasan"
 
-#: src/panel/applets/places-indicator/VolumeItem.vala:27
 #: src/panel/applets/places-indicator/MountItem.vala:25
+#: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
 msgstr "Volume lokal"
 
-#: src/panel/applets/places-indicator/VolumeItem.vala:31
 #: src/panel/applets/places-indicator/MountItem.vala:29
+#: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
 msgstr "Folder jaringan"
 
-#: src/panel/applets/places-indicator/VolumeItem.vala:41
-#, c-format
-msgid "Mount and open \"%s\""
-msgstr "Tambatkan dan buka \"%s\""
-
-#: src/panel/applets/places-indicator/VolumeItem.vala:55
 #: src/panel/applets/places-indicator/MountItem.vala:58
+#: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
 msgstr "Cabut"
-
-#: src/panel/applets/places-indicator/VolumeItem.vala:73
-#: src/panel/applets/places-indicator/VolumeItem.vala:114
-msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Masukkan sandi enkripsi untuk membuka kunci volume ini"
-
-#: src/panel/applets/places-indicator/VolumeItem.vala:83
-#: src/panel/applets/places-indicator/MountItem.vala:75
-msgid "You can now safely remove"
-msgstr "Anda sekarang dapat melepaskannya dengan aman"
-
-#: src/panel/applets/places-indicator/VolumeItem.vala:112
-msgid "The password you entered is incorrect"
-msgstr "Kata sandi yang Anda masukkan tidak tepat"
-
-#: src/panel/applets/places-indicator/VolumeItem.vala:116
-msgid "An unknown error occurred while attempting to mount this volume"
-msgstr ""
-"Terjadi kesalahan yang tidak diketahui saat berusaha menambatkan volume ini"
 
 #: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
 msgstr "Lepaskan"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:36
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
 msgstr "Buka \"%s\""
+
+#: src/panel/applets/places-indicator/MountItem.vala:75
+#: src/panel/applets/places-indicator/VolumeItem.vala:83
+msgid "You can now safely remove"
+msgstr "Anda sekarang dapat melepaskannya dengan aman"
 
 #: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
@@ -831,6 +684,31 @@ msgstr "Terjadi kesalahan saat mencabut perangkat"
 msgid "Error while unmounting volume"
 msgstr "Terjadi kesalahan saat melepas volume"
 
+#: src/panel/applets/places-indicator/PlacesIndicator.vala:80
+#: src/panel/applets/places-indicator/PlacesSection.vala:22
+#: src/panel/applets/places-indicator/PlacesSection.vala:44
+msgid "Places"
+msgstr "Tempat"
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:41
+#, c-format
+msgid "Mount and open \"%s\""
+msgstr "Tambatkan dan buka \"%s\""
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:73
+#: src/panel/applets/places-indicator/VolumeItem.vala:114
+msgid "Enter the encryption passphrase to unlock this volume"
+msgstr "Masukkan sandi enkripsi untuk membuka kunci volume ini"
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:112
+msgid "The password you entered is incorrect"
+msgstr "Kata sandi yang Anda masukkan tidak tepat"
+
+#: src/panel/applets/places-indicator/VolumeItem.vala:116
+msgid "An unknown error occurred while attempting to mount this volume"
+msgstr ""
+"Terjadi kesalahan yang tidak diketahui saat berusaha menambatkan volume ini"
+
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
 msgstr "Tak ada yang dapat ditampilkan saat ini"
@@ -843,23 +721,9 @@ msgstr "Tambatkan drive"
 msgid "Enable more sections"
 msgstr "Aktifkan lebih banyak bagian"
 
-#: src/panel/applets/places-indicator/PlacesIndicator.vala:80
-#: src/panel/applets/places-indicator/PlacesSection.vala:22
-#: src/panel/applets/places-indicator/PlacesSection.vala:44
-msgid "Places"
-msgstr "Tempat"
-
-#: src/panel/applets/places-indicator/MountHelper.vala:35
-msgid "Volume is in use by other processes"
-msgstr "Volume sedang digunakan oleh proses lain"
-
-#: src/panel/applets/places-indicator/MountHelper.vala:40
-msgid "Operation aborted"
-msgstr "Tindakan dibatalkan"
-
-#: src/panel/applets/places-indicator/MountHelper.vala:51
-msgid "Type your password"
-msgstr "Ketikkan kata sandi Anda"
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
+msgid "Toggle the desktop"
+msgstr "Alihkan desktop"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
@@ -977,463 +841,58 @@ msgstr ""
 msgid "Power settings"
 msgstr "Pengaturan daya"
 
-#: src/panel/applets/lock-keys/LockKeysApplet.vala:68
-msgid "Caps lock is active"
-msgstr "Caps lock aktif"
+#. User Menu Creation
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:98
+msgid "User"
+msgstr "Pengguna"
 
-#: src/panel/applets/lock-keys/LockKeysApplet.vala:71
-msgid "Caps lock is not active"
-msgstr "Caps lock nonaktif"
+#. Default to "User" and symbolic icon
+#. The rest
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
+msgid "Lock"
+msgstr "Kunci"
 
-#: src/panel/applets/lock-keys/LockKeysApplet.vala:80
-msgid "Num lock is active"
-msgstr "Num lock aktif"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
+msgid "Suspend"
+msgstr "Tidur"
 
-#: src/panel/applets/lock-keys/LockKeysApplet.vala:83
-msgid "Num lock is not active"
-msgstr "Num lock nonaktif"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:106
+msgid "Hibernate"
+msgstr "Hibernasi"
 
-#: src/panel/settings/settings_raven_widgets.vala:21
-msgid "Widget Settings"
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:107
+#: src/daemon/endsession.ui.h:5
+msgid "Restart"
+msgstr "Nyalakan ulang"
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:108
+#: src/daemon/endsession.ui.h:6
+msgid "Shutdown"
+msgstr "Matikan"
+
+#: src/panel/applets/user-indicator/UserIndicatorWindow.vala:207
+#: src/daemon/endsession.ui.h:4
+msgid "Logout"
+msgstr "Keluar"
+
+#: src/panel/applets/workspaces/WorkspaceItem.vala:72
+msgid "Rename"
+msgstr "Ubah nama"
+
+#: src/panel/applets/workspaces/WorkspaceItem.vala:80
+#: src/panel/settings/settings_panel_dialogs.vala:157
+msgid "Remove"
+msgstr "Hapus"
+
+#: src/panel/applets/workspaces/WorkspacesApplet.vala:121
+#: src/panel/applets/workspaces/WorkspacesApplet.vala:226
+msgid "Not able to create new workspaces"
 msgstr ""
 
-#: src/panel/settings/settings_raven_widgets.vala:149
-msgid "Add widget"
+#: src/panel/applets/workspaces/WorkspacesApplet.vala:123
+#: src/panel/applets/workspaces/WorkspacesApplet.vala:229
+msgid "Create a new workspace"
 msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:150
-msgid "Choose a new widget to add to the Widgets view"
-msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:164
-#: src/panel/settings/settings_panel_applets.vala:250
-msgid "No settings available"
-msgstr "Tidak ada pengaturan yang tersedia"
-
-#: src/panel/settings/settings_raven_widgets.vala:237
-msgid ""
-"Failed to create the widget instance. The plugin engine could not find info "
-"for this plugin."
-msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:240
-msgid ""
-"Failed to create the widget instance. The module name must be in reverse-DNS"
-" format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
-"'tld_domain_group_WidgetName' for Python."
-msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:244
-msgid ""
-"Failed to create the widget instance. The plugin engine failed to load the "
-"plugin from the disk."
-msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:247
-msgid ""
-"Failed to create the widget instance. The plugin supports settings, but does not install a settings schema with the same name.\n"
-"\n"
-"The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
-msgstr ""
-
-#: src/panel/settings/settings_raven_widgets.vala:252
-msgid "Failed to create the widget instance due to an unknown failure."
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:88
-msgid "Applets"
-msgstr "Applet"
-
-#: src/panel/settings/settings_panel.vala:89
-#: src/panel/settings/settings_raven.vala:48
-msgid "Settings"
-msgstr "Setelan"
-
-#: src/panel/settings/settings_panel.vala:91
-msgid "Remove Panel"
-msgstr "Hapus Panel"
-
-#: src/panel/settings/settings_panel.vala:92
-msgid "Remove this panel from the screen"
-msgstr "Hapus panel ini dari layar"
-
-#: src/panel/settings/settings_panel.vala:129
-msgid "Top Dock"
-msgstr "Dok Atas"
-
-#: src/panel/settings/settings_panel.vala:131
-msgid "Right Dock"
-msgstr "Dok Kanan"
-
-#: src/panel/settings/settings_panel.vala:133
-msgid "Left Dock"
-msgstr "Dok Kiri"
-
-#: src/panel/settings/settings_panel.vala:135
-msgid "Bottom Dock"
-msgstr "Dok Bawah"
-
-#: src/panel/settings/settings_panel.vala:140
-msgid "Top Panel"
-msgstr "Panel Atas"
-
-#: src/panel/settings/settings_panel.vala:142
-msgid "Right Panel"
-msgstr "Panel Kanan"
-
-#: src/panel/settings/settings_panel.vala:144
-msgid "Left Panel"
-msgstr "Panel Kiri"
-
-#: src/panel/settings/settings_panel.vala:146
-msgid "Bottom Panel"
-msgstr "Panel Bawah"
-
-#: src/panel/settings/settings_panel.vala:183
-msgid "Top"
-msgstr "Atas"
-
-#: src/panel/settings/settings_panel.vala:189
-msgid "Bottom"
-msgstr "Bawah"
-
-#: src/panel/settings/settings_panel.vala:199
-msgid "Always"
-msgstr "Selalu"
-
-#: src/panel/settings/settings_panel.vala:201
-msgid "Dynamic"
-msgstr "Dinamis"
-
-#: src/panel/settings/settings_panel.vala:204
-#: src/panel/settings/settings_fonts.vala:83
-#: src/panel/settings/settings_fonts.vala:109
-msgid "None"
-msgstr "Tidak"
-
-#: src/panel/settings/settings_panel.vala:216
-msgid "Intelligent"
-msgstr "Cerdas"
-
-#: src/panel/settings/settings_panel.vala:219
-msgid "Never"
-msgstr "Tak pernah"
-
-#: src/panel/settings/settings_panel.vala:236
-msgid "Position"
-msgstr "Letak"
-
-#: src/panel/settings/settings_panel.vala:237
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Atur tepi layar sebelah mana panel ini akan berada"
-
-#: src/panel/settings/settings_panel.vala:245
-msgid "Size"
-msgstr "Ukuran"
-
-#: src/panel/settings/settings_panel.vala:246
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Setel ukuran (lebar atau tinggi, tergantung orientasi) pada panel ini"
-
-#: src/panel/settings/settings_panel.vala:253
-msgid "Spacing"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:254
-msgid "Set the spacing between applets for this panel"
-msgstr ""
-
-#: src/panel/settings/settings_panel.vala:261
-msgid "Automatically hide"
-msgstr "Otomatis sembunyi"
-
-#: src/panel/settings/settings_panel.vala:262
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
-"Bila disetel, panel ini akan sembunyi dari pandangan untuk memaksimalkan "
-"ruang layar"
-
-#: src/panel/settings/settings_panel.vala:269
-msgid "Transparency"
-msgstr "Transparansi"
-
-#: src/panel/settings/settings_panel.vala:270
-msgid "Control when this panel should have a solid background"
-msgstr "Atur bagaimana mode transparansi pada panel ini"
-
-#: src/panel/settings/settings_panel.vala:275
-msgid "Shadow"
-msgstr "Bayangan"
-
-#: src/panel/settings/settings_panel.vala:276
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr ""
-"Menambahkan sentuhan efek bayangan jatuh, ideal untuk yang berpanel buram "
-"(opaque)"
-
-#: src/panel/settings/settings_panel.vala:282
-msgid "Stylize regions"
-msgstr "Corak bidang"
-
-#: src/panel/settings/settings_panel.vala:283
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr ""
-"Menambahkan sentuhan pada panel sehingga memungkinan area antar panel "
-"memiliki tema yang berbeda."
-
-#: src/panel/settings/settings_panel.vala:290
-msgid "Dock mode"
-msgstr "Mode dok"
-
-#: src/panel/settings/settings_panel.vala:291
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr ""
-"Saat dalam mode dok, panel akan menggunakan ruang seminimal mungkin, "
-"membebaskan lebih banyak ruang layar"
-
-#: src/panel/settings/settings_panel_dialogs.vala:24
-msgid "Confirm panel removal"
-msgstr "Konfirmasi penghapusan panel"
-
-#: src/panel/settings/settings_panel_dialogs.vala:31
-msgid "Do you really want to remove this panel? This action cannot be undone."
-msgstr ""
-"Apakah Anda yakin ingin menghapus panel ini? Tindakan ini tidak dapat "
-"diurungkan."
-
-#: src/panel/settings/settings_panel_dialogs.vala:42
-msgid "Remove panel"
-msgstr "Hapus panel"
-
-#: src/panel/settings/settings_panel_dialogs.vala:43
-msgid "Keep panel"
-msgstr "Pertahankan panel"
-
-#: src/panel/settings/settings_panel_dialogs.vala:67
-msgid "Confirm applet removal"
-msgstr "Konfirmasi penghapusan applet"
-
-#: src/panel/settings/settings_panel_dialogs.vala:74
-msgid ""
-"Do you really want to remove this applet? This action cannot be undone."
-msgstr ""
-"Apakah Anda yakin ingin menghapus applet ini? Tindakan ini tidak dapat "
-"diurungkan."
-
-#: src/panel/settings/settings_panel_dialogs.vala:89
-#: src/panel/settings/settings_panel_dialogs.vala:148
-msgid "Don't ask me again"
-msgstr "Jangan tanyakan lagi"
-
-#: src/panel/settings/settings_panel_dialogs.vala:98
-msgid "Remove applet"
-msgstr "Hapus applet"
-
-#: src/panel/settings/settings_panel_dialogs.vala:99
-msgid "Keep applet"
-msgstr "Pertahankan applet"
-
-#: src/panel/settings/settings_panel_dialogs.vala:126
-msgid "Confirm widget removal"
-msgstr ""
-
-#: src/panel/settings/settings_panel_dialogs.vala:133
-msgid ""
-"Do you really want to remove this widget? This action cannot be undone."
-msgstr ""
-
-#: src/panel/settings/settings_raven_settings.vala:47
-msgid "Set Raven position"
-msgstr "Atur letak Raven"
-
-#: src/panel/settings/settings_raven_settings.vala:48
-msgid ""
-"Set which side of the screen Raven will open on. If set to Automatic, Raven "
-"will open where its parent panel is."
-msgstr ""
-"Atur sisi layar sebelah manakah Raven akan terbuka. Jika diatur ke Otomatis,"
-" Raven akan terbuka di mana panel induknya berada."
-
-#: src/panel/settings/settings_raven_settings.vala:71
-msgid "Set notification sort order"
-msgstr ""
-
-#: src/panel/settings/settings_raven_settings.vala:72
-msgid ""
-"Set whether notifications are sorted from oldest to newest, or newest to "
-"oldest."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "Jendela"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "Tata letak tombol"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "Ubah tata letak tombol di bar judul aplikasi."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "Pusatkan jendela baru pada layar"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "Pusatkan jendela yang baru saja diluncurkan pada layar saat ini."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr ""
-"Nonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr ""
-"Menonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh dan"
-" sebaliknya."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Jeda notifikasi saat jendela dalam keadaan layar penuh"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr ""
-"Mencegah notifikasi muncul saat jendela dalam keadaan layar penuh dan "
-"sebaliknya."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "Otomatis mengubin"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Jendela akan mengubin atau menempatkan diri secara otomatis saat diseret ke "
-"atas atau sudut layar."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "Aktifkan peralihan fokus jendela saat kursor masuk dan keluar"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr ""
-"Memungkinkan fokus jendela akan aktif ketika kursor memasuki area jendela "
-"dan sebaliknya."
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "Tampilkan seluruh jendela di pengalih tab"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr ""
-"Seluruh tab akan ditampilkan di pengalih tab, terlepas dari ruang kerja yang"
-" digunakan."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "Kanan (standar)"
-
-#: src/panel/settings/settings_fonts.vala:31
-msgid "Fonts"
-msgstr "Fon"
-
-#: src/panel/settings/settings_fonts.vala:42
-msgid "Window Titles"
-msgstr "Judul Jendela"
-
-#: src/panel/settings/settings_fonts.vala:43
-msgid "Set the font used in the titlebars of applications."
-msgstr "Setel fon yang digunakan pada bar judul aplikasi."
-
-#: src/panel/settings/settings_fonts.vala:49
-msgid "Documents"
-msgstr "Dokumen"
-
-#: src/panel/settings/settings_fonts.vala:50
-msgid "Set the display font used by for documents."
-msgstr "Setel tampilan fon yang digunakan bagi dokumen."
-
-#: src/panel/settings/settings_fonts.vala:56
-msgid "Interface"
-msgstr "Antarmuka"
-
-#: src/panel/settings/settings_fonts.vala:57
-msgid "Set the primary font used by application controls."
-msgstr "Setel fon utama yang digunakan pada antarmuka aplikasi."
-
-#: src/panel/settings/settings_fonts.vala:63
-msgid "Monospace"
-msgstr "Monospace"
-
-#: src/panel/settings/settings_fonts.vala:64
-msgid "Set the fixed-width font used by text dominant applications."
-msgstr ""
-"Setel fon lebar-tetap (fixed-width) yang digunakan pada aplikasi yang "
-"berbasis teks."
-
-#: src/panel/settings/settings_fonts.vala:70
-msgid "Text scaling"
-msgstr "Penskalaan teks"
-
-#: src/panel/settings/settings_fonts.vala:71
-msgid "Set the text scaling factor."
-msgstr "Setel skala pada pembesaran teks."
-
-#: src/panel/settings/settings_fonts.vala:80
-msgid "Full"
-msgstr "Penuh"
-
-#: src/panel/settings/settings_fonts.vala:81
-msgid "Medium"
-msgstr "Sedang"
-
-#: src/panel/settings/settings_fonts.vala:82
-msgid "Slight"
-msgstr "Sedikit"
-
-#: src/panel/settings/settings_fonts.vala:99
-msgid "Hinting"
-msgstr "Penyesuaian Fon (Hinting)"
-
-#: src/panel/settings/settings_fonts.vala:100
-msgid "Set the type of hinting to use."
-msgstr "Setel jenis hinting atau penyesuaian guratan fon yang akan digunakan."
-
-#: src/panel/settings/settings_fonts.vala:107
-msgid "Subpixel (for LCD screens)"
-msgstr "Subpiksel (untuk layar LCD)"
-
-#: src/panel/settings/settings_fonts.vala:108
-msgid "Standard (grayscale)"
-msgstr "Standar (abu-abu)"
-
-#: src/panel/settings/settings_fonts.vala:124
-msgid "Antialiasing"
-msgstr "Antialiasing"
-
-#: src/panel/settings/settings_fonts.vala:125
-msgid "Set the type of antialiasing to use."
-msgstr "Setel jenis antialiasing yang akan digunakan."
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1498,22 +957,6 @@ msgstr "Tambahkan Aplikasi"
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
 msgstr "Tambahkan Perintah"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Penampilan"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panel"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Sesi"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Buat panel baru"
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
@@ -1630,6 +1073,110 @@ msgstr "Lebar"
 msgid "Massive"
 msgstr "Masif"
 
+#: src/panel/settings/settings_fonts.vala:31
+msgid "Fonts"
+msgstr "Fon"
+
+#: src/panel/settings/settings_fonts.vala:42
+msgid "Window Titles"
+msgstr "Judul Jendela"
+
+#: src/panel/settings/settings_fonts.vala:43
+msgid "Set the font used in the titlebars of applications."
+msgstr "Setel fon yang digunakan pada bar judul aplikasi."
+
+#: src/panel/settings/settings_fonts.vala:49
+msgid "Documents"
+msgstr "Dokumen"
+
+#: src/panel/settings/settings_fonts.vala:50
+msgid "Set the display font used by for documents."
+msgstr "Setel tampilan fon yang digunakan bagi dokumen."
+
+#: src/panel/settings/settings_fonts.vala:56
+msgid "Interface"
+msgstr "Antarmuka"
+
+#: src/panel/settings/settings_fonts.vala:57
+msgid "Set the primary font used by application controls."
+msgstr "Setel fon utama yang digunakan pada antarmuka aplikasi."
+
+#: src/panel/settings/settings_fonts.vala:63
+msgid "Monospace"
+msgstr "Monospace"
+
+#: src/panel/settings/settings_fonts.vala:64
+msgid "Set the fixed-width font used by text dominant applications."
+msgstr ""
+"Setel fon lebar-tetap (fixed-width) yang digunakan pada aplikasi yang "
+"berbasis teks."
+
+#: src/panel/settings/settings_fonts.vala:70
+msgid "Text scaling"
+msgstr "Penskalaan teks"
+
+#: src/panel/settings/settings_fonts.vala:71
+msgid "Set the text scaling factor."
+msgstr "Setel skala pada pembesaran teks."
+
+#: src/panel/settings/settings_fonts.vala:80
+msgid "Full"
+msgstr "Penuh"
+
+#: src/panel/settings/settings_fonts.vala:81
+msgid "Medium"
+msgstr "Sedang"
+
+#: src/panel/settings/settings_fonts.vala:82
+msgid "Slight"
+msgstr "Sedikit"
+
+#: src/panel/settings/settings_fonts.vala:83
+#: src/panel/settings/settings_fonts.vala:109
+#: src/panel/settings/settings_panel.vala:246
+msgid "None"
+msgstr "Tidak"
+
+#: src/panel/settings/settings_fonts.vala:99
+msgid "Hinting"
+msgstr "Penyesuaian Fon (Hinting)"
+
+#: src/panel/settings/settings_fonts.vala:100
+msgid "Set the type of hinting to use."
+msgstr "Setel jenis hinting atau penyesuaian guratan fon yang akan digunakan."
+
+#: src/panel/settings/settings_fonts.vala:107
+msgid "Subpixel (for LCD screens)"
+msgstr "Subpiksel (untuk layar LCD)"
+
+#: src/panel/settings/settings_fonts.vala:108
+msgid "Standard (grayscale)"
+msgstr "Standar (abu-abu)"
+
+#: src/panel/settings/settings_fonts.vala:124
+msgid "Antialiasing"
+msgstr "Antialiasing"
+
+#: src/panel/settings/settings_fonts.vala:125
+msgid "Set the type of antialiasing to use."
+msgstr "Setel jenis antialiasing yang akan digunakan."
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Penampilan"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panel"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sesi"
+
+#: src/panel/settings/settings_main.vala:99
+msgid "Create new panel"
+msgstr "Buat panel baru"
+
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
 msgstr ""
@@ -1642,6 +1189,11 @@ msgstr "Tambahkan applet"
 msgid "Choose a new applet to add to this panel"
 msgstr "Pilih applet baru untuk ditambahkan ke panel ini"
 
+#: src/panel/settings/settings_panel_applets.vala:250
+#: src/panel/settings/settings_raven_widgets.vala:164
+msgid "No settings available"
+msgstr "Tidak ada pengaturan yang tersedia"
+
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
 msgstr "Awal"
@@ -1653,6 +1205,394 @@ msgstr "Tengah"
 #: src/panel/settings/settings_panel_applets.vala:409
 msgid "End"
 msgstr "Akhir"
+
+#: src/panel/settings/settings_panel_dialogs.vala:24
+msgid "Confirm panel removal"
+msgstr "Konfirmasi penghapusan panel"
+
+#: src/panel/settings/settings_panel_dialogs.vala:31
+msgid "Do you really want to remove this panel? This action cannot be undone."
+msgstr ""
+"Apakah Anda yakin ingin menghapus panel ini? Tindakan ini tidak dapat "
+"diurungkan."
+
+#: src/panel/settings/settings_panel_dialogs.vala:42
+msgid "Remove panel"
+msgstr "Hapus panel"
+
+#: src/panel/settings/settings_panel_dialogs.vala:43
+msgid "Keep panel"
+msgstr "Pertahankan panel"
+
+#: src/panel/settings/settings_panel_dialogs.vala:67
+msgid "Confirm applet removal"
+msgstr "Konfirmasi penghapusan applet"
+
+#: src/panel/settings/settings_panel_dialogs.vala:74
+msgid ""
+"Do you really want to remove this applet? This action cannot be undone."
+msgstr ""
+"Apakah Anda yakin ingin menghapus applet ini? Tindakan ini tidak dapat "
+"diurungkan."
+
+#: src/panel/settings/settings_panel_dialogs.vala:89
+#: src/panel/settings/settings_panel_dialogs.vala:148
+msgid "Don't ask me again"
+msgstr "Jangan tanyakan lagi"
+
+#: src/panel/settings/settings_panel_dialogs.vala:98
+msgid "Remove applet"
+msgstr "Hapus applet"
+
+#: src/panel/settings/settings_panel_dialogs.vala:99
+msgid "Keep applet"
+msgstr "Pertahankan applet"
+
+#: src/panel/settings/settings_panel_dialogs.vala:126
+msgid "Confirm widget removal"
+msgstr ""
+
+#: src/panel/settings/settings_panel_dialogs.vala:133
+msgid ""
+"Do you really want to remove this widget? This action cannot be undone."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:62
+msgid "Built-in"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:96
+msgid "Choose a plugin"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:239
+msgid "No description."
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:261
+#, c-format
+msgid "by %s"
+msgstr ""
+
+#: src/panel/settings/settings_plugin_chooser.vala:264
+msgid "No authors listed"
+msgstr ""
+
+#: src/panel/settings/settings_raven.vala:47
+#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
+msgid "Widgets"
+msgstr "Widget"
+
+#: src/panel/settings/settings_raven.vala:48
+#: src/panel/settings/settings_panel.vala:91
+msgid "Settings"
+msgstr "Setelan"
+
+#: src/panel/settings/settings_raven_settings.vala:47
+msgid "Set Raven position"
+msgstr "Atur letak Raven"
+
+#: src/panel/settings/settings_raven_settings.vala:48
+msgid ""
+"Set which side of the screen Raven will open on. If set to Automatic, Raven "
+"will open where its parent panel is."
+msgstr ""
+"Atur sisi layar sebelah manakah Raven akan terbuka. Jika diatur ke Otomatis,"
+" Raven akan terbuka di mana panel induknya berada."
+
+#: src/panel/settings/settings_raven_settings.vala:71
+msgid "Set notification sort order"
+msgstr ""
+
+#: src/panel/settings/settings_raven_settings.vala:72
+msgid ""
+"Set whether notifications are sorted from oldest to newest, or newest to "
+"oldest."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:21
+msgid "Widget Settings"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:149
+msgid "Add widget"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:150
+msgid "Choose a new widget to add to the Widgets view"
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:237
+msgid ""
+"Failed to create the widget instance. The plugin engine could not find info "
+"for this plugin."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:240
+msgid ""
+"Failed to create the widget instance. The module name must be in reverse-DNS"
+" format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
+"'tld_domain_group_WidgetName' for Python."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:244
+msgid ""
+"Failed to create the widget instance. The plugin engine failed to load the "
+"plugin from the disk."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:247
+msgid ""
+"Failed to create the widget instance. The plugin supports settings, but does not install a settings schema with the same name.\n"
+"\n"
+"The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
+msgstr ""
+
+#: src/panel/settings/settings_raven_widgets.vala:252
+msgid "Failed to create the widget instance due to an unknown failure."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Jendela"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Tata letak tombol"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Ubah tata letak tombol di bar judul aplikasi."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "Pusatkan jendela baru pada layar"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "Pusatkan jendela yang baru saja diluncurkan pada layar saat ini."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr ""
+"Nonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Menonaktifkan mode Cahaya Malam ketika jendela dalam keadaan layar penuh dan"
+" sebaliknya."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Jeda notifikasi saat jendela dalam keadaan layar penuh"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
+"Mencegah notifikasi muncul saat jendela dalam keadaan layar penuh dan "
+"sebaliknya."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "Otomatis mengubin"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Jendela akan mengubin atau menempatkan diri secara otomatis saat diseret ke "
+"atas atau sudut layar."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Enable window focus change on mouse enter and leave"
+msgstr "Aktifkan peralihan fokus jendela saat kursor masuk dan keluar"
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Enables window focus to apply when the mouse enters the window and unfocus "
+"when the mouse leaves the window."
+msgstr ""
+"Memungkinkan fokus jendela akan aktif ketika kursor memasuki area jendela "
+"dan sebaliknya."
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "Tampilkan seluruh jendela di pengalih tab"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Seluruh tab akan ditampilkan di pengalih tab, terlepas dari ruang kerja yang"
+" digunakan."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "Kanan (standar)"
+
+#: src/panel/settings/settings_wm.vala:84
+#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Kiri"
+
+#: src/panel/settings/settings_panel.vala:90
+msgid "Applets"
+msgstr "Applet"
+
+#: src/panel/settings/settings_panel.vala:93
+msgid "Remove Panel"
+msgstr "Hapus Panel"
+
+#: src/panel/settings/settings_panel.vala:94
+msgid "Remove this panel from the screen"
+msgstr "Hapus panel ini dari layar"
+
+#: src/panel/settings/settings_panel.vala:171
+msgid "Top Dock"
+msgstr "Dok Atas"
+
+#: src/panel/settings/settings_panel.vala:173
+msgid "Right Dock"
+msgstr "Dok Kanan"
+
+#: src/panel/settings/settings_panel.vala:175
+msgid "Left Dock"
+msgstr "Dok Kiri"
+
+#: src/panel/settings/settings_panel.vala:177
+msgid "Bottom Dock"
+msgstr "Dok Bawah"
+
+#: src/panel/settings/settings_panel.vala:182
+msgid "Top Panel"
+msgstr "Panel Atas"
+
+#: src/panel/settings/settings_panel.vala:184
+msgid "Right Panel"
+msgstr "Panel Kanan"
+
+#: src/panel/settings/settings_panel.vala:186
+msgid "Left Panel"
+msgstr "Panel Kiri"
+
+#: src/panel/settings/settings_panel.vala:188
+msgid "Bottom Panel"
+msgstr "Panel Bawah"
+
+#: src/panel/settings/settings_panel.vala:225
+msgid "Top"
+msgstr "Atas"
+
+#: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Kanan"
+
+#: src/panel/settings/settings_panel.vala:231
+msgid "Bottom"
+msgstr "Bawah"
+
+#: src/panel/settings/settings_panel.vala:241
+msgid "Always"
+msgstr "Selalu"
+
+#: src/panel/settings/settings_panel.vala:243
+msgid "Dynamic"
+msgstr "Dinamis"
+
+#: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Otomatis"
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Intelligent"
+msgstr "Cerdas"
+
+#: src/panel/settings/settings_panel.vala:261
+msgid "Never"
+msgstr "Tak pernah"
+
+#: src/panel/settings/settings_panel.vala:278
+msgid "Position"
+msgstr "Letak"
+
+#: src/panel/settings/settings_panel.vala:279
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Atur tepi layar sebelah mana panel ini akan berada"
+
+#: src/panel/settings/settings_panel.vala:287
+msgid "Size"
+msgstr "Ukuran"
+
+#: src/panel/settings/settings_panel.vala:288
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr "Setel ukuran (lebar atau tinggi, tergantung orientasi) pada panel ini"
+
+#: src/panel/settings/settings_panel.vala:295
+msgid "Spacing"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:296
+msgid "Set the spacing between applets for this panel"
+msgstr ""
+
+#: src/panel/settings/settings_panel.vala:303
+msgid "Automatically hide"
+msgstr "Otomatis sembunyi"
+
+#: src/panel/settings/settings_panel.vala:304
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+"Bila disetel, panel ini akan sembunyi dari pandangan untuk memaksimalkan "
+"ruang layar"
+
+#: src/panel/settings/settings_panel.vala:311
+msgid "Transparency"
+msgstr "Transparansi"
+
+#: src/panel/settings/settings_panel.vala:312
+msgid "Control when this panel should have a solid background"
+msgstr "Atur bagaimana mode transparansi pada panel ini"
+
+#: src/panel/settings/settings_panel.vala:317
+msgid "Shadow"
+msgstr "Bayangan"
+
+#: src/panel/settings/settings_panel.vala:318
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr ""
+"Menambahkan sentuhan efek bayangan jatuh, ideal untuk yang berpanel buram "
+"(opaque)"
+
+#: src/panel/settings/settings_panel.vala:324
+msgid "Stylize regions"
+msgstr "Corak bidang"
+
+#: src/panel/settings/settings_panel.vala:325
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Menambahkan sentuhan pada panel sehingga memungkinan area antar panel "
+"memiliki tema yang berbeda."
+
+#: src/panel/settings/settings_panel.vala:332
+msgid "Dock mode"
+msgstr "Mode dok"
+
+#: src/panel/settings/settings_panel.vala:333
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Saat dalam mode dok, panel akan menggunakan ruang seminimal mungkin, "
+"membebaskan lebih banyak ruang layar"
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -1707,62 +1647,111 @@ msgstr "Animasi"
 msgid "Control whether windows and controls use animations"
 msgstr "Atur apakah jendela dan objek interaksi menggunakan animasi"
 
-#: src/panel/settings/settings_style.vala:207
+#: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
 msgstr "Kiri Atas"
 
-#: src/panel/settings/settings_style.vala:209
+#: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
 msgstr "Kiri Bawah"
 
-#: src/panel/settings/settings_style.vala:211
+#: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
 msgstr "Kanan Bawah"
 
-#: src/panel/settings/settings_style.vala:214
+#: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Kanan Atas"
 
-#: src/panel/settings/settings_plugin_chooser.vala:62
-msgid "Built-in"
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "Notifikasi"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
 msgstr ""
 
-#: src/panel/settings/settings_plugin_chooser.vala:96
-msgid "Choose a plugin"
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "Tak ada apa pun di sini"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "Tak ada notifikasi baru"
+
+#: src/raven/widgets/media-controls/media_controls.vala:155
+msgid "No apps are currently playing audio."
+msgstr "Tak ada aplikasi yang sedang memutar audio."
+
+#: src/raven/widgets/media-controls/media_controls.vala:164
+msgid "Play some music"
+msgstr "Mainkan musik"
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:107
+#: src/raven/widgets/media-controls/mpris_gui.vala:430
+msgid "Unknown Title"
 msgstr ""
 
-#: src/panel/settings/settings_plugin_chooser.vala:239
-msgid "No description."
+#: src/raven/widgets/media-controls/mpris_gui.vala:110
+#: src/raven/widgets/media-controls/mpris_gui.vala:434
+msgid "Unknown Artist"
 msgstr ""
 
-#: src/panel/settings/settings_plugin_chooser.vala:261
+#: src/raven/widgets/media-controls/mpris_gui.vala:113
+#: src/raven/widgets/media-controls/mpris_gui.vala:438
+msgid "Unknown Album"
+msgstr ""
+
+#: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
-msgid "by %s"
+msgid "Playing - %s"
 msgstr ""
 
-#: src/panel/settings/settings_plugin_chooser.vala:264
-msgid "No authors listed"
+#: src/raven/widgets/media-controls/mpris_gui.vala:309
+#, c-format
+msgid "Paused - %s"
 msgstr ""
 
-#: src/dialogs/screenshot/aftershot.ui.h:1
-msgid "Name:"
+#: src/raven/widgets/sound-output/sound_output.vala:173
+msgid "No apps are playing audio."
 msgstr ""
 
-#: src/dialogs/screenshot/aftershot.ui.h:2
-msgid "Folder:"
+#: src/raven/widgets/sound-output/sound_output.vala:189
+msgid "Apps"
+msgstr "Aplikasi"
+
+#: src/raven/widgets/sound-output/sound_output.vala:190
+msgid "Devices"
+msgstr "Perangkat"
+
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
+msgid "Usage Monitor"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshothome.ui.h:1
-msgid "Delay in seconds"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+msgid "CPU"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshothome.ui.h:2
-msgid "Show Pointer"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+msgid "RAM"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshothome.ui.h:3
-msgid "Play sound when capturing"
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+msgid "Swap"
 msgstr ""
+
+#: src/raven/raven.vala:49
+msgid "Oldest to newest"
+msgstr ""
+
+#: src/raven/raven.vala:52
+msgid "Newest to oldest"
+msgstr ""
+
+#: src/daemon/endsession.ui.h:2
+msgid "Are you sure you want to end your session?"
+msgstr "Apakah Anda yakin ingin mengakhiri sesi ini?"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
@@ -1796,119 +1785,25 @@ msgstr ""
 msgid "Authenticate"
 msgstr "Cek"
 
-#: src/raven/widgets/sound-output/settings.ui.h:1
-#: src/raven/widgets/sound-input/settings.ui.h:1
-msgid "Allow Volume Overdrive"
+#: src/dialogs/screenshot/aftershot.ui.h:1
+msgid "Name:"
 msgstr ""
 
-#: src/raven/widgets/calendar/settings.ui.h:1
-msgid "Show Week Numbers"
+#: src/dialogs/screenshot/aftershot.ui.h:2
+msgid "Folder:"
 msgstr ""
 
-#: src/raven/widgets/calendar/settings.ui.h:2
-msgid "Show Day Names"
+#: src/dialogs/screenshot/screenshothome.ui.h:1
+msgid "Delay in seconds"
 msgstr ""
 
-#: src/raven/widgets/usage-monitor/settings.ui.h:1
-msgid "Show Swap Usage"
+#: src/dialogs/screenshot/screenshothome.ui.h:2
+msgid "Show Pointer"
 msgstr ""
 
-#: src/daemon/endsession.ui.h:2
-msgid "Are you sure you want to end your session?"
-msgstr "Apakah Anda yakin ingin mengakhiri sesi ini?"
-
-#: src/panel/applets/trash/settings.ui.h:1
-msgid "Sort Mode"
+#: src/dialogs/screenshot/screenshothome.ui.h:3
+msgid "Play sound when capturing"
 msgstr ""
-
-#: src/panel/applets/trash/settings.ui.h:2
-msgid "Sort by type"
-msgstr ""
-
-#: src/panel/applets/trash/settings.ui.h:3
-msgid "Sort alphabetically"
-msgstr ""
-
-#: src/panel/applets/trash/settings.ui.h:4
-msgid "Sort reverse alphabetically"
-msgstr ""
-
-#: src/panel/applets/trash/settings.ui.h:5
-msgid "Sort by date ascending"
-msgstr ""
-
-#: src/panel/applets/trash/settings.ui.h:6
-msgid "Sort by date descending"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:1
-msgid "Show all windows on click"
-msgstr "Tampilkan seluruh jendela saat diklik"
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:2
-msgid "Only show favorited"
-msgstr "Hanya tunjukkan yang favorit"
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:3
-msgid "Lock icons"
-msgstr "Ikon kunci"
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:4
-msgid "Restrict to Workspace"
-msgstr "Batasi untuk Ruang Kerja"
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:5
-msgid "Middle click to launch new window"
-msgstr "Klik tengah untuk meluncurkan jendela baru"
-
-#: src/panel/applets/icon-tasklist/settings.ui.h:6
-msgid "Require a double-click to launch new window"
-msgstr "Memerlukan klik ganda untuk meluncurkan jendela baru"
-
-#: src/panel/applets/clock/settings.ui.h:1
-msgid "Show date"
-msgstr "Tunjukkan tanggal"
-
-#: src/panel/applets/clock/settings.ui.h:2
-msgid "Show seconds"
-msgstr "Tunjukkan detik"
-
-#: src/panel/applets/clock/settings.ui.h:3
-msgid "Use 24 hour time"
-msgstr "Format 24 jam"
-
-#: src/panel/applets/clock/settings.ui.h:4
-msgid "Custom Format"
-msgstr ""
-
-#: src/panel/applets/clock/settings.ui.h:6
-#, no-c-format
-msgid "%H:%M:%S %d.%m.%Y"
-msgstr ""
-
-#: src/panel/applets/clock/settings.ui.h:7
-msgid "Custom Timezone"
-msgstr ""
-
-#: src/panel/applets/clock/settings.ui.h:8
-msgid "UTC"
-msgstr ""
-
-#: src/panel/applets/caffeine/settings.ui.h:1
-msgid "Enable notification"
-msgstr "Aktifkan notifikasi"
-
-#: src/panel/applets/caffeine/settings.ui.h:2
-msgid "Maximize brightness"
-msgstr "Maksimalkan kecerahan"
-
-#: src/panel/applets/caffeine/settings.ui.h:3
-msgid "Brightness Level"
-msgstr "Tingkat Kecerahan"
-
-#: src/panel/applets/spacer/settings.ui.h:1
-msgid "Spacer size"
-msgstr "Lebar pengatur jarak"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1942,45 +1837,70 @@ msgstr "Arahkan kursor"
 msgid "Show settings items"
 msgstr ""
 
-#: src/panel/applets/workspaces/settings.ui.h:1
-msgid "\"Add\" button visibility"
-msgstr "Visibilitas tombol \"tambahkan\""
+#: src/panel/applets/caffeine/settings.ui.h:1
+msgid "Enable notification"
+msgstr "Aktifkan notifikasi"
 
-#: src/panel/applets/workspaces/settings.ui.h:2
-msgid "Item Size Multiplier"
+#: src/panel/applets/caffeine/settings.ui.h:2
+msgid "Maximize brightness"
+msgstr "Maksimalkan kecerahan"
+
+#: src/panel/applets/caffeine/settings.ui.h:3
+msgid "Brightness Level"
+msgstr "Tingkat Kecerahan"
+
+#: src/panel/applets/clock/settings.ui.h:1
+msgid "Show date"
+msgstr "Tunjukkan tanggal"
+
+#: src/panel/applets/clock/settings.ui.h:2
+msgid "Show seconds"
+msgstr "Tunjukkan detik"
+
+#: src/panel/applets/clock/settings.ui.h:3
+msgid "Use 24 hour time"
+msgstr "Format 24 jam"
+
+#: src/panel/applets/clock/settings.ui.h:4
+msgid "Custom Format"
 msgstr ""
 
-#: src/panel/applets/workspaces/settings.ui.h:3
-msgid "Don't show"
-msgstr "Jangan tampilkan"
-
-#: src/panel/applets/workspaces/settings.ui.h:4
-msgid "Show on mouseover"
-msgstr "Saat ada gerakan kursor"
-
-#: src/panel/applets/workspaces/settings.ui.h:5
-msgid "Always show"
-msgstr "Selalu tampilkan"
-
-#: src/panel/applets/workspaces/settings.ui.h:6
-msgid "0.5x"
+#: src/panel/applets/clock/settings.ui.h:6
+#, no-c-format
+msgid "%H:%M:%S %d.%m.%Y"
 msgstr ""
 
-#: src/panel/applets/workspaces/settings.ui.h:7
-msgid "0.75x"
+#: src/panel/applets/clock/settings.ui.h:7
+msgid "Custom Timezone"
 msgstr ""
 
-#: src/panel/applets/workspaces/settings.ui.h:8
-msgid "1.0x"
+#: src/panel/applets/clock/settings.ui.h:8
+msgid "UTC"
 msgstr ""
 
-#: src/panel/applets/workspaces/settings.ui.h:9
-msgid "1.5x"
-msgstr ""
+#: src/panel/applets/icon-tasklist/settings.ui.h:1
+msgid "Show all windows on click"
+msgstr "Tampilkan seluruh jendela saat diklik"
 
-#: src/panel/applets/workspaces/settings.ui.h:10
-msgid "2.0x"
-msgstr ""
+#: src/panel/applets/icon-tasklist/settings.ui.h:2
+msgid "Only show favorited"
+msgstr "Hanya tunjukkan yang favorit"
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:3
+msgid "Lock icons"
+msgstr "Ikon kunci"
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:4
+msgid "Restrict to Workspace"
+msgstr "Batasi untuk Ruang Kerja"
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:5
+msgid "Middle click to launch new window"
+msgstr "Klik tengah untuk meluncurkan jendela baru"
+
+#: src/panel/applets/icon-tasklist/settings.ui.h:6
+msgid "Require a double-click to launch new window"
+msgstr "Memerlukan klik ganda untuk meluncurkan jendela baru"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
@@ -2026,129 +1946,139 @@ msgstr "Tampilkan drive lepasan"
 msgid "Always expand places"
 msgstr "Selalu luaskan tempat"
 
-#: src/panel/applets/tray/settings.ui.h:1
+#: src/panel/applets/spacer/settings.ui.h:1
+msgid "Spacer size"
+msgstr "Lebar pengatur jarak"
+
 #: src/panel/applets/status/settings.ui.h:1
+#: src/panel/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
 msgstr "Jarak Ikon"
-
-#: src/panel/applets/tray/settings.ui.h:2
-msgid "Scale icons with panel size"
-msgstr ""
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
 msgstr "Tunjukkan persentase baterai"
 
-#: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:2
+#: src/panel/applets/trash/settings.ui.h:1
+msgid "Sort Mode"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:2
+msgid "Sort by type"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:3
+msgid "Sort alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:4
+msgid "Sort reverse alphabetically"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:5
+msgid "Sort by date ascending"
+msgstr ""
+
+#: src/panel/applets/trash/settings.ui.h:6
+msgid "Sort by date descending"
+msgstr ""
+
+#: src/panel/applets/tray/settings.ui.h:2
+msgid "Scale icons with panel size"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:1
+msgid "\"Add\" button visibility"
+msgstr "Visibilitas tombol \"tambahkan\""
+
+#: src/panel/applets/workspaces/settings.ui.h:2
+msgid "Item Size Multiplier"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:3
+msgid "Don't show"
+msgstr "Jangan tampilkan"
+
+#: src/panel/applets/workspaces/settings.ui.h:4
+msgid "Show on mouseover"
+msgstr "Saat ada gerakan kursor"
+
+#: src/panel/applets/workspaces/settings.ui.h:5
+msgid "Always show"
+msgstr "Selalu tampilkan"
+
+#: src/panel/applets/workspaces/settings.ui.h:6
+msgid "0.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:7
+msgid "0.75x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:8
+msgid "1.0x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:9
+msgid "1.5x"
+msgstr ""
+
+#: src/panel/applets/workspaces/settings.ui.h:10
+msgid "2.0x"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:1
+msgid "Show button icons"
+msgstr ""
+
+#: src/panel/applets/tasklist/settings.ui.h:2
+msgid "Show button labels"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:1
+msgid "Show Week Numbers"
+msgstr ""
+
+#: src/raven/widgets/calendar/settings.ui.h:2
+msgid "Show Day Names"
+msgstr ""
+
+#: src/raven/widgets/sound-input/settings.ui.h:1
+#: src/raven/widgets/sound-output/settings.ui.h:1
+msgid "Allow Volume Overdrive"
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/settings.ui.h:1
+msgid "Show Swap Usage"
+msgstr ""
+
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
+#: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr ""
-
-#: src/session/budgie-desktop-magpie.desktop.in.in.h:1
-msgid "Budgie Desktop (magpie)"
-msgstr ""
-
-#: src/session/budgie-desktop-magpie.desktop.in.in.h:2
-msgid ""
-"This session logs you into the Budgie Desktop using magpie as the window "
-"manager"
-msgstr ""
-
-#: src/session/budgie-desktop.session.in.in.h:1
-#: src/session/budgie-desktop.desktop.in.in.h:1
-msgid "Budgie Desktop"
-msgstr "Desktop Budgie"
-
-#: src/session/budgie-desktop.desktop.in.in.h:2
-msgid ""
-"This session logs you into the Budgie Desktop using labwc as the window "
-"manager"
-msgstr ""
-
-#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
-msgid "Media Controls"
-msgstr ""
-
-#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
-msgid ""
-"This widget uses the Mpris API to show actively playing media with metadata "
-"and playback controls, with support for audio and video."
-msgstr ""
-
-#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
-msgid "Sound Output"
-msgstr ""
-
-#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
-msgid ""
-"Allows global and per-app audio output volume control, and displays a list "
-"of available audio output devices."
-msgstr ""
-
-#: src/raven/widgets/calendar/Calendar.plugin.in.h:1
-msgid "Calendar"
-msgstr "Kalender"
-
-#: src/raven/widgets/calendar/Calendar.plugin.in.h:2
-msgid ""
-"A simple calendar with a month view, using the built-in Gtk.Calendar widget."
-" The calendar shows the current date by default."
-msgstr ""
-
-#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
-msgid "Sound Input"
-msgstr ""
-
-#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
-msgid ""
-"Allows adjustment of audio input volume, and displays a list of available "
-"audio input devices."
-msgstr ""
-
-#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
-msgid ""
-"A view for system resource usage in bar graph form. Includes CPU, RAM, and "
-"Swap usage by default."
-msgstr ""
-
-#: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
-msgid "Opens the power dialog."
-msgstr ""
-
-#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
-msgid "Manage your trash from the Budgie panel"
-msgstr ""
-
-#: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
-msgid "A configurable application task list."
-msgstr ""
-
-#: src/panel/applets/clock/ClockApplet.plugin.in.h:1
-msgid "A digital clock with a customizable format."
-msgstr ""
-
-#: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
-msgid "Prevent the system and screen from sleeping."
-msgstr ""
-
-#: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
-msgid "Adjustable spacer to put between other applets."
-msgstr ""
-
-#: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
-msgid "Open the Raven sidebar."
 msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
 msgstr ""
 
-#: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
-msgid "Display workspaces and switch between them."
+#: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
+msgid "Prevent the system and screen from sleeping."
 msgstr ""
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
-msgid "A button that toggles visibility of the desktop."
+#: src/panel/applets/clock/ClockApplet.plugin.in.h:1
+msgid "A digital clock with a customizable format."
+msgstr ""
+
+#: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
+msgid "A configurable application task list."
+msgstr ""
+
+#: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
+msgid "Indicates which keyboard layout is currently in use."
+msgstr ""
+
+#: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
+msgid "Show status of lock keys."
 msgstr ""
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
@@ -2163,8 +2093,28 @@ msgstr ""
 msgid "Show drives and favorite folders."
 msgstr ""
 
-#: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
-msgid "Indicates which keyboard layout is currently in use."
+#: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
+msgid "Open the Raven sidebar."
+msgstr ""
+
+#: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
+msgid "Visual separator between applets."
+msgstr ""
+
+#: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
+msgid "A button that toggles visibility of the desktop."
+msgstr ""
+
+#: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
+msgid "Adjustable spacer to put between other applets."
+msgstr ""
+
+#: src/panel/applets/status/StatusApplet.plugin.in.h:1
+msgid "Show system status indicators, like sound, battery, and Bluetooth."
+msgstr ""
+
+#: src/panel/applets/trash/TrashApplet.plugin.in.h:1
+msgid "Manage your trash from the Budgie panel"
 msgstr ""
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
@@ -2172,20 +2122,16 @@ msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
 
+#: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
+msgid "Opens the power dialog."
+msgstr ""
+
+#: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
+msgid "Display workspaces and switch between them."
+msgstr ""
+
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr ""
-
-#: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
-msgid "Visual separator between applets."
-msgstr ""
-
-#: src/panel/applets/status/StatusApplet.plugin.in.h:1
-msgid "Show system status indicators, like sound, battery, and Bluetooth."
-msgstr ""
-
-#: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
-msgid "Show status of lock keys."
 msgstr ""
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
@@ -2203,3 +2149,70 @@ msgid ""
 msgstr ""
 "Luncurkan aplikasi lain dan sediakan berbagai utilitas untuk mengelola "
 "jendela, menunjukkan waktu, dll."
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:1
+msgid "Calendar"
+msgstr "Kalender"
+
+#: src/raven/widgets/calendar/Calendar.plugin.in.h:2
+msgid ""
+"A simple calendar with a month view, using the built-in Gtk.Calendar widget."
+" The calendar shows the current date by default."
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
+msgid "Media Controls"
+msgstr ""
+
+#: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
+msgid ""
+"This widget uses the Mpris API to show actively playing media with metadata "
+"and playback controls, with support for audio and video."
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
+msgid "Sound Input"
+msgstr ""
+
+#: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
+msgid ""
+"Allows adjustment of audio input volume, and displays a list of available "
+"audio input devices."
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
+msgid "Sound Output"
+msgstr ""
+
+#: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
+msgid ""
+"Allows global and per-app audio output volume control, and displays a list "
+"of available audio output devices."
+msgstr ""
+
+#: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
+msgid ""
+"A view for system resource usage in bar graph form. Includes CPU, RAM, and "
+"Swap usage by default."
+msgstr ""
+
+#: src/session/budgie-desktop.session.in.in.h:1
+#: src/session/budgie-desktop.desktop.in.in.h:1
+msgid "Budgie Desktop"
+msgstr "Desktop Budgie"
+
+#: src/session/budgie-desktop-magpie.desktop.in.in.h:1
+msgid "Budgie Desktop (magpie)"
+msgstr ""
+
+#: src/session/budgie-desktop-magpie.desktop.in.in.h:2
+msgid ""
+"This session logs you into the Budgie Desktop using magpie as the window "
+"manager"
+msgstr ""
+
+#: src/session/budgie-desktop.desktop.in.in.h:2
+msgid ""
+"This session logs you into the Budgie Desktop using labwc as the window "
+"manager"
+msgstr ""
