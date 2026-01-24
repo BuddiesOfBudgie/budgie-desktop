@@ -183,6 +183,11 @@ namespace Budgie {
 		private OSD? osd_window = null;
 		private uint32 expire_timeout = 0;
 
+		// Signal to notify when OSD service is ready
+		public signal void ready();
+
+		private bool _is_ready = false;
+
 		[DBus (visible=false)]
 		public OSDManager() {
 			osd_window = new OSD();
@@ -198,7 +203,9 @@ namespace Budgie {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, Budgie.OSD_DBUS_NAME, flags,
-				on_bus_acquired, ()=> {}, Budgie.DaemonNameLost);
+				on_bus_acquired,
+				on_name_acquired,
+				Budgie.DaemonNameLost);
 		}
 
 		/**
@@ -207,10 +214,22 @@ namespace Budgie {
 		private void on_bus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object(Budgie.OSD_DBUS_OBJECT_PATH, this);
+				debug("OSDManager: Registered object on DBus");
 			} catch (Error e) {
-				stderr.printf("Error registering BudgieOSD: %s\n", e.message);
+				critical("Error registering BudgieOSD: %s\n", e.message);
 			}
 			Budgie.setup = true;
+		}
+
+		/**
+		* Called when name is acquired on the bus
+		*/
+		private void on_name_acquired() {
+			if (!_is_ready) {
+				_is_ready = true;
+				debug("OSDManager: Name acquired, service is ready");
+				ready();
+			}
 		}
 
 		/**
