@@ -275,10 +275,10 @@
 			<action name="ToggleSnapToEdge" direction="right" />
 		</keybind>
 		<keybind key="XF86MonBrightnessUp">
-			<action name="Execute" command="dbus-send --session --type=method_call --dest=org.gnome.SettingsDaemon.Power /org/gnome/SettingsDaemon/Power org.gnome.SettingsDaemon.Power.Screen.StepUp " />
+			<action name="Execute" command="budgie-brightness-helper up" />
 		</keybind>
 		<keybind key="XF86MonBrightnessDown">
-			<action name="Execute" command="dbus-send --session --type=method_call --dest=org.gnome.SettingsDaemon.Power /org/gnome/SettingsDaemon/Power org.gnome.SettingsDaemon.Power.Screen.StepDown " />
+			<action name="Execute" command="budgie-brightness-helper down" />
 		</keybind>
 		<keybind bridge="custom1" key="C-A-o">
 			<action name="Execute" command="mate-sysmonitor" />
