@@ -6,7 +6,8 @@ man_pages = [
     'budgie-run-dialog.1',
     'org.buddiesofbudgie.BudgieScreenshot.1',
     'org.buddiesofbudgie.sendto.1',
-    'startbudgielabwc.1'
+    'startbudgielabwc.1',
+    'budgie-brightness-helper.1'
 ]
 
 foreach man_page : man_pages
