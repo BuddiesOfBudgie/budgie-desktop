@@ -26,10 +26,8 @@
 	class OSDKeys : Object {
 
 		// vars for the brightness handling
-		GLib.DBusConnection conn = null;
-		uint signal_id;
 		ShowOSD osd = null;
-		double current_brightness_level = 0.0;
+		private BrightnessManager? brightness_manager = null;
 
 		// vars for the caps/numlock changes
 		unowned Gdk.Keymap? map;
@@ -50,28 +48,78 @@
 		// activated when budgie-daemon is started.
 		private bool initialising;
 
+		/**
+		 * Set up connection to OSD service with retry logic
+		 */
+		private async void setup_osd_proxy() {
+			int retry_count = 0;
+			const int MAX_RETRIES = 10;
+			const int RETRY_DELAY_MS = 1000;
+
+			while (retry_count < MAX_RETRIES) {
+				try {
+					debug("Attempting to connect to BudgieOSD service (attempt %d/%d)",
+						retry_count + 1, MAX_RETRIES);
+
+					osd = yield Bus.get_proxy(
+						BusType.SESSION,
+						"org.budgie_desktop.BudgieOSD",
+						"/org/budgie_desktop/BudgieOSD"
+					);
+
+					debug("Successfully connected to BudgieOSD service");
+					return;
+
+				} catch (Error e) {
+					retry_count++;
+					if (retry_count >= MAX_RETRIES) {
+						warning("Failed to connect to BudgieOSD after %d attempts: %s",
+							MAX_RETRIES, e.message);
+						return;
+					}
+
+					warning("Failed to connect to BudgieOSD (attempt %d/%d): %s, retrying...",
+						retry_count, MAX_RETRIES, e.message);
+
+					// Wait before retrying
+					Timeout.add(RETRY_DELAY_MS, () => {
+						setup_osd_proxy.begin();
+						return false;
+					});
+					return;
+				}
+			}
+		}
+
 		public OSDKeys() {
 			initialising = true;
-			try {
-				osd = Bus.get_proxy_sync (BusType.SESSION, "org.budgie_desktop.BudgieOSD",
-															"/org/budgie_desktop/BudgieOSD");
 
-			} catch (Error e) {
-				warning("%s\n", e.message);
-			}
+			// Connect to OSD service asynchronously with retry logic
+			setup_osd_proxy.begin();
 
-			try {
-				conn = Bus.get_sync(GLib.BusType.SESSION, null);
-			}
-			catch(IOError e) {
-				info("%s", e.message);
-			}
+			// Initialize brightness manager
+			debug("Creating BrightnessManager...");
+			brightness_manager = new BrightnessManager();
 
-			signal_id = conn.signal_subscribe("org.gnome.SettingsDaemon.Power",
-											  "org.freedesktop.DBus.Properties",
-											  "PropertiesChanged", null, null,
-											  DBusSignalFlags.NONE,
-											  signal_powerchanges);
+			// Connect to ready signal to know when it's actually available
+			brightness_manager.ready.connect(() => {
+				debug("BrightnessManager is ready");
+				if (brightness_manager.is_available()) {
+					brightness_manager.brightness_changed.connect(on_brightness_changed);
+					debug("Connected to brightness_changed signal");
+				} else {
+					warning("BrightnessManager not available after initialization");
+				}
+			});
+
+			// Also check if it's already ready (in case ready() fired before we connected)
+			if (brightness_manager.is_ready) {
+				debug("BrightnessManager already ready");
+				if (brightness_manager.is_available()) {
+					brightness_manager.brightness_changed.connect(on_brightness_changed);
+					debug("Connected to brightness_changed signal");
+				}
+			}
 
 			mixer = new Gvc.MixerControl("BD Volume Mixer");
 			mixer.state_changed.connect(on_mixer_state_change);
@@ -82,6 +130,7 @@
 			// we see the volume OSD on startup accidently when keymap changes are invoked
 			Timeout.add(200, () => {
 				initialising = false;
+				debug("Initialization complete");
 				map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
 				map.state_changed.connect(on_keymap_state_changed);
 				return false;
@@ -91,12 +140,42 @@
 			wm_settings.changed["caffeine-mode"].connect(on_caffeine_mode);
 		}
 
-	~OSDKeys() {
-		// Cleanup DBus signal subscription to prevent resource leak
-		if (conn != null && signal_id != 0) {
-			conn.signal_unsubscribe(signal_id);
+		/**
+		 * Called when brightness changes
+		 */
+		private void on_brightness_changed(double level) {
+			debug("Brightness changed to %.2f%% (initialising=%s, dimming=%s, caffeine=%s, osd=%s)",
+				level * 100,
+				initialising ? "true" : "false",
+				Screenlock.is_dimming ? "true" : "false",
+				caffeine_was_enabled ? "true" : "false",
+				osd != null ? "connected" : "null");
+
+			if (initialising || Screenlock.is_dimming || caffeine_was_enabled) {
+				warning("Skipping brightness OSD (initializing or dimming or caffeine)");
+				return;
+			}
+
+			if (osd == null) {
+				warning("Skipping brightness OSD (OSD service not connected yet)");
+				return;
+			}
+
+			string icon = "display-brightness-symbolic";
+			if (level >= 0.9) {
+				icon = "display-brightness-high-symbolic";
+			} else if (level <= 0.1) {
+				icon = "display-brightness-low-symbolic";
+			}
+
+			HashTable<string,Variant> params;
+			params = new HashTable<string,Variant>(null, null);
+			params.set("level", new Variant.double(level));
+			params.set("icon", new Variant.string(icon));
+
+			debug("Showing brightness OSD with icon=%s, level=%.2f", icon, level);
+			osd.Show.begin(params);
 		}
-	}
 
 		/* handle brightness changes due to caffeine mode - we
 		    don't want the brightness OSD to display when caffeine with brightness
@@ -105,6 +184,7 @@
 		void on_caffeine_mode() {
 			if (wm_settings.get_boolean("caffeine-mode")) {
 				caffeine_was_enabled = true;
+				debug("Caffeine mode enabled");
 				return;
 			}
 
@@ -112,11 +192,14 @@
 			   inadvertently trigger the brightness OSD.  We workaround this
 			   by letting caffeine events to complete first
 			*/
+			debug("Caffeine mode disabled, waiting for events to settle...");
 			Timeout.add(1000, () => {
 				caffeine_was_enabled = false;
+				debug("Caffeine mode fully disabled");
 				return false;
 			});
 		}
+
 		void on_mixer_sink_changed(uint id) {
 			set_default_mixer();
 		}
@@ -152,6 +235,11 @@
 		*/
 		void update_volume() {
 			if (initialising) return;
+
+			if (osd == null) {
+				warning("Skipping volume OSD (OSD service not connected yet)");
+				return;
+			}
 
 			var vol_norm = mixer.get_vol_max_norm();
 			var vol = stream.get_volume();
@@ -206,6 +294,10 @@
 				firstrun = true;
 			}
 
+			if (osd == null) {
+				return;  // OSD service not ready yet
+			}
+
 			HashTable<string,Variant> params = new HashTable<string,Variant>(null, null);
 			string caption = "";
 			bool skip = false;
@@ -246,44 +338,6 @@
 				params.set("label", new Variant.string(caption));
 				osd.Show.begin(params);
 			}
-		}
-
-		private void signal_powerchanges(GLib.DBusConnection connection,
-										 string? sender_name,
-										 string object_path,
-										 string interface_name,
-										 string signal_name,
-										 GLib.Variant parameters) {
-			if (initialising) return;
-
-			GLib.VariantDict dict = new GLib.VariantDict(parameters.get_child_value(1));
-			GLib.Variant? brightness = dict.lookup_value("Brightness", GLib.VariantType.INT32);
-			if (brightness == null || Screenlock.is_dimming || caffeine_was_enabled) {
-				return;
-			}
-
-			// we don't want brightness changes to be displayed if we are in caffeine mode
-
-			double level = (double) brightness.get_int32() / 100;
-			// nothing has changed therefore quit
-			// i.e. GSD power can and does signal more than just brightness changes
-			if (current_brightness_level == level) return;
-
-			current_brightness_level = level;
-
-			string icon = "display-brightness-symbolic";
-			if (level == 1.0) {
-				icon = "display-brightness-high-symbolic";
-			} else if (level == 0.0) {
-				icon = "display-brightness-low-symbolic";
-			}
-
-			HashTable<string,Variant> params;
-			params = new HashTable<string,Variant>(null, null);
-			params.set("level", new Variant.double(level));
-			params.set("icon", new Variant.string(icon));
-
-			osd.Show.begin(params);
 		}
 	}
  }

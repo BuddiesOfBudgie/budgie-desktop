@@ -51,9 +51,16 @@ namespace Budgie {
 				}
 			});
 
+			// Set up OSD service first
+			debug("ServiceManager: Creating OSDManager...");
 			osd = new Budgie.OSDManager();
 			osd.setup_dbus(replace);
-			osdkeys = new Budgie.OSDKeys();
+
+			// Wait for OSD to be ready before creating OSDKeys
+			osd.ready.connect(() => {
+				debug("ServiceManager: OSDManager ready, creating OSDKeys");
+				osdkeys = new Budgie.OSDKeys();
+			});
 
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
