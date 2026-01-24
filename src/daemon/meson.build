@@ -24,6 +24,7 @@ lib_daemon_resources = static_library(
 )
 
 daemon_sources = [
+    'brightness-manager.vala',
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
@@ -89,6 +90,7 @@ executable(
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
+        '--pkg', 'posix',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
@@ -99,6 +101,23 @@ executable(
     ],
     install: true,
     install_rpath: rpath_libdir,
+)
+
+# Brightness Helper executable
+budgie_brightness_helper = executable(
+    'budgie-brightness-helper',
+    sources: [
+        'brightness-helper.vala',
+    ],
+    dependencies: [
+        dep_giounix,
+        dep_glib,
+    ],
+    vala_args: [
+        '--pkg', 'posix',
+    ],
+    install: true,
+    install_dir: libexecdir,
 )
 
 install_data('gammastep.config',

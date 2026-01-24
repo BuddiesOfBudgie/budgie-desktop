@@ -12,22 +12,14 @@
 namespace Budgie {
 	const string DBUS_SCREENLOCK = "org.buddiesofbudgie.BudgieScreenlock";
 	const string DBUS_SCREENLOCK_PATH = "/org/buddiesofbudgie/Screenlock";
-	const string POWERSCREEN_DBUS_NAME = "org.gnome.SettingsDaemon.Power";
-	const string POWERSCREEN_DBUS_OBJECT_PATH = "/org/gnome/SettingsDaemon/Power";
-
-	[DBus (name="org.gnome.SettingsDaemon.Power.Screen")]
-	public interface PowerScreenRemote : GLib.Object {
-		public abstract int32 Brightness { get; set; }
-	}
 
 	[DBus (name="org.buddiesofbudgie.BudgieScreenlock")]
 	public class Screenlock {
 		static Screenlock? instance;
 
 		// Screen Dim capability
-		PowerScreenRemote? powerscreen_proxy = null;
-		bool isdimmable = false;
-		int32 current_brightness = 0;
+		private BrightnessManager? brightness_manager = null;
+		private int saved_brightness = 0;
 		public static bool is_dimming { get; private set; default = false; }
 
 		// connections to various schemas used in screenlocking
@@ -48,10 +40,26 @@ namespace Budgie {
 		private bool battery_mode;
 
 		private string calculate_dim() {
-			isdimmable = this.power.get_boolean("idle-dim");
+			bool isdimmable = this.power.get_boolean("idle-dim");
 
-			if (!isdimmable) return "";
+			if (!isdimmable) {
+				debug("idle-dim is disabled in settings");
+				return "";
+			}
 
+			// Check if brightness manager is ready before enabling dim
+			if (brightness_manager == null) {
+				debug("Brightness manager is null, disabling idle-dim");
+				return "";
+			}
+
+			if (!brightness_manager.is_available()) {
+				debug("Brightness not yet available (is_ready=%s), will retry when ready",
+					brightness_manager.is_ready ? "true" : "false");
+				return "";
+			}
+
+			debug("Brightness available, enabling idle-dim");
 			var dbus_call = "timeout 30 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Dim' ";
 			dbus_call += "resume 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Undim' ";
 			return dbus_call;
@@ -197,7 +205,7 @@ namespace Budgie {
 
 			new_idle += " " + calculate_sleep();
 
-			debug("%s", new_idle);
+			debug("swayidle command: %s", new_idle);
 			try {
 				string[] spawn_args = {"killall", "swayidle"};
 				string[] spawn_env = Environ.get();
@@ -224,15 +232,6 @@ namespace Budgie {
 			}
 		}
 
-		/* Hold onto our PowerScreen proxy ref */
-		void on_powerscreen_get(Object? o, AsyncResult? res) {
-			try {
-				powerscreen_proxy = Bus.get_proxy.end(res);
-			} catch (Error e) {
-				warning("Failed to get PowerScreen proxy: %s", e.message);
-			}
-		}
-
 		[DBus (visible = false)]
 		public void setup_dbus() {
 			/* Hook up screenlock dbus */
@@ -243,29 +242,40 @@ namespace Budgie {
 		}
 
 		public async void dim() throws GLib.DBusError, GLib.IOError {
-			if (powerscreen_proxy == null) {
+			if (brightness_manager == null || !brightness_manager.is_available()) {
+				debug("Cannot dim - brightness not available");
 				return;
 			}
 
+			debug("Dimming screen");
 			is_dimming = true;
 
-			current_brightness = powerscreen_proxy.Brightness;
-			int32 idle_brightness = power.get_int("idle-brightness");
+			// Save current brightness
+			saved_brightness = brightness_manager.get_brightness();
+			debug("Saved brightness: %d", saved_brightness);
 
-			if (current_brightness > idle_brightness) {
-				powerscreen_proxy.Brightness = idle_brightness;
-			}
+			// Get idle brightness percentage from settings
+			int idle_brightness_percent = power.get_int("idle-brightness");
+			debug("Setting brightness to %d%%", idle_brightness_percent);
+
+			// Set to idle brightness
+			brightness_manager.set_brightness_percent((double)idle_brightness_percent / 100.0);
 		}
 
 		public async void undim() throws GLib.DBusError, GLib.IOError {
-			if (powerscreen_proxy == null) {
+			if (brightness_manager == null || !brightness_manager.is_available()) {
+				debug("Cannot undim - brightness not available");
 				return;
 			}
 
-			powerscreen_proxy.Brightness = current_brightness;
+			debug("Undimming screen to %d", saved_brightness);
+
+			// Restore saved brightness
+			brightness_manager.set_brightness(saved_brightness);
 
 			Timeout.add(200, ()=> {
 				is_dimming = false;
+				debug("Undim complete");
 				return false;
 			});
 		}
@@ -274,7 +284,7 @@ namespace Budgie {
 			try {
 				conn.register_object(DBUS_SCREENLOCK_PATH, this);
 			} catch (Error e) {
-				message("Unable to register Screenlock: %s", e.message);
+				message("Unable to register %s", e.message);
 			}
 		}
 
@@ -316,8 +326,25 @@ namespace Budgie {
 				}
 			}
 
-			string supported_lockers[] = {"gtklock", "swaylock"};
+			// Initialize brightness manager
+			debug("Creating BrightnessManager...");
+			brightness_manager = new BrightnessManager();
 
+			// Connect to ready signal to recalculate idle when brightness becomes available
+			brightness_manager.ready.connect(() => {
+				debug("BrightnessManager is ready, recalculating idle settings");
+				if (brightness_manager.is_available()) {
+					debug("Brightness control available");
+					// Recalculate idle settings now that brightness is available
+					if (all_apps && locker != "") {
+						calculate_idle();
+					}
+				} else {
+					warning("BrightnessManager not available after initialization");
+				}
+			});
+
+			string supported_lockers[] = {"gtklock", "swaylock"};
 
 			foreach(unowned var app in supported_lockers) {
 				if (Environment.find_program_in_path(app) != null) {
@@ -333,8 +360,6 @@ namespace Budgie {
 			if (!all_apps || locker == "") {
 				return;
 			}
-
-			Bus.get_proxy.begin<PowerScreenRemote>(BusType.SESSION, POWERSCREEN_DBUS_NAME, POWERSCREEN_DBUS_OBJECT_PATH, 0, null, on_powerscreen_get);
 
 			// Connect to upower and get notifications for all batteries and power-supplies to see if on battery mode
 			client = new Up.Client();
@@ -383,6 +408,7 @@ namespace Budgie {
 				}
 			});
 
+			debug("Doing initial calculate_idle (brightness may not be ready yet)");
 			calculate_idle();
 		}
 	}
