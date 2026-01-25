@@ -530,7 +530,7 @@ msgstr "Simge ayarla"
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
-msgstr "Üzgünüz, hiçbir öge bulunamadı"
+msgstr "Üzgünüm, hiçbir öge bulunamadı"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
@@ -570,7 +570,7 @@ msgstr "Favorilere Ekle"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Tüm pencereleri kapat"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
@@ -587,7 +587,7 @@ msgstr "Tam Küçült"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "%s'ye taşı"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
@@ -597,31 +597,31 @@ msgstr "Küçült"
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
-msgstr "Büyült"
+msgstr "Ekrana Sığdır"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Pencereyi kapat"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Pencere ayarlarını göster"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "Caps lock etkin"
+msgstr "Caps lock açık"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "Caps lock etkin değil"
+msgstr "Caps lock açık değil"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "Num lock etkin"
+msgstr "Num lock açık"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "Num lock etkin değil"
+msgstr "Num lock açık değil"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:122
 #: src/raven/notifications_view.vala:341
@@ -816,7 +816,7 @@ msgstr "Gönderiliyor… %s / %s"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
-msgstr "Pil tamamen doldu."
+msgstr "batarya tamamen şarj oldu."
 
 #: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
@@ -825,7 +825,7 @@ msgstr "Bilinmeyen"
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
-msgstr "Pil doluyor"
+msgstr "Batarya şarj oluyor"
 
 #: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
@@ -897,12 +897,12 @@ msgstr "Kaldır"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "Yeni çalışma alanı yaratılamaz"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "Yeni çalışma alanı yarat"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
