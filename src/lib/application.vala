@@ -1,13 +1,13 @@
 /*
- * This file is part of budgie-desktop
- *
- * Copyright Budgie Desktop Developers
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- */
+* This file is part of budgie-desktop
+*
+* Copyright Budgie Desktop Developers
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*/
 
 namespace Budgie {
 	/**
@@ -30,17 +30,17 @@ namespace Budgie {
 		public unowned string[] actions { get; private set; }
 
 		/**
-		 * Emitted when the application is launched.
-		 *
-		 * See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launched.html
-		 */
+		* Emitted when the application is launched.
+		*
+		* See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launched.html
+		*/
 		public signal void launched(AppInfo info, Variant platform_data);
 
 		/**
-		 * Emitted when the application fails to launch.
-		 *
-		 * See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launch_failed.html
-		 */
+		* Emitted when the application fails to launch.
+		*
+		* See https://valadoc.org/gio-2.0/GLib.AppLaunchContext.launch_failed.html
+		*/
 		public signal void launch_failed(string startup_notify_id);
 
 		private Switcheroo switcheroo;
@@ -110,40 +110,97 @@ namespace Budgie {
 		public bool launch_with_context(AppLaunchContext context) {
 			try {
 				var info = new DesktopAppInfo(this.desktop_id);
-				/*
-				* appinfo.launch has difficulty running pkexec
-				* based apps so lets spawn an async process instead
-				*/
+
 				var cmd = info.get_commandline();
-				string[] args = {};
-				const string checkstr = "pkexec";
+				string[] parsed_args;
+				bool fallback = false;
 
-				// Check if the start command contains pkexec
-				if (cmd.contains(checkstr)) {
-					// Split the command into args
-					args = cmd.split(" ");
+				try {
+					GLib.Shell.parse_argv(cmd, out parsed_args);
+				} catch (Error e) {
+					warning("Failed to parse command line for '%s': %s", this.desktop_id, e.message);
+					// Fallback: try the default launcher
+					fallback = true;
 				}
 
-				// Check if the first command element is pkexec
-				if (args.length >= 2 && args[0] == checkstr) {
-					// Spawn a new async process to start the application
-					string[] env = Environ.get();
-					Pid child_pid;
-					Process.spawn_async(
-						"/",
-						args,
-						env,
-						SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
-						null,
-						out child_pid
-					);
-					ChildWatch.add(child_pid, (pid, status) => {
-						Process.close_pid(pid);
-					});
-				} else {
-					// No pkexec, use the DesktopAppInfo to launch the app
+				// If not pkexec, use the DesktopAppInfo to launch the app normally
+				if (parsed_args.length == 0 || parsed_args[0] != "pkexec" || fallback == true) {
 					new DesktopAppInfo(this.desktop_id).launch(null, context);
+					return true;
 				}
+
+				// Collect any pkexec options (those starting with '-') right after 'pkexec'
+				var pkexec_opts = new GLib.List<string>();
+				int i = 1;
+				while (i < parsed_args.length && parsed_args[i].has_prefix("-")) {
+					pkexec_opts.append(parsed_args[i]);
+					i++;
+				}
+
+				// The remainder after options is the original executable and its arguments
+				var original_prog_and_args = new GLib.List<string>();
+				for (int j = i; j < parsed_args.length; j++) {
+					original_prog_and_args.append(parsed_args[j]);
+				}
+
+				// Gather Wayland info from the *user* environment
+				var wayland_display = GLib.Environment.get_variable("WAYLAND_DISPLAY"); // e.g. "wayland-0"
+				var xdg_runtime_dir = GLib.Environment.get_variable("XDG_RUNTIME_DIR"); // e.g. "/run/user/1000"
+
+				// Build a new argv - format will now be
+				// pkexec [opts] env variable1=... variable2=... <executable> <arguments>
+				var final_args = new GLib.List<string>();
+				final_args.append("pkexec");
+				foreach (var opt in pkexec_opts) {
+					final_args.append(opt);
+				}
+
+				// Always use env so we can add variables for Wayland
+				final_args.append("env");
+
+				bool injected_any = false;
+				if (wayland_display != null && wayland_display.length > 0) {
+					// IMPORTANT: keep WAYLAND_DISPLAY as the socket name (e.g., "wayland-0")
+					final_args.append("WAYLAND_DISPLAY=%s".printf(wayland_display));
+					injected_any = true;
+				}
+				if (xdg_runtime_dir != null && xdg_runtime_dir.length > 0) {
+					// This must be the user's runtime dir, e.g., "/run/user/1000"
+					final_args.append("XDG_RUNTIME_DIR=%s".printf(xdg_runtime_dir));
+					injected_any = true;
+				}
+
+				// Append the original program and args
+				foreach (var a in original_prog_and_args) {
+					final_args.append(a);
+				}
+
+				// Convert the list to a string array
+				string[] argv = {};
+				foreach (var a in final_args) {
+					argv += a;
+				}
+
+				// Use the existing environment (pkexec would normally strip the environment vars,
+				// but we're using 'env' in the program portion to execute)
+				string[] envv = GLib.Environ.get();
+
+				// Spawn the pkexec process async
+				Pid child_pid;
+				GLib.Process.spawn_async(
+					"/",                   // working dir (or null to inherit)
+					argv,
+					envv,
+					GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+					null,
+					out child_pid
+				);
+				GLib.ChildWatch.add(child_pid, (pid, status) => {
+					GLib.Process.close_pid(pid);
+				});
+
+				return true;
+
 			} catch (Error e) {
 				warning("Failed to launch application '%s': %s", name, e.message);
 				return false;
