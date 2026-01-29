@@ -23,7 +23,13 @@ lib_daemon_resources = static_library(
     c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
 )
 
+# Shared Brightness Utility (used by both daemon and helper)
+brightness_util_sources = files(
+    'brightness-util.vala',
+)
+
 daemon_sources = [
+    brightness_util_sources,
     'brightness-manager.vala',
     'endsession.vala',
     'notifications/dbus.vala',
@@ -107,6 +113,7 @@ executable(
 budgie_brightness_helper = executable(
     'budgie-brightness-helper',
     sources: [
+        brightness_util_sources,
         'brightness-helper.vala',
     ],
     dependencies: [

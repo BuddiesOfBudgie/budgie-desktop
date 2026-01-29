@@ -14,17 +14,6 @@
 *
 * Simple command-line utility to adjust screen brightness
 * Designed to be called from keyboard shortcuts
-*
-* Usage:
-*   budgie-brightness-helper up [step]     - Increase brightness
-*   budgie-brightness-helper down [step]   - Decrease brightness
-*   budgie-brightness-helper set <value>   - Set to specific percentage (0-100)
-*
-* Examples:
-*   budgie-brightness-helper up            - Increase by 5%
-*   budgie-brightness-helper up 10         - Increase by 10%
-*   budgie-brightness-helper down          - Decrease by 5%
-*   budgie-brightness-helper set 50        - Set to 50%
 */
 
 namespace Budgie {
@@ -35,256 +24,171 @@ namespace Budgie {
 	interface LogindSession : GLib.Object {
 		public abstract void SetBrightness(string subsystem, string name, uint32 brightness) throws DBusError, IOError;
 	}
-	
-	public class BrightnessHelper {
-		private string? backlight_device = null;
-		private string? backlight_path = null;
-		private int max_brightness = 0;
-		private int current_brightness = 0;
+
+	public class BrightnessHelper : GLib.Application {
+		private BrightnessUtil util;
 		private LogindSession? logind_session = null;
-		
+
 		public BrightnessHelper() {
-			find_backlight_device();
-			setup_logind_session();
+			Object(
+				application_id: "org.buddiesofbudgie.BrightnessCLI",
+				flags: ApplicationFlags.HANDLES_COMMAND_LINE
+			);
+
+			// Add options to the application
+			add_main_option("up", 'u', OptionFlags.NONE, OptionArg.NONE,
+			"Increase brightness", null);
+			add_main_option("down", 'd', OptionFlags.NONE, OptionArg.NONE,
+			"Decrease brightness", null);
+			add_main_option("set", 's', OptionFlags.NONE, OptionArg.INT,
+			"Set brightness to PERCENT (0-100)", "PERCENT");
+			add_main_option("step", 't', OptionFlags.NONE, OptionArg.INT,
+			"Step size for up/down (default: 5)", "PERCENT");
+
+			util = new BrightnessUtil();
 		}
-		
-		/**
-		* Find the first available backlight device
-		*/
-		private void find_backlight_device() {
-			try {
-				var backlight_dir = File.new_for_path("/sys/class/backlight");
-				var enumerator = backlight_dir.enumerate_children(
-					FileAttribute.STANDARD_NAME,
-					FileQueryInfoFlags.NONE
-				);
-				
-				FileInfo? info;
-				while ((info = enumerator.next_file()) != null) {
-					backlight_device = info.get_name();
-					backlight_path = "/sys/class/backlight/" + backlight_device;
-					break;
-				}
-				
-				if (backlight_device == null) {
-					critical("No backlight device found");
-					return;
-				}
-				
-				// Read max brightness
-				var max_file = File.new_for_path(backlight_path + "/max_brightness");
-				uint8[] contents;
-				if (max_file.load_contents(null, out contents, null)) {
-					max_brightness = int.parse((string)contents);
-				}
-				
-				// Read current brightness
-				var brightness_file = File.new_for_path(backlight_path + "/brightness");
-				if (brightness_file.load_contents(null, out contents, null)) {
-					current_brightness = int.parse((string)contents);
-				}
-				
-			} catch (Error e) {
-				critical("Error finding backlight device: %s", e.message);
+
+		public override int command_line(ApplicationCommandLine cmd) {
+			var options = cmd.get_options_dict();
+
+			// Initialize hardware
+			if (!util.find_backlight_device()) {
+				cmd.printerr("Failed to find backlight device\n");
+				return 1;
 			}
-		}
-		
-		/**
-		* Set up connection to logind session
-		*/
-		private void setup_logind_session() {
-			try {
-				string? session_id = null;
-				
-				// Method 1: Use XDG_SESSION_ID environment variable
-				session_id = Environment.get_variable("XDG_SESSION_ID");
-				
-				// Method 2: Ask logind for our session using our PID
-				if (session_id == null || session_id == "") {
-					session_id = get_session_from_logind();
+
+			if (!setup_logind_session()) {
+				cmd.printerr("Failed to connect to logind session\n");
+				return 1;
+			}
+
+			// Get option values
+			bool opt_up = options.contains("up");
+			bool opt_down = options.contains("down");
+			bool has_set = options.contains("set");
+			int opt_set = has_set ? options.lookup_value("set", VariantType.INT32).get_int32() : -1;
+			int opt_step = options.contains("step") ?
+			options.lookup_value("step", VariantType.INT32).get_int32() : 5;
+
+			// Validate step size
+			if (opt_step < 1 || opt_step > 100) {
+				cmd.printerr("Error: step must be between 1 and 100\n");
+				return 1;
+			}
+
+			// Process commands (mutually exclusive)
+			int commands_given = 0;
+			if (opt_up) commands_given++;
+			if (opt_down) commands_given++;
+			if (has_set) commands_given++;
+
+			if (commands_given == 0) {
+				cmd.printerr("Error: Must specify one of --up, --down, or --set\n");
+				cmd.printerr("Run with --help for usage information\n");
+				return 1;
+			}
+
+			if (commands_given > 1) {
+				cmd.printerr("Error: Cannot specify multiple commands (--up, --down, --set) simultaneously\n");
+				return 1;
+			}
+
+			// Execute the requested command
+			bool success = false;
+
+			if (opt_up) {
+				success = increase_brightness(opt_step);
+			} else if (opt_down) {
+				success = decrease_brightness(opt_step);
+			} else if (has_set) {
+				if (opt_set < 0 || opt_set > 100) {
+					cmd.printerr("Error: brightness percentage must be between 0 and 100\n");
+					return 1;
 				}
-				
+				success = set_brightness_percent(opt_set);
+			}
+
+			return success ? 0 : 1;
+		}
+
+		private bool setup_logind_session() {
+			try {
+				string? session_id = BrightnessUtil.get_session_id();
+
 				if (session_id == null || session_id == "") {
 					critical("Could not determine session ID");
-					return;
+					return false;
 				}
-				
-				string session_path = "/org/freedesktop/login1/session/" + session_id;
-				
+
+				string session_path = Path.build_filename("/org/freedesktop/login1/session", session_id);
+
 				logind_session = Bus.get_proxy_sync(
 					BusType.SYSTEM,
 					"org.freedesktop.login1",
 					session_path
 				);
-				
+
+				return true;
+
 			} catch (Error e) {
 				critical("Error connecting to logind: %s", e.message);
+				return false;
 			}
 		}
-		
-		/**
-		* Get session ID from logind using D-Bus API (synchronous version)
-		*/
-		private string? get_session_from_logind() {
-			try {
-				int pid = Posix.getpid();
-				
-				var connection = Bus.get_sync(BusType.SYSTEM);
-				var reply = connection.call_sync(
-					"org.freedesktop.login1",
-					"/org/freedesktop/login1",
-					"org.freedesktop.login1.Manager",
-					"GetSessionByPID",
-					new Variant("(u)", (uint32)pid),
-					new VariantType("(o)"),
-					DBusCallFlags.NONE,
-					-1
-				);
-				
-				string session_object_path;
-				reply.get("(o)", out session_object_path);
-				
-				string[] parts = session_object_path.split("/");
-				if (parts.length > 0) {
-					string session_id = parts[parts.length - 1];
-					return session_id;
-				}
-				
-			} catch (Error e) {
-				warning("Failed to get session from logind: %s", e.message);
-			}
-			
-			return null;
-		}
-		
-		/**
-		* Set brightness to absolute value
-		*/
+
 		public bool set_brightness(uint32 value) {
-			if (logind_session == null || backlight_device == null) {
+			if (logind_session == null || util.backlight_device == null) {
 				critical("Brightness control not initialized");
 				return false;
 			}
-			
-			uint32 clamped = uint32.min(value, max_brightness);
-			
+
+			uint32 clamped = uint32.min(value, util.max_brightness);
+
 			try {
-				logind_session.SetBrightness("backlight", backlight_device, clamped);
+				logind_session.SetBrightness("backlight", util.backlight_device, clamped);
 				return true;
 			} catch (Error e) {
 				critical("Failed to set brightness: %s", e.message);
 				return false;
 			}
 		}
-		
-		/**
-		* Set brightness as percentage (0-100)
-		*/
+
 		public bool set_brightness_percent(int percent) {
-			if (max_brightness == 0) {
+			if (util.max_brightness == 0) {
+				critical("Max brightness is 0");
 				return false;
 			}
-			
+
 			int clamped = percent.clamp(0, 100);
-			uint32 value = (uint32)((clamped * max_brightness) / 100);
+			uint32 value = (uint32)((clamped * util.max_brightness) / 100);
 			return set_brightness(value);
 		}
-		
-		/**
-		* Increase brightness by percentage step
-		*/
+
 		public bool increase_brightness(int step_percent) {
-			if (max_brightness == 0) {
+			if (util.max_brightness == 0) {
+				critical("Max brightness is 0");
 				return false;
 			}
-			
-			int current_percent = (current_brightness * 100) / max_brightness;
+
+			int current_percent = (util.current_brightness * 100) / util.max_brightness;
 			int new_percent = (current_percent + step_percent).clamp(0, 100);
 			return set_brightness_percent(new_percent);
 		}
-		
-		/**
-		* Decrease brightness by percentage step
-		*/
+
 		public bool decrease_brightness(int step_percent) {
-			if (max_brightness == 0) {
+			if (util.max_brightness == 0) {
+				critical("Max brightness is 0");
 				return false;
 			}
-			
-			int current_percent = (current_brightness * 100) / max_brightness;
+
+			int current_percent = (util.current_brightness * 100) / util.max_brightness;
 			int new_percent = (current_percent - step_percent).clamp(0, 100);
 			return set_brightness_percent(new_percent);
 		}
-		
-		/**
-		* Print usage information
-		*/
-		private static void print_usage() {
-			print("Usage: budgie-brightness-helper <command> [value]\n");
-			print("\n");
-			print("Commands:\n");
-			print("  up [step]      Increase brightness by step percent (default: 5)\n");
-			print("  down [step]    Decrease brightness by step percent (default: 5)\n");
-			print("  set <value>    Set brightness to specific percentage (0-100)\n");
-			print("\n");
-			print("Examples:\n");
-			print("  budgie-brightness-helper up       # Increase by 5%%\n");
-			print("  budgie-brightness-helper up 10    # Increase by 10%%\n");
-			print("  budgie-brightness-helper down     # Decrease by 5%%\n");
-			print("  budgie-brightness-helper set 50   # Set to 50%%\n");
-		}
-		
+
 		public static int main(string[] args) {
-			if (args.length < 2) {
-				print_usage();
-				return 1;
-			}
-			
-			var helper = new BrightnessHelper();
-			string command = args[1].down();
-			
-			bool success = false;
-			
-			switch (command) {
-				case "up":
-				int step = 5;
-				if (args.length >= 3) {
-					step = int.parse(args[2]);
-				}
-				success = helper.increase_brightness(step);
-				break;
-				
-				case "down":
-				int step = 5;
-				if (args.length >= 3) {
-					step = int.parse(args[2]);
-				}
-				success = helper.decrease_brightness(step);
-				break;
-				
-				case "set":
-				if (args.length < 3) {
-					print("'set' command requires a value (0-100)");
-					print_usage();
-					return 1;
-				}
-				int value = int.parse(args[2]);
-				success = helper.set_brightness_percent(value);
-				break;
-				
-				case "help":
-				case "--help":
-				case "-h":
-				print_usage();
-				return 0;
-				
-				default:
-				print("Unknown command '%s'", command);
-				print_usage();
-				return 1;
-			}
-			
-			return success ? 0 : 1;
+			var app = new BrightnessHelper();
+			return app.run(args);
 		}
 	}
 }
