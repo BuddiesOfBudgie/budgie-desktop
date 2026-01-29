@@ -110,91 +110,66 @@ namespace Budgie {
 		public bool launch_with_context(AppLaunchContext context) {
 			try {
 				var info = new DesktopAppInfo(this.desktop_id);
+				var cmd  = info.get_commandline();
 
-				var cmd = info.get_commandline();
 				string[] parsed_args;
-				bool fallback = false;
+				GLib.Shell.parse_argv(cmd, out parsed_args);
 
-				try {
-					GLib.Shell.parse_argv(cmd, out parsed_args);
-				} catch (Error e) {
-					warning("Failed to parse command line for '%s': %s", this.desktop_id, e.message);
-					// Fallback: try the default launcher
-					fallback = true;
-				}
-
-				// If not pkexec, use the DesktopAppInfo to launch the app normally
-				if (parsed_args.length == 0 || parsed_args[0] != "pkexec" || fallback == true) {
+				if (parsed_args.length == 0 || parsed_args[0] != "pkexec") {
 					new DesktopAppInfo(this.desktop_id).launch(null, context);
 					return true;
 				}
 
-				// Collect any pkexec options (those starting with '-') right after 'pkexec'
-				var pkexec_opts = new GLib.List<string>();
-				int i = 1;
-				while (i < parsed_args.length && parsed_args[i].has_prefix("-")) {
-					pkexec_opts.append(parsed_args[i]);
-					i++;
-				}
+				// We need special handling of pkexec based elevation under
+				// wayland - pkexec strips the users environment which includes
+				// wayland environment stuff. To overcome this we need to include
+				// the wayland environment vars as part of the command to be executed
 
-				// The remainder after options is the original executable and its arguments
-				var original_prog_and_args = new GLib.List<string>();
-				for (int j = i; j < parsed_args.length; j++) {
-					original_prog_and_args.append(parsed_args[j]);
+				// Scan for pkexec options denoted by a -
+				int pkexec_options = 1;
+				while (pkexec_options < parsed_args.length && parsed_args[pkexec_options].has_prefix("-")) {
+					pkexec_options++;
 				}
 
 				// Gather Wayland info from the *user* environment
 				var wayland_display = GLib.Environment.get_variable("WAYLAND_DISPLAY"); // e.g. "wayland-0"
 				var xdg_runtime_dir = GLib.Environment.get_variable("XDG_RUNTIME_DIR"); // e.g. "/run/user/1000"
 
-				// Build a new argv - format will now be
-				// pkexec [opts] env variable1=... variable2=... <executable> <arguments>
-				var final_args = new GLib.List<string>();
-				final_args.append("pkexec");
-				foreach (var opt in pkexec_opts) {
-					final_args.append(opt);
+				// Build argv
+				string[] argv = {"pkexec"};
+
+				// Append pkexec options (parsed_args[1..i-1])
+				for (int pkexec_args = 1; pkexec_args < pkexec_options; pkexec_args++) {
+					argv += parsed_args[pkexec_args];
 				}
 
-				// Always use env so we can add variables for Wayland
-				final_args.append("env");
-
-				bool injected_any = false;
+				// Append the wayland vars
+				argv += "env";
 				if (wayland_display != null && wayland_display.length > 0) {
-					// IMPORTANT: keep WAYLAND_DISPLAY as the socket name (e.g., "wayland-0")
-					final_args.append("WAYLAND_DISPLAY=%s".printf(wayland_display));
-					injected_any = true;
+					argv += "WAYLAND_DISPLAY=%s".printf(wayland_display);
 				}
 				if (xdg_runtime_dir != null && xdg_runtime_dir.length > 0) {
-					// This must be the user's runtime dir, e.g., "/run/user/1000"
-					final_args.append("XDG_RUNTIME_DIR=%s".printf(xdg_runtime_dir));
-					injected_any = true;
+					argv += "XDG_RUNTIME_DIR=%s".printf(xdg_runtime_dir);
 				}
 
-				// Append the original program and args
-				foreach (var a in original_prog_and_args) {
-					final_args.append(a);
+				// Append original executable + its arguments
+				for (int orig = pkexec_options; orig < parsed_args.length; orig++) {
+					argv += parsed_args[orig];
 				}
 
-				// Convert the list to a string array
-				string[] argv = {};
-				foreach (var a in final_args) {
-					argv += a;
-				}
-
-				// Use the existing environment (pkexec would normally strip the environment vars,
-				// but we're using 'env' in the program portion to execute)
+				// spawn asyncronously the re-made commandline
 				string[] envv = GLib.Environ.get();
-
-				// Spawn the pkexec process async
 				Pid child_pid;
+
 				GLib.Process.spawn_async(
-					"/",                   // working dir (or null to inherit)
+					"/",
 					argv,
 					envv,
 					GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
 					null,
 					out child_pid
 				);
+
 				GLib.ChildWatch.add(child_pid, (pid, status) => {
 					GLib.Process.close_pid(pid);
 				});
@@ -205,8 +180,6 @@ namespace Budgie {
 				warning("Failed to launch application '%s': %s", name, e.message);
 				return false;
 			}
-
-			return true;
 		}
 
 		/**
