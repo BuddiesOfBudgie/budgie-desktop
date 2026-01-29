@@ -215,11 +215,10 @@ namespace Budgie {
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
 		}
 
-		/**
-		* Initial setup of the dynamic transparency routine
-		* Executed after the initial setup of the panel manager
+		/*
+		* Setup the events for listening to the windowing system changes
 		*/
-		private void do_dynamic_transparency_setup() {
+		private void setup_windowing_events() {
 			windowing.window_state_changed.connect((window) => {
 				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 				check_windows();
@@ -227,13 +226,8 @@ namespace Budgie {
 
 			windowing.window_added.connect(window_opened);
 			windowing.window_removed.connect(check_windows);
-			windowing.active_window_changed.connect(active_window_changed);
+			windowing.active_window_changed.connect(check_windows);
 			windowing.active_workspace_changed.connect(check_windows);
-		}
-
-		private void active_window_changed() {
-			// Handle transparency
-			check_windows();
 		}
 
 		/*
@@ -301,7 +295,7 @@ namespace Budgie {
 				set_panel_transparent(false, true);
 				return;
 			}
-			bool found = false;
+			bool found_maximized_window = false;
 
 			Xfw.Workspace? active_workspace = windowing.get_active_workspace();
 
@@ -309,12 +303,21 @@ namespace Budgie {
 				if (window.is_skip_pager()) return;
 				if (!this.window_on_primary(window)) return;
 				if ((window.is_maximized() && !window.is_minimized())) {
-					found = true;
+					found_maximized_window = true;
 					return;
 				}
 			});
 
-			set_panel_transparent(!found);
+			set_panel_transparent(!found_maximized_window);
+			set_panel_occluded(found_maximized_window);
+		}
+
+		void set_panel_occluded(bool occluded) {
+			Budgie.Panel? panel = null;
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(null, out panel)) {
+				panel.set_occluded(occluded);
+			}
 		}
 
 		/*
@@ -478,7 +481,7 @@ namespace Budgie {
 			this.setup = true;
 			/* Well, off we go to be a panel manager. */
 			do_setup();
-			do_dynamic_transparency_setup();
+			setup_windowing_events();
 		}
 
 		/**
