@@ -515,6 +515,19 @@ namespace Budgie {
 			this.enter_notify_event.connect(on_enter_notify);
 			this.leave_notify_event.connect(on_leave_notify);
 
+			// Connect size_allocate signals to update margins when size changes
+			// Only update margins for main_layout to avoid recursive issues
+			//  main_layout.size_allocate.connect(() => {
+			//  	// Only update margins if we're in dock mode and have valid allocations
+			//  	if (this.dock_mode) {
+			//  		Gtk.Allocation alloc;
+			//  		main_layout.get_allocation(out alloc);
+			//  		if (alloc.width > 0 && alloc.height > 0) {
+			//  			update_panel_margins();
+			//  		}
+			//  	}
+			//  });
+
 			get_child().show_all();
 
 			// Immediately hide our inner boxes
@@ -543,33 +556,118 @@ namespace Budgie {
 			this.queue_draw();
 		}
 
-		void update_layer_shell_props() {
-			var default_display = Gdk.Display.get_default();
-			if (default_display != null) {
-				var monitor = default_display.get_primary_monitor();
-				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
-			}
-
-			GtkLayerShell.set_anchor(
-				this,
-				Budgie.panel_position_to_layer_shell_edge(this.position),
-				true
-			);
-
-			// Update the exclusive zone based on the autohide policy
-			this.update_exclusive_zone();
+	void update_layer_shell_props() {
+		var default_display = Gdk.Display.get_default();
+		if (default_display != null) {
+			var monitor = default_display.get_primary_monitor();
+			if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
 		}
 
-		void update_exclusive_zone() {
-			// If our panel is set to intelligent autohide and the screen is occluded, we want to ensure there is no exclusive zone and the panel goes behind other surfaces
-			if (this.autohide == AutohidePolicy.INTELLIGENT && screen_occluded) {
-				GtkLayerShell.set_exclusive_zone(this, 0);
-				set_below_other_surfaces();
-			} else {
-				GtkLayerShell.set_exclusive_zone(this, this.intended_size);
-				set_above_other_surfaces();
-			}
+		GtkLayerShell.Edge position_edge = Budgie.panel_position_to_layer_shell_edge(this.position);
+		
+		// Explicitly set all edges first
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
+		
+		// Then anchor only the position edge
+		GtkLayerShell.set_anchor(this, position_edge, true);
+
+		// Update the exclusive zone based on the autohide policy
+		this.update_exclusive_zone();
+	}
+
+	void calculate_panel_margins(out int margin_top, out int margin_bottom, out int margin_left, out int margin_right) {
+		Gtk.Allocation main_alloc;
+		main_layout.get_allocation(out main_alloc);
+		
+		Gtk.Allocation panel_alloc;
+		get_allocation(out panel_alloc);
+		
+		// Initialize margins
+		margin_top = 0;
+		margin_bottom = 0;
+		margin_left = 0;
+		margin_right = 0;
+		
+		// For non-dock mode, margins are always zero
+		if (!this.dock_mode) {
+			return;
 		}
+		
+		// For dock mode, calculate margins to center the panel
+		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
+		
+		if (horizontal) {
+			// For horizontal panels (TOP/BOTTOM), center horizontally
+			// Calculate equal left and right margins to center the panel
+			int available_width = orig_scr.width - main_alloc.width;
+			int centered_margin = available_width / 2;
+			margin_left = orig_scr.x + centered_margin;
+			margin_right = centered_margin;
+			
+			// Ensure margins are non-negative
+			margin_left = int.max(0, margin_left);
+			margin_right = int.max(0, margin_right);
+		} else {
+			// For vertical panels (LEFT/RIGHT), center vertically
+			// Calculate equal top and bottom margins to center the panel
+			int available_height = orig_scr.height - main_alloc.height;
+			int centered_margin = available_height / 2;
+			margin_top = orig_scr.y + centered_margin;
+			margin_bottom = centered_margin;
+			
+			// Ensure margins are non-negative
+			margin_top = int.max(0, margin_top);
+			margin_bottom = int.max(0, margin_bottom);
+		}
+		
+		// Debug output for validation
+		message("calculate_panel_margins: panel_alloc=%dx%d, main_layout_alloc=%dx%d, orig_scr=(x=%d, y=%d, w=%d, h=%d), margins=(top=%d, bottom=%d, left=%d, right=%d), dock_mode=%s",
+			panel_alloc.width, panel_alloc.height,
+			main_alloc.width, main_alloc.height,
+			orig_scr.x, orig_scr.y, orig_scr.width, orig_scr.height,
+			margin_top, margin_bottom, margin_left, margin_right,
+			this.dock_mode.to_string());
+	}
+
+	void update_panel_margins() {
+		// Calculate margins for the panel based on orientation and screen area
+		int margin_top, margin_bottom, margin_left, margin_right;
+		calculate_panel_margins(out margin_top, out margin_bottom, out margin_left, out margin_right);
+		
+		// Set margins using GtkLayerShell - set relevant margins and zero out the others
+		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
+		
+		if (horizontal) {
+		  	// For horizontal panels (TOP/BOTTOM), set left/right margins and zero top/bottom
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin_left);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, margin_right);
+		  } else {
+		  	// For vertical panels (LEFT/RIGHT), set top/bottom margins and zero left/right
+		 	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, margin_top);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, margin_bottom);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, -1);
+		  }
+	}
+
+	void update_exclusive_zone() {
+		// Update panel margins
+		update_panel_margins();
+		
+		// If our panel is set to intelligent autohide and the screen is occluded, we want to ensure there is no exclusive zone and the panel goes behind other surfaces
+		if (this.autohide == AutohidePolicy.INTELLIGENT && screen_occluded) {
+			GtkLayerShell.set_exclusive_zone(this, 0);
+			set_below_other_surfaces();
+		} else {
+			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+			set_above_other_surfaces();
+		}
+	}
 
 		void update_sizes() {
 			int size = icon_sizes[0];
