@@ -622,14 +622,6 @@ namespace Budgie {
 			margin_top = int.max(0, margin_top);
 			margin_bottom = int.max(0, margin_bottom);
 		}
-		
-		// Debug output for validation
-		message("calculate_panel_margins: panel_alloc=%dx%d, main_layout_alloc=%dx%d, orig_scr=(x=%d, y=%d, w=%d, h=%d), margins=(top=%d, bottom=%d, left=%d, right=%d), dock_mode=%s",
-			panel_alloc.width, panel_alloc.height,
-			main_alloc.width, main_alloc.height,
-			orig_scr.x, orig_scr.y, orig_scr.width, orig_scr.height,
-			margin_top, margin_bottom, margin_left, margin_right,
-			this.dock_mode.to_string());
 	}
 
 	void update_panel_margins() {
@@ -658,7 +650,7 @@ namespace Budgie {
 	void update_exclusive_zone() {
 		// Update panel margins
 		update_panel_margins();
-		
+
 		// If our panel is set to intelligent autohide and the screen is occluded, we want to ensure there is no exclusive zone and the panel goes behind other surfaces
 		if (this.autohide == AutohidePolicy.INTELLIGENT && screen_occluded) {
 			GtkLayerShell.set_exclusive_zone(this, 0);
