@@ -23,7 +23,14 @@ lib_daemon_resources = static_library(
     c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
 )
 
+# Shared Brightness Utility (used by both daemon and helper)
+brightness_util_sources = files(
+    'brightness-util.vala',
+)
+
 daemon_sources = [
+    brightness_util_sources,
+    'brightness-manager.vala',
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
@@ -89,6 +96,7 @@ executable(
         '--pkg', 'theme',
         '--pkg', 'budgie-config',
         '--pkg', 'gvc-1.0',
+        '--pkg', 'posix',
         # Make gresource work
         '--target-glib=2.38',
         '--gresources=' + gresource,
@@ -99,6 +107,24 @@ executable(
     ],
     install: true,
     install_rpath: rpath_libdir,
+)
+
+# Brightness Helper executable
+budgie_brightness_helper = executable(
+    'budgie-brightness-helper',
+    sources: [
+        brightness_util_sources,
+        'brightness-helper.vala',
+    ],
+    dependencies: [
+        dep_giounix,
+        dep_glib,
+    ],
+    vala_args: [
+        '--pkg', 'posix',
+    ],
+    install: true,
+    install_dir: bindir,
 )
 
 install_data('gammastep.config',
