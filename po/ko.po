@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: JungHee Lee <daemul72@gmail.com>, 2025\n"
 "Language-Team: Korean (https://app.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
@@ -88,11 +88,11 @@ msgstr "새 범주"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "읽지 않은 알림"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -102,37 +102,9 @@ msgstr[0] "응용프로그램이 전체 화면으로 표시되는 동안 %d개�
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "알림 보기"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "로그아웃"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "시스템 재시작"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "시스템 종료"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr "Caps lock 켜짐"
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr "Caps lock 꺼짐"
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr "Num lock 켜짐"
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr "Num lock 꺼짐"
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -149,11 +121,39 @@ msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
 msgstr[0] "%d분 후에 꺼집니다"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "로그아웃"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "시스템 재시작"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "시스템 종료"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "Caps lock 켜짐"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "Caps lock 꺼짐"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "Num lock 켜짐"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "Num lock 꺼짐"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "인증 실패함"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "그룹:"
 
@@ -251,7 +251,7 @@ msgstr "닫기"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -313,6 +313,7 @@ msgid "Keyboard"
 msgstr "키보드"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "마우스"
 
@@ -442,8 +443,8 @@ msgstr "사용자의 장치들이 검색 가능하게 설정되어 있고 페어
 msgid "Available Devices"
 msgstr "사용 가능한 장치"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -451,47 +452,47 @@ msgstr "Budgie 스크린숏"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "스크린숏 전체 화면"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "스크린숏 활성 창"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "스크린숏 선택된 영역"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "스크린숏 취소하기"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "선택한 디렉터리에 스크린숏 저장하기"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "스크린숏을 클립보드에 복사하기"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "기본 응용프로그램에서 스크린숏 열기"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "기타..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "폴더 열기"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "열기"
 
@@ -523,10 +524,6 @@ msgstr "아이콘 설정하기"
 msgid "Sorry, no items found"
 msgstr "검색 결과 없음"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "모두"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -540,6 +537,10 @@ msgstr "시스템 설정"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "전원"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "모두"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1346,85 +1347,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "알 수 없는 오류로 인해 위젯 인스턴스를 만들지 못했습니다."
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "창"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "단추 배치"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "응용프로그램의 제목표시줄 단추 배치를 변경합니다."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "새 창을 화면 중앙에 띄우기"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "새로 실행된 창을 현재 화면 중앙에 놓습니다."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "창이 전체 화면일 때 야간 조명 모드 비활성화"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "창이 전체 화면일 때 야간 조명 모드를 비활성화합니다. 전체 화면을 종료할 때 다시 활성화합니다."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "창이 전체 화면일 때 알림 일시중지"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "창이 전체 화면일 때 알림이 표시되지 않도록 합니다. 전체 화면을 종료할 때 일시 중지를 해제합니다."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "자동 바둑판식 배열"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr "마우스로 창을 화면 맨 위나 가장자리 구석으로 가져다 대면 창의 크기가 자동으로 조절됩니다."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "마우스 위치에 따라 창 활성화"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "마우스 포인터가 창 내부로 이동하면 창이 활성화되고, 벗어나면 창이 비활성화됩니다."
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "탭 전환도구에서 모든 창 표시하기"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "모든 탭은 사용 중인 작업공간에 관계없이 탭 전환도구에 표시됩니다."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "오른쪽 (기본값)"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "왼쪽"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "애플릿"
@@ -1476,6 +1398,11 @@ msgstr "상단"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "오른쪽"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "왼쪽"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1637,6 +1564,88 @@ msgstr "오른쪽 하단"
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "오른쪽 상단"
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "창"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "단추 배치"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "응용프로그램의 제목표시줄 단추 배치를 변경합니다."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "새 창을 화면 중앙에 띄우기"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "새로 실행된 창을 현재 화면 중앙에 놓습니다."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "창이 전체 화면일 때 야간 조명 모드 비활성화"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "창이 전체 화면일 때 야간 조명 모드를 비활성화합니다. 전체 화면을 종료할 때 다시 활성화합니다."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "창이 전체 화면일 때 알림 일시중지"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "창이 전체 화면일 때 알림이 표시되지 않도록 합니다. 전체 화면을 종료할 때 일시 중지를 해제합니다."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "자동 바둑판식 배열"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr "마우스로 창을 화면 맨 위나 가장자리 구석으로 가져다 대면 창의 크기가 자동으로 조절됩니다."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "탭 전환도구에서 모든 창 표시하기"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "모든 탭은 사용 중인 작업공간에 관계없이 탭 전환도구에 표시됩니다."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "오른쪽 (기본값)"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"

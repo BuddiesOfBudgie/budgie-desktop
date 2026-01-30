@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Mirko Jäntti, 2025\n"
 "Language-Team: Finnish (https://app.transifex.com/buddiesofbudgie/teams/129844/fi/)\n"
@@ -88,11 +88,11 @@ msgstr "Uusi kategoria"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "Lukemattomat ilmoitukset"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -103,37 +103,9 @@ msgstr[1] "Vastaanotit %dkpl ilmoituksia kun ohjelma oli kokonäytöllä."
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "Näytä ilmoitukset"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "Kirjaudu ulos"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "Käynnistä laite uudelleen"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Sammuta"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr "Caps Lock päällä"
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr "Caps Lock pois päältä"
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr "Num Lock päällä"
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr "Num Lock pois päältä"
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -151,11 +123,39 @@ msgid_plural "Will turn off in %d minutes"
 msgstr[0] "Sammutetaan minuutin kuluttua"
 msgstr[1] "Sammutetaan %dminuutin kuluttua."
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "Kirjaudu ulos"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "Käynnistä laite uudelleen"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Sammuta"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "Caps Lock päällä"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "Caps Lock pois päältä"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "Num Lock päällä"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "Num Lock pois päältä"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "Tunnistautuminen epäonnistui"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "Ryhmä:"
 
@@ -253,7 +253,7 @@ msgstr "Sulje"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -319,6 +319,7 @@ msgid "Keyboard"
 msgstr "Näppäimistö"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "Hiiri"
 
@@ -448,8 +449,8 @@ msgstr "Varmista että laitteet ovat näkyvissä ja valmiita paritukseen"
 msgid "Available Devices"
 msgstr "Saatavilla olevat laitteet"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -457,47 +458,47 @@ msgstr "Budgie Kuvankaappaus"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "Kaappaa koko ruutu"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "Kaappaa aktiivinen ikkuna"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "Kaappaa valittu alue"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "Peruuta kuvakaappaus"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "Tallenna kuvakaappaus valittuun hakemistoon"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "Kopioi kuvakaappaus leikepöydälle"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "Avaa kuvakaappaus oletussovelluksessa"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "Muu..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "Avaa kansio"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "Avaa"
 
@@ -529,10 +530,6 @@ msgstr "Aseta kuvake"
 msgid "Sorry, no items found"
 msgstr "Valitettavasti tuloksia ei löytynyt"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "Kaikki"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -546,6 +543,10 @@ msgstr "Järjestelmäasetukset"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "Virta"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "Kaikki"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1372,91 +1373,6 @@ msgid "Failed to create the widget instance due to an unknown failure."
 msgstr ""
 "Pienoisohjelman instanssia ei voitu luoda tuntemattoman virheen vuoksi."
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "Ikkunat"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "Painikkeiden asettelu"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "Muuta painikkeiden asettelua ohjelmien otsikkopalkissa."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "Keskitä uudet ikkunat näytölle"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "Keskitä tuoreeltaan käynnistetyt ikkunat nykyisen näytön keskelle."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Kytke yövalo pois kokoruututilassa"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr ""
-"Kytkee yövalotilan pois ikkunoiden ollessa kokoruututilassa. Kytkeytyy "
-"takaisin kokoruututilasta poistuttaessa."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Piilota ilmoitukset kokoruututilassa"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "Kytkee ilmoitukset pois päältä kokoruututilan ajaksi."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "Automaattinen asettelu"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Ikkunat asetellaan raahattaessa automaattisesti näytön yläreunaan tai "
-"kulmiin."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "Kohdista ikkunaan hiiren ollessa yllä"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "Kohdistaa ikkunaan kun osoitin on ikkunan sisällä."
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "Näytä kaikki ikkunat välilehden vaihtajassa"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr ""
-"Kaikki välilehdet näytetään välilehden vaihtajassa käytettävästä työtilasta "
-"riippumatta."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "Oikea (standardi)"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Vasen"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Appletit"
@@ -1508,6 +1424,11 @@ msgstr "Ylä"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "Oikea"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Vasen"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1675,6 +1596,94 @@ msgstr "Oikea alakulma"
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Oikea yläkulma"
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Ikkunat"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Painikkeiden asettelu"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Muuta painikkeiden asettelua ohjelmien otsikkopalkissa."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "Keskitä uudet ikkunat näytölle"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "Keskitä tuoreeltaan käynnistetyt ikkunat nykyisen näytön keskelle."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "Kytke yövalo pois kokoruututilassa"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Kytkee yövalotilan pois ikkunoiden ollessa kokoruututilassa. Kytkeytyy "
+"takaisin kokoruututilasta poistuttaessa."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Piilota ilmoitukset kokoruututilassa"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "Kytkee ilmoitukset pois päältä kokoruututilan ajaksi."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "Automaattinen asettelu"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Ikkunat asetellaan raahattaessa automaattisesti näytön yläreunaan tai "
+"kulmiin."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "Näytä kaikki ikkunat välilehden vaihtajassa"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Kaikki välilehdet näytetään välilehden vaihtajassa käytettävästä työtilasta "
+"riippumatta."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "Oikea (standardi)"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"

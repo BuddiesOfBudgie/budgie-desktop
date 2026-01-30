@@ -5,16 +5,16 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2026\n"
 "Language-Team: Georgian (https://app.transifex.com/buddiesofbudgie/teams/129844/ka/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,11 +88,11 @@ msgstr "ახალი კატეგორია"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "წაუკითხავი გაფრთხილებები"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -103,37 +103,9 @@ msgstr[1] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "გაფრთხილებების ნახვა"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "გასვლა"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "მოწყობილობის გადატვირთვა"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "გამორთვა"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr ""
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -151,11 +123,39 @@ msgid_plural "Will turn off in %d minutes"
 msgstr[0] "გამოირთვება ერთ წუთში"
 msgstr[1] "გამოირთვება %d წუთში"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "გასვლა"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "მოწყობილობის გადატვირთვა"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "გამორთვა"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "CapsLock ჩართულია"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "Caps Lock გამორთულია"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "Num Lock ჩართულია"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "Num Lock გამორთულია"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "ავთენტიკაცია ჩავარდა"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "ჯგუფი:"
 
@@ -190,37 +190,37 @@ msgstr ""
 
 #: src/dialogs/sendto/Application.vala:75
 msgid "Files to send"
-msgstr ""
+msgstr "გასაგზავნი ფაილები"
 
 #: src/dialogs/sendto/Application.vala:78
 msgid "_Cancel"
-msgstr ""
+msgstr "გაუ_ქმება"
 
 #: src/dialogs/sendto/Application.vala:79
 msgid "_Open"
-msgstr ""
+msgstr "_გახსნა"
 
 #: src/dialogs/sendto/Application.vala:193
 msgid "Send Files via Bluetooth"
-msgstr ""
+msgstr "ფაილების ბლუთუზით გადაცემა"
 
 #: src/dialogs/sendto/Application.vala:195
 msgid "Send files to device…"
-msgstr ""
+msgstr "ფაილების გაგზავნა მოწყობილობაზე…"
 
 #: src/dialogs/sendto/Application.vala:301
 msgid "Rejected file"
-msgstr ""
+msgstr "ფაილი უარყოფილია"
 
 #: src/dialogs/sendto/Application.vala:302
 #, c-format
 msgid "File already exists: %s"
-msgstr ""
+msgstr "ფაილი უკვე არსებობს: %s"
 
 #. Create a notification prompting the user what to do
 #: src/dialogs/sendto/Application.vala:314
 msgid "Receiving file"
-msgstr ""
+msgstr "ფალის მიღება"
 
 #: src/dialogs/sendto/Application.vala:315
 #, c-format
@@ -229,31 +229,31 @@ msgstr ""
 
 #: src/dialogs/sendto/Application.vala:317
 msgid "Accept"
-msgstr ""
+msgstr "დასტური"
 
 #: src/dialogs/sendto/Application.vala:321
 msgid "Reject"
-msgstr ""
+msgstr "უარყოფა"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
-msgstr ""
+msgstr "ფაილის სახელი"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:69
 msgid "Transfer rate"
-msgstr ""
+msgstr "გადაცემის სიჩქარე"
 
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
-msgstr ""
+msgstr "დახურვა"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -266,79 +266,80 @@ msgstr "გაუქმება"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:156
 #, c-format
 msgid "<b>Transfer rate:</b> %s / s"
-msgstr ""
+msgstr "<b>გადაცემის სიჩქარე:</b> %s / წმ"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:158
 #, c-format
 msgid "%s / %s: Time remaining: %s"
-msgstr ""
+msgstr "%s / %s: დარჩენილი დრო: %s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:169
 #, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u საათი"
+msgstr[1] "%u საათი"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:170
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:175
 #, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u წუთი"
+msgstr[1] "%u წუთი"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:176
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u წამი"
+msgstr[1] "%u წამი"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:180
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d წმ"
+msgstr[1] "%d წმ"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
-msgstr ""
+msgstr "გაგზავნა"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:111
 msgid "Speaker"
-msgstr ""
+msgstr "დინამიკი"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:113
 msgid "Controller"
-msgstr ""
+msgstr "კონტროლერი"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:115
 msgid "Keyboard"
-msgstr ""
+msgstr "კლავიატურა"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
-msgstr ""
+msgstr "თაგუნა"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:119
 msgid "Tablet"
-msgstr ""
+msgstr "ტაბლეტი"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:121
 msgid "Touchpad"
-msgstr ""
+msgstr "თაჩპედი"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:123
 msgid "Phone"
-msgstr ""
+msgstr "ტელეფონი"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:24
 #: src/dialogs/sendto/Dialog/FileSender.vala:29
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:26
 msgid "Bluetooth File Transfer"
-msgstr ""
+msgstr "ბლუთუზით ფაილის გადაცემა"
 
 #. Update the labels
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:30
@@ -346,24 +347,24 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileSender.vala:174
 #, c-format
 msgid "<b>From</b>: %s"
-msgstr ""
+msgstr "<b>ვისგან</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:31
 #: src/dialogs/sendto/Dialog/FileSender.vala:101
 #: src/dialogs/sendto/Dialog/FileSender.vala:175
 #, c-format
 msgid "<b>To</b>: %s"
-msgstr ""
+msgstr "<b>ვის</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:43
 #, c-format
 msgid "<b>File name</b>: %s"
-msgstr ""
+msgstr "<b>ფაილის სახელი</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:53
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:74
 msgid "File transfer failed"
-msgstr ""
+msgstr "ფაილის მიმოცვლის შეცდომა"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:54
 #, c-format
@@ -378,7 +379,7 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:92
 #: src/dialogs/sendto/Dialog/FileSender.vala:274
 msgid "File transferred successfully"
-msgstr ""
+msgstr "ფაილის გადაცემა წარმატებულია"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:93
 #, c-format
@@ -387,11 +388,11 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:33
 msgid "From"
-msgstr ""
+msgstr "ვისგან"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:34
 msgid "To"
-msgstr ""
+msgstr "ვის"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
@@ -411,7 +412,7 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr ""
+msgstr "თავიდან ცდა"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
@@ -434,7 +435,7 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:49
 msgid "Discovering…"
-msgstr ""
+msgstr "აღმოჩენა…"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:64
 msgid "<b>No devices found</b>"
@@ -446,10 +447,10 @@ msgstr ""
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr ""
+msgstr "ხელმისაწვდომი მოწყობილობები"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -457,47 +458,47 @@ msgstr "Budgie-ის ეკრანის ანაბეჭდი"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr ""
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr ""
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "სხვა..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "საქაღალდის გახსნა"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "გახსნა"
 
@@ -529,10 +530,6 @@ msgstr "ხატულის დაყენება"
 msgid "Sorry, no items found"
 msgstr "ვერაფერი მოიძებნა"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "ყველა"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -546,6 +543,10 @@ msgstr "სისტემის მორგება"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "კვება"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "ყველა"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -567,11 +568,11 @@ msgstr "რჩეული"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "ყველა ფანჯრის დახურვა"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "ახალი გაშვებული ასლის გაშვება"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
@@ -598,7 +599,7 @@ msgstr "გაშლა"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "ფანჯრის დახურვა"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
@@ -734,7 +735,7 @@ msgstr "სამუშაო მაგიდის გადართვა"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
-msgstr ""
+msgstr "ბლუთუზი"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:114
 msgid "Bluetooth Settings"
@@ -766,19 +767,19 @@ msgstr ""
 
 #: src/panel/applets/status/BluetoothIndicator.vala:440
 msgid "Send file"
-msgstr ""
+msgstr "ფაილის გაგზავნა"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:465
 msgid "Disconnect"
-msgstr ""
+msgstr "გათიშვა"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:577
 msgid "Disconnecting…"
-msgstr ""
+msgstr "მიმდინარეობს გათიშვა…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:580
 msgid "Connecting…"
-msgstr ""
+msgstr "დაკავშირება…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to disconnect"
@@ -786,30 +787,30 @@ msgstr ""
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to connect"
-msgstr ""
+msgstr "კავშირის შეცდომა"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Connected"
-msgstr ""
+msgstr "დაკავშირებულია"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Disconnected"
-msgstr ""
+msgstr "გათიშულია"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:702
 #, c-format
 msgid "<b>Filename</b>: %s"
-msgstr ""
+msgstr "<b>ფაილის სახელი</b>: %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:709
 #, c-format
 msgid "Receiving… %s of %s"
-msgstr ""
+msgstr "მიღება… %s %s-დან"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:714
 #, c-format
 msgid "Sending… %s of %s"
-msgstr ""
+msgstr "გაგზავნა… %s %s-დან"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
@@ -1050,7 +1051,7 @@ msgstr "ორმაგი"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr ""
+msgstr "დაწკაპუნების პოლიტიკა"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
@@ -1074,7 +1075,7 @@ msgstr "დიდი"
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr ""
+msgstr "მასიური"
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
@@ -1348,89 +1349,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr ""
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "ფანჯრები"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "ღილაკების განლაგება"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "ღილაკების განლაგების შეცვლა აპლიკაციების სათაურებში."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "დაცენტრე ახალი ფანჯარა ეკრანზე"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "ახალი ფანჯრების მიმდინარე ეკრანის ცენტრში გახსნა."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "„ღამის ნათების“ რეჟიმის გამორთვა, როცა ფანჯარა მთელ ეკრანზეა"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr ""
-"გამორთავს ღამის განათების რეჟიმს, როცა ფანჯარა მთელ ეკრანზეა გაშლილი. "
-"ჩართავს, როცა ჩვეულ რეჟიმში დაბრუნდება."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "ავტომატურად დასათაურება"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"ფანჯრები ავტომატურად დაპატარავდება მათი ეკრანის ზედა მხარეს ან კუთხეებთან "
-"მიტანისას."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "ფანჯრის ფოკუსის ცვლილება თაგუნას გადატარებისას და გაწევისას"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "თაგუნას ფოკუსს უკეთებს გადატარებულ ფანჯარაზე და პირიქით."
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "მარჯვნივ (სტანდარტული)"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "მარცხენა"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "აპლეტი"
@@ -1482,6 +1400,11 @@ msgstr "თავში"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "მარჯვენა"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "მარცხენა"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1654,6 +1577,92 @@ msgstr "ქვედა მარჯვენა"
 msgid "Top Right"
 msgstr "ზედა მარჯვენა"
 
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "ფანჯრები"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "ღილაკების განლაგება"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "ღილაკების განლაგების შეცვლა აპლიკაციების სათაურებში."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "დაცენტრე ახალი ფანჯარა ეკრანზე"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "ახალი ფანჯრების მიმდინარე ეკრანის ცენტრში გახსნა."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "„ღამის ნათების“ რეჟიმის გამორთვა, როცა ფანჯარა მთელ ეკრანზეა"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"გამორთავს ღამის განათების რეჟიმს, როცა ფანჯარა მთელ ეკრანზეა გაშლილი. "
+"ჩართავს, როცა ჩვეულ რეჟიმში დაბრუნდება."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "ავტომატურად დასათაურება"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"ფანჯრები ავტომატურად დაპატარავდება მათი ეკრანის ზედა მხარეს ან კუთხეებთან "
+"მიტანისას."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr "ფანჯრის ფოკუსის რეჟიმი"
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "მარჯვნივ (სტანდარტული)"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr "წკაპი"
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr "სველი"
+
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "გაფრთხილებები"
@@ -1754,7 +1763,7 @@ msgstr "პაროლი:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "მომხმარებელი:"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
@@ -1952,7 +1961,7 @@ msgstr "ელემენტის პროცენტულობის ჩ�
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "დალაგების რეჟიმი"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
@@ -2020,7 +2029,7 @@ msgstr "2.0x"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "ღილაკის ხატულების ჩვენება"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"

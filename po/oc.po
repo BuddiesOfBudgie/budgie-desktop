@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Quentin PAGÈS, 2025\n"
 "Language-Team: Occitan (post 1500) (https://app.transifex.com/buddiesofbudgie/teams/129844/oc/)\n"
@@ -88,11 +88,11 @@ msgstr "Categoria novèla"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "Notificacions non legidas"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -105,37 +105,9 @@ msgstr[1] ""
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "Veire las notificacions"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "Desconnexion"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "Reaviar"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Atudar"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr "Verr. Maj. es activat"
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr "Verr. Maj. es desactivat"
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr "Verr. Num. es activat"
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr "Verr. Num. es desactivat"
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -153,11 +125,39 @@ msgid_plural "Will turn off in %d minutes"
 msgstr[0] "S’atudarà d’aquí una minuta"
 msgstr[1] "S’atudarà d’aquí %d minutas"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "Desconnexion"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "Reaviar"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Atudar"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "Verr. Maj. es activat"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "Verr. Maj. es desactivat"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "Verr. Num. es activat"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "Verr. Num. es desactivat"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "Fracàs d'autentificacion"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "Grop :"
 
@@ -255,7 +255,7 @@ msgstr "Tampar"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -321,6 +321,7 @@ msgid "Keyboard"
 msgstr "Clavièr"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "Mirga"
 
@@ -450,8 +451,8 @@ msgstr "Asseguratz-vos que los aparelhs son visibles e lèstes a l’associacion
 msgid "Available Devices"
 msgstr "Aparelhs disponibles"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -459,47 +460,47 @@ msgstr "Captura d’ecran Budgie"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "Prendre una captura d'ecran de l'ecran tot entièr"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "Prendre una captura d'ecran de la fenèstra activa"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "Prendre una captura d'ecran de la zòna seleccionada"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "Anullar la captura d’ecran"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "Enregistrar la captura d'ecran dins lo dossièr seleccionat"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "Copiar la captura d'ecran dins lo quichapapièrs"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "Dobrir la captura d'ecran amb l'aplicacion per defaut"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "Autre..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "Dobrir lo dossièr"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "Dobrir"
 
@@ -531,10 +532,6 @@ msgstr "Definir l’icòna"
 msgid "Sorry, no items found"
 msgstr "O planhèm, cap de resultat pas trobat"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "Tot"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -548,6 +545,10 @@ msgstr "Paramètres sistèma"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "Alimentacion"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "Tot"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1378,97 +1379,6 @@ msgstr ""
 "Fracàs de la creacion de l’instance del widget a causa d’un fracàs "
 "desconegut."
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "Fenèstras"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "Disposicion dels botons"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr ""
-"Modificar la disposicion dels botons de la barra de títol de las "
-"aplicacions."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "Centrar las fenèstras novèlas"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "Centrar las fenèstras novèlament creadas sus l’ecran actual."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Desactivar lo mòde nuèch quand la fenèstra en es plen ecran"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr ""
-"Desactiva lo mòde nuèch quand una fenèstra es en plen ecran. Se tòrna "
-"activar en sortissent del plen ecran."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Metre las notificacions quand las fenèstras son en ecran complèt"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr ""
-"Empacha las notificacion de s’afichar quand una fenèstra es en plen ecran. "
-"Sortís de pausa en quitant lo plen ecran."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "Mosaic automatic"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Las fenèstras faràn automaticament un mosaic quand son plaçadas ennaut de "
-"l’ecran o als cantons."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "Activar lo cambiament de fòcus a l’entrada e sortida de la mirga"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr ""
-"Activa lo fòcus de la fenèstra d’aplicacion quand la mirga dintra dins la "
-"fenèstra e daissar lo fòcus quand la mirga quita la fenèstra."
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "Mostrar totas las fenèstras dins lo gestionari d’onglets"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr ""
-"Totes los onglets seràn afichats dins lo gestionaris de quin espaci de "
-"trabalh que vengan."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "Drecha (estandard)"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Esquèrra"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Applets"
@@ -1520,6 +1430,11 @@ msgstr "Naut"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "Drecha"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Esquèrra"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1689,6 +1604,98 @@ msgstr "Enbàs a drecha"
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Ennaut a drecha"
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Fenèstras"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Disposicion dels botons"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr ""
+"Modificar la disposicion dels botons de la barra de títol de las "
+"aplicacions."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "Centrar las fenèstras novèlas"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "Centrar las fenèstras novèlament creadas sus l’ecran actual."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "Desactivar lo mòde nuèch quand la fenèstra en es plen ecran"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr ""
+"Desactiva lo mòde nuèch quand una fenèstra es en plen ecran. Se tòrna "
+"activar en sortissent del plen ecran."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Metre las notificacions quand las fenèstras son en ecran complèt"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr ""
+"Empacha las notificacion de s’afichar quand una fenèstra es en plen ecran. "
+"Sortís de pausa en quitant lo plen ecran."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "Mosaic automatic"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Las fenèstras faràn automaticament un mosaic quand son plaçadas ennaut de "
+"l’ecran o als cantons."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "Mostrar totas las fenèstras dins lo gestionari d’onglets"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr ""
+"Totes los onglets seràn afichats dins lo gestionaris de quin espaci de "
+"trabalh que vengan."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "Drecha (estandard)"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"

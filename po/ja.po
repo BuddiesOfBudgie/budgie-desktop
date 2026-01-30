@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: green <usergreen@users.osdn.me>, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
@@ -89,11 +89,11 @@ msgstr "新しいカテゴリ"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "未読通知"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -103,37 +103,9 @@ msgstr[0] "すべて調べたところ、%d 件の通知があります。"
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "通知の表示"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "ログアウト"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "デバイスの再起動"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "電源オフ"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr "Caps Lock がオンです"
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr "Caps Lock がオフです"
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr "Num Lock がオンです"
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr "Num Lock がオフです"
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -150,11 +122,39 @@ msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
 msgstr[0] "%d 分で電源を切る"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "ログアウト"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "デバイスの再起動"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "電源オフ"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "Caps Lock がオンです"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "Caps Lock がオフです"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "Num Lock がオンです"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "Num Lock がオフです"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "認証に失敗"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "グループ:"
 
@@ -252,7 +252,7 @@ msgstr "閉じる"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -314,6 +314,7 @@ msgid "Keyboard"
 msgstr "キーボード"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "マウス"
 
@@ -443,8 +444,8 @@ msgstr "デバイスが視認可能で、ペアリングが準備できている
 msgid "Available Devices"
 msgstr "利用可能なデバイス"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -452,47 +453,47 @@ msgstr "Budgie スクリーンショット"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "画面全体を撮影"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "アクティブな画面のみ撮影"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "選択部分を撮影"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "スクリーンショットの取り消し"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "スクリーンショットを選択したディレクトリへ保存"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "スクリーンショットをクリップボードへ貼り付け"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "スクリーンショットを既定のアプリケーションで開く"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "その他..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "フォルダを開く"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "開く"
 
@@ -524,10 +525,6 @@ msgstr "アイコンの設定"
 msgid "Sorry, no items found"
 msgstr "アイテムが見つかりませんでした"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "すべて"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -541,6 +538,10 @@ msgstr "システムの設定"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "電源"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "すべて"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1346,85 +1347,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "不明な障害によって、ウィジェットのインスタンス作成に失敗しました。"
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "ウィンドウ"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "ボタンの位置"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "アプリケーションの見出しにあるボタンの場所を変更します。"
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "新規ウィンドウを画面中央に表示"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "新しく起動したウィンドウを現在ある画面の中央部に配置します。"
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効化"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効にします。全画面表示をを解除すると、再び有効になります。"
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "全画面表示のとき、通知を一時停止"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "全画面表示のとき、通知を表示しないようにします。全画面表示を止めると一時停止を解除します。"
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "自動的にタイル化"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr "画面の上部や四隅へドラッグすると、ウィンドウが自動的にタイル状になります。"
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "ウィンドウのフォーカスをマウスの出入りによって変更"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "マウスがウィンドウの中に入るとウィンドウフォーカスを適用し、ウィンドウの外に出るとフォーカスを解除します。"
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "タブスイッチですべてのウィンドウを表示"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "利用中のワークスペースが何であっても、タブスイッチですべてのタブを表示します。"
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "右（標準）"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "左"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "アプレット"
@@ -1476,6 +1398,11 @@ msgstr "上"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "右"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "左"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1637,6 +1564,88 @@ msgstr "右下"
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "右上"
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "ウィンドウ"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "ボタンの位置"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "アプリケーションの見出しにあるボタンの場所を変更します。"
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "新規ウィンドウを画面中央に表示"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "新しく起動したウィンドウを現在ある画面の中央部に配置します。"
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効化"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効にします。全画面表示をを解除すると、再び有効になります。"
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "全画面表示のとき、通知を一時停止"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "全画面表示のとき、通知を表示しないようにします。全画面表示を止めると一時停止を解除します。"
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "自動的にタイル化"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr "画面の上部や四隅へドラッグすると、ウィンドウが自動的にタイル状になります。"
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "タブスイッチですべてのウィンドウを表示"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "利用中のワークスペースが何であっても、タブスイッチですべてのタブを表示します。"
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "右（標準）"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"

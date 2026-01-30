@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 22:35+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,11 +83,11 @@ msgstr ""
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after notifications have been blocked because an application was in fullscreen mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr ""
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural "You received %d notifications while an application was fullscreened."
@@ -96,24 +96,8 @@ msgstr[1] ""
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
 msgstr ""
 
 #. Should show a notification
@@ -132,23 +116,39 @@ msgid_plural "Will turn off in %d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/daemon/endsession.vala:162
+#: src/daemon/endsession.vala:161
 msgid "Log out"
 msgstr ""
 
-#: src/daemon/endsession.vala:166
+#: src/daemon/endsession.vala:165
 msgid "Restart device"
 msgstr ""
 
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
 msgid "Power Off"
 msgstr ""
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr ""
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr ""
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgstr ""
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -442,55 +442,55 @@ msgstr ""
 msgid "Available Devices"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
 msgstr ""
 
 #. Translators: be as brief as possible; popovers are cut off if broader than the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr ""
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr ""
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr ""
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr ""
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr ""
 
@@ -522,10 +522,6 @@ msgstr ""
 msgid "Sorry, no items found"
 msgstr ""
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr ""
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -538,6 +534,10 @@ msgstr ""
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
 msgstr ""
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39

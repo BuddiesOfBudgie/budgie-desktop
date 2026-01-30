@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Yazi Tian, 2023
-# Karsten Ng, 2023
 # Gavin Zhao, 2023
+# Karsten Ng, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Wenyin Root <ruojiner@hotmail.com>, 2025
+# Wenyin Root <ruojiner@hotmail.com>, 2024
+# dwong dwong, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Wenyin Root <ruojiner@hotmail.com>, 2025\n"
+"Last-Translator: dwong dwong, 2026\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/buddiesofbudgie/teams/129844/zh_HK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,7 @@ msgstr "其他"
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr "应用程序"
+msgstr "應用程式"
 
 #: src/appindexer/AppIndex.vala:152
 msgid "Education"
@@ -48,23 +48,23 @@ msgstr "教育"
 
 #: src/appindexer/AppIndex.vala:157
 msgid "Games"
-msgstr "游戏"
+msgstr "遊戲"
 
 #: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
-msgstr "图形图像"
+msgstr "圖形圖像"
 
 #: src/appindexer/AppIndex.vala:169
 msgid "Internet"
-msgstr "互联网"
+msgstr "互聯網"
 
 #: src/appindexer/AppIndex.vala:174
 msgid "Office"
-msgstr "办公"
+msgstr "辦公"
 
 #: src/appindexer/AppIndex.vala:178
 msgid "Programming"
-msgstr "编程"
+msgstr "編程"
 
 #: src/appindexer/AppIndex.vala:182
 msgid "Science"
@@ -72,161 +72,161 @@ msgstr "科技"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr "多媒体"
+msgstr "多媒體"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
-msgstr "系统工具"
+msgstr "系統工具"
 
 #: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
-msgstr "通用访问"
+msgstr "輔助使用"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr "新的类别"
+msgstr "新的類別"
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
-msgstr "未读通知"
+msgstr "未讀通知"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
-msgstr[0] "在运行全屏应用时你收到了 %d 个通知"
+msgstr[0] "在運行全螢幕程式時你收到了 %d 個通知"
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "查看通知"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "登出"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "重新啟動裝置"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "關機"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr ""
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
-msgstr "啟動Caffeine Boost程序"
+msgstr "啟動Caffeine Boost程式"
 
 #: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
-msgstr "關閉Caffeine Boost程序"
+msgstr "關閉Caffeine Boost程式"
 
 #: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] "将在 %d 分钟后关闭"
+msgstr[0] "將在 %d 分鐘後關閉"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "登出"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "重新開機"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "關機"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "已開啟大寫鎖定鍵（Caps lock）"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "已關閉大寫鎖定鍵（Caps lock）"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "已開啟數字鎖定鍵（Num lock）"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "已關閉數字鎖定鍵（Num lock）"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "認證失敗"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
-msgstr "組別:"
+msgstr "群組:"
 
 #. Create our buttons
 #: src/dialogs/power/window.vala:87
 msgid "_Lock"
-msgstr "_锁定"
+msgstr "鎖定(_L)"
 
 #: src/dialogs/power/window.vala:90
 msgid "L_og Out"
-msgstr "注_销"
+msgstr "登出(_O)"
 
 #: src/dialogs/power/window.vala:93
 msgid "_Suspend"
-msgstr "_睡眠"
+msgstr "睡眠(_S)"
 
 #: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
-msgstr "_休眠"
+msgstr "休眠(_H)"
 
 #: src/dialogs/power/window.vala:101
 msgid "_Reboot"
-msgstr "_重启"
+msgstr "重啟(_R)"
 
 #: src/dialogs/power/window.vala:104
 msgid "Shut_down"
-msgstr "关_机"
+msgstr "關機"
 
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
-msgstr "此系统不支持休眠"
+msgstr "此系統不支持休眠"
 
 #: src/dialogs/sendto/Application.vala:75
 msgid "Files to send"
-msgstr "要发送的文件"
+msgstr "要發送的檔案"
 
 #: src/dialogs/sendto/Application.vala:78
 msgid "_Cancel"
-msgstr "_取消"
+msgstr "取消(_C)"
 
 #: src/dialogs/sendto/Application.vala:79
 msgid "_Open"
-msgstr "_打开"
+msgstr "打開(_O)"
 
 #: src/dialogs/sendto/Application.vala:193
 msgid "Send Files via Bluetooth"
-msgstr "通过蓝牙发送文件"
+msgstr "通過藍牙發送檔案"
 
 #: src/dialogs/sendto/Application.vala:195
 msgid "Send files to device…"
-msgstr "发送文件到设备..."
+msgstr "發送檔案到裝置..."
 
 #: src/dialogs/sendto/Application.vala:301
 msgid "Rejected file"
-msgstr "拒绝的文件"
+msgstr "拒絕的檔案"
 
 #: src/dialogs/sendto/Application.vala:302
 #, c-format
 msgid "File already exists: %s"
-msgstr "文件已存在：%s"
+msgstr "檔案已存在：%s"
 
 #. Create a notification prompting the user what to do
 #: src/dialogs/sendto/Application.vala:314
 msgid "Receiving file"
-msgstr "接收文件"
+msgstr "接收檔案"
 
 #: src/dialogs/sendto/Application.vala:315
 #, c-format
 msgid "Device '%s' wants to send a file: %s %s"
-msgstr "设备 '%s' 想要发送一个文件：%s %s"
+msgstr "裝置 '%s' 想要發送一個檔案：%s %s"
 
 #: src/dialogs/sendto/Application.vala:317
 msgid "Accept"
@@ -234,27 +234,27 @@ msgstr "接受"
 
 #: src/dialogs/sendto/Application.vala:321
 msgid "Reject"
-msgstr "拒绝"
+msgstr "拒絕"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
-msgstr "文件名"
+msgstr "檔案名"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:69
 msgid "Transfer rate"
-msgstr "传输速率"
+msgstr "傳輸速率"
 
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
-msgstr "关闭"
+msgstr "關閉"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -267,25 +267,25 @@ msgstr "取消"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:156
 #, c-format
 msgid "<b>Transfer rate:</b> %s / s"
-msgstr "<b>传输速率：</b> %s / s"
+msgstr "<b>傳輸速率：</b> %s / s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:158
 #, c-format
 msgid "%s / %s: Time remaining: %s"
-msgstr "%s / %s：剩余时间：%s"
+msgstr "%s / %s：剩餘時間：%s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:169
 #, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] "%u小时"
+msgstr[0] "%u小時"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:170
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:175
 #, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] "%u分钟"
+msgstr[0] "%u分鐘"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:176
 #, c-format
@@ -301,11 +301,11 @@ msgstr[0] "%d 秒"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
-msgstr "发送"
+msgstr "發送"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:111
 msgid "Speaker"
-msgstr "演讲者"
+msgstr "喇叭"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:113
 msgid "Controller"
@@ -313,29 +313,30 @@ msgstr "控制器"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:115
 msgid "Keyboard"
-msgstr "键盘"
+msgstr "鍵盤"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
-msgstr "鼠标"
+msgstr "滑鼠"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:119
 msgid "Tablet"
-msgstr "触控屏"
+msgstr "繪圖板"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:121
 msgid "Touchpad"
-msgstr "触摸板"
+msgstr "觸控板"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:123
 msgid "Phone"
-msgstr "手机"
+msgstr "手機"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:24
 #: src/dialogs/sendto/Dialog/FileSender.vala:29
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:26
 msgid "Bluetooth File Transfer"
-msgstr "蓝牙文件传输"
+msgstr "藍牙檔案傳輸"
 
 #. Update the labels
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:30
@@ -343,160 +344,160 @@ msgstr "蓝牙文件传输"
 #: src/dialogs/sendto/Dialog/FileSender.vala:174
 #, c-format
 msgid "<b>From</b>: %s"
-msgstr "<b>从</b>: %s"
+msgstr "<b>從</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:31
 #: src/dialogs/sendto/Dialog/FileSender.vala:101
 #: src/dialogs/sendto/Dialog/FileSender.vala:175
 #, c-format
 msgid "<b>To</b>: %s"
-msgstr "<b>去</b>: %s"
+msgstr "<b>到</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:43
 #, c-format
 msgid "<b>File name</b>: %s"
-msgstr "<b>文件名</b>: %s"
+msgstr "<b>檔案名</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:53
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:74
 msgid "File transfer failed"
-msgstr "文件传输失败"
+msgstr "檔案傳輸失敗"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:54
 #, c-format
 msgid "File '%s' not received from %s"
-msgstr ""
+msgstr "並未從 %s 收到 '%s' 檔案"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:75
 #, c-format
 msgid "File '%s' from %s not received: %s"
-msgstr ""
+msgstr "並未從 %s 收到 %s' 檔案： %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:92
 #: src/dialogs/sendto/Dialog/FileSender.vala:274
 msgid "File transferred successfully"
-msgstr "文件传输已完成"
+msgstr "檔案傳輸已完成"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:93
 #, c-format
 msgid "Saved file from %s to '%s'"
-msgstr ""
+msgstr "由 %s 儲存檔案到 %s"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:33
 msgid "From"
-msgstr ""
+msgstr "從"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:34
 msgid "To"
-msgstr ""
+msgstr "到"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
 msgid "Trying to connect to %s…"
-msgstr ""
+msgstr "嘗試連接到 %s"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:136
 #, c-format
 msgid "Connecting to '%s' failed"
-msgstr ""
+msgstr "連接 %s 失敗"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:139
 #: src/dialogs/sendto/Dialog/FileSender.vala:220
 msgid "The file has not been transferred."
-msgstr ""
+msgstr "並未傳輸此檔案"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr ""
+msgstr "重試"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
 msgid "Waiting for acceptance on %s…"
-msgstr ""
+msgstr "正等待 %s 接受"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:217
 #, c-format
 msgid "Transferring '%s' failed"
-msgstr ""
+msgstr "傳輸 %s 失敗"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:219
 #, c-format
 msgid "The transfer was interrupted or declined by %s."
-msgstr ""
+msgstr "%s 中止或拒絕了傳輸"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
-msgstr ""
+msgstr "選擇一個藍牙裝置送出檔案"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:49
 msgid "Discovering…"
-msgstr ""
+msgstr "尋覓中"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:64
 msgid "<b>No devices found</b>"
-msgstr ""
+msgstr "<b>沒有發現裝置</b>"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:68
 msgid "Ensure that your devices are visable and ready for pairing"
-msgstr ""
+msgstr "請確保裝置能夠被找到及已準備配對"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr ""
+msgstr "可用裝置"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr "Budgie 截图"
+msgstr "Budgie 截圖"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
-msgstr "全屏幕截图"
+msgstr "全螢幕截圖"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
-msgstr "活动窗口截图"
+msgstr "活動視窗截圖"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
-msgstr "选定区域截图"
+msgstr "選定區域截圖"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
-msgid "Cancel screenshot"
-msgstr "取消截图"
-
-#: src/dialogs/screenshot/screenshot.vala:896
-msgid "Save screenshot to the selected directory"
-msgstr "保存截图到指定目录"
-
 #: src/dialogs/screenshot/screenshot.vala:897
-msgid "Copy screenshot to the clipboard"
-msgstr "复制截图到剪贴板"
+msgid "Cancel screenshot"
+msgstr "取消截圖"
 
 #: src/dialogs/screenshot/screenshot.vala:898
+msgid "Save screenshot to the selected directory"
+msgstr "保存截圖到指定目錄"
+
+#: src/dialogs/screenshot/screenshot.vala:899
+msgid "Copy screenshot to the clipboard"
+msgstr "複製截圖到剪貼簿"
+
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
-msgstr "用默认应用打开截图"
+msgstr "用預設程式打開截圖"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "其他..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
-msgstr "打开文件夹"
+msgstr "打開檔案夾"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
-msgstr "打开"
+msgstr "打開"
 
 #. Caffeine Notification
 #. Prepare label widget
@@ -507,7 +508,7 @@ msgstr "Caffeine 模式"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
-msgstr "從檔案中設定菜單圖示"
+msgstr "從檔案中設定選單圖示"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
@@ -519,16 +520,12 @@ msgstr "任何檔案"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
-msgstr "設訂圖示"
+msgstr "設定圖示"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
 msgstr "抱歉, 查無此物"
-
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "全部"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
@@ -538,11 +535,15 @@ msgstr "Budgie 桌面設定"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "系统设置"
+msgstr "系統設定"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr "电源"
+msgstr "電源"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "全部"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -550,25 +551,25 @@ msgstr "計時器(分鐘)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr "系统时间和日期设置"
+msgstr "系統時間和日期設定"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Unfavorite"
-msgstr "移除最愛"
+msgstr "移除我的最愛"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Favorite"
-msgstr "最愛"
+msgstr "我的最愛"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "關閉所有視窗"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "啟動新的實例"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
@@ -581,7 +582,7 @@ msgstr "最小化"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "移動至 %s"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
@@ -595,43 +596,43 @@ msgstr "最大化"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "關閉視窗"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "顯示視窗設定"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "大寫鎖定已啟動"
+msgstr "已啟用大寫鎖定鍵（Caps lock）"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "大寫鎖定已關閉"
+msgstr "已停用大寫鎖定鍵（Caps lock）"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "數字鍵盤已啟動"
+msgstr "已啟用數字鎖定鍵（Num lock）"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "數字鍵盤已關閉"
+msgstr "已停用數字鎖定鍵（Num lock）"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:122
 #: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] " %u 条未读通知"
+msgstr[0] "有 %u 條未讀通知"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:124
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
-msgstr "無未讀通知"
+msgstr "沒有未讀通知"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr "此卷正被其它程序占用中"
+msgstr "此卷宗正被其它程式佔用中"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
@@ -639,17 +640,17 @@ msgstr "作業被強制中斷"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:51
 msgid "Type your password"
-msgstr "輸入你的密碼"
+msgstr "輸入密碼"
 
 #: src/panel/applets/places-indicator/MountItem.vala:23
 #: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
-msgstr "可移除裝置"
+msgstr "卸除式裝置"
 
 #: src/panel/applets/places-indicator/MountItem.vala:25
 #: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
-msgstr "本地端儲存區"
+msgstr "本地卷宗"
 
 #: src/panel/applets/places-indicator/MountItem.vala:29
 #: src/panel/applets/places-indicator/VolumeItem.vala:31
@@ -659,22 +660,22 @@ msgstr "網路資料夾"
 #: src/panel/applets/places-indicator/MountItem.vala:58
 #: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
-msgstr "移除"
+msgstr "退出"
 
 #: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
-msgstr "卸除"
+msgstr "卸載"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
 #: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
-msgstr "打開 \"%s\""
+msgstr "開啟「%s」"
 
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
-msgstr "你現在可以安全地移除"
+msgstr "您現在可以安全移除"
 
 #: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
@@ -686,7 +687,7 @@ msgstr "移除裝置時發生錯誤"
 
 #: src/panel/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
-msgstr "卸除裝置時發生錯誤"
+msgstr "卸載裝置時發生錯誤"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: src/panel/applets/places-indicator/PlacesSection.vala:22
@@ -706,11 +707,11 @@ msgstr "輸入加密密碼以解鎖此卷"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
-msgstr "你輸入的密碼不正確"
+msgstr "密碼錯誤"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "掛載此卷時遇到未知的錯誤"
+msgstr "掛載此卷宗時遇到未知的錯誤"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
@@ -730,7 +731,7 @@ msgstr "切換桌面"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
-msgstr "蓝牙"
+msgstr "藍牙"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:114
 msgid "Bluetooth Settings"
@@ -739,63 +740,63 @@ msgstr "藍牙設定"
 #. Bluetooth switch
 #: src/panel/applets/status/BluetoothIndicator.vala:120
 msgid "Turn Bluetooth on or off"
-msgstr "蓝牙开关"
+msgstr "藍牙開關"
 
 #. Update the tray icon and placeholder text
 #. Airplane mode is on, so Bluetooth is disabled
 #: src/panel/applets/status/BluetoothIndicator.vala:279
 msgid "Airplane mode is on."
-msgstr "飞行模式开启"
+msgstr "已開啟飛行模式"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:280
 msgid "Bluetooth is disabled while airplane mode is on."
-msgstr "蓝牙在飞行模式下被禁用。"
+msgstr "藍牙在飛行模式下被禁用。"
 
 #. Airplane mode is off, so Bluetooth is enabled
 #: src/panel/applets/status/BluetoothIndicator.vala:283
 msgid "No paired Bluetooth devices found."
-msgstr "没有找到配对的蓝牙设备。"
+msgstr "沒有找到已配對的藍牙裝置。"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:284
 msgid "Visit Bluetooth settings to pair a device."
-msgstr "访问蓝牙设置以配对设备。"
+msgstr "前往藍牙設定以配對裝置。"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:440
 msgid "Send file"
-msgstr "发送文件"
+msgstr "發送檔案"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:465
 msgid "Disconnect"
-msgstr "断开连接"
+msgstr "斷開連接"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:577
 msgid "Disconnecting…"
-msgstr "断开连接中..."
+msgstr "斷開連接中..."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:580
 msgid "Connecting…"
-msgstr "连接中..."
+msgstr "連接中..."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to disconnect"
-msgstr "断开连接失败"
+msgstr "斷開連接失敗"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to connect"
-msgstr "连接失败"
+msgstr "連接失敗"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Connected"
-msgstr "已连接"
+msgstr "已連接"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Disconnected"
-msgstr "已断开连接"
+msgstr "已斷開連接"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:702
 #, c-format
 msgid "<b>Filename</b>: %s"
-msgstr "<b>文件名</b>: %s"
+msgstr "<b>檔案名</b>: %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:709
 #, c-format
@@ -805,11 +806,11 @@ msgstr "接收中... %s 的 %s"
 #: src/panel/applets/status/BluetoothIndicator.vala:714
 #, c-format
 msgid "Sending… %s of %s"
-msgstr "发送中... %s 的 %s"
+msgstr "發送中... %s 的 %s"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
-msgstr "電池已充滿."
+msgstr "已完全充滿電池。"
 
 #: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
@@ -818,11 +819,11 @@ msgstr "未知"
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
-msgstr "電池正在充電"
+msgstr "電池充電中"
 
 #: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
-msgstr "電池剩下"
+msgstr "電池尚餘"
 
 #: src/panel/applets/status/PowerIndicator.vala:191
 msgid "Performance Mode"
@@ -830,7 +831,7 @@ msgstr "性能模式"
 
 #: src/panel/applets/status/PowerIndicator.vala:200
 msgid "Power Saver"
-msgstr "省电模式"
+msgstr "省電模式"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Balanced"
@@ -842,7 +843,7 @@ msgstr "性能"
 
 #: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
-msgstr "能源設定"
+msgstr "電源設定"
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:98
@@ -866,7 +867,7 @@ msgstr "休眠"
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:107
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "重新啟動"
+msgstr "重啟"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:108
 #: src/daemon/endsession.ui.h:6
@@ -890,12 +891,12 @@ msgstr "移除"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "無法新增工作區"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "新增工作區"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -911,7 +912,7 @@ msgstr "執行中"
 
 #: src/panel/settings/settings_autostart.vala:185
 msgid "Applications"
-msgstr "应用程序"
+msgstr "應用程式"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
@@ -922,11 +923,11 @@ msgstr "增加"
 #: src/panel/settings/settings_autostart.vala:354
 #: src/panel/settings/settings_autostart.vala:387
 msgid "Command"
-msgstr "命令"
+msgstr "指令"
 
 #: src/panel/settings/settings_autostart.vala:370
 msgid "An entry with that title already exists"
-msgstr "具有相同标题的项目已存在"
+msgstr "已存在相同標題的項目"
 
 #: src/panel/settings/settings_autostart.vala:373
 msgid "Title"
@@ -935,7 +936,7 @@ msgstr "標題"
 #: src/panel/settings/settings_autostart.vala:377
 #: src/panel/settings/settings_autostart.vala:391
 msgid "Required"
-msgstr "必须"
+msgstr "必須"
 
 #: src/panel/settings/settings_autostart.vala:380
 msgid "Description"
@@ -943,23 +944,23 @@ msgstr "描述"
 
 #: src/panel/settings/settings_autostart.vala:384
 msgid "Optional"
-msgstr "可选"
+msgstr "可選"
 
 #: src/panel/settings/settings_autostart.vala:446
 msgid "Autostart"
-msgstr "自动启动"
+msgstr "自動啟動"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr "自动启动应用"
+msgstr "自動啟動程式"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
-msgstr "添加程序"
+msgstr "添加程式"
 
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
-msgstr "添加命令"
+msgstr "添加指令"
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
@@ -990,29 +991,29 @@ msgstr "控制是否允許圖示出現在桌面上。"
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr "激活挂载"
+msgstr "活躍掛載"
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
-msgstr "在桌面上显示所有活动的挂载."
+msgstr "在桌面上顯示所有活動的掛載."
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr "家目錄"
+msgstr "主目錄"
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr "在桌面上添加指向主目录的快捷方式。"
+msgstr "在桌面上新增前往主目錄的捷徑。"
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
 msgid "Trash"
-msgstr "垃圾"
+msgstr "回收桶"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "向桌面上添加回收站目录的快捷方式."
+msgstr "向桌面上添加前往回收桶的捷徑."
 
 #. DesktopType doesn't support icon size changing. Nemo might but needs
 #. validation.
@@ -1020,38 +1021,38 @@ msgstr "向桌面上添加回收站目录的快捷方式."
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
 msgid "Icon Size"
-msgstr "图标大小"
+msgstr "圖示大小"
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
-msgstr "设置桌面图标的大小"
+msgstr "設定桌面圖示的大小"
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr "虚拟桌面的数量"
+msgstr "虛擬桌面的數量"
 
 #: src/panel/settings/settings_desktop.vala:149
 msgid ""
 "Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "启动时会自动创建的虚拟桌面/工作区的数量。"
+msgstr "啟動時會自動新增的虛擬桌面/工作區的數量。"
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
-msgstr "单击"
+msgstr "按一下"
 
 #. If the click policy is to double click
 #: src/panel/settings/settings_desktop.vala:221
 msgid "Double"
-msgstr "双击"
+msgstr "按兩下"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr "点击设置"
+msgstr "點擊設定"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
 "Click Policy determines if we should open items on a single or double click."
-msgstr "使用单击或双击以打开桌面项目"
+msgstr "使用按一下或按兩下以打開桌面項目"
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
@@ -1074,31 +1075,31 @@ msgstr "超大"
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
-msgstr "字體"
+msgstr "字型"
 
 #: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
-msgstr "窗口標題"
+msgstr "視窗標題"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
-msgstr "设置应用程序标题栏的字体。"
+msgstr "設定應用程式標題欄的字體。"
 
 #: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
-msgstr "文件"
+msgstr "檔案"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
-msgstr "设置文档使用的字体。"
+msgstr "設定文檔使用的字體。"
 
 #: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
-msgstr "界面"
+msgstr "介面"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
-msgstr "设置应用程序控件的基本字体。"
+msgstr "設定應用程式控件的基本字體。"
 
 #: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
@@ -1106,15 +1107,15 @@ msgstr "等寬字"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "设置由文本主导的应用程序所使用的等宽字体。"
+msgstr "設定由文本主導的應用程式所使用的等寬字體。"
 
 #: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
-msgstr "文字缩放"
+msgstr "文字縮放"
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
-msgstr "设置文字缩放的系数。"
+msgstr "設定文字縮放的系數。"
 
 #: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
@@ -1126,7 +1127,7 @@ msgstr "中等"
 
 #: src/panel/settings/settings_fonts.vala:82
 msgid "Slight"
-msgstr "轻微"
+msgstr "輕微"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
@@ -1136,27 +1137,27 @@ msgstr "無"
 
 #: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
-msgstr "微调"
+msgstr "微調"
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
-msgstr "设置要使用的微调类型。"
+msgstr "設定要使用的微調類型。"
 
 #: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
-msgstr "子像素（用于 LCD 屏幕）"
+msgstr "子像素（用於 LCD 屏幕）"
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
-msgstr "标准（灰阶）"
+msgstr "標準（灰階）"
 
 #: src/panel/settings/settings_fonts.vala:124
 msgid "Antialiasing"
-msgstr "抗锯齿"
+msgstr "抗鋸齒"
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
-msgstr "设置需要使用的抗锯齿类型。"
+msgstr "設定需要使用的抗鋸齒類型。"
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
@@ -1168,23 +1169,23 @@ msgstr "面板"
 
 #: src/panel/settings/settings_main.vala:59
 msgid "Session"
-msgstr "会话"
+msgstr "階段"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
-msgstr "開創新面板"
+msgstr "新增面板"
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr "控件设定"
+msgstr "小程式設定"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
-msgstr "添加小程序"
+msgstr "新增小程式"
 
 #: src/panel/settings/settings_panel_applets.vala:236
 msgid "Choose a new applet to add to this panel"
-msgstr "选择一个新的小程序添加到该面板"
+msgstr "選擇一個新的小程式添加到該面板"
 
 #: src/panel/settings/settings_panel_applets.vala:250
 #: src/panel/settings/settings_raven_widgets.vala:164
@@ -1193,7 +1194,7 @@ msgstr "沒有可用設定"
 
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
-msgstr "開頭"
+msgstr "開始"
 
 #: src/panel/settings/settings_panel_applets.vala:406
 msgid "Center"
@@ -1221,12 +1222,12 @@ msgstr "保留面板"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "确认小程序移除"
+msgstr "確認移除小程式"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
-msgstr "您真的想要移除该小程序吗？此操作无法撤销。"
+msgstr "您真的想要移除該小程式嗎？此動作不可還原。"
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 #: src/panel/settings/settings_panel_dialogs.vala:148
@@ -1235,37 +1236,37 @@ msgstr "不要再問我"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
-msgstr "移除小程序"
+msgstr "移除小程式"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid "Keep applet"
-msgstr "保留小程序"
+msgstr "保留小程式"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr "确认移除小程序"
+msgstr "確認移除小程式"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
-msgstr "您真的想要移除该小程序吗？此操作无法撤销。"
+msgstr "您真的想要移除該小程式嗎？此動作不可還原。"
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr "内建的"
+msgstr "內置的"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr "选择一个插件"
+msgstr "選擇一個插件"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr "无描述"
+msgstr "無描述"
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr "通过 %s"
+msgstr "通過 %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
@@ -1283,41 +1284,41 @@ msgstr "設定"
 
 #: src/panel/settings/settings_raven_settings.vala:47
 msgid "Set Raven position"
-msgstr "设置乌夜啼的位置"
+msgstr "設定 Raven 的位置"
 
 #: src/panel/settings/settings_raven_settings.vala:48
 msgid ""
 "Set which side of the screen Raven will open on. If set to Automatic, Raven "
 "will open where its parent panel is."
-msgstr "设置 Raven 将打开屏幕的哪一边。如果设置为自动，Raven 将在其父面板所在的位置打开."
+msgstr "設定在那一邊屏幕開啟 Raven。如果設定為自動，Raven 將在其父面板所在的位置打開."
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr "设置通知排列顺序"
+msgstr "設定通知排列順序"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
-msgstr "设置通知是从最旧的到最新的，还是从最新的到最旧的排序"
+msgstr "設定通知是從最舊的到最新的，還是從最新的到最舊的排序"
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr "小程序设置"
+msgstr "小部件設定"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr "添加小部件"
+msgstr "新增小部件"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr "选择一个新的小工具添加到小工具视图"
+msgstr "選擇一個新的小部件添加到小工具視圖"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
-msgstr "创建小部件实例失败。插件引擎无法找到此插件的信息。"
+msgstr "新增小部件失敗。插件引擎無法找到此插件的信息。"
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -1325,14 +1326,14 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
-"创建小部件实例失败。模块名必须为反向 DNS 格式， 示例：'tld.domain.group.WidgetName.so' 使用 C/Vala  或 "
+"新增小部件失敗。模塊名必須為反向 DNS 格式， 如：'tld.domain.group.WidgetName.so' 使用 C/Vala  或 "
 "'tld_domain_group_WidgetName'  使用 Python。"
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
-msgstr "创建小部件实例失败。插件引擎无法从磁盘加载插件。"
+msgstr "新增小部件失敗。插件引擎無法從硬碟載入插件。"
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -1340,96 +1341,17 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
-"创建小部件实例失败。插件支持设置，但不安装具有相同名称的设置模式。\n"
+"新增小部件失敗。插件支持設定，但無法安裝與其有相同名稱的設定模式。\n"
 "\n"
-"模式名称应该与模块名称相同，但没有扩展名（在Python的情况下）下划线应替换为句号。"
+"模式名稱應該與模塊名稱相同，但沒有副檔名，以及（在Python的情況下）下劃線應替換為句號。"
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr "由于未知错误，无法创建小部件实例。"
-
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "視窗"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "按鈕配置"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "更改应用程序标题栏内的按钮布局。"
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "在屏幕上居中显示新窗口"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "在当前屏幕上居中显示新启动的窗口."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "当窗口处于全屏时禁用夜间模式"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重新启用。"
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "當視窗處於全螢幕時停止通知"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "有視窗處於全螢幕時暫停通知。離開全螢幕時將取消暫停通知。"
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "自动平铺"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr "将窗口拖曳到屏幕顶部或远角时会自动平铺窗口。"
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "启用鼠标进入和离开窗口时的焦点切换"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "当鼠标进入窗口时激活该窗口的焦点，并在鼠标离开该窗口时撤销对该窗口的焦点激活。"
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "在 tab 切换器中显示所有窗口"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "所有选项卡都将显示在选项卡切换器中，无论使用的工作区是什么."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "右（标准）"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "左邊"
+msgstr "由於未知錯誤，無法新增小部件。"
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
-msgstr "小程序"
+msgstr "小程式"
 
 #: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
@@ -1441,15 +1363,15 @@ msgstr "從螢幕中移除此面板"
 
 #: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
-msgstr "顶部停靠"
+msgstr "頂部停靠"
 
 #: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
-msgstr "右侧停靠"
+msgstr "右側停靠"
 
 #: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
-msgstr "左侧停靠"
+msgstr "左側停靠"
 
 #: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
@@ -1457,19 +1379,19 @@ msgstr "底部停靠"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
-msgstr "頂端面版"
+msgstr "頂端面板"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
-msgstr "右邊面版"
+msgstr "右側面板"
 
 #: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
-msgstr "左邊面版"
+msgstr "左側面板"
 
 #: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
-msgstr "下方面版"
+msgstr "底部面板"
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Top"
@@ -1479,13 +1401,18 @@ msgstr "頂端"
 msgid "Right"
 msgstr "右邊"
 
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "左邊"
+
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
-msgstr "下方"
+msgstr "底部"
 
 #: src/panel/settings/settings_panel.vala:241
 msgid "Always"
-msgstr "經常"
+msgstr "總是"
 
 #: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
@@ -1501,7 +1428,7 @@ msgstr "聰明"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Never"
-msgstr "永不"
+msgstr "從不"
 
 #: src/panel/settings/settings_panel.vala:278
 msgid "Position"
@@ -1509,11 +1436,11 @@ msgstr "位置"
 
 #: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "设置该面板停靠的屏幕边缘"
+msgstr "設定該面板停靠的屏幕邊緣"
 
 #: src/panel/settings/settings_panel.vala:287
 msgid "Size"
-msgstr "大小"
+msgstr "比例"
 
 #: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
@@ -1521,11 +1448,11 @@ msgstr "設定此面板的大小(闊度或高度，取決於方向)"
 
 #: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
-msgstr "间距"
+msgstr "間距"
 
 #: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
-msgstr "为这个面板设置控件之间的间距"
+msgstr "為這個面板設定小程式之間的間距"
 
 #: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
@@ -1533,7 +1460,7 @@ msgstr "自動隱藏"
 
 #: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "设置之后，该面板将自动隐藏以便能最大化利用屏幕资源"
+msgstr "設定之後，該面板將自動隱藏以便能最大化利用屏幕資源"
 
 #: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
@@ -1541,7 +1468,7 @@ msgstr "透明度"
 
 #: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
-msgstr "控制该面板何时具有实心背景"
+msgstr "控制該面板何時具有實心背景"
 
 #: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
@@ -1549,7 +1476,7 @@ msgstr "陰影"
 
 #: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "添加有助于美化的阴影，该选项适合不透明的面板"
+msgstr "添加有助於美化的陰影，該選項適合不透明的面板"
 
 #: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
@@ -1559,7 +1486,7 @@ msgstr "個人區塊風格"
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
-msgstr "给面板做个标记以便面板的三块主要区域可以采用不同的主题。"
+msgstr "給面板做個標記，以便面板的三塊主要區域可以採用不同主題。"
 
 #: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
@@ -1569,7 +1496,7 @@ msgstr "Dock 模式"
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
-msgstr "启用停靠模式时，面板可以尽可能地使用最少的空间从而节省宝贵的屏幕区域"
+msgstr "啟用停靠模式時，面板可以盡可能地使用最少的空間從而節省的屏幕區域"
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -1577,7 +1504,7 @@ msgstr "風格"
 
 #: src/panel/settings/settings_style.vala:48
 msgid "Set the appearance of window decorations and controls"
-msgstr "设置窗口美化和控制器的外观"
+msgstr "設定視窗美化和控制器的外觀"
 
 #: src/panel/settings/settings_style.vala:52
 msgid "Icons"
@@ -1601,20 +1528,20 @@ msgstr "通知位置"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Set the location for notification popups"
-msgstr "设置通知弹出的位置"
+msgstr "設定通知彈出的位置"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
-msgstr "深色主題"
+msgstr "暗黑主題"
 
 #: src/panel/settings/settings_style.vala:79
 msgid "Built-in theme"
-msgstr "內置主題"
+msgstr "內建主題"
 
 #: src/panel/settings/settings_style.vala:80
 msgid ""
 "When enabled, the built-in theme will override the desktop component styling"
-msgstr "开启后，内置主题将覆盖桌面组件的样式"
+msgstr "開啟後，內置主題將覆蓋桌面組件的樣式"
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Animations"
@@ -1622,7 +1549,7 @@ msgstr "動畫"
 
 #: src/panel/settings/settings_style.vala:88
 msgid "Control whether windows and controls use animations"
-msgstr "控制是否对窗口和控制条使用动画"
+msgstr "控制是否對視窗和控制條使用動畫"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
@@ -1640,6 +1567,88 @@ msgstr "右下"
 msgid "Top Right"
 msgstr "右上"
 
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "視窗"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "按鈕設置"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "更改應用程式標題欄內的按鈕佈局。"
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "在屏幕上居中顯示新視窗"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "在當前屏幕上居中顯示新啟動的視窗."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "當視窗處於全螢幕時禁用夜間模式"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "當視窗處於全螢幕時禁用夜間模式。視窗退出全螢幕後將重新啟用。"
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "當視窗處於全螢幕時暫停通知"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "有視窗處於全螢幕時暫停通知。離開全螢幕時將取消暫停通知。"
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "自動平鋪"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr "將視窗拖曳到屏幕頂部或遠角時會自動平鋪視窗。"
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr "視窗聚焦方式"
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr "選擇視窗取得焦點的方式：點擊以取得焦點；滑鼠移入即可取得焦點（不會將視窗置前）；滑鼠移入即可取得焦點並將視窗置前。"
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "在 Tab 切換器中顯示所有視窗"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "所有選項卡都將顯示在選項卡切換器中，無論使用的工作區是什麼."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "右（標準）"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr "點選"
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr "移入"
+
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "通知"
@@ -1650,11 +1659,11 @@ msgstr "未添加小部件。"
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
-msgstr "這裡沒有東西看"
+msgstr "此處無內容"
 
 #: src/raven/notifications_view.vala:123
 msgid "No new notifications"
-msgstr "沒有新訊息"
+msgstr "沒有新通知"
 
 #: src/raven/widgets/media-controls/media_controls.vala:155
 msgid "No apps are currently playing audio."
@@ -1667,17 +1676,17 @@ msgstr "播放音樂"
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr "未知标题"
+msgstr "未知標題"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:110
 #: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr "未知艺术家"
+msgstr "未知藝術家"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr "未知专辑"
+msgstr "未知專輯"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
@@ -1687,24 +1696,24 @@ msgstr "正在播放 - %s"
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr "已暂停 - %s"
+msgstr "已暫停 - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr "没有应用在播放音频。"
+msgstr "沒有程式在播放音訊。"
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
-msgstr "應用程序"
+msgstr "應用程式"
 
 #: src/raven/widgets/sound-output/sound_output.vala:190
 msgid "Devices"
-msgstr "設備"
+msgstr "裝置"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr "用量监控"
+msgstr "用量監控"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
@@ -1712,19 +1721,19 @@ msgstr "CPU"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr "物理内存"
+msgstr "記憶體"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr "交换空间"
+msgstr "交換空間"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr "从最久到最新"
+msgstr "從最舊到最新"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr "从最新到最久"
+msgstr "從最新到最舊"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
@@ -1732,7 +1741,7 @@ msgstr "您確定要結束您的作業階段？"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "需要验证"
+msgstr "需要驗證"
 
 #: src/dialogs/polkit/dialog.ui.h:2
 msgid "Password:"
@@ -1740,7 +1749,7 @@ msgstr "密碼："
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "用戶名"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
@@ -1748,15 +1757,15 @@ msgstr "需要驗證"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Details"
-msgstr ""
+msgstr "詳情"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "Action:"
-msgstr ""
+msgstr "動作："
 
 #: src/dialogs/polkit/dialog.ui.h:7
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:9
 msgid "Authenticate"
@@ -1764,23 +1773,23 @@ msgstr "驗證"
 
 #: src/dialogs/screenshot/aftershot.ui.h:1
 msgid "Name:"
-msgstr "名称："
+msgstr "名稱："
 
 #: src/dialogs/screenshot/aftershot.ui.h:2
 msgid "Folder:"
-msgstr "文件夹："
+msgstr "檔案夾："
 
 #: src/dialogs/screenshot/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr "以秒为单位的延迟"
+msgstr "以秒為單位的延遲"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr "显示鼠标指针"
+msgstr "顯示滑鼠指針"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr "截图时播放声音"
+msgstr "截圖時播放聲音"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
@@ -1792,7 +1801,7 @@ msgstr "選單標籤"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr "使用默认的菜单图标"
+msgstr "使用預設的選單圖示"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
@@ -1800,23 +1809,23 @@ msgstr "選單圖示"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:5
 msgid "Compact Mode"
-msgstr "紧凑模式"
+msgstr "緊湊模式"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:6
 msgid "Show Headers"
-msgstr "显示标头"
+msgstr "顯示標頭"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:7
 msgid "Roll-over mouse"
-msgstr "滚动鼠标"
+msgstr "滾動滑鼠"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr "显示设置项"
+msgstr "顯示設定項"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
-msgstr "启用通知"
+msgstr "啟用通知"
 
 #: src/panel/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
@@ -1824,7 +1833,7 @@ msgstr "最大化亮度"
 
 #: src/panel/applets/caffeine/settings.ui.h:3
 msgid "Brightness Level"
-msgstr "亮度等级"
+msgstr "亮度等級"
 
 #: src/panel/applets/clock/settings.ui.h:1
 msgid "Show date"
@@ -1836,11 +1845,11 @@ msgstr "顯示秒鐘"
 
 #: src/panel/applets/clock/settings.ui.h:3
 msgid "Use 24 hour time"
-msgstr "使用24小時制"
+msgstr "套用24小時制"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr "自定义格式"
+msgstr "自定義格式"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
@@ -1849,35 +1858,35 @@ msgstr "%H:%M:%S %d.%m.%Y"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr "自定义时区"
+msgstr "自定義時區"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
-msgstr "世界协调时（UTC）"
+msgstr "協調世界時（UTC）"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
-msgstr "点击时显示全部窗口"
+msgstr "點擊時顯示全部視窗"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:2
 msgid "Only show favorited"
-msgstr "只显示喜欢的"
+msgstr "只顯示喜歡的"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
-msgstr "锁定图标"
+msgstr "鎖定圖示"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
-msgstr "限制在工作区"
+msgstr "限制在工作區"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
-msgstr "中击以打开新窗口"
+msgstr "按中鍵以打開新視窗"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
-msgstr "双击以打开新窗口"
+msgstr "按兩下以打開新視窗"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
@@ -1885,11 +1894,11 @@ msgstr "夜光"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
-msgstr "色温"
+msgstr "色溫"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "计划"
+msgstr "計劃"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
@@ -1901,7 +1910,7 @@ msgstr "使用指南"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "显示设置"
+msgstr "顯示設定"
 
 #: src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
@@ -1921,68 +1930,68 @@ msgstr "顯示卸除式裝置"
 
 #: src/panel/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "总是扩展区域"
+msgstr "總是擴展區域"
 
 #: src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "空隔大小"
+msgstr "佔位填空大小"
 
 #: src/panel/applets/status/settings.ui.h:1
 #: src/panel/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr "图标间隔"
+msgstr "圖示間隔"
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
-msgstr "顯示剩餘電池百分比"
+msgstr "顯示電池容量"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "排序模式"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "按檔案類別"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "按檔案名稱"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "按反向檔案名稱"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "按日期（舊到新）"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "按日期（新到舊）"
 
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
-msgstr ""
+msgstr "按照面板大小調節圖示"
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
-msgstr "“添加”按钮可见"
+msgstr "“新增”按鈕可見"
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr "项目大小倍数"
+msgstr "項目大小倍數"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
-msgstr "不要显示"
+msgstr "不要顯示"
 
 #: src/panel/applets/workspaces/settings.ui.h:4
 msgid "Show on mouseover"
-msgstr "鼠标跨越时显示"
+msgstr "滑鼠跨越時顯示"
 
 #: src/panel/applets/workspaces/settings.ui.h:5
 msgid "Always show"
-msgstr "总是显示"
+msgstr "總是顯示"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
@@ -1990,11 +1999,11 @@ msgstr "0.5X"
 
 #: src/panel/applets/workspaces/settings.ui.h:7
 msgid "0.75x"
-msgstr "0.75X"
+msgstr "0.75 X"
 
 #: src/panel/applets/workspaces/settings.ui.h:8
 msgid "1.0x"
-msgstr "1.0 X"
+msgstr "1.0X"
 
 #: src/panel/applets/workspaces/settings.ui.h:9
 msgid "1.5x"
@@ -2006,114 +2015,114 @@ msgstr "2.0X"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "顯示按鈕圖示"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "顯示按鈕標籤"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr "显示周数"
+msgstr "顯示周數"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr "显示星期几"
+msgstr "顯示星期幾"
 
 #: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr "允许音量超过限制"
+msgstr "允許音量超過限制"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr "显示交换空间用量"
+msgstr "顯示交換空間用量"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr "Budgie 截图程序"
+msgstr "Budgie 截圖程式"
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr "搜索并启动应用程序。"
+msgstr "搜索並啟動應用程式。"
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr "防止系统和屏幕j进入休眠状态。"
+msgstr "防止系統和屏幕進入休眠狀態。"
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr "具有可定制格式的数字时钟。"
+msgstr "具有可定制格式的數字時鐘。"
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr "可配置的应用程序列表。"
+msgstr "可設定的應用程式列表。"
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr "指示当前正在使用的键盘布局。"
+msgstr "指示當前正在使用的鍵盤佈局。"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr "显示切换锁定键状态。"
+msgstr "顯示切換鎖定鍵狀態。"
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr "切换和修改夜间模式。"
+msgstr "切換和修改夜間模式。"
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr "打开 Raven 通知视图。"
+msgstr "打開 Raven 通知視圖。"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr "显示驱动器和喜欢的目录。"
+msgstr "顯示儲存裝置和喜歡的目錄。"
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr "显示 Raven 侧边栏。"
+msgstr "顯示 Raven 側邊欄。"
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr "小程序之间的可视分隔符。"
+msgstr "小程式之間的可視分隔符。"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr "切换桌面可见性的按钮。"
+msgstr "切換桌面可見性的按鈕。"
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr "放置在其他小程序之间的可调节间隔。"
+msgstr "放置在其他小程式之間的可調節間隔。"
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
-msgstr "显示系统状态指示，如声音，电池和蓝牙。"
+msgstr "顯示系統狀態指示，如聲音，電池和藍牙。"
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "從Budgie面板中管理回收筒"
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "系統欄採用Freedesktop狀態通知模式"
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr "打开电源选项对话框。"
+msgstr "打開電源選項對話框。"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr "显示工作区并在其间切换。"
+msgstr "顯示工作區並在其間切換。"
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr "带有图标和标签的应用程序任务列表。"
+msgstr "帶有圖示和標籤的應用程式任務列表。"
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
-msgstr "更改桌面外观和行为"
+msgstr "更改桌面外觀和行為"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
@@ -2123,71 +2132,71 @@ msgstr "Budgie 面板"
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
-msgstr "启动其他程序并提供各种工具来管理窗口，显示时间等。"
+msgstr "啟動其他程式並提供各種工具來管理視窗，顯示時間等。"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
-msgstr "日曆"
+msgstr "行事曆"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:2
 msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
-msgstr "一个带有月份视图的简单日历小部件，使用系统内建GTK编写。默认情况下，日历显示当前日期。"
+msgstr "一個帶有月份視圖的簡單日曆小部件，使用系統內建GTK編寫。預設情況下，日曆顯示當前日期。"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr "多媒体控制"
+msgstr "多媒體控制"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
-msgstr "这个小部件通过元数据和播放控件显示正在播放的媒体，使用Mpris API，并支持音视频。"
+msgstr "這個小部件通過中繼資料和播放控件顯示正在播放的媒體，使用Mpris API，並支持音訊、視訊。"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr "音频输入"
+msgstr "音訊輸入"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
-msgstr "允许调整音频输入音量，并显示可用的音频输入设备的列表。"
+msgstr "允許調整音訊輸入音量，並顯示可用的音訊輸入裝置的列表。"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr "音频输出"
+msgstr "音訊輸出"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
-msgstr "允许全局和每个应用程序音频输出音量控制，并显示可用的音频输出设备列表。"
+msgstr "允許通用和每個應用程式音訊輸出音量控制，並顯示可用的音訊輸出裝置列表。"
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
-msgstr "以条形图形式显示系统资源使用情况。默认情况下包括CPU、物理内存和交换空间使用率。"
+msgstr "以條形圖形式顯示系統資源使用情況。預設情況下包括CPU、物理內存和交換空間使用率。"
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Budgie 桌面"
+msgstr "Budgie 桌面環境"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie 桌面環境 （magpie）"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using magpie as the window "
 "manager"
-msgstr ""
+msgstr "此階段將使用magpie作為 Budgie 桌面環境的視窗管理程式"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using labwc as the window "
 "manager"
-msgstr ""
+msgstr "此階段將使用labwc作為 Budgie 桌面環境的視窗管理程式"

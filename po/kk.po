@@ -4,10 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Alex Semёnov-Sherin, 2023
-# Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Victor, 2024
-# Yaroslav Popkov, 2025
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -16,13 +13,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Yaroslav Popkov, 2025\n"
-"Language-Team: Russian (https://app.transifex.com/buddiesofbudgie/teams/129844/ru/)\n"
+"Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2026\n"
+"Language-Team: Kazakh (https://app.transifex.com/buddiesofbudgie/teams/129844/kk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: kk\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -30,7 +27,7 @@ msgstr ""
 #: src/panel/applets/places-indicator/MountItem.vala:32
 #: src/panel/applets/places-indicator/VolumeItem.vala:34
 msgid "Other"
-msgstr "Другое"
+msgstr "Басқа"
 
 #. * Add our categories, adhearing to the Freedesktop Menu spec.
 #. *
@@ -39,15 +36,15 @@ msgstr "Другое"
 #. * the Freedeskop Menus spec, and by ourselves.
 #: src/appindexer/AppIndex.vala:142
 msgid "Accessories"
-msgstr "Аксессуары"
+msgstr "Керек-жарақтар"
 
 #: src/appindexer/AppIndex.vala:152
 msgid "Education"
-msgstr "Образование"
+msgstr "Білім беру"
 
 #: src/appindexer/AppIndex.vala:157
 msgid "Games"
-msgstr "Игры"
+msgstr "Ойындар"
 
 #: src/appindexer/AppIndex.vala:161
 msgid "Graphics"
@@ -63,28 +60,28 @@ msgstr "Офис"
 
 #: src/appindexer/AppIndex.vala:178
 msgid "Programming"
-msgstr "Программирование"
+msgstr "Бағдарламалау"
 
 #: src/appindexer/AppIndex.vala:182
 msgid "Science"
-msgstr "Наука"
+msgstr "Ғылым"
 
 #: src/appindexer/AppIndex.vala:188
 msgid "Sound & Video"
-msgstr "Звук и видео"
+msgstr "Дыбыс және видео"
 
 #: src/appindexer/AppIndex.vala:192
 msgid "System Tools"
-msgstr "Системные инструменты"
+msgstr "Жүйелік саймандар"
 
 #: src/appindexer/AppIndex.vala:202
 msgid "Universal Access"
-msgstr "Универсальный доступ"
+msgstr "Әмбебап қолжетімділік"
 
 #. Make sure we have a default name
 #: src/appindexer/Category.vala:51
 msgid "New Category"
-msgstr "Новая категория"
+msgstr "Жаңа санат"
 
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
@@ -92,7 +89,7 @@ msgstr "Новая категория"
 #. mode
 #: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
-msgstr "Непрочитанные уведомления"
+msgstr "Оқылмаған хабарландырулар"
 
 #: src/daemon/notifications/dbus.vala:576
 #, c-format
@@ -100,169 +97,159 @@ msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
 "You received %d notifications while an application was fullscreened."
 msgstr[0] ""
-"Вы получили %d уведомление, когда приложение работало в полноэкранном "
-"режиме."
+"Қолданба толық экранды режимде болған кезде сіз %d хабарландыру алдыңыз."
 msgstr[1] ""
-"Вы получили %d уведомления, когда приложение работало в полноэкранном "
-"режиме."
-msgstr[2] ""
-"Вы получили %d уведомлений, когда приложение работало в полноэкранном "
-"режиме."
-msgstr[3] ""
-"Вы получили %d уведомлений, когда приложение работало в полноэкранном "
-"режиме."
+"Қолданба толық экранды режимде болған кезде сіз %d хабарландыру алдыңыз."
 
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
 #: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
-msgstr "Посмотреть уведомления"
+msgstr "Хабарландыруларды қарау"
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
 msgid "Turned on Caffeine Boost"
-msgstr "Caffeine Boost включен"
+msgstr "Кофеин үдетуі іске қосылды"
 
 #: src/daemon/settings.vala:416
 msgid "Turned off Caffeine Boost"
-msgstr "Caffeine Boost отключен"
+msgstr "Кофеин үдетуі сөндірілді"
 
 #: src/daemon/settings.vala:421
 #, c-format
 msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
-msgstr[0] "Отключение произойдёт через 1 минуту"
-msgstr[1] "Отключение произойдёт через %d минуты"
-msgstr[2] "Отключение произойдёт через %d минут"
-msgstr[3] "Отключение произойдёт через %d минут"
+msgstr[0] "Бір минуттан кейін сөндіріледі"
+msgstr[1] "%d минуттан кейін сөндіріледі"
 
 #: src/daemon/endsession.vala:161
 msgid "Log out"
-msgstr "Выйти"
+msgstr "Шығу"
 
 #: src/daemon/endsession.vala:165
 msgid "Restart device"
-msgstr "Перезагрузить устройство"
+msgstr "Құрылғыны қайта іске қосу"
 
 #: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
 msgid "Power Off"
-msgstr "Выключить"
+msgstr "Сөндіру"
 
 #: src/daemon/osdkeys.vala:307
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Caps Lock қосулы"
 
 #: src/daemon/osdkeys.vala:314
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Caps Lock өшірулі"
 
 #: src/daemon/osdkeys.vala:324
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Num Lock қосулы"
 
 #: src/daemon/osdkeys.vala:330
 msgid "Num Lock is off"
-msgstr ""
+msgstr "Num Lock өшірулі"
 
 #: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
-msgstr "Ошибка аутентификации"
+msgstr "Аутентификация сәтсіз аяқталды"
 
 #: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
-msgstr "Группа:"
+msgstr "Топ:"
 
 #. Create our buttons
 #: src/dialogs/power/window.vala:87
 msgid "_Lock"
-msgstr "_Заблокировать"
+msgstr "Құ_лыптау"
 
 #: src/dialogs/power/window.vala:90
 msgid "L_og Out"
-msgstr "В_ыйти"
+msgstr "Ш_ығу"
 
 #: src/dialogs/power/window.vala:93
 msgid "_Suspend"
-msgstr "_Сон"
+msgstr "Күту _режимі"
 
 #: src/dialogs/power/window.vala:97
 msgid "_Hibernate"
-msgstr "_Гибернация"
+msgstr "Ги_бернация"
 
 #: src/dialogs/power/window.vala:101
 msgid "_Reboot"
-msgstr "_Перезагрузка"
+msgstr "Қайта іс_ке қосу"
 
 #: src/dialogs/power/window.vala:104
 msgid "Shut_down"
-msgstr "Выключить"
+msgstr "Сөнді_ру"
 
 #: src/dialogs/power/window.vala:156
 msgid "This system does not support hibernation."
-msgstr "Данная система не поддерживает гибернацию"
+msgstr "Бұл жүйе гибернацияны қолдамайды."
 
 #: src/dialogs/sendto/Application.vala:75
 msgid "Files to send"
-msgstr "Файлы для отправки"
+msgstr "Жіберілетін файлдар"
 
 #: src/dialogs/sendto/Application.vala:78
 msgid "_Cancel"
-msgstr "_Отмена"
+msgstr "Бас _тарту"
 
 #: src/dialogs/sendto/Application.vala:79
 msgid "_Open"
-msgstr "_Открыть"
+msgstr "_Ашу"
 
 #: src/dialogs/sendto/Application.vala:193
 msgid "Send Files via Bluetooth"
-msgstr "Отправить файлы через Bluetooth"
+msgstr "Файлдарды Bluetooth арқылы жіберу"
 
 #: src/dialogs/sendto/Application.vala:195
 msgid "Send files to device…"
-msgstr "Отправить файлы на устройство..."
+msgstr "Файлдарды құрылғыға жіберу…"
 
 #: src/dialogs/sendto/Application.vala:301
 msgid "Rejected file"
-msgstr "Отклоненный файл"
+msgstr "Файл қабылданбады"
 
 #: src/dialogs/sendto/Application.vala:302
 #, c-format
 msgid "File already exists: %s"
-msgstr "Файл уже существует: %s"
+msgstr "Файл бұрыннан бар: %s"
 
 #. Create a notification prompting the user what to do
 #: src/dialogs/sendto/Application.vala:314
 msgid "Receiving file"
-msgstr "Получаемый файл"
+msgstr "Файл алынуда"
 
 #: src/dialogs/sendto/Application.vala:315
 #, c-format
 msgid "Device '%s' wants to send a file: %s %s"
-msgstr "Устройство '%s' хочет отправить файл: %s %s"
+msgstr "'%s' құрылғысы файл жібергісі келеді: %s %s"
 
 #: src/dialogs/sendto/Application.vala:317
 msgid "Accept"
-msgstr "Разрешить"
+msgstr "Қабылдау"
 
 #: src/dialogs/sendto/Application.vala:321
 msgid "Reject"
-msgstr "Отклонить"
+msgstr "Қабылдамау"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
-msgstr "Имя файла"
+msgstr "Файл аты"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:69
 msgid "Transfer rate"
-msgstr "Скорость передачи"
+msgstr "Тасымалдау жылдамдығы"
 
 #. Now add the dialog buttons
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:108
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:114
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:39
 msgid "Close"
-msgstr "Закрыть"
+msgstr "Жабу"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
@@ -275,58 +262,50 @@ msgstr "Закрыть"
 #: src/panel/settings/settings_plugin_chooser.vala:105
 #: src/daemon/endsession.ui.h:3 src/dialogs/polkit/dialog.ui.h:8
 msgid "Cancel"
-msgstr "Отмена"
+msgstr "Бас тарту"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:156
 #, c-format
 msgid "<b>Transfer rate:</b> %s / s"
-msgstr "<b>Скорость передачи:</b> %s/сек"
+msgstr "<b>Тасымалдау жылдамдығы:</b> %s / с"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:158
 #, c-format
 msgid "%s / %s: Time remaining: %s"
-msgstr "%s / %s : Оставшееся время: %s"
+msgstr "%s / %s: Қалған уақыт: %s"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:169
 #, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] "%u час"
-msgstr[1] "%u часов"
-msgstr[2] "%u часов"
-msgstr[3] "%u часов"
+msgstr[0] "%u сағат"
+msgstr[1] "%u сағат"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:170
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:175
 #, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] "%u минута"
+msgstr[0] "%u минут"
 msgstr[1] "%u минут"
-msgstr[2] "%u минут"
-msgstr[3] "%u минут"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:176
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] "%u секунда"
+msgstr[0] "%u секунд"
 msgstr[1] "%u секунд"
-msgstr[2] "%u секунд"
-msgstr[3] "%u секунд"
 
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:180
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] "%d секунда"
+msgstr[0] "%d секунд"
 msgstr[1] "%d секунд"
-msgstr[2] "%d секунд"
-msgstr[3] "%d секунд"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:58
 msgid "Send"
-msgstr "Отправить"
+msgstr "Жіберу"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:111
 msgid "Speaker"
@@ -334,16 +313,16 @@ msgstr "Динамик"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:113
 msgid "Controller"
-msgstr "Контролер"
+msgstr "Контроллер"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:115
 msgid "Keyboard"
-msgstr "Клавиатура"
+msgstr "Пернетақта"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
 #: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
-msgstr "Мышь"
+msgstr "Тышқан"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:119
 msgid "Tablet"
@@ -361,7 +340,7 @@ msgstr "Телефон"
 #: src/dialogs/sendto/Dialog/FileSender.vala:29
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:26
 msgid "Bluetooth File Transfer"
-msgstr "Передача файлов по Bluetooth"
+msgstr "Bluetooth файлдарын беру"
 
 #. Update the labels
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:30
@@ -369,237 +348,238 @@ msgstr "Передача файлов по Bluetooth"
 #: src/dialogs/sendto/Dialog/FileSender.vala:174
 #, c-format
 msgid "<b>From</b>: %s"
-msgstr "<b>От</b>:%s   "
+msgstr "<b>Қайдан</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:31
 #: src/dialogs/sendto/Dialog/FileSender.vala:101
 #: src/dialogs/sendto/Dialog/FileSender.vala:175
 #, c-format
 msgid "<b>To</b>: %s"
-msgstr "<b>На</b>:%s"
+msgstr "<b>Қайда</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:43
 #, c-format
 msgid "<b>File name</b>: %s"
-msgstr "<b>Имя файла</b>: %s"
+msgstr "<b>Файл атауы</b>: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:53
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:74
 msgid "File transfer failed"
-msgstr "Не удалось передать файл"
+msgstr "Файлды тасымалдау сәтсіз аяқталды"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:54
 #, c-format
 msgid "File '%s' not received from %s"
-msgstr "Файл '%s' не был получен от %s"
+msgstr "'%s' файлы %s құрылғысынан алынбады"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:75
 #, c-format
 msgid "File '%s' from %s not received: %s"
-msgstr "Файл '%s' от %s не был получен: %s"
+msgstr "'%s' файлы %s құрылғысынан алынбады: %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:92
 #: src/dialogs/sendto/Dialog/FileSender.vala:274
 msgid "File transferred successfully"
-msgstr "Успешная передача файла"
+msgstr "Файл сәтті тасымалданды"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:93
 #, c-format
 msgid "Saved file from %s to '%s'"
-msgstr "Сохраненный файл от %s на '%s'"
+msgstr "%s құрылғысынан алынған файл '%s' ретінде сақталды"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:33
 msgid "From"
-msgstr "От"
+msgstr "Қайдан"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:34
 msgid "To"
-msgstr "На"
+msgstr "Қайда"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
 msgid "Trying to connect to %s…"
-msgstr "Попытка подключения к %s..."
+msgstr "%s құрылғысына қосылу әрекеті…"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:136
 #, c-format
 msgid "Connecting to '%s' failed"
-msgstr "Подключение к '%s' не удалось"
+msgstr "'%s' құрылғысына қосылу сәтсіз аяқталды"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:139
 #: src/dialogs/sendto/Dialog/FileSender.vala:220
 msgid "The file has not been transferred."
-msgstr "Файл не был передан."
+msgstr "Файл тасымалданбады."
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr "Повторить"
+msgstr "Қайталау"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
 msgid "Waiting for acceptance on %s…"
-msgstr "Ожидание принятия на %s..."
+msgstr "%s құрылғысында қабылдауды күту…"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:217
 #, c-format
 msgid "Transferring '%s' failed"
-msgstr "Передача '%s' не удалась"
+msgstr "'%s' файлын тасымалдау сәтсіз аяқталды"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:219
 #, c-format
 msgid "The transfer was interrupted or declined by %s."
-msgstr "Передача была прервана или отклонена %s."
+msgstr "Тасымалдау процесін %s үзді немесе қабылдамады."
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
-msgstr "Выберите устройство Bluetooth для отправки файлов"
+msgstr "Файлдарды жіберу үшін Bluetooth құрылғысын таңдаңыз"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:49
 msgid "Discovering…"
-msgstr "Открытие…"
+msgstr "Іздеу…"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:64
 msgid "<b>No devices found</b>"
-msgstr "<b>Устройство не найдено</b>"
+msgstr "<b>Құрылғылар табылмады</b>"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:68
 msgid "Ensure that your devices are visable and ready for pairing"
-msgstr "Убедитесь, что ваши устройства видны и готовы к сопряжению"
+msgstr ""
+"Құрылғыларыңыз көрінетініне және жұптастыруға дайын екеніне көз жеткізіңіз"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr "Доступные устройства"
+msgstr "Қолжетімді құрылғылар"
 
 #: src/dialogs/screenshot/screenshot.vala:365
 #: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
-msgstr "Снимок экрана Budgie"
+msgstr "Budgie скриншоты"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
 #: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
-msgstr "Снимок всего экрана"
+msgstr "Бүкіл экранның скриншоты"
 
 #: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
-msgstr "Сделать снимок экрана активного окна"
+msgstr "Белсенді терезенің скриншоты"
 
 #: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
-msgstr "Снимок выбранной области экран"
+msgstr "Таңдалған аймақтың скриншоты"
 
 #. translate
 #: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
-msgstr "Прекратить снимок экрана"
+msgstr "Скриншоттан бас тарту"
 
 #: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
-msgstr "Сохранить снимок экрана в выбранном каталоге"
+msgstr "Скриншотты таңдалған бумаға сақтау"
 
 #: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
-msgstr "Скопировать снимок экрана в буфер обмена"
+msgstr "Скриншотты алмасу буферіне көшіру"
 
 #: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
-msgstr "Открыть снимок экрана в стандартном приложении"
+msgstr "Скриншотты әдепкі қолданбада ашу"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
 #: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
-msgstr "Другие..."
+msgstr "Басқа..."
 
 #. set custom dir to found dir
 #: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
-msgstr "Открыть папку"
+msgstr "Буманы ашу"
 
 #: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
-msgstr "Открыть"
+msgstr "Ашу"
 
 #. Caffeine Notification
 #. Prepare label widget
 #: src/lib/notification.vala:80
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
-msgstr "Режим Caffeine"
+msgstr "Кофеин режимі"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
-msgstr "Выбрать значок меню из файла"
+msgstr "Мәзір таңбашасын файлдан орнату"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:34
 msgid "Image files"
-msgstr "Файлы изображений"
+msgstr "Сурет файлдары"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:40
 msgid "Any file"
-msgstr "Все файлы"
+msgstr "Кез келген файл"
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:53
 msgid "Set icon"
-msgstr "Установить значок"
+msgstr "Таңбашаны орнату"
 
 #. placeholder in case of no results
 #: src/panel/applets/budgie-menu/views/ListView.vala:111
 msgid "Sorry, no items found"
-msgstr "Извините, ничего не найдено"
+msgstr "Кешіріңіз, ешбір элемент табылмады"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
-msgstr "Настройки рабочего стола Budgie"
+msgstr "Budgie жұмыс үстелінің баптаулары"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
 msgid "System Settings"
-msgstr "Настройки системы"
+msgstr "Жүйелік баптаулар"
 
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
-msgstr "Питание"
+msgstr "Қуат"
 
 #: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
 msgid "All"
-msgstr "Все"
+msgstr "Барлығы"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
-msgstr "Таймер (минуты)"
+msgstr "Таймер (минут)"
 
 #: src/panel/applets/clock/ClockApplet.vala:122
 msgid "System time and date settings"
-msgstr "Настройки времени и даты"
+msgstr "Жүйелік уақыт пен күн баптаулары"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Unfavorite"
-msgstr "Удалить из избранного"
+msgstr "Таңдаулыдан алып тастау"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
 msgid "Favorite"
-msgstr "Добавить в избранное"
+msgstr "Таңдамалы"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Барлық терезелерді жабу"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "Жаңа дананы іске қосу"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
-msgstr "Свернуть"
+msgstr "Қайыру"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
@@ -607,155 +587,153 @@ msgstr "Свернуть"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "%s жұмыс орнына жылжыту"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
-msgstr "Восстановить размер"
+msgstr "Жазық емес ету"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
-msgstr "Развернуть"
+msgstr "Жазық қылу"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Терезені жабу"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Терезе басқару элементтерін көрсету"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
-msgstr "Caps lock включен"
+msgstr "Caps Lock белсенді"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:71
 msgid "Caps lock is not active"
-msgstr "Caps lock выключен"
+msgstr "Caps Lock белсенді емес"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:80
 msgid "Num lock is active"
-msgstr "Num lock включен"
+msgstr "Num lock белсенді"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:83
 msgid "Num lock is not active"
-msgstr "Num lock выключен"
+msgstr "Num lock белсенді емес"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:122
 #: src/raven/notifications_view.vala:341
 #, c-format
 msgid "%u unread notification"
 msgid_plural "%u unread notifications"
-msgstr[0] "%u непрочитанное уведомление "
-msgstr[1] "%u непорчитанное уведомление"
-msgstr[2] "%u непрочитанных уведомлений"
-msgstr[3] "%u непрочитанных уведомлений"
+msgstr[0] "%u оқылмаған хабарлама"
+msgstr[1] "%u оқылмаған хабарлама"
 
 #: src/panel/applets/notifications/NotificationsApplet.vala:124
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
-msgstr "Нет непрочитанных уведомлений"
+msgstr "Оқылмаған хабарламалар жоқ"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
-msgstr "Том используется другими процессами"
+msgstr "Томды басқа процестер қолдануда"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:40
 msgid "Operation aborted"
-msgstr "Операция прервана"
+msgstr "Операция тоқтатылды"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:51
 msgid "Type your password"
-msgstr "Введите пароль"
+msgstr "Пароліңізді теріңіз"
 
 #: src/panel/applets/places-indicator/MountItem.vala:23
 #: src/panel/applets/places-indicator/VolumeItem.vala:25
 msgid "Removable devices"
-msgstr "Съемные устройства"
+msgstr "Ауыстырмалы құрылғылар"
 
 #: src/panel/applets/places-indicator/MountItem.vala:25
 #: src/panel/applets/places-indicator/VolumeItem.vala:27
 msgid "Local volumes"
-msgstr "Локальные тома"
+msgstr "Жергілікті томдар"
 
 #: src/panel/applets/places-indicator/MountItem.vala:29
 #: src/panel/applets/places-indicator/VolumeItem.vala:31
 msgid "Network folders"
-msgstr "Сетевые папки"
+msgstr "Желілік бумалар"
 
 #: src/panel/applets/places-indicator/MountItem.vala:58
 #: src/panel/applets/places-indicator/VolumeItem.vala:55
 msgid "Eject"
-msgstr "Извлечь"
+msgstr "Шығару"
 
 #: src/panel/applets/places-indicator/MountItem.vala:60
 msgid "Unmount"
-msgstr "Размонтировать"
+msgstr "Тіркеуден шығару"
 
 #: src/panel/applets/places-indicator/MountItem.vala:63
 #: src/panel/applets/places-indicator/PlaceItem.vala:41
 #, c-format
 msgid "Open \"%s\""
-msgstr "Открыть \"%s\""
+msgstr "\"%s\" ашу"
 
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
-msgstr "Теперь можно безопасно извлечь"
+msgstr "Енді қауіпсіз түрде шығаруға болады"
 
 #: src/panel/applets/places-indicator/MountItem.vala:76
 msgid "Unknown Device"
-msgstr "Неизвестное устройство"
+msgstr "Белгісіз құрылғы"
 
 #: src/panel/applets/places-indicator/MountItem.vala:84
 msgid "Error while ejecting device"
-msgstr "Ошибка при извлечении устройства"
+msgstr "Құрылғыны шығару қатесі"
 
 #: src/panel/applets/places-indicator/MountItem.vala:100
 msgid "Error while unmounting volume"
-msgstr "Ошибка при размонтировании тома"
+msgstr "Томды тіркеуден шығару қатесі"
 
 #: src/panel/applets/places-indicator/PlacesIndicator.vala:80
 #: src/panel/applets/places-indicator/PlacesSection.vala:22
 #: src/panel/applets/places-indicator/PlacesSection.vala:44
 msgid "Places"
-msgstr "Места"
+msgstr "Орындар"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
-msgstr "Смонтировать и открыть \"%s\""
+msgstr "\"%s\" тіркеу және ашу"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:73
 #: src/panel/applets/places-indicator/VolumeItem.vala:114
 msgid "Enter the encryption passphrase to unlock this volume"
-msgstr "Введите кодовую фразу шифрования для разблокировки этого тома"
+msgstr "Бұл томның құлпын ашу үшін шифрлеу кілттік фразасын енгізіңіз"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:112
 msgid "The password you entered is incorrect"
-msgstr "Введенный пароль неверен"
+msgstr "Енгізілген пароль қате"
 
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
-msgstr "Произошла неизвестная ошибка при попытке монтирования этого тома"
+msgstr "Бұл томды тіркеу кезінде белгісіз қате орын алды"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
 msgid "Nothing to display right now"
-msgstr "Сейчас нечего показывать"
+msgstr "Қазір көрсетуге ештеңе жоқ"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Mount some drives"
-msgstr "Смонтируйте какие-нибудь диски"
+msgstr "Кейбір диск жетектерін тіркеу"
 
 #: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
 msgid "Enable more sections"
-msgstr "Включите больше секций"
+msgstr "Көбірек бөлімдерді іске қосу"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
 msgid "Toggle the desktop"
-msgstr "Переключиться на рабочий стол"
+msgstr "Жұмыс үстелін көрсету/жасыру"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:104
 msgid "Bluetooth"
@@ -763,190 +741,190 @@ msgstr "Bluetooth"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:114
 msgid "Bluetooth Settings"
-msgstr "Настройки Bluetooth"
+msgstr "Bluetooth баптаулары"
 
 #. Bluetooth switch
 #: src/panel/applets/status/BluetoothIndicator.vala:120
 msgid "Turn Bluetooth on or off"
-msgstr "Включить или выключить Bluetooth"
+msgstr "Bluetooth-ды іске қосу немесе сөндіру"
 
 #. Update the tray icon and placeholder text
 #. Airplane mode is on, so Bluetooth is disabled
 #: src/panel/applets/status/BluetoothIndicator.vala:279
 msgid "Airplane mode is on."
-msgstr "Включен режим полета."
+msgstr "Ұшақ режимі іске қосулы."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:280
 msgid "Bluetooth is disabled while airplane mode is on."
-msgstr "Bluetooth выключен, пока действует режим полета"
+msgstr "Ұшақ режимі іске қосулы болғанда Bluetooth сөндіріледі."
 
 #. Airplane mode is off, so Bluetooth is enabled
 #: src/panel/applets/status/BluetoothIndicator.vala:283
 msgid "No paired Bluetooth devices found."
-msgstr "Не пайдено сопряженных Bluetooth устройств."
+msgstr "Жұпталған Bluetooth құрылғылары табылмады."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:284
 msgid "Visit Bluetooth settings to pair a device."
-msgstr "Посетите настройки Bluetooth для сопряжения устройства."
+msgstr "Құрылғыны жұптау үшін Bluetooth баптауларын қараңыз."
 
 #: src/panel/applets/status/BluetoothIndicator.vala:440
 msgid "Send file"
-msgstr "Отправить файл"
+msgstr "Файлды жіберу"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:465
 msgid "Disconnect"
-msgstr "Разъединенить"
+msgstr "Байланысты үзу"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:577
 msgid "Disconnecting…"
-msgstr "Разъединение..."
+msgstr "Байланыс үзілуде…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:580
 msgid "Connecting…"
-msgstr "Подключение..."
+msgstr "Байланыс орнатылуда…"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to disconnect"
-msgstr "Ошибка разъединения"
+msgstr "Байланысты үзу сәтсіз аяқталды"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:585
 msgid "Failed to connect"
-msgstr "Ошибка подключения"
+msgstr "Байланыс орнату сәтсіз аяқталды"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Connected"
-msgstr "Подключено"
+msgstr "Байланыс орнатылды"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
 msgid "Disconnected"
-msgstr "Разъединено"
+msgstr "Байланыс үзілді"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:702
 #, c-format
 msgid "<b>Filename</b>: %s"
-msgstr "<b>Имя файла</b>: %s"
+msgstr "<b>Файл атауы</b>: %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:709
 #, c-format
 msgid "Receiving… %s of %s"
-msgstr "Получено… %s из %s"
+msgstr "Қабылдануда… %s / %s"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:714
 #, c-format
 msgid "Sending… %s of %s"
-msgstr "Отправлено... %s из %s"
+msgstr "Жіберілуде… %s / %s"
 
 #: src/panel/applets/status/PowerIndicator.vala:103
 msgid "Battery fully charged."
-msgstr "Батарея полностью заряжена."
+msgstr "Батарея толық зарядталды."
 
 #: src/panel/applets/status/PowerIndicator.vala:107
 msgid "Unknown"
-msgstr "Неизвестно"
+msgstr "Белгісіз"
 
 #. Set inner charging duration to hours:minutes
 #: src/panel/applets/status/PowerIndicator.vala:116
 msgid "Battery charging"
-msgstr "Батарея заряжается"
+msgstr "Батарея зарядталуда"
 
 #: src/panel/applets/status/PowerIndicator.vala:121
 msgid "Battery remaining"
-msgstr "Осталось заряда"
+msgstr "Батареяның қалған заряды"
 
 #: src/panel/applets/status/PowerIndicator.vala:191
 msgid "Performance Mode"
-msgstr "Режим производительности"
+msgstr "Өнімділік режимі"
 
 #: src/panel/applets/status/PowerIndicator.vala:200
 msgid "Power Saver"
-msgstr "Сохранение энергии"
+msgstr "Энергияны үнемдеу"
 
 #: src/panel/applets/status/PowerIndicator.vala:207
 msgid "Balanced"
-msgstr "Сбалансированный"
+msgstr "Теңгерілген"
 
 #: src/panel/applets/status/PowerIndicator.vala:214
 msgid "Performance"
-msgstr "Производительность"
+msgstr "Өнімділік"
 
 #: src/panel/applets/status/PowerIndicator.vala:276
 msgid "Power settings"
-msgstr "Настройки питания"
+msgstr "Қуат баптаулары"
 
 #. User Menu Creation
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:98
 msgid "User"
-msgstr "Пользователь"
+msgstr "Пайдаланушы"
 
 #. Default to "User" and symbolic icon
 #. The rest
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:104
 msgid "Lock"
-msgstr "Заблокировать"
+msgstr "Құлыптау"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:105
 msgid "Suspend"
-msgstr "Режим сна"
+msgstr "Күту режимі"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:106
 msgid "Hibernate"
-msgstr "Гибернация"
+msgstr "Ұйқы режимі"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:107
 #: src/daemon/endsession.ui.h:5
 msgid "Restart"
-msgstr "Перезагрузить"
+msgstr "Қайта іске қосу"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:108
 #: src/daemon/endsession.ui.h:6
 msgid "Shutdown"
-msgstr "Выключить"
+msgstr "Сөндіру"
 
 #: src/panel/applets/user-indicator/UserIndicatorWindow.vala:207
 #: src/daemon/endsession.ui.h:4
 msgid "Logout"
-msgstr "Выйти"
+msgstr "Шығу"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:72
 msgid "Rename"
-msgstr "Переименовать"
+msgstr "Атын өзгерту"
 
 #: src/panel/applets/workspaces/WorkspaceItem.vala:80
 #: src/panel/settings/settings_panel_dialogs.vala:157
 msgid "Remove"
-msgstr "Удалить"
+msgstr "Өшіру"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "Жаңа жұмыс орындарын жасау мүмкін емес"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "Жаңа жұмыс орнын жасау"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
-msgstr "Без названия"
+msgstr "Атаусыз"
 
 #: src/panel/settings/settings_autostart.vala:141
 msgid "No description"
-msgstr "Нет описания"
+msgstr "Сипаттамасы жоқ"
 
 #: src/panel/settings/settings_autostart.vala:164
 msgid "running"
-msgstr "работает"
+msgstr "орындалуда"
 
 #: src/panel/settings/settings_autostart.vala:185
 msgid "Applications"
-msgstr "Приложения"
+msgstr "Қолданбалар"
 
 #: src/panel/settings/settings_autostart.vala:195
 #: src/panel/settings/settings_autostart.vala:360
 #: src/panel/settings/settings_plugin_chooser.vala:106
 msgid "Add"
-msgstr "Добавить"
+msgstr "Қосу"
 
 #: src/panel/settings/settings_autostart.vala:354
 #: src/panel/settings/settings_autostart.vala:387
@@ -955,44 +933,44 @@ msgstr "Команда"
 
 #: src/panel/settings/settings_autostart.vala:370
 msgid "An entry with that title already exists"
-msgstr "Запись с таким названием уже существует"
+msgstr "Мұндай атауы бар жазба бар болып тұр"
 
 #: src/panel/settings/settings_autostart.vala:373
 msgid "Title"
-msgstr "Название"
+msgstr "Атауы"
 
 #: src/panel/settings/settings_autostart.vala:377
 #: src/panel/settings/settings_autostart.vala:391
 msgid "Required"
-msgstr "Обязательно"
+msgstr "Міндетті"
 
 #: src/panel/settings/settings_autostart.vala:380
 msgid "Description"
-msgstr "Описание"
+msgstr "Сипаттамасы"
 
 #: src/panel/settings/settings_autostart.vala:384
 msgid "Optional"
-msgstr "Необязательно"
+msgstr "Міндетті емес"
 
 #: src/panel/settings/settings_autostart.vala:446
 msgid "Autostart"
-msgstr "Автозапуск"
+msgstr "Автожөнелту"
 
 #: src/panel/settings/settings_autostart.vala:464
 msgid "Autostart apps"
-msgstr "Автозапуск приложений"
+msgstr "Автожөнелтілетін қолданбалар"
 
 #: src/panel/settings/settings_autostart.vala:506
 msgid "Add Application"
-msgstr "Добавить приложение"
+msgstr "Қолданбаны қосу"
 
 #: src/panel/settings/settings_autostart.vala:508
 msgid "Add Command"
-msgstr "Добавить команду"
+msgstr "Команда қосу"
 
 #: src/panel/settings/settings_desktop.vala:52
 msgid "Desktop"
-msgstr "Рабочий стол"
+msgstr "Жұмыс үстелі"
 
 #. Budgie native implementation
 #. Get the settings for Budgie Desktop View
@@ -1007,11 +985,11 @@ msgstr "Рабочий стол"
 #. Universal show
 #: src/panel/settings/settings_desktop.vala:77
 msgid "Desktop Icons"
-msgstr "Значки рабочего стола"
+msgstr "Жұмыс үстелі таңбашалары"
 
 #: src/panel/settings/settings_desktop.vala:78
 msgid "Control whether to allow icons on the desktop."
-msgstr "Управляет возможностью использовать ярлыки и значки на рабочем столе."
+msgstr "Жұмыс үстелінде таңбашаларға рұқсат беру-бермеуді басқару."
 
 #. DesktopFolder doesn't support fancy options like showing home folder,
 #. trash, or active mounts
@@ -1019,29 +997,29 @@ msgstr "Управляет возможностью использовать я�
 #. Switcher to show or hide active mounts
 #: src/panel/settings/settings_desktop.vala:87
 msgid "Active Mounts"
-msgstr "Смонтированные устройства"
+msgstr "Белсенді тіркеулер"
 
 #: src/panel/settings/settings_desktop.vala:88
 msgid "Show all active mounts on the desktop."
-msgstr "Показывает все активные точки монтирования на рабочем столе."
+msgstr "Жұмыс үстелінде барлық белсенді тіркелген құрылғыларды көрсету."
 
 #. Switcher to show or hide our Home folder
 #: src/panel/settings/settings_desktop.vala:95
 msgid "Home directory"
-msgstr "Домашняя папка"
+msgstr "Үй бумасы"
 
 #: src/panel/settings/settings_desktop.vala:96
 msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Добавить ярлык домашней папки на рабочий стол."
+msgstr "Жұмыс үстеліне үй бумасына сілтейтін жарлықты қосу."
 
 #. Switcher to show or hide a shortcut to Trash
 #: src/panel/settings/settings_desktop.vala:103
 msgid "Trash"
-msgstr "Корзина"
+msgstr "Қоқыс шелегі"
 
 #: src/panel/settings/settings_desktop.vala:104
 msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Добавить ярлык корзины на рабочий стол."
+msgstr "Жұмыс үстеліне қоқыс шелегі бумасына сілтейтін жарлықты қосу."
 
 #. DesktopType doesn't support icon size changing. Nemo might but needs
 #. validation.
@@ -1049,80 +1027,81 @@ msgstr "Добавить ярлык корзины на рабочий стол.
 #. Icon Size combo box
 #: src/panel/settings/settings_desktop.vala:116
 msgid "Icon Size"
-msgstr "Размер значков"
+msgstr "Таңбаша өлшемі"
 
 #: src/panel/settings/settings_desktop.vala:117
 msgid "Set the desired size of icons on the desktop."
-msgstr "Установить желаемый размер значков на рабочем столе."
+msgstr "Жұмыс үстеліндегі таңбашалардың қажетті өлшемін орнату."
 
 #: src/panel/settings/settings_desktop.vala:148
 msgid "Number of virtual desktops"
-msgstr "Число виртуальных рабочих столов"
+msgstr "Виртуалды жұмыс үстелдерінің саны"
 
 #: src/panel/settings/settings_desktop.vala:149
 msgid ""
 "Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
-"Количество создаваемых при загрузке виртуальных рабочих столов/пространств."
+"Іске қосылғанда автоматты түрде жасалатын виртуалды жұмыс үстелдерінің / "
+"жұмыс аймақтарының саны."
 
 #: src/panel/settings/settings_desktop.vala:217
 msgid "Single"
-msgstr "Одиночный"
+msgstr "Бірлік"
 
 #. If the click policy is to double click
 #: src/panel/settings/settings_desktop.vala:221
 msgid "Double"
-msgstr "Двойной"
+msgstr "Қос"
 
 #: src/panel/settings/settings_desktop.vala:236
 msgid "Click Policy"
-msgstr "Политика нажатий"
+msgstr "Шерту саясаты"
 
 #: src/panel/settings/settings_desktop.vala:237
 msgid ""
 "Click Policy determines if we should open items on a single or double click."
 msgstr ""
-"Политика нажатий определяет, следует ли открывать элементы одиночным или "
-"двойным нажатием."
+"Шерту саясаты элементтерді бірлік немесе қос шерту арқылы ашу керектігін "
+"анықтайды."
 
 #: src/panel/settings/settings_desktop.vala:289
 msgid "Normal"
-msgstr "Нормальный"
+msgstr "Қалыпты"
 
 #. Small
 #: src/panel/settings/settings_desktop.vala:292
 msgid "Small"
-msgstr "Маленький"
+msgstr "Кіші"
 
 #. Large
 #: src/panel/settings/settings_desktop.vala:294
 msgid "Large"
-msgstr "Большой"
+msgstr "Үлкен"
 
 #. Massive
 #: src/panel/settings/settings_desktop.vala:296
 msgid "Massive"
-msgstr "Огромный"
+msgstr "Өте үлкен"
 
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
-msgstr "Шрифты"
+msgstr "Қаріптер"
 
 #: src/panel/settings/settings_fonts.vala:42
 msgid "Window Titles"
-msgstr "Заголовки окон"
+msgstr "Терезе атаулары"
 
 #: src/panel/settings/settings_fonts.vala:43
 msgid "Set the font used in the titlebars of applications."
-msgstr "Задает шрифт для заголовков окон приложений."
+msgstr "Бағдарламалардың атау жолақтарында қолданылатын қаріпті орнату."
 
 #: src/panel/settings/settings_fonts.vala:49
 msgid "Documents"
-msgstr "Документы"
+msgstr "Құжаттар"
 
 #: src/panel/settings/settings_fonts.vala:50
 msgid "Set the display font used by for documents."
-msgstr "Задает шрифт, используемый для документов."
+msgstr "Құжаттар үшін қолданылатын қаріпті орнату."
 
 #: src/panel/settings/settings_fonts.vala:56
 msgid "Interface"
@@ -1130,42 +1109,42 @@ msgstr "Интерфейс"
 
 #: src/panel/settings/settings_fonts.vala:57
 msgid "Set the primary font used by application controls."
-msgstr ""
-"Задает основной шрифт, используемый элементами управления приложениями."
+msgstr "Қолданбаларды басқару элементтері қолданатын негізгі қаріпті орнату."
 
 #: src/panel/settings/settings_fonts.vala:63
 msgid "Monospace"
-msgstr "Моноширинный"
+msgstr "Ені біркелкі"
 
 #: src/panel/settings/settings_fonts.vala:64
 msgid "Set the fixed-width font used by text dominant applications."
-msgstr "Задает моноширинный шрифт, используемый текстовыми приложениями."
+msgstr ""
+"Мәтін басым қолданбалар қолданатын бекітілген ені біркелкі қаріпті орнату."
 
 #: src/panel/settings/settings_fonts.vala:70
 msgid "Text scaling"
-msgstr "Масштабирование текста"
+msgstr "Мәтінді масштабтау"
 
 #: src/panel/settings/settings_fonts.vala:71
 msgid "Set the text scaling factor."
-msgstr "Устанавливает коэффициент масштабирования текста."
+msgstr "Мәтінді масштабтау коэффициентін орнату."
 
 #: src/panel/settings/settings_fonts.vala:80
 msgid "Full"
-msgstr "Полный"
+msgstr "Толық"
 
 #: src/panel/settings/settings_fonts.vala:81
 msgid "Medium"
-msgstr "Средний"
+msgstr "Орташа"
 
 #: src/panel/settings/settings_fonts.vala:82
 msgid "Slight"
-msgstr "Легкий"
+msgstr "Кішкене"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
 #: src/panel/settings/settings_panel.vala:246
 msgid "None"
-msgstr "Нет"
+msgstr "Жоқ"
 
 #: src/panel/settings/settings_fonts.vala:99
 msgid "Hinting"
@@ -1173,195 +1152,194 @@ msgstr "Хинтинг"
 
 #: src/panel/settings/settings_fonts.vala:100
 msgid "Set the type of hinting to use."
-msgstr "Устанавливает тип используемого хинтинга."
+msgstr "Қолданылатын хинтинг түрін орнату."
 
 #: src/panel/settings/settings_fonts.vala:107
 msgid "Subpixel (for LCD screens)"
-msgstr "Субпиксельное (для ЖК-экранов)"
+msgstr "Субпиксельді (LCD экрандары үшін)"
 
 #: src/panel/settings/settings_fonts.vala:108
 msgid "Standard (grayscale)"
-msgstr "Стандартное (оттенки серого)"
+msgstr "Стандартты (сұр түстер шкаласы)"
 
 #: src/panel/settings/settings_fonts.vala:124
 msgid "Antialiasing"
-msgstr "Сглаживание"
+msgstr "Тегістеу"
 
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
-msgstr "Устанавливает тип используемого сглаживания."
+msgstr "Қолданылатын тегістеу түрін орнату."
 
 #: src/panel/settings/settings_main.vala:57
 msgid "Appearance"
-msgstr "Внешний вид"
+msgstr "Сыртқы түрі"
 
 #: src/panel/settings/settings_main.vala:58
 msgid "Panels"
-msgstr "Панели"
+msgstr "Панельдер"
 
 #: src/panel/settings/settings_main.vala:59
 msgid "Session"
-msgstr "Сессия"
+msgstr "Сеанс"
 
 #: src/panel/settings/settings_main.vala:99
 msgid "Create new panel"
-msgstr "Создать новую панель"
+msgstr "Жаңа панельді жасау"
 
 #: src/panel/settings/settings_panel_applets.vala:21
 msgid "Applet Settings"
-msgstr "Настройки апплета"
+msgstr "Апплет баптаулары"
 
 #: src/panel/settings/settings_panel_applets.vala:235
 msgid "Add applet"
-msgstr "Добавить апплет"
+msgstr "Апплет қосу"
 
 #: src/panel/settings/settings_panel_applets.vala:236
 msgid "Choose a new applet to add to this panel"
-msgstr "Выбрать новый апплет для добавления на эту панель"
+msgstr "Осы панельге қосу үшін жаңа апплетті таңдаңыз"
 
 #: src/panel/settings/settings_panel_applets.vala:250
 #: src/panel/settings/settings_raven_widgets.vala:164
 msgid "No settings available"
-msgstr "Нет доступных настроек"
+msgstr "Қолжетімді баптаулар жоқ"
 
 #: src/panel/settings/settings_panel_applets.vala:403
 msgid "Start"
-msgstr "Начало"
+msgstr "Басы"
 
 #: src/panel/settings/settings_panel_applets.vala:406
 msgid "Center"
-msgstr "Центр"
+msgstr "Ортасы"
 
 #: src/panel/settings/settings_panel_applets.vala:409
 msgid "End"
-msgstr "Конец"
+msgstr "Соңы"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
-msgstr "Подтвердить удаление панели"
+msgstr "Панельді өшіруді растау"
 
 #: src/panel/settings/settings_panel_dialogs.vala:31
 msgid "Do you really want to remove this panel? This action cannot be undone."
 msgstr ""
-"Вы действительно хотите удалить эту панель? Это действие нельзя отменить."
+"Бұл панельді шынымен өшіргіңіз келе ме? Бұл әрекетті қайтару мүмкін емес."
 
 #: src/panel/settings/settings_panel_dialogs.vala:42
 msgid "Remove panel"
-msgstr "Удалить панель"
+msgstr "Панельді өшіру"
 
 #: src/panel/settings/settings_panel_dialogs.vala:43
 msgid "Keep panel"
-msgstr "Оставить панель"
+msgstr "Панельді қалдыру"
 
 #: src/panel/settings/settings_panel_dialogs.vala:67
 msgid "Confirm applet removal"
-msgstr "Подтвердить удаление апплета"
+msgstr "Апплетті өшіруді растау"
 
 #: src/panel/settings/settings_panel_dialogs.vala:74
 msgid ""
 "Do you really want to remove this applet? This action cannot be undone."
 msgstr ""
-"Вы действительно хотите удалить этот апплет? Это действие нельзя отменить."
+"Бұл апплетті өшіруді шынымен қалайсыз ба? Бұл әрекетті болдырмау мүмкін "
+"емес."
 
 #: src/panel/settings/settings_panel_dialogs.vala:89
 #: src/panel/settings/settings_panel_dialogs.vala:148
 msgid "Don't ask me again"
-msgstr "Больше не спрашивать"
+msgstr "Менен қайта сұрамау"
 
 #: src/panel/settings/settings_panel_dialogs.vala:98
 msgid "Remove applet"
-msgstr "Удалить апплет"
+msgstr "Апплетті өшіру"
 
 #: src/panel/settings/settings_panel_dialogs.vala:99
 msgid "Keep applet"
-msgstr "Оставить апплет"
+msgstr "Апплетті қалдыру"
 
 #: src/panel/settings/settings_panel_dialogs.vala:126
 msgid "Confirm widget removal"
-msgstr "Подтвердите удаление виджета"
+msgstr "Виджетті өшіруді растау"
 
 #: src/panel/settings/settings_panel_dialogs.vala:133
 msgid ""
 "Do you really want to remove this widget? This action cannot be undone."
 msgstr ""
-"Вы действительно хотите удалить этот виджет? Это действие не может быть "
-"отменено."
+"Бұл виджетті шынымен өшіргіңіз келе ме? Бұл әрекетті қайтару мүмкін емес."
 
 #: src/panel/settings/settings_plugin_chooser.vala:62
 msgid "Built-in"
-msgstr "Встроенный"
+msgstr "Ішіне орнатылған"
 
 #: src/panel/settings/settings_plugin_chooser.vala:96
 msgid "Choose a plugin"
-msgstr "Выбрать плагин"
+msgstr "Плагинді таңдау"
 
 #: src/panel/settings/settings_plugin_chooser.vala:239
 msgid "No description."
-msgstr "Нет описания."
+msgstr "Сипаттамасы жоқ."
 
 #: src/panel/settings/settings_plugin_chooser.vala:261
 #, c-format
 msgid "by %s"
-msgstr "около %s"
+msgstr "авторы %s"
 
 #: src/panel/settings/settings_plugin_chooser.vala:264
 msgid "No authors listed"
-msgstr "Нет списка артистов"
+msgstr "Авторлар көрсетілмеген"
 
 #: src/panel/settings/settings_raven.vala:47
 #: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
 msgid "Widgets"
-msgstr "Виджеты"
+msgstr "Виджеттер"
 
 #: src/panel/settings/settings_raven.vala:48
 #: src/panel/settings/settings_panel.vala:91
 msgid "Settings"
-msgstr "Настройки"
+msgstr "Баптаулар"
 
 #: src/panel/settings/settings_raven_settings.vala:47
 msgid "Set Raven position"
-msgstr "Установить положение панели Raven"
+msgstr "Raven орнын орнату"
 
 #: src/panel/settings/settings_raven_settings.vala:48
 msgid ""
 "Set which side of the screen Raven will open on. If set to Automatic, Raven "
 "will open where its parent panel is."
 msgstr ""
-"Устанавливает, на какой стороне экрана будет открываться панель Raven.  Если"
-" установлено значение «Автоматически», панель Raven откроется там, где "
-"находится его родительская панель."
+"Raven экранның қай жағында ашылатынын орнату. Егер «Автоматты» күйіне "
+"орнатылса, Raven өзінің негізгі панелі орналасқан жерде ашылады."
 
 #: src/panel/settings/settings_raven_settings.vala:71
 msgid "Set notification sort order"
-msgstr "Установить другую сортировку уведомлений"
+msgstr "Хабарландыруларды сұрыптау ретін орнату"
 
 #: src/panel/settings/settings_raven_settings.vala:72
 msgid ""
 "Set whether notifications are sorted from oldest to newest, or newest to "
 "oldest."
 msgstr ""
-"Установите, будут ли уведомления сортироваться от самых старых к самым новым"
-" или от самых новых к самым старым."
+"Хабарландырулардың ескіден жаңаға немесе жаңадан ескіге қарай сұрыпталатынын"
+" орнату."
 
 #: src/panel/settings/settings_raven_widgets.vala:21
 msgid "Widget Settings"
-msgstr "Настройки виджета"
+msgstr "Виджет баптаулары"
 
 #: src/panel/settings/settings_raven_widgets.vala:149
 msgid "Add widget"
-msgstr "Добавить виджет"
+msgstr "Виджетті қосу"
 
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
-msgstr "Выберите новый виджет для добавления просмотра виджетов"
+msgstr "Виджеттер көрінісіне қосу үшін жаңа виджетті таңдаңыз"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
 "for this plugin."
 msgstr ""
-"Ошибка сознания экземпляра виджета. Движок плагина не смог найти информацию "
-"для этого плагина."
+"Виджет данасын жасау сәтсіз аяқталды. Плагин қозғалтқышы бұл плагин үшін "
+"ақпаратты таба алмады."
 
 #: src/panel/settings/settings_raven_widgets.vala:240
 msgid ""
@@ -1369,17 +1347,17 @@ msgid ""
 " format, such as 'tld.domain.group.WidgetName.so' for C/Vala or "
 "'tld_domain_group_WidgetName' for Python."
 msgstr ""
-"Ошибка сознания экземпляра виджета. Имя модуля должно быть в формате "
-"обратного DNS. Например: 'tld.domain.group.WidgetName.so' для C/Vala или "
-"'tld_domain_group_WidgetName' для Python."
+"Виджет данасын жасау сәтсіз аяқталды. Модуль атауы кері DNS пішімінде болуы "
+"керек, мысалы, C/Vala үшін 'tld.domain.group.WidgetName.so' немесе Python "
+"үшін 'tld_domain_group_WidgetName'."
 
 #: src/panel/settings/settings_raven_widgets.vala:244
 msgid ""
 "Failed to create the widget instance. The plugin engine failed to load the "
 "plugin from the disk."
 msgstr ""
-"Ошибка сознания экземпляра виджета. Движок плагина не смог загрузить плагин "
-"с диска."
+"Виджет данасын жасау сәтсіз аяқталды. Плагин қозғалтқышы плагинді дисктен "
+"жүктей алмады."
 
 #: src/panel/settings/settings_raven_widgets.vala:247
 msgid ""
@@ -1387,169 +1365,169 @@ msgid ""
 "\n"
 "The schema name should be identical to the module name, but with no extension and (in the case of Python) the underscores replaced with periods."
 msgstr ""
-"Ошибка создания экземпляра виджета. Плагин поддерживает настройки, однако не устанавливает схему настроек с таким же именем.\n"
+"Виджет данасын жасау сәтсіз аяқталды. Плагин баптауларды қолдайды, бірақ дәл сондай атаумен баптаулар схемасын орнатпайды.\n"
 "\n"
-"Имя схемы должно быть индетично имени модуля, но без расширения и (в случае Python) подчеркивания заменены точками."
+"Схема атауы модуль атауымен бірдей болуы керек, бірақ кеңейтусіз және (Python жағдайында) астын сызу таңбалары нүктелермен ауыстырылуы керек."
 
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
-msgstr "Ошибка создания экземпляра виджета из-за неизвестной ошибки."
+msgstr "Белгісіз қате салдарынан виджет данасын жасау мүмкін болмады."
 
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
-msgstr "Апплеты"
+msgstr "Апплеттер"
 
 #: src/panel/settings/settings_panel.vala:93
 msgid "Remove Panel"
-msgstr "Удалить панель"
+msgstr "Панельді өшіру"
 
 #: src/panel/settings/settings_panel.vala:94
 msgid "Remove this panel from the screen"
-msgstr "Убрать эту панель с экрана"
+msgstr "Бұл панельді экраннан өшіру"
 
 #: src/panel/settings/settings_panel.vala:171
 msgid "Top Dock"
-msgstr "Верхний док"
+msgstr "Жоғарғы док"
 
 #: src/panel/settings/settings_panel.vala:173
 msgid "Right Dock"
-msgstr "Правый док"
+msgstr "Оң жақ док"
 
 #: src/panel/settings/settings_panel.vala:175
 msgid "Left Dock"
-msgstr "Левый док"
+msgstr "Сол жақ док"
 
 #: src/panel/settings/settings_panel.vala:177
 msgid "Bottom Dock"
-msgstr "Нижний док"
+msgstr "Төменгі док"
 
 #: src/panel/settings/settings_panel.vala:182
 msgid "Top Panel"
-msgstr "Верхняя панель"
+msgstr "Жоғарғы панель"
 
 #: src/panel/settings/settings_panel.vala:184
 msgid "Right Panel"
-msgstr "Правая панель"
+msgstr "Оң жақ панель"
 
 #: src/panel/settings/settings_panel.vala:186
 msgid "Left Panel"
-msgstr "Левая панель"
+msgstr "Сол жақ панель"
 
 #: src/panel/settings/settings_panel.vala:188
 msgid "Bottom Panel"
-msgstr "Нижняя панель"
+msgstr "Төменгі панель"
 
 #: src/panel/settings/settings_panel.vala:225
 msgid "Top"
-msgstr "Сверху"
+msgstr "Жоғары"
 
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
-msgstr "Справа"
+msgstr "Оң жақ"
 
 #: src/panel/settings/settings_panel.vala:229
 #: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
 msgid "Left"
-msgstr "Слева"
+msgstr "Сол жақ"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
-msgstr "Снизу"
+msgstr "Төмен"
 
 #: src/panel/settings/settings_panel.vala:241
 msgid "Always"
-msgstr "Всегда"
+msgstr "Әрқашан"
 
 #: src/panel/settings/settings_panel.vala:243
 msgid "Dynamic"
-msgstr "Динамически"
+msgstr "Динамикалық"
 
 #: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
 msgid "Automatic"
-msgstr "Автоматически"
+msgstr "Автоматты түрде"
 
 #: src/panel/settings/settings_panel.vala:258
 msgid "Intelligent"
-msgstr "Умно"
+msgstr "Интеллектуалды"
 
 #: src/panel/settings/settings_panel.vala:261
 msgid "Never"
-msgstr "Никогда"
+msgstr "Ешқашан"
 
 #: src/panel/settings/settings_panel.vala:278
 msgid "Position"
-msgstr "Расположение"
+msgstr "Орын"
 
 #: src/panel/settings/settings_panel.vala:279
 msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Задать край экрана для привязки панели"
+msgstr "Осы панель орналасатын экран жиегін орнату"
 
 #: src/panel/settings/settings_panel.vala:287
 msgid "Size"
-msgstr "Размер"
+msgstr "Өлшемі"
 
 #: src/panel/settings/settings_panel.vala:288
 msgid "Set the size (width or height, depending on orientation) of this panel"
 msgstr ""
-"Задать размер (ширину или высоту, в зависимости от ориентации) этой панели"
+"Осы панельдің өлшемін (бағдарына байланысты ені немесе биіктігі) орнату"
 
 #: src/panel/settings/settings_panel.vala:295
 msgid "Spacing"
-msgstr "Интервал"
+msgstr "Аралық"
 
 #: src/panel/settings/settings_panel.vala:296
 msgid "Set the spacing between applets for this panel"
-msgstr "Установите интервал между апплетами для этой панели"
+msgstr "Осы панель үшін апплеттер арасындағы аралықты орнату"
 
 #: src/panel/settings/settings_panel.vala:303
 msgid "Automatically hide"
-msgstr "Автоматически скрывать"
+msgstr "Автоматты түрде жасыру"
 
 #: src/panel/settings/settings_panel.vala:304
 msgid "When set, this panel will hide from view to maximize screen estate"
 msgstr ""
-"Если задано, эта панель будет скрываться для максимизации экранного "
-"пространства"
+"Іске қосылған кезде, бұл панель экран кеңістігін барынша пайдалану үшін "
+"көзден жасырылады"
 
 #: src/panel/settings/settings_panel.vala:311
 msgid "Transparency"
-msgstr "Прозрачность"
+msgstr "Мөлдірлік"
 
 #: src/panel/settings/settings_panel.vala:312
 msgid "Control when this panel should have a solid background"
-msgstr "Задать прозрачность фона для этой панели"
+msgstr "Осы панельдің фон түсі қашан тұтас болуы керектігін басқару"
 
 #: src/panel/settings/settings_panel.vala:317
 msgid "Shadow"
-msgstr "Тень"
+msgstr "Көлеңке"
 
 #: src/panel/settings/settings_panel.vala:318
 msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Добавляет декоративную тень, идеально для прозрачных панелей"
+msgstr "Мөлдір емес панельдер үшін қолайлы сәндік түсетін көлеңке қосады"
 
 #: src/panel/settings/settings_panel.vala:324
 msgid "Stylize regions"
-msgstr "Стилизовать регионы"
+msgstr "Аймақтарды стильдеу"
 
 #: src/panel/settings/settings_panel.vala:325
 msgid ""
 "Adds a hint to the panel so that each of the panel's three main areas may be"
 " themed differently."
 msgstr ""
-"Настраивает панель так, что каждая из трех основных областей панели может "
-"иметь свою тему."
+"Панельдің үш негізгі аймағының әрқайсысына әртүрлі тема қолдануға болатындай"
+" етіп панельге нұсқау қосады."
 
 #: src/panel/settings/settings_panel.vala:332
 msgid "Dock mode"
-msgstr "Режим дока"
+msgstr "Док режимі"
 
 #: src/panel/settings/settings_panel.vala:333
 msgid ""
 "When in dock mode, the panel will use the minimal amount of space possible, "
 "freeing up valuable screen estate"
 msgstr ""
-"Находясь в режиме дока, панель будет использовать минимально возможную "
-"площадь, освобождая полезное экранное пространство"
+"Док режимінде панель экранның құнды кеңістігін босатып, мүмкіндігінше аз "
+"орын пайдаланады"
 
 #: src/panel/settings/settings_style.vala:33
 msgid "Style"
@@ -1557,254 +1535,257 @@ msgstr "Стиль"
 
 #: src/panel/settings/settings_style.vala:48
 msgid "Set the appearance of window decorations and controls"
-msgstr "Устанавливает внешний вид окон и элементов управления"
+msgstr "Терезе безендірулері мен басқару элементтерінің сыртқы түрін орнату"
 
 #: src/panel/settings/settings_style.vala:52
 msgid "Icons"
-msgstr "Значки"
+msgstr "Таңбашалар"
 
 #: src/panel/settings/settings_style.vala:53
 msgid "Set the globally used icon theme"
-msgstr "Устанавливает глобально используемую тему значков"
+msgstr "Глобалды қолданылатын таңбашалар тақырыбын орнату"
 
 #: src/panel/settings/settings_style.vala:57
 msgid "Cursors"
-msgstr "Курсоры"
+msgstr "Курсорлар"
 
 #: src/panel/settings/settings_style.vala:58
 msgid "Set the globally used mouse cursor theme"
-msgstr "Устанавливает глобально используемую тему курсоров мыши"
+msgstr "Глобалды қолданылатын тышқан курсорының тақырыбын орнату"
 
 #: src/panel/settings/settings_style.vala:62
 msgid "Notification Position"
-msgstr "Позиция уведомлений"
+msgstr "Хабарландыру орны"
 
 #: src/panel/settings/settings_style.vala:63
 msgid "Set the location for notification popups"
-msgstr "Устанавливает местоположение всплывающих окон уведомлений"
+msgstr "Хабарландырулардың шығатын орнын орнату"
 
 #: src/panel/settings/settings_style.vala:72
 msgid "Dark theme"
-msgstr "Тёмная тема"
+msgstr "Күңгірт тема"
 
 #: src/panel/settings/settings_style.vala:79
 msgid "Built-in theme"
-msgstr "Встроенная тема"
+msgstr "Кірістірілген тема"
 
 #: src/panel/settings/settings_style.vala:80
 msgid ""
 "When enabled, the built-in theme will override the desktop component styling"
 msgstr ""
-"Когда включено, стиль компонентов рабочего стола будет заменен встроенной "
-"темой"
+"Іске қосылған кезде, кірістірілген тема жұмыс үстелі компоненттерінің стилін"
+" алмастырады"
 
 #: src/panel/settings/settings_style.vala:87
 msgid "Animations"
-msgstr "Анимации"
+msgstr "Анимациялар"
 
 #: src/panel/settings/settings_style.vala:88
 msgid "Control whether windows and controls use animations"
-msgstr "Управляет использованием анимаций окнами и элементами управления"
+msgstr "Терезелер мен басқару элементтерінің анимацияларды қолдануын басқару"
 
 #: src/panel/settings/settings_style.vala:204
 msgid "Top Left"
-msgstr "Вверху слева"
+msgstr "Жоғарғы сол жақ"
 
 #: src/panel/settings/settings_style.vala:206
 msgid "Bottom Left"
-msgstr "Внизу слева"
+msgstr "Төменгі сол жақ"
 
 #: src/panel/settings/settings_style.vala:208
 msgid "Bottom Right"
-msgstr "Внизу справа"
+msgstr "Төменгі оң жақ"
 
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
-msgstr "Вверху справа"
+msgstr "Жоғарғы оң жақ"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
-msgstr "Окна"
+msgstr "Терезелер"
 
 #: src/panel/settings/settings_wm.vala:38
 msgid "Button layout"
-msgstr "Расположение кнопок"
+msgstr "Батырмалар жаймасы"
 
 #: src/panel/settings/settings_wm.vala:39
 msgid "Change the layout of buttons in application titlebars."
-msgstr "Меняет расположение кнопок в заголовках окон приложений."
+msgstr ""
+"Қолданбалардың атау жолақтарындағы батырмалардың орналасуын өзгертіңіз."
 
 #: src/panel/settings/settings_wm.vala:44
 msgid "Center new windows on screen"
-msgstr "Центрировать новые окна на экране"
+msgstr "Жаңа терезелерді экран ортасына қою"
 
 #: src/panel/settings/settings_wm.vala:45
 msgid "Center newly launched windows on the current screen."
-msgstr "Центрирует вновь запущенные окна на текущем экране."
+msgstr "Жаңадан іске қосылған терезелерді ағымдағы экранның ортасына қою."
 
 #: src/panel/settings/settings_wm.vala:50
 msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Отключить режим ночного света, когда окна развернуты на весь экран"
+msgstr "Терезелер толық экранда болғанда түнгі жарық режимін сөндіру"
 
 #: src/panel/settings/settings_wm.vala:51
 msgid ""
 "Disables Night Light mode when a window is fullscreen. Re-enables when "
 "leaving fullscreen."
 msgstr ""
-"Отключает режим ночного света, когда какое-то окно развернуто на весь экран."
-" Включает обратно после выхода из полноэкранного режима."
+"Терезе толық экранда болғанда түнгі жарық режимін сөндіреді. Толық экраннан "
+"шыққанда қайта іске қосады."
 
 #: src/panel/settings/settings_wm.vala:56
 msgid "Pause notifications when windows are fullscreen"
-msgstr "Приостановить уведомления, когда окна развернуты на весь экран"
+msgstr "Терезелер толық экранда болғанда хабарландыруларды кідірту"
 
 #: src/panel/settings/settings_wm.vala:57
 msgid ""
 "Prevents notifications from appearing when a window is fullscreen. Unpauses "
 "when leaving fullscreen."
 msgstr ""
-"Предотвращает появление уведомлений в полноэкранном режиме окна. Отменяет "
-"паузу при выходе из полноэкранного режима."
+"Терезе толық экранда болғанда хабарландырулардың пайда болуын болдырмайды. "
+"Толық экраннан шыққанда кідіртуді тоқтатады."
 
 #: src/panel/settings/settings_wm.vala:62
 msgid "Automatic tiling"
-msgstr "Автоматическое выравнивание"
+msgstr "Автоматты плиткалар"
 
 #: src/panel/settings/settings_wm.vala:63
 msgid ""
 "Windows will automatically tile when dragged into the top of the screen or "
 "the far corners."
 msgstr ""
-"Окна будут автоматически выравниваться при перетаскивании в углы или верхнюю"
-" часть экрана."
+"Терезелер экранның жоғарғы жағына немесе шеткі бұрыштарына сүйреп "
+"апарылғанда автоматты түрде плитка болып тізіледі."
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Window focus mode"
-msgstr ""
+msgstr "Терезе фокусы режимі"
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Choose how windows receive focus: click to focus; sloppy to focus without "
 "raising windows; mouse to focus with raising."
 msgstr ""
+"Терезелердің фокусты қалай алатынын таңдаңыз: фокус үшін шерту; терезелерді "
+"көтермей фокус алу (sloppy); көтере отырып тышқанмен фокус алу."
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
-msgstr "Показывать все окна в переключателе окон"
+msgstr "Барлық терезелерді бет ауыстырғышында көрсету"
 
 #: src/panel/settings/settings_wm.vala:75
 msgid ""
 "All tabs will be displayed in tab switcher regardless of the workspace in "
 "use."
 msgstr ""
-"В переключателе будут отображены все окна, независимо от используемого "
-"рабочего места."
+"Қолданыстағы жұмыс орнына қарамастан, барлық беттер бет ауыстырғышында "
+"көрсетіледі."
 
 #: src/panel/settings/settings_wm.vala:82
 msgid "Right (standard)"
-msgstr "Справа (стандартное)"
+msgstr "Оң жақ (стандартты)"
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Click"
-msgstr ""
+msgstr "Шерту"
 
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
-msgstr ""
+msgstr "Салғырт"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
-msgstr "Уведомления"
+msgstr "Хабарландырулар"
 
 #: src/raven/main_view.vala:68
 msgid "No widgets added."
-msgstr "Виджеты не добавлены."
+msgstr "Виджеттер қосылмаған."
 
 #: src/raven/notifications_view.vala:31
 msgid "Nothing to see here"
-msgstr "Не на что смотреть"
+msgstr "Бұл жерде көретін ештеңе жоқ"
 
 #: src/raven/notifications_view.vala:123
 msgid "No new notifications"
-msgstr "Нет новых уведомлений"
+msgstr "Жаңа хабарландырулар жоқ"
 
 #: src/raven/widgets/media-controls/media_controls.vala:155
 msgid "No apps are currently playing audio."
-msgstr "Нет программ, проигрывающих аудио."
+msgstr "Қазіргі уақытта ешбір қолданба аудио ойнатып тұрған жоқ."
 
 #: src/raven/widgets/media-controls/media_controls.vala:164
 msgid "Play some music"
-msgstr "Играть музыку"
+msgstr "Музыка ойнату"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
 msgid "Unknown Title"
-msgstr "Неизвестное название"
+msgstr "Белгісіз атау"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:110
 #: src/raven/widgets/media-controls/mpris_gui.vala:434
 msgid "Unknown Artist"
-msgstr "Неизвестный артист"
+msgstr "Белгісіз орындаушы"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:113
 #: src/raven/widgets/media-controls/mpris_gui.vala:438
 msgid "Unknown Album"
-msgstr "Неизвестный альбом"
+msgstr "Белгісіз альбом"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:302
 #, c-format
 msgid "Playing - %s"
-msgstr "Проигрывается - %s"
+msgstr "Ойнатылуда - %s"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:309
 #, c-format
 msgid "Paused - %s"
-msgstr "Приостановлено - %s"
+msgstr "Кідіртілген - %s"
 
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
-msgstr "Никакие приложения не воспроизводят аудио."
+msgstr "Қолданбалар аудио ойнатып тұрған жоқ."
 
 #: src/raven/widgets/sound-output/sound_output.vala:189
 msgid "Apps"
-msgstr "Приложения"
+msgstr "Қолданбалар"
 
 #: src/raven/widgets/sound-output/sound_output.vala:190
 msgid "Devices"
-msgstr "Устройства"
+msgstr "Құрылғылар"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:47
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
-msgstr "Монитор использования"
+msgstr "Пайдалану мониторы"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:83
 msgid "CPU"
-msgstr "ЦПУ"
+msgstr "Процессор"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "RAM"
-msgstr "ОЗУ"
+msgstr "Жады"
 
 #: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "Swap"
-msgstr "Swap"
+msgstr "Своп"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
-msgstr "От самого старого к самому новому"
+msgstr "Ескісінен жаңасына қарай"
 
 #: src/raven/raven.vala:52
 msgid "Newest to oldest"
-msgstr "От самого нового к самому старому"
+msgstr "Жаңасынан ескісіне қарай"
 
 #: src/daemon/endsession.ui.h:2
 msgid "Are you sure you want to end your session?"
-msgstr "Вы уверены, что хотите завершить сессию?"
+msgstr "Сеансты аяқтауды растайсыз ба?"
 
 #: src/dialogs/polkit/dialog.ui.h:1
 msgid "Authentication Required"
-msgstr "Требуется аутентификация"
+msgstr "Аутентификация қажет"
 
 #: src/dialogs/polkit/dialog.ui.h:2
 msgid "Password:"
@@ -1812,116 +1793,116 @@ msgstr "Пароль:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "Пайдаланушы аты:"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
-msgstr "Требуется аутентификация"
+msgstr "Аутентификация қажет"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Details"
-msgstr "Детали"
+msgstr "Ақпараты"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "Action:"
-msgstr "Действие:"
+msgstr "Әрекет:"
 
 #: src/dialogs/polkit/dialog.ui.h:7
 msgid "ID:"
-msgstr "ИД:"
+msgstr "Идентификатор:"
 
 #: src/dialogs/polkit/dialog.ui.h:9
 msgid "Authenticate"
-msgstr "Аутентифицироваться"
+msgstr "Аутентификациялау"
 
 #: src/dialogs/screenshot/aftershot.ui.h:1
 msgid "Name:"
-msgstr "Имя:"
+msgstr "Атауы:"
 
 #: src/dialogs/screenshot/aftershot.ui.h:2
 msgid "Folder:"
-msgstr "Папка:"
+msgstr "Бума:"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:1
 msgid "Delay in seconds"
-msgstr "Задержка в секундах"
+msgstr "Секундпен кідіріс"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:2
 msgid "Show Pointer"
-msgstr "Показать курсор"
+msgstr "Курсорды көрсету"
 
 #: src/dialogs/screenshot/screenshothome.ui.h:3
 msgid "Play sound when capturing"
-msgstr "Проигрывать звук при захвате"
+msgstr "Түсіру кезінде дыбыс шығару"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:1
 msgid "Show Menu Label"
-msgstr "Показывать подпись меню"
+msgstr "Мәзір белгісін көрсету"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:2
 msgid "Menu Label"
-msgstr "Подпись меню"
+msgstr "Мәзір белгісі"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:3
 msgid "Use Default Menu Icon"
-msgstr "Использовать стандартную иконку меню"
+msgstr "Әдепкі мәзір таңбашасын қолдану"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:4
 msgid "Menu Icon"
-msgstr "Значок меню"
+msgstr "Мәзір таңбашасы"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:5
 msgid "Compact Mode"
-msgstr "Компактный режим"
+msgstr "Ықшам режим"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:6
 msgid "Show Headers"
-msgstr "Показывать заголовки"
+msgstr "Атауларды көрсету"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:7
 msgid "Roll-over mouse"
-msgstr "Активация при наведении мыши"
+msgstr "Тышқанмен үстінен өту"
 
 #: src/panel/applets/budgie-menu/settings.ui.h:8
 msgid "Show settings items"
-msgstr "Показать элементы настроек"
+msgstr "Баптаулар элементтерін көрсету"
 
 #: src/panel/applets/caffeine/settings.ui.h:1
 msgid "Enable notification"
-msgstr "Включить уведомления"
+msgstr "Хабарландыруды іске қосу"
 
 #: src/panel/applets/caffeine/settings.ui.h:2
 msgid "Maximize brightness"
-msgstr "Максимально увеличить яркость"
+msgstr "Жарықтылықты барынша арттыру"
 
 #: src/panel/applets/caffeine/settings.ui.h:3
 msgid "Brightness Level"
-msgstr "Уровень яркости"
+msgstr "Жарықтылық деңгейі"
 
 #: src/panel/applets/clock/settings.ui.h:1
 msgid "Show date"
-msgstr "Показывать дату"
+msgstr "Күнді көрсету"
 
 #: src/panel/applets/clock/settings.ui.h:2
 msgid "Show seconds"
-msgstr "Показывать секунды"
+msgstr "Секундтарды көрсету"
 
 #: src/panel/applets/clock/settings.ui.h:3
 msgid "Use 24 hour time"
-msgstr "Использовать 24-часовой формат"
+msgstr "24 сағаттық уақытты қолдану"
 
 #: src/panel/applets/clock/settings.ui.h:4
 msgid "Custom Format"
-msgstr "Свой формат"
+msgstr "Таңдауыңызша пішім"
 
 #: src/panel/applets/clock/settings.ui.h:6
 #, no-c-format
 msgid "%H:%M:%S %d.%m.%Y"
-msgstr "%Ч:%М:%С %d.%м.%Г"
+msgstr "%H:%M:%S %d.%m.%Y"
 
 #: src/panel/applets/clock/settings.ui.h:7
 msgid "Custom Timezone"
-msgstr "Своя временная зона"
+msgstr "Таңдауыңызша уақыт белдеуі"
 
 #: src/panel/applets/clock/settings.ui.h:8
 msgid "UTC"
@@ -1929,31 +1910,31 @@ msgstr "UTC"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:1
 msgid "Show all windows on click"
-msgstr "Показывать все окна при нажатии"
+msgstr "Шерткенде барлық терезелерді көрсету"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:2
 msgid "Only show favorited"
-msgstr "Показывать только избранные приложения"
+msgstr "Тек таңдаулыларды көрсету"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:3
 msgid "Lock icons"
-msgstr "Закрепить значки"
+msgstr "Таңбашаларды құлыптау"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:4
 msgid "Restrict to Workspace"
-msgstr "Ограничить рабочим местом"
+msgstr "Жұмыс орнымен шектеу"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:5
 msgid "Middle click to launch new window"
-msgstr "Открывать новое окно нажатием средней кнопки мыши"
+msgstr "Ортаңғы батырмамен шерту арқылы жаңа терезе ашу"
 
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
-msgstr "Требовать двойной щелчок для запуска нового окна"
+msgstr "Жаңа терезені ашу үшін қос шертуді талап ету"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
-msgstr "Ночной свет"
+msgstr "Түнгі жарық"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:2
 msgid "Temperature"
@@ -1961,100 +1942,100 @@ msgstr "Температура"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:3
 msgid "Schedule"
-msgstr "Расписание"
+msgstr "Кесте"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:4
 msgid "Sunset to Sunrise"
-msgstr "От заката до рассвета"
+msgstr "Күн батқаннан күн шыққанға дейін"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:5
 msgid "Manual"
-msgstr "Вручную"
+msgstr "Қолмен"
 
 #: src/panel/applets/night-light/indicator_window.ui.h:6
 msgid "Display Settings"
-msgstr "Настройки дисплея"
+msgstr "Экран баптаулары"
 
 #: src/panel/applets/places-indicator/settings.ui.h:1
 msgid "Show label"
-msgstr "Показывать подпись"
+msgstr "Белгіні көрсету"
 
 #: src/panel/applets/places-indicator/settings.ui.h:2
 msgid "Show places"
-msgstr "Показывать места"
+msgstr "Орындарды көрсету"
 
 #: src/panel/applets/places-indicator/settings.ui.h:3
 msgid "Show network folders"
-msgstr "Показывать сетевые папки"
+msgstr "Желілік бумаларды көрсету"
 
 #: src/panel/applets/places-indicator/settings.ui.h:4
 msgid "Show removable drives"
-msgstr "Показывать съемные диски"
+msgstr "Ауыстырмалы дискілерді көрсету"
 
 #: src/panel/applets/places-indicator/settings.ui.h:5
 msgid "Always expand places"
-msgstr "Всегда раскрывать места"
+msgstr "Орындарды әрқашан жаю"
 
 #: src/panel/applets/spacer/settings.ui.h:1
 msgid "Spacer size"
-msgstr "Размер расширителя"
+msgstr "Аралық өлшемі"
 
 #: src/panel/applets/status/settings.ui.h:1
 #: src/panel/applets/tray/settings.ui.h:1
 msgid "Icon Spacing"
-msgstr "Отступ между значками"
+msgstr "Таңбашалар аралығы"
 
 #: src/panel/applets/status/settings.ui.h:2
 msgid "Show battery percentage"
-msgstr "Показать процент заряда батареи"
+msgstr "Батарея пайызын көрсету"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr "Режим сортировки"
+msgstr "Сұрыптау режимі"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr "Тип сортировки"
+msgstr "Түрі бойынша сұрыптау"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr "Сортировка по алфавиту"
+msgstr "Әліпби бойынша сұрыптау"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr "Сортировка в обратном порядке по алфавиту"
+msgstr "Кері әліпби бойынша сұрыптау"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr "Сортировка по дате"
+msgstr "Күн бойынша өсу ретімен сұрыптау"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr "Сортировка в обратном порядке по дате"
+msgstr "Күн бойынша кему ретімен сұрыптау"
 
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
-msgstr "Менять размер значков с размером панели"
+msgstr "Таңбашаларды панель өлшеміне қарай масштабтау"
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
-msgstr "Видимость кнопки \"Добавить\""
+msgstr "\"Қосу\" батырмасының көрінуі"
 
 #: src/panel/applets/workspaces/settings.ui.h:2
 msgid "Item Size Multiplier"
-msgstr "Множитель размера элемента"
+msgstr "Элемент өлшемінің көбейткіші"
 
 #: src/panel/applets/workspaces/settings.ui.h:3
 msgid "Don't show"
-msgstr "Не показывать"
+msgstr "Көрсетпеу"
 
 #: src/panel/applets/workspaces/settings.ui.h:4
 msgid "Show on mouseover"
-msgstr "Показывать при наведении курсора мыши"
+msgstr "Тышқанды үстіне апарғанда көрсету"
 
 #: src/panel/applets/workspaces/settings.ui.h:5
 msgid "Always show"
-msgstr "Всегда показывать"
+msgstr "Әрқашан көрсету"
 
 #: src/panel/applets/workspaces/settings.ui.h:6
 msgid "0.5x"
@@ -2078,204 +2059,207 @@ msgstr "2.0x"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "Батырма таңбашаларын көрсету"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "Батырма белгілерін көрсету"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
-msgstr "Показывать номер недели"
+msgstr "Апта нөмірлерін көрсету"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr "Показывать названия дней"
+msgstr "Күн атауларын көрсету"
 
 #: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1
 msgid "Allow Volume Overdrive"
-msgstr "Разрешить перегрузку громкости"
+msgstr "Дыбыс деңгейін шектен асыруға рұқсат ету"
 
 #: src/raven/widgets/usage-monitor/settings.ui.h:1
 msgid "Show Swap Usage"
-msgstr "Показать использование Swap"
+msgstr "Swap қолданылуын көрсету"
 
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:2
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:2
 msgid "Budgie screenshot app"
-msgstr "Снимок экрана Budgie"
+msgstr "Budgie скриншот қолданбасы"
 
 #: src/panel/applets/budgie-menu/BudgieMenu.plugin.in.h:1
 msgid "Search for and start up applications."
-msgstr "Поиск и запуск приложений."
+msgstr "Қолданбаларды іздеу және орындау."
 
 #: src/panel/applets/caffeine/CaffeineApplet.plugin.in.h:1
 msgid "Prevent the system and screen from sleeping."
-msgstr "Предотвратите переход системы и экрана в спящий режим."
+msgstr "Жүйе мен экранның ұйқы режиміне өтуін болдырмау."
 
 #: src/panel/applets/clock/ClockApplet.plugin.in.h:1
 msgid "A digital clock with a customizable format."
-msgstr "Цифровые часы с настраиваемым форматом. "
+msgstr "Теңшелетін пішімі бар цифрлық сағат."
 
 #: src/panel/applets/icon-tasklist/IconTasklistApplet.plugin.in.h:1
 msgid "A configurable application task list."
-msgstr "Настраиваемый список задач приложения."
+msgstr "Теңшелетін қолданбалар тапсырмаларының тізімі."
 
 #: src/panel/applets/keyboard-layout/KeyboardLayoutApplet.plugin.in.h:1
 msgid "Indicates which keyboard layout is currently in use."
-msgstr "Указывает, какая раскладка клавиатуры используется в данный момент."
+msgstr "Қазіргі уақытта қай пернетақта жаймасы қолданылып жатқанын көрсетеді."
 
 #: src/panel/applets/lock-keys/LockKeysApplet.plugin.in.h:1
 msgid "Show status of lock keys."
-msgstr "Посмотреть состояние кнопок lock."
+msgstr "Құлыптау пернелерінің күйін көрсету."
 
 #: src/panel/applets/night-light/NightLight.plugin.in.h:1
 msgid "Toggle and modify Night Light settings."
-msgstr "Переключайте и изменяйте настройки ночного освещения."
+msgstr "Түнгі жарық баптауларын ауыстыру және өзгерту."
 
 #: src/panel/applets/notifications/NotificationsApplet.plugin.in.h:1
 msgid "Open the Raven notifications view."
-msgstr "Открыть Raven для показа уведомлений."
+msgstr "Raven хабарландырулар көрінісін ашу."
 
 #: src/panel/applets/places-indicator/PlacesIndicator.plugin.in.h:1
 msgid "Show drives and favorite folders."
-msgstr "Показывать накопители и избранные папки."
+msgstr "Дискілерді және таңдаулы бумаларды көрсету."
 
 #: src/panel/applets/raven-trigger/RavenTriggerApplet.plugin.in.h:1
 msgid "Open the Raven sidebar."
-msgstr "Открыть боковую панель Raven."
+msgstr "Raven бүйірлік панелін ашу."
 
 #: src/panel/applets/separator/SeparatorApplet.plugin.in.h:1
 msgid "Visual separator between applets."
-msgstr "Визуальный разделитель между апплетами."
+msgstr "Апплеттер арасындағы визуалды ажыратқыш."
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.plugin.in.h:1
 msgid "A button that toggles visibility of the desktop."
-msgstr "Кнопка, которая переключает видимость рабочего стола."
+msgstr "Жұмыс үстелінің көрінуін ауыстыратын батырма."
 
 #: src/panel/applets/spacer/SpacerApplet.plugin.in.h:1
 msgid "Adjustable spacer to put between other applets."
-msgstr "Регулируемая прокладка для размещения между другими апплетами."
+msgstr "Басқа апплеттер арасына қоюға болатын реттелетін бос орын."
 
 #: src/panel/applets/status/StatusApplet.plugin.in.h:1
 msgid "Show system status indicators, like sound, battery, and Bluetooth."
 msgstr ""
-"Показывать индикаторы состояния системы. К примеру: звук, батарею и "
-"Bluetooth."
+"Дыбыс, батарея және Bluetooth сияқты жүйелік күй индикаторларын көрсету."
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr "Управляйте своим мусором с панели Budgie"
+msgstr "Қоқыс шелегін Budgie панелінен басқару"
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
 msgstr ""
-"Системный трей, реализующий спецификацию уведомителя состояния Freedesktop."
+"Freedesktop Status Notifier спецификациясын іске асыратын жүйелік сөре."
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
-msgstr "Открытие диалога окна питания."
+msgstr "Қуат сұхбат терезесін ашады."
 
 #: src/panel/applets/workspaces/WorkspacesApplet.plugin.in.h:1
 msgid "Display workspaces and switch between them."
-msgstr "Отображение рабочих пространств и переключение между ними."
+msgstr "Жұмыс орындарын көрсету және олардың арасында ауысу."
 
 #: src/panel/applets/tasklist/TasklistApplet.plugin.in.h:1
 msgid "An application task list with icons and labels."
-msgstr "Список задач приложения с пиктограммами и ярлыками."
+msgstr "Таңбашалары мен белгілері бар қолданбалар тапсырмаларының тізімі."
 
 #: src/panel/budgie-desktop-settings.desktop.in.h:2
 msgid "Change desktop appearance and behavior"
-msgstr "Изменить внешний вид и поведение рабочего стола"
+msgstr "Жұмыс үстелінің сыртқы түрі мен мінез-құлқын өзгерту"
 
 #: src/panel/budgie-panel.desktop.in.h:1
 msgid "Budgie Panel"
-msgstr "Панель Budgie"
+msgstr "Budgie панелі"
 
 #: src/panel/budgie-panel.desktop.in.h:2
 msgid ""
 "Launch other applications and provide various utilities to manage windows, "
 "show the time, etc."
 msgstr ""
-"Запуск других приложений и предоставление различных утилит для управления "
-"окнами, отображения времени и т. д."
+"Басқа қолданбаларды іске қосу және терезелерді басқару, уақытты көрсету және"
+" т.б. үшін түрлі утилиталарды ұсыну."
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:1
 msgid "Calendar"
-msgstr "Календарь"
+msgstr "Күнтізбе"
 
 #: src/raven/widgets/calendar/Calendar.plugin.in.h:2
 msgid ""
 "A simple calendar with a month view, using the built-in Gtk.Calendar widget."
 " The calendar shows the current date by default."
 msgstr ""
-"Простой календарь с просмотром по месяцам, использующий встроенный виджет "
-"Gtk.Calendar. Календарь показывает текущую дату по умолчанию."
+"Кірістірілген Gtk.Calendar виджетін қолданатын айлық көрінісі бар қарапайым "
+"күнтізбе. Күнтізбе әдепкі бойынша ағымдағы күнді көрсетеді."
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:1
 msgid "Media Controls"
-msgstr "Настройка медиа"
+msgstr "Медиа басқару элементтері"
 
 #: src/raven/widgets/media-controls/MediaControls.plugin.in.h:2
 msgid ""
 "This widget uses the Mpris API to show actively playing media with metadata "
 "and playback controls, with support for audio and video."
 msgstr ""
-"Этот виджет использует Mpris API для отображения активно воспроизводимых "
-"медиа с метаданными и элементами управления воспроизведением, с поддержкой "
-"аудио и видео."
+"Бұл виджет метадеректері мен ойнатуды басқару элементтері бар белсенді "
+"ойнатылып жатқан медианы көрсету үшін Mpris API қолданады, аудио мен видеоны"
+" қолдайды."
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:1
 msgid "Sound Input"
-msgstr "Аудиовход"
+msgstr "Дыбыс кірісі"
 
 #: src/raven/widgets/sound-input/SoundInput.plugin.in.h:2
 msgid ""
 "Allows adjustment of audio input volume, and displays a list of available "
 "audio input devices."
 msgstr ""
-"Позволяет регулировать громкость аудиовхода и отображает список доступных "
-"устройств аудиовхода."
+"Аудио кіріс деңгейін реттеуге мүмкіндік береді және қолжетімді аудио кіріс "
+"құрылғыларының тізімін көрсетеді."
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:1
 msgid "Sound Output"
-msgstr "Аудиовыход"
+msgstr "Дыбыс шығысы"
 
 #: src/raven/widgets/sound-output/SoundOutput.plugin.in.h:2
 msgid ""
 "Allows global and per-app audio output volume control, and displays a list "
 "of available audio output devices."
 msgstr ""
-"Позволяет регулировать громкость аудиовыхода везде и для каждого приложения,"
-" а также отображает список доступных устройств вывода звука."
+"Глобалды және әр қолданба үшін аудио шығыс деңгейін басқаруға мүмкіндік "
+"береді және қолжетімді аудио шығыс құрылғыларының тізімін көрсетеді."
 
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:2
 msgid ""
 "A view for system resource usage in bar graph form. Includes CPU, RAM, and "
 "Swap usage by default."
 msgstr ""
-"Представление использования системных ресурсов в виде гистограммы. Включает "
-"использование ЦПУ, ОЗУ и Swap по умолчанию."
+"Жүйелік ресурстарды пайдалануды бағандық график түрінде көрсету. Әдепкі "
+"бойынша CPU, RAM және Swap пайдалануын қамтиды."
 
 #: src/session/budgie-desktop.session.in.in.h:1
 #: src/session/budgie-desktop.desktop.in.in.h:1
 msgid "Budgie Desktop"
-msgstr "Рабочий стол Budgie"
+msgstr "Budgie жұмыс үстелі"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie жұмыс үстелі (magpie)"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using magpie as the window "
 "manager"
 msgstr ""
+"Бұл сеанс magpie-ді терезе менеджері ретінде қолданып, Budgie жұмыс үстеліне"
+" кіруге мүмкіндік береді"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using labwc as the window "
 "manager"
 msgstr ""
+"Бұл сеанс labwc-ді терезе менеджері ретінде қолданып, Budgie жұмыс үстеліне "
+"кіруге мүмкіндік береді"

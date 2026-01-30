@@ -8,15 +8,16 @@
 # Gavin Zhao, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # Wenyin Root <ruojiner@hotmail.com>, 2025
+# dwong dwong, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Wenyin Root <ruojiner@hotmail.com>, 2025\n"
+"Last-Translator: dwong dwong, 2026\n"
 "Language-Team: Chinese (https://app.transifex.com/buddiesofbudgie/teams/129844/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -90,11 +91,11 @@ msgstr "新的类别"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "未读通知"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -104,37 +105,9 @@ msgstr[0] "在运行全屏应用时你收到了 %d 个通知"
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "查看通知"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "注销"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "重新启动设备"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "关机"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr ""
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -151,11 +124,39 @@ msgid "Will turn off in a minute"
 msgid_plural "Will turn off in %d minutes"
 msgstr[0] "将在 %d 分钟后关闭"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "注销"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "重新启动设备"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "关机"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr "已開啟大寫鎖定鍵（Caps lock）"
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr "已關閉大寫鎖定鍵（Caps lock）"
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr "已開啟數字鎖定鍵（Num lock）"
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr "已關閉數字鎖定鍵（Num lock）"
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "认证失败"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "组："
 
@@ -253,7 +254,7 @@ msgstr "关闭"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -315,6 +316,7 @@ msgid "Keyboard"
 msgstr "键盘"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "鼠标"
 
@@ -364,12 +366,12 @@ msgstr "文件传输失败"
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:54
 #, c-format
 msgid "File '%s' not received from %s"
-msgstr ""
+msgstr "並未從 %s 收到 '%s' 檔案"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:75
 #, c-format
 msgid "File '%s' from %s not received: %s"
-msgstr ""
+msgstr "並未從 %s 收到 %s' 檔案： %s"
 
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:92
 #: src/dialogs/sendto/Dialog/FileSender.vala:274
@@ -379,73 +381,73 @@ msgstr "文件传输已完成"
 #: src/dialogs/sendto/Dialog/FileReceiver.vala:93
 #, c-format
 msgid "Saved file from %s to '%s'"
-msgstr ""
+msgstr "由 %s 儲存檔案到 %s"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:33
 msgid "From"
-msgstr ""
+msgstr "從"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:34
 msgid "To"
-msgstr ""
+msgstr "到"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:103
 #, c-format
 msgid "Trying to connect to %s…"
-msgstr ""
+msgstr "嘗試連接到 %s"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:136
 #, c-format
 msgid "Connecting to '%s' failed"
-msgstr ""
+msgstr "連接 %s 失敗"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:139
 #: src/dialogs/sendto/Dialog/FileSender.vala:220
 msgid "The file has not been transferred."
-msgstr ""
+msgstr "並未傳輸此檔案"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:144
 #: src/dialogs/sendto/Dialog/FileSender.vala:225
 msgid "Retry"
-msgstr ""
+msgstr "重試"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:177
 #, c-format
 msgid "Waiting for acceptance on %s…"
-msgstr ""
+msgstr "正等待 %s 接受"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:217
 #, c-format
 msgid "Transferring '%s' failed"
-msgstr ""
+msgstr "傳輸 %s 失敗"
 
 #: src/dialogs/sendto/Dialog/FileSender.vala:219
 #, c-format
 msgid "The transfer was interrupted or declined by %s."
-msgstr ""
+msgstr "%s 中止或拒絕了傳輸"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:33
 msgid "Select a Bluetooth device to send files to"
-msgstr ""
+msgstr "選擇一個藍牙裝置送出檔案"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:49
 msgid "Discovering…"
-msgstr ""
+msgstr "尋覓中"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:64
 msgid "<b>No devices found</b>"
-msgstr ""
+msgstr "<b>沒有發現裝置</b>"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:68
 msgid "Ensure that your devices are visable and ready for pairing"
-msgstr ""
+msgstr "請確保裝置能夠被找到及已準備配對"
 
 #: src/dialogs/sendto/Dialog/ScanDialog.vala:231
 msgid "Available Devices"
-msgstr ""
+msgstr "可用裝置"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -453,47 +455,47 @@ msgstr "Budgie 截图"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "全屏幕截图"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "活动窗口截图"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "选定区域截图"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "取消截图"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "保存截图到指定目录"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "复制截图到剪贴板"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "用默认应用打开截图"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "其他..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "打开文件夹"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "打开"
 
@@ -525,10 +527,6 @@ msgstr "设置图标"
 msgid "Sorry, no items found"
 msgstr "抱歉，这里空空如也"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "所有"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -542,6 +540,10 @@ msgstr "系统设置"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "电源"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "所有"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -563,11 +565,11 @@ msgstr "收藏"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "關閉所有視窗"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "啟動新的實例"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
@@ -580,7 +582,7 @@ msgstr "最小化"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "移動至 %s"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
@@ -594,11 +596,11 @@ msgstr "最大化"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "關閉視窗"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "顯示視窗設定"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
@@ -889,12 +891,12 @@ msgstr "移除"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "無法新增工作區"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "新增工作區"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1347,85 +1349,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "由于未知错误，无法创建小部件实例。"
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "窗口"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "按钮布局"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "更改应用程序标题栏内的按钮布局。"
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "在屏幕上居中显示新窗口"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "在当前屏幕上居中显示新启动的窗口."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "当窗口处于全屏时禁用夜间模式"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重新启用。"
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "当窗口处于全屏时禁止通知提醒"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "当窗口处于全屏时禁止通知提醒。窗口退出全屏后将重新启用。"
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "自动平铺"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr "将窗口拖曳到屏幕顶部或远角时会自动平铺窗口。"
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "启用鼠标进入和离开窗口时的焦点切换"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "当鼠标进入窗口时激活该窗口的焦点，并在鼠标离开该窗口时撤销对该窗口的焦点激活。"
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "在 tab 切换器中显示所有窗口"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "所有选项卡都将显示在选项卡切换器中，无论使用的工作区是什么."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "右侧（标准）"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "左侧"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "小程序"
@@ -1477,6 +1400,11 @@ msgstr "顶部"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "右侧"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "左侧"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1639,6 +1567,88 @@ msgstr "右下"
 msgid "Top Right"
 msgstr "右上"
 
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "窗口"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "按钮布局"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "更改应用程序标题栏内的按钮布局。"
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "在屏幕上居中显示新窗口"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "在当前屏幕上居中显示新启动的窗口."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "当窗口处于全屏时禁用夜间模式"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "当窗口处于全屏时禁用夜间模式。窗口退出全屏后将重新启用。"
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "当窗口处于全屏时禁止通知提醒"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "当窗口处于全屏时禁止通知提醒。窗口退出全屏后将重新启用。"
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "自动平铺"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr "将窗口拖曳到屏幕顶部或远角时会自动平铺窗口。"
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr "視窗聚焦方式"
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr "選擇視窗取得焦點的方式：點擊以取得焦點；滑鼠移入即可取得焦點（不會將視窗置前）；滑鼠移入即可取得焦點並將視窗置前。"
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "在 tab 切换器中显示所有窗口"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "所有选项卡都将显示在选项卡切换器中，无论使用的工作区是什么."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "右侧（标准）"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr "點選"
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr "移入"
+
 #: src/raven/main_view.vala:56
 msgid "Notifications"
 msgstr "通知"
@@ -1739,7 +1749,7 @@ msgstr "密码:"
 
 #: src/dialogs/polkit/dialog.ui.h:3
 msgid "Username:"
-msgstr ""
+msgstr "用戶名"
 
 #: src/dialogs/polkit/dialog.ui.h:4
 msgid "Authentication is required"
@@ -1747,15 +1757,15 @@ msgstr "需要验证"
 
 #: src/dialogs/polkit/dialog.ui.h:5
 msgid "Details"
-msgstr ""
+msgstr "詳情"
 
 #: src/dialogs/polkit/dialog.ui.h:6
 msgid "Action:"
-msgstr ""
+msgstr "動作："
 
 #: src/dialogs/polkit/dialog.ui.h:7
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: src/dialogs/polkit/dialog.ui.h:9
 msgid "Authenticate"
@@ -1937,31 +1947,31 @@ msgstr "显示电池电量"
 
 #: src/panel/applets/trash/settings.ui.h:1
 msgid "Sort Mode"
-msgstr ""
+msgstr "排序模式"
 
 #: src/panel/applets/trash/settings.ui.h:2
 msgid "Sort by type"
-msgstr ""
+msgstr "按檔案類別"
 
 #: src/panel/applets/trash/settings.ui.h:3
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "按檔案名稱"
 
 #: src/panel/applets/trash/settings.ui.h:4
 msgid "Sort reverse alphabetically"
-msgstr ""
+msgstr "按反向檔案名稱"
 
 #: src/panel/applets/trash/settings.ui.h:5
 msgid "Sort by date ascending"
-msgstr ""
+msgstr "按日期（舊到新）"
 
 #: src/panel/applets/trash/settings.ui.h:6
 msgid "Sort by date descending"
-msgstr ""
+msgstr "按日期（新到舊）"
 
 #: src/panel/applets/tray/settings.ui.h:2
 msgid "Scale icons with panel size"
-msgstr ""
+msgstr "按照面板大小調節圖示"
 
 #: src/panel/applets/workspaces/settings.ui.h:1
 msgid "\"Add\" button visibility"
@@ -2005,11 +2015,11 @@ msgstr "2.0 X"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "顯示按鈕圖示"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "顯示按鈕標籤"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -2091,12 +2101,12 @@ msgstr "显示系统状态指示，如声音，电池和蓝牙。"
 
 #: src/panel/applets/trash/TrashApplet.plugin.in.h:1
 msgid "Manage your trash from the Budgie panel"
-msgstr ""
+msgstr "從Budgie面板中管理回收筒"
 
 #: src/panel/applets/tray/TrayApplet.plugin.in.h:1
 msgid ""
 "System tray implementing the Freedesktop Status Notifier specification."
-msgstr ""
+msgstr "系統欄採用Freedesktop狀態通知模式"
 
 #: src/panel/applets/user-indicator/UserIndicator.plugin.in.h:1
 msgid "Opens the power dialog."
@@ -2177,16 +2187,16 @@ msgstr "Budgie 桌面"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie 桌面環境 （magpie）"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using magpie as the window "
 "manager"
-msgstr ""
+msgstr "此階段將使用magpie作為 Budgie 桌面環境的視窗管理程式"
 
 #: src/session/budgie-desktop.desktop.in.in.h:2
 msgid ""
 "This session logs you into the Budgie Desktop using labwc as the window "
 "manager"
-msgstr ""
+msgstr "此階段將使用labwc作為 Budgie 桌面環境的視窗管理程式"

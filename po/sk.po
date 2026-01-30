@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 00:29+0200\n"
+"POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Patrik Tapušík (tapo), 2024\n"
 "Language-Team: Slovak (https://app.transifex.com/buddiesofbudgie/teams/129844/sk/)\n"
@@ -88,11 +88,11 @@ msgstr "Nová kategória"
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
 #. mode
-#: src/daemon/notifications/dbus.vala:558
+#: src/daemon/notifications/dbus.vala:573
 msgid "Unread Notifications"
 msgstr "Neprečítané upozornenia"
 
-#: src/daemon/notifications/dbus.vala:561
+#: src/daemon/notifications/dbus.vala:576
 #, c-format
 msgid "You received %d notification while an application was fullscreened."
 msgid_plural ""
@@ -105,37 +105,9 @@ msgstr[3] "Dostali ste %d notifikácií počas režimu celej obrazovky."
 #. No existing ref, make a new notification
 #. translators: Text for a button on the notification to open Raven to the
 #. notifications view
-#: src/daemon/notifications/dbus.vala:575
+#: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "Zobraziť upozornenia"
-
-#: src/daemon/endsession.vala:162
-msgid "Log out"
-msgstr "Odhlásiť sa"
-
-#: src/daemon/endsession.vala:166
-msgid "Restart device"
-msgstr "Reštartovať zariadenie"
-
-#: src/daemon/endsession.vala:178 src/daemon/endsession.ui.h:1
-msgid "Power Off"
-msgstr "Vypnúť zariadenie"
-
-#: src/daemon/osdkeys.vala:215
-msgid "Caps Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:222
-msgid "Caps Lock is off"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:232
-msgid "Num Lock is on"
-msgstr ""
-
-#: src/daemon/osdkeys.vala:238
-msgid "Num Lock is off"
-msgstr ""
 
 #. Should show a notification
 #: src/daemon/settings.vala:416
@@ -155,11 +127,39 @@ msgstr[1] "Vypne sa o %d minúty"
 msgstr[2] "Vypne sa o %d minút"
 msgstr[3] "Vypne sa o %d minút"
 
-#: src/dialogs/polkit/polkitdialog.vala:208
+#: src/daemon/endsession.vala:161
+msgid "Log out"
+msgstr "Odhlásiť sa"
+
+#: src/daemon/endsession.vala:165
+msgid "Restart device"
+msgstr "Reštartovať zariadenie"
+
+#: src/daemon/endsession.vala:177 src/daemon/endsession.ui.h:1
+msgid "Power Off"
+msgstr "Vypnúť zariadenie"
+
+#: src/daemon/osdkeys.vala:307
+msgid "Caps Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:314
+msgid "Caps Lock is off"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:324
+msgid "Num Lock is on"
+msgstr ""
+
+#: src/daemon/osdkeys.vala:330
+msgid "Num Lock is off"
+msgstr ""
+
+#: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
 msgstr "Overenie zlyhalo"
 
-#: src/dialogs/polkit/polkitdialog.vala:296
+#: src/dialogs/polkit/polkitdialog.vala:312
 msgid "Group:"
 msgstr "Banda:"
 
@@ -257,7 +257,7 @@ msgstr "Zatvoriť"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -331,6 +331,7 @@ msgid "Keyboard"
 msgstr "Klávesnica"
 
 #: src/dialogs/sendto/Dialog/DeviceRow.vala:117
+#: src/panel/settings/settings_wm.vala:101
 msgid "Mouse"
 msgstr "Myš"
 
@@ -461,8 +462,8 @@ msgstr ""
 msgid "Available Devices"
 msgstr "Viditeľné zariadenia"
 
-#: src/dialogs/screenshot/screenshot.vala:384
-#: src/dialogs/screenshot/screenshot.vala:831
+#: src/dialogs/screenshot/screenshot.vala:365
+#: src/dialogs/screenshot/screenshot.vala:833
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -470,47 +471,47 @@ msgstr "Snímka obrazovky"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:500
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot entire screen"
 msgstr "Urobiť snímku celej obrazovky"
 
-#: src/dialogs/screenshot/screenshot.vala:502
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot active window"
 msgstr "Urobiť snímku aktívneho okna"
 
-#: src/dialogs/screenshot/screenshot.vala:504
+#: src/dialogs/screenshot/screenshot.vala:485
 msgid "Screenshot selected area"
 msgstr "Urobiť snímku vyznačenej oblasti"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:895
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Cancel screenshot"
 msgstr "Zrušiť snímku obrazovky"
 
-#: src/dialogs/screenshot/screenshot.vala:896
+#: src/dialogs/screenshot/screenshot.vala:898
 msgid "Save screenshot to the selected directory"
 msgstr "Uložiť snímku do vybraného priečinka"
 
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:899
 msgid "Copy screenshot to the clipboard"
 msgstr "Skopírovať snímku do schránky"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:900
 msgid "Open screenshot in default application"
 msgstr "Otvoriť snímku v predvolenej aplikácii "
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1175
+#: src/dialogs/screenshot/screenshot.vala:1177
 msgid "Other..."
 msgstr "Ďalšie..."
 
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1259
+#: src/dialogs/screenshot/screenshot.vala:1261
 msgid "Open Folder"
 msgstr "Otvoriť priečinok"
 
-#: src/dialogs/screenshot/screenshot.vala:1260
+#: src/dialogs/screenshot/screenshot.vala:1262
 msgid "Open"
 msgstr "Otvoriť"
 
@@ -542,10 +543,6 @@ msgstr "Nastaviť ikonu"
 msgid "Sorry, no items found"
 msgstr "Sorko, žiadne položky neboli nájdené"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
-msgid "All"
-msgstr "Všetky"
-
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
@@ -559,6 +556,10 @@ msgstr "Systémové nastavenia"
 #: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
 msgid "Power"
 msgstr "Výkon"
+
+#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+msgid "All"
+msgstr "Všetky"
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -1375,87 +1376,6 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Pri vytváraní dopnku sa vyskytla neznáma chyba."
 
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "Okná"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "Rozloženie tlačidiel"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "Zmeniť rozloženie tlačidiel v hlavičke okien."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "Umiestniť nové okná na stred"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "Umiestniť nové okná na stred na tejto obrazovke."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Vypnúť nočné osvetlenie pri režime na celú obrazovku"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "Vypne nočné osvetlenie pri režime na celú obrazovku a opäť ho zapne."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Pozastaviť notifikácie pri režime na celú obrazovku"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "Pozastaví notifikácie pri režime na celú obrazovku a opäť ich zapne."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "Automatické usporiadanie"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Okná sa automaticky usporiadajú po pretiahnutí do rohov alebo okrajom "
-"obrazovky."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Enable window focus change on mouse enter and leave"
-msgstr "Aktivovať okno ukázaním pomocou myši"
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Enables window focus to apply when the mouse enters the window and unfocus "
-"when the mouse leaves the window."
-msgstr "Aktivuje okno po prejdení myši a deaktivuje po zídení"
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "Zobraziť všetky okná pri ALT-TABe"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "Budú zobrazené všetké okná nehľadúc na aktuálne aktívnu plochu."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "Vpravo (základné)"
-
-#: src/panel/settings/settings_wm.vala:84
-#: src/panel/settings/settings_panel.vala:229 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Vľavo"
-
 #: src/panel/settings/settings_panel.vala:90
 msgid "Applets"
 msgstr "Applety"
@@ -1507,6 +1427,11 @@ msgstr "Hore"
 #: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
 msgid "Right"
 msgstr "Vpravo"
+
+#: src/panel/settings/settings_panel.vala:229
+#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Vľavo"
 
 #: src/panel/settings/settings_panel.vala:231
 msgid "Bottom"
@@ -1670,6 +1595,90 @@ msgstr "Pravý dolný roh"
 #: src/panel/settings/settings_style.vala:211
 msgid "Top Right"
 msgstr "Pravý horný roh"
+
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Okná"
+
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Rozloženie tlačidiel"
+
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Zmeniť rozloženie tlačidiel v hlavičke okien."
+
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "Umiestniť nové okná na stred"
+
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "Umiestniť nové okná na stred na tejto obrazovke."
+
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "Vypnúť nočné osvetlenie pri režime na celú obrazovku"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "Vypne nočné osvetlenie pri režime na celú obrazovku a opäť ho zapne."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Pozastaviť notifikácie pri režime na celú obrazovku"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "Pozastaví notifikácie pri režime na celú obrazovku a opäť ich zapne."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "Automatické usporiadanie"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Okná sa automaticky usporiadajú po pretiahnutí do rohov alebo okrajom "
+"obrazovky."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "Zobraziť všetky okná pri ALT-TABe"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "Budú zobrazené všetké okná nehľadúc na aktuálne aktívnu plochu."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "Vpravo (základné)"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
