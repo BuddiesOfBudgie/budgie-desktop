@@ -10,11 +10,13 @@
  */
 
 static bool replace = false;
-static bool reset = false;
+static bool reset_panel = false;
+static bool reset_raven = false;
 
 const OptionEntry[] options = {
 	{ "replace", 0, 0, OptionArg.NONE, ref replace, "Replace currently running panel" },
-	{ "reset", 0, 0, OptionArg.NONE, ref reset, "Reset the panel configuration" },
+	{ "reset", 0, 0, OptionArg.NONE, ref reset_panel, "Reset the panel configuration" },
+	{ "reset-raven", 0, 0, OptionArg.NONE, ref reset_raven, "Reset the Raven widget configuration" },
 	{ null }
 };
 
@@ -39,7 +41,15 @@ public static int main(string[] args) {
 		return 0;
 	}
 
-	var manager = new Budgie.PanelManager(reset);
+	Budgie.ResetFlags reset_flags = Budgie.ResetFlags.NONE;
+	if (reset_panel) {
+		reset_flags |= Budgie.ResetFlags.PANEL;
+	}
+	if (reset_raven) {
+		reset_flags |= Budgie.ResetFlags.RAVEN;
+	}
+
+	var manager = new Budgie.PanelManager(reset_flags);
 	manager.serve(replace);
 
 	Gtk.main();

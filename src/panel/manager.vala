@@ -20,6 +20,13 @@ namespace Budgie {
 		"Raven Trigger",
 	};
 
+	[Flags]
+	public enum ResetFlags {
+		NONE = 0,
+		PANEL = 1 << 0,
+		RAVEN = 1 << 1
+	}
+
 	/**
 	* Available slots
 	*/
@@ -128,7 +135,7 @@ namespace Budgie {
 	public class PanelManager : DesktopManager {
 		private PanelManagerIface? iface;
 		bool setup = false;
-		bool reset = false;
+		ResetFlags reset_flags = ResetFlags.NONE;
 
 		/* Keep track of our SessionManager */
 		private LibSession.SessionClient? sclient;
@@ -199,9 +206,9 @@ namespace Budgie {
 			return true;
 		}
 
-		public PanelManager(bool reset) {
+		public PanelManager(ResetFlags reset_flags) {
 			Object();
-			this.reset = reset;
+			this.reset_flags = reset_flags;
 			Xfw.set_client_type(Xfw.ClientType.PAGER);
 			windowing = new Budgie.Windowing.Windowing();
 			screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
@@ -475,16 +482,61 @@ namespace Budgie {
 		}
 
 		/**
-		* Reset the entire panel configuration
+		* Reset configuration based on flags
 		*/
 		void do_reset() {
-			message("Resetting budgie-panel configuration to defaults");
+			if (reset_flags == ResetFlags.NONE) {
+				return;
+			}
+
+			message("Resetting budgie-desktop configuration");
+
+			if (ResetFlags.PANEL in reset_flags) {
+				reset_panel_config();
+			}
+
+			if (ResetFlags.RAVEN in reset_flags) {
+				reset_raven_config();
+			}
+		}
+
+		/**
+		* Reset panel configuration
+		*/
+		void reset_panel_config() {
+			message("Resetting panel configuration to defaults");
 			Settings s = new Settings(Budgie.ROOT_SCHEMA);
 			this.default_layout = s.get_string(PANEL_KEY_LAYOUT);
 			this.reset_dconf_path(s);
-			// Preserve the default layout once more
+			// Preserve the default layout
 			s = new Settings(Budgie.ROOT_SCHEMA);
 			s.set_string(PANEL_KEY_LAYOUT, this.default_layout);
+		}
+
+		/**
+		* Reset Raven widget configuration
+		*/
+		void reset_raven_config() {
+			message("Resetting Raven widget configuration to defaults");
+
+			// Reset the main Raven widgets schema
+			Settings raven_widgets = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
+
+			// Get widget UUIDs before reset
+			string[] widget_uuids = raven_widgets.get_strv("uuids");
+
+			// Reset individual widget instances
+			foreach (string uuid in widget_uuids) {
+				string instance_path = "/org/buddiesofbudgie/budgie-desktop/raven/widgets/instance/%s/".printf(uuid);
+				Settings instance_settings = new Settings.with_path(
+					"org.buddiesofbudgie.budgie-desktop.raven.widgets.instance-info",
+					instance_path
+				);
+				this.reset_dconf_path(instance_settings);
+			}
+
+			// Reset main schema last
+			this.reset_dconf_path(raven_widgets);
 		}
 
 		/**
@@ -505,7 +557,11 @@ namespace Budgie {
 				}
 			}
 
+			// Set flag to reset panel config only
+			ResetFlags old_flags = this.reset_flags;
+			this.reset_flags = ResetFlags.PANEL;
 			this.do_reset();
+			this.reset_flags = old_flags;  // Restore original flags
 		}
 
 		/**
@@ -513,9 +569,8 @@ namespace Budgie {
 		* i.e. no risk of dying
 		*/
 		void do_setup() {
-			if (this.reset) {
-				this.do_reset();
-			}
+			this.do_reset();
+
 			var scr = Gdk.Screen.get_default();
 			var dis = scr.get_display();
 
