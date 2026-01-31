@@ -258,8 +258,11 @@ namespace Budgie {
 			int idle_brightness_percent = power.get_int("idle-brightness");
 			debug("Setting brightness to %d%%", idle_brightness_percent);
 
-			// Set to idle brightness
-			brightness_manager.set_brightness_percent((double)idle_brightness_percent / 100.0);
+			int current_brightness_percent = (int)(brightness_manager.get_brightness_level() * 100.0);
+			if (current_brightness_percent > idle_brightness_percent) {
+				// Set to idle brightness only if the current level is more than the dim level
+				brightness_manager.set_brightness_percent((double)idle_brightness_percent / 100.0);
+			}
 		}
 
 		public async void undim() throws GLib.DBusError, GLib.IOError {
