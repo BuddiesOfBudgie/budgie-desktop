@@ -271,6 +271,8 @@ namespace Budgie {
 			while (iter.next(out uuid, out info)) {
 				if ((info.applet.supported_actions & action) != 0) {
 					this.present();
+					set_occluded(false);
+					this.set_above_other_surfaces(); // Ensure the surface is above others before we invoke the action
 
 					Idle.add(() => {
 						info.applet.invoke_action(action);
@@ -341,7 +343,6 @@ namespace Budgie {
 
 		public void set_transparent(bool transparent) {
 			layout.set_transparent(transparent);
-			this.update_dock_behavior();
 		}
 
 		public void update_shadow(bool visible) {
@@ -359,7 +360,7 @@ namespace Budgie {
 			if (this.autohide == AutohidePolicy.NONE) {
 				return;
 			}
-			this.update_dock_behavior();
+			this.update_exclusive_zone();
 		}
 
 		public override List<AppletInfo?> get_applets() {
@@ -445,16 +446,10 @@ namespace Budgie {
 				this.scale = get_scale_factor();
 				this.placement();
 			});
-			// Handle intelligent dock behavior
-			notify["intersected"].connect(() => {
-				if (this.autohide != AutohidePolicy.NONE) {
-					this.update_dock_behavior();
-				}
-			});
 
 			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+				set_above_other_surfaces();
 				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 			}
 
@@ -517,9 +512,21 @@ namespace Budgie {
 			this.settings.bind(Budgie.PANEL_KEY_REGIONS, this, "theme-regions", SettingsBindFlags.DEFAULT);
 			this.update_theme_regions();
 
-			this.size_allocate.connect_after(this.do_size_allocate);
 			this.enter_notify_event.connect(on_enter_notify);
 			this.leave_notify_event.connect(on_leave_notify);
+
+			// Connect size_allocate signals to update margins when size changes
+			// Only update margins for main_layout to avoid recursive issues
+			//  main_layout.size_allocate.connect(() => {
+			//  	// Only update margins if we're in dock mode and have valid allocations
+			//  	if (this.dock_mode) {
+			//  		Gtk.Allocation alloc;
+			//  		main_layout.get_allocation(out alloc);
+			//  		if (alloc.width > 0 && alloc.height > 0) {
+			//  			update_panel_margins();
+			//  		}
+			//  	}
+			//  });
 
 			get_child().show_all();
 
@@ -533,10 +540,7 @@ namespace Budgie {
 			/* bit of a no-op. */
 			update_sizes();
 			load_applets();
-		}
-
-		void do_size_allocate() {
-			this.update_screen_edge();
+			update_dock_mode();
 		}
 
 		void update_theme_regions() {
@@ -552,21 +556,110 @@ namespace Budgie {
 			this.queue_draw();
 		}
 
-		void update_layer_shell_props() {
-			var default_display = Gdk.Display.get_default();
-			if (default_display != null) {
-				var monitor = default_display.get_primary_monitor();
-				if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
-			}
-
-			GtkLayerShell.set_anchor(
-				this,
-				Budgie.panel_position_to_layer_shell_edge(this.position),
-				true
-			);
-
-			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+	void update_layer_shell_props() {
+		var default_display = Gdk.Display.get_default();
+		if (default_display != null) {
+			var monitor = default_display.get_primary_monitor();
+			if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
 		}
+
+		GtkLayerShell.Edge position_edge = Budgie.panel_position_to_layer_shell_edge(this.position);
+		
+		// Explicitly set all edges first
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
+		
+		// Then anchor only the position edge
+		GtkLayerShell.set_anchor(this, position_edge, true);
+
+		// Update the exclusive zone based on the autohide policy
+		this.update_exclusive_zone();
+	}
+
+	void calculate_panel_margins(out int margin_top, out int margin_bottom, out int margin_left, out int margin_right) {
+		Gtk.Allocation main_alloc;
+		main_layout.get_allocation(out main_alloc);
+		
+		Gtk.Allocation panel_alloc;
+		get_allocation(out panel_alloc);
+		
+		// Initialize margins
+		margin_top = 0;
+		margin_bottom = 0;
+		margin_left = 0;
+		margin_right = 0;
+		
+		// For non-dock mode, margins are always zero
+		if (!this.dock_mode) {
+			return;
+		}
+		
+		// For dock mode, calculate margins to center the panel
+		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
+		
+		if (horizontal) {
+			// For horizontal panels (TOP/BOTTOM), center horizontally
+			// Calculate equal left and right margins to center the panel
+			int available_width = orig_scr.width - main_alloc.width;
+			int centered_margin = available_width / 2;
+			margin_left = orig_scr.x + centered_margin;
+			margin_right = centered_margin;
+			
+			// Ensure margins are non-negative
+			margin_left = int.max(0, margin_left);
+			margin_right = int.max(0, margin_right);
+		} else {
+			// For vertical panels (LEFT/RIGHT), center vertically
+			// Calculate equal top and bottom margins to center the panel
+			int available_height = orig_scr.height - main_alloc.height;
+			int centered_margin = available_height / 2;
+			margin_top = orig_scr.y + centered_margin;
+			margin_bottom = centered_margin;
+			
+			// Ensure margins are non-negative
+			margin_top = int.max(0, margin_top);
+			margin_bottom = int.max(0, margin_bottom);
+		}
+	}
+
+	void update_panel_margins() {
+		// Calculate margins for the panel based on orientation and screen area
+		int margin_top, margin_bottom, margin_left, margin_right;
+		calculate_panel_margins(out margin_top, out margin_bottom, out margin_left, out margin_right);
+		
+		// Set margins using GtkLayerShell - set relevant margins and zero out the others
+		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
+		
+		if (horizontal) {
+		  	// For horizontal panels (TOP/BOTTOM), set left/right margins and zero top/bottom
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin_left);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, margin_right);
+		  } else {
+		  	// For vertical panels (LEFT/RIGHT), set top/bottom margins and zero left/right
+		 	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, margin_top);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, margin_bottom);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, -1);
+		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, -1);
+		  }
+	}
+
+	void update_exclusive_zone() {
+		// Update panel margins
+		update_panel_margins();
+
+		// If our panel is set to intelligent autohide and the screen is occluded, we want to ensure there is no exclusive zone and the panel goes behind other surfaces
+		if (this.autohide == AutohidePolicy.INTELLIGENT && screen_occluded) {
+			GtkLayerShell.set_exclusive_zone(this, 0);
+			set_below_other_surfaces();
+		} else {
+			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+			set_above_other_surfaces();
+		}
+	}
 
 		void update_sizes() {
 			int size = icon_sizes[0];
@@ -1175,7 +1268,6 @@ namespace Budgie {
 				this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
 				this.autohide = policy;
 				this.update_layer_shell_props();
-				this.update_dock_behavior();
 			}
 		}
 
@@ -1186,90 +1278,6 @@ namespace Budgie {
 		void update_dock_mode() {
 			layout.set_dock_mode(this.dock_mode);
 			this.placement();
-		}
-
-		int old_width = 0;
-		int old_height = 0;
-
-		void update_screen_edge() {
-			Gtk.Allocation alloc;
-			main_layout.get_allocation(out alloc);
-			int x = 0, y = 0;
-			int nx = 0, ny = 0;
-			int nw = 0, nh = 0;
-			this.get_position(out nx, out ny);
-			this.get_size(out nw, out nh);
-
-			if (this.dock_mode) {
-				switch (position) {
-				case Budgie.PanelPosition.TOP:
-					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2) - (alloc.width / 2));
-					if (x < orig_scr.x) {
-						x = orig_scr.x;
-					}
-					y = orig_scr.y;
-					break;
-				case Budgie.PanelPosition.LEFT:
-					x = orig_scr.x;
-					y = (orig_scr.y / 2) + (((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2));
-					if (y < orig_scr.y) {
-						y = orig_scr.y;
-					}
-					break;
-				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - alloc.width;
-					y = (orig_scr.y / 2) + (((orig_scr.y + orig_scr.height) / 2) - (alloc.height / 2));
-					if (y < orig_scr.y) {
-						y = orig_scr.y;
-					}
-					break;
-				case Budgie.PanelPosition.BOTTOM:
-				default:
-					x = (orig_scr.x / 2) + (((orig_scr.x + orig_scr.width) / 2) - (alloc.width / 2));
-					y = orig_scr.y + (orig_scr.height - alloc.height);
-					if (x < orig_scr.x) {
-						x = orig_scr.x;
-					}
-					break;
-				}
-			} else {
-				switch (position) {
-				case Budgie.PanelPosition.TOP:
-					x = orig_scr.x;
-					y = orig_scr.y;
-					break;
-				case Budgie.PanelPosition.LEFT:
-					x = orig_scr.x;
-					y = orig_scr.y;
-					break;
-				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - alloc.width;
-					y = orig_scr.y;
-					break;
-				case Budgie.PanelPosition.BOTTOM:
-				default:
-					x = orig_scr.x;
-					y = orig_scr.y + (orig_scr.height - alloc.height);
-					break;
-				}
-			}
-
-			// Don't update input regions unless needed
-			if (old_width != nw || old_height != nh) {
-				if (get_visible()) {
-					this.set_input_region();
-				}
-				old_width = nw;
-				old_height = nh;
-			}
-
-			// Don't move if we don't need to.
-			if (nx == x && ny == y) {
-				return;
-			}
-
-			move(x, y);
-			this.queue_draw();
 		}
 
 		void placement() {
@@ -1373,7 +1381,7 @@ namespace Budgie {
 				main_layout.set_orientation(Gtk.Orientation.VERTICAL);
 				main_layout.valign = Gtk.Align.FILL;
 				if (this.dock_mode) {
-					main_layout.halign = Gtk.Align.START;
+					main_layout.halign = Gtk.Align.CENTER;
 				} else {
 					main_layout.halign = Gtk.Align.FILL;
 				}
@@ -1395,7 +1403,7 @@ namespace Budgie {
 
 				main_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
 				if (this.dock_mode) {
-					main_layout.valign = Gtk.Align.START;
+					main_layout.valign = Gtk.Align.CENTER;
 				} else {
 					main_layout.valign = Gtk.Align.FILL;
 				}
@@ -1405,7 +1413,6 @@ namespace Budgie {
 
 			layout.set_size_request(width, height);
 			set_size_request(width, height);
-			this.update_screen_edge();
 		}
 
 		public override void get_preferred_width(out int minimum_width, out int natural_width) {
@@ -1663,166 +1670,18 @@ namespace Budgie {
 		}
 
 		/**
-		* Remove existing animations
-		*/
-		private void remove_panel_animations() {
-			if (dock_animation == null) {
-				return;
-			}
-			dock_animation.stop();
-			dock_animation = null;
-			animation = PanelAnimation.NONE;
-		}
-
-		private bool render_panel = true;
-
-		/* Track update dock requests */
-		private uint update_dock_id = 0;
-
-		private bool cursor_within_bounds() {
-			int cx = 0, cy = 0;
-			int x = 0, y = 0;
-			int w = 0, h = 0;
-			var display = this.get_display();
-			unowned Gdk.Device? pointer = null;
-
-			var seat = display.get_default_seat();
-			pointer = seat.get_pointer();
-			this.get_position(out x, out y);
-			this.get_size(out w, out h);
-			pointer.get_position(null, out cx, out cy);
-
-			if ((cx >= x && cx <= x + w) && (cy >= y && cy <= y + h)) {
-				return true;
-			}
-
-			return false;
-		}
-
-		/**
-		* Handle dock like functionality
-		*/
-		bool update_dock_behavior() {
-			update_dock_id = 0;
-
-			PanelAnimation target_state = PanelAnimation.NONE;
-
-			if (this.autohide == AutohidePolicy.NONE) {
-				this.remove_panel_animations();
-				this.animation = PanelAnimation.NONE;
-				this.placement();
-				this.show_panel();
-				return false;
-			}
-
-			/* Intellihide is basically: Are we intersected */
-			if (this.autohide == AutohidePolicy.INTELLIGENT) {
-				if (this.intersected) {
-					target_state = PanelAnimation.HIDE;
-				} else {
-					target_state = PanelAnimation.SHOW;
-				}
-			} else {
-				if (this.screen_occluded) {
-					target_state = PanelAnimation.HIDE;
-				} else {
-					target_state = PanelAnimation.SHOW;
-				}
-			}
-
-			if (target_state == PanelAnimation.SHOW && nscale == 1.0) {
-				return false;
-			}
-
-			if (target_state == PanelAnimation.HIDE && nscale == 0.0) {
-				return false;
-			}
-
-			this.remove_panel_animations();
-
-			if (target_state == PanelAnimation.SHOW) {
-				this.show_panel();
-			} else {
-				this.hide_panel();
-			}
-			return false;
-		}
-
-		/**
-		* Unset the input region to allow peek events
-		*/
-		private void unset_input_region() {
-			// Set 1px input region to receive enter-notify
-			render_panel = false;
-			Cairo.Region? region = null;
-
-			switch (position) {
-				case PanelPosition.TOP:
-					region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-						x = 0, y = 0,
-						width = get_allocated_width() * this.scale_factor,
-						height = 1 * this.scale_factor
-					});
-					break;
-				case PanelPosition.LEFT:
-					region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-						x = 0, y = 0,
-						width = 1 * this.scale_factor,
-						height = get_allocated_height() * this.scale_factor
-					});
-					break;
-				case PanelPosition.RIGHT:
-					region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-						x = (get_allocated_width() * this.scale_factor) - (1 * this.scale_factor),
-						y = 0,
-						width = 1 * this.scale_factor,
-						height = get_allocated_height() * this.scale_factor
-					});
-					break;
-				case PanelPosition.BOTTOM:
-				default:
-					region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-						x = 0,
-						y = (get_allocated_height() * this.scale_factor) - (1 * this.scale_factor),
-						width = get_allocated_width() * this.scale_factor,
-						height = 1 * this.scale_factor
-					});
-					break;
-			}
-
-			get_window().input_shape_combine_region(region, 0, 0);
-		}
-
-		/**
-		* Restore the full input region for "normal" usage
-		*/
-		private void set_input_region() {
-			var region = new Cairo.Region.rectangle(Cairo.RectangleInt() {
-				x = 0, y = 0,
-				width = get_allocated_width(),
-				height = get_allocated_height()
-			});
-			get_window().input_shape_combine_region(region, 0, 0);
-		}
-
-		/**
 		* In an autohidden mode, if we're not visible, and get peeked, say
 		* hello
 		*/
 		private bool on_enter_notify(Gdk.EventCrossing cr) {
-			if (this.render_panel) {
-				return Gdk.EVENT_PROPAGATE;
-			}
+			//  if (this.render_panel) {
+			//  	return Gdk.EVENT_PROPAGATE;
+			//  }
 			if (this.autohide == AutohidePolicy.NONE) {
 				return Gdk.EVENT_PROPAGATE;
 			}
 			if (cr.detail == Gdk.NotifyType.INFERIOR) {
 				return Gdk.EVENT_PROPAGATE;
-			}
-
-			if (update_dock_id > 0) {
-				Source.remove(update_dock_id);
-				update_dock_id = 0;
 			}
 
 			if (show_panel_id > 0) {
@@ -1845,10 +1704,6 @@ namespace Budgie {
 				show_panel_id = 0;
 			}
 
-			if (update_dock_id > 0) {
-				Source.remove(update_dock_id);
-			}
-			update_dock_id = Timeout.add(175, this.update_dock_behavior);
 			return Gdk.EVENT_STOP;
 		}
 
@@ -1864,20 +1719,17 @@ namespace Budgie {
 				return false;
 			}
 			this.animation = PanelAnimation.SHOW;
-			render_panel = true;
+			//  render_panel = true;
 
 			this.queue_draw();
 			this.show();
 
 			if (!this.get_settings().gtk_enable_animations) {
 				this.nscale = 1.0;
-				this.set_input_region();
 				this.animation = PanelAnimation.NONE;
 				this.queue_draw();
 				return false;
 			}
-
-			this.set_input_region();
 
 			dock_animation = new Budgie.Animation();
 			dock_animation.widget = this;
@@ -1892,59 +1744,18 @@ namespace Budgie {
 			};
 
 			dock_animation.start((a) => {
-				this.set_input_region();
 				this.animation = PanelAnimation.NONE;
 			});
+
+			set_above_other_surfaces();
 			return false;
 		}
 
-		/**
-		* Hide the panel through a small animation
-		*/
-		private void hide_panel() {
-			if (!this.allow_animation) {
-				return;
-			}
-
-			if (this.cursor_within_bounds()) {
-				return;
-			}
-
-			if (!this.get_settings().gtk_enable_animations) {
-				this.nscale = 0.0;
-				this.unset_input_region();
-				this.animation = PanelAnimation.NONE;
-				this.queue_draw();
-				return;
-			}
-
-			this.unset_input_region();
-
-			render_panel = true;
-			this.animation = PanelAnimation.SHOW;
-			dock_animation = new Budgie.Animation();
-			dock_animation.widget = this;
-			dock_animation.length = 360 * Budgie.MSECOND;
-			dock_animation.tween = Budgie.expo_ease_out;
-			dock_animation.changes = new Budgie.PropChange[] {
-				Budgie.PropChange() {
-					property = "nscale",
-					old = this.nscale,
-					@new = 0.0
-				}
-			};
-
-			dock_animation.start((a) => {
-				this.unset_input_region();
-				this.animation = PanelAnimation.NONE;
-			});
-		}
-
 		public override bool draw(Cairo.Context cr) {
-			if (!render_panel) {
-				/* Don't need to render */
-				return Gdk.EVENT_STOP;
-			}
+			//  if (!render_panel) {
+			//  	/* Don't need to render */
+			//  	return Gdk.EVENT_STOP;
+			//  }
 
 			if (animation == PanelAnimation.NONE) {
 				return base.draw(cr);
@@ -2024,6 +1835,15 @@ namespace Budgie {
 				}
 			}
 			return false;
+		}
+
+		private void set_above_other_surfaces() {
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP); // Ensure it is above other surfaces
+			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+		}
+
+		private void set_below_other_surfaces() {
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.BOTTOM); // Ensure it is below other surfaces
 		}
 	}
 }
