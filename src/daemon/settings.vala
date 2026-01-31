@@ -107,7 +107,6 @@ namespace Budgie {
 
 
 			panel_settings.changed["dark-theme"].connect((key) => apply_dark_theme_pref());
-			apply_dark_theme_pref();
 
 			gnome_session_settings.changed["idle-delay"].connect(this.update_idle_delay);
 			gnome_power_settings.changed["idle-dim"].connect(this.update_idle_dim);
@@ -115,7 +114,6 @@ namespace Budgie {
 			gnome_power_settings.changed["sleep-inactive-battery-timeout"].connect(this.update_battery_timeout);
 
 			wm_settings.changed.connect(this.on_wm_settings_changed);
-			this.on_wm_settings_changed("button-style");
 
 			gnome_desktop_settings.changed.connect(this.on_gnome_desktop_settings_changed);
 			this.on_gnome_desktop_settings_changed("gtk-theme");
