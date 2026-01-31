@@ -8,3 +8,5 @@ justfile
 /.fleet/
 /.idea/
 /.cache/
+
+subprojects/.wraplock
