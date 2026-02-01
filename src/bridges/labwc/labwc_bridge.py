@@ -442,10 +442,19 @@ class Bridge:
                 except IndexError:
                     pass
 
-        self.budgie_wm_changed(self.budgie_wm_settings, "window-focus-mode")
-        self.budgie_wm_changed(self.budgie_wm_settings, "show-all-windows-tabswitcher")
-        self.budgie_wm_changed(self.budgie_wm_settings, "edge-tiling")
+        budgie_wmkeys = {"window-focus-mode",
+                         "show-all-windows-tabswitcher",
+                         "edge-tiling",
+                         "take-full-screenshot",
+                         "take-region-screenshot",
+                         "clear-notifications",
+                         "toggle-raven",
+                         "toggle-notifications"}
+        for key in budgie_wmkeys:
+            self.budgie_wm_changed(self.budgie_wm_settings, key)
+
         self.mutter_changed(self.mutter_settings, "center-new-windows")
+        self.mutter_changed(self.mutter_settings, "overlay-key")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "titlebar-font")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "button-layout")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "num-workspaces")
@@ -746,6 +755,7 @@ class Bridge:
         if key == "custom-keybindings":
             self.customkeys_changed(self.gsd_media_keys_settings, None)
             return
+
         # for some reason, the mutter overlay-key is a string, while every other key, rest of mutter included, is a string array.
         # turning overlay-key into an array seems to allow it to work properly, or else it ends up as just the first character
         if key == "overlay-key":
@@ -754,7 +764,7 @@ class Bridge:
             keybind = settings[key]
 
         if keybind == None:
-            return
+            keybind = []
 
         root = self.et.getroot()
 
@@ -764,22 +774,71 @@ class Bridge:
             return
 
         partial = partial[-2] + "." + partial[-1] + "/" + key
-        path = "./keyboard/keybind/[@bridge='" + partial + "']"
-        for bridge in root.findall(path):
-            bridge.attrib["key"] = self.calc_keybind(keybind[0])
 
-            # GNOME defines settings-daemon media keys also with a -static suffix - if
-            # the key we calculate is "undefined" then grab the value
-            # from the equivalent -static gsettings key
-            # ... in most keys - so skip those keys that don't have -static suffixes here
-            if bridge.attrib["key"] == "undefined" and settings == self.gsd_media_keys_settings:
+        # Find all existing keybind elements for this bridge key
+        path = "./keyboard/keybind[@bridge='" + partial + "']"
+        existing_keybinds = root.findall(path)
+
+        # Handle empty keybind array - keep one element with "undefined"
+        if not keybind or len(keybind) == 0 or (len(keybind) == 1 and not keybind[0]):
+            # Remove all but the first keybind element
+            keyboard_element = root.find("./keyboard")
+            for i, bridge in enumerate(existing_keybinds):
+                if i == 0:
+                    # Keep first element but set to undefined
+                    bridge.attrib["key"] = "undefined"
+                else:
+                    # Remove extra elements
+                    keyboard_element.remove(bridge)
+
+            self.write_config()
+            return
+
+        # Process each keybinding in the array
+        for i, binding in enumerate(keybind):
+            calculated_key = self.calc_keybind(binding)
+
+            # Check if we need to use -static suffix for media keys
+            if calculated_key == "undefined" and settings == self.gsd_media_keys_settings:
                 try:
-                    keybind = settings[key + "-static"]
-                    bridge.attrib["key"] = self.calc_keybind(keybind[0])
+                    static_keybind = settings[key + "-static"]
+                    if static_keybind and len(static_keybind) > i:
+                        calculated_key = self.calc_keybind(static_keybind[i])
                 except KeyError:
                     pass
 
-            self.write_config()
+            # Update existing keybind or create new one
+            if i < len(existing_keybinds):
+                # Update existing element
+                existing_keybinds[i].attrib["key"] = calculated_key
+            else:
+                # Create new keybind element
+                # First, get the action structure from the first keybind
+                if len(existing_keybinds) > 0:
+                    # Clone the action element from the first keybind
+                    keyboard_element = root.find("./keyboard")
+                    new_keybind = Et.Element("keybind")
+                    new_keybind.attrib["bridge"] = partial
+                    new_keybind.attrib["key"] = calculated_key
+
+                    # Copy the action element(s) from the first keybind
+                    for action in existing_keybinds[0].findall("action"):
+                        new_action = Et.Element("action")
+                        new_action.attrib.update(action.attrib)
+                        new_action.text = action.text
+                        new_keybind.append(new_action)
+
+                    # Insert after the last existing keybind for this bridge
+                    insert_index = list(keyboard_element).index(existing_keybinds[-1]) + 1
+                    keyboard_element.insert(insert_index, new_keybind)
+
+        # Remove excess keybind elements if array shrank
+        if len(existing_keybinds) > len(keybind):
+            keyboard_element = root.find("./keyboard")
+            for bridge in existing_keybinds[len(keybind):]:
+                keyboard_element.remove(bridge)
+
+        self.write_config()
 
     # all solus-project panel gsettings changes are managed
     def panel_settings_changed(self, settings, key):
