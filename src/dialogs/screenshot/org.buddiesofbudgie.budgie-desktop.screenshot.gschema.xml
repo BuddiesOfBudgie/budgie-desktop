@@ -24,6 +24,11 @@
             <default>4</default>
             <range min="0" max="7"/>
         </key>
+        <key type="s" name="last-save-directory-path">
+            <summary>Last used custom save directory path</summary>
+            <description>The full path to the last used custom directory for saving screenshots. Empty if using a standard user directory.</description>
+            <default>""</default>
+        </key>
         <key type="s" name="file-type">
             <choices>
        	        <choice value='jpeg'/>
