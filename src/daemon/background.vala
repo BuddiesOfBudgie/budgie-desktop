@@ -24,6 +24,7 @@ namespace Budgie {
 		*/
 		Gnome.BG? gnome_bg;
 		Subprocess? bg = null;
+		CrystalDockHelper? crystal_dock_helper = null;
 
 		/**
 		* Determine if the wallpaper is a colour wallpaper or not
@@ -37,8 +38,6 @@ namespace Budgie {
 			}
 			return false;
 		}
-
-		// Add this method to the Background class after is_color_wallpaper()
 
 		/**
 		* Translate GNOME desktop background picture-options to swaybg mode
@@ -97,6 +96,13 @@ namespace Budgie {
 
 			/* Do the initial load */
 			gnome_bg.load_from_preferences(this.settings);
+
+			/* Setup Crystal Dock helper and monitor for changes */
+			crystal_dock_helper = new CrystalDockHelper();
+			crystal_dock_helper.dock_config_changed.connect(() => {
+				message("Crystal Dock configuration changed, updating wallpaper");
+				this.update();
+			});
 		}
 
 		/**
@@ -152,10 +158,20 @@ namespace Budgie {
 
 			/* Set background image when appropriate, and for now dont parse .xml files */
 			if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
+				string swaybg_mode = get_swaybg_mode();
+				string wallpaper_path = bg_filename;
+
+				// Check if Crystal Dock is running and add borders if needed
+				if (crystal_dock_helper != null) {
+					string? bordered_path = crystal_dock_helper.apply_borders(bg_filename);
+					if (bordered_path != null) {
+						wallpaper_path = bordered_path;
+					}
+				}
+
 				// we use swaybg to define the wallpaper - we need to keep track
 				// of what we create so that we kill it the next time a background is defined
-				string swaybg_mode = get_swaybg_mode();
-				string[] cmdline = { "swaybg", "-i", bg_filename, "--mode", swaybg_mode };
+				string[] cmdline = { "swaybg", "-i", wallpaper_path, "--mode", swaybg_mode };
 
 				Subprocess new_bg;
 				try {

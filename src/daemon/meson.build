@@ -31,6 +31,7 @@ brightness_util_sources = files(
 daemon_sources = [
     brightness_util_sources,
     'brightness-manager.vala',
+    'crystal_dock_helper.vala',
     'endsession.vala',
     'notifications/dbus.vala',
     'notifications/popup.vala',
