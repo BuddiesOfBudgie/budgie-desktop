@@ -315,8 +315,8 @@ namespace Budgie {
 			});
 
 			labwc_theme_row = new SettingsRow(labwc_theme_override,
-				_("Window Manager Theme"),
-				_("Override the labwc window manager theme independently from the desktop theme.")
+				_("Labwc Compositor Theme"),
+				_("Override the labwc compositor theme independently from the desktop theme.")
 			);
 		}
 
