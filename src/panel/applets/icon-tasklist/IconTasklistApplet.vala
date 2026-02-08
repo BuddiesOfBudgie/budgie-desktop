@@ -508,32 +508,42 @@ public class IconTasklistApplet : Budgie.Applet {
 				if (has_open_windows && settings.get_boolean("show-all-windows-on-click")) {
 					var group = button.get_window_group();
 					var windows = group.get_windows();
-					var has_active = false;
 
-					// Check if there are any un-minimized windows in this group
-					foreach (var window in windows) {
-						if (!window.is_minimized()) {
-							has_active = true;
-							break;
+					if (button.has_active_window) {
+						// remember active_window, because it should be the last one to minimize
+						var active_window = group.get_active_window();
+
+						// Hide any un-minimized windows in this group
+						foreach (var window in windows) {
+							if (window != active_window && !window.is_minimized()) {
+								try {
+									window.set_minimized(true);
+								} catch (Error e) {
+									warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
+								}
+							}
+						}
+
+						// the active window gets minimized last
+						try {
+							active_window.set_minimized(true);
+						} catch (Error e) {
+							warning("Unable to minimize active window '%s': %s", active_window.get_name(), e.message);
 						}
 					}
+					else {
+						var last_active_window = group.get_active_window();
 
-					// If there are un-minimized windows, minimize all windows in this group.
-					// Otherwise, un-minimize all of the windows in the group.
-					foreach (var window in windows) {
-						if (has_active) {
+						foreach (var window in windows) {
 							try {
-								window.set_minimized(true);
+								if (window.is_minimized()) window.set_minimized(false);
+								if (window != last_active_window) window.activate(null, event.time);
 							} catch (Error e) {
 								warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
 							}
-						} else {
-							try {
-								window.set_minimized(false);
-								window.activate(null, event.time);
-							} catch (Error e) {
-								warning("Unable to un-minimize or activate window '%s': %s", window.get_name(), e.message);
-							}
+						}
+						if (last_active_window != null) {
+							last_active_window.activate(null, event.time);
 						}
 					}
 				} else if (has_open_windows) { // Has open windows, toggle the visibility of the current/last active window
@@ -569,7 +579,7 @@ public class IconTasklistApplet : Budgie.Applet {
 				manager.show_popover(button);
 				return Gdk.EVENT_STOP;
 			case Gdk.BUTTON_MIDDLE:
-				if (settings.get_boolean("middle-click-launch-new-instance")) break;
+				if (!settings.get_boolean("middle-click-launch-new-instance")) break;
 
 				if (!button.launch()) {
 					warning("Failed to launch application: %s", button.app.name);
