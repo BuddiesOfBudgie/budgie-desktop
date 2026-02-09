@@ -125,7 +125,7 @@ namespace Budgie {
 			skip_taskbar_hint = true;
 
 			GtkLayerShell.init_for_window(this);
-			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
 			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, 80);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
 
