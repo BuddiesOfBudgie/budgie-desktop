@@ -19,15 +19,26 @@ namespace Budgie {
 		private FileMonitor? config_monitor = null;
 		private uint dock_check_timeout = 0;
 		private bool last_dock_running = false;
-		private string config_dir = Path.build_filename(GLib.Environment.get_user_config_dir(), "crystal-dock", "Budgie");
+		private bool crystal_dock_installed = false;
+		private int current_poll_interval = 5000;  // Start at 5 seconds
+		string config_dir = Path.build_filename(Environment.get_user_config_dir(), "crystal-dock", "Budgie");
 
 
-		const int DOCK_CHECK_INTERVAL = 5000;  // Check every 5 seconds
+		// Polling intervals
+		const int POLL_INTERVAL_MIN = 5000;        // 5 seconds - minimum
+		const int POLL_INTERVAL_MAX = 30000;       // 30 seconds - maximum
+		const int POLL_INTERVAL_INCREMENT = 5000;  // Add 5 seconds each time
 
 		public signal void dock_config_changed();
 
 		public CrystalDockHelper() {
-			setup_monitors();
+			// Check if Crystal Dock is actually installed before setting up monitoring
+			crystal_dock_installed = Environment.find_program_in_path("crystal-dock") != null;
+
+			if (crystal_dock_installed) {
+				message("Crystal Dock is installed, setting up monitoring");
+				setup_monitors();
+			}
 		}
 
 		~CrystalDockHelper() {
@@ -82,6 +93,8 @@ namespace Budgie {
 									return false;
 								});
 								break;
+							default:
+								break;
 						}
 					}
 				});
@@ -94,29 +107,63 @@ namespace Budgie {
 		}
 
 		/**
-		* Monitor if Crystal Dock process starts or stops
+		* Setup adaptive process polling
 		*/
 		private void setup_process_monitor() {
 			last_dock_running = is_running();
+			current_poll_interval = POLL_INTERVAL_MIN;
 
-			dock_check_timeout = Timeout.add(DOCK_CHECK_INTERVAL, () => {
-				bool currently_running = is_running();
+			dock_check_timeout = Timeout.add(current_poll_interval, check_process_state);
+		}
 
-				if (currently_running != last_dock_running) {
-					message("Crystal Dock %s",
-						currently_running ? "started" : "stopped");
-					last_dock_running = currently_running;
-					dock_config_changed();
+		/**
+		* Check Crystal Dock process state and adjust polling interval
+		*/
+		private bool check_process_state() {
+			bool currently_running = is_running();
+
+			if (currently_running != last_dock_running) {
+				// State changed - Crystal Dock started or stopped
+				debug("Crystal Dock %s",
+					currently_running ? "started" : "stopped");
+				last_dock_running = currently_running;
+				dock_config_changed();
+
+				// Reset to minimum interval after state change
+				if (current_poll_interval != POLL_INTERVAL_MIN) {
+					current_poll_interval = POLL_INTERVAL_MIN;
+					adjust_poll_interval();
 				}
+			} else {
+				// State unchanged - increase interval by 5s (up to max)
+				if (current_poll_interval < POLL_INTERVAL_MAX) {
+					current_poll_interval += POLL_INTERVAL_INCREMENT;
+					if (current_poll_interval > POLL_INTERVAL_MAX) {
+						current_poll_interval = POLL_INTERVAL_MAX;
+					}
+					adjust_poll_interval();
+				}
+			}
 
-				return true;
-			});
+			return true;  // Continue timeout
+		}
+
+		/**
+		* Adjust polling interval by recreating the timeout
+		*/
+		private void adjust_poll_interval() {
+			// Remove old timeout and create new one with adjusted interval
+			if (dock_check_timeout > 0) {
+				Source.remove(dock_check_timeout);
+			}
+
+			dock_check_timeout = Timeout.add(current_poll_interval, check_process_state);
 		}
 
 		/**
 		* Check if crystal-dock process is running
 		*/
-		public bool is_running() {
+		private bool is_running() {
 			try {
 				string stdout_str;
 				int exit_status;
@@ -177,6 +224,11 @@ namespace Budgie {
 		*/
 		public string[] get_active_edges() {
 			string[] edges = {};
+
+			if (!crystal_dock_installed) {
+				return edges;
+			}
+
 			if (!FileUtils.test(config_dir, FileTest.IS_DIR)) {
 				return edges;
 			}
@@ -211,7 +263,7 @@ namespace Budgie {
 		*/
 		public string? apply_borders(string original_path) {
 			// Only apply borders if Crystal Dock is actually running
-			if (!is_running()) {
+			if (!crystal_dock_installed || !last_dock_running) {
 				return original_path;
 			}
 
