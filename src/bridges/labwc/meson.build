@@ -19,12 +19,17 @@ install_data(
     install_dir: libexecdir
 )
 
-install_data(
+labwc_files = [
     'rc.xml',
-    install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
-)
+    'menu.xml',
+    'themerc-dark',
+    'themerc-darkest',
+    'themerc-mid',
+    'themerc-light',
+    'themerc-frappe'
+]
 
 install_data(
-    'menu.xml',
+    labwc_files,
     install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
 )
