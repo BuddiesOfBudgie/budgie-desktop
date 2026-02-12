@@ -779,8 +779,24 @@ class Bridge:
         path = "./keyboard/keybind[@bridge='" + partial + "']"
         existing_keybinds = root.findall(path)
 
+        # If no existing keybinds found, nothing to update
+        if len(existing_keybinds) == 0:
+            return
+
         # Handle empty keybind array - keep one element with "undefined"
-        if not keybind or len(keybind) == 0 or (len(keybind) == 1 and not keybind[0]):
+        is_empty = False
+        if len(keybind) == 0:
+            is_empty = True
+        else:
+            # Check if all bindings are empty or None
+            all_empty = True
+            for binding in keybind:
+                if binding:  # If any binding is not empty
+                    all_empty = False
+                    break
+            is_empty = all_empty
+
+        if is_empty:
             # Remove all but the first keybind element
             keyboard_element = root.find("./keyboard")
             for i, bridge in enumerate(existing_keybinds):
