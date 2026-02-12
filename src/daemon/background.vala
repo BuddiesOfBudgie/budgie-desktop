@@ -31,6 +31,7 @@ namespace Budgie {
 		Gnome.BG? gnome_bg;
 		Subprocess? bg = null;
 		CrystalDockHelper? crystal_dock_helper = null;
+		private uint dbus_id = 0;
 
 		/**
 		* Determine if the wallpaper is a colour wallpaper or not
@@ -109,6 +110,47 @@ namespace Budgie {
 				message("Crystal Dock configuration changed, updating wallpaper");
 				this.update();
 			});
+
+			register_dbus();
+		}
+
+		~Background() {
+			unregister_dbus();
+		}
+
+		/**
+		* Register background on the session bus
+		*/
+		private void register_dbus() {
+			try {
+				var connection = Bus.get_sync(BusType.SESSION);
+				dbus_id = connection.register_object(BACKGROUND_DBUS_PATH, this);
+
+				// Also own the well-known name
+				Bus.own_name(
+					BusType.SESSION,
+					BACKGROUND_DBUS_NAME,
+					BusNameOwnerFlags.NONE,
+					null,
+					null,
+					null
+				);
+
+				debug("Background DBus interface registered");
+			} catch (Error e) {
+				warning("Failed to register Background DBus interface: %s", e.message);
+			}
+		}
+
+		private void unregister_dbus() {
+			if (dbus_id > 0) {
+				try {
+					var connection = Bus.get_sync(BusType.SESSION);
+					connection.unregister_object(dbus_id);
+				} catch (Error e) {
+					warning("Failed to unregister Background DBus interface: %s", e.message);
+				}
+			}
 		}
 
 		/**
@@ -166,14 +208,18 @@ namespace Budgie {
 			if (!this.is_color_wallpaper(bg_filename) && !bg_filename.has_suffix(".xml")) {
 				string swaybg_mode = get_swaybg_mode();
 				string wallpaper_path = bg_filename;
+				bool is_modified = false;
 
 				// Check if Crystal Dock is running and add borders if needed
 				if (crystal_dock_helper != null) {
 					string? bordered_path = crystal_dock_helper.apply_borders(bg_filename);
 					if (bordered_path != null) {
 						wallpaper_path = bordered_path;
+						is_modified = true;
 					}
 				}
+
+				wallpaper_changing(wallpaper_path, is_modified);
 
 				// we use swaybg to define the wallpaper - we need to keep track
 				// of what we create so that we kill it the next time a background is defined
