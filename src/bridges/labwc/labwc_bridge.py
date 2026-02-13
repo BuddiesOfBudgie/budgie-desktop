@@ -888,6 +888,21 @@ class Bridge:
 
             replacement = replacement.replace("XF86XF86", "XF86")
 
+            # Convert the final key (non-modifier) to lowercase
+            if "-" in replacement:
+                parts = replacement.rsplit("-", 1)
+                if len(parts) == 2:
+                    modifiers = parts[0]
+                    key = parts[1]
+                    # Only lowercase if it's not an XF86 key or special key
+                    if not key.startswith("XF86") and len(key) == 1:
+                        key = key.lower()
+                    replacement = modifiers + "-" + key
+            else:
+                # No modifiers, just a single key
+                if len(replacement) == 1:
+                    replacement = replacement.lower()
+
         return replacement
 
     # all keybinds from various gsettings schemas are managed
