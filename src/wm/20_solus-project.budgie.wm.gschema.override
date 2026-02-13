@@ -16,4 +16,4 @@ switch-input-source = ['<Alt>Shift_L', '<Super>space', 'XF86Keyboard']
 switch-input-source-backward = ['<Super><Shift>space', '<Shift>XF86Keyboard']
 
 [org.gnome.mutter:Budgie]
-overlay-key="<Super_L>"
+overlay-key="Super_L"
