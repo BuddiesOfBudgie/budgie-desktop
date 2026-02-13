@@ -27,6 +27,144 @@ from gi.repository import Pango
 
 mainloop = None
 
+CURRENT_RC_VERSION = 1
+
+class RcXmlMigration:
+    """Handles migration of rc.xml to newer versions"""
+
+    def __init__(self, bridge):
+        self.bridge = bridge
+        self.log = bridge.log
+
+    def get_rc_version(self, et):
+        """Get the version number from rc.xml root element"""
+        root = et.getroot()
+        version = root.get('version')
+        if version is None:
+            return 0  # No version means old/original format
+        return int(version)
+
+    def needs_migration(self):
+        """Check if user's rc.xml needs migration"""
+        try:
+            user_version = self.get_rc_version(self.bridge.et)
+            return user_version < CURRENT_RC_VERSION
+        except:
+            return False
+
+    def backup_user_config(self):
+        """Create backup of user's current rc.xml"""
+        user_path = self.bridge.user_config()
+        backup_path = user_path + ".backup"
+
+        try:
+            shutil.copy2(user_path, backup_path)
+            self.log.info(f"Backed up rc.xml to {backup_path}")
+            return True
+        except Exception as e:
+            self.log.error(f"Failed to backup rc.xml: {e}")
+            return False
+
+    def load_template(self):
+        """Load the new template rc.xml from system data dirs"""
+        for system_dir in GLib.get_system_data_dirs():
+            # Check for distro-specific template first
+            template_path = os.path.join(system_dir, "budgie-desktop", "labwc", "distro-rc.xml")
+            if os.path.isfile(template_path):
+                try:
+                    return Et.parse(template_path)
+                except Exception as e:
+                    self.log.warning(f"Cannot parse distro template {template_path}: {e}")
+
+            # Fall back to standard template
+            template_path = os.path.join(system_dir, "budgie-desktop", "labwc", "rc.xml")
+            if os.path.isfile(template_path):
+                try:
+                    return Et.parse(template_path)
+                except Exception as e:
+                    self.log.warning(f"Cannot parse template {template_path}: {e}")
+
+        self.log.error("Could not find rc.xml template")
+        return None
+
+    def replace_keyboard_section(self, user_et, template_et):
+        """Replace only the keyboard section from user config with template version"""
+        user_root = user_et.getroot()
+        template_root = template_et.getroot()
+
+        # Find and remove old keyboard section from user config
+        old_keyboard = user_root.find('./keyboard')
+        if old_keyboard is not None:
+            user_root.remove(old_keyboard)
+
+        # Find keyboard section in template
+        template_keyboard = template_root.find('./keyboard')
+        if template_keyboard is None:
+            self.log.error("Template has no keyboard section")
+            return False
+
+        # Deep copy the template keyboard section
+        # We need to find the right position to insert it
+        # Typically keyboard comes after desktops but before theme
+        # Let's try to maintain reasonable ordering
+
+        # Find insertion point - try to insert before theme element
+        theme_element = user_root.find('./theme')
+        if theme_element is not None:
+            insert_index = list(user_root).index(theme_element)
+            user_root.insert(insert_index, template_keyboard)
+        else:
+            # If no theme element, try before windowRules
+            windowrules_element = user_root.find('./windowRules')
+            if windowrules_element is not None:
+                insert_index = list(user_root).index(windowrules_element)
+                user_root.insert(insert_index, template_keyboard)
+            else:
+                # Just append at the end if we can't find a good spot
+                user_root.append(template_keyboard)
+
+        self.log.info("Replaced keyboard section with template version")
+        return True
+
+    def migrate(self):
+        """Perform the migration - replace keyboard section only"""
+        self.log.info("Starting rc.xml migration - replacing keyboard section only")
+
+        # Step 1: Backup current config
+        if not self.backup_user_config():
+            self.log.error("Migration aborted - backup failed")
+            return False
+
+        # Step 2: Load template
+        template_et = self.load_template()
+        if template_et is None:
+            self.log.error("Migration aborted - no template found")
+            return False
+
+        # Step 3: Replace keyboard section in user's config
+        user_et = self.bridge.et
+        if not self.replace_keyboard_section(user_et, template_et):
+            self.log.error("Migration aborted - failed to replace keyboard section")
+            return False
+
+        # Step 4: Set version number on user config
+        user_root = user_et.getroot()
+        user_root.set('version', str(CURRENT_RC_VERSION))
+
+        # Step 5: Write updated config
+        user_path = self.bridge.user_config()
+
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(user_path), exist_ok=True)
+
+        # Write updated config
+        Et.indent(user_et, space="\t", level=0)
+        user_et.write(user_path)
+
+        self.log.info("rc.xml migration completed - keyboard section updated to version " + str(CURRENT_RC_VERSION))
+        return True
+
+
 class Bridge:
 
     # element tree to read/write
@@ -125,6 +263,13 @@ class Bridge:
             self.log.warning("Cannot parse " + path + ":\n")
             self.log.warning(e)
             return
+
+        # Check if migration is needed
+        migration = RcXmlMigration(self)
+        if migration.needs_migration():
+            self.log.info("Old rc.xml format detected, performing migration")
+            if not migration.migrate():
+                self.log.error("Migration failed, continuing with current config")
 
         signal.signal(signal.SIGINT, self.sigint_handler)
 
@@ -783,14 +928,38 @@ class Bridge:
         if len(existing_keybinds) == 0:
             return
 
+        # For media keys, check if we should use -static values
+        effective_keybind = keybind
+        if settings == self.gsd_media_keys_settings:
+            # Check if main key is empty but -static key has values
+            main_is_empty = len(keybind) == 0 or all(not binding for binding in keybind)
+
+            if main_is_empty:
+                try:
+                    static_key = key + "-static"
+                    static_keybind = settings[static_key]
+                    self.log.info(f"Main key '{key}' is empty, checking -static: {static_keybind}")
+
+                    # If -static has values, use those instead
+                    if static_keybind and len(static_keybind) > 0:
+                        has_values = any(binding for binding in static_keybind)
+                        if has_values:
+                            self.log.info(f"Using -static values for '{key}'")
+                            effective_keybind = static_keybind
+                            main_is_empty = False
+                except KeyError:
+                    # No -static key exists
+                    self.log.info(f"No -static key found for '{key}'")
+                    pass
+
         # Handle empty keybind array - keep one element with "undefined"
         is_empty = False
-        if len(keybind) == 0:
+        if len(effective_keybind) == 0:
             is_empty = True
         else:
             # Check if all bindings are empty or None
             all_empty = True
-            for binding in keybind:
+            for binding in effective_keybind:
                 if binding:  # If any binding is not empty
                     all_empty = False
                     break
@@ -811,17 +980,13 @@ class Bridge:
             return
 
         # Process each keybinding in the array
-        for i, binding in enumerate(keybind):
+        for i, binding in enumerate(effective_keybind):
             calculated_key = self.calc_keybind(binding)
 
-            # Check if we need to use -static suffix for media keys
-            if calculated_key == "undefined" and settings == self.gsd_media_keys_settings:
-                try:
-                    static_keybind = settings[key + "-static"]
-                    if static_keybind and len(static_keybind) > i:
-                        calculated_key = self.calc_keybind(static_keybind[i])
-                except KeyError:
-                    pass
+            self.log.info(f"Processing keybind '{key}' index {i}: binding='{binding}' -> calculated='{calculated_key}'")
+
+            # Note: if we're using effective_keybind from -static,
+            # we don't need the fallback logic below since we already have the static values
 
             # Update existing keybind or create new one
             if i < len(existing_keybinds):

@@ -1,4 +1,4 @@
-<labwc_config>
+<labwc_config version="1">
 	<desktops number="4" />
 	<keyboard>
 		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">
