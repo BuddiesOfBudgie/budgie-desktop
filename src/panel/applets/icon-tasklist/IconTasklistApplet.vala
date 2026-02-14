@@ -543,7 +543,11 @@ public class IconTasklistApplet : Budgie.Applet {
 							}
 						}
 						if (last_active_window != null) {
-							last_active_window.activate(null, event.time);
+							try {
+								last_active_window.activate(null, event.time);
+							} catch (Error e) {
+								warning("Unable to activate last window '%s': %s", last_active_window.get_name(), e.message);
+							}
 						}
 					}
 				} else if (has_open_windows) { // Has open windows, toggle the visibility of the current/last active window
