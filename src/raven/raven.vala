@@ -423,7 +423,7 @@ namespace Budgie {
 		}
 
 		public override bool draw(Cairo.Context cr) {
-			if (nscale == 0.0 || nscale == 1.0) {
+			if (nscale == 1.0) {
 				return base.draw(cr);
 			}
 
@@ -488,9 +488,11 @@ namespace Budgie {
 			if (!this.get_settings().gtk_enable_animations) {
 				if (!exp) {
 					this.nscale = 0.0;
+					this.set_opacity(0.0);
 					this.hide();
 				} else {
 					this.nscale = 1.0;
+					this.set_opacity(1.0);
 					this.present();
 					this.grab_focus();
 					this.steal_focus();
@@ -521,6 +523,10 @@ namespace Budgie {
 			} else {
 				shadow.show();
 			}
+
+			// Raven is invisible before fade-in animation; make window visible before we start the animation
+			set_opacity(1.0);
+			show();
 
 			anim.start((a) => {
 				Budgie.Raven? r = a.widget as Budgie.Raven;

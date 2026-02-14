@@ -1,4 +1,4 @@
-<labwc_config>
+<labwc_config version="1">
 	<desktops number="4" />
 	<keyboard>
 		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">
@@ -106,70 +106,64 @@
 		<keybind bridge="wm.keybindings/switch-to-workspace-right" key="W-Page_Down">
 			<action name="GoToDesktop" to="right" wrap="no" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-applications" key="W-Tab">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="wm.keybindings/switch-applications-backward" key="S-W-Tab">
+			<action name="PreviousWindow" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-applications" key="W-Tab">
+			<action name="NextWindow" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-panels-backward" key="S-C-A-Tab">
 			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/switch-panels" key="C-A-Tab">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-panels-backward" key="S-C-A-Tab">
+		<keybind bridge="wm.keybindings/cycle-panels-backward" key="S-C-A-Escape">
 			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/cycle-panels" key="C-A-Escape">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/cycle-panels-backward" key="S-C-A-Escape">
+		<keybind bridge="wm.keybindings/switch-windows-backward" key="undefined">
 			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/switch-windows" key="undefined">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-windows-backward" key="undefined">
-			<action name="" command="" />
+		<keybind bridge="wm.keybindings/cycle-windows-backward" key="S-A-Escape">
+			<action name="PreviousWindow" />
 		</keybind>
 		<keybind bridge="wm.keybindings/cycle-windows" key="A-Escape">
 			<action name="NextWindow" />
 		</keybind>
-		<keybind bridge="wm.keybindings/cycle-windows-backward" key="S-A-Escape">
-			<action name="PreviousWindow" />
-		</keybind>
-		<keybind bridge="wm.keybindings/cycle-group" key="A-F6">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="wm.keybindings/cycle-group-backward" key="S-A-F6">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-group" key="W-Above_Tab">
+		<keybind bridge="wm.keybindings/cycle-group" key="A-F6">
 			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/switch-group-backward" key="S-W-Above_Tab">
 			<action name="" command="" />
 		</keybind>
-		<keybind key="A-Tab">
-			<action name="NextWindow" />
+		<keybind bridge="wm.keybindings/switch-group" key="W-Above_Tab">
+			<action name="" command="" />
 		</keybind>
-		<keybind key="A-S-Tab">
-			<action name="PreviousWindow" />
-		</keybind>
-		<keybind key="Super_L" onRelease="yes">
+		<keybind bridge="gnome.mutter/overlay-key" key="Super_L" onRelease="yes">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
 		</keybind>
-		<keybind key="W-c">
+		<keybind bridge="solus-project.budgie-wm/clear-notifications" key="W-c">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ClearNotifications" />
 		</keybind>
-		<keybind key="W-n">
+		<keybind bridge="solus-project.budgie-wm/toggle-notifications" key="W-n">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleNotificationsView" />
 		</keybind>
-		<keybind key="W-a">
+		<keybind bridge="solus-project.budgie-wm/toggle-raven" key="W-a">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleAppletView" />
 		</keybind>
-		<keybind key="S-Print">
+		<keybind bridge="solus-project.budgie-wm/take-region-screenshot" key="C-Print">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartAreaSelect" />
 		</keybind>
-		<keybind key="Print">
+		<keybind bridge="solus-project.budgie-wm/take-full-screenshot" key="Print">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/eject" key="undefined">
@@ -211,14 +205,8 @@
 		<keybind bridge="plugins.media-keys/logout" key="C-A-Delete">
 			<action name="Execute" command="budgie-session-quit" />
 		</keybind>
-		<keybind key="S-W-p">
-			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.PowerDialog /org/buddiesofbudgie/PowerDialog org.buddiesofbudgie.PowerDialog.Toggle" />
-		</keybind>
 		<keybind bridge="wm.keybindings/panel-run-dialog" key="A-F2">
 			<action name="Execute" command="budgie-run-dialog" />
-		</keybind>
-		<keybind key="A-Space">
-			<action name="ShowMenu" menu="client-menu" />
 		</keybind>
 		<keybind bridge="wm.keybindings/switch-input-source" key="A-Shift_L">
 			<action name="" command="" />
@@ -274,10 +262,10 @@
 		<keybind bridge="mutter.keybindings/toggle-tiled-right" key="W-Right">
 			<action name="ToggleSnapToEdge" direction="right" />
 		</keybind>
-		<keybind key="XF86MonBrightnessUp">
+		<keybind bridge="plugins.media-keys/screen-brightness-up" key="XF86MonBrightnessUp">
 			<action name="Execute" command="budgie-brightness-helper --up" />
 		</keybind>
-		<keybind key="XF86MonBrightnessDown">
+		<keybind bridge="plugins.media-keys/screen-brightness-down" key="XF86MonBrightnessDown">
 			<action name="Execute" command="budgie-brightness-helper --down" />
 		</keybind>
 	</keyboard>

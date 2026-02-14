@@ -22,10 +22,13 @@ namespace Budgie {
 		private Gtk.Switch? switch_dark;
 		private Gtk.Switch? switch_builtin;
 		private Gtk.Switch? switch_animations;
+		private Gtk.ComboBox? labwc_theme_override;
 		private Settings ui_settings;
 		private Settings budgie_settings;
 		private SettingsRow? builtin_row;
+		private SettingsRow? labwc_theme_row;
 		private ThemeScanner? theme_scanner;
+		private bool is_labwc_running = false;
 
 		public StylePage() {
 			Object(group: SETTINGS_GROUP_APPEARANCE,
@@ -37,6 +40,8 @@ namespace Budgie {
 
 			budgie_settings = new Settings("com.solus-project.budgie-panel");
 			ui_settings = new Settings("org.gnome.desktop.interface");
+
+			is_labwc_running = check_labwc_running();
 
 			var group = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 			var grid = new SettingsGrid();
@@ -80,6 +85,12 @@ namespace Budgie {
 				_("When enabled, the built-in theme will override the desktop component styling"));
 
 				grid.add_row(builtin_row);
+			}
+
+			if (is_labwc_running) {
+				setup_labwc_theme_override();
+				grid.add_row(labwc_theme_row);
+				group.add_widget(labwc_theme_override);
 			}
 
 			switch_animations = new Gtk.Switch();
@@ -134,6 +145,179 @@ namespace Budgie {
 				this.load_themes();
 				return false;
 			});
+		}
+
+		// Check if labwc is the current window manager
+		private bool check_labwc_running() {
+			// Try to detect labwc by checking for the process
+			try {
+				string output;
+				int exit_status;
+				Process.spawn_command_line_sync("pgrep -x labwc",
+					out output,
+					null,
+					out exit_status);
+				return exit_status == 0;
+			} catch (SpawnError e) {
+				warning("Failed to check for labwc: %s", e.message);
+			}
+
+			return false;
+		}
+
+		// Scan for available labwc theme files
+		private string[] get_labwc_themes() {
+			string[] themes = { "use-theme" };
+			GenericSet<string> theme_set = new GenericSet<string>(str_hash, str_equal);
+
+			// Scan all system data directories
+			foreach (string data_dir in Environment.get_system_data_dirs()) {
+				string themes_dir = Path.build_filename(data_dir, "budgie-desktop", "labwc");
+
+				if (!FileUtils.test(themes_dir, FileTest.IS_DIR)) {
+					continue;
+				}
+
+				try {
+					Dir dir = Dir.open(themes_dir, 0);
+					string? name = null;
+
+					while ((name = dir.read_name()) != null) {
+						if (name.has_prefix("themerc-")) {
+							// Extract theme name from filename (themerc-NAME)
+							string theme_name = name.substring(8); // Remove "themerc-"
+							theme_set.add(theme_name);
+						}
+					}
+				} catch (FileError e) {
+					warning("Could not read labwc themes directory %s: %s", themes_dir, e.message);
+				}
+			}
+
+			// Convert set to array
+			theme_set.foreach ((theme) => {
+				themes += theme;
+			});
+
+			return themes;
+		}
+
+		// Get display name for theme
+		private string get_theme_display_name(string theme_id) {
+			if (theme_id == "use-theme") return _("Use theme");
+			// Capitalize first letter
+			return theme_id.substring(0, 1).up() + theme_id.substring(1);
+		}
+
+		// Get current labwc theme override
+		private string get_current_labwc_theme() {
+			string config_dir = Path.build_filename(Environment.get_user_config_dir(),
+				"budgie-desktop", "labwc");
+			string override_path = Path.build_filename(config_dir, "themerc-override");
+
+			// Check if override file exists and is a symlink
+			if (FileUtils.test(override_path, FileTest.IS_SYMLINK)) {
+				try {
+					string target = FileUtils.read_link(override_path);
+					// Extract theme name from path
+					string basename = Path.get_basename(target);
+					if (basename.has_prefix("themerc-")) {
+						return basename.substring(8);
+					}
+				} catch (FileError e) {
+					warning("Could not read labwc theme override: %s", e.message);
+				}
+			}
+
+			return "use-theme";
+		}
+
+		// Set labwc theme override
+		private void set_labwc_theme(string theme_id) {
+			string config_dir = Path.build_filename(Environment.get_user_config_dir(),
+				"budgie-desktop", "labwc");
+			string override_path = Path.build_filename(config_dir, "themerc-override");
+
+			// Create config directory if it doesn't exist
+			DirUtils.create_with_parents(config_dir, 0755);
+
+			// Remove existing override if present
+			if (FileUtils.test(override_path, FileTest.EXISTS)) {
+				FileUtils.unlink(override_path);
+			}
+
+			// If not "use-theme", create symlink to the selected theme
+			if (theme_id != "use-theme") {
+				string? target = null;
+
+				// Search for theme file in system data directories
+				foreach (string data_dir in Environment.get_system_data_dirs()) {
+					string theme_path = Path.build_filename(data_dir, "budgie-desktop", "labwc", "themerc-" + theme_id);
+					if (FileUtils.test(theme_path, FileTest.EXISTS)) {
+						target = theme_path;
+						break;
+					}
+				}
+
+				if (target == null) {
+					warning("Could not find labwc theme file for: %s", theme_id);
+					return;
+				}
+
+				try {
+					FileUtils.symlink(target, override_path);
+					// Reload labwc configuration
+					Process.spawn_command_line_async("labwc -r");
+				} catch (Error e) {
+					warning("Could not create labwc theme override: %s", e.message);
+				}
+			} else {
+				// Reload labwc to use default theme
+				try {
+					Process.spawn_command_line_async("labwc -r");
+				} catch (SpawnError e) {
+					warning("Could not reload labwc: %s", e.message);
+				}
+			}
+		}
+
+		// Setup labwc theme override combo box
+		private void setup_labwc_theme_override() {
+			labwc_theme_override = new Gtk.ComboBox();
+
+			var model = new Gtk.ListStore(2, typeof(string), typeof(string));
+			Gtk.TreeIter iter;
+
+			string[] themes = get_labwc_themes();
+			foreach (string theme in themes) {
+				model.append(out iter);
+				model.set(iter, 0, theme, 1, get_theme_display_name(theme), -1);
+			}
+
+			labwc_theme_override.set_model(model);
+			labwc_theme_override.set_id_column(0);
+
+			var render = new Gtk.CellRendererText();
+			render.width_chars = 1;
+			render.ellipsize = Pango.EllipsizeMode.END;
+			labwc_theme_override.pack_start(render, true);
+			labwc_theme_override.add_attribute(render, "text", 1);
+
+			// Set current value
+			labwc_theme_override.active_id = get_current_labwc_theme();
+
+			// Connect change signal
+			labwc_theme_override.changed.connect(() => {
+				string? theme_id = labwc_theme_override.get_active_id();
+				if (theme_id != null) {
+					set_labwc_theme(theme_id);
+				}
+			});
+
+			labwc_theme_row = new SettingsRow(labwc_theme_override,
+				_("Labwc Compositor Theme"),
+				_("Override the labwc compositor theme independently from the desktop theme.")
+			);
 		}
 
 		public void load_themes() {
