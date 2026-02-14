@@ -1162,7 +1162,7 @@ namespace Budgie {
 				if (custom_file.query_exists()) {
 					string ic_name = lookup_icon_name(custom_file);
 					string[] path_parts = saved_custom_path.split("/");
-					string mention = path_parts[path_parts.length - 1];
+					string mention = GLib.Path.get_basename(saved_custom_path);
 					custompath_row = {saved_custom_path, mention, ic_name};
 				} else {
 					// Path no longer exists, clear it
