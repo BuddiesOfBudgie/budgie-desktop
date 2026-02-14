@@ -81,6 +81,12 @@ if grep -q "VirtualBox" /sys/class/dmi/id/product_name 2>/dev/null; then
     export WLR_RENDERER=pixman
 fi
 
+if command -v eglinfo >/dev/null 2>&1; then
+    if eglinfo 2>/dev/null | grep -qi 'virgl'; then
+        export WLR_NO_HARDWARE_CURSORS=1
+    fi
+fi
+
 # Add a helper for electron based apps to think they are running under GNOME
 export GNOME_DESKTOP_SESSION_ID=this-is-deprecated
 
