@@ -382,25 +382,28 @@ public class IconTasklistApplet : Budgie.Applet {
 		return true;
 	}
 
-	/**
-	 * on_app_opened handles when we open a new app
-	 */
-	private void on_app_opened(Budgie.Windowing.WindowGroup group) {
-		string application_id = group.group_id.to_string();
-
-		Budgie.Application? application = null;
-
+	private string get_app_id_by_group(Budgie.Windowing.WindowGroup group, ref Budgie.Application? application) {
 		if (group.app_info != null) {
 			application = new Budgie.Application(group.app_info);
 
 			if (application.desktop_id in buttons) {
-				application_id = application.desktop_id;
+				return application.desktop_id;
 			}
 		}
 
+		return group.group_id.to_string();
+	}
+
+	/**
+	 * on_app_opened handles when we open a new app
+	 */
+	private void on_app_opened(Budgie.Windowing.WindowGroup group) {
+		Budgie.Application? application = null;
+		string app_id = get_app_id_by_group(group, ref application);
+
 		// Trigger an animation when a new instance of a window is launched while another is already open
-		if (application_id in buttons) {
-			var first_button = buttons[application_id];
+		if (app_id in buttons) {
+			var first_button = buttons[app_id];
 
 			if (!first_button.get_icon().waiting && first_button.get_icon().get_realized()) {
 				first_button.get_icon().waiting = true;
@@ -409,11 +412,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		IconButton? button = null;
-		if (application_id in buttons) { // try to get existing button if any
-			button = buttons[application_id];
+		if (app_id in buttons) { // try to get existing button if any
+			button = buttons[app_id];
 
 			if (button != null) {
-				add_button(application_id, button); // map app to it's button so that we can update it later on
+				add_button(app_id, button); // map app to it's button so that we can update it later on
 			}
 		}
 
@@ -424,7 +427,7 @@ public class IconTasklistApplet : Budgie.Applet {
 			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
 
-			add_icon_button(application_id, button);
+			add_icon_button(app_id, button);
 		}
 
 		if (button.get_window_group() == null) { // button was pinned without app opened, set window group in button to properly group windows
@@ -435,21 +438,11 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void on_app_closed(Budgie.Windowing.WindowGroup group) {
-		var app_id = group.group_id.to_string();
+		Budgie.Application? application = null;
+		var app_id = get_app_id_by_group(group, ref application);
+
 		IconButton? button = buttons.get(app_id);
 
-		if (button == null) { // Button might be pinned, try to get button from launcher instead
-			app_id = group.get_desktop_id();
-			button = buttons.get(app_id);
-
-			// Because the only way to get a desktop_id from an application on X11 is basically
-			// to just guess, the casing may not be correct, e.g. Nemo.desktop vs nemo.desktop.
-			// Try again to get the button, this time making the desktop_id all lowercase.
-			if (button == null) {
-				app_id = app_id.down();
-				button = buttons.get(app_id);
-			}
-		}
 
 		if (button == null) { // we don't manage this button
 			warning(@"an application ($(group.group_id)) was closed, but we couldn't find its button");
