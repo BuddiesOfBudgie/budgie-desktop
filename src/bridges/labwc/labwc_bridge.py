@@ -308,6 +308,9 @@ class Bridge:
         self.peripherals_touchpad_settings = Gio.Settings.new('org.gnome.desktop.peripherals.touchpad')
         self.peripherals_touchpad_settings.connect('changed', self.peripherals_changed)
 
+        self.peripherals_touchpad_settings.connect('changed::two-finger-scrolling-enabled', self.scrollmethod_changed)
+        self.peripherals_touchpad_settings.connect('changed::edge-scrolling-enabled', self.scrollmethod_changed)
+
         self.default_terminal_settings = Gio.Settings.new('org.gnome.desktop.default-applications.terminal')
         self.default_terminal_settings.connect('changed', self.default_terminal_changed)
 
@@ -338,6 +341,54 @@ class Bridge:
 
         Et.indent(self.menuet, space="\t", level=0)
         self.menuet.write(path)
+
+    # Helper method to ensure libinput structure exists for any peripheral
+    def ensure_peripheral_element(self, category, element_name):
+        """
+        Ensure libinput/device/element structure exists for the given category.
+        Returns the element, creating the full path if necessary.
+
+        Args:
+            category: 'touchpad' or 'non-touch'
+            element_name: name of the element to find/create (e.g., 'scrollMethod', 'naturalScroll')
+
+        Returns:
+            The XML element
+        """
+        root = self.et.getroot()
+
+        # Find or create libinput section
+        libinput = root.find("./libinput")
+        if libinput is None:
+            libinput = Et.SubElement(root, "libinput")
+
+        # Find or create device with specified category
+        device = libinput.find(f"./device[@category='{category}']")
+        if device is None:
+            device = Et.SubElement(libinput, "device")
+            device.attrib["category"] = category
+
+        # Find or create the specific element
+        element = device.find(f"./{element_name}")
+        if element is None:
+            element = Et.SubElement(device, element_name)
+
+        return element
+
+    # this manages scroll method changes for touchpad
+    # we have split this into a specific method to cope with the GNOME
+    # settings schema using two keys to define one scroll-method
+    def scrollmethod_changed(self, settings, key):
+        if key not in ["two-finger-scrolling-enabled", "edge-scrolling-enabled"]:
+            return
+
+        two_finger = settings.get_boolean("two-finger-scrolling-enabled")
+        edge_scroll = settings.get_boolean("edge-scrolling-enabled")
+
+        scroll_method = self.ensure_peripheral_element("touchpad", "scrollMethod")
+        scroll_method.text = "twofinger" if two_finger else ("edge" if edge_scroll else "none")
+
+        self.write_config()
 
     # this manages the default terminal updates
     def default_terminal_changed(self, settings, key):
@@ -405,15 +456,11 @@ class Bridge:
         if key == "double-click":
             schema = "./mouse/doubleClickTime"
         else:
-            schema = "./libinput/device[@category='" + category + "']/" + schema
-        bridge = self.et.find(schema)
-
-        if bridge is not None:
-            bridge.text = textvalue
-        else:
-            self.log.info("cannot find schema " + schema + " to set the value " + value)
-
-        self.write_config()
+            # Use the helper to ensure structure exists
+            element = self.ensure_peripheral_element(category, schema)
+            element.text = textvalue
+            self.write_config()
+            return
 
     # writes the complete environment file with XKB and cursor settings
     def write_environment_file(self):
@@ -626,7 +673,7 @@ class Bridge:
                         "accel-profile",
                         "tap-button-map",
                         "click-method",
-                        "send-events"}
+                        "send-events" }
         for key in touchpadkeys:
             self.peripherals_changed(self.peripherals_touchpad_settings, key)
 
@@ -639,6 +686,12 @@ class Bridge:
 
         for key in mousekeys:
             self.peripherals_changed(self.peripherals_mouse_settings, key)
+
+        # Sync scroll method settings
+        try:
+            self.scrollmethod_changed(self.peripherals_touchpad_settings, "two-finger-scrolling-enabled")
+        except Exception as e:
+            self.log.warning(f"Could not sync scroll method: {e}")
 
         self.delay_config_write = False
         self.write_config()
