@@ -49,7 +49,8 @@ jobs:
             slurp \
             swaybg \
             swayidle \
-            wlopm
+            wlopm \
+            egl-utils
       - name: Checkout
         uses: actions/checkout@v6
         with:
