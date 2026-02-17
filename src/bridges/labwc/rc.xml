@@ -49,8 +49,8 @@
 		<keybind bridge="plugins.media-keys/control-center" key="undefined">
 			<action name="Execute" command="budgie-desktop-settings" />
 		</keybind>
-		<keybind bridge="wm.keybindings/show-desktop" key="undefined">
-			<action name="" command="" />
+		<keybind bridge="wm.keybindings/show-desktop" key="W-d">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ToggleShowDesktop" />
 		</keybind>
 		<keybind bridge="wm.keybindings/move-to-monitor-down" key="W-S-Down">
 			<action name="" command="" />

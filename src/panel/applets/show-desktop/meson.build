@@ -17,7 +17,7 @@ applet_showdesktop_deps = [
     libpanelplugin_vapi,
     dep_gtk3,
     dep_peas,
-    dep_xfce4windowing,
+    dep_giounix,
     link_libpanelplugin,
 ]
 
