@@ -331,12 +331,11 @@ public class TasklistApplet : Budgie.Applet {
 			size = 32;
 		}
 
-		var scale_factor = button.get_scale_factor();
-		var pixbuf = button.window.get_icon(size, scale_factor);
+		var pixbuf = button.window.get_icon(size, 1);
 
 		if (pixbuf == null) return;
 
-		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale_factor, null);
+		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, 1, null);
 		Gtk.drag_set_icon_surface(context, surface);
 	}
 

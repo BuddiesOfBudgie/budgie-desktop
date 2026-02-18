@@ -222,8 +222,6 @@ public class IconTasklistApplet : Budgie.Applet {
 			size = 32;
 		}
 
-		var scale_factor = button.get_scale_factor();
-
 		var icon_theme = Gtk.IconTheme.get_default();
 		var icon_info = icon_theme.lookup_icon(button.app.icon.to_string(), size, Gtk.IconLookupFlags.USE_BUILTIN);
 
@@ -244,7 +242,7 @@ public class IconTasklistApplet : Budgie.Applet {
 
 		if (pixbuf == null) return;
 
-		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale_factor, null);
+		var surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, 1, null);
 
 		Gtk.drag_set_icon_surface(context, surface);
 	}

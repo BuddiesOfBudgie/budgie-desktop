@@ -187,7 +187,7 @@ public class TasklistButton : ToggleButton {
 	private void on_window_icon_changed() {
 		var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
 		//  message("icon_size: %d", size);
-		unowned var pixbuf = window.get_icon(size, get_scale_factor());
+		unowned var pixbuf = window.get_icon(size, 1);
 		icon.set_from_pixbuf(pixbuf);
 	}
 
