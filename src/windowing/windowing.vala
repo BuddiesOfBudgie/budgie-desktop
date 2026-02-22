@@ -53,7 +53,8 @@ namespace Budgie.Windowing {
 		private bool previous_color_setting;
 
 		private bool is_show_desktop = false;
-		private HashTable<unowned Xfw.Window, bool> minimized_by_show_desktop;
+		private ulong active_window_changed_id;
+		private List<Xfw.Window> minimized_windows_by_show_desktop;
 
 		public bool has_windows { get; private set; }
 		public unowned List<Xfw.Window> windows { get { return screen.get_windows(); } }
@@ -133,13 +134,13 @@ namespace Budgie.Windowing {
 			applications = new HashTable<Xfw.Application, WindowGroup>(direct_hash, direct_equal);
 			fullscreen_windows = new List<Window>();
 
-			minimized_by_show_desktop = new HashTable<unowned Xfw.Window, bool>(direct_hash, direct_equal);
+			minimized_windows_by_show_desktop = new List<Xfw.Window>();
 
 			screen = Screen.get_default();
 
 			screen.get_windows().foreach(on_window_added);
 
-			screen.active_window_changed.connect(on_active_window_changed);
+			active_window_changed_id = screen.active_window_changed.connect(on_active_window_changed);
 			screen.window_opened.connect(on_window_added);
 			screen.window_closed.connect(on_window_removed);
 
@@ -192,6 +193,7 @@ namespace Budgie.Windowing {
 
 		private void on_active_window_changed(Window? old_window) {
 			var new_window = screen.get_active_window();
+			if (new_window == null) return;
 
 			foreach (var group in applications.get_values()) {
 				if (group.has_window(new_window)) {
@@ -296,7 +298,7 @@ namespace Budgie.Windowing {
 				bool is_minimized = (WindowState.MINIMIZED in new_state);
 				if (!is_minimized) {
 					// Remove from tracking if it was minimized by show-desktop
-					minimized_by_show_desktop.remove(window);
+					minimized_windows_by_show_desktop.remove(window);
 
 					// Exit show-desktop mode if a non-filtered window was unminimized
 					if (!should_filter_window(window, SHOW_DESKTOP_FILTER)) {
@@ -411,19 +413,25 @@ namespace Budgie.Windowing {
 
 			if (show) {
 				// Clear tracking and minimize non-minimized windows
-				minimized_by_show_desktop.remove_all();
+				minimized_windows_by_show_desktop = new List<Xfw.Window>();
+				SignalHandler.block(screen, active_window_changed_id);
 
-				screen.get_windows().foreach((window) => {
+				windows.foreach((window) => {
 					if (should_filter_window(window, filter) || window.is_minimized()) return;
 
-					minimized_by_show_desktop.insert(window, true);
 					window.set_minimized(true);
+					minimized_windows_by_show_desktop.append(window);
+				});
+
+				Timeout.add(100, () => {
+					SignalHandler.unblock(screen, active_window_changed_id);
+					return false;
 				});
 			} else {
 				// Restore only windows we minimized
-				minimized_by_show_desktop.get_keys().foreach((window) => {
+				foreach (var window in minimized_windows_by_show_desktop) {
 					window.set_minimized(false);
-				});
+				}
 			}
 
 			desktop_shown(is_show_desktop);
