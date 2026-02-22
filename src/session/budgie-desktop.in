@@ -19,5 +19,6 @@ export BUDGIE_SESSION_VERSION=${BUDGIE_VERSION}
 compositor="@gsd_libexecdir@/budgie-session-compositor-ready"
 if command -v "$compositor" > /dev/null 2>&1 && "$compositor"; then
   @bindir@/org.buddiesofbudgie.Services &
+  @libexecdirroot@/xdg-desktop-portal &
   exec budgie-session --builtin --session=org.buddiesofbudgie.BudgieDesktop $*
 fi
