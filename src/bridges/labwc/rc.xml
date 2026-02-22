@@ -319,6 +319,7 @@
 			<dragLock>no</dragLock>
 			<middleEmulation>no</middleEmulation>
 			<disableWhileTyping>yes</disableWhileTyping>
+			<scrollMethod>twofinger</scrollMethod>
 			<clickMethod>clickfinger</clickMethod>
 			<sendEventsMode>yes</sendEventsMode>
 		</device>
