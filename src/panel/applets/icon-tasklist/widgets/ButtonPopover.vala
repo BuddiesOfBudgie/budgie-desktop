@@ -196,39 +196,29 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 				controls_layout.destroy();
 			});
 
-			var class_ids = window.get_class_ids();
-			if (class_ids == null || class_ids.length == 0) {
-				warning("Window '%s' has no class IDs", window.get_name());
-				return;
+			var control = stack.get_child_by_name("controls");
+			if (control != null) {
+				stack.set_visible_child_name("main");
+				stack.remove(control);
+				control.destroy();
 			}
 
-			string id = class_ids[0];
-			stack.add_named(controls_layout, id);
-			stack.set_visible_child_name(id);
+			stack.add_named(controls_layout, "controls");
+			stack.set_visible_child_name("controls");
 		});
 
 		windows.add(window_item);
 	}
 
 	public void remove_window(Xfw.Window window) {
-		var class_ids = window.get_class_ids();
-		if (class_ids == null || class_ids.length == 0) {
-			warning("Window '%s' has no class IDs in remove_window", window.get_name());
-			return;
-		}
-
-		string window_id = class_ids[0];
 		WindowItem? window_item = null;
 
 		// Get the window item for this window, if exists
 		foreach (var child in windows.get_children()) {
-			var child_class_ids = ((WindowItem) child).window.get_class_ids();
-			if (child_class_ids != null && child_class_ids.length > 0) {
-				string child_id = child_class_ids[0];
-				if (child_id == window_id) {
-					window_item = child as WindowItem;
-					break;
-				}
+			var wnd_item = child as WindowItem;
+			if (wnd_item.window == window) {
+				window_item = wnd_item;
+				break;
 			}
 		}
 
@@ -236,19 +226,12 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 
 		window_item.destroy();
 
-		string id = window_id.to_string();
-
-		// Set the stack page to the main layout if we happen to have this window's page open
-		if (stack.get_visible_child_name() == id) {
+		// If the controls-page of this window is currently open, remove it and activate the "main"-stack
+		var wnd_controls = stack.get_child_by_name("controls") as WindowControls;
+		if (wnd_controls != null && wnd_controls.window == window ) {
 			stack.set_visible_child_name("main");
-		}
-
-		// If a page for this window exists, remove it
-		var controls_layout = stack.get_child_by_name(id);
-
-		if (controls_layout != null) {
-			stack.remove(controls_layout);
-			controls_layout.destroy();
+			stack.remove(wnd_controls);
+			wnd_controls.destroy();
 		}
 	}
 }
