@@ -17,6 +17,21 @@ namespace Budgie.Windowing {
 	private const string NOTIFICATIONS_DBUS_OBJECT_PATH = "/org/budgie_desktop/Notifications";
 
 	/**
+	 * Window filter flags to control which windows are affected by operations
+	 */
+	[Flags]
+	public enum WindowFilter {
+		NONE = 0,
+		SKIP_PAGER = 1 << 0,
+		SKIP_TASKLIST = 1 << 1,
+		MINIMIZED = 1 << 2,
+		ALL = SKIP_PAGER | SKIP_TASKLIST | MINIMIZED
+	}
+
+	// Default filter for show desktop operations
+	public const WindowFilter SHOW_DESKTOP_FILTER = WindowFilter.SKIP_PAGER | WindowFilter.SKIP_TASKLIST;
+
+	/**
 	 * This object keeps track of WindowGroups. It serves as the main part
 	 * of the Budgie windowing library.
 	 */
@@ -37,8 +52,14 @@ namespace Budgie.Windowing {
 		private bool pause_notifications;
 		private bool previous_color_setting;
 
+		private bool is_show_desktop = false;
+		private ulong active_window_changed_id;
+		private List<Xfw.Window> minimized_windows_by_show_desktop;
+
 		public bool has_windows { get; private set; }
 		public unowned List<Xfw.Window> windows { get { return screen.get_windows(); } }
+
+		public bool showing_desktop { get { return is_show_desktop; }}
 
 		/**
 		 * Emitted when the currently active window has changed.
@@ -85,6 +106,11 @@ namespace Budgie.Windowing {
 		public signal void workspace_destroyed(Workspace workspace);
 
 		/**
+		 * Emitted when show desktop state changes.
+		 */
+		public signal void desktop_shown(bool showing);
+
+		/**
 		 * Creates a new Windowing object. This is the entry point into
 		 * this library.
 		 */
@@ -108,11 +134,13 @@ namespace Budgie.Windowing {
 			applications = new HashTable<Xfw.Application, WindowGroup>(direct_hash, direct_equal);
 			fullscreen_windows = new List<Window>();
 
+			minimized_windows_by_show_desktop = new List<Xfw.Window>();
+
 			screen = Screen.get_default();
 
 			screen.get_windows().foreach(on_window_added);
 
-			screen.active_window_changed.connect(on_active_window_changed);
+			active_window_changed_id = screen.active_window_changed.connect(on_active_window_changed);
 			screen.window_opened.connect(on_window_added);
 			screen.window_closed.connect(on_window_removed);
 
@@ -165,6 +193,7 @@ namespace Budgie.Windowing {
 
 		private void on_active_window_changed(Window? old_window) {
 			var new_window = screen.get_active_window();
+			if (new_window == null) return;
 
 			foreach (var group in applications.get_values()) {
 				if (group.has_window(new_window)) {
@@ -174,6 +203,12 @@ namespace Budgie.Windowing {
 				if (old_window != null && group.has_window(old_window)) {
 					group.set_last_active_window(old_window);
 				}
+			}
+
+			// Reset showing_desktop state when a new non-minimized window becomes active
+			if (!should_filter_window(new_window, SHOW_DESKTOP_FILTER) && !new_window.is_minimized()) {
+				is_show_desktop = false;
+				desktop_shown(is_show_desktop);
 			}
 
 			last_active_window = old_window;
@@ -195,6 +230,13 @@ namespace Budgie.Windowing {
 
 		private void on_window_added(Window window) {
 			if (window.is_skip_tasklist()) return;
+
+			// Reset showing_desktop when new window is added
+			if (!should_filter_window(window, SHOW_DESKTOP_FILTER) && !window.is_minimized()) {
+				is_show_desktop = false;
+				desktop_shown(is_show_desktop);
+			}
+
 			window_added(window);
 			has_windows = true;
 
@@ -250,6 +292,21 @@ namespace Budgie.Windowing {
 
 		private void on_window_state_changed(Window window, WindowState changed_mask, WindowState new_state) {
 			window_state_changed(window, changed_mask, new_state);
+
+			// Check if window was unminimized
+			if ((WindowState.MINIMIZED in changed_mask)) {
+				bool is_minimized = (WindowState.MINIMIZED in new_state);
+				if (!is_minimized) {
+					// Remove from tracking if it was minimized by show-desktop
+					minimized_windows_by_show_desktop.remove(window);
+
+					// Exit show-desktop mode if a non-filtered window was unminimized
+					if (!should_filter_window(window, SHOW_DESKTOP_FILTER)) {
+						is_show_desktop = false;
+						desktop_shown(is_show_desktop);
+					}
+				}
+			}
 
 			// Check if fullscreen state changed
 			if (!(WindowState.FULLSCREEN in changed_mask)) return;
@@ -316,6 +373,68 @@ namespace Budgie.Windowing {
 					warning("Unknown setting changed: %s", key);
 					break;
 			}
+		}
+		/*
+		 * Check if a window should be filtered based on given filter flags
+		 */
+		private bool should_filter_window(Window? window, WindowFilter filter) {
+			if (window == null || filter == WindowFilter.NONE) {
+				return false;
+			}
+
+			if ((filter & WindowFilter.SKIP_PAGER) != 0 && window.is_skip_pager()) {
+				return true;
+			}
+
+			if ((filter & WindowFilter.SKIP_TASKLIST) != 0 && window.is_skip_tasklist()) {
+				return true;
+			}
+
+			if ((filter & WindowFilter.MINIMIZED) != 0 && window.is_minimized()) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Toggle show desktop state
+		 */
+		public void toggle_show_desktop() {
+			is_show_desktop = !is_show_desktop;
+			show_desktop(is_show_desktop);
+		}
+
+		/**
+		 * Show or hide the desktop by minimizing/unminimizing windows
+		 */
+		public void show_desktop(bool show, WindowFilter filter = SHOW_DESKTOP_FILTER) {
+			is_show_desktop = show;
+
+			if (show) {
+				// Clear tracking and minimize non-minimized windows
+				minimized_windows_by_show_desktop = new List<Xfw.Window>();
+				SignalHandler.block(screen, active_window_changed_id);
+
+				windows.foreach((window) => {
+					if (should_filter_window(window, filter) || window.is_minimized()) return;
+
+					window.set_minimized(true);
+					minimized_windows_by_show_desktop.append(window);
+				});
+
+				Timeout.add(100, () => {
+					SignalHandler.unblock(screen, active_window_changed_id);
+					return false;
+				});
+			} else {
+				// Restore only windows we minimized
+				foreach (var window in minimized_windows_by_show_desktop) {
+					window.set_minimized(false);
+				}
+			}
+
+			desktop_shown(is_show_desktop);
 		}
 
 		/**

@@ -9,6 +9,13 @@
  * (at your option) any later version.
  */
 
+[DBus (name = "org.budgie_desktop.Panel")]
+interface PanelRemote : Object {
+	public abstract async void ShowDesktop(bool show) throws Error;
+	public abstract async void ToggleShowDesktop() throws Error;
+	public signal void DesktopShown(bool showing);
+}
+
 public class ShowDesktopPlugin : Budgie.Plugin, Peas.ExtensionBase {
 	public Budgie.Applet get_panel_widget(string uuid) {
 		return new ShowDesktopApplet();
@@ -18,7 +25,8 @@ public class ShowDesktopPlugin : Budgie.Plugin, Peas.ExtensionBase {
 public class ShowDesktopApplet : Budgie.Applet {
 	protected Gtk.ToggleButton widget;
 	protected Gtk.Image img;
-	private Xfw.Screen xfce_screen;
+	private PanelRemote? panel_proxy = null;
+	private bool in_toggle = false;
 
 	public ShowDesktopApplet() {
 		widget = new Gtk.ToggleButton();
@@ -28,36 +36,62 @@ public class ShowDesktopApplet : Budgie.Applet {
 		widget.add(img);
 		widget.set_tooltip_text(_("Toggle the desktop"));
 
-		xfce_screen = Xfw.Screen.get_default();
-
-		xfce_screen.window_opened.connect((window) => {
-			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-
-			widget.set_active(false);
-
-			window.state_changed.connect(() => {
-				if (!window.is_minimized()) widget.set_active(false);
-			});
-		});
+		// Connect to panel DBus service
+		setup_dbus.begin();
 
 		widget.toggled.connect(() => {
-			bool showing_desktop = !widget.get_active();
-  			xfce_screen.get_windows_stacked().foreach((window) => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-
-				try {
-					window.set_minimized(!showing_desktop);
-				} catch (Error e) {
-					// Note: This is intentionally set to debug instead of warning because Xfw will create noise otherwise
-					// Unminimize operations can end up being noisy when they fail due to the window not yet reporting the capability to support CAN_MINIMIZE
-					// https://gitlab.xfce.org/xfce/libxfce4windowing/-/blob/main/libxfce4windowing/xfw-window-x11.c#L363
-					debug("Failed to change state of window \"%s\": %s", window.get_name(), e.message);
-				}
-			});
+			if (in_toggle) return;
+			toggle_desktop.begin();
 		});
 
 		add(widget);
 		show_all();
+	}
+
+	private async void setup_dbus() {
+		try {
+			panel_proxy = yield Bus.get_proxy(BusType.SESSION,
+				"org.budgie_desktop.Panel",
+				"/org/budgie_desktop/Panel");
+
+			// Track desktop state changes
+			panel_proxy.DesktopShown.connect((showing) => {
+				in_toggle = true;
+				widget.set_active(showing);
+				in_toggle = false;
+			});
+		} catch (Error e) {
+			warning("Failed to connect to panel DBus: %s", e.message);
+		}
+	}
+
+	private async void toggle_desktop() {
+		if (panel_proxy == null) return;
+
+		try {
+			yield panel_proxy.ToggleShowDesktop();
+
+			// If toggle completed successfully but button is still pressed
+			// and we're not in a toggle state update, it means there were
+			// no windows to minimize. Reset the button state.
+			if (!in_toggle && widget.get_active()) {
+				// Small delay to allow signal to propagate
+				Timeout.add(50, () => {
+					if (!in_toggle && widget.get_active()) {
+						in_toggle = true;
+						widget.set_active(false);
+						in_toggle = false;
+					}
+					return false;
+				});
+			}
+		} catch (Error e) {
+			warning("Failed to toggle desktop: %s", e.message);
+			// Revert button state on error
+			in_toggle = true;
+			widget.set_active(!widget.get_active());
+			in_toggle = false;
+		}
 	}
 }
 
