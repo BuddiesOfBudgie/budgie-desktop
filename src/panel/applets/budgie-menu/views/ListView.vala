@@ -16,9 +16,11 @@
  * on the right.
  */
 public class ApplicationListView : ApplicationView {
-	const int HEIGHT = 510;
+	const int MIN_HEIGHT = 510;
+	const int MAX_HEIGHT = 700;
 	const int WIDTH = 300;
-	private int SCALED_HEIGHT = HEIGHT;
+	const double HEIGHT_RATIO = 0.42;
+	private int SCALED_HEIGHT = MIN_HEIGHT;
 	private int SCALED_WIDTH = WIDTH;
 
 	private Gtk.Box categories;
@@ -47,11 +49,15 @@ public class ApplicationListView : ApplicationView {
 			spacing: 0
 		);
 
-		SCALED_HEIGHT = HEIGHT / this.scale_factor;
+		SCALED_HEIGHT = compute_base_height() / this.scale_factor;
 		SCALED_WIDTH = WIDTH / this.scale_factor;
 	}
 
 	construct {
+		this.realize.connect(() => {
+			this.set_scaled_sizing();
+		});
+
 		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 		this.icon_size = settings.get_int("menu-icons-size");
 
@@ -130,10 +136,33 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	/**
-	* Sets various widgets to use sizing based on current scale and our default HEIGHT
-	*/
+	 * Computes the base (unscaled) menu height from the monitor workarea.
+	 * Returns at least MIN_HEIGHT.
+	 */
+	private int compute_base_height() {
+		var toplevel = this.get_toplevel();
+		if (toplevel == null) {
+			return MIN_HEIGHT;
+		}
+
+		var gdk_window = toplevel.get_window();
+		if (gdk_window == null) {
+			return MIN_HEIGHT;
+		}
+
+		var display = toplevel.get_display();
+		var monitor = display.get_monitor_at_window(gdk_window);
+		var workarea = monitor.get_workarea();
+
+		int computed = (int) (workarea.height * HEIGHT_RATIO);
+		return computed.clamp(MIN_HEIGHT, MAX_HEIGHT);
+	}
+
+	/**
+	 * Sets various widgets to use sizing based on current scale and monitor workarea.
+	 */
 	private void set_scaled_sizing() {
-		SCALED_HEIGHT = HEIGHT / this.scale_factor;
+		SCALED_HEIGHT = compute_base_height() / this.scale_factor;
 		SCALED_WIDTH = WIDTH / this.scale_factor;
 		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
 
