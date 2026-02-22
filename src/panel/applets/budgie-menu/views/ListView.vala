@@ -16,12 +16,12 @@
  * on the right.
  */
 public class ApplicationListView : ApplicationView {
-	const int MIN_HEIGHT = 510;
-	const int MAX_HEIGHT = 700;
+	const int MIN_HEIGHT = 480;
+	const int MAX_HEIGHT = 600;
 	const int WIDTH = 300;
-	const double HEIGHT_RATIO = 0.42;
-	private int SCALED_HEIGHT = MIN_HEIGHT;
-	private int SCALED_WIDTH = WIDTH;
+	const double HEIGHT_RATIO = 0.35;
+	private int current_height = MIN_HEIGHT;
+	private int current_width = WIDTH;
 
 	private Gtk.Box categories;
 	private Gtk.ListBox applications;
@@ -49,16 +49,14 @@ public class ApplicationListView : ApplicationView {
 			spacing: 0
 		);
 
-		SCALED_HEIGHT = compute_base_height() / this.scale_factor;
-		SCALED_WIDTH = WIDTH / this.scale_factor;
 	}
 
 	construct {
 		this.realize.connect(() => {
-			this.set_scaled_sizing();
+			this.update_sizing();
 		});
 
-		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
+		this.set_size_request(current_width, current_height);
 		this.icon_size = settings.get_int("menu-icons-size");
 
 		this.categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
@@ -66,16 +64,12 @@ public class ApplicationListView : ApplicationView {
 			margin_bottom = 3
 		};
 
-		notify["scale-factor"].connect(() => {
-			this.set_scaled_sizing();
-		});
-
 		this.categories_scroll = new Gtk.ScrolledWindow(null, null) {
 			overlay_scrolling = false,
 			shadow_type = Gtk.ShadowType.NONE, // Don't have an outline
 			hscrollbar_policy = Gtk.PolicyType.NEVER,
 			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
-			min_content_height = SCALED_HEIGHT,
+			min_content_height = current_height,
 			propagate_natural_height = true
 		};
 		this.categories_scroll.get_style_context().add_class("categories");
@@ -99,7 +93,7 @@ public class ApplicationListView : ApplicationView {
 			selection_mode = Gtk.SelectionMode.SINGLE,
 			valign = Gtk.Align.START,
 			// Make sure that the box at least covers the whole area. This helps more themes look better
-			height_request = SCALED_HEIGHT
+			height_request = current_height
 		};
 		this.applications.row_activated.connect(this.on_row_activate);
 
@@ -107,7 +101,7 @@ public class ApplicationListView : ApplicationView {
 			overlay_scrolling = true,
 			hscrollbar_policy = Gtk.PolicyType.NEVER,
 			vscrollbar_policy = Gtk.PolicyType.AUTOMATIC,
-			min_content_height = SCALED_HEIGHT
+			min_content_height = current_height
 		};
 		this.content_scroll.set_overlay_scrolling(true);
 		this.content_scroll.add(applications);
@@ -132,11 +126,11 @@ public class ApplicationListView : ApplicationView {
 		this.applications.set_filter_func(do_filter_list);
 		this.applications.set_sort_func(do_sort_list);
 
-		this.set_scaled_sizing();
+		this.update_sizing();
 	}
 
 	/**
-	 * Computes the base (unscaled) menu height from the monitor workarea.
+	 * Computes the menu height from the monitor workarea.
 	 * Returns at least MIN_HEIGHT.
 	 */
 	private int compute_base_height() {
@@ -159,16 +153,15 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	/**
-	 * Sets various widgets to use sizing based on current scale and monitor workarea.
+	 * Updates widget sizing based on the monitor workarea.
 	 */
-	private void set_scaled_sizing() {
-		SCALED_HEIGHT = compute_base_height() / this.scale_factor;
-		SCALED_WIDTH = WIDTH / this.scale_factor;
-		this.set_size_request(SCALED_WIDTH, SCALED_HEIGHT);
+	private void update_sizing() {
+		current_height = compute_base_height();
+		this.set_size_request(current_width, current_height);
 
-		this.categories_scroll.min_content_height = SCALED_HEIGHT;
-		this.content_scroll.min_content_height = SCALED_HEIGHT;
-		this.applications.height_request = SCALED_HEIGHT;
+		this.categories_scroll.min_content_height = current_height;
+		this.content_scroll.min_content_height = current_height;
+		this.applications.height_request = current_height;
 	}
 
 	/**
