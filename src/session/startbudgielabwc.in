@@ -33,6 +33,7 @@ if [ -z "${XDG_RUNTIME_DIR}" ]; then
         fi
     fi
 fi
+
 if [ ! -e "${XDG_RUNTIME_DIR}" ]; then
     logger "XDG_RUNTIME_DIR is invalid or does not exist!"
     logger "Creating XDG_RUNTIME_DIR..."
@@ -42,6 +43,17 @@ if [ ! -e "${XDG_RUNTIME_DIR}" ]; then
     }
 fi
 
+# Fix desktop file override precedence
+if [ -z "$XDG_DATA_DIRS" ]; then
+    export XDG_DATA_DIRS="@datadir@/budgie-desktop:@datadir@"
+else
+    case ":$XDG_DATA_DIRS:" in
+        *":@datadir@/budgie-desktop:"*) ;;
+        *)
+            export XDG_DATA_DIRS="@datadir@/budgie-desktop:$XDG_DATA_DIRS"
+            ;;
+    esac
+fi
 
 # freedesktop specifications mandate that the definition
 # of XDG_SESSION_TYPE should be respected
