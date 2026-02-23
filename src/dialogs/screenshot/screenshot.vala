@@ -1161,7 +1161,6 @@ namespace Budgie {
 				File custom_file = File.new_for_path(saved_custom_path);
 				if (custom_file.query_exists()) {
 					string ic_name = lookup_icon_name(custom_file);
-					string[] path_parts = saved_custom_path.split("/");
 					string mention = GLib.Path.get_basename(saved_custom_path);
 					custompath_row = {saved_custom_path, mention, ic_name};
 				} else {
@@ -1234,29 +1233,24 @@ namespace Budgie {
 		}
 
 		void save_customdir(Gtk.Dialog dialog, int response_id) {
-			// setting user response on dialog as custom path (the labor work)
+			// setting user response on dialog as custom path
 			var save_dialog = dialog as Gtk.FileChooserDialog;
 			if (response_id == Gtk.ResponseType.ACCEPT) {
 				File file = save_dialog.get_file();
 				string ic_name = lookup_icon_name(file);
-
-				// so, the actual path
 				string custompath = file.get_path();
+				string mention = GLib.Path.get_basename(custompath);
 
-				// ...and its mention in the dropdown
-				string[] custompath_data = custompath.split("/");
-				string mention = custompath_data[custompath_data.length - 1];
-
-				// delivering info to set new row
 				custompath_row = {custompath, mention, ic_name};
 
-				// save the custom path to GSettings**
+				// save the custom path to GSettings
 				windowstate.screenshot_settings.set_string("last-save-directory-path", custompath);
 
 				update_dropdown();
 			} else {
 				pickdir_combo.set_active(windowstate.screenshot_settings.get_int("last-save-directory"));
 			}
+
 			dialog.destroy();
 
 			// Show the AfterShot window again after the file chooser is closed
