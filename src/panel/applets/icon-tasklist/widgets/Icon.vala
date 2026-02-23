@@ -206,11 +206,11 @@ public class Icon : Gtk.Image {
 		if (window == null) {
 			return Gdk.EVENT_STOP;
 		}
-		/* Create a compatible buffer for the current scaling factor */
+		/* Create a compatible buffer */
 		var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
-														 alloc.width * this.scale_factor,
-														 alloc.height * this.scale_factor,
-														 this.scale_factor);
+														 alloc.width,
+														 alloc.height,
+														 1);
 		var cr2 = new Cairo.Context(buffer);
 		base.draw(cr2);
 

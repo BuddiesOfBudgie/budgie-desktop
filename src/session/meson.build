@@ -4,6 +4,7 @@
 session_data = configuration_data()
 session_data.set('PACKAGE_VERSION', package_version)
 session_data.set('libexecdir', libexecdir)
+session_data.set('libexecdirroot', libexecdirroot)
 
 # mandatory gnome-settings-daemon components
 budgie_session_324_components = [

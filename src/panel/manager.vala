@@ -114,6 +114,8 @@ namespace Budgie {
 	public class PanelManagerIface {
 		private Budgie.PanelManager? manager = null;
 
+		public signal void DesktopShown(bool showing);
+
 		[DBus (visible=false)]
 		public PanelManagerIface(Budgie.PanelManager? manager) {
 			this.manager = manager;
@@ -129,6 +131,19 @@ namespace Budgie {
 
 		public void OpenSettings() throws DBusError, IOError {
 			this.manager.open_settings();
+		}
+
+		public void ShowDesktop(bool show) throws DBusError, IOError {
+			this.manager.show_desktop(show);
+		}
+
+		public void ToggleShowDesktop() throws DBusError, IOError {
+			this.manager.toggle_show_desktop();
+		}
+
+		[DBus (visible=false)]
+		public void emit_desktop_shown(bool showing) {
+			DesktopShown(showing);
 		}
 	}
 
@@ -172,6 +187,18 @@ namespace Budgie {
 				if (panel.activate_action(action)) {
 					break;
 				}
+			}
+		}
+
+		public void show_desktop(bool show) {
+			if (windowing != null) {
+				windowing.show_desktop(show);
+			}
+		}
+
+		public void toggle_show_desktop() {
+			if (windowing != null) {
+				windowing.toggle_show_desktop();
 			}
 		}
 
@@ -219,6 +246,11 @@ namespace Budgie {
 		* Setup the events for listening to the windowing system changes
 		*/
 		private void setup_windowing_events() {
+			// Forward desktop_shown signal to DBus
+			windowing.desktop_shown.connect((showing) => {
+				if (iface != null) iface.DesktopShown(showing);
+			});
+
 			windowing.window_state_changed.connect((window) => {
 				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 				check_windows();
