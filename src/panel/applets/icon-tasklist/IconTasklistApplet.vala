@@ -62,6 +62,8 @@ public class IconTasklistApplet : Budgie.Applet {
 	private Settings settings;
 	private Gtk.Box main_layout;
 
+	private Budgie.ApplicationMatcher matcher;
+
 	private bool lock_icons = false;
 	private bool restrict_to_workspace = false;
 	private bool only_show_pinned = false;
@@ -121,6 +123,8 @@ public class IconTasklistApplet : Budgie.Applet {
 		/* Somewhere to store the window mappings */
 		buttons = new HashTable<string, IconButton>(str_hash, str_equal);
 		main_layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+
+		matcher = new Budgie.ApplicationMatcher();
 
 		/* Initial bootstrap of helpers */
 		windowing = new Budgie.Windowing.Windowing();
@@ -380,7 +384,19 @@ public class IconTasklistApplet : Budgie.Applet {
 		return true;
 	}
 
+	/**
+	 * Get the application ID for a window group
+	 *
+	 * This method first tries to get the app_id from group.app_info (standard case).
+	 * If that fails or doesn't match any existing buttons, it uses ApplicationMatcher
+	 * to handle non-standard apps like Tilix, jEdit, and snap applications.
+	 *
+	 * @param group The window group to get an ID for
+	 * @param application Output parameter set to the Application object if found
+	 * @return The application desktop ID (e.g., "firefox.desktop")
+	 */
 	private string get_app_id_by_group(Budgie.Windowing.WindowGroup group, ref Budgie.Application? application) {
+		// Standard case: group has app_info
 		if (group.app_info != null) {
 			application = new Budgie.Application(group.app_info);
 
@@ -389,6 +405,24 @@ public class IconTasklistApplet : Budgie.Applet {
 			}
 		}
 
+		// Fallback: match for non-standard apps
+		// This handles apps like Tilix (com.gexperts.Tilix.desktop → tilix WM_CLASS),
+		// jEdit (jedit.desktop → org-gjt-sp-jedit-jEdit WM_CLASS),
+		// and snap apps (snap-store_ubuntu-software.desktop → snap-store WM_CLASS)
+		var match_result = matcher.match_window_group(group);
+
+		if (match_result != null && match_result.matched()) {
+			debug(@"ApplicationMatcher: Matched $(match_result.desktop_id) via $(match_result.match_method)");
+
+			// Create Application from matched desktop ID
+			application = matcher.create_application(match_result.desktop_id);
+
+			if (application != null) {
+				return match_result.desktop_id;
+			}
+		}
+
+		// ultimate fallback - use the group_id as-is
 		return group.group_id.to_string();
 	}
 
@@ -421,6 +455,9 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (button == null) { // create a new button
 			button = new IconButton.with_group(group, manager, application);
 
+			// IMPORTANT: Set pinned BEFORE connecting signals to avoid spurious notify events
+			button.pinned = false;
+
 			button.button_press_event.connect(on_button_press);
 			button.button_release_event.connect(on_button_release);
 			button.notify["pinned"].connect(on_pinned_changed);
@@ -435,12 +472,33 @@ public class IconTasklistApplet : Budgie.Applet {
 		update_button(button);
 	}
 
+	/**
+	 * on_app_closed handles when an app closes.
+	 *
+	 * find the correct button via:
+	 * 1. Try get_app_id_by_group() (includes matcher fallback)
+	 * 2. Search all buttons by window group reference
+	 */
 	private void on_app_closed(Budgie.Windowing.WindowGroup group) {
 		Budgie.Application? application = null;
 		var app_id = get_app_id_by_group(group, ref application);
 
 		IconButton? button = buttons.get(app_id);
 
+		// If not found by app_id, search by window group reference
+		// This is critical for matched apps where the button was created
+		// with a different ID than what get_app_id_by_group returns
+		if (button == null) {
+			debug(@"Button not found by app_id '$app_id', searching by window group...");
+
+			buttons.foreach((key, btn) => {
+				if (btn.get_window_group() == group) {
+					button = btn;
+					app_id = key; // Update app_id to the actual key the button is stored under
+					debug(@"Found button by window group: key='$key'");
+				}
+			});
+		}
 
 		if (button == null) { // we don't manage this button
 			warning(@"an application ($(group.group_id)) was closed, but we couldn't find its button");

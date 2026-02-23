@@ -28,6 +28,7 @@ lib_applet_icontasklist_resources = static_library(
 )
 
 applet_icontasklist_sources = [
+    'ApplicationMatcher.vala',
     'IconTasklistApplet.vala',
     'widgets/ButtonPopover.vala',
     'widgets/ButtonWrapper.vala',

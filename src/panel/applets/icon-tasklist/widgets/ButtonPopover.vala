@@ -58,25 +58,48 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
-		if (app != null) {
+		if (app != null && app.actions != null) {
 			var app_info = new DesktopAppInfo(app.desktop_id);
 
-			foreach (var action in app.actions) {
-				var action_label = app_info.get_action_name(action);
+			if (app_info != null) {
+				try {
+					// Iterate through actions
+					for (int i = 0; i < app.actions.length; i++) {
+						unowned string action = app.actions[i];
 
-				var action_button = new Gtk.Button.with_label(action_label) {
-					relief = Gtk.ReliefStyle.NONE,
-				};
+						// Skip null or empty actions
+						if (action == null || action.length == 0) {
+							debug(@"Skipping null/empty action at index $i");
+							continue;
+						}
 
-				var label = action_button.get_child() as Gtk.Label;
-				label.set_xalign(0);
+						var action_label = app_info.get_action_name(action);
 
-				action_button.clicked.connect(() => {
-					app.launch_action(action);
-					hide();
-				});
+						// Skip if we couldn't get a label
+						if (action_label == null || action_label.length == 0) {
+							debug(@"Skipping action '$action' - no label");
+							continue;
+						}
 
-				desktop_actions.add(action_button);
+						var action_button = new Gtk.Button.with_label(action_label) {
+							relief = Gtk.ReliefStyle.NONE,
+						};
+
+						var label = action_button.get_child() as Gtk.Label;
+						if (label != null) {
+							label.set_xalign(0);
+						}
+
+						action_button.clicked.connect(() => {
+							app.launch_action(action);
+							hide();
+						});
+
+						desktop_actions.add(action_button);
+					}
+				} catch (Error e) {
+					warning(@"Error processing desktop actions: $(e.message)");
+				}
 			}
 		}
 

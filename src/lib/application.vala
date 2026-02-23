@@ -27,7 +27,7 @@ namespace Budgie {
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
 		public bool dbus_activatable { get; private set; default = false; }
-		public unowned string[] actions { get; private set; }
+		public string[] actions { get; private set; }
 
 		/**
 		* Emitted when the application is launched.
