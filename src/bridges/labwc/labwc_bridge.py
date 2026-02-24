@@ -808,7 +808,6 @@ class Bridge:
             category = "non-touch"
 
         yesno = { "natural-scroll" : "naturalScroll",
-                  "left-handed" : "leftHanded",
                   "accel-profile" : "accelProfile",
                   "tap-to-click" : "tap",
                   "tap-and-drag" : "tapAndDrag",
@@ -816,6 +815,22 @@ class Bridge:
                   "middle-click-emulation" : "middleEmulation",
                   "disable-while-typing" : "disableWhileTyping"}
         match key:
+            case "left-handed":
+                schema = "leftHanded"
+                if category == "touchpad":
+                    # Touchpad left-handed is an enum: 'left', 'right', or 'mouse'
+                    handed = settings[key]
+                    if handed == "left":
+                        textvalue = "yes"
+                    elif handed == "right":
+                        textvalue = "no"
+                    else:
+                        # 'mouse' - follow the mouse left-handed boolean setting
+                        mouse_left_handed = self.peripherals_mouse_settings.get_boolean("left-handed")
+                        textvalue = "yes" if mouse_left_handed else "no"
+                else:
+                    # Mouse left-handed is a boolean
+                    textvalue = "yes" if settings[key] else "no"
             case "speed":
                 schema = "pointerSpeed"
                 textvalue = str(settings[key])
@@ -850,6 +865,14 @@ class Bridge:
                 else:
                     self.log.info("unknown key " + key + " for peripherals category " + category)
                     return
+
+        # If the mouse left-handed setting changed, re-evaluate touchpad leftHanded
+        # in case the touchpad is set to follow mouse ('mouse' mode)
+        if key == "left-handed" and category == "non-touch":
+            touchpad_handed = self.peripherals_touchpad_settings.get_string("left-handed")
+            if touchpad_handed == "mouse":
+                element = self.ensure_peripheral_element("touchpad", "leftHanded")
+                element.text = textvalue
 
         if key == "double-click":
             schema = "./mouse/doubleClickTime"
