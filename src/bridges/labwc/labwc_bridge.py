@@ -19,6 +19,8 @@ import psutil
 import sys
 import gettext
 from enum import StrEnum
+import dbus
+import dbus.mainloop.glib
 
 import gi
 from gi.repository import Gio, GLib
@@ -28,6 +30,150 @@ from gi.repository import Pango
 mainloop = None
 
 CURRENT_RC_VERSION = 1
+
+def read_key_value_file(filepath, strip_quotes=False):
+    """
+    Read a key=value config file into a dict.
+
+    Args:
+        filepath: Path to config file
+        strip_quotes: If True, remove surrounding quotes from values
+
+    Returns:
+        Dict of key-value pairs
+    """
+    config = {}
+
+    if not os.path.exists(filepath):
+        return config
+
+    try:
+        with open(filepath, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    if strip_quotes:
+                        value = value.strip('"').strip("'")
+                    config[key] = value
+    except Exception:
+        pass
+
+    return config
+
+
+def parse_options_string(options_string):
+    """Parse comma-separated options into a set."""
+    if not options_string:
+        return set()
+    return {opt.strip() for opt in options_string.split(',') if opt.strip()}
+
+
+def normalize_xkb_options(options_set):
+    """
+    Normalize XKB options to avoid conflicts.
+    Only certain option families are mutually exclusive
+    Other families like lv3:, compose: can have multiple options.
+
+    Known mutually-exclusive families: grp, caps, ctrl, altwin
+
+    Args:
+        options_set: Set of XKB option strings
+
+    Returns:
+        Set of normalized options
+    """
+    if not options_set:
+        return set()
+
+    # Families where only one option should be kept
+    exclusive_families = {'grp', 'caps', 'ctrl', 'altwin'}
+
+    seen_exclusive = {}
+    normalized = set()
+
+    for option in sorted(options_set):  # Sort for consistent behavior
+        if ':' in option:
+            family = option.split(':', 1)[0]
+
+            if family in exclusive_families:
+                # Keep only first of exclusive families
+                if family not in seen_exclusive:
+                    seen_exclusive[family] = option
+                    normalized.add(option)
+                # else: skip duplicate exclusive family
+            else:
+                # Non-exclusive family - keep all
+                normalized.add(option)
+        else:
+            # Options without family (rare) - keep all
+            normalized.add(option)
+
+    return normalized
+
+
+def format_keyboard_layout(layout, variant=''):
+    """
+    Convert layout and variant strings to labwc format.
+
+    Args:
+        layout: Comma-separated layout string
+        variant: Comma-separated variant string
+
+    Returns:
+        Formatted layout string or None if no layout
+    """
+    if not layout:
+        return None
+
+    if not variant:
+        return layout
+
+    variants = variant.split(',')
+    layouts = layout.split(',')
+
+    combined = []
+    for i, l in enumerate(layouts):
+        if i < len(variants) and variants[i]:
+            combined.append(f"{l}({variants[i]})")
+        else:
+            combined.append(l)
+
+    return ','.join(combined)
+
+
+def get_locale1_all_properties(dbus_bus, log=None):
+    """
+    Get all properties from org.freedesktop.locale1.
+
+    Args:
+        dbus_bus: D-Bus system bus connection
+        log: Optional logger
+
+    Returns:
+        Dict of properties or None if service unavailable
+    """
+    if not dbus_bus:
+        return None
+
+    try:
+        proxy = dbus_bus.get_object(
+            'org.freedesktop.locale1',
+            '/org/freedesktop/locale1'
+        )
+
+        props_iface = dbus.Interface(
+            proxy,
+            'org.freedesktop.DBus.Properties'
+        )
+
+        return props_iface.GetAll('org.freedesktop.locale1')
+
+    except dbus.DBusException as e:
+        if log:
+            log.debug(f"Could not read locale1 properties: {e}")
+        return None
+
 
 class RcXmlMigration:
     """Handles migration of rc.xml to newer versions"""
@@ -161,7 +307,6 @@ class RcXmlMigration:
         Et.indent(user_et, space="\t", level=0)
         user_et.write(user_path)
 
-        self.log.info("rc.xml migration completed - keyboard section updated to version " + str(CURRENT_RC_VERSION))
         return True
 
 
@@ -236,6 +381,8 @@ class Bridge:
 
     # starting point for the bridge
     def __init__(self):
+        # Initialize dbus mainloop FIRST
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
         self.log = logging.getLogger('labwc_bridge')
         self.log.addHandler(JournalHandler())
@@ -314,7 +461,258 @@ class Bridge:
         self.default_terminal_settings = Gio.Settings.new('org.gnome.desktop.default-applications.terminal')
         self.default_terminal_settings.connect('changed', self.default_terminal_changed)
 
+        # Setup locale1 monitoring for keyboard layout and locale
+        self.setup_locale1_monitor()
+
         self.bridge_config()
+
+    def setup_locale1_monitor(self):
+        """Setup monitoring of org.freedesktop.locale1 using dbus-python"""
+        try:
+            # Get system bus
+            bus = dbus.SystemBus()
+
+            # Store bus for later use
+            self.dbus_system_bus = bus
+
+            # Subscribe to PropertiesChanged signals
+            bus.add_signal_receiver(
+                self.on_locale1_properties_changed,
+                signal_name='PropertiesChanged',
+                dbus_interface='org.freedesktop.DBus.Properties',
+                path='/org/freedesktop/locale1',
+                arg0='org.freedesktop.locale1'
+            )
+
+        except Exception as e:
+            self.log.warning(f"Could not setup locale1 monitoring: {e}")
+
+    def on_locale1_properties_changed(self, interface, changed, invalidated):
+        """
+        Handler for PropertiesChanged signals from locale1.
+        Signature (s, a{sv}, as) -> interface name, changed dict, invalidated list
+        """
+        self.log.info(f"locale1 PropertiesChanged received for interface: {interface}")
+
+        if changed:
+            self.log.info("Changed properties:")
+            for k, v in dict(changed).items():
+                self.log.info(f"  {k}: {v}")
+
+        if invalidated:
+            self.log.info(f"Invalidated properties: {list(invalidated)}")
+
+        # Update environment file with new locale/keyboard settings
+        self.write_environment_file()
+
+        # Reload labwc config if not delayed
+        if not self.delay_config_write:
+            subprocess.call("labwc -r", shell=True)
+
+    def get_locale_from_locale1(self):
+        """Get locale settings from systemd-localed via dbus-python"""
+        locale_vars = {}
+
+        if not hasattr(self, 'dbus_system_bus'):
+            return locale_vars
+
+        props = get_locale1_all_properties(self.dbus_system_bus, self.log)
+        if not props:
+            return locale_vars
+
+        # The 'Locale' property is an array of strings like "LANG=en_US.UTF-8"
+        if 'Locale' in props:
+            locale_array = props['Locale']
+            for locale_entry in locale_array:
+                if '=' in locale_entry:
+                    key, value = locale_entry.split('=', 1)
+                    locale_vars[key] = value
+                    self.log.debug(f"Got from locale1: {key}={value}")
+
+        return locale_vars
+
+    def get_keyboard_layout_from_locale1(self):
+        """Get keyboard layout from systemd-localed"""
+        layout_info = {
+            'layout': None,
+            'variant': None,
+            'model': None,
+            'options': None
+        }
+
+        if not hasattr(self, 'dbus_system_bus'):
+            return layout_info
+
+        props = get_locale1_all_properties(self.dbus_system_bus, self.log)
+        if not props:
+            return layout_info
+
+        if 'X11Layout' in props:
+            layout_info['layout'] = str(props['X11Layout'])
+        if 'X11Variant' in props:
+            layout_info['variant'] = str(props['X11Variant'])
+        if 'X11Model' in props:
+            layout_info['model'] = str(props['X11Model'])
+        if 'X11Options' in props:
+            layout_info['options'] = str(props['X11Options'])
+
+        if layout_info['layout']:
+            self.log.info(f"Got keyboard layout from locale1: {layout_info}")
+
+        return layout_info
+
+    def get_keyboard_layout_from_system_files(self):
+        """
+        Fallback: Read keyboard layout from /etc/default/keyboard
+        """
+        layout_info = {
+            'layout': None,
+            'variant': None,
+            'model': None,
+            'options': None
+        }
+
+        keyboard_config = read_key_value_file('/etc/default/keyboard', strip_quotes=True)
+
+        if 'XKBLAYOUT' in keyboard_config:
+            layout_info['layout'] = keyboard_config['XKBLAYOUT']
+        if 'XKBVARIANT' in keyboard_config:
+            layout_info['variant'] = keyboard_config['XKBVARIANT']
+        if 'XKBMODEL' in keyboard_config:
+            layout_info['model'] = keyboard_config['XKBMODEL']
+        if 'XKBOPTIONS' in keyboard_config:
+            layout_info['options'] = keyboard_config['XKBOPTIONS']
+
+        if layout_info['layout']:
+            self.log.info(f"Got keyboard layout from /etc/default/keyboard: {layout_info}")
+
+        return layout_info
+
+    def get_keyboard_layout(self):
+        """
+        Extract keyboard layout in this order:
+        1. GSettings input-sources (if exists and non-empty)
+        2. systemd-localed X11Layout (if exists and non-empty)
+        3. /etc/default/keyboard XKBLAYOUT (if defined)
+        4. Default to "us"
+        """
+
+        # GSettings input-sources (if exists and non-empty)
+        if self.desktop_input_sources_settings:
+            sources = self.desktop_input_sources_settings["sources"]
+            layout_parts = []
+
+            for source in sources:
+                if source[0] == 'xkb':
+                    extract = source[1].replace("'","")
+
+                    if "+" in extract:
+                        rhs = extract.split("+")
+                        extract = f"{rhs[0]}({rhs[1]})"
+
+                    layout_parts.append(extract)
+
+            if layout_parts:
+                layout = ','.join(layout_parts)
+                self.log.info(f"Using keyboard layout from GSettings: {layout}")
+                return layout
+
+        # systemd-localed X11Layout (if exists and non-empty)
+        locale1_layout = self.get_keyboard_layout_from_locale1()
+
+        formatted = format_keyboard_layout(locale1_layout['layout'], locale1_layout['variant'])
+        if formatted:
+            self.log.info(f"Using keyboard layout from locale1: {formatted}")
+            return formatted
+
+        # /etc/default/keyboard XKBLAYOUT (if defined)
+        system_layout = self.get_keyboard_layout_from_system_files()
+
+        formatted = format_keyboard_layout(system_layout['layout'], system_layout['variant'])
+        if formatted:
+            self.log.info(f"Using keyboard layout from /etc/default/keyboard: {formatted}")
+            return formatted
+
+        # Default fallback
+        self.log.info("Using default keyboard layout: us")
+        return "us"
+
+    def get_merged_xkb_options(self):
+        """
+        Get XKB options in this order with normalization:
+        1. GSettings xkb-options (ONLY if user-modified)
+        2. systemd-localed X11Options (if exists)
+        3. /etc/default/keyboard XKBOPTIONS (if exists)
+        4. GSettings default (if nothing else found)
+        5. Empty otherwise
+
+        Then normalize (remove duplicate families) and inject grp:alt_shift_toggle
+        if multiple layouts and no grp: option exists.
+        """
+        options_set = set()
+        gsettings_default = set()
+
+        # GSettings xkb-options (if exists and non-empty)
+        if self.desktop_input_sources_settings:
+            try:
+                user_value = self.desktop_input_sources_settings.get_user_value("xkb-options")
+
+                if user_value is not None:
+                    # User explicitly set it (even if empty)
+                    gsettings_options = self.desktop_input_sources_settings.get_strv("xkb-options")
+                    options_set = set(gsettings_options)
+                    self.log.info(f"Using USER GSettings XKB options: {options_set}")
+                else:
+                    # Not user-modified → store default for possible fallback
+                    gsettings_options = self.desktop_input_sources_settings.get_strv("xkb-options")
+                    if gsettings_options:
+                        gsettings_default = set(gsettings_options)
+                    self.log.debug("GSettings xkb-options not user-modified")
+
+            except Exception as e:
+                self.log.debug(f"Could not read GSettings xkb-options: {e}")
+
+        # systemd-localed X11Options (if not found in GSettings)
+        if not options_set:
+            locale1_layout = self.get_keyboard_layout_from_locale1()
+            options_set = parse_options_string(locale1_layout.get('options', ''))
+            if options_set:
+                self.log.info(f"Got XKB options from locale1: {options_set}")
+
+        # /etc/default/keyboard XKBOPTIONS (if not found above)
+        if not options_set:
+            system_layout = self.get_keyboard_layout_from_system_files()
+            options_set = parse_options_string(system_layout.get('options', ''))
+            if options_set:
+                self.log.info(f"Got XKB options from /etc/default/keyboard: {options_set}")
+
+        if not options_set and gsettings_default:
+            options_set = gsettings_default
+            self.log.info(f"Using DEFAULT GSettings XKB options: {options_set}")
+
+        # Empty if nothing found
+        if not options_set:
+            self.log.info("No XKB options found from any source")
+            options_set = set()
+
+        # Normalize: remove duplicate option families (keep only first of each family)
+        options_set = normalize_xkb_options(options_set)
+
+        # Get current keyboard layout to check if multiple layouts
+        current_layout = self.get_keyboard_layout()
+        has_multiple_layouts = ',' in current_layout
+
+        # Check if any grp: option exists
+        has_grp_option = any(opt.startswith('grp:') for opt in options_set)
+
+        # Inject default grp:alt_shift_toggle if multiple layouts and no grp: option
+        if has_multiple_layouts and not has_grp_option:
+            options_set.add('grp:alt_shift_toggle')
+            self.log.info("Injected grp:alt_shift_toggle for multiple layouts")
+
+        result = ','.join(sorted(options_set))
+        self.log.info(f"Final XKB options: {result}")
+        return result
 
     # this translate all menu labels if not already done
     def translate_menu_labels(self, path):
@@ -455,57 +853,137 @@ class Bridge:
 
         if key == "double-click":
             schema = "./mouse/doubleClickTime"
+            bridge = self.et.find(schema)
+
+            if bridge is not None:
+                bridge.text = textvalue
+            else:
+                self.log.info("cannot find schema " + schema + " to set the value " + textvalue)
         else:
             # Use the helper to ensure structure exists
             element = self.ensure_peripheral_element(category, schema)
             element.text = textvalue
-            self.write_config()
-            return
+
+        self.write_config()
 
     # writes the complete environment file with XKB and cursor settings
     def write_environment_file(self):
+        """Write environment file with keyboard layout, XKB options, cursor, and locale settings"""
         path = self.user_config("environment")
-        lines = []
 
-        # Get keyboard layout from desktop_input_sources_settings
-        layout = ""
-        if self.desktop_input_sources_settings:
-            sources = self.desktop_input_sources_settings["sources"]
-            for source in sources:
-                if source[0] == 'xkb':
-                    extract = source[1].replace("'","")
+        # Define which variables are FULLY managed by the bridge (overwritten)
+        fully_managed_vars = {
+            'XKB_DEFAULT_LAYOUT',
+            'XKB_DEFAULT_OPTIONS',
+            'XCURSOR_THEME',
+            'XCURSOR_SIZE',
+            'LANG',
+            'LC_CTYPE',
+            'LC_NUMERIC',
+            'LC_TIME',
+            'LC_COLLATE',
+            'LC_MONETARY',
+            'LC_MESSAGES',
+            'LC_PAPER',
+            'LC_NAME',
+            'LC_ADDRESS',
+            'LC_TELEPHONE',
+            'LC_MEASUREMENT',
+            'LC_IDENTIFICATION'
+        }
 
-                    if "+" in extract:
-                        rhs = extract.split("+")
-                        extract = f"{rhs[0]}({rhs[1]})"
+        # Read existing variables to preserve user customizations
+        existing_vars = read_key_value_file(path)
 
-                    if layout == "":
-                        layout = extract
-                    else:
-                        layout += "," + extract
+        # Build new managed variables
+        new_vars = {}
 
-        if layout == "":
-            layout = "us" # default to at least a known keyboard layout
+        # Get keyboard layout
+        layout = self.get_keyboard_layout()
+        new_vars['XKB_DEFAULT_LAYOUT'] = layout
 
-        lines.append(f"XKB_DEFAULT_LAYOUT={layout}\n")
-        lines.append("XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle\n")
+        # Get XKB options
+        new_vars['XKB_DEFAULT_OPTIONS'] = self.get_merged_xkb_options()
 
         # Get cursor settings from desktop_interface_settings
         if self.desktop_interface_settings:
-            cursor_theme = self.desktop_interface_settings["cursor-theme"]
+            cursor_theme = self.desktop_interface_settings.get_string("cursor-theme")
             if cursor_theme:
-                lines.append(f"XCURSOR_THEME={cursor_theme}\n")
+                new_vars['XCURSOR_THEME'] = cursor_theme
 
-            cursor_size = self.desktop_interface_settings["cursor-size"]
+            cursor_size = self.desktop_interface_settings.get_int("cursor-size")
             if cursor_size:
-                lines.append(f"XCURSOR_SIZE={cursor_size}\n")
+                new_vars['XCURSOR_SIZE'] = str(cursor_size)
 
-        # Ensure directory exists
+        # Get locale settings from locale1 D-Bus interface
+        locale_from_locale1 = self.get_locale_from_locale1()
+        if locale_from_locale1:
+            self.log.info(f"Got {len(locale_from_locale1)} locale variables from locale1")
+            new_vars.update(locale_from_locale1)
+        else:
+            # Fallback to current environment if locale1 not available
+            self.log.info("No locale from locale1, using environment fallback")
+            for var in fully_managed_vars:
+                if var.startswith('LANG') or var.startswith('LC_'):
+                    value = os.environ.get(var)
+                    if value:
+                        new_vars[var] = value
+
+            # Ensure we have at least LANG set
+            if 'LANG' not in new_vars:
+                new_vars['LANG'] = 'en_US.UTF-8'
+
+        # Merge: keep user variables, update managed ones
+        final_vars = {}
+
+        # First, add all existing variables that aren't managed
+        for key, value in existing_vars.items():
+            if key not in fully_managed_vars:
+                final_vars[key] = value
+
+        # Then add/update all managed variables
+        final_vars.update(new_vars)
+
+        # Write the file
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
-        # Write the complete file
+        lines = []
+        lines.append("# Budgie Desktop - labwc environment configuration\n")
+        lines.append("# Variables fully managed by budgie: XKB_DEFAULT_LAYOUT, XKB_DEFAULT_OPTIONS, XCURSOR_*, LC_*, LANG\n")
+        lines.append("# Use dconf key xkb-options to add user defined values\n")
+        lines.append("# Other user customizations are preserved\n\n")
+
+        # Organize variables by category
+        xkb_vars = {k: v for k, v in final_vars.items() if k.startswith('XKB_')}
+        cursor_vars = {k: v for k, v in final_vars.items() if k.startswith('XCURSOR_')}
+        locale_vars = {k: v for k, v in final_vars.items() if k.startswith('LC_') or k == 'LANG'}
+        other_vars = {k: v for k, v in final_vars.items()
+                      if not k.startswith('XKB_') and not k.startswith('XCURSOR_')
+                      and not k.startswith('LC_') and k != 'LANG'}
+
+        if xkb_vars:
+            for key in sorted(xkb_vars.keys()):
+                lines.append(f"{key}={xkb_vars[key]}\n")
+
+        if cursor_vars:
+            lines.append("\n")
+            for key in sorted(cursor_vars.keys()):
+                lines.append(f"{key}={cursor_vars[key]}\n")
+
+        if locale_vars:
+            lines.append("\n")
+            for key in sorted(locale_vars.keys()):
+                lines.append(f"{key}={locale_vars[key]}\n")
+
+        if other_vars:
+            lines.append("\n# User customizations\n")
+            for key in sorted(other_vars.keys()):
+                lines.append(f"{key}={other_vars[key]}\n")
+
         with open(path, "w") as file:
             file.writelines(lines)
+
+        self.log.info(f"Updated environment file: {path}")
 
     # this handles cursor changes
     def cursor_changed(self, settings, key):
@@ -522,12 +1000,12 @@ class Bridge:
         # reload config for labwc
         subprocess.call("labwc -r", shell=True)
 
-    # this handles keyboard layout changes
+    # this handles keyboard layout and XKB options changes
     def desktop_input_sources_changed(self, settings, key):
-        if key != "sources":
+        if key not in ["sources", "xkb-options"]:
             return
 
-        # Regenerate the complete environment file with updated layout
+        # Regenerate the complete environment file with updated layout/options
         self.write_environment_file()
 
         if self.delay_config_write:
@@ -656,6 +1134,7 @@ class Bridge:
         self.desktop_interface_changed(self.desktop_interface_settings, "cursor-size")
         self.panel_settings_changed(self.panel_settings, "notification-position")
         self.desktop_input_sources_changed(self.desktop_input_sources_settings, "sources")
+        self.desktop_input_sources_changed(self.desktop_input_sources_settings, "xkb-options")
 
         self.customkeys_changed(self.gsd_media_keys_settings, None)
 
