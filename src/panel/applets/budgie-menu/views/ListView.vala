@@ -212,8 +212,12 @@ public class ApplicationListView : ApplicationView {
 		all_categories.show_all();
 		this.categories.pack_start(all_categories, false);
 
-		foreach (var category in app_tracker.get_categories()) {
-			// Skip empty categories
+		// Sort categories alphabetically to ensure we are locale-aware
+		var sorted_categories = new Gee.ArrayList<Budgie.Category>();
+		sorted_categories.add_all(app_tracker.get_categories());
+		sorted_categories.sort((a, b) => a.name.collate(b.name));
+
+		foreach (var category in sorted_categories) {
 			if (category.apps.is_empty) {
 				continue;
 			}
@@ -227,7 +231,7 @@ public class ApplicationListView : ApplicationView {
 			});
 
 			btn.show_all();
-			this.categories.pack_start(btn, false); // Add the button
+			this.categories.pack_start(btn, false);
 
 			// Create a button for each app in this category
 			foreach (var app in category.apps) {
