@@ -109,7 +109,7 @@ namespace Budgie {
 			}
 
 			// Update the application system after the timeout
-			this.timeout_id = Timeout.add(seconds, () => {
+			this.timeout_id = Timeout.add_seconds(seconds, () => {
 				this.refresh();
 				this.timeout_id = 0;
 				return Source.REMOVE;
