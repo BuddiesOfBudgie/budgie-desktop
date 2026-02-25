@@ -13,17 +13,11 @@ namespace Budgie {
 	public const string BACKGROUND_SCHEMA = "org.gnome.desktop.background";
 	public const string ACCOUNTS_SCHEMA = "org.freedesktop.Accounts";
 	public const string GNOME_COLOR_HACK = "budgie-control-center/pixmaps/noise-texture-light.png";
-	public const string BACKGROUND_DBUS_NAME = "org.buddiesofbudgie.budgie.Background";
-	public const string BACKGROUND_DBUS_PATH = "/org/buddiesofbudgie/budgie/Background";
 
-	[DBus (name = "org.buddiesofbudgie.budgie.Background")]
 	public class Background : Object  {
 		private Settings? settings = null;
 
 		const int BACKGROUND_TIMEOUT = 850;
-
-		[DBus (visible = true)]
-		public signal void wallpaper_changing(string wallpaper_path, bool is_modified);
 
 		/* Ensure we're efficient with changed queries and dont update
 		* a bunch of times
@@ -31,7 +25,6 @@ namespace Budgie {
 		Gnome.BG? gnome_bg;
 		Subprocess? bg = null;
 		CrystalDockHelper? crystal_dock_helper = null;
-		private uint dbus_id = 0;
 
 		/**
 		* Determine if the wallpaper is a colour wallpaper or not
@@ -111,46 +104,6 @@ namespace Budgie {
 				this.update();
 			});
 
-			register_dbus();
-		}
-
-		~Background() {
-			unregister_dbus();
-		}
-
-		/**
-		* Register background on the session bus
-		*/
-		private void register_dbus() {
-			try {
-				var connection = Bus.get_sync(BusType.SESSION);
-				dbus_id = connection.register_object(BACKGROUND_DBUS_PATH, this);
-
-				// Also own the well-known name
-				Bus.own_name(
-					BusType.SESSION,
-					BACKGROUND_DBUS_NAME,
-					BusNameOwnerFlags.NONE,
-					null,
-					null,
-					null
-				);
-
-				debug("Background DBus interface registered");
-			} catch (Error e) {
-				warning("Failed to register Background DBus interface: %s", e.message);
-			}
-		}
-
-		private void unregister_dbus() {
-			if (dbus_id > 0) {
-				try {
-					var connection = Bus.get_sync(BusType.SESSION);
-					connection.unregister_object(dbus_id);
-				} catch (Error e) {
-					warning("Failed to unregister Background DBus interface: %s", e.message);
-				}
-			}
 		}
 
 		/**
@@ -218,8 +171,6 @@ namespace Budgie {
 						is_modified = true;
 					}
 				}
-
-				wallpaper_changing(wallpaper_path, is_modified);
 
 				// we use swaybg to define the wallpaper - we need to keep track
 				// of what we create so that we kill it the next time a background is defined
