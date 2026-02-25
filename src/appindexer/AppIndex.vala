@@ -222,6 +222,9 @@ namespace Budgie {
 				this.categories.add(this.misc_category);
 			}
 
+			// sort the categories
+			this.categories.sort((a, b) => a.name.collate(b.name));
+
 			// Emit our signal for changes
 			this.changed();
 		}
