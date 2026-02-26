@@ -49,18 +49,17 @@ namespace Budgie {
 		public static Category? new_for_file(File file) throws Error {
 			// Make sure we have a default name
 			var name = _("New Category");
+			var keyfile = new KeyFile();
 
-			// Open the file
-			var input_stream = file.read(null);
-			var data_stream = new DataInputStream(input_stream);
+			keyfile.load_from_file(file.get_path(), KeyFileFlags.NONE);
 
-			// Read the lines
-			string line = null;
-			while ((line = data_stream.read_line()) != null) {
-				// Look for a name to set
-				if (line.has_prefix("Name=")) {
-					name = line.substring(5).strip();
-					break;
+			try {
+				name = keyfile.get_locale_string("Desktop Entry", "Name", null);
+			} catch (KeyFileError e) {
+				try {
+					name = keyfile.get_string("Desktop Entry", "Name");
+				} catch (KeyFileError e2) {
+					warning("Could not read name from '%s': %s", file.get_path(), e2.message);
 				}
 			}
 
