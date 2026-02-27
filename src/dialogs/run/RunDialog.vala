@@ -32,6 +32,10 @@ namespace Budgie {
 		bool focus_quit = true;
 		DBusImpl? impl = null;
 
+		private uint focus_quit_timeout = 0;
+		private bool pointer_entered = false;
+		private GLib.Settings? wm_settings = null;
+
 		string search_term = "";
 
 		Budgie.RelevancyService relevancy;
@@ -56,6 +60,7 @@ namespace Budgie {
 
 			this.relevancy = new Budgie.RelevancyService();
 			this.theme_manager = new Budgie.ThemeManager(); // Initialize theme manager. What does this even do?
+			wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
 
 			/* Quicker than a list lookup */
 			this.active_names = new HashTable<string,bool>(str_hash, str_equal);
@@ -177,6 +182,7 @@ namespace Budgie {
 
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
 			if (monitor_obj != null) {
 				GtkLayerShell.set_monitor(this, monitor_obj);
@@ -189,7 +195,6 @@ namespace Budgie {
 			// ensure opposite anchors are false so it doesn't stretch
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
-			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
 			// calculate where to place the window in the monitor horizontally
 			int margin_left = rect.x;
@@ -211,9 +216,27 @@ namespace Budgie {
 				if (!this.focus_quit) {
 					return Gdk.EVENT_STOP;
 				}
-				debug("quiting from focus_out_event");
-				this.application.quit();
+				on_focus_out();
 				return Gdk.EVENT_STOP;
+			});
+
+			focus_in_event.connect(() => {
+				cancel_focus_quit();
+				return Gdk.EVENT_PROPAGATE;
+			});
+
+			enter_notify_event.connect((event) => {
+				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+				pointer_entered = true;
+				cancel_focus_quit();
+				return Gdk.EVENT_PROPAGATE;
+			});
+
+			leave_notify_event.connect((event) => {
+				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+				on_pointer_left();
+				return Gdk.EVENT_PROPAGATE;
 			});
 
 			this.key_release_event.connect(on_key_release);
@@ -222,6 +245,53 @@ namespace Budgie {
 			this.show_all();
 
 			setup_dbus.begin();
+		}
+
+		public void prepare_for_show() {
+			pointer_entered = false;
+			cancel_focus_quit();
+			update_layer_shell_properties();
+		}
+
+		private void update_layer_shell_properties() {
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "mouse") {
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			} else {
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			}
+		}
+
+		private void on_focus_out() {
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "click") {
+				debug("quitting due to focus_out_event (click mode)");
+				this.application.quit();
+			}
+		}
+
+		private void on_pointer_left() {
+			if (!pointer_entered) return;
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "click") return;
+			schedule_focus_quit();
+		}
+
+		private void schedule_focus_quit() {
+			cancel_focus_quit();
+			focus_quit_timeout = Timeout.add(400, () => {
+				focus_quit_timeout = 0;
+				debug("quitting due to pointer leaving dialog");
+				this.application.quit();
+				return Source.REMOVE;
+			});
+		}
+
+		private void cancel_focus_quit() {
+			if (focus_quit_timeout != 0) {
+				Source.remove(focus_quit_timeout);
+				focus_quit_timeout = 0;
+			}
 		}
 
 		/**
@@ -553,6 +623,7 @@ namespace Budgie {
 				rd = new RunDialog(this);
 				rd.set_focus_quit(!focus_keep);
 			}
+			rd.prepare_for_show();
 			rd.show();
 		}
 	}

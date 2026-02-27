@@ -10,6 +10,7 @@ powerdialog_sources = [
 powerdialog_deps = [
     dep_giounix,
     dep_gtk3,
+    dep_gtk_layer_shell,
     link_libconfig,
     link_libtheme
 ]
