@@ -6,10 +6,6 @@ project(
         'GPL-2.0',
         'LGPL-2.1',
     ],
-    default_options: [
-        'c_std=c11',
-        'warning_level=3'
-    ],
 )
 
 # Vala generates bad C code and missing these on gcc 14 will cause FTBFS
