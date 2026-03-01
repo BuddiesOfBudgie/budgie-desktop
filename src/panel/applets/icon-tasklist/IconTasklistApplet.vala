@@ -411,7 +411,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		// and snap apps (snap-store_ubuntu-software.desktop → snap-store WM_CLASS)
 		var match_result = matcher.match_window_group(group);
 
-		if (match_result != null && match_result.matched()) {
+		if (match_result.matched()) {
 			debug(@"ApplicationMatcher: Matched $(match_result.desktop_id) via $(match_result.match_method)");
 
 			// Create Application from matched desktop ID

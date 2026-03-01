@@ -40,10 +40,12 @@ namespace Budgie {
 		 * @param window The window to match
 		 * @return MatchResult containing the desktop ID and match method, or null if not found
 		 */
-		public MatchResult? match_window(Xfw.Window window) {
+		public MatchResult match_window(Xfw.Window window) {
+			var match_result = new MatchResult();
 			var class_ids = window.get_class_ids();
 			if (class_ids == null || class_ids.length == 0) {
-				return null;
+				debug(@"Got no class_ids for window='$(window.get_name())");
+				return match_result;
 			}
 
 			string instance = class_ids[0];
@@ -68,21 +70,24 @@ namespace Budgie {
 				if (desktop_id == null) continue;
 
 				// Try each matching strategy in priority order
-				var result = try_startup_wm_class(desktop_info, desktop_id, instance, class_name, variants);
-				if (result != null) return result;
+				match_result = try_startup_wm_class(desktop_info, desktop_id, instance, class_name, variants);
+				if (match_result.matched()) return match_result;
 
-				result = try_desktop_id_match(desktop_info, desktop_id, instance, class_name, variants);
-				if (result != null) return result;
+				match_result = try_desktop_id_match(desktop_info, desktop_id, instance, class_name, variants);
+				if (match_result.matched()) return match_result;
 
-				result = try_reverse_dns_match(desktop_info, desktop_id, instance, class_name, variants);
-				if (result != null) return result;
+				match_result = try_reverse_dns_match(desktop_info, desktop_id, instance, class_name, variants);
+				if (match_result.matched()) return match_result;
 
-				result = try_snap_pattern_match(desktop_info, desktop_id, instance, class_name, variants);
-				if (result != null) return result;
+				match_result = try_snap_pattern_match(desktop_info, desktop_id, instance, class_name, variants);
+				if (match_result.matched()) return match_result;
+
+				match_result = try_instance_to_exec_match(desktop_info, desktop_id, instance);
+				if (match_result.matched()) return match_result;
 			}
 
 			debug(@"No match found for instance='$instance'");
-			return null;
+			return match_result;
 		}
 
 		/**
@@ -91,10 +96,10 @@ namespace Budgie {
 		 * @param group The window group to match
 		 * @return MatchResult or null if no window available or no match
 		 */
-		public MatchResult? match_window_group(Budgie.Windowing.WindowGroup group) {
+		public MatchResult match_window_group(Budgie.Windowing.WindowGroup group) {
 			var window = group.get_first_window();
 			if (window == null) {
-				return null;
+				return new MatchResult();
 			}
 
 			return match_window(window);
@@ -119,7 +124,7 @@ namespace Budgie {
 		/**
 		 * Check StartupWMClass field in desktop file.
 		 */
-		private MatchResult? try_startup_wm_class(
+		private MatchResult try_startup_wm_class(
 			DesktopAppInfo desktop_info,
 			string desktop_id,
 			string instance,
@@ -128,7 +133,7 @@ namespace Budgie {
 		) {
 			var wm_class = desktop_info.get_startup_wm_class();
 			if (wm_class == null || wm_class.length == 0) {
-				return null;
+				return new MatchResult();
 			}
 
 			if (matches_any_variant(wm_class, instance, variants)) {
@@ -141,13 +146,13 @@ namespace Budgie {
 				return create_match_result(desktop_id, "StartupWMClass(class)");
 			}
 
-			return null;
+			return new MatchResult();
 		}
 
 		/**
 		 * Check if desktop file ID matches WM_CLASS.
 		 */
-		private MatchResult? try_desktop_id_match(
+		private MatchResult try_desktop_id_match(
 			DesktopAppInfo desktop_info,
 			string desktop_id,
 			string instance,
@@ -168,13 +173,13 @@ namespace Budgie {
 				return create_match_result(desktop_id, "DesktopID(class)");
 			}
 
-			return null;
+			return new MatchResult();
 		}
 
 		/**
 		 * Handle reverse-DNS naming (com.example.App).
 		 */
-		private MatchResult? try_reverse_dns_match(
+		private MatchResult try_reverse_dns_match(
 			DesktopAppInfo desktop_info,
 			string desktop_id,
 			string instance,
@@ -184,35 +189,34 @@ namespace Budgie {
 			var id_base = desktop_id.has_suffix(".desktop")
 				? desktop_id.substring(0, desktop_id.length - 8)
 				: desktop_id;
+			var match_result = new MatchResult();
 
-			if (!id_base.contains(".")) {
-				return null;
-			}
+			if (!id_base.contains(".")) return match_result;
 
 			var parts = id_base.split(".");
-			if (parts.length <= 1) {
-				return null;
-			}
+			if (parts.length <= 1) return match_result;
 
 			var last_part = parts[parts.length - 1];
 
 			if (matches_any_variant(last_part, instance, variants)) {
 				debug(@"Matched via reverse-DNS: $desktop_id");
-				return create_match_result(desktop_id, "ReverseDNS");
+				match_result = create_match_result(desktop_id, "ReverseDNS");
 			}
+
+			if (match_result.matched()) return match_result;
 
 			if (class_name != null && last_part.down() == class_name.down()) {
 				debug(@"Matched via reverse-DNS (class): $desktop_id");
-				return create_match_result(desktop_id, "ReverseDNS(class)");
+				match_result = create_match_result(desktop_id, "ReverseDNS(class)");
 			}
 
-			return null;
+			return match_result;
 		}
 
 		/**
 		 * Handle snap naming pattern (snap-name_app-name).
 		 */
-		private MatchResult? try_snap_pattern_match(
+		private MatchResult try_snap_pattern_match(
 			DesktopAppInfo desktop_info,
 			string desktop_id,
 			string instance,
@@ -223,23 +227,41 @@ namespace Budgie {
 				? desktop_id.substring(0, desktop_id.length - 8)
 				: desktop_id;
 
-			if (!id_base.contains("_")) {
-				return null;
-			}
+			var match_result = new MatchResult();
+
+			if (!id_base.contains("_")) return match_result;
 
 			var snap_parts = id_base.split("_");
-			if (snap_parts.length < 2) {
-				return null;
-			}
+			if (snap_parts.length < 2) return match_result;
 
 			var snap_name = snap_parts[0];
 
 			if (matches_any_variant(snap_name, instance, variants)) {
 				debug(@"Matched via snap pattern: $desktop_id");
-				return create_match_result(desktop_id, "SnapPattern");
+				match_result = create_match_result(desktop_id, "SnapPattern");
 			}
 
-			return null;
+			return match_result;
+		}
+
+		/**
+		* Handle attempting to match the instance name and transformations of it to the exec in the desktop file
+	 	*/
+		private MatchResult try_instance_to_exec_match(
+			DesktopAppInfo desktop_info,
+			string desktop_id,
+			string instance
+		) {
+			var exec = desktop_info.get_executable();
+			if (instance == exec) return create_match_result(desktop_id, "InstanceToExec");
+
+			if (!instance.contains(" ")) return new MatchResult(); // No whitespace, return early since subsequent logic requires it
+
+			var instance_dash = instance.replace(" ", "-");
+			var instance_dot = instance.replace(" ", ".");
+
+			if (instance_dash == exec || instance_dot == exec) return create_match_result(desktop_id, "InstanceToExec");
+			return new MatchResult();
 		}
 
 		/**
