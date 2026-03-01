@@ -64,14 +64,9 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 			if (app_info != null) {
 				try {
 					// Iterate through actions
-					for (int i = 0; i < app.actions.length; i++) {
-						unowned string action = app.actions[i];
-
+					foreach (var action in app.actions) {
 						// Skip null or empty actions
-						if (action == null || action.length == 0) {
-							debug(@"Skipping null/empty action at index $i");
-							continue;
-						}
+						if (action == null || action.length == 0) continue;
 
 						var action_label = app_info.get_action_name(action);
 
