@@ -62,38 +62,34 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 			var app_info = new DesktopAppInfo(app.desktop_id);
 
 			if (app_info != null) {
-				try {
-					// Iterate through actions
-					foreach (var action in app.actions) {
-						// Skip null or empty actions
-						if (action == null || action.length == 0) continue;
+				// Iterate through actions
+				foreach (var action in app.actions) {
+					// Skip null or empty actions
+					if (action == null || action.length == 0) continue;
 
-						var action_label = app_info.get_action_name(action);
+					var action_label = app_info.get_action_name(action);
 
-						// Skip if we couldn't get a label
-						if (action_label == null || action_label.length == 0) {
-							debug(@"Skipping action '$action' - no label");
-							continue;
-						}
-
-						var action_button = new Gtk.Button.with_label(action_label) {
-							relief = Gtk.ReliefStyle.NONE,
-						};
-
-						var label = action_button.get_child() as Gtk.Label;
-						if (label != null) {
-							label.set_xalign(0);
-						}
-
-						action_button.clicked.connect(() => {
-							app.launch_action(action);
-							hide();
-						});
-
-						desktop_actions.add(action_button);
+					// Skip if we couldn't get a label
+					if (action_label == null || action_label.length == 0) {
+						debug(@"Skipping action '$action' - no label");
+						continue;
 					}
-				} catch (Error e) {
-					warning(@"Error processing desktop actions: $(e.message)");
+
+					var action_button = new Gtk.Button.with_label(action_label) {
+						relief = Gtk.ReliefStyle.NONE,
+					};
+
+					var label = action_button.get_child() as Gtk.Label;
+					if (label != null) {
+						label.set_xalign(0);
+					}
+
+					action_button.clicked.connect(() => {
+						app.launch_action(action);
+						hide();
+					});
+
+					desktop_actions.add(action_button);
 				}
 			}
 		}
