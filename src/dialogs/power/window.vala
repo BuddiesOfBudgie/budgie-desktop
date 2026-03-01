@@ -43,6 +43,9 @@ namespace Budgie {
 		private EventControllerKey? event_controller = null;
 
 		Budgie.ThemeManager? theme_manager = null;
+		private uint focus_hide_timeout = 0;
+		private bool pointer_entered = false;
+		private GLib.Settings? wm_settings = null;
 
 		construct {
 			set_keep_above(true);
@@ -54,6 +57,11 @@ namespace Budgie {
 			}
 
 			get_style_context().add_class("budgie-power-dialog");
+			wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
 			theme_manager = new Budgie.ThemeManager();
 
@@ -144,21 +152,94 @@ namespace Budgie {
 			});
 
 			focus_out_event.connect(() => {
-				debug("hiding due to focus_out_event");
-				hide();
+				on_focus_out();
 				return Gdk.EVENT_STOP;
 			});
 
-#if WITH_HIBERNATE
+			focus_in_event.connect(() => {
+				cancel_focus_hide();
+				return Gdk.EVENT_PROPAGATE;
+			});
+
+			enter_notify_event.connect((event) => {
+				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+				pointer_entered = true;
+				cancel_focus_hide();
+				return Gdk.EVENT_PROPAGATE;
+			});
+
+			leave_notify_event.connect((event) => {
+				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+				on_pointer_left();
+				return Gdk.EVENT_PROPAGATE;
+			});
+
 			show.connect(() => {
+#if WITH_HIBERNATE
+
 				var can_hibernate = can_hibernate();
 				hibernate_button.sensitive = can_hibernate;
 				hibernate_button.set_tooltip_markup(can_hibernate ? null : _("This system does not support hibernation."));
-			});
-#endif
 
+#endif
+				pointer_entered = false;
+				cancel_focus_hide();
+				update_layer_shell_properties();
+			});
 			event_controller = new EventControllerKey(this);
 			event_controller.key_released.connect(on_key_release);
+		}
+
+		/**
+		 * Updates layer property based on the current focus mode.
+ 		 */
+		private void update_layer_shell_properties() {
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "mouse") {
+				// Under mouse focus, regular TOP competes with raised windows.
+				// OVERLAY ensures the dialog is never buried.
+				// The seat grab in application.vala handles keyboard routing
+				// once the surface is mapped.
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			} else {
+				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			}
+		}
+
+		private void on_focus_out() {
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "click") {
+				debug("hiding due to focus_out_event (click mode)");
+				hide();
+			}
+		}
+
+		private void on_pointer_left() {
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+			if (focus_mode == "click") return;
+
+			// Only schedule dialog hiding if the pointer actually visited the dialog.
+			if (!pointer_entered) return;
+
+			schedule_focus_hide();
+		}
+
+		private void schedule_focus_hide() {
+			cancel_focus_hide();
+			focus_hide_timeout = Timeout.add(400, () => {
+				focus_hide_timeout = 0;
+				debug("hiding due to pointer leaving dialog");
+				hide();
+				return Source.REMOVE;
+			});
+		}
+
+		private void cancel_focus_hide() {
+			if (focus_hide_timeout != 0) {
+				Source.remove(focus_hide_timeout);
+				focus_hide_timeout = 0;
+			}
 		}
 
 		public PowerWindow(Gtk.Application app) {

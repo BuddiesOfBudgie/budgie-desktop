@@ -82,12 +82,32 @@ namespace Budgie {
 			this.window.show_all();
 			this.window.reset_focus();
 
-			// We can't grab the seat for this window right after calling present/show
-			// because it happens too fast. The seat will fail to grab with `GDK_GRAB_STATUS_NOT_VIEWABLE`.
-			Timeout.add(250, () => {
-				grab_seat();
-				return Source.REMOVE;
-			});
+			var wm_settings = new GLib.Settings("com.solus-project.budgie-wm");
+			string focus_mode = wm_settings.get_string("window-focus-mode");
+
+			if (focus_mode == "mouse") {
+				// Under mouse focus, other windows raise as the cursor passes over them.
+				// We must grab as soon as the surface is mapped and visible — waiting
+				// 250ms gives mouse focus enough time to bury the dialog first.
+				this.window.map_event.connect(on_mapped_grab);
+			} else {
+				// click/sloppy: the 250ms delay is sufficient and avoids
+				// GDK_GRAB_STATUS_NOT_VIEWABLE on slower systems.
+				Timeout.add(250, () => {
+					grab_seat();
+					return Source.REMOVE;
+				});
+			}
+		}
+
+		/**
+		 * Grabs the seat as soon as the window surface is mapped and visible,
+		 * then disconnects itself so it only fires once per show.
+		 */
+		private bool on_mapped_grab(Gdk.EventAny event) {
+			this.window.map_event.disconnect(on_mapped_grab);
+			grab_seat();
+			return false;
 		}
 
 		/**
