@@ -27,7 +27,6 @@ namespace Budgie {
 		 */
 		public class MatchResult {
 			public string? desktop_id { get; set; }
-			public string match_method { get; set; default = "none"; }
 
 			public bool matched() {
 				return desktop_id != null;
@@ -138,12 +137,12 @@ namespace Budgie {
 
 			if (matches_any_variant(wm_class, instance, variants)) {
 				debug(@"Matched via StartupWMClass: $desktop_id");
-				return create_match_result(desktop_id, "StartupWMClass");
+				return create_match_result(desktop_id);
 			}
 
 			if (class_name != null && wm_class.down() == class_name.down()) {
 				debug(@"Matched via StartupWMClass (class): $desktop_id");
-				return create_match_result(desktop_id, "StartupWMClass(class)");
+				return create_match_result(desktop_id);
 			}
 
 			return new MatchResult();
@@ -165,12 +164,12 @@ namespace Budgie {
 
 			if (matches_any_variant(id_base, instance, variants)) {
 				debug(@"Matched via desktop ID: $desktop_id");
-				return create_match_result(desktop_id, "DesktopID");
+				return create_match_result(desktop_id);
 			}
 
 			if (class_name != null && id_base.down() == class_name.down()) {
 				debug(@"Matched via desktop ID (class): $desktop_id");
-				return create_match_result(desktop_id, "DesktopID(class)");
+				return create_match_result(desktop_id);
 			}
 
 			return new MatchResult();
@@ -200,14 +199,14 @@ namespace Budgie {
 
 			if (matches_any_variant(last_part, instance, variants)) {
 				debug(@"Matched via reverse-DNS: $desktop_id");
-				match_result = create_match_result(desktop_id, "ReverseDNS");
+				match_result = create_match_result(desktop_id);
 			}
 
 			if (match_result.matched()) return match_result;
 
 			if (class_name != null && last_part.down() == class_name.down()) {
 				debug(@"Matched via reverse-DNS (class): $desktop_id");
-				match_result = create_match_result(desktop_id, "ReverseDNS(class)");
+				match_result = create_match_result(desktop_id);
 			}
 
 			return match_result;
@@ -238,7 +237,7 @@ namespace Budgie {
 
 			if (matches_any_variant(snap_name, instance, variants)) {
 				debug(@"Matched via snap pattern: $desktop_id");
-				match_result = create_match_result(desktop_id, "SnapPattern");
+				match_result = create_match_result(desktop_id);
 			}
 
 			return match_result;
@@ -252,15 +251,21 @@ namespace Budgie {
 			string desktop_id,
 			string instance
 		) {
-			var exec = desktop_info.get_executable();
-			if (instance == exec) return create_match_result(desktop_id, "InstanceToExec");
+			var exec = Path.get_basename(desktop_info.get_executable());
+			if (instance == exec) {
+				debug(@"Matched via InstanceToExec: $desktop_id");
+				return create_match_result(desktop_id);
+			}
 
 			if (!instance.contains(" ")) return new MatchResult(); // No whitespace, return early since subsequent logic requires it
 
 			var instance_dash = instance.replace(" ", "-");
 			var instance_dot = instance.replace(" ", ".");
 
-			if (instance_dash == exec || instance_dot == exec) return create_match_result(desktop_id, "InstanceToExec");
+			if (instance_dash == exec || instance_dot == exec) {
+				debug(@"Matched via InstanceToExec: $desktop_id");
+				return create_match_result(desktop_id);
+			}
 			return new MatchResult();
 		}
 
@@ -347,10 +352,9 @@ namespace Budgie {
 		/**
 		 * Create a MatchResult object.
 		 */
-		private MatchResult create_match_result(string desktop_id, string method) {
+		private MatchResult create_match_result(string desktop_id) {
 			var result = new MatchResult();
 			result.desktop_id = desktop_id;
-			result.match_method = method;
 			return result;
 		}
 	}

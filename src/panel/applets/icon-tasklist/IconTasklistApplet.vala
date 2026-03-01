@@ -412,8 +412,6 @@ public class IconTasklistApplet : Budgie.Applet {
 		var match_result = matcher.match_window_group(group);
 
 		if (match_result.matched()) {
-			debug(@"ApplicationMatcher: Matched $(match_result.desktop_id) via $(match_result.match_method)");
-
 			// Create Application from matched desktop ID
 			application = matcher.create_application(match_result.desktop_id);
 
