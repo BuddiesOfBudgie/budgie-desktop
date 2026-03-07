@@ -13,9 +13,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.10.0\n"
+"Project-Id-Version: budgie-desktop 10.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 22:56+0200\n"
+"POT-Creation-Date: 2026-03-07 17:28+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: Facundo Ciruzzi, 2024\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/buddiesofbudgie/teams/129844/es_MX/)\n"
@@ -171,31 +171,31 @@ msgid "Group:"
 msgstr "Grupo:"
 
 #. Create our buttons
-#: src/dialogs/power/window.vala:87
+#: src/dialogs/power/window.vala:95
 msgid "_Lock"
 msgstr "_Bloquear"
 
-#: src/dialogs/power/window.vala:90
+#: src/dialogs/power/window.vala:98
 msgid "L_og Out"
 msgstr "C_errar Sesión"
 
-#: src/dialogs/power/window.vala:93
+#: src/dialogs/power/window.vala:101
 msgid "_Suspend"
 msgstr "_Suspender"
 
-#: src/dialogs/power/window.vala:97
+#: src/dialogs/power/window.vala:105
 msgid "_Hibernate"
 msgstr "_Hibernar"
 
-#: src/dialogs/power/window.vala:101
+#: src/dialogs/power/window.vala:109
 msgid "_Reboot"
 msgstr "_Reiniciar"
 
-#: src/dialogs/power/window.vala:104
+#: src/dialogs/power/window.vala:112
 msgid "Shut_down"
 msgstr "Apagar"
 
-#: src/dialogs/power/window.vala:156
+#: src/dialogs/power/window.vala:183
 msgid "This system does not support hibernation."
 msgstr "Su sistema no soporta la hibernación."
 
@@ -264,7 +264,7 @@ msgstr "Cerrar "
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1262
+#: src/dialogs/screenshot/screenshot.vala:1281
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -504,16 +504,17 @@ msgstr "Abrir captura de pantalla en la aplicación por defecto"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1177
+#: src/dialogs/screenshot/screenshot.vala:1191
 msgid "Other..."
 msgstr "Otra..."
 
+#. Hide the AfterShot window while the file chooser is open
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1261
+#: src/dialogs/screenshot/screenshot.vala:1280
 msgid "Open Folder"
 msgstr "Abrir Carpeta"
 
-#: src/dialogs/screenshot/screenshot.vala:1262
+#: src/dialogs/screenshot/screenshot.vala:1281
 msgid "Open"
 msgstr "Abrir"
 
@@ -572,51 +573,51 @@ msgid "System time and date settings"
 msgstr "Configuración de fecha y hora del sistema"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
 msgid "Unfavorite"
 msgstr "Remover de favoritos"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
 msgid "Favorite"
 msgstr "Agregar a favoritos"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:111
 msgid "Close all windows"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:129
 msgid "Launch new instance"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:271
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimizar"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:338
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Restaurar"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:400
 msgid "Close window"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:405
 msgid "Show window controls"
 msgstr ""
 
@@ -745,7 +746,7 @@ msgstr "Montar algunas unidades"
 msgid "Enable more sections"
 msgstr "Habilitar mas secciones"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:37
 msgid "Toggle the desktop"
 msgstr "Pasar el escritorio"
 
@@ -1304,7 +1305,7 @@ msgid "No authors listed"
 msgstr "No autores listados"
 
 #: src/panel/settings/settings_raven.vala:47
-#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_style.vala:52 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "Widgets"
 
@@ -1546,77 +1547,6 @@ msgstr ""
 "Cuando se pone en modo estante, el panel usará la menor cantidad de espacio "
 "posible, liberando espacio en la pantalla"
 
-#: src/panel/settings/settings_style.vala:33
-msgid "Style"
-msgstr "Estilo"
-
-#: src/panel/settings/settings_style.vala:48
-msgid "Set the appearance of window decorations and controls"
-msgstr "Establecer la apariencia de las decoraciones de ventanas y controles"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Icons"
-msgstr "Íconos"
-
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the globally used icon theme"
-msgstr "Estableces el tema global de íconos"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Cursors"
-msgstr "Cursores"
-
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used mouse cursor theme"
-msgstr "Establecer el tema global de cursores del ratón"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Notification Position"
-msgstr "Posición de las notificaciones"
-
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the location for notification popups"
-msgstr "Establecer la ubicación para las notificaciones emergentes"
-
-#: src/panel/settings/settings_style.vala:72
-msgid "Dark theme"
-msgstr "Tema oscuro"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "Built-in theme"
-msgstr "Tema incorporado"
-
-#: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr ""
-"Cuando está activado, los estilos de los componentes del escritorio serán "
-"anulados por el tema incorporado"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Animations"
-msgstr "Animaciones"
-
-#: src/panel/settings/settings_style.vala:88
-msgid "Control whether windows and controls use animations"
-msgstr "Controla si las ventanas y controles usarán animaciones"
-
-#: src/panel/settings/settings_style.vala:204
-msgid "Top Left"
-msgstr "Cima Izquierda"
-
-#: src/panel/settings/settings_style.vala:206
-msgid "Bottom Left"
-msgstr "Abaja Izquierda"
-
-#: src/panel/settings/settings_style.vala:208
-msgid "Bottom Right"
-msgstr "Abaja Derecha"
-
-#: src/panel/settings/settings_style.vala:211
-msgid "Top Right"
-msgstr "Cima Derecha"
-
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
 msgstr "Ventanas"
@@ -1711,6 +1641,91 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
 msgstr ""
+
+#: src/panel/settings/settings_style.vala:36
+msgid "Style"
+msgstr "Estilo"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the appearance of window decorations and controls"
+msgstr "Establecer la apariencia de las decoraciones de ventanas y controles"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Icons"
+msgstr "Íconos"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used icon theme"
+msgstr "Estableces el tema global de íconos"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Cursors"
+msgstr "Cursores"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the globally used mouse cursor theme"
+msgstr "Establecer el tema global de cursores del ratón"
+
+#: src/panel/settings/settings_style.vala:67
+msgid "Notification Position"
+msgstr "Posición de las notificaciones"
+
+#: src/panel/settings/settings_style.vala:68
+msgid "Set the location for notification popups"
+msgstr "Establecer la ubicación para las notificaciones emergentes"
+
+#: src/panel/settings/settings_style.vala:77
+msgid "Dark theme"
+msgstr "Tema oscuro"
+
+#: src/panel/settings/settings_style.vala:84
+msgid "Built-in theme"
+msgstr "Tema incorporado"
+
+#: src/panel/settings/settings_style.vala:85
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr ""
+"Cuando está activado, los estilos de los componentes del escritorio serán "
+"anulados por el tema incorporado"
+
+#: src/panel/settings/settings_style.vala:98
+msgid "Animations"
+msgstr "Animaciones"
+
+#: src/panel/settings/settings_style.vala:99
+msgid "Control whether windows and controls use animations"
+msgstr "Controla si las ventanas y controles usarán animaciones"
+
+#. Get display name for theme
+#: src/panel/settings/settings_style.vala:207
+msgid "Use theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:318
+msgid "Labwc Compositor Theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:319
+msgid ""
+"Override the labwc compositor theme independently from the desktop theme."
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:388
+msgid "Top Left"
+msgstr "Cima Izquierda"
+
+#: src/panel/settings/settings_style.vala:390
+msgid "Bottom Left"
+msgstr "Abaja Izquierda"
+
+#: src/panel/settings/settings_style.vala:392
+msgid "Bottom Right"
+msgstr "Abaja Derecha"
+
+#: src/panel/settings/settings_style.vala:395
+msgid "Top Right"
+msgstr "Cima Derecha"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"

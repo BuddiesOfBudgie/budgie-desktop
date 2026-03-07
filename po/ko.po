@@ -10,9 +10,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: budgie-desktop 10.10.0\n"
+"Project-Id-Version: budgie-desktop 10.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 22:56+0200\n"
+"POT-Creation-Date: 2026-03-07 17:28+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: JungHee Lee <daemul72@gmail.com>, 2025\n"
 "Language-Team: Korean (https://app.transifex.com/buddiesofbudgie/teams/129844/ko/)\n"
@@ -158,31 +158,31 @@ msgid "Group:"
 msgstr "그룹:"
 
 #. Create our buttons
-#: src/dialogs/power/window.vala:87
+#: src/dialogs/power/window.vala:95
 msgid "_Lock"
 msgstr "잠금(_L)"
 
-#: src/dialogs/power/window.vala:90
+#: src/dialogs/power/window.vala:98
 msgid "L_og Out"
 msgstr "로그아웃(_O)"
 
-#: src/dialogs/power/window.vala:93
+#: src/dialogs/power/window.vala:101
 msgid "_Suspend"
 msgstr "절전모드(_S)"
 
-#: src/dialogs/power/window.vala:97
+#: src/dialogs/power/window.vala:105
 msgid "_Hibernate"
 msgstr "최대 절전모드(_H)"
 
-#: src/dialogs/power/window.vala:101
+#: src/dialogs/power/window.vala:109
 msgid "_Reboot"
 msgstr "재부팅(_R)"
 
-#: src/dialogs/power/window.vala:104
+#: src/dialogs/power/window.vala:112
 msgid "Shut_down"
 msgstr "컴퓨터 끄기(_D)"
 
-#: src/dialogs/power/window.vala:156
+#: src/dialogs/power/window.vala:183
 msgid "This system does not support hibernation."
 msgstr "이 시스템은 최대 절전모드를 지원하지 않습니다."
 
@@ -251,7 +251,7 @@ msgstr "닫기"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1262
+#: src/dialogs/screenshot/screenshot.vala:1281
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -483,16 +483,17 @@ msgstr "기본 응용프로그램에서 스크린숏 열기"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1177
+#: src/dialogs/screenshot/screenshot.vala:1191
 msgid "Other..."
 msgstr "기타..."
 
+#. Hide the AfterShot window while the file chooser is open
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1261
+#: src/dialogs/screenshot/screenshot.vala:1280
 msgid "Open Folder"
 msgstr "폴더 열기"
 
-#: src/dialogs/screenshot/screenshot.vala:1262
+#: src/dialogs/screenshot/screenshot.vala:1281
 msgid "Open"
 msgstr "열기"
 
@@ -551,51 +552,51 @@ msgid "System time and date settings"
 msgstr "시스템 시간 및 날짜 설정"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
 msgid "Unfavorite"
 msgstr "즐겨찾기 해제"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:108
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
 msgid "Favorite"
 msgstr "즐겨찾기"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:111
 msgid "Close all windows"
 msgstr "모든 창 닫기"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:129
 msgid "Launch new instance"
 msgstr "새 인스턴스 실행하기"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:271
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "최소화"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:341
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:338
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "%s로 이동하기"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "최대화 해제"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "최대화"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:400
 msgid "Close window"
 msgstr "창 닫기"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:405
 msgid "Show window controls"
 msgstr "창 제어단추 표시하기"
 
@@ -722,7 +723,7 @@ msgstr "일부 드라이브 장착하기"
 msgid "Enable more sections"
 msgstr "더 많은 섹션 활성화"
 
-#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:29
+#: src/panel/applets/show-desktop/ShowDesktopApplet.vala:37
 msgid "Toggle the desktop"
 msgstr "바탕화면 전환하기"
 
@@ -1270,7 +1271,7 @@ msgid "No authors listed"
 msgstr "나열된 작성자 없음"
 
 #: src/panel/settings/settings_raven.vala:47
-#: src/panel/settings/settings_style.vala:47 src/raven/main_view.vala:53
+#: src/panel/settings/settings_style.vala:52 src/raven/main_view.vala:53
 msgid "Widgets"
 msgstr "위젯"
 
@@ -1496,75 +1497,6 @@ msgid ""
 "freeing up valuable screen estate"
 msgstr "간소화된 작업표시줄 사용 시, 작업표시줄이 차지하는 영역을 최소화하여 화면의 사용 가능한 공간을 최대한 늘립니다"
 
-#: src/panel/settings/settings_style.vala:33
-msgid "Style"
-msgstr "스타일"
-
-#: src/panel/settings/settings_style.vala:48
-msgid "Set the appearance of window decorations and controls"
-msgstr "창 장식 및 제어단추의 모양새 설정하기"
-
-#: src/panel/settings/settings_style.vala:52
-msgid "Icons"
-msgstr "아이콘"
-
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the globally used icon theme"
-msgstr "전체적으로 사용되는 아이콘 테마 설정하기"
-
-#: src/panel/settings/settings_style.vala:57
-msgid "Cursors"
-msgstr "커서"
-
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used mouse cursor theme"
-msgstr "전체적으로 사용되는 마우스 커서 테마 설정하기"
-
-#: src/panel/settings/settings_style.vala:62
-msgid "Notification Position"
-msgstr "알림 위치"
-
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the location for notification popups"
-msgstr "알림 팝업 위치 설정하기"
-
-#: src/panel/settings/settings_style.vala:72
-msgid "Dark theme"
-msgstr "어두운 테마"
-
-#: src/panel/settings/settings_style.vala:79
-msgid "Built-in theme"
-msgstr "기본 테마"
-
-#: src/panel/settings/settings_style.vala:80
-msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
-msgstr "이 옵션을 활성화하면, 바탕화면 구성요소 스타일보다 기본 테마에 의한 설정을 우선시합니다"
-
-#: src/panel/settings/settings_style.vala:87
-msgid "Animations"
-msgstr "애니메이션"
-
-#: src/panel/settings/settings_style.vala:88
-msgid "Control whether windows and controls use animations"
-msgstr "창 및 제어단추의 애니메이션 사용 여부 제어하기"
-
-#: src/panel/settings/settings_style.vala:204
-msgid "Top Left"
-msgstr "왼쪽 상단"
-
-#: src/panel/settings/settings_style.vala:206
-msgid "Bottom Left"
-msgstr "왼쪽 하단"
-
-#: src/panel/settings/settings_style.vala:208
-msgid "Bottom Right"
-msgstr "오른쪽 하단"
-
-#: src/panel/settings/settings_style.vala:211
-msgid "Top Right"
-msgstr "오른쪽 상단"
-
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
 msgstr "창"
@@ -1646,6 +1578,89 @@ msgstr ""
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
 msgstr ""
+
+#: src/panel/settings/settings_style.vala:36
+msgid "Style"
+msgstr "스타일"
+
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the appearance of window decorations and controls"
+msgstr "창 장식 및 제어단추의 모양새 설정하기"
+
+#: src/panel/settings/settings_style.vala:57
+msgid "Icons"
+msgstr "아이콘"
+
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used icon theme"
+msgstr "전체적으로 사용되는 아이콘 테마 설정하기"
+
+#: src/panel/settings/settings_style.vala:62
+msgid "Cursors"
+msgstr "커서"
+
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the globally used mouse cursor theme"
+msgstr "전체적으로 사용되는 마우스 커서 테마 설정하기"
+
+#: src/panel/settings/settings_style.vala:67
+msgid "Notification Position"
+msgstr "알림 위치"
+
+#: src/panel/settings/settings_style.vala:68
+msgid "Set the location for notification popups"
+msgstr "알림 팝업 위치 설정하기"
+
+#: src/panel/settings/settings_style.vala:77
+msgid "Dark theme"
+msgstr "어두운 테마"
+
+#: src/panel/settings/settings_style.vala:84
+msgid "Built-in theme"
+msgstr "기본 테마"
+
+#: src/panel/settings/settings_style.vala:85
+msgid ""
+"When enabled, the built-in theme will override the desktop component styling"
+msgstr "이 옵션을 활성화하면, 바탕화면 구성요소 스타일보다 기본 테마에 의한 설정을 우선시합니다"
+
+#: src/panel/settings/settings_style.vala:98
+msgid "Animations"
+msgstr "애니메이션"
+
+#: src/panel/settings/settings_style.vala:99
+msgid "Control whether windows and controls use animations"
+msgstr "창 및 제어단추의 애니메이션 사용 여부 제어하기"
+
+#. Get display name for theme
+#: src/panel/settings/settings_style.vala:207
+msgid "Use theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:318
+msgid "Labwc Compositor Theme"
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:319
+msgid ""
+"Override the labwc compositor theme independently from the desktop theme."
+msgstr ""
+
+#: src/panel/settings/settings_style.vala:388
+msgid "Top Left"
+msgstr "왼쪽 상단"
+
+#: src/panel/settings/settings_style.vala:390
+msgid "Bottom Left"
+msgstr "왼쪽 하단"
+
+#: src/panel/settings/settings_style.vala:392
+msgid "Bottom Right"
+msgstr "오른쪽 하단"
+
+#: src/panel/settings/settings_style.vala:395
+msgid "Top Right"
+msgstr "오른쪽 상단"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
