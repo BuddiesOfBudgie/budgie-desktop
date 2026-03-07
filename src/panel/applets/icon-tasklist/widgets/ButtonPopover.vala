@@ -58,25 +58,39 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 			selection_mode = Gtk.SelectionMode.NONE,
 		};
 
-		if (app != null) {
+		if (app != null && app.actions != null) {
 			var app_info = new DesktopAppInfo(app.desktop_id);
 
-			foreach (var action in app.actions) {
-				var action_label = app_info.get_action_name(action);
+			if (app_info != null) {
+				// Iterate through actions
+				foreach (var action in app.actions) {
+					// Skip null or empty actions
+					if (action == null || action.length == 0) continue;
 
-				var action_button = new Gtk.Button.with_label(action_label) {
-					relief = Gtk.ReliefStyle.NONE,
-				};
+					var action_label = app_info.get_action_name(action);
 
-				var label = action_button.get_child() as Gtk.Label;
-				label.set_xalign(0);
+					// Skip if we couldn't get a label
+					if (action_label == null || action_label.length == 0) {
+						debug(@"Skipping action '$action' - no label");
+						continue;
+					}
 
-				action_button.clicked.connect(() => {
-					app.launch_action(action);
-					hide();
-				});
+					var action_button = new Gtk.Button.with_label(action_label) {
+						relief = Gtk.ReliefStyle.NONE,
+					};
 
-				desktop_actions.add(action_button);
+					var label = action_button.get_child() as Gtk.Label;
+					if (label != null) {
+						label.set_xalign(0);
+					}
+
+					action_button.clicked.connect(() => {
+						app.launch_action(action);
+						hide();
+					});
+
+					desktop_actions.add(action_button);
+				}
 			}
 		}
 

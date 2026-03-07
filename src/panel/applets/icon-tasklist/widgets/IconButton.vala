@@ -641,17 +641,16 @@ public class IconButton : Gtk.ToggleButton {
 			icon.waiting = false;
 		}
 
-		if (window_group != null) {
+		if (app != null && app.icon != null) {
+			icon.set_from_gicon(app.icon, Gtk.IconSize.INVALID);
+		} else if (window_group != null) {
 			var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
 			unowned var pixbuf = window_group.application.get_icon(size, 1);
 			icon.set_from_pixbuf(pixbuf);
-		} else if (app?.icon != null) {
-			icon.set_from_gicon(app?.icon, Gtk.IconSize.INVALID);
 		} else {
 			icon.set_from_icon_name("image-missing", Gtk.IconSize.INVALID);
 		}
 
-		// prevents apps making the panel massive when the icon initially gets added
 		icon.pixel_size = (target_icon_size > 0) ? target_icon_size : DEFAULT_ICON_SIZE;
 	}
 }
