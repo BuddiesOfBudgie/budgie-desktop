@@ -197,16 +197,12 @@ namespace Budgie {
 
 			var last_part = parts[parts.length - 1];
 
-			if (matches_any_variant(last_part, instance, variants)) {
+			if (
+				(matches_any_variant(last_part, instance, variants)) || // Matches variant
+				(class_name != null && last_part.down() == class_name.down()) // Matches class_name
+			) {
 				debug(@"Matched via reverse-DNS: $desktop_id");
-				match_result = create_match_result(desktop_id);
-			}
-
-			if (match_result.matched()) return match_result;
-
-			if (class_name != null && last_part.down() == class_name.down()) {
-				debug(@"Matched via reverse-DNS (class): $desktop_id");
-				match_result = create_match_result(desktop_id);
+				match_result.desktop_id = desktop_id;
 			}
 
 			return match_result;
@@ -237,7 +233,7 @@ namespace Budgie {
 
 			if (matches_any_variant(snap_name, instance, variants)) {
 				debug(@"Matched via snap pattern: $desktop_id");
-				match_result = create_match_result(desktop_id);
+				match_result.desktop_id = desktop_id;
 			}
 
 			return match_result;
@@ -259,7 +255,12 @@ namespace Budgie {
 
 			if (!instance.contains(" ")) return new MatchResult(); // No whitespace, return early since subsequent logic requires it
 
+			// Have a comparison between exec and a string replaced instance of whitespace to dashes
+			// This comparison would effectively check if "proton pass" as proton-pass is the same as the executable
 			var instance_dash = instance.replace(" ", "-");
+
+			// Have a comparison between exec and a string replaced instance of whitespace to a DOT (period)
+			// This comparison would effectively check if a malformed rev-dns or otherwise poorly named executable (let's say "proton mail" as "proton.mail" -- even though in reality that isn't the name) matches the executable
 			var instance_dot = instance.replace(" ", ".");
 
 			if (instance_dash == exec || instance_dot == exec) {

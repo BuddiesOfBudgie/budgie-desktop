@@ -799,15 +799,6 @@ public class IconTasklistApplet : Budgie.Applet {
 			this.buttons.remove(key);
 		}
 	}
-
-	/**
-	 * Ensure that we don't access the resource simultaneously when swapping a button's key.
-	 */
-	private void swap_button(string old_key, string new_key) {
-		lock(this.buttons) {
-			this.buttons.insert(new_key, this.buttons.take(old_key));
-		}
-	}
 }
 
 [ModuleInit]
