@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# Quentin PAGÈS, 2025
+# Quentin PAGÈS, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Quentin PAGÈS, 2025\n"
+"Last-Translator: Quentin PAGÈS, 2026\n"
 "Language-Team: Occitan (post 1500) (https://app.transifex.com/buddiesofbudgie/teams/129844/oc/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1665,13 +1665,15 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Window focus mode"
-msgstr ""
+msgstr "Mòde de fòcus de las fenèstras"
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Choose how windows receive focus: click to focus; sloppy to focus without "
 "raising windows; mouse to focus with raising."
 msgstr ""
+"Causir cossí las fenèstra recebon lo fòcus : clic per activar ; focalizacion"
+" imprecisa sens aténher las fenèstras ; mirga per activar en atenhent."
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
@@ -1691,11 +1693,11 @@ msgstr "Drecha (estandard)"
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Click"
-msgstr ""
+msgstr "Clic"
 
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
-msgstr ""
+msgstr "Imprecís"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -2063,11 +2065,11 @@ msgstr "2.0x"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "Mostrar las icònas dels botons"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "Mostrar las etiquetas dels botons"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -2075,7 +2077,7 @@ msgstr "Mostrar los numèros de setmana"
 
 #: src/raven/widgets/calendar/settings.ui.h:2
 msgid "Show Day Names"
-msgstr "Afichar los noms de jorn"
+msgstr "Mostrar los noms de jorn"
 
 #: src/raven/widgets/sound-input/settings.ui.h:1
 #: src/raven/widgets/sound-output/settings.ui.h:1

@@ -7,6 +7,7 @@
 # Thomas Staudinger, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
 # Jonathan Haas, 2024
+# John Luthgers, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Jonathan Haas, 2024\n"
+"Last-Translator: John Luthgers, 2026\n"
 "Language-Team: German (https://app.transifex.com/buddiesofbudgie/teams/129844/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -142,19 +143,19 @@ msgstr "Ausschalten"
 
 #: src/daemon/osdkeys.vala:307
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Feststelltaste aktiv"
 
 #: src/daemon/osdkeys.vala:314
 msgid "Caps Lock is off"
-msgstr ""
+msgstr "Feststelltaste inaktiv"
 
 #: src/daemon/osdkeys.vala:324
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Num-Taste aktiv"
 
 #: src/daemon/osdkeys.vala:330
 msgid "Num Lock is off"
-msgstr ""
+msgstr "Num-Taste inaktiv"
 
 #: src/dialogs/polkit/polkitdialog.vala:224
 msgid "Authentication failed"
@@ -573,11 +574,11 @@ msgstr "Zu Favoriten hinzufügen"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:97
 msgid "Close all windows"
-msgstr ""
+msgstr "Alle Fenster schließen"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:115
 msgid "Launch new instance"
-msgstr ""
+msgstr "Neue Instanz starten"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:274
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
@@ -590,7 +591,7 @@ msgstr "Minimieren"
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
-msgstr ""
+msgstr "Auf %s verschieben"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:364
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
@@ -604,11 +605,11 @@ msgstr "Maximieren"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:403
 msgid "Close window"
-msgstr ""
+msgstr "Fenster schließen"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:408
 msgid "Show window controls"
-msgstr ""
+msgstr "Fenstersteuerelemente anzeigen"
 
 #: src/panel/applets/lock-keys/LockKeysApplet.vala:68
 msgid "Caps lock is active"
@@ -900,12 +901,12 @@ msgstr "Entfernen"
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:121
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:226
 msgid "Not able to create new workspaces"
-msgstr ""
+msgstr "Es können keine neuen Arbeitsflächen hinzugefügt werden"
 
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:123
 #: src/panel/applets/workspaces/WorkspacesApplet.vala:229
 msgid "Create a new workspace"
-msgstr ""
+msgstr "Neuen Arbeitsfläche erstellen"
 
 #: src/panel/settings/settings_autostart.vala:134
 msgid "Untitled"
@@ -1662,13 +1663,16 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Window focus mode"
-msgstr ""
+msgstr "Fensteraktivierungsmodus"
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Choose how windows receive focus: click to focus; sloppy to focus without "
 "raising windows; mouse to focus with raising."
 msgstr ""
+"Legt fest, wie Fenster aktiviert werden: per Klick; Sloppy aktiviert das "
+"Fenster unter der Maus belässt es im Hintergrund; Maus aktiviert das Fenster"
+" unter der Maus und bringt es nach vorn"
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
@@ -1688,11 +1692,11 @@ msgstr "Rechts (Standard)"
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Click"
-msgstr ""
+msgstr "Klick"
 
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
-msgstr ""
+msgstr "Sloppy"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -2060,11 +2064,11 @@ msgstr "2,0x"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "Symbole anzeigen"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "Beschriftungen anzeigen"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
@@ -2247,7 +2251,7 @@ msgstr "Budgie Desktop"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:1
 msgid "Budgie Desktop (magpie)"
-msgstr ""
+msgstr "Budgie Desktop (magpie)"
 
 #: src/session/budgie-desktop-magpie.desktop.in.in.h:2
 msgid ""

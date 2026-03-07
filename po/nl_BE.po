@@ -8,7 +8,7 @@
 # c7dec8729c467b3d74b61420ef90f0d4_5ff0469, 2024
 # Pintjebier, 2024
 # Vanhoorne Michael, 2025
-# Stephan Paternotte <stephan@paternottes.net>, 2025
+# Stephan Paternotte <stephan@paternottes.net>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 22:56+0200\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2025\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>, 2026\n"
 "Language-Team: Dutch (Belgium) (https://app.transifex.com/buddiesofbudgie/teams/129844/nl_BE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1672,13 +1672,16 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Window focus mode"
-msgstr ""
+msgstr "Vensterfocus-modus"
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Choose how windows receive focus: click to focus; sloppy to focus without "
 "raising windows; mouse to focus with raising."
 msgstr ""
+"Kies hoe vensters focus ontvangen: klik om scherp te stellen; slordig om "
+"scherp te stellen zonder vensters te verhogen; muis om scherp te stellen met"
+" verhogen."
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
@@ -1698,11 +1701,11 @@ msgstr "Rechts (standaard)"
 
 #: src/panel/settings/settings_wm.vala:97
 msgid "Click"
-msgstr ""
+msgstr "Klikken"
 
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
-msgstr ""
+msgstr "Slordig"
 
 #: src/raven/main_view.vala:56
 msgid "Notifications"
@@ -2070,11 +2073,11 @@ msgstr "2.0x"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "Pictogrammen bij knoppen weergeven"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "Labels bij knoppen weergeven"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
