@@ -105,10 +105,6 @@ namespace Budgie {
 			enforce_mutter_settings(); // Call enforce mutter settings so we ensure we transition our Mutter settings over to BudgieWM
 			raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
 
-
-			panel_settings.changed["dark-theme"].connect((key) => apply_dark_theme_pref());
-			apply_dark_theme_pref();
-
 			gnome_session_settings.changed["idle-delay"].connect(this.update_idle_delay);
 			gnome_power_settings.changed["idle-dim"].connect(this.update_idle_dim);
 			gnome_power_settings.changed["sleep-inactive-ac-timeout"].connect(this.update_ac_timeout);
@@ -542,11 +538,6 @@ namespace Budgie {
 			if (!get_caffeine_mode()) { // If Caffeine Mode is off
 				default_idle_dim = gnome_power_settings.get_boolean("idle-dim");
 			}
-		}
-
-		private void apply_dark_theme_pref() {
-			var scheme = panel_settings.get_boolean("dark-theme") ? ColorScheme.PREFER_DARK : ColorScheme.PREFER_LIGHT;
-			gnome_desktop_settings.set_enum("color-scheme", scheme);
 		}
 	}
 }
