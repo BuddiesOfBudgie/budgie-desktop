@@ -37,7 +37,7 @@ namespace Budgie {
 		 * Find the desktop ID that matches a window.
 		 *
 		 * @param window The window to match
-		 * @return MatchResult containing the desktop ID and match method, or null if not found
+		 * @return MatchResult containing the desktop ID, if found. If not found, the desktop ID will be null
 		 */
 		public MatchResult match_window(Xfw.Window window) {
 			var match_result = new MatchResult();
@@ -93,7 +93,7 @@ namespace Budgie {
 		 * Find the desktop ID that matches a window group.
 		 *
 		 * @param group The window group to match
-		 * @return MatchResult or null if no window available or no match
+		 * @return MatchResult with the result of the match
 		 */
 		public MatchResult match_window_group(Budgie.Windowing.WindowGroup group) {
 			var window = group.get_first_window();
