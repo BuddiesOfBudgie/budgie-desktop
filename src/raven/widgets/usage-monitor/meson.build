@@ -26,6 +26,7 @@ raven_plugin_usage_monitor_deps = [
     libravenplugin_vapi,
     dep_gtk3,
     dep_peas,
+    dep_libgtop,
     link_libravenplugin
 ]
 
@@ -33,6 +34,9 @@ shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.UsageMonitor',
     raven_plugin_usage_monitor_sources,
     dependencies: raven_plugin_usage_monitor_deps,
+    vala_args: [
+        '--vapidir', top_vapidir,
+    ],
     install: true,
     install_dir: raven_plugin_usage_monitor_dir,
 )
