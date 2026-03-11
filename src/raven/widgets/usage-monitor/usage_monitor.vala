@@ -132,7 +132,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	}
 
 	private void update_cpu() {
-		GTop.Cpu current_cpu = GTop.Cpu();
+		GTop.Cpu current_cpu;
 		GTop.get_cpu(out current_cpu);
 
 		if (prev_cpu != null) {
@@ -150,7 +150,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	}
 
 	private void update_ram_and_swap() {
-		GTop.Mem mem = GTop.Mem();
+		GTop.Mem mem;
 		GTop.get_mem(out mem);
 
 		if (mem.total > 0) {
@@ -160,7 +160,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 			ram.hide();
 		}
 
-		GTop.Swap swap_info = GTop.Swap();
+		GTop.Swap swap_info;
 		GTop.get_swap(out swap_info);
 
 		if (swap_info.total > 0 && !swap.stay_hidden) {
