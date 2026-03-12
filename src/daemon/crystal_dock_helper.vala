@@ -21,6 +21,7 @@ namespace Budgie {
 		private bool last_dock_running = false;
 		private bool crystal_dock_installed = false;
 		private int current_poll_interval = 5000;  // Start at 5 seconds
+		private Settings? budgie_desktop_view_settings = null;
 		string config_dir = Path.build_filename(Environment.get_user_config_dir(), "crystal-dock", "Budgie");
 
 
@@ -51,6 +52,7 @@ namespace Budgie {
 		private void setup_monitors() {
 			setup_config_file_monitor();
 			setup_process_monitor();
+			setup_desktop_icons_monitor();
 		}
 
 		/**
@@ -65,6 +67,62 @@ namespace Budgie {
 				config_monitor.cancel();
 				config_monitor = null;
 			}
+			budgie_desktop_view_settings = null;
+		}
+
+		/**
+		* Watch the desktop icons visibility GSettings key and restart Crystal Dock
+		* if it changes, to avoid Crystal Dock occasionally freezing on desktop icon toggle.
+		*/
+		private void setup_desktop_icons_monitor() {
+			SettingsSchemaSource schema_source = SettingsSchemaSource.get_default();
+			if (schema_source == null || schema_source.lookup("org.buddiesofbudgie.budgie-desktop-view", true) == null) {
+				debug("budgie-desktop-view schema not found, skipping desktop icons monitor");
+				return;
+			}
+
+			try {
+				budgie_desktop_view_settings = new Settings("org.buddiesofbudgie.budgie-desktop-view");
+				budgie_desktop_view_settings.changed["show"].connect(() => {
+					debug("Desktop icons visibility changed, restarting Crystal Dock");
+					restart();
+				});
+			} catch (Error e) {
+				warning("Failed to watch desktop icons setting: %s", e.message);
+			}
+		}
+
+		/**
+		* Restart Crystal Dock - kills the process, waits briefly, then relaunches.
+		*/
+		private void restart() {
+			if (!crystal_dock_installed || !last_dock_running) {
+				return;
+			}
+
+			try {
+				Process.spawn_command_line_sync("pkill -x crystal-dock", null, null, null);
+			} catch (SpawnError e) {
+				warning("Failed to stop Crystal Dock: %s", e.message);
+				return;
+			}
+
+			Timeout.add(500, () => {
+				try {
+					Process.spawn_async(
+						null,
+						{ "crystal-dock" },
+						null,
+						SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
+						null,
+						null
+					);
+					debug("Crystal Dock relaunched");
+				} catch (SpawnError e) {
+					warning("Failed to relaunch Crystal Dock: %s", e.message);
+				}
+				return false;
+			});
 		}
 
 		/**
