@@ -25,6 +25,7 @@ jobs:
             'pkgconfig(gtk-layer-shell-0)' \
             'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
+            'pkgconfig(libgtop-2.0)' \
             'pkgconfig(libnotify)' \
             'pkgconfig(libpeas-2)' \
             'pkgconfig(libpulse)' \
