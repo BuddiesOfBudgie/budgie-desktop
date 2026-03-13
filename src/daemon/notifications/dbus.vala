@@ -118,19 +118,16 @@
 
 		private uint32 notif_id = 0;
 
-		internal Dispatcher dispatcher { get; private set; default = null; }
+		private Dispatcher dispatcher { get; private set; default = null; }
 		private RavenProxy raven { get; private set; default = null; }
-		internal HashTable<uint32, Popup> popups;
+		private HashTable<uint32, Popup> popups;
 		private Settings panel_settings { private get; private set; default = null; }
 
-		internal uint32 latest_popup_id { get; internal set; default = 0; }
+		private uint32 latest_popup_id { private get; private set; default = 0; }
 		private int32 latest_popup_y;
 		private int paused_notifications { private get; private set; default = 0; }
 
 		private Notify.Notification unpaused_noti = null;
-
-		/** Handlers for per-popup signal connections */
-		internal HashTable<uint32, PopupSignalHandler> popup_handlers;
 
 		/** Fields for capturing size_allocate context */
 		private Popup pending_popup;
@@ -145,7 +142,6 @@
 			Bus.get_proxy.begin<RavenProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
-			this.popup_handlers = new HashTable<uint32, PopupSignalHandler>(direct_hash, direct_equal);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
@@ -325,10 +321,18 @@
 				this.latest_popup_id = id;
 				this.popups[id].begin_decay(notification.expire_timeout);
 
-				var handler = new PopupSignalHandler(this, id, app_name);
-				this.popup_handlers[id] = handler;
-				this.popups[id].ActionInvoked.connect(handler.on_action_invoked);
-				this.popups[id].Closed.connect(handler.on_closed);
+				this.popups[id].ActionInvoked.connect((action_key) => {
+					this.ActionInvoked(id, action_key);
+				});
+
+				this.popups[id].Closed.connect((reason) => {
+					if (this.popups.length == 1 && this.latest_popup_id == id) {
+						this.latest_popup_id = 0;
+					}
+					this.popups.remove(id);
+					this.dispatcher.NotificationClosed(id, app_name, reason);
+					this.NotificationClosed(id, reason);
+				});
 			}
 
 			// Play a sound for the notification if desired
@@ -656,35 +660,6 @@
 		}
 	}
 
-	/**
-	 * Helper class to hold per-popup state for signal handlers,
-	 * replacing lambdas that captured local id and app_name variables.
-	 */
-	private class PopupSignalHandler {
-		private unowned Server server;
-		private uint32 id;
-		private string app_name;
-
-		public PopupSignalHandler(Server server, uint32 id, string app_name) {
-			this.server = server;
-			this.id = id;
-			this.app_name = app_name;
-		}
-
-		public void on_action_invoked(string action_key) {
-			this.server.ActionInvoked(this.id, action_key);
-		}
-
-		public void on_closed(NotificationCloseReason reason) {
-			if (this.server.popups.length == 1 && this.server.latest_popup_id == this.id) {
-				this.server.latest_popup_id = 0;
-			}
-			this.server.popups.remove(this.id);
-			this.server.popup_handlers.remove(this.id);
-			this.server.dispatcher.NotificationClosed(this.id, this.app_name, reason);
-			this.server.NotificationClosed(this.id, reason);
-		}
-	}
 
 	class SoundPlayer {
 		private Notification notification;
