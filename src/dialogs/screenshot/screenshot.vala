@@ -161,7 +161,6 @@ namespace Budgie {
 
 	class MakeScreenshot {
 		int delay;
-		int scale;
 		int[]? area;
 		string screenshot_mode;
 		bool include_cursor;
@@ -199,7 +198,6 @@ namespace Budgie {
 
 			windowstate = new CurrentState();
 			this.area = area;
-			scale = get_scaling();
 			delay = windowstate.screenshot_settings.get_int("delay");
 			emit_capture_sound = windowstate.screenshot_settings.get_boolean("screenshot-capture-sound");
 			screenshot_mode = windowstate.screenshot_settings.get_string("screenshot-mode");
@@ -278,7 +276,7 @@ namespace Budgie {
 
 			try {
 				yield client.ScreenshotArea(
-					topleftx * scale, toplefty * scale, width * scale, height * scale,
+					topleftx, toplefty, width, height,
 					include_cursor, true, windowstate.tempfile_path, out success, out filename_used
 				);
 			} catch (Error e) {
@@ -843,12 +841,11 @@ namespace Budgie {
 
 		private void makeaftershotwindow(Pixbuf pxb) {
 			this.set_keep_above(true);
-			int scale = get_scaling();
 			Clipboard clp = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
 			windowstate.statechanged(WindowState.AFTERSHOT);
 
 			// create resized image for preview
-			var pixbuf = resize_pixbuf(pxb, scale);
+			var pixbuf = resize_pixbuf(pxb);
 			img.set_from_pixbuf(pixbuf);
 			filenameentry.set_text(get_scrshotname());
 
@@ -1046,23 +1043,23 @@ namespace Budgie {
 			b.show_all();
 		}
 
-		private Gdk.Pixbuf resize_pixbuf(Pixbuf pxb, int scale) {
+		private Gdk.Pixbuf resize_pixbuf(Pixbuf pxb) {
 			/*
 			* before showing the image, resize it to fit the max available
 			* available space in the decision window (345 x 345)
 			*/
 			int maxw_h = 345;
 			float resize = 1;
-			int scaled_width = (int) (pxb.get_width() / scale);
-			int scaled_height = (int) (pxb.get_height() / scale);
+			int width = pxb.get_width();
+			int height = pxb.get_height();
 
-			if (scaled_width > maxw_h || scaled_height > maxw_h) {
-				(scaled_width >= scaled_height) ? resize = (float) maxw_h / scaled_width : resize;
-				(scaled_height >= scaled_width) ? resize = (float) maxw_h / scaled_height : resize;
+			if (width > maxw_h || height > maxw_h) {
+				(width >= height) ? resize = (float) maxw_h / width : resize;
+				(height >= width) ? resize = (float) maxw_h / height : resize;
 			}
 
-			int dest_width = (int) (scaled_width * resize);
-			int dest_height = (int) (scaled_height * resize);
+			int dest_width = (int)(width * resize);
+			int dest_height = (int)(height * resize);
 			Gdk.Pixbuf resized = pxb.scale_simple(dest_width, dest_height, InterpType.BILINEAR);
 
 			return resized;
@@ -1314,18 +1311,6 @@ namespace Budgie {
 				custompath_row = null;
 			}
 		}
-	}
-
-	private int get_scaling() {
-		// not very sophisticated, but for now, we'll assume one scale
-		var wayland_client = new WaylandClient();
-
-		if (!wayland_client.is_initialised()) {
-			warning("WaylandClient not initialized, using default scale of 1");
-			return 1;
-		}
-
-		return wayland_client.scale;
 	}
 
 	private int find_stringindex(string str, string[] arr) {
