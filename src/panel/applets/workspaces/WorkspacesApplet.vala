@@ -55,6 +55,13 @@ namespace Workspaces {
 		private Settings settings;
 		private AddButtonVisibility button_visibility = AddButtonVisibility.ALWAYS;
 		private float item_size_multiplier = 1.0f;
+		private Gtk.Button add_button;
+
+		/* Instance fields for captured local variables */
+		private Gtk.Widget pending_destroy_widget;
+		private uint pending_move_index;
+		private Xfw.Window pending_move_window;
+		private int pending_remove_index;
 
 		public string uuid { public set ; public get ; }
 
@@ -111,7 +118,7 @@ namespace Workspaces {
 			add_button_revealer.set_transition_type(hide_transition);
 			add_button_revealer.set_reveal_child(false);
 
-			Gtk.Button add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
+			add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.MENU);
 			add_button.get_style_context().add_class("workspace-add-button");
 			add_button.valign = Gtk.Align.CENTER;
 			add_button.halign = Gtk.Align.CENTER;
@@ -139,97 +146,109 @@ namespace Workspaces {
 			add_button.drag_drop.connect(on_add_button_drag_drop);
 			add_button.drag_data_received.connect(on_add_button_drag_data_received);
 
-			add_button.button_release_event.connect((event) => {
-				try {
-					add_new_workspace();
-					uint new_index = workspace_group.get_workspace_count() - 1;
+			add_button.button_release_event.connect(on_add_button_release);
 
-					 if (new_index != -1) {
-					 	set_current_workspace();
-					 }
-				} catch (Error e) {
-					warning("Failed to append new workspace: %s", e.message);
-				}
-
-				return false;
-			});
-
-			Idle.add(() => {
-				Timeout.add(500, () => {
-					startup = false;
-					update_workspaces.begin();
-					return false;
-				});
-				return false;
-			});
+			Idle.add(on_startup_idle);
 
 			populate_workspaces();
 			this.show_all();
 
-			ebox.enter_notify_event.connect(() => {
-				if (button_visibility != AddButtonVisibility.HOVER) {
-					return Gdk.EVENT_PROPAGATE;
-				}
+			ebox.enter_notify_event.connect(on_ebox_enter);
+			ebox.leave_notify_event.connect(on_ebox_leave);
+			ebox.scroll_event.connect(on_ebox_scroll);
 
-				if (below_max_workspaces()) {
-					add_button_revealer.set_transition_type(show_transition);
-					add_button_revealer.set_reveal_child(true);
-				}
+			workspace_group.capabilities_changed.connect(on_capabilities_changed);
+		}
 
+		private bool on_add_button_release(Gdk.EventButton event) {
+			try {
+				add_new_workspace();
+				uint new_index = workspace_group.get_workspace_count() - 1;
+
+				 if (new_index != -1) {
+				 	set_current_workspace();
+				 }
+			} catch (Error e) {
+				warning("Failed to append new workspace: %s", e.message);
+			}
+
+			return false;
+		}
+
+		private bool on_startup_idle() {
+			Timeout.add(500, on_startup_timeout);
+			return false;
+		}
+
+		private bool on_startup_timeout() {
+			startup = false;
+			update_workspaces.begin();
+			return false;
+		}
+
+		private bool on_ebox_enter(Gdk.EventCrossing event) {
+			if (button_visibility != AddButtonVisibility.HOVER) {
 				return Gdk.EVENT_PROPAGATE;
-			});
+			}
 
-			ebox.leave_notify_event.connect(() => {
-				if (dragging || button_visibility != AddButtonVisibility.HOVER) {
-					return Gdk.EVENT_PROPAGATE;
-				}
-				add_button_revealer.set_transition_type(hide_transition);
-				add_button_revealer.set_reveal_child(false);
+			if (below_max_workspaces()) {
+				add_button_revealer.set_transition_type(show_transition);
+				add_button_revealer.set_reveal_child(true);
+			}
+
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_ebox_leave(Gdk.EventCrossing event) {
+			if (dragging || button_visibility != AddButtonVisibility.HOVER) {
 				return Gdk.EVENT_PROPAGATE;
-			});
+			}
+			add_button_revealer.set_transition_type(hide_transition);
+			add_button_revealer.set_reveal_child(false);
+			return Gdk.EVENT_PROPAGATE;
+		}
 
-			ebox.scroll_event.connect((e) => {
-				if (e.direction >= 4) {
-					return Gdk.EVENT_STOP;
-				}
-
-				bool down = e.direction == Gdk.ScrollDirection.DOWN;
-				bool up = e.direction == Gdk.ScrollDirection.UP;
-
-				if (!down && !up) return Gdk.EVENT_STOP;
-
-				if (get_monotonic_time() - last_scroll_time < 300000) {
-					return Gdk.EVENT_STOP;
-				}
-
-				unowned Xfw.Workspace current = workspace_group.get_active_workspace();
-				unowned Xfw.Workspace? next = current.get_neighbor(
-					(down) ? Xfw.Direction.RIGHT : Xfw.Direction.DOWN
-				);
-
-				if (next != null) {
-					try {
-						next.activate();
-					} catch (Error e) {
-						warning("Failed to switch to workspace: %s", e.message);
-					}
-					last_scroll_time = get_monotonic_time();
-				}
-
+		private bool on_ebox_scroll(Gdk.EventScroll e) {
+			if (e.direction >= 4) {
 				return Gdk.EVENT_STOP;
-			});
+			}
 
-			workspace_group.capabilities_changed.connect((changed_mask, new_capabilities) => {
-				if (Xfw.WorkspaceGroupCapabilities.CREATE_WORKSPACE in changed_mask) {
-					if (!(Xfw.WorkspaceGroupCapabilities.CREATE_WORKSPACE in new_capabilities)) {
-						add_button.sensitive = false;
-						add_button.set_tooltip_text(_("Not able to create new workspaces"));
-					} else {
-						add_button.sensitive = true;
-						add_button.set_tooltip_text(_("Create a new workspace"));
-					}
+			bool down = e.direction == Gdk.ScrollDirection.DOWN;
+			bool up = e.direction == Gdk.ScrollDirection.UP;
+
+			if (!down && !up) return Gdk.EVENT_STOP;
+
+			if (get_monotonic_time() - last_scroll_time < 300000) {
+				return Gdk.EVENT_STOP;
+			}
+
+			unowned Xfw.Workspace current = workspace_group.get_active_workspace();
+			unowned Xfw.Workspace? next = current.get_neighbor(
+				(down) ? Xfw.Direction.RIGHT : Xfw.Direction.DOWN
+			);
+
+			if (next != null) {
+				try {
+					next.activate();
+				} catch (Error e) {
+					warning("Failed to switch to workspace: %s", e.message);
 				}
-			});
+				last_scroll_time = get_monotonic_time();
+			}
+
+			return Gdk.EVENT_STOP;
+		}
+
+		private void on_capabilities_changed(Xfw.WorkspaceGroupCapabilities changed_mask, Xfw.WorkspaceGroupCapabilities new_capabilities) {
+			if (Xfw.WorkspaceGroupCapabilities.CREATE_WORKSPACE in changed_mask) {
+				if (!(Xfw.WorkspaceGroupCapabilities.CREATE_WORKSPACE in new_capabilities)) {
+					add_button.sensitive = false;
+					add_button.set_tooltip_text(_("Not able to create new workspaces"));
+				} else {
+					add_button.sensitive = true;
+					add_button.set_tooltip_text(_("Create a new workspace"));
+				}
+			}
 		}
 
 		private void on_settings_change(string key) {
@@ -245,11 +264,13 @@ namespace Workspaces {
 					item.set_size_multiplier(item_size_multiplier);
 					item.queue_resize();
 				}
-				Timeout.add(100, () => {
-					update_workspaces.begin();
-					return false;
-				});
+				Timeout.add(100, on_settings_update_timeout);
 			}
+		}
+
+		private bool on_settings_update_timeout() {
+			update_workspaces.begin();
+			return false;
 		}
 
 		private void populate_workspaces() {
@@ -285,12 +306,14 @@ namespace Workspaces {
 				}
 			}
 
-			window_connections.@foreach((key, val) => {
+			var keys = window_connections.get_keys();
+			foreach (unowned Xfw.Window key in keys) {
+				ulong val = window_connections.get(key);
 				if (SignalHandler.is_connected(key, val)) {
 					SignalHandler.disconnect(key, val);
 				}
 				window_connections.remove(key);
-			});
+			}
 		}
 
 		private void workspace_added(Xfw.Workspace space) {
@@ -322,15 +345,18 @@ namespace Workspaces {
 				if (item.get_workspace() == space) {
 					revealer.set_transition_type(hide_transition);
 					revealer.set_reveal_child(false);
-					Timeout.add(200, () => {
-						widget.destroy();
-						return false;
-					});
+					pending_destroy_widget = widget;
+					Timeout.add(200, on_workspace_removed_timeout);
 					break;
 				}
 			}
 
 			add_button_revealer.set_reveal_child(true);
+		}
+
+		private bool on_workspace_removed_timeout() {
+			pending_destroy_widget.destroy();
+			return false;
 		}
 
 		private void window_opened(Xfw.Window window) {
@@ -412,18 +438,22 @@ namespace Workspaces {
 
 			if (new_index != -1) { // Successfully added workspace
 				dynamically_created_workspaces.append((int) new_index);
-				Timeout.add(50, () => {
-					Xfw.Workspace? workspace = get_workspace_by_index(new_index);
-					try {
-						if (workspace != null) window.move_to_workspace(workspace);
-					} catch (Error e) {
-						warning("Failed to move window to workspace: %s", e.message);
-					}
-					return false;
-				});
+				pending_move_index = new_index;
+				pending_move_window = window;
+				Timeout.add(50, on_move_window_to_new_workspace_timeout);
 			}
 
 			Gtk.drag_finish(context, true, true, time);
+		}
+
+		private bool on_move_window_to_new_workspace_timeout() {
+			Xfw.Workspace? workspace = get_workspace_by_index(pending_move_index);
+			try {
+				if (workspace != null) pending_move_window.move_to_workspace(workspace);
+			} catch (Error e) {
+				warning("Failed to move window to workspace: %s", e.message);
+			}
+			return false;
 		}
 
 		public override void panel_size_changed(int panel_size, int icon_size, int small_icon_size) {
@@ -460,11 +490,13 @@ namespace Workspaces {
 			}
 
 			if (!startup) {
-				Timeout.add(500, () => {
-					update_workspaces.begin();
-					return false;
-				});
+				Timeout.add(500, on_position_changed_timeout);
 			}
+		}
+
+		private bool on_position_changed_timeout() {
+			update_workspaces.begin();
+			return false;
 		}
 
 		private void add_new_workspace() {
@@ -515,11 +547,11 @@ namespace Workspaces {
 				unowned List<Xfw.Window>? windows = xfce_screen.get_windows();
 				List<Xfw.Window> window_list = new List<Xfw.Window>();
 
-				windows.foreach((window) => {
+				foreach (unowned Xfw.Window window in windows) {
 					if (window.get_workspace() == item.get_workspace() && !window.is_skip_tasklist() && !window.is_skip_pager() && window.get_window_type() == Xfw.WindowType.NORMAL) {
 						window_list.append(window);
 					}
-				});
+				}
 
 				int index = (int)item.get_workspace().get_number();
 				unowned List<int>? dyn = dynamically_created_workspaces.find(index);
@@ -529,11 +561,8 @@ namespace Workspaces {
 					dyn = dynamically_created_workspaces.find(index+1);
 
 					if (dyn == null) {
-						Timeout.add(200, () => {
-							remove_workspace(index, Gdk.CURRENT_TIME);
-
-							return false;
-						});
+						pending_remove_index = index;
+						Timeout.add(200, on_dynamic_workspace_remove_timeout);
 					}
 				}
 
@@ -541,6 +570,11 @@ namespace Workspaces {
 			}
 
 			updating = false;
+		}
+
+		private bool on_dynamic_workspace_remove_timeout() {
+			remove_workspace(pending_remove_index, Gdk.CURRENT_TIME);
+			return false;
 		}
 
 		public override void update_popovers(Budgie.PopoverManager? manager) {

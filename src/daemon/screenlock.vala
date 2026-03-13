@@ -237,8 +237,8 @@ namespace Budgie {
 			/* Hook up screenlock dbus */
 			Bus.own_name(BusType.SESSION, DBUS_SCREENLOCK, BusNameOwnerFlags.REPLACE,
 				on_bus_acquired,
-				() => {},
-				() => {} );
+				null,
+				null);
 		}
 
 		public async void dim() throws GLib.DBusError, GLib.IOError {
@@ -276,11 +276,13 @@ namespace Budgie {
 			// Restore saved brightness
 			brightness_manager.set_brightness(saved_brightness);
 
-			Timeout.add(200, ()=> {
-				is_dimming = false;
-				debug("Undim complete");
-				return false;
-			});
+			Timeout.add(200, on_undim_complete);
+		}
+
+		private bool on_undim_complete() {
+			is_dimming = false;
+			debug("Undim complete");
+			return false;
 		}
 
 		void on_bus_acquired(DBusConnection conn) {
@@ -319,6 +321,51 @@ namespace Budgie {
 			battery_mode = client.get_on_battery();
 		}
 
+		private void on_brightness_ready() {
+			debug("BrightnessManager is ready, recalculating idle settings");
+			if (brightness_manager.is_available()) {
+				debug("Brightness control available");
+				// Recalculate idle settings now that brightness is available
+				if (all_apps && locker != "") {
+					calculate_idle();
+				}
+			} else {
+				warning("BrightnessManager not available after initialization");
+			}
+		}
+
+		private void on_power_settings_changed(string key) {
+			string[] search = { "sleep-inactive-ac-timeout",
+								"sleep-inactive-ac-type",
+								"sleep-inactive-battery-timeout",
+								"sleep-inactive-battery-type",
+								"idle-dim"};
+
+			if (key in search) {
+				calculate_idle();
+			}
+		}
+
+		private void on_session_settings_changed(string key) {
+			if (key == "idle-delay") {
+				calculate_idle();
+			}
+		}
+
+		private void on_screensaver_settings_changed(string key) {
+			string[] search = {"lock-enabled", "lock-delay", "picture-uri"};
+
+			if (key in search) {
+				calculate_idle();
+			}
+		}
+
+		private void on_lockdown_settings_changed(string key) {
+			if (key == "disable-lock-screen") {
+				calculate_idle();
+			}
+		}
+
 		private Screenlock() {
 			string check_apps[] = {"swayidle", "killall", "wlopm", "dbus-send"};
 
@@ -334,18 +381,7 @@ namespace Budgie {
 			brightness_manager = new BrightnessManager();
 
 			// Connect to ready signal to recalculate idle when brightness becomes available
-			brightness_manager.ready.connect(() => {
-				debug("BrightnessManager is ready, recalculating idle settings");
-				if (brightness_manager.is_available()) {
-					debug("Brightness control available");
-					// Recalculate idle settings now that brightness is available
-					if (all_apps && locker != "") {
-						calculate_idle();
-					}
-				} else {
-					warning("BrightnessManager not available after initialization");
-				}
-			});
+			brightness_manager.ready.connect(on_brightness_ready);
 
 			string supported_lockers[] = {"gtklock", "swaylock"};
 
@@ -377,39 +413,15 @@ namespace Budgie {
 			battery_mode = client.get_on_battery();
 
 			this.power = new Settings("org.gnome.settings-daemon.plugins.power");
-			this.power.changed.connect((key) => {
-				string[] search = { "sleep-inactive-ac-timeout",
-									"sleep-inactive-ac-type",
-									"sleep-inactive-battery-timeout",
-									"sleep-inactive-battery-type",
-									"idle-dim"};
-
-				if (key in search) {
-					calculate_idle();
-				}
-			});
+			this.power.changed.connect(on_power_settings_changed);
 
 			this.session = new Settings("org.gnome.desktop.session");
-			this.session.changed.connect((key) => {
-				if (key == "idle-delay") {
-					calculate_idle();
-				}
-			});
+			this.session.changed.connect(on_session_settings_changed);
 
 			this.screensaver = new Settings("org.gnome.desktop.screensaver");
-			this.screensaver.changed.connect((key) => {
-				string[] search = {"lock-enabled", "lock-delay", "picture-uri"};
-
-				if (key in search) {
-					calculate_idle();
-				}
-			});
+			this.screensaver.changed.connect(on_screensaver_settings_changed);
 			this.lockdown = new Settings("org.gnome.desktop.lockdown");
-			this.lockdown.changed.connect((key) => {
-				if (key == "disable-lock-screen") {
-					calculate_idle();
-				}
-			});
+			this.lockdown.changed.connect(on_lockdown_settings_changed);
 
 			debug("Doing initial calculate_idle (brightness may not be ready yet)");
 			calculate_idle();

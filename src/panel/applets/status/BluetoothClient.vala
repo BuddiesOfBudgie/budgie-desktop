@@ -111,25 +111,35 @@ class BluetoothClient : GLib.Object {
 			);
 
 			// Add all of the current interfaces
-			object_manager.get_objects().foreach((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_added(object, iface));
-			});
+			foreach (var object in object_manager.get_objects()) {
+				foreach (var iface in object.get_interfaces()) {
+					on_interface_added(object, iface);
+				}
+			}
 
 			// Connect the signals
 			object_manager.interface_added.connect(on_interface_added);
 			object_manager.interface_removed.connect(on_interface_removed);
 
-			object_manager.object_added.connect((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_added(object, iface));
-			});
-			object_manager.object_removed.connect((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_removed(object, iface));
-			});
+			object_manager.object_added.connect(on_object_added);
+			object_manager.object_removed.connect(on_object_removed);
 		} catch (Error e) {
 			critical("Error getting DBus Object Manager: %s", e.message);
 		}
 
 		retrieve_finished = true;
+	}
+
+	private void on_object_added(DBusObject object) {
+		foreach (var iface in object.get_interfaces()) {
+			on_interface_added(object, iface);
+		}
+	}
+
+	private void on_object_removed(DBusObject object) {
+		foreach (var iface in object.get_interfaces()) {
+			on_interface_removed(object, iface);
+		}
 	}
 
 	private void create_rfkill_proxy() {
@@ -142,14 +152,16 @@ class BluetoothClient : GLib.Object {
 				cancellable
 			);
 
-			((DBusProxy) rfkill).g_properties_changed.connect((changed, invalid) => {
-				var variant = changed.lookup_value("BluetoothAirplaneMode", new VariantType("b"));
-				if (variant == null) return;
-				airplane_mode_changed();
-			});
+			((DBusProxy) rfkill).g_properties_changed.connect(on_rfkill_properties_changed);
 		} catch (Error e) {
 			critical("Error getting RFKill proxy: %s", e.message);
 		}
+	}
+
+	private void on_rfkill_properties_changed(Variant changed, string[] invalid) {
+		var variant = changed.lookup_value("BluetoothAirplaneMode", new VariantType("b"));
+		if (variant == null) return;
+		airplane_mode_changed();
 	}
 
 	/**
@@ -269,11 +281,11 @@ class BluetoothClient : GLib.Object {
 	private List<Adapter1> get_adapters() {
 		var adapters = new List<Adapter1>();
 
-		object_manager.get_objects().foreach((object) => {
+		foreach (var object in object_manager.get_objects()) {
 			var iface = object.get_interface(BLUEZ_ADAPTER_INTERFACE);
-			if (iface == null) return;
+			if (iface == null) continue;
 			adapters.append(iface as Adapter1);
-		});
+		}
 
 		return (owned) adapters;
 	}

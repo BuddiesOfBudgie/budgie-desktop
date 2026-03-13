@@ -112,15 +112,17 @@ public class ScanDialog : Gtk.Dialog {
 		get_content_area().add(devices_grid);
 
 		add_button(_("Close"), Gtk.ResponseType.CLOSE);
-		response.connect((response_id) => {
-			manager.stop_discovery.begin();
-			destroy();
-		});
+		response.connect(on_response);
 
 		// Connect manager signals
 		manager.device_added.connect(add_device);
 		manager.device_removed.connect(device_removed);
 		manager.status_discovering.connect(update_status);
+	}
+
+	private void on_response(int response_id) {
+		manager.stop_discovery.begin();
+		destroy();
 	}
 
 	public override void show() {
@@ -166,24 +168,28 @@ public class ScanDialog : Gtk.Dialog {
 			devices_box.row_activated(row);
 		}
 
-		row.send_clicked.connect((device) => {
-			manager.stop_discovery.begin();
-			send_file(device);
-		});
+		row.send_clicked.connect(on_row_send_clicked);
 
-		((DBusProxy) row.device).g_properties_changed.connect((changed, invalid) => {
-			var paired = changed.lookup_value("Paired", new VariantType("b"));
-			if (paired != null) {
-				invalidate_filters();
-			}
-
-			var connected = changed.lookup_value("Connected", new VariantType("b"));
-			if (connected != null) {
-				invalidate_filters();
-			}
-		});
+		((DBusProxy) row.device).g_properties_changed.connect(on_device_properties_changed);
 
 		invalidate_filters();
+	}
+
+	private void on_row_send_clicked(Bluetooth.Device device) {
+		manager.stop_discovery.begin();
+		send_file(device);
+	}
+
+	private void on_device_properties_changed(Variant changed, string[] invalid) {
+		var paired = changed.lookup_value("Paired", new VariantType("b"));
+		if (paired != null) {
+			invalidate_filters();
+		}
+
+		var connected = changed.lookup_value("Connected", new VariantType("b"));
+		if (connected != null) {
+			invalidate_filters();
+		}
 	}
 
 	private void device_removed(Bluetooth.Device device) {

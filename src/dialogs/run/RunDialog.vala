@@ -47,6 +47,9 @@ namespace Budgie {
 		/* Active dbus names */
 		HashTable<string,bool> active_names = null;
 
+		/* Captured from construct for size_allocate handler */
+		private Gdk.Rectangle allocate_rect;
+
 		construct {
 			set_keep_above(true);
 			set_position(Gtk.WindowPosition.CENTER);
@@ -203,41 +206,17 @@ namespace Budgie {
 
 			// we don't know the run dialog height until its displayed
 			// so wait and then set the vertical position
-			this.size_allocate.connect((allocation) => {
-				int real_h = allocation.height;
-				if (real_h <= 0) return;
-
-				int y_pos = rect.y + (rect.height - real_h) / 2;
-				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y_pos - rect.y);
-			});
+			this.allocate_rect = rect;
+			this.size_allocate.connect(on_size_allocate);
 
 			/* Connect events */
-			focus_out_event.connect(() => {
-				if (!this.focus_quit) {
-					return Gdk.EVENT_STOP;
-				}
-				on_focus_out();
-				return Gdk.EVENT_STOP;
-			});
+			focus_out_event.connect(on_focus_out_event);
 
-			focus_in_event.connect(() => {
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			focus_in_event.connect(on_focus_in_event);
 
-			enter_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				pointer_entered = true;
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			enter_notify_event.connect(on_enter_notify);
 
-			leave_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
-				on_pointer_left();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			leave_notify_event.connect(on_leave_notify);
 
 			this.key_release_event.connect(on_key_release);
 
@@ -245,6 +224,53 @@ namespace Budgie {
 			this.show_all();
 
 			setup_dbus.begin();
+		}
+
+		private void on_size_allocate(Gtk.Allocation allocation) {
+			int real_h = allocation.height;
+			if (real_h <= 0) return;
+
+			int y_pos = allocate_rect.y + (allocate_rect.height - real_h) / 2;
+			GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y_pos - allocate_rect.y);
+		}
+
+		private bool on_focus_out_event(Gdk.EventFocus event) {
+			if (!this.focus_quit) {
+				return Gdk.EVENT_STOP;
+			}
+			on_focus_out();
+			return Gdk.EVENT_STOP;
+		}
+
+		private bool on_focus_in_event(Gdk.EventFocus event) {
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_enter_notify(Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			pointer_entered = true;
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_leave_notify(Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+			on_pointer_left();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_focus_quit_timeout() {
+			focus_quit_timeout = 0;
+			debug("quitting due to pointer leaving dialog");
+			this.application.quit();
+			return Source.REMOVE;
+		}
+
+		private bool on_escape_quit_idle() {
+			this.application.quit();
+			return false;
 		}
 
 		public void prepare_for_show() {
@@ -279,12 +305,7 @@ namespace Budgie {
 
 		private void schedule_focus_quit() {
 			cancel_focus_quit();
-			focus_quit_timeout = Timeout.add(400, () => {
-				focus_quit_timeout = 0;
-				debug("quitting due to pointer leaving dialog");
-				this.application.quit();
-				return Source.REMOVE;
-			});
+			focus_quit_timeout = Timeout.add(400, on_focus_quit_timeout);
 		}
 
 		private void cancel_focus_quit() {
@@ -494,10 +515,7 @@ namespace Budgie {
 		*/
 		bool on_key_release(Gdk.EventKey btn) {
 			if (btn.keyval == Gdk.Key.Escape) {
-				Idle.add(() => {
-					this.application.quit();
-					return false;
-				});
+				Idle.add(on_escape_quit_idle);
 				return Gdk.EVENT_STOP;
 			}
 			return Gdk.EVENT_PROPAGATE;

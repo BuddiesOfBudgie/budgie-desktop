@@ -87,9 +87,9 @@ public class SendtoApplication : Gtk.Application {
 			}
 
 			var picked_files = picker.get_files();
-			picked_files.foreach((file) => {
+			foreach (var file in picked_files) {
 				files += file;
-			});
+			}
 
 			picker.destroy();
 		}
@@ -105,24 +105,17 @@ public class SendtoApplication : Gtk.Application {
 				scan_dialog = new ScanDialog(this, manager);
 
 				// Wait for asyncronous initialization before showing the dialog
-				Idle.add(() => {
-					scan_dialog.show_all();
-					return Source.REMOVE;
-				});
+				Idle.add(on_show_scan_dialog);
 			} else {
 				// Dialog already exists, present it
 				scan_dialog.present();
 			}
 
 			// Clear our pointer when the scan dialog is destroyed
-			scan_dialog.destroy.connect(() => {
-				scan_dialog = null;
-			});
+			scan_dialog.destroy.connect(on_scan_dialog_destroyed);
 
 			// Send the files when a device has been selected
-			scan_dialog.send_file.connect((device) => {
-				device_addr = device.address;
-			});
+			scan_dialog.send_file.connect(on_scan_dialog_send_file);
 		}
 
 		var device = manager.get_device(device_addr);
@@ -133,9 +126,7 @@ public class SendtoApplication : Gtk.Application {
 			file_sender.add_files(files, device);
 			file_senders.append(file_sender);
 			file_sender.show_all();
-			file_sender.destroy.connect(() => {
-				file_senders.remove_link(file_senders.find(file_sender));
-			});
+			file_sender.destroy.connect(on_file_sender_destroyed);
 		}
 
 		// Cleanup
@@ -143,6 +134,23 @@ public class SendtoApplication : Gtk.Application {
 		send = false;
 
 		return 0;
+	}
+
+	private bool on_show_scan_dialog() {
+		scan_dialog.show_all();
+		return Source.REMOVE;
+	}
+
+	private void on_scan_dialog_destroyed() {
+		scan_dialog = null;
+	}
+
+	private void on_scan_dialog_send_file(Bluetooth.Device device) {
+		device_addr = device.address;
+	}
+
+	private void on_file_sender_destroyed() {
+		file_senders.remove_link(file_senders.find(file_sender));
 	}
 
 	protected override void activate() {
@@ -160,90 +168,92 @@ public class SendtoApplication : Gtk.Application {
 		file_senders = new List<FileSender>();
 
 		manager = new Bluetooth.ObjectManager();
-		manager.notify["has-object"].connect(() => {
-			var build_path = Path.build_filename(Environment.get_home_dir(), ".local", "share", "contractor");
-			var file = File.new_for_path(
-				Path.build_filename(
-					build_path,
-					Environment.get_application_name() + ".contract"
-				)
-			);
-			var file_exists = file.query_exists();
+		manager.notify["has-object"].connect(on_has_object_changed);
+	}
 
-			// Create the parent directory for the contract file if it doesn't exist
-			if (!File.new_for_path(build_path).query_exists()) {
-				DirUtils.create(build_path, 0700);
+	private void on_has_object_changed() {
+		var build_path = Path.build_filename(Environment.get_home_dir(), ".local", "share", "contractor");
+		var file = File.new_for_path(
+			Path.build_filename(
+				build_path,
+				Environment.get_application_name() + ".contract"
+			)
+		);
+		var file_exists = file.query_exists();
+
+		// Create the parent directory for the contract file if it doesn't exist
+		if (!File.new_for_path(build_path).query_exists()) {
+			DirUtils.create(build_path, 0700);
+		}
+
+		// If we have Bluetooth devices, create our Obex Agent and contract file
+		if (manager.has_object) {
+			// Create our Obex Agent if we haven't been activated yet
+			if (!active_once) {
+				agent = new Bluetooth.Obex.Agent();
+				agent.transfer_view.connect(dialog_active);
+				agent.response_accepted.connect(response_accepted);
+				agent.response_canceled.connect(response_canceled);
+				agent.response_notify.connect(response_notify);
+				active_once = true;
 			}
 
-			// If we have Bluetooth devices, create our Obex Agent and contract file
-			if (manager.has_object) {
-				// Create our Obex Agent if we haven't been activated yet
-				if (!active_once) {
-					agent = new Bluetooth.Obex.Agent();
-					agent.transfer_view.connect(dialog_active);
-					agent.response_accepted.connect(response_accepted);
-					agent.response_canceled.connect(response_canceled);
-					agent.response_notify.connect(response_notify);
-					active_once = true;
-				}
+			// Create and write to our Obex contract file if it doesn't exist
+			if (!file_exists) {
+				var keyfile = new KeyFile();
+				keyfile.set_string("Contractor Entry", "Name", _("Send Files via Bluetooth"));
+				keyfile.set_string("Contractor Entry", "Icon", "bluetooth-active");
+				keyfile.set_string("Contractor Entry", "Description", _("Send files to device…"));
+				keyfile.set_string("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
+				keyfile.set_string("Contractor Entry", "MimeType", "!inode;");
 
-				// Create and write to our Obex contract file if it doesn't exist
-				if (!file_exists) {
-					var keyfile = new KeyFile();
-					keyfile.set_string("Contractor Entry", "Name", _("Send Files via Bluetooth"));
-					keyfile.set_string("Contractor Entry", "Icon", "bluetooth-active");
-					keyfile.set_string("Contractor Entry", "Description", _("Send files to device…"));
-					keyfile.set_string("Contractor Entry", "Exec", "org.buddiesofbudgie.sendto -f %F");
-					keyfile.set_string("Contractor Entry", "MimeType", "!inode;");
-
-					try {
-						keyfile.save_to_file(file.get_path());
-					} catch (Error e) {
-						critical("Error saving contract file: %s", e.message);
-					}
-				}
-			} else {
-				// Delete the contract file if it exists
-				if (file_exists) {
-					try {
-						file.delete();
-					} catch (Error e) {
-						critical("Error deleting old contract file: %s", e.message);
-					}
+				try {
+					keyfile.save_to_file(file.get_path());
+				} catch (Error e) {
+					critical("Error saving contract file: %s", e.message);
 				}
 			}
-		});
+		} else {
+			// Delete the contract file if it exists
+			if (file_exists) {
+				try {
+					file.delete();
+				} catch (Error e) {
+					critical("Error deleting old contract file: %s", e.message);
+				}
+			}
+		}
 	}
 
 	private void dialog_active(string session_path) {
 		// Show any file receiver dialogs if there is a transfer session for the
 		// given path
-		file_receivers.foreach((receiver) => {
+		foreach (var receiver in file_receivers) {
 			if (receiver.transfer.session == session_path) {
 				receiver.show_all();
 			}
-		});
+		}
 
 		// Show any file sender dialogs if there is a transfer session for the
 		// given path
-		file_senders.foreach((sender) => {
+		foreach (var sender in file_senders) {
 			if (sender.transfer.session == session_path) {
 				sender.show_all();
 			}
-		});
+		}
 	}
 
 	private bool insert_sender(File[] files, Bluetooth.Device device) {
 		bool exists = false;
 
 		// Pass the files to send to the correct sender
-		file_senders.foreach((sender) => {
+		foreach (var sender in file_senders) {
 			if (sender.device == device) {
 				sender.add_files(files, device);
 				sender.present();
 				exists = true;
 			}
-		});
+		}
 
 		return exists;
 	}
@@ -260,12 +270,14 @@ public class SendtoApplication : Gtk.Application {
 		file_receiver = new FileReceiver(this);
 		file_receivers.append(file_receiver);
 
-		file_receiver.destroy.connect(() => {
-			file_receivers.remove_link(file_receivers.find(file_receiver));
-		});
+		file_receiver.destroy.connect(on_file_receiver_destroyed);
 
 		Bluetooth.Device device = manager.get_device(address);
 		file_receiver.set_transfer(device, path);
+	}
+
+	private void on_file_receiver_destroyed() {
+		file_receivers.remove_link(file_receivers.find(file_receiver));
 	}
 
 	private void response_canceled(ObjectPath? path = null) {
@@ -301,10 +313,7 @@ public class SendtoApplication : Gtk.Application {
 			notification.set_title(_("Rejected file"));
 			notification.set_body(_("File already exists: %s").printf(transfer.name));
 			send_notification("org.buddiesofbudgie.bluetooth", notification);
-			Idle.add(() => {
-				activate_action("btcancel", new Variant.string("Cancel"));
-				return Source.REMOVE;
-			});
+			Idle.add(on_reject_cancel);
 
 			return;
 		}
@@ -323,6 +332,11 @@ public class SendtoApplication : Gtk.Application {
 		);
 
 		send_notification("org.buddiesofbudgie.bluetooth", notification);
+	}
+
+	private bool on_reject_cancel() {
+		activate_action("btcancel", new Variant.string("Cancel"));
+		return Source.REMOVE;
 	}
 
 	private bool reject_if_exists(string name, uint64 size) {

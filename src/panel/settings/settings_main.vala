@@ -45,6 +45,7 @@ namespace Budgie {
 		/* Special item that allows us to add new items to the display */
 		SettingsItem? item_add_panel;
 		bool new_panel_requested = false;
+		private string pending_select_content_id;
 
 		public SettingsWindow(Budgie.DesktopManager? manager) {
 			Object(type: Gtk.WindowType.TOPLEVEL, icon_name: "preferences-desktop", manager: manager);
@@ -110,11 +111,7 @@ namespace Budgie {
 
 			Bus.own_name(BusType.SESSION, Budgie.SETTINGS_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT, on_bus_acquired, on_name_acquired, on_name_lost);
 
-			unrealize.connect(() => { // When the window is about to be destroyed
-				if (conn != null) {
-					conn.unregister_object(register_id); // Ensure we unregister our connection
-				}
-			});
+			unrealize.connect(on_unrealize);
 
 			layout.show_all();
 			header.show_all();
@@ -155,16 +152,24 @@ namespace Budgie {
 			message("Lost or replaced DBus connection");
 		}
 
+		private void on_unrealize() {
+			if (conn != null) {
+				conn.unregister_object(register_id);
+			}
+		}
+
 		/**
 		* Update the state of the add-panel button in relation to slots
 		*/
 		void on_panels_changed() {
 			item_add_panel.set_sensitive(this.manager.slots_available() >= 1);
-			Idle.add(() => {
-				this.sidebar.invalidate_sort();
-				this.sidebar.invalidate_filter();
-				return false;
-			});
+			Idle.add(on_panels_changed_idle);
+		}
+
+		private bool on_panels_changed_idle() {
+			this.sidebar.invalidate_sort();
+			this.sidebar.invalidate_filter();
+			return false;
 		}
 
 		/**
@@ -300,13 +305,16 @@ namespace Budgie {
 		* Emulate sidebar activation for the user
 		*/
 		void force_select_page(string content_id) {
-			Idle.add(() => {
-				Gtk.ListBoxRow? row = this.sidebar_map[content_id].get_parent() as Gtk.ListBoxRow;
-				sidebar.select_row(row);
-				row.grab_focus();
-				content.set_visible_child_name(content_id);
-				return false;
-			});
+			this.pending_select_content_id = content_id;
+			Idle.add(on_force_select_page_idle);
+		}
+
+		private bool on_force_select_page_idle() {
+			Gtk.ListBoxRow? row = this.sidebar_map[pending_select_content_id].get_parent() as Gtk.ListBoxRow;
+			sidebar.select_row(row);
+			row.grab_focus();
+			content.set_visible_child_name(pending_select_content_id);
+			return false;
 		}
 
 		/**

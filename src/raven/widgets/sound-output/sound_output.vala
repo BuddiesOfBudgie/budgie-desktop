@@ -69,11 +69,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		header_icon.margin = 4;
 		header_icon.margin_start = 8;
 		header_icon.margin_end = 4;
-		header_icon.clicked.connect(() => {
-			if (primary_stream != null) {
-				primary_stream.change_is_muted(!primary_stream.get_is_muted());
-			}
-		});
+		header_icon.clicked.connect(on_mute_toggle);
 		header.add(header_icon);
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -91,13 +87,9 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		 */
 		mixer = new Gvc.MixerControl("Budgie Volume Control");
 
-		mixer.card_added.connect((id) => { // When we add a card
-			devices_state_changed();
-		});
+		mixer.card_added.connect(on_card_added);
 
-		mixer.card_removed.connect((id) => { // When we remove a card
-			devices_state_changed();
-		});
+		mixer.card_removed.connect(on_card_removed);
 
 		derpers = new HashTable<string,string?>(str_hash, str_equal); // Create our GVC Stream app derpers
 		derpers.insert("Vivaldi", "vivaldi"); // Vivaldi
@@ -125,15 +117,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		header_reveal_button.margin = 4;
 		header_reveal_button.margin_start = 2;
 		header_reveal_button.valign = Gtk.Align.CENTER;
-		header_reveal_button.clicked.connect(() => {
-			content_revealer.reveal_child = !content_revealer.child_revealed;
-			var image = (Gtk.Image?) header_reveal_button.get_image();
-			if (content_revealer.reveal_child) {
-				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-			} else {
-				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-			}
-		});
+		header_reveal_button.clicked.connect(on_header_reveal_clicked);
 		header.pack_end(header_reveal_button, false, false, 0);
 
 		gnome_sound_settings = new Settings("org.gnome.desktop.sound");
@@ -163,11 +147,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 		apps_listbox.selection_mode = Gtk.SelectionMode.NONE;
 		apps_listbox.margin_top = 10;
 		apps_listbox.margin_bottom = 10;
-		apps_listbox.set_sort_func((row1, row2) => { // Alphabetize items
-			var app_1 = ((Budgie.AppSoundControl) row1.get_child()).app_name;
-			var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
-			return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
-		});
+		apps_listbox.set_sort_func(sort_apps);
 		apps_area.add(apps_listbox);
 
 		apps_placeholder_label = new Gtk.Label(_("No apps are playing audio.")) {
@@ -208,6 +188,36 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 
 		show_all();
 		apps_listbox.hide();
+	}
+
+	private void on_mute_toggle() {
+		if (primary_stream != null) {
+			primary_stream.change_is_muted(!primary_stream.get_is_muted());
+		}
+	}
+
+	private void on_card_added(uint id) {
+		devices_state_changed();
+	}
+
+	private void on_card_removed(uint id) {
+		devices_state_changed();
+	}
+
+	private void on_header_reveal_clicked() {
+		content_revealer.reveal_child = !content_revealer.child_revealed;
+		var image = (Gtk.Image?) header_reveal_button.get_image();
+		if (content_revealer.reveal_child) {
+			image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		} else {
+			image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		}
+	}
+
+	private static int sort_apps(Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
+		var app_1 = ((Budgie.AppSoundControl) row1.get_child()).app_name;
+		var app_2 = ((Budgie.AppSoundControl) row2.get_child()).app_name;
+		return (strcmp(app_1, app_2) <= 0) ? -1 : 1;
 	}
 
 	/**
@@ -294,16 +304,18 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			primary_notify_id = 0;
 		}
 
-		primary_notify_id = stream.notify.connect((n, p) => {
-			if (p.name == "volume" || p.name == "is-muted") {
-				update_volume();
-			}
-		});
+		primary_notify_id = stream.notify.connect(on_primary_stream_notify);
 
 		this.primary_stream = stream;
 		update_volume();
 		devices_list.queue_draw();
 		devices_state_changed();
+	}
+
+	private void on_primary_stream_notify(Object n, ParamSpec p) {
+		if (p.name == "volume" || p.name == "is-muted") {
+			update_volume();
+		}
 	}
 
 	/**
@@ -452,9 +464,7 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 				Gvc.ChannelMap channel_map = stream.get_channel_map(); // Get the channel map for this stream
 
 				if (channel_map != null) { // Valid channel map
-					channel_map.volume_changed.connect(() => { // On volume change on channel map
-						control.refresh_volume(); // Refresh the volume
-					});
+					channel_map.volume_changed.connect(control.refresh_volume);
 				}
 			}
 		}

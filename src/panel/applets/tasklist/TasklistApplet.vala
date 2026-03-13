@@ -100,13 +100,7 @@ public class TasklistApplet : Budgie.Applet {
 		// because it takes a little bit for the update_popovers
 		// function to be called. If we don't wait here, button
 		// creation fails and the log is spammed with errors.
-		Idle.add(() => {
-			foreach (var window in screen.get_windows()) {
-				on_app_opened(window);
-			}
-
-			return Source.REMOVE;
-		});
+		Idle.add(on_idle_create_buttons);
 	}
 
 	construct {
@@ -146,13 +140,9 @@ public class TasklistApplet : Budgie.Applet {
 		};
 
 		// Connect button clicks to scroll
-		this.left_scroll_button.clicked.connect(() => {
-			scroll_beginning();
-		});
+		this.left_scroll_button.clicked.connect(on_scroll_beginning_clicked);
 
-		this.right_scroll_button.clicked.connect(() => {
-			scroll_end();
-		});
+		this.right_scroll_button.clicked.connect(on_scroll_end_clicked);
 
 		// Create main container with buttons and scrolled window
 		this.main_container = new Box(Orientation.HORIZONTAL, 0) {
@@ -171,12 +161,7 @@ public class TasklistApplet : Budgie.Applet {
 		scrolled_window.hadjustment.value_changed.connect(update_scroll_buttons_visibility);
 		scrolled_window.vadjustment.changed.connect(update_scroll_buttons_visibility);
 		scrolled_window.vadjustment.value_changed.connect(update_scroll_buttons_visibility);
-		scrolled_window.size_allocate.connect(() => {
-			Idle.add(() => {
-				update_scroll_buttons_visibility();
-				return Source.REMOVE;
-			});
-		});
+		scrolled_window.size_allocate.connect(on_scrolled_window_size_allocate);
 
 		this.screen = Xfw.Screen.get_default();
 
@@ -299,12 +284,9 @@ public class TasklistApplet : Budgie.Applet {
 		
 		// Force recalculation of adjustments
 		scrolled_window.queue_resize();
-		
+
 		// Update scroll button visibility after orientation change
-		Idle.add(() => {
-			update_scroll_buttons_visibility();
-			return Source.REMOVE;
-		});
+		Idle.add(on_idle_update_scroll_buttons);
 	}
 
 	/**
@@ -388,6 +370,40 @@ public class TasklistApplet : Budgie.Applet {
 		return false; // Send drag-motion to other widgets
 	}
 
+	private bool on_idle_create_buttons() {
+		foreach (var window in screen.get_windows()) {
+			on_app_opened(window);
+		}
+
+		return Source.REMOVE;
+	}
+
+	private void on_scroll_beginning_clicked() {
+		scroll_beginning();
+	}
+
+	private void on_scroll_end_clicked() {
+		scroll_end();
+	}
+
+	private void on_scrolled_window_size_allocate(Gtk.Allocation allocation) {
+		Idle.add(on_idle_update_scroll_buttons);
+	}
+
+	private bool on_idle_update_scroll_buttons() {
+		update_scroll_buttons_visibility();
+		return Source.REMOVE;
+	}
+
+	/**
+	 * When any tracked window's workspace changes, update all button visibility.
+	 */
+	private void on_any_window_workspace_changed() {
+		foreach (var button in this.buttons) {
+			this.on_app_workspace_changed(button.window);
+		}
+	}
+
 	/**
 	 * Create a button for the newly opened app and add it to our tracking map.
 	 */
@@ -395,7 +411,7 @@ public class TasklistApplet : Budgie.Applet {
 		if (window.is_skip_tasklist()) return;
 		if (get_button_for_window(window) != null) return;
 
-		window.workspace_changed.connect(() => this.on_app_workspace_changed(window));
+		window.workspace_changed.connect(on_any_window_workspace_changed);
 
 		var button = new TasklistButton(window, popover_manager, settings);
 
@@ -414,10 +430,7 @@ public class TasklistApplet : Budgie.Applet {
 		this.buttons.append(button);
 
 		// Update scroll button visibility after adding a button
-		Idle.add(() => {
-			update_scroll_buttons_visibility();
-			return Source.REMOVE;
-		});
+		Idle.add(on_idle_update_scroll_buttons);
 	}
 
 	/**
@@ -435,10 +448,7 @@ public class TasklistApplet : Budgie.Applet {
 		this.buttons.remove(button);
 
 		// Update scroll button visibility after removing a button
-		Idle.add(() => {
-			update_scroll_buttons_visibility();
-			return Source.REMOVE;
-		});
+		Idle.add(on_idle_update_scroll_buttons);
 	}
 
 	/**

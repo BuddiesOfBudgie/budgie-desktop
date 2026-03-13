@@ -114,13 +114,19 @@ namespace Budgie {
 		}
 
 		[DBus (visible=false)]
+		private bool on_delete_event(Gdk.Event event) {
+			this.cancel_clicked();
+			return Gdk.EVENT_STOP;
+		}
+
+		[DBus (visible=false)]
 		public EndSessionDialog(bool replace) {
 			var flags = BusNameOwnerFlags.ALLOW_REPLACEMENT;
 			if (replace) {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, "org.budgie_desktop.Session.EndSessionDialog", flags,
-				on_bus_acquired, () => {}, Budgie.DaemonNameLost);
+				on_bus_acquired, null, Budgie.DaemonNameLost);
 			set_keep_above(true);
 			set_resizable(false);
 
@@ -131,10 +137,7 @@ namespace Budgie {
 			set_titlebar(header);
 			header.get_style_context().remove_class("titlebar");
 
-			delete_event.connect(() => {
-				this.cancel_clicked();
-				return Gdk.EVENT_STOP;
-			});
+			delete_event.connect(on_delete_event);
 
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
@@ -181,14 +184,7 @@ namespace Budgie {
 			this.label_end_title.set_text(title);
 
 			var wayland_client = new WaylandClient();
-			bool monitor_set = wayland_client.with_valid_monitor(() => {
-				var monitor = wayland_client.gdk_monitor;
-				if (monitor != null) {
-					GtkLayerShell.set_monitor(this, monitor);
-					return true;
-				}
-				return false;
-			});
+			bool monitor_set = wayland_client.with_valid_monitor(on_set_monitor);
 
 			if (!monitor_set) {
 				warning("Failed to set monitor for EndSessionDialog");
@@ -227,6 +223,16 @@ namespace Budgie {
 			}
 
 			Opened(); // Indicate that we've opened the EndSession dialog
+		}
+
+		private bool on_set_monitor() {
+			var wayland_client = new WaylandClient();
+			var monitor = wayland_client.gdk_monitor;
+			if (monitor != null) {
+				GtkLayerShell.set_monitor(this, monitor);
+				return true;
+			}
+			return false;
 		}
 
 		public void Close() throws DBusError, IOError {

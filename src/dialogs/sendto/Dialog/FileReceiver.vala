@@ -34,9 +34,7 @@ public class FileReceiver : BaseDialog {
 
 		try {
 			transfer = Bus.get_proxy_sync<Bluetooth.Obex.Transfer>(BusType.SESSION, "org.bluez.obex", path);
-			((DBusProxy) transfer).g_properties_changed.connect((changed, invalid) => {
-				transfer_progress();
-			});
+			((DBusProxy) transfer).g_properties_changed.connect(on_transfer_properties_changed);
 
 			total_size = transfer.size;
 			session_path = transfer.session;
@@ -44,6 +42,10 @@ public class FileReceiver : BaseDialog {
 		} catch (Error e) {
 			warning("Error accepting Bluetooth file transfer: %s", e.message);
 		}
+	}
+
+	private void on_transfer_properties_changed(Variant changed, string[] invalid) {
+		transfer_progress();
 	}
 
 	private void transfer_progress() {

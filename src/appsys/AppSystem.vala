@@ -38,31 +38,37 @@ namespace Budgie {
 
 			pid_cache = new HashTable<int64?,string?>(str_hash, str_equal);
 
-			Bus.@get.begin(BusType.SESSION, null, (obj, res) => {
-				try {
-					bus = Bus.@get.end(res);
-					bus.signal_subscribe(null,
-										"org.gtk.gio.DesktopAppInfo",
-										"Launched",
-										"/org/gtk/gio/DesktopAppInfo",
-										null,
-										0,
-										this.signal_received);
-				} catch (IOError e) {
-					warning(e.message);
-				}
-			});
+			Bus.@get.begin(BusType.SESSION, null, on_bus_get_ready);
 
 			monitor = AppInfoMonitor.get();
-			monitor.changed.connect(() => {
-				Idle.add(() => {
-					lock(invalidated) {
-						invalidated = true;
-					}
-					return false;
-				});
-			});
+			monitor.changed.connect(on_app_info_changed);
 			reload_ids();
+		}
+
+		private void on_bus_get_ready(Object? obj, AsyncResult res) {
+			try {
+				bus = Bus.@get.end(res);
+				bus.signal_subscribe(null,
+									"org.gtk.gio.DesktopAppInfo",
+									"Launched",
+									"/org/gtk/gio/DesktopAppInfo",
+									null,
+									0,
+									this.signal_received);
+			} catch (IOError e) {
+				warning(e.message);
+			}
+		}
+
+		private void on_app_info_changed() {
+			Idle.add(on_invalidate_idle);
+		}
+
+		private bool on_invalidate_idle() {
+			lock(invalidated) {
+				invalidated = true;
+			}
+			return false;
 		}
 
 		private void signal_received(DBusConnection connection,

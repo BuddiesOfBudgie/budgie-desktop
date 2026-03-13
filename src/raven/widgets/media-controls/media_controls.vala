@@ -99,22 +99,21 @@ public class MediaControlsRavenWidget : Budgie.RavenWidget {
 		}
 	}
 
+	private async void try_add_iface(string name) {
+		var iface = yield new_iface(name);
+		if (iface != null) {
+			add_iface(name, iface);
+		}
+	}
+
 	void on_name_owner_changed(string? n, string? o, string? ne) {
 		if (!n.has_prefix("org.mpris.MediaPlayer2.")) {
 			return;
 		}
 		if (o == "") {
-			new_iface.begin(n, (o, r) => {
-				var iface = new_iface.end(r);
-				if (iface != null) {
-					add_iface(n, iface);
-				}
-			});
+			try_add_iface.begin(n);
 		} else {
-			Idle.add(() => {
-				destroy_iface(n);
-				return false;
-			});
+			destroy_iface(n);
 		}
 	}
 

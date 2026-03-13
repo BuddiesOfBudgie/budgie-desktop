@@ -221,16 +221,22 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.EndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.Stop.connect(() => {
-				end_session(true);
-			});
+			sclient.QueryEndSession.connect(on_query_end_session);
+			sclient.EndSession.connect(on_end_session);
+			sclient.Stop.connect(on_session_stop);
 			return true;
+		}
+
+		private void on_query_end_session() {
+			end_session(false);
+		}
+
+		private void on_end_session() {
+			end_session(false);
+		}
+
+		private void on_session_stop() {
+			end_session(true);
 		}
 
 		public PanelManager(ResetFlags reset_flags) {
@@ -247,14 +253,9 @@ namespace Budgie {
 		*/
 		private void setup_windowing_events() {
 			// Forward desktop_shown signal to DBus
-			windowing.desktop_shown.connect((showing) => {
-				if (iface != null) iface.DesktopShown(showing);
-			});
+			windowing.desktop_shown.connect(on_desktop_shown);
 
-			windowing.window_state_changed.connect((window) => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-				check_windows();
-			});
+			windowing.window_state_changed.connect(on_window_state_changed);
 
 			windowing.window_added.connect(window_opened);
 			windowing.window_removed.connect(check_windows);
@@ -262,15 +263,26 @@ namespace Budgie {
 			windowing.active_workspace_changed.connect(check_windows);
 		}
 
+		private void on_desktop_shown(bool showing) {
+			if (iface != null) iface.DesktopShown(showing);
+		}
+
+		private void on_window_state_changed(Xfw.Window window, Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
+			check_windows();
+		}
+
 		/*
 		* Callback for newly opened, not yet tracked windows
 		*/
 		private void window_opened(Xfw.Window window) {
-			window.state_changed.connect(() => {
-				if (window.is_skip_pager() || window.is_skip_tasklist()) return;
-				check_windows();
-			});
+			window.state_changed.connect(on_xfw_window_state_changed);
 
+			check_windows();
+		}
+
+		private void on_xfw_window_state_changed(Xfw.Window window, Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 			check_windows();
 		}
 
@@ -331,14 +343,14 @@ namespace Budgie {
 
 			Xfw.Workspace? active_workspace = windowing.get_active_workspace();
 
-			windowing.windows.foreach((window) => {
-				if (window.is_skip_pager()) return;
-				if (!this.window_on_primary(window)) return;
+			foreach (var window in windowing.windows) {
+				if (window.is_skip_pager()) continue;
+				if (!this.window_on_primary(window)) continue;
 				if ((window.is_maximized() && !window.is_minimized())) {
 					found_maximized_window = true;
-					return;
+					break;
 				}
-			});
+			}
 
 			set_panel_transparent(!found_maximized_window);
 			set_panel_occluded(found_maximized_window);
@@ -623,15 +635,7 @@ namespace Budgie {
 			// Listen to the Raven position setting for changes
 			raven_settings = new Settings(RAVEN_SCHEMA);
 			raven_position = (RavenPosition)raven_settings.get_enum(RAVEN_KEY_POSITION);
-			raven_settings.changed[RAVEN_KEY_POSITION].connect(() => {
-				RavenPosition new_position = (RavenPosition)raven_settings.get_enum(RAVEN_KEY_POSITION);
-				if (new_position != raven_position) {
-					raven_position = new_position;
-
-					// Raven needs to know about its new position
-					update_screen();
-				}
-			});
+			raven_settings.changed[RAVEN_KEY_POSITION].connect(on_raven_position_changed);
 
 			this.default_layout = settings.get_string(PANEL_KEY_LAYOUT);
 			theme_manager = new Budgie.ThemeManager();
@@ -657,12 +661,24 @@ namespace Budgie {
 			/* Whatever route we took, set the migration level to the current now */
 			settings.set_int(PANEL_KEY_MIGRATION, BUDGIE_MIGRATION_LEVEL);
 
-			register_with_session.begin((o, res) => {
-				bool success = register_with_session.end(res);
-				if (!success) {
-					message("Failed to register with Session manager");
-				}
-			});
+			register_with_session.begin(on_register_with_session_complete);
+		}
+
+		private void on_register_with_session_complete(Object? obj, AsyncResult res) {
+			bool success = register_with_session.end(res);
+			if (!success) {
+				message("Failed to register with Session manager");
+			}
+		}
+
+		private void on_raven_position_changed() {
+			RavenPosition new_position = (RavenPosition)raven_settings.get_enum(RAVEN_KEY_POSITION);
+			if (new_position != raven_position) {
+				raven_position = new_position;
+
+				// Raven needs to know about its new position
+				update_screen();
+			}
 		}
 
 		public override List<Peas.PluginInfo?> get_panel_plugins() {
@@ -1418,26 +1434,30 @@ namespace Budgie {
 		* Open up the settings window on screen
 		*/
 		public void open_settings() {
-			Idle.add(() => {
-				if (this.settings_window == null) {
-					this.settings_window = new Budgie.SettingsWindow(this);
-					this.settings_window.destroy.connect(() => {
-						this.settings_window = null;
-					});
+			Idle.add(on_open_settings_idle);
+		}
 
-					/* Say hullo to the settings_window */
-					foreach (var panel in this.get_panels()) {
-						this.panel_added(panel.uuid, panel);
-					}
+		private bool on_open_settings_idle() {
+			if (this.settings_window == null) {
+				this.settings_window = new Budgie.SettingsWindow(this);
+				this.settings_window.destroy.connect(on_settings_window_destroy);
+
+				/* Say hullo to the settings_window */
+				foreach (var panel in this.get_panels()) {
+					this.panel_added(panel.uuid, panel);
 				}
-				this.settings_window.present();
-				this.settings_window.grab_focus();
-				Gdk.Window? window = this.settings_window.get_window();
-				if (window != null) {
-					window.focus(Gdk.CURRENT_TIME);
-				}
-				return false;
-			});
+			}
+			this.settings_window.present();
+			this.settings_window.grab_focus();
+			Gdk.Window? window = this.settings_window.get_window();
+			if (window != null) {
+				window.focus(Gdk.CURRENT_TIME);
+			}
+			return false;
+		}
+
+		private void on_settings_window_destroy() {
+			this.settings_window = null;
 		}
 	}
 }

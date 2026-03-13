@@ -130,10 +130,10 @@ namespace Budgie {
 		}
 
 		public void raven_expanded(bool expanded) {
-			box.get_children().foreach((child) => {
+			foreach (var child in box.get_children()) {
 				var widget = child as RavenWidget;
 				widget.raven_expanded(expanded);
-			});
+			}
 		}
 	}
 }

@@ -47,40 +47,48 @@ namespace Caffeine {
 
 			popover = new CaffeineWindow(event_box, settings);
 
-			settings.changed["caffeine-mode"].connect(() => { // When Caffeine Mode has been enabled or disabled
-				update_icon(); // Update the icon
-			});
+			settings.changed["caffeine-mode"].connect(on_caffeine_mode_changed);
 
-			interface_settings.changed["icon-theme"].connect_after(() => {
-				Timeout.add(200, () => {
-					set_caffeine_icons(); // Update our Caffeine Icons
-					update_icon(); // Update the icon
-					return false;
-				});
-			});
+			interface_settings.changed["icon-theme"].connect_after(on_icon_theme_changed);
 
 			// On click icon
-			event_box.button_press_event.connect((e) => {
-				switch (e.button) {
-				case 1:
-					if (popover.get_visible()) {
-						popover.hide();
-					} else {
-						popover.show_all();
-						this.manager.show_popover(event_box);
-					}
-					break;
-				case 2:
-					toggle_caffeine_mode(); // Toggle the caffeine mode
-					break;
-				default:
-					return Gdk.EVENT_PROPAGATE;
-				}
-
-				return Gdk.EVENT_STOP;
-			});
+			event_box.button_press_event.connect(on_event_box_button_press);
 
 			this.show_all();
+		}
+
+		private void on_caffeine_mode_changed() {
+			update_icon();
+		}
+
+		private void on_icon_theme_changed() {
+			Timeout.add(200, on_icon_theme_update_timeout);
+		}
+
+		private bool on_icon_theme_update_timeout() {
+			set_caffeine_icons();
+			update_icon();
+			return false;
+		}
+
+		private bool on_event_box_button_press(Gdk.EventButton e) {
+			switch (e.button) {
+			case 1:
+				if (popover.get_visible()) {
+					popover.hide();
+				} else {
+					popover.show_all();
+					this.manager.show_popover(event_box);
+				}
+				break;
+			case 2:
+				toggle_caffeine_mode();
+				break;
+			default:
+				return Gdk.EVENT_PROPAGATE;
+			}
+
+			return Gdk.EVENT_STOP;
 		}
 
 		/**

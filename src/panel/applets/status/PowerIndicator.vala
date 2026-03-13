@@ -149,16 +149,22 @@ public interface PowerProfilesDBus : Object {
 }
 
 public class PowerProfilesOption : Gtk.RadioButton {
+	private PowerProfilesDBus profiles_proxy;
+	private string profile_name;
+
 	public PowerProfilesOption(PowerProfilesDBus profiles_proxy, string profile_name, string display_name) {
 		label = display_name;
-		
-		this.toggled.connect(() => {
-			if (this.get_active()) {
-				profiles_proxy.active_profile = profile_name;
-			}
-		});
+		this.profiles_proxy = profiles_proxy;
+		this.profile_name = profile_name;
+
+		this.toggled.connect(on_toggled);
 	}
 
+	private void on_toggled() {
+		if (this.get_active()) {
+			profiles_proxy.active_profile = profile_name;
+		}
+	}
 }
 
 public class PowerProfilesSelector : Gtk.Box {
@@ -167,9 +173,13 @@ public class PowerProfilesSelector : Gtk.Box {
 	private PowerProfilesOption radio_power_balanced;
 	private PowerProfilesOption radio_power_performance;
 
+	private PowerProfilesDBus profiles_proxy;
+
 	public PowerProfilesSelector(PowerProfilesDBus profiles_proxy) {
 		orientation = Gtk.Orientation.VERTICAL;
 		spacing = 6;
+
+		this.profiles_proxy = profiles_proxy;
 
 		var profiles = new GenericSet<string>(str_hash, str_equal);
 
@@ -180,7 +190,7 @@ public class PowerProfilesSelector : Gtk.Box {
 
 			profiles.add(profile_value.get_string());
 		}
-		
+
 		// need at least two options for it to be meaningful
 		if (profiles.length < 2) return;
 
@@ -222,10 +232,12 @@ public class PowerProfilesSelector : Gtk.Box {
 		// initialize state
 		on_active_profile_changed(profiles_proxy.active_profile);
 
-		((DBusProxy) profiles_proxy).g_properties_changed.connect(() => {
-			on_active_profile_changed(profiles_proxy.active_profile);
-		});
+		((DBusProxy) profiles_proxy).g_properties_changed.connect(on_profiles_proxy_properties_changed);
 
+	}
+
+	private void on_profiles_proxy_properties_changed(Variant changed, string[] invalid) {
+		on_active_profile_changed(profiles_proxy.active_profile);
 	}
 
 	void on_active_profile_changed(string active_profile) {
@@ -307,7 +319,7 @@ public class PowerIndicator : Gtk.Bin {
 		try {
 			profiles_proxy = Bus.get_proxy.end(res);
 
-			if (profiles_proxy.active_profile != null) 
+			if (profiles_proxy.active_profile != null)
 				create_power_profiles_options();
 
 		} catch (Error e) {
@@ -334,7 +346,7 @@ public class PowerIndicator : Gtk.Bin {
 
 	public void update_labels(bool visible) {
 		this.label_visible = visible;
-		
+
 		unowned BatteryIcon? icon = null;
 		var iter = HashTableIter<string,BatteryIcon?>(this.devices);
 		while (iter.next(null, out icon)) {
@@ -405,9 +417,9 @@ public class PowerIndicator : Gtk.Bin {
 		// try to discover batteries
 		var devices = client.get_devices();
 
-		devices.foreach((device) => {
+		foreach (var device in devices) {
 			this.on_device_added(device);
-		});
+		}
 		toggle_show();
 	}
 }

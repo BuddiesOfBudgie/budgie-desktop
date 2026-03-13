@@ -55,37 +55,13 @@ public class TasklistButtonPopover : Gtk.Popover {
 
 		add(list_box);
 
-		maximize_button.clicked.connect(() => {
-			var maximized = window.is_maximized();
+		maximize_button.clicked.connect(on_maximize_clicked);
 
-			try {
-				window.set_maximized(!maximized);
-			} catch (Error e) {
-				warning("Unable to set maximized on window %s: %s", window.get_name(), e.message);
-			}
-		});
+		minimize_button.clicked.connect(on_minimize_clicked);
 
-		minimize_button.clicked.connect(() => {
-			try {
-				window.set_minimized(true);
-			} catch (Error e) {
-				warning("Unable to set minimized on window %s: %s", window.get_name(), e.message);
-			}
-		});
+		close_button.clicked.connect(on_close_clicked);
 
-		close_button.clicked.connect(() => {
-			try {
-				window.close(Gtk.get_current_event_time());
-			} catch (Error e) {
-				warning("Unable to close window '%s': %s", window.get_name(), e.message);
-			}
-		});
-
-		window.state_changed.connect((changed_mask, new_state) => {
-			if (Xfw.WindowState.MAXIMIZED in changed_mask) {
-				update_maximize_label();
-			}
-		});
+		window.state_changed.connect(on_window_state_changed);
 
 		update_maximize_label();
 
@@ -109,19 +85,55 @@ public class TasklistButtonPopover : Gtk.Popover {
 			var button_label = button.get_child() as Gtk.Label;
 			button_label.halign = Gtk.Align.START;
 
-			button.clicked.connect(() => {
-				if (workspace == window.get_workspace()) {
-					return;
-				}
-
-				try {
-					window.move_to_workspace(workspace);
-				} catch (Error e) {
-					warning("Unable to move window '%s' to new workspace: %s", window.get_name(), e.message);
-				}
-			});
+			button.set_data<Xfw.Workspace>("target-workspace", workspace);
+			button.clicked.connect(on_workspace_button_clicked);
 
 			list_box.add(button);
+		}
+	}
+
+	private void on_maximize_clicked() {
+		var maximized = window.is_maximized();
+
+		try {
+			window.set_maximized(!maximized);
+		} catch (Error e) {
+			warning("Unable to set maximized on window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_minimize_clicked() {
+		try {
+			window.set_minimized(true);
+		} catch (Error e) {
+			warning("Unable to set minimized on window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_close_clicked() {
+		try {
+			window.close(Gtk.get_current_event_time());
+		} catch (Error e) {
+			warning("Unable to close window '%s': %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_window_state_changed(Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+		if (Xfw.WindowState.MAXIMIZED in changed_mask) {
+			update_maximize_label();
+		}
+	}
+
+	private void on_workspace_button_clicked(Gtk.Button button) {
+		Xfw.Workspace workspace = button.get_data<Xfw.Workspace>("target-workspace");
+		if (workspace == window.get_workspace()) {
+			return;
+		}
+
+		try {
+			window.move_to_workspace(workspace);
+		} catch (Error e) {
+			warning("Unable to move window '%s' to new workspace: %s", window.get_name(), e.message);
 		}
 	}
 

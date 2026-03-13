@@ -61,11 +61,7 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		header_icon.margin = 4;
 		header_icon.margin_start = 8;
 		header_icon.margin_end = 4;
-		header_icon.clicked.connect(() => {
-			if (primary_stream != null) {
-				primary_stream.change_is_muted(!primary_stream.get_is_muted());
-			}
-		});
+		header_icon.clicked.connect(on_mute_toggle);
 		header.add(header_icon);
 
 		content = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -82,13 +78,9 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		 */
 		mixer = new Gvc.MixerControl("Budgie Volume Control");
 
-		mixer.card_added.connect((id) => { // When we add a card
-			devices_state_changed();
-		});
+		mixer.card_added.connect(on_card_added);
 
-		mixer.card_removed.connect((id) => { // When we remove a card
-			devices_state_changed();
-		});
+		mixer.card_removed.connect(on_card_removed);
 
 		derpers = new HashTable<string,string?>(str_hash, str_equal); // Create our GVC Stream app derpers
 		derpers.insert("Vivaldi", "vivaldi"); // Vivaldi
@@ -115,15 +107,7 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
 		header_reveal_button.valign = Gtk.Align.CENTER;
-		header_reveal_button.clicked.connect(() => {
-			content_revealer.reveal_child = !content_revealer.child_revealed;
-			var image = (Gtk.Image?) header_reveal_button.get_image();
-			if (content_revealer.reveal_child) {
-				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-			} else {
-				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-			}
-		});
+		header_reveal_button.clicked.connect(on_header_reveal_clicked);
 		header.pack_end(header_reveal_button, false, false, 0);
 
 		budgie_settings = new Settings("com.solus-project.budgie-panel");
@@ -146,6 +130,30 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 		 */
 
 		show_all();
+	}
+
+	private void on_mute_toggle() {
+		if (primary_stream != null) {
+			primary_stream.change_is_muted(!primary_stream.get_is_muted());
+		}
+	}
+
+	private void on_card_added(uint id) {
+		devices_state_changed();
+	}
+
+	private void on_card_removed(uint id) {
+		devices_state_changed();
+	}
+
+	private void on_header_reveal_clicked() {
+		content_revealer.reveal_child = !content_revealer.child_revealed;
+		var image = (Gtk.Image?) header_reveal_button.get_image();
+		if (content_revealer.reveal_child) {
+			image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		} else {
+			image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		}
 	}
 
 	/**
@@ -229,16 +237,18 @@ public class SoundInputRavenWidget : Budgie.RavenWidget {
 			primary_notify_id = 0;
 		}
 
-		primary_notify_id = stream.notify.connect((n, p) => {
-			if (p.name == "volume" || p.name == "is-muted") {
-				update_volume();
-			}
-		});
+		primary_notify_id = stream.notify.connect(on_primary_stream_notify);
 
 		this.primary_stream = stream;
 		update_volume();
 		devices_list.queue_draw();
 		devices_state_changed();
+	}
+
+	private void on_primary_stream_notify(Object n, ParamSpec p) {
+		if (p.name == "volume" || p.name == "is-muted") {
+			update_volume();
+		}
 	}
 
 	/**

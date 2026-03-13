@@ -38,24 +38,34 @@ public class ObexManager : Object {
 			);
 
 			// Get and add any current Transfers
-			object_manager.get_objects().foreach((obj) => {
-				obj.get_interfaces().foreach((iface) => interface_added(obj, iface));
-			});
+			foreach (var obj in object_manager.get_objects()) {
+				foreach (var iface in obj.get_interfaces()) {
+					interface_added(obj, iface);
+				}
+			}
 
 			// Connect signals for added/removed interfaces
 			object_manager.interface_added.connect(interface_added);
 			object_manager.interface_removed.connect(interface_removed);
 
 			// Connect signals for added/removed objects
-			object_manager.object_added.connect((obj) => {
-				obj.get_interfaces().foreach((iface) => interface_added(obj, iface));
-			});
+			object_manager.object_added.connect(on_object_added);
 
-			object_manager.object_removed.connect((obj) => {
-				obj.get_interfaces().foreach((iface) => interface_removed(obj, iface));
-			});
+			object_manager.object_removed.connect(on_object_removed);
 		} catch (Error e) {
 			critical("Error getting DBus object manager for Obex: %s", e.message);
+		}
+	}
+
+	private void on_object_added(DBusObject obj) {
+		foreach (var iface in obj.get_interfaces()) {
+			interface_added(obj, iface);
+		}
+	}
+
+	private void on_object_removed(DBusObject obj) {
+		foreach (var iface in obj.get_interfaces()) {
+			interface_removed(obj, iface);
 		}
 	}
 
@@ -72,6 +82,9 @@ public class ObexManager : Object {
 
 		return typeof(DBusProxy);
 	}
+
+	/** Stores session destination for each transfer for use in the signal handler. */
+	private HashTable<Transfer, string> transfer_sessions = new HashTable<Transfer, string>(direct_hash, direct_equal);
 
 	/**
 	 * Handles when an interface has been added.
@@ -99,10 +112,17 @@ public class ObexManager : Object {
 			}
 
 			active_transfers[transfer] = session.destination;
-			((DBusProxy) transfer).g_properties_changed.connect((changed, invalid) => {
-				transfer_active(session.destination);
-			});
+			transfer_sessions[transfer] = session.destination;
+			((DBusProxy) transfer).g_properties_changed.connect(on_transfer_properties_changed);
 			transfer_added(session.destination, transfer);
+		}
+	}
+
+	private void on_transfer_properties_changed(DBusProxy proxy, Variant changed, string[] invalid) {
+		unowned Transfer transfer = (Transfer) proxy;
+		var destination = transfer_sessions[transfer];
+		if (destination != null) {
+			transfer_active(destination);
 		}
 	}
 
@@ -115,6 +135,7 @@ public class ObexManager : Object {
 			if (active_transfers.contains(transfer)) {
 				active_transfers.remove(transfer);
 			}
+			transfer_sessions.remove(transfer);
 			transfer_removed(transfer);
 		}
 	}

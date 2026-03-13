@@ -39,13 +39,30 @@ public class ShowDesktopApplet : Budgie.Applet {
 		// Connect to panel DBus service
 		setup_dbus.begin();
 
-		widget.toggled.connect(() => {
-			if (in_toggle) return;
-			toggle_desktop.begin();
-		});
+		widget.toggled.connect(on_widget_toggled);
 
 		add(widget);
 		show_all();
+	}
+
+	private void on_widget_toggled() {
+		if (in_toggle) return;
+		toggle_desktop.begin();
+	}
+
+	private void on_desktop_shown(bool showing) {
+		in_toggle = true;
+		widget.set_active(showing);
+		in_toggle = false;
+	}
+
+	private bool on_reset_toggle_state() {
+		if (!in_toggle && widget.get_active()) {
+			in_toggle = true;
+			widget.set_active(false);
+			in_toggle = false;
+		}
+		return false;
 	}
 
 	private async void setup_dbus() {
@@ -55,11 +72,7 @@ public class ShowDesktopApplet : Budgie.Applet {
 				"/org/budgie_desktop/Panel");
 
 			// Track desktop state changes
-			panel_proxy.DesktopShown.connect((showing) => {
-				in_toggle = true;
-				widget.set_active(showing);
-				in_toggle = false;
-			});
+			panel_proxy.DesktopShown.connect(on_desktop_shown);
 		} catch (Error e) {
 			warning("Failed to connect to panel DBus: %s", e.message);
 		}
@@ -76,14 +89,7 @@ public class ShowDesktopApplet : Budgie.Applet {
 			// no windows to minimize. Reset the button state.
 			if (!in_toggle && widget.get_active()) {
 				// Small delay to allow signal to propagate
-				Timeout.add(50, () => {
-					if (!in_toggle && widget.get_active()) {
-						in_toggle = true;
-						widget.set_active(false);
-						in_toggle = false;
-					}
-					return false;
-				});
+				Timeout.add(50, on_reset_toggle_state);
 			}
 		} catch (Error e) {
 			warning("Failed to toggle desktop: %s", e.message);

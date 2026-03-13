@@ -34,21 +34,23 @@ namespace NightLight {
 			this.add(event_box);
 			this.show_all();
 
-			event_box.button_press_event.connect((e) => {
-				if (e.button == 1) {
-					if (popover.get_visible()) {
-						popover.hide();
-					} else {
-						this.manager.show_popover(event_box);
-					}
-				} else if (e.button == 2) {
-					popover.toggle_nightlight();
-				} else {
-					return Gdk.EVENT_PROPAGATE;
-				}
+			event_box.button_press_event.connect(on_event_box_button_press);
+		}
 
-				return Gdk.EVENT_STOP;
-			});
+		private bool on_event_box_button_press(Gdk.EventButton e) {
+			if (e.button == 1) {
+				if (popover.get_visible()) {
+					popover.hide();
+				} else {
+					this.manager.show_popover(event_box);
+				}
+			} else if (e.button == 2) {
+				popover.toggle_nightlight();
+			} else {
+				return Gdk.EVENT_PROPAGATE;
+			}
+
+			return Gdk.EVENT_STOP;
 		}
 
 		public override void update_popovers(Budgie.PopoverManager? manager) {

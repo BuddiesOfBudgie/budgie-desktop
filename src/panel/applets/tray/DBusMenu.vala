@@ -40,11 +40,17 @@ public class DBusMenu : Object {
 		iface = Bus.get_proxy_sync(BusType.SESSION, dbus_name, dbus_object_path);
 
 		update_layout();
-		iface.layout_updated.connect((revision, parent) => update_layout());
-		iface.items_properties_updated.connect((updated_props, removed_props) => {
-			on_items_properties_updated(updated_props);
-			on_items_properties_updated(removed_props);
-		});
+		iface.layout_updated.connect(on_layout_updated);
+		iface.items_properties_updated.connect(on_items_properties_updated_signal);
+	}
+
+	private void on_layout_updated(uint32 revision, int32 parent) {
+		update_layout();
+	}
+
+	private void on_items_properties_updated_signal(Variant updated_props, Variant removed_props) {
+		on_items_properties_updated(updated_props);
+		on_items_properties_updated(removed_props);
 	}
 
 	private void update_layout() {
@@ -59,11 +65,13 @@ public class DBusMenu : Object {
 
 		parse_layout(layout);
 
-		all_nodes.foreach_remove((id, node) => {
-			return id != 0 && node.item.parent == null;
-		});
+		all_nodes.foreach_remove(should_remove_node);
 
 		all_nodes.get(0).submenu.show_all();
+	}
+
+	private bool should_remove_node(int32 id, DBusMenuNode node) {
+		return id != 0 && node.item.parent == null;
 	}
 
 	private DBusMenuNode? parse_layout(Variant layout) {
@@ -83,10 +91,10 @@ public class DBusMenu : Object {
 			update_node_properties(node, v_props);
 		} else {
 			node = new DBusMenuNode(id, v_props);
-			node.clicked.connect((data) => send_event(id, "clicked", data));
-			node.hovered.connect((event) => send_event(id, "hovered"));
-			node.opened.connect((event) => send_event(id, "opened"));
-			node.closed.connect((event) => send_event(id, "closed"));
+			node.clicked.connect(on_node_clicked);
+			node.hovered.connect(on_node_hovered);
+			node.opened.connect(on_node_opened);
+			node.closed.connect(on_node_closed);
 
 			all_nodes.set(id, node);
 		}
@@ -107,6 +115,22 @@ public class DBusMenu : Object {
 		}
 
 		return node;
+	}
+
+	private void on_node_clicked(int32 node_id, Variant? data) {
+		send_event(node_id, "clicked", data);
+	}
+
+	private void on_node_hovered(int32 node_id) {
+		send_event(node_id, "hovered");
+	}
+
+	private void on_node_opened(int32 node_id) {
+		send_event(node_id, "opened");
+	}
+
+	private void on_node_closed(int32 node_id) {
+		send_event(node_id, "closed");
 	}
 
 	private void on_items_properties_updated(Variant updated_props) {

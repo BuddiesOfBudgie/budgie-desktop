@@ -46,7 +46,7 @@ namespace Budgie {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, Budgie.TRACKER_DBUS_NAME, flags,
-				on_dbus_acquired, ()=> {}, Budgie.DaemonNameLost);
+				on_dbus_acquired, null, Budgie.DaemonNameLost);
 		}
 
 		private void on_dbus_acquired(DBusConnection conn) {

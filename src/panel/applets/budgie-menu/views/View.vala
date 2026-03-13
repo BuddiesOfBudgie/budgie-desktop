@@ -61,6 +61,8 @@ public abstract class ApplicationView : Gtk.Box {
 	 * The time to wait before refreshing can be set by passing in `seconds`.
 	 * By default, the time is 1 second.
 	 */
+	private Budgie.AppIndex? queued_app_tracker = null;
+
 	public void queue_refresh(Budgie.AppIndex app_tracker, int seconds = 1) {
 		// Reset the refresh timer if an update is already queued
 		if (this.timeout_id != 0) {
@@ -68,12 +70,18 @@ public abstract class ApplicationView : Gtk.Box {
 			this.timeout_id = 0;
 		}
 
+		// Store the app tracker for the callback
+		this.queued_app_tracker = app_tracker;
+
 		// Update the view after the timeout
-		this.timeout_id = Timeout.add_seconds(seconds, () => {
-			this.refresh(app_tracker);
-			this.timeout_id = 0;
-			return Source.REMOVE;
-		});
+		this.timeout_id = Timeout.add_seconds(seconds, on_queue_refresh_timeout);
+	}
+
+	private bool on_queue_refresh_timeout() {
+		this.refresh(this.queued_app_tracker);
+		this.timeout_id = 0;
+		this.queued_app_tracker = null;
+		return Source.REMOVE;
 	}
 
 	/**

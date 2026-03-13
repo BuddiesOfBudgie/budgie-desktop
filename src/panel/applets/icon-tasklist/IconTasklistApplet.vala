@@ -103,10 +103,7 @@ public class IconTasklistApplet : Budgie.Applet {
 		/* Now hook up settings */
 		this.settings.changed.connect(this.on_settings_changed);
 
-		Idle.add(() => {
-			this.rebuild_items();
-			return false;
-		});
+		Idle.add(on_initial_rebuild);
 
 		this.on_settings_changed("restrict-to-workspace");
 		this.on_settings_changed("lock-icons");
@@ -115,6 +112,11 @@ public class IconTasklistApplet : Budgie.Applet {
 		this.connect_app_signals();
 
 		this.show_all();
+	}
+
+	private bool on_initial_rebuild() {
+		this.rebuild_items();
+		return false;
 	}
 
 	construct {
@@ -196,9 +198,9 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void update_buttons() {
-		this.buttons.foreach((id, button) => {
+		foreach (IconButton button in buttons.get_values()) {
 			this.update_button(button);
-		});
+		}
 	}
 
 	/**
@@ -275,16 +277,18 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 	}
 
+	private static int compare_wrapper_by_desktop_id(Gtk.Widget a, Gtk.Widget b) {
+		var wrapper_a = a as ButtonWrapper;
+		var wrapper_b = b as ButtonWrapper;
+
+		return strcmp(wrapper_a.button.app.desktop_id, wrapper_b.button.app.desktop_id);
+	}
+
 	private void button_drag_data_received_handle_desktop_info(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData data, Gtk.Widget source) {
 		var button = widget as IconButton;
 
 		List<weak Gtk.Widget> children = main_layout.get_children(); // Get the list of child buttons
-		unowned var self = children.find_custom(button.get_parent(), (a, b) => {
-			var wrapper_a = a as ButtonWrapper;
-			var wrapper_b = b as ButtonWrapper;
-
-			return strcmp(wrapper_a.button.app.desktop_id, wrapper_b.button.app.desktop_id);
-		});
+		unowned var self = children.find_custom(button.get_parent(), compare_wrapper_by_desktop_id);
 
 		if (self == null) {
 			warning("Unable to find the correct wrapper");
@@ -406,9 +410,9 @@ public class IconTasklistApplet : Budgie.Applet {
 		}
 
 		// Fallback: match for non-standard apps
-		// This handles apps like Tilix (com.gexperts.Tilix.desktop → tilix WM_CLASS),
-		// jEdit (jedit.desktop → org-gjt-sp-jedit-jEdit WM_CLASS),
-		// and snap apps (snap-store_ubuntu-software.desktop → snap-store WM_CLASS)
+		// This handles apps like Tilix (com.gexperts.Tilix.desktop -> tilix WM_CLASS),
+		// jEdit (jedit.desktop -> org-gjt-sp-jedit-jEdit WM_CLASS),
+		// and snap apps (snap-store_ubuntu-software.desktop -> snap-store WM_CLASS)
 		var match_result = matcher.match_window_group(group);
 
 		if (match_result.matched()) {
@@ -489,13 +493,15 @@ public class IconTasklistApplet : Budgie.Applet {
 		if (button == null) {
 			debug(@"Button not found by app_id '$app_id', searching by window group...");
 
-			buttons.foreach((key, btn) => {
+			foreach (string key in buttons.get_keys()) {
+				var btn = buttons[key];
 				if (btn.get_window_group() == group) {
 					button = btn;
 					app_id = key; // Update app_id to the actual key the button is stored under
 					debug(@"Found button by window group: key='$key'");
+					break;
 				}
-			});
+			}
 		}
 
 		if (button == null) { // we don't manage this button
@@ -668,11 +674,11 @@ public class IconTasklistApplet : Budgie.Applet {
 	}
 
 	private void resize() {
-		this.buttons.foreach((id, button) => {
+		foreach (IconButton button in buttons.get_values()) {
 			button.set_icon_size(icon_size);
 			button.set_panel_size(panel_size);
 			button.queue_resize();
-		});
+		}
 
 		queue_resize();
 	}

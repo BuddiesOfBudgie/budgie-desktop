@@ -42,45 +42,21 @@ public class BluetoothIndicator : Bin {
 		client = new BluetoothClient();
 		obex_manager = new ObexManager();
 
-		client.device_added.connect((device) => {
-			// Remove any existing rows for this device
-			remove_device(device);
-			// Add the new device to correctly update its status
-			add_device(device);
-		});
+		client.device_added.connect(on_client_device_added);
 
-		client.device_removed.connect((device) => {
-			remove_device(device);
-		});
+		client.device_removed.connect(on_client_device_removed);
 
 		// Handle when a UPower device has been added
-		client.upower_device_added.connect((up_device) => {
-			devices_box.foreach((row) => {
-				var device_row = row as BTDeviceRow;
-				if (device_row.device.address == up_device.serial) {
-					device_row.up_device = up_device;
-				}
-			});
-		});
+		client.upower_device_added.connect(on_upower_device_added);
 
 		// Handle when a UPower device has been removed
-		client.upower_device_removed.connect((path) => {
-			devices_box.foreach((row) => {
-				var device_row = row as BTDeviceRow;
-				if (((DBusProxy) device_row.device).get_object_path() == path) {
-					device_row.up_device = null;
-				}
-			});
-		});
+		client.upower_device_removed.connect(on_upower_device_removed);
 
 		// Handle changes to airplane mode
 		client.airplane_mode_changed.connect(update_state_ui);
 
 		// Show or hide the panel widget if we have a Bluetooth adapter or not
-		client.notify["has-adapter"].connect(() => {
-			if (client.has_adapter) show_all();
-			else hide();
-		});
+		client.notify["has-adapter"].connect(on_has_adapter_changed);
 
 		// Create our popover
 		popover = new Budgie.Popover(ebox);
@@ -139,9 +115,7 @@ public class BluetoothIndicator : Bin {
 		devices_box.set_sort_func(sort_devices);
 		devices_box.get_style_context().add_class("bluetooth-device-listbox");
 
-		devices_box.row_activated.connect((row) => {
-			((BTDeviceRow) row).toggle_connection.begin();
-		});
+		devices_box.row_activated.connect(on_device_row_activated);
 
 		// Placeholder
 		var placeholder = new Box(Orientation.VERTICAL, 18) {
@@ -184,6 +158,44 @@ public class BluetoothIndicator : Bin {
 		if (client.has_adapter) show_all();
 	}
 
+	private void on_client_device_added(Device1 device) {
+		// Remove any existing rows for this device
+		remove_device(device);
+		// Add the new device to correctly update its status
+		add_device(device);
+	}
+
+	private void on_client_device_removed(Device1 device) {
+		remove_device(device);
+	}
+
+	private void on_upower_device_added(Up.Device up_device) {
+		foreach (var row in devices_box.get_children()) {
+			var device_row = row as BTDeviceRow;
+			if (device_row.device.address == up_device.serial) {
+				device_row.up_device = up_device;
+			}
+		}
+	}
+
+	private void on_upower_device_removed(string path) {
+		foreach (var row in devices_box.get_children()) {
+			var device_row = row as BTDeviceRow;
+			if (((DBusProxy) device_row.device).get_object_path() == path) {
+				device_row.up_device = null;
+			}
+		}
+	}
+
+	private void on_has_adapter_changed() {
+		if (client.has_adapter) show_all();
+		else hide();
+	}
+
+	private void on_device_row_activated(ListBoxRow row) {
+		((BTDeviceRow) row).toggle_connection.begin();
+	}
+
 	private bool on_button_released(EventButton e) {
 		if (e.button != BUTTON_MIDDLE) return EVENT_PROPAGATE;
 
@@ -218,12 +230,14 @@ public class BluetoothIndicator : Bin {
 
 		var widget = new BTDeviceRow(device, obex_manager);
 
-		widget.properties_updated.connect(() => {
-			devices_box.invalidate_filter();
-			devices_box.invalidate_sort();
-		});
+		widget.properties_updated.connect(on_device_properties_updated);
 
 		devices_box.add(widget);
+		devices_box.invalidate_filter();
+		devices_box.invalidate_sort();
+	}
+
+	private void on_device_properties_updated() {
 		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
 	}
@@ -231,12 +245,12 @@ public class BluetoothIndicator : Bin {
 	private void remove_device(Device1 device) {
 		debug("Bluetooth device removed: %s", device.alias);
 
-		devices_box.foreach((row) => {
+		foreach (var row in devices_box.get_children()) {
 			var child = row as BTDeviceRow;
 			if (child.device.address == device.address) {
 				row.destroy();
 			}
-		});
+		}
 
 		devices_box.invalidate_filter();
 		devices_box.invalidate_sort();
@@ -338,9 +352,7 @@ public class BTDeviceRow : ListBoxRow {
 			update_battery();
 			// Connect to signal if the new device isn't null
 			if (_up_device == null) return;
-			up_handler_id = _up_device.notify.connect(() => {
-				update_battery();
-			});
+			up_handler_id = _up_device.notify.connect(on_up_device_notify);
 		}
 	}
 
@@ -440,24 +452,7 @@ public class BTDeviceRow : ListBoxRow {
 			tooltip_text = _("Send file"),
 		};
 		send_button.get_style_context().add_class("circular");
-		send_button.clicked.connect(() => {
-			string[] args = { "org.buddiesofbudgie.sendto", "-a", device.address, "-f" };
-			var env = Environ.get();
-			Pid pid;
-
-			try {
-				Process.spawn_async(
-					null,
-					args,
-					env,
-					SEARCH_PATH_FROM_ENVP,
-					null,
-					out pid
-				);
-			} catch (SpawnError e) {
-				warning("Error starting sendto: %s", e.message);
-			}
-		});
+		send_button.clicked.connect(on_send_button_clicked);
 
 		// Disconnect button
 		connection_button = new Button.from_icon_name("bluetooth-disabled-symbolic", IconSize.BUTTON) {
@@ -466,9 +461,7 @@ public class BTDeviceRow : ListBoxRow {
 		};
 		connection_button.get_style_context().add_class("circular");
 		connection_button.get_style_context().add_class("bluetooth-connection-button");
-		connection_button.clicked.connect(() => {
-			toggle_connection.begin();
-		});
+		connection_button.clicked.connect(on_connection_button_clicked);
 
 		button_box.pack_start(send_button, true, true, 0);
 		button_box.pack_start(connection_button, true, true, 0);
@@ -510,7 +503,7 @@ public class BTDeviceRow : ListBoxRow {
 		progress_revealer.add(progress_grid);
 
 		// Signals
-		((DBusProxy) device).g_properties_changed.connect(update_status);
+		((DBusProxy) device).g_properties_changed.connect(on_device_properties_changed);
 
 		// Packing
 		grid.attach(image, 0, 0, 2, 2);
@@ -533,6 +526,37 @@ public class BTDeviceRow : ListBoxRow {
 
 	public BTDeviceRow(Device1 device, ObexManager obex_manager) {
 		Object(device: device, obex_manager: obex_manager);
+	}
+
+	private void on_up_device_notify() {
+		update_battery();
+	}
+
+	private void on_send_button_clicked() {
+		string[] args = { "org.buddiesofbudgie.sendto", "-a", device.address, "-f" };
+		var env = Environ.get();
+		Pid pid;
+
+		try {
+			Process.spawn_async(
+				null,
+				args,
+				env,
+				SEARCH_PATH_FROM_ENVP,
+				null,
+				out pid
+			);
+		} catch (SpawnError e) {
+			warning("Error starting sendto: %s", e.message);
+		}
+	}
+
+	private void on_connection_button_clicked() {
+		toggle_connection.begin();
+	}
+
+	private void on_device_properties_changed(Variant changed, string[] invalid) {
+		update_status();
 	}
 
 	private void hide_progress_revealer() {

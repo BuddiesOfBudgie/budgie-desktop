@@ -130,24 +130,26 @@ namespace Budgie {
 			workspace_count = new Gtk.SpinButton.with_range(1, 8, 1); // Create our button, with a minimum of 1 workspace and max of 8
 			workspace_count.set_value((double) gnome_wm_settings.get_int("num-workspaces")); // Set our default value
 
-			workspace_count.value_changed.connect(() => { // On value change
-				int new_val = workspace_count.get_value_as_int(); // Get the value as an int
-
-				if (new_val < 1) { // Ensure valid minimum
-					new_val = 1;
-					workspace_count.set_value(1.0); // Set as 1
-				} else if (new_val > 8) { // Ensure valid maximum
-					new_val = 8;
-					workspace_count.set_value(8.0); // Set as 8
-				}
-
-				gnome_wm_settings.set_int("num-workspaces", new_val); // Update num-workspaces
-			});
+			workspace_count.value_changed.connect(on_workspace_count_changed);
 
 			grid.add_row(new SettingsRow(workspace_count,
 				_("Number of virtual desktops"),
 				_("Number of virtual desktops / workspaces to create automatically on startup.")
 			));
+		}
+
+		private void on_workspace_count_changed() {
+			int new_val = workspace_count.get_value_as_int();
+
+			if (new_val < 1) {
+				new_val = 1;
+				workspace_count.set_value(1.0);
+			} else if (new_val > 8) {
+				new_val = 8;
+				workspace_count.set_value(8.0);
+			}
+
+			gnome_wm_settings.set_int("num-workspaces", new_val);
 		}
 
 		// get_exec_for_type will get the name of the executable for this type

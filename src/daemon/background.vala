@@ -26,6 +26,8 @@ namespace Budgie {
 		Subprocess? bg = null;
 		CrystalDockHelper? crystal_dock_helper = null;
 
+		private Subprocess? pending_bg = null;
+
 		/**
 		* Determine if the wallpaper is a colour wallpaper or not
 		*/
@@ -85,25 +87,31 @@ namespace Budgie {
 			gnome_bg = new Gnome.BG();
 
 			/* If the background keys change, proxy it to libgnomedesktop */
-			settings.change_event.connect(() => {
-				gnome_bg.load_from_preferences(this.settings);
-				return false;
-			});
+			settings.change_event.connect(on_settings_change_event);
 
-			gnome_bg.changed.connect(() => {
-				this.update();
-			});
+			gnome_bg.changed.connect(on_gnome_bg_changed);
 
 			/* Do the initial load */
 			gnome_bg.load_from_preferences(this.settings);
 
 			/* Setup Crystal Dock helper and monitor for changes */
 			crystal_dock_helper = new CrystalDockHelper();
-			crystal_dock_helper.dock_config_changed.connect(() => {
-				message("Crystal Dock configuration changed, updating wallpaper");
-				this.update();
-			});
+			crystal_dock_helper.dock_config_changed.connect(on_dock_config_changed);
 
+		}
+
+		private bool on_settings_change_event() {
+			gnome_bg.load_from_preferences(this.settings);
+			return false;
+		}
+
+		private void on_gnome_bg_changed() {
+			this.update();
+		}
+
+		private void on_dock_config_changed() {
+			message("Crystal Dock configuration changed, updating wallpaper");
+			this.update();
 		}
 
 		/**
@@ -148,6 +156,16 @@ namespace Budgie {
 			}
 		}
 
+		private bool on_background_swap_timeout() {
+			// use a delay to allow process termination to complete
+			if (bg != null) {
+				bg.force_exit();
+			}
+			bg = pending_bg;
+			pending_bg = null;
+			return false;
+		}
+
 		void update() {
 			string? bg_filename = gnome_bg.get_filename();
 
@@ -179,14 +197,8 @@ namespace Budgie {
 				Subprocess new_bg;
 				try {
 					new_bg = new Subprocess.newv(cmdline, SubprocessFlags.NONE);
-					Timeout.add(BACKGROUND_TIMEOUT, () => {
-						// use a delay to allow process termination to complete
-						if (bg != null) {
-							bg.force_exit();
-						}
-						bg = new_bg;
-						return false;
-					});
+					pending_bg = new_bg;
+					Timeout.add(BACKGROUND_TIMEOUT, on_background_swap_timeout);
 				} catch (Error e) {
 					warning("Error starting swaybg: %s", e.message);
 				}

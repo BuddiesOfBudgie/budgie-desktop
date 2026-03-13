@@ -72,24 +72,14 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
 		header_reveal_button.valign = Gtk.Align.CENTER;
-		header_reveal_button.clicked.connect(() => {
-			content_revealer.reveal_child = !content_revealer.child_revealed;
-			var image = (Gtk.Image?) header_reveal_button.get_image();
-			if (content_revealer.reveal_child) {
-				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-			} else {
-				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-			}
-		});
+		header_reveal_button.clicked.connect(on_header_reveal_clicked);
 		header.pack_end(header_reveal_button, false, false, 0);
 
 		cal = new Gtk.Calendar();
 		cal.get_style_context().add_class("raven-calendar");
 		content.add(cal);
 
-		cal.month_changed.connect(() => {
-			update_selection();
-		});
+		cal.month_changed.connect(on_month_changed);
 
 		settings.changed.connect(settings_updated);
 		settings_updated("show-week-numbers");
@@ -99,11 +89,29 @@ public class CalendarRavenWidget : Budgie.RavenWidget {
 		Bus.get_proxy.begin<RavenToCalendarRemote>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 	}
 
+	private void on_header_reveal_clicked() {
+		content_revealer.reveal_child = !content_revealer.child_revealed;
+		var image = (Gtk.Image?) header_reveal_button.get_image();
+		if (content_revealer.reveal_child) {
+			image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		} else {
+			image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		}
+	}
+
+	private void on_month_changed() {
+		update_selection();
+	}
+
+	private void on_expansion_changed(bool is_expanded) {
+		on_visibility_changed(is_expanded);
+	}
+
 	/* Hold onto our Raven proxy ref */
 	void on_raven_get(Object? o, AsyncResult? res) {
 		try {
 			raven_proxy = Bus.get_proxy.end(res);
-			raven_proxy.ExpansionChanged.connect((is_expanded) => on_visibility_changed(is_expanded));
+			raven_proxy.ExpansionChanged.connect(on_expansion_changed);
 		} catch (Error e) {
 			warning("Failed to get Raven proxy: %s", e.message);
 		}

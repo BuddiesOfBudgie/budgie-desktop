@@ -34,23 +34,33 @@ public class Bluetooth.ObjectManager : Object {
 				null
 			);
 
-			object_manager.get_objects().foreach((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_added(object, iface));
-			});
+			foreach (var object in object_manager.get_objects()) {
+				foreach (var iface in object.get_interfaces()) {
+					on_interface_added(object, iface);
+				}
+			}
 
 			object_manager.interface_added.connect(on_interface_added);
 
 			object_manager.interface_removed.connect(on_interface_removed);
 
-			object_manager.object_added.connect((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_added(object, iface));
-			});
+			object_manager.object_added.connect(on_object_added);
 
-			object_manager.object_removed.connect((object) => {
-				object.get_interfaces().foreach((iface) => on_interface_removed(object, iface));
-			});
+			object_manager.object_removed.connect(on_object_removed);
 		} catch (Error e) {
 			critical("Error getting Bluez object manager: %s", e.message);
+		}
+	}
+
+	private void on_object_added(DBusObject object) {
+		foreach (var iface in object.get_interfaces()) {
+			on_interface_added(object, iface);
+		}
+	}
+
+	private void on_object_removed(DBusObject object) {
+		foreach (var iface in object.get_interfaces()) {
+			on_interface_removed(object, iface);
 		}
 	}
 
@@ -90,6 +100,13 @@ public class Bluetooth.ObjectManager : Object {
 		}
 	}
 
+	private void on_adapter_properties_changed(Variant changed, string[] invalid) {
+		var discovering = changed.lookup_value("Discovering", VariantType.BOOLEAN);
+		if (discovering != null) {
+			status_discovering();
+		}
+	}
+
 	private void on_interface_added(DBusObject object, DBusInterface iface) {
 		if (iface is Bluetooth.Device) {
 			unowned var device = (Bluetooth.Device) iface;
@@ -97,12 +114,7 @@ public class Bluetooth.ObjectManager : Object {
 		} else if (iface is Bluetooth.Adapter) {
 			unowned var adapter = (Bluetooth.Adapter) iface;
 			has_object = true;
-			((DBusProxy) adapter).g_properties_changed.connect((changed, invalid) => {
-				var discovering = changed.lookup_value("Discovering", VariantType.BOOLEAN);
-				if (discovering != null) {
-					status_discovering();
-				}
-			});
+			((DBusProxy) adapter).g_properties_changed.connect(on_adapter_properties_changed);
 		}
 	}
 
@@ -117,12 +129,12 @@ public class Bluetooth.ObjectManager : Object {
 	public Gee.LinkedList<Bluetooth.Adapter> get_adapters() requires (object_manager != null) {
 		var adapters = new Gee.LinkedList<Bluetooth.Adapter>();
 
-		object_manager.get_objects().foreach((object) => {
+		foreach (var object in object_manager.get_objects()) {
 			DBusInterface? iface = object.get_interface("org.bluez.Adapter1");
-			if (iface == null) return;
+			if (iface == null) continue;
 
 			adapters.add(((Bluetooth.Adapter) iface));
-		});
+		}
 
 		return (owned) adapters;
 	}
@@ -130,12 +142,12 @@ public class Bluetooth.ObjectManager : Object {
 	public Gee.Collection<Bluetooth.Device> get_devices() requires (object_manager != null) {
 		var devices = new Gee.LinkedList<Bluetooth.Device>();
 
-		object_manager.get_objects().foreach((object) => {
+		foreach (var object in object_manager.get_objects()) {
 			DBusInterface? iface = object.get_interface("org.bluez.Device1");
-			if (iface == null) return;
+			if (iface == null) continue;
 
 			devices.add(((Bluetooth.Device) iface));
-		});
+		}
 
 		return (owned) devices;
 	}

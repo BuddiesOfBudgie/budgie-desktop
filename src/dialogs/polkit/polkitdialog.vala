@@ -50,6 +50,10 @@ namespace Budgie {
 		public PolkitAgent.Session? pk_session = null;
 		private Polkit.Identity? pk_identity = null;
 
+		/* Stored for async enumerate_actions callback */
+		private Polkit.Authority? stored_authority = null;
+		private string stored_action_id;
+
 		public string action_id {
 			public get {
 				return label_id_value.get_text();
@@ -103,6 +107,44 @@ namespace Budgie {
 
 		public string cookie { public get; public set; }
 
+		private void on_enumerate_actions_ready(Object? obj, AsyncResult res) {
+			try {
+				var actions = stored_authority.enumerate_actions.end(res);
+				Polkit.ActionDescription action = null;
+				foreach (unowned Polkit.ActionDescription a in actions) {
+					if (a.get_action_id() == stored_action_id) {
+						action = a;
+						break;
+					}
+				}
+
+				// If we found the appropiate action, set our description
+				if (action != null) {
+					action_desc = action.get_description();
+				}
+			} catch (Error e) {
+				GLib.warning("Error enumerating Polkit actions: %s", e.message);
+			}
+		}
+
+		private bool on_monitor_setup() {
+			var wayland_client = new WaylandClient();
+
+			if (!wayland_client.is_initialised()) {
+				warning("WaylandClient not initialized for polkit dialog");
+				return false;
+			}
+
+			var monitor = wayland_client.gdk_monitor;
+			if (monitor == null) {
+				warning("Failed to get monitor for polkit dialog");
+				return false;
+			}
+
+			GtkLayerShell.set_monitor(this, monitor);
+			return true;
+		}
+
 		/* Save manually setting all this crap via some nice properties */
 		public AgentDialog(string action_id, string message, string icon_name, string cookie, Cancellable? cancellable) {
 			Object(action_id: action_id, message: message, auth_icon_name: icon_name, cookie: cookie, cancellable: cancellable, resizable: false);
@@ -116,28 +158,10 @@ namespace Budgie {
 			// Try to get the ActionDescription for this event to give more
 			// context to the popup dialog
 			try {
-				var authority = Polkit.Authority.get_sync(null);
+				stored_authority = Polkit.Authority.get_sync(null);
+				stored_action_id = action_id;
 				// To do this, we have to iterate over all of the actions...
-				authority.enumerate_actions.begin(null, (obj, res) => {
-					try {
-						var actions = authority.enumerate_actions.end(res);
-						Polkit.ActionDescription action = null;
-						actions.foreach((a) => {
-							// ...and see if its ID matches the one we were given
-							if (a.get_action_id() == action_id) {
-								action = a;
-								return;
-							}
-						});
-
-						// If we found the appropiate action, set our description
-						if (action != null) {
-							action_desc = action.get_description();
-						}
-					} catch (Error e) {
-						GLib.warning("Error enumerating Polkit actions: %s", e.message);
-					}
-				});
+				stored_authority.enumerate_actions.begin(null, on_enumerate_actions_ready);
 			} catch (Error e) {
 				GLib.warning("Error getting Polkit Authority: %s", e.message);
 			}
@@ -161,16 +185,7 @@ namespace Budgie {
 				// Fallback: just init the window without positioning
 			} else {
 				// Safe initialization with monitor
-				wayland_client.with_valid_monitor(() => {
-					var monitor = wayland_client.gdk_monitor;
-					if (monitor == null) {
-						warning("Failed to get monitor for polkit dialog");
-						return false;
-					}
-
-					GtkLayerShell.set_monitor(this, monitor);
-					return true;
-				});
+				wayland_client.with_valid_monitor(on_monitor_setup);
 			}
 
 			key_release_event.connect(on_key_release);
@@ -368,14 +383,18 @@ namespace Budgie {
 
 		public signal void stopagent();
 
+		/* Stored for use in the done signal handler */
+		private AgentDialog? active_dialog = null;
+
 		public override async bool initiate_authentication(
 			string action_id, string message, string icon_name,
 			Polkit.Details details, string cookie, List<Polkit.Identity> identities, Cancellable? cancellable
 		) throws Polkit.Error {
 			var dialog = new AgentDialog(action_id, message, "dialog-password-symbolic", cookie, cancellable);
-			dialog.done.connect(() => {
-				initiate_authentication.callback();
-			});
+			active_dialog = dialog;
+			// NOTE: This must remain a lambda because Vala async yield callbacks
+			// can only be accessed from within the async method's own scope.
+			dialog.done.connect(() => { initiate_authentication.callback(); });
 
 			if (identities == null) {
 				dialog.destroy();
@@ -396,15 +415,29 @@ namespace Budgie {
 			return true;
 		}
 
+		private void on_register_with_session_ready(Object? obj, AsyncResult res) {
+			bool success = register_with_session.end(res);
+			if (!success) {
+				message("Failed to register with Session manager");
+			}
+		}
+
 		public Agent() {
 			theme_manager = new Budgie.ThemeManager();
 
-			register_with_session.begin((o, res) => {
-				bool success = register_with_session.end(res);
-				if (!success) {
-					message("Failed to register with Session manager");
-				}
-			});
+			register_with_session.begin(on_register_with_session_ready);
+		}
+
+		private void on_query_end_session() {
+			end_session(false);
+		}
+
+		private void on_end_session() {
+			end_session(false);
+		}
+
+		private void on_stop() {
+			end_session(true);
 		}
 
 		private async bool register_with_session() {
@@ -414,15 +447,9 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.EndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.Stop.connect(() => {
-				end_session(true);
-			});
+			sclient.QueryEndSession.connect(on_query_end_session);
+			sclient.EndSession.connect(on_end_session);
+			sclient.Stop.connect(on_stop);
 			return true;
 		}
 
@@ -441,6 +468,15 @@ namespace Budgie {
 	}
 }
 
+/* Stored for use in the stopagent signal handler */
+private static void* stored_agenthandle = null;
+private static Budgie.Agent? stored_agent = null;
+
+private static void on_stopagent() {
+	PolkitAgent.Listener.unregister(stored_agenthandle);
+	Gtk.main_quit();
+}
+
 public static int main(string[] args) {
 	Gtk.init(ref args);
 
@@ -450,6 +486,7 @@ public static int main(string[] args) {
 	Intl.textdomain(Budgie.GETTEXT_PACKAGE);
 
 	Budgie.Agent? agent = new Budgie.Agent();
+	stored_agent = agent;
 
 	Polkit.Subject? subject = null;
 
@@ -465,11 +502,8 @@ public static int main(string[] args) {
 
 	try {
 		var agenthandle = agent.register(PolkitAgent.RegisterFlags.NONE, subject, "/org/freedesktop/PolicyKit1/AuthenticationAgent");
-		agent.stopagent.connect(() => {
-			PolkitAgent.Listener.unregister(agenthandle);
-			Gtk.main_quit();
-			return;
-		});
+		stored_agenthandle = agenthandle;
+		agent.stopagent.connect(on_stopagent);
 	} catch (Error e) {
 		stderr.printf("Unable to register listener: %s", e.message);
 		Gtk.main_quit();
@@ -480,4 +514,3 @@ public static int main(string[] args) {
 
 	return 0;
 }
-

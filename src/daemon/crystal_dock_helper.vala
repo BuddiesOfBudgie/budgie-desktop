@@ -79,31 +79,35 @@ namespace Budgie {
 				File config_file = File.new_for_path(config_dir);
 				config_monitor = config_file.monitor_directory(FileMonitorFlags.NONE, null);
 
-				config_monitor.changed.connect((file, other_file, event_type) => {
-					string basename = file.get_basename();
-					if (basename.has_prefix("panel_") && basename.has_suffix(".conf")) {
-						switch (event_type) {
-							case FileMonitorEvent.CHANGED:
-							case FileMonitorEvent.CREATED:
-							case FileMonitorEvent.DELETED:
-								debug("Crystal Dock config changed: %s", basename);
-								// Small delay to let file write complete
-								Timeout.add(200, () => {
-									dock_config_changed();
-									return false;
-								});
-								break;
-							default:
-								break;
-						}
-					}
-				});
+				config_monitor.changed.connect(on_config_dir_changed);
 
 				debug("Monitoring Crystal Dock config for changes");
 
 			} catch (Error e) {
 				warning("Failed to setup Crystal Dock config monitor: %s", e.message);
 			}
+		}
+
+		private void on_config_dir_changed(File file, File? other_file, FileMonitorEvent event_type) {
+			string basename = file.get_basename();
+			if (basename.has_prefix("panel_") && basename.has_suffix(".conf")) {
+				switch (event_type) {
+					case FileMonitorEvent.CHANGED:
+					case FileMonitorEvent.CREATED:
+					case FileMonitorEvent.DELETED:
+						debug("Crystal Dock config changed: %s", basename);
+						// Small delay to let file write complete
+						Timeout.add(200, on_config_change_delay);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private bool on_config_change_delay() {
+			dock_config_changed();
+			return false;
 		}
 
 		/**

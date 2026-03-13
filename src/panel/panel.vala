@@ -261,6 +261,9 @@ namespace Budgie {
 			}
 		}
 
+		private Budgie.Applet? pending_action_applet = null;
+		private Budgie.PanelAction pending_action_type;
+
 		public bool activate_action(int remote_action) {
 			unowned string? uuid = null;
 			unowned Budgie.AppletInfo? info = null;
@@ -274,14 +277,41 @@ namespace Budgie {
 					set_occluded(false);
 					this.set_above_other_surfaces(); // Ensure the surface is above others before we invoke the action
 
-					Idle.add(() => {
-						info.applet.invoke_action(action);
-						return false;
-					});
+					this.pending_action_applet = info.applet;
+					this.pending_action_type = action;
+					Idle.add(on_invoke_action_idle);
 					return true;
 				}
 			}
 			return false;
+		}
+
+		private bool on_invoke_action_idle() {
+			if (pending_action_applet != null) {
+				pending_action_applet.invoke_action(pending_action_type);
+				pending_action_applet = null;
+			}
+			return false;
+		}
+
+		private void on_scale_factor_changed() {
+			this.scale = get_scale_factor();
+			this.placement();
+		}
+
+		private static int applet_info_compare(Budgie.AppletInfo? a, Budgie.AppletInfo? b) {
+			return (int) (a.position > b.position) - (int) (a.position < b.position);
+		}
+
+		private bool on_update_box_constraints_timeout() {
+			Gtk.Allocation layout_alloc;
+			layout.get_allocation(out layout_alloc);
+			layout.update_box_constraints(layout_alloc);
+			return false;
+		}
+
+		private void on_dock_animation_complete(Budgie.Animation? src) {
+			this.animation = PanelAnimation.NONE;
 		}
 
 		/**
@@ -442,10 +472,7 @@ namespace Budgie {
 			nscale = 1.0;
 
 			// Respond to a scale factor change
-			notify["scale-factor"].connect(() => {
-				this.scale = get_scale_factor();
-				this.placement();
-			});
+			notify["scale-factor"].connect(on_scale_factor_changed);
 
 			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
@@ -784,9 +811,7 @@ namespace Budgie {
 				return;
 			}
 
-			CompareFunc<Budgie.AppletInfo?> infocmp = (a, b) => {
-				return (int) (a.position > b.position) - (int) (a.position < b.position);
-			};
+			CompareFunc<Budgie.AppletInfo?> infocmp = applet_info_compare;
 
 			lock (expected_uuids) {
 				for (int i = 0; i < applets.length; i++) {
@@ -1156,12 +1181,7 @@ namespace Budgie {
 			layout.queue_resize();
 			
 			// Use a timeout to ensure allocations are updated before constraining
-			Timeout.add(10, () => {
-				Gtk.Allocation layout_alloc;
-				layout.get_allocation(out layout_alloc);
-				layout.update_box_constraints(layout_alloc);
-				return false;
-			});
+			Timeout.add(10, on_update_box_constraints_timeout);
 		}
 
 		void applet_updated(Object o, ParamSpec p) {
@@ -1743,9 +1763,7 @@ namespace Budgie {
 				}
 			};
 
-			dock_animation.start((a) => {
-				this.animation = PanelAnimation.NONE;
-			});
+			dock_animation.start(on_dock_animation_complete);
 
 			set_above_other_surfaces();
 			return false;

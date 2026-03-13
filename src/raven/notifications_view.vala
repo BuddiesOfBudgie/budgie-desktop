@@ -143,13 +143,7 @@ namespace Budgie {
 			listbox.set_placeholder(placeholder);
 			scrolledwindow.add(listbox);
 
-			raven_settings.changed["notification-sort"].connect((key) => {
-				sort_mode = (NotificationSort) raven_settings.get_enum(key);
-				listbox.foreach((row) => {
-					var group = ((Gtk.ListBoxRow) row).get_child() as NotificationGroup;
-					group.set_sort_mode(sort_mode);
-				});
-			});
+			raven_settings.changed["notification-sort"].connect(on_notification_sort_changed);
 			sort_mode = (NotificationSort) raven_settings.get_enum("notification-sort");
 
 			show_all();
@@ -172,6 +166,14 @@ namespace Budgie {
 				null,
 				on_raven_get
 			);
+		}
+
+		private void on_notification_sort_changed(string key) {
+			sort_mode = (NotificationSort) raven_settings.get_enum(key);
+			foreach (var row in listbox.get_children()) {
+				var group = ((Gtk.ListBoxRow) row).get_child() as NotificationGroup;
+				group.set_sort_mode(sort_mode);
+			}
 		}
 
 		private void on_dbus_get(Object? o, AsyncResult? res) {
@@ -267,18 +269,9 @@ namespace Budgie {
 				group = new NotificationGroup(notification, sort_mode, max_per_group);
 				listbox.add(group);
 
-				group.dismissed_group.connect((name) => { // When we dismiss the group
-					notification_count -= group.noti_count;
-					update_child_count();
-					Raven.get_instance().ReadNotifications(); // Update our counter
-					group.destroy();
-				});
+				group.dismissed_group.connect(on_group_dismissed);
 
-				group.dismissed_notification.connect((id) => {
-					notification_count--;
-					update_child_count();
-					Raven.get_instance().ReadNotifications(); // Update our counter
-				});
+				group.dismissed_notification.connect(on_group_notification_dismissed);
 			}
 
 			// Add the notification to the group, and notify Raven
@@ -287,6 +280,22 @@ namespace Budgie {
 			notification_count++;
 			update_child_count();
 			Raven.get_instance().UnreadNotifications();
+		}
+
+		private void on_group_dismissed(string name) {
+			var group = get_notification_group(name);
+			if (group != null) {
+				notification_count -= group.noti_count;
+				group.destroy();
+			}
+			update_child_count();
+			Raven.get_instance().ReadNotifications(); // Update our counter
+		}
+
+		private void on_group_notification_dismissed(uint32 id) {
+			notification_count--;
+			update_child_count();
+			Raven.get_instance().ReadNotifications(); // Update our counter
 		}
 
 		private NotificationGroup? get_notification_group(string? name) {

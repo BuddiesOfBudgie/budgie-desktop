@@ -66,7 +66,8 @@ public class OverlayMenus : Revealer {
 
 		this.items_to_show = this.user_directory_buttons.get_keys();
 
-		this.user_directory_buttons.foreach((key, val) => {
+		foreach (UserDirectory key in this.user_directory_buttons.get_keys()) {
+			MenuItem val = this.user_directory_buttons.get(key);
 			unowned string dir = Environment.get_user_special_dir(key);
 
 			if (dir != null) {
@@ -76,16 +77,18 @@ public class OverlayMenus : Revealer {
 
 			val.set_data<UserDirectory>("user-directory", key); // Add the UserDirectory as the data for this button
 			this.folder_items.insert(val, -1); // Add each of the menu items
-			val.clicked.connect((val) => {
-				this.handle_xdg_dir_clicked(val);
-				this.item_clicked();
-			});
-		});
+			val.clicked.connect(on_folder_item_clicked);
+		}
 
 		this.setup_dbus.begin();
 
 		this.stack.add_named(this.folder_items, "xdg");
 		this.add(this.stack);
+	}
+
+	private void on_folder_item_clicked(Button button) {
+		this.handle_xdg_dir_clicked(button);
+		this.item_clicked();
 	}
 
 	private bool filter_list_box_item(ListBoxRow row) {

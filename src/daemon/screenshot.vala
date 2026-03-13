@@ -30,8 +30,12 @@ namespace Budgie {
 			/* Hook up screenshot dbus */
 			Bus.own_name(BusType.SESSION, DBUS_SCREENSHOT, BusNameOwnerFlags.REPLACE,
 				on_bus_acquired,
-				() => {},
-				() => warning("serve Could not acquire name\n") );
+				null,
+				on_screenshot_name_lost);
+		}
+
+		private void on_screenshot_name_lost() {
+			warning("serve Could not acquire name\n");
 		}
 
 		void on_bus_acquired(DBusConnection conn) {

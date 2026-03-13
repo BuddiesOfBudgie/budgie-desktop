@@ -52,26 +52,32 @@ namespace Budgie {
 
 			buttonplacement = new GLib.Settings("com.solus-project.budgie-wm");
 
-			buttonplacement.changed["button-style"].connect(() => {
-				fill_buttonpos();
-				buttonpos_changed();
-			});
+			buttonplacement.changed["button-style"].connect(on_button_style_changed);
 			fill_buttonpos();
 
 			emit_capture_sound = screenshot_settings.get_boolean("screenshot-capture-sound");
-			screenshot_settings.changed["screenshot-capture-sound"].connect(() => {
-				emit_capture_sound = screenshot_settings.get_boolean("screenshot-capture-sound");
-			});
+			screenshot_settings.changed["screenshot-capture-sound"].connect(on_capture_sound_changed);
 
 			showtooltips = screenshot_settings.get_boolean("showtooltips");
-			screenshot_settings.changed["showtooltips"].connect(() => {
-				showtooltips = screenshot_settings.get_boolean("showtooltips");
-			});
+			screenshot_settings.changed["showtooltips"].connect(on_showtooltips_changed);
 
 			// we need to use the same temporary user-space file across dbus client/server calls to coordinate
 			// the passing of screenshot images
 			string tmpdir = Environment.get_variable("XDG_RUNTIME_DIR") ?? Environment.get_variable("HOME");
 			tempfile_path = GLib.Path.build_path(GLib.Path.DIR_SEPARATOR_S, tmpdir, ".budgiescreenshot_tempfile");
+		}
+
+		private void on_button_style_changed() {
+			fill_buttonpos();
+			buttonpos_changed();
+		}
+
+		private void on_capture_sound_changed() {
+			emit_capture_sound = screenshot_settings.get_boolean("screenshot-capture-sound");
+		}
+
+		private void on_showtooltips_changed() {
+			showtooltips = screenshot_settings.get_boolean("showtooltips");
 		}
 
 		private void fill_buttonpos() {
@@ -131,11 +137,15 @@ namespace Budgie {
 			}
 		}
 
+		private void on_name_lost(DBusConnection conn, string name) {
+			warning("setup_dbus Could not acquire name");
+		}
+
 		public void setup_dbus() throws Error {
 			GLib.Bus.own_name (
 				BusType.SESSION, "org.buddiesofbudgie.BudgieScreenshotControl",
 				BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE, on_bus_acquired,
-				() => {}, () => warning("setup_dbus Could not acquire name")
+				null, on_name_lost
 			);
 		}
 
@@ -206,24 +216,30 @@ namespace Budgie {
 
 			switch (screenshot_mode) {
 				case SELECTION:
-					Timeout.add(200 + (delay * 1000), () => {
-						shoot_area.begin();
-						return false;
-					});
+					Timeout.add(200 + (delay * 1000), on_shoot_area_timeout);
 					break;
 				case SCREEN:
-					Timeout.add(200 + (delay * 1000), () => {
-						shoot_screen.begin();
-						return false;
-					});
+					Timeout.add(200 + (delay * 1000), on_shoot_screen_timeout);
 					break;
 				case WINDOW:
-					Timeout.add(200 + (delay * 1000), () => {
-						shoot_window.begin();
-						return false;
-					});
+					Timeout.add(200 + (delay * 1000), on_shoot_window_timeout);
 					break;
 			}
+		}
+
+		private bool on_shoot_area_timeout() {
+			shoot_area.begin();
+			return false;
+		}
+
+		private bool on_shoot_screen_timeout() {
+			shoot_screen.begin();
+			return false;
+		}
+
+		private bool on_shoot_window_timeout() {
+			shoot_window.begin();
+			return false;
 		}
 
 		async void shoot_window() {
@@ -312,6 +328,9 @@ namespace Budgie {
 		bool ignore = false;
 		Label[] shortcutlabels;
 		ulong? button_id = null;
+		Gtk.Popover helppopover;
+		string shootmode;
+		ToggleButton[] all_selectbuttons;
 
 		[GtkChild]
 		private unowned Gtk.Grid? maingrid;
@@ -334,22 +353,7 @@ namespace Budgie {
 				return;
 			}
 
-			bool window_configured = wayland_client.with_valid_monitor(() => {
-				var monitor = wayland_client.gdk_monitor;
-				if (monitor == null) {
-					warning("Failed to get monitor for screenshot home window");
-					return false;
-				}
-
-				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-				GtkLayerShell.set_monitor(this, monitor);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
-				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
-
-				return true;
-			});
+			bool window_configured = wayland_client.with_valid_monitor(on_configure_monitor);
 
 			if (!window_configured) {
 				warning("Failed to configure screenshot home window");
@@ -391,13 +395,7 @@ namespace Budgie {
 			//this.set_keep_above(true);
 
 			 // Connect the key-press-event signal to close the window on escape
-			 this.key_press_event.connect((event) => {
-				if (event.keyval == Gdk.Key.Escape) {
-					this.close();
-					return true;
-				}
-				return false;
-			});
+			 this.key_press_event.connect(on_key_press);
 
 			// css stuff
 			Gdk.Screen screen = this.get_screen();
@@ -424,25 +422,119 @@ namespace Budgie {
 			// delay
 			windowstate.screenshot_settings.bind("delay", delayspin, "value", SettingsBindFlags.GET|SettingsBindFlags.SET);
 
-			this.destroy.connect(() => {
-				// prevent WindowState.NONE if follow up button is pressed
-				Timeout.add(100, () => {
-					if (windowstate.newstate == WindowState.MAINWINDOW) {
-						windowstate.statechanged(WindowState.NONE);
-					}
-
-					return false;
-				});
-			});
+			this.destroy.connect(on_destroy);
 
 			/*
 			 * left or right windowbuttons, that's the question when
 			 * (re-?) arranging headerbar buttons
 			*/
-			button_id = windowstate.buttonpos_changed.connect(() => {rearrange_headerbar();});
+			button_id = windowstate.buttonpos_changed.connect(on_buttonpos_changed);
 			rearrange_headerbar();
 
 			this.show_all();
+		}
+
+		private bool on_configure_monitor() {
+			var wayland_client = new WaylandClient();
+			var monitor = wayland_client.gdk_monitor;
+			if (monitor == null) {
+				warning("Failed to get monitor for screenshot home window");
+				return false;
+			}
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_monitor(this, monitor);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+
+			return true;
+		}
+
+		private bool on_key_press(Gdk.EventKey event) {
+			if (event.keyval == Gdk.Key.Escape) {
+				this.close();
+				return true;
+			}
+			return false;
+		}
+
+		private void on_destroy() {
+			// prevent WindowState.NONE if follow up button is pressed
+			Timeout.add(100, on_destroy_timeout);
+		}
+
+		private bool on_destroy_timeout() {
+			if (windowstate.newstate == WindowState.MAINWINDOW) {
+				windowstate.statechanged(WindowState.NONE);
+			}
+
+			return false;
+		}
+
+		private void on_buttonpos_changed() {
+			rearrange_headerbar();
+		}
+
+		private void on_shoot_clicked() {
+			windowstate.disconnect(button_id);
+			this.close();
+			shootmode = windowstate.screenshot_settings.get_string(
+				"screenshot-mode"
+			);
+			// allow the window to gracefully disappear
+			Timeout.add(100, on_shoot_timeout);
+		}
+
+		private bool on_shoot_timeout() {
+			switch (shootmode) {
+				case SELECTION:
+					new SelectLayer();
+					break;
+				case SCREEN:
+					windowstate.statechanged(WindowState.WAITINGFORSHOT);
+					new MakeScreenshot(null);
+					break;
+				case WINDOW:
+					windowstate.statechanged(WindowState.WAITINGFORSHOT);
+					new MakeScreenshot(null);
+					break;
+			}
+
+			return false;
+		}
+
+		private void on_help_clicked() {
+			update_current_shortcuts();
+			helppopover.set_visible(true);
+		}
+
+		private void on_area_button_0_clicked() {
+			on_area_button_clicked(all_selectbuttons[0]);
+		}
+
+		private void on_area_button_1_clicked() {
+			on_area_button_clicked(all_selectbuttons[1]);
+		}
+
+		private void on_area_button_2_clicked() {
+			on_area_button_clicked(all_selectbuttons[2]);
+		}
+
+		private void on_area_button_clicked(ToggleButton b) {
+			if (!ignore) {
+				ignore = true;
+				select_action(b, all_selectbuttons);
+				b.set_active(true);
+				Timeout.add(200, on_area_button_ignore_timeout);
+			}
+		}
+
+		private bool on_area_button_ignore_timeout() {
+			ignore = false;
+
+			return false;
 		}
 
 		private void update_current_shortcuts() {
@@ -533,38 +625,11 @@ namespace Budgie {
 			shootimage.margin_end = 10;
 			shootbutton.add(shootimage);
 			shootbutton.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-			shootbutton.clicked.connect(() => {
-				windowstate.disconnect(button_id);
-				this.close();
-				string shootmode = windowstate.screenshot_settings.get_string(
-					"screenshot-mode"
-				);
-				// allow the window to gracefully disappear
-				Timeout.add(100, () => {
-					switch (shootmode) {
-						case SELECTION:
-							new SelectLayer();
-							break;
-						case SCREEN:
-							windowstate.statechanged(WindowState.WAITINGFORSHOT);
-							new MakeScreenshot(null);
-							break;
-						case WINDOW:
-							windowstate.statechanged(WindowState.WAITINGFORSHOT);
-							new MakeScreenshot(null);
-							break;
-					}
-
-					return false;
-				});
-			});
+			shootbutton.clicked.connect(on_shoot_clicked);
 
 			Gtk.Button helpbutton = new Gtk.Button();
-			Gtk.Popover helppopover = make_info_popover(helpbutton);
-			helpbutton.clicked.connect(() => {
-				update_current_shortcuts();
-				helppopover.set_visible(true);
-			});
+			helppopover = make_info_popover(helpbutton);
+			helpbutton.clicked.connect(on_help_clicked);
 			helpbutton.label = "･･･";
 			helpbutton.get_style_context().add_class(Gtk.STYLE_CLASS_RAISED);
 			if (windowstate.buttonpos == ButtonPlacement.LEFT) {
@@ -602,10 +667,10 @@ namespace Budgie {
 			icon_names += "selectselection-symbolic";
 
 			int i = 0;
-			ToggleButton[] selectbuttons = {};
+			all_selectbuttons = {};
 			foreach (string s in areabuttons_labels) {
-				var iconfile = new ThemedIcon(name = icon_names[i]);
-				Gtk.Image selecticon = new Gtk.Image.from_gicon(iconfile,Gtk.IconSize.DIALOG);
+				var cur_iconfile = new ThemedIcon(name = icon_names[i]);
+				Gtk.Image selecticon = new Gtk.Image.from_gicon(cur_iconfile,Gtk.IconSize.DIALOG);
 				selecticon.pixel_size = 60;
 				Box buttonbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 4);
 				buttonbox.pack_start(selecticon);
@@ -623,20 +688,19 @@ namespace Budgie {
 				b.add(buttonbox);
 				b.set_active(i == active);
 				areabuttonbox.pack_start(b);
-				selectbuttons += b;
-				b.clicked.connect(() => {
-					if (!ignore) {
-						ignore = true;
-						select_action(b, selectbuttons);
-						b.set_active(true);
-						Timeout.add(200, () => {
-							ignore = false;
-
-							return false;
-						});
-					}
-				});
+				all_selectbuttons += b;
 				i += 1;
+			}
+
+			// connect click handlers after the loop (no lambdas)
+			if (all_selectbuttons.length > 0) {
+				all_selectbuttons[0].clicked.connect(on_area_button_0_clicked);
+			}
+			if (all_selectbuttons.length > 1) {
+				all_selectbuttons[1].clicked.connect(on_area_button_1_clicked);
+			}
+			if (all_selectbuttons.length > 2) {
+				all_selectbuttons[2].clicked.connect(on_area_button_2_clicked);
 			}
 
 			return areabuttonbox;
@@ -758,6 +822,8 @@ namespace Budgie {
 		int counted_dirs;
 		CurrentState windowstate;
 		ulong? button_id = null;
+		Clipboard clp;
+		Gdk.Pixbuf pxb;
 
 		enum Column {
 			DIRPATH,
@@ -782,10 +848,10 @@ namespace Budgie {
 				Thread.usleep(100000);
 				if (pixfile.query_exists()) {
 					try {
-						Pixbuf pxb = new Gdk.Pixbuf.from_file(windowstate.tempfile_path);
+						Pixbuf loaded_pxb = new Gdk.Pixbuf.from_file(windowstate.tempfile_path);
 						delete_file(pixfile);
 
-						return pxb;
+						return loaded_pxb;
 					} catch (Error e) {
 						message("unable to load image from /tmp");
 					}
@@ -804,21 +870,7 @@ namespace Budgie {
 				return;
 			}
 
-			bool window_configured = wayland_client.with_valid_monitor(() => {
-				var monitor = wayland_client.gdk_monitor;
-				if (monitor == null) {
-					warning("Failed to get monitor for after shot window");
-					return false;
-				}
-
-				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
-				GtkLayerShell.set_monitor(this, monitor);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
-				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
-				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
-				return true;
-			});
+			bool window_configured = wayland_client.with_valid_monitor(on_configure_monitor);
 
 			if (!window_configured) {
 				warning("Failed to configure after shot window");
@@ -831,7 +883,7 @@ namespace Budgie {
 			this.set_title(_("Budgie Screenshot"));
 			this.set_wmclass("org.buddiesofbudgie.BudgieScreenshot", "org.buddiesofbudgie.BudgieScreenshot");
 			windowstate = new CurrentState();
-			Gdk.Pixbuf pxb = get_pxb();
+			pxb = get_pxb();
 			if (pxb == null) {
 				windowstate.statechanged(WindowState.NONE);
 			} else {
@@ -839,7 +891,24 @@ namespace Budgie {
 			}
 		}
 
-		private void makeaftershotwindow(Pixbuf pxb) {
+		private bool on_configure_monitor() {
+			var wayland_client = new WaylandClient();
+			var wl_monitor = wayland_client.gdk_monitor;
+			if (wl_monitor == null) {
+				warning("Failed to get monitor for after shot window");
+				return false;
+			}
+
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_monitor(this, wl_monitor);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
+			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
+			return true;
+		}
+
+		private void makeaftershotwindow(Pixbuf shot_pxb) {
 			this.set_keep_above(true);
 			Clipboard clp = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
 			windowstate.statechanged(WindowState.AFTERSHOT);
@@ -854,29 +923,35 @@ namespace Budgie {
 			monitor.mount_added.connect(update_dropdown);
 			monitor.mount_removed.connect(update_dropdown);
 			update_dropdown();
-			pickdir_combo.changed.connect(() => {
-				if (act_ondropdown) { item_changed(pickdir_combo); }
-			});
+			pickdir_combo.changed.connect(on_pickdir_combo_changed);
 
 			// headerbar
 			HeaderBar decisionbar = new Gtk.HeaderBar();
 			decisionbar.show_close_button = false;
-			button_id = windowstate.buttonpos_changed.connect(() => {
-				decisionbuttons = {};
-				setup_headerbar(decisionbar, filenameentry, clp, pxb);
-			});
+			button_id = windowstate.buttonpos_changed.connect(on_aftershot_buttonpos_changed);
 
-			setup_headerbar(decisionbar, filenameentry, clp, pxb);
+			setup_headerbar(decisionbar, filenameentry, clp, shot_pxb);
 
 			// Connect the key-press-event signal invoke the trash button click on escape
-			this.key_press_event.connect((event) => {
-				if (event.keyval == Gdk.Key.Escape) {
-					decisionbuttons[0].clicked();
-					return true;
-				}
-				return false;
-			});
+			this.key_press_event.connect(on_aftershot_key_press);
 
+		}
+
+		private void on_pickdir_combo_changed() {
+			if (act_ondropdown) { item_changed(pickdir_combo); }
+		}
+
+		private void on_aftershot_buttonpos_changed() {
+			decisionbuttons = {};
+			setup_headerbar((Gtk.HeaderBar) this.get_titlebar(), filenameentry, clp, pxb);
+		}
+
+		private bool on_aftershot_key_press(Gdk.EventKey event) {
+			if (event.keyval == Gdk.Key.Escape) {
+				decisionbuttons[0].clicked();
+				return true;
+			}
+			return false;
 		}
 
 		private void close_window() {
@@ -884,7 +959,40 @@ namespace Budgie {
 			this.close();
 		}
 
-		private void setup_headerbar(HeaderBar bar, Entry filenameentry, Clipboard clp, Pixbuf pxb) {
+		private void on_trash_clicked() {
+			if (!windowstate.startedfromgui) {
+				windowstate.statechanged(WindowState.NONE);
+				close_window();
+			} else {
+				windowstate.statechanged(WindowState.MAINWINDOW);
+				close_window();
+				new ScreenshotHomeWindow();
+			}
+		}
+
+		private void on_save_clicked() {
+			if (save_tofile(filenameentry, pickdir_combo, pxb) != "fail") {
+				windowstate.statechanged(WindowState.NONE);
+				close_window();
+			}
+		}
+
+		private void on_clipboard_clicked() {
+			clp.set_image(pxb);
+			windowstate.statechanged(WindowState.NONE);
+			close_window();
+		}
+
+		private void on_open_clicked() {
+			string usedpath = save_tofile(filenameentry, pickdir_combo, pxb);
+			if (usedpath != "fail") {
+				open_indefaultapp(usedpath);
+				windowstate.statechanged(WindowState.NONE);
+				close_window();
+			}
+		}
+
+		private void setup_headerbar(HeaderBar bar, Entry header_filenameentry, Clipboard header_clp, Pixbuf header_pxb) {
 			foreach (Widget w in bar.get_children()) {
 				w.destroy();
 			}
@@ -935,42 +1043,17 @@ namespace Budgie {
 
 			// set headerbar button actions
 			// trash button: cancel
-			decisionbuttons[0].clicked.connect(() => {
-				if (!windowstate.startedfromgui) {
-					windowstate.statechanged(WindowState.NONE);
-					close_window();
-				} else {
-					windowstate.statechanged(WindowState.MAINWINDOW);
-					close_window();
-					new ScreenshotHomeWindow();
-				}
-			});
+			decisionbuttons[0].clicked.connect(on_trash_clicked);
 
 			// save to file
 			decisionbuttons[1].set_can_default(true);
-			decisionbuttons[1].clicked.connect(() => {
-				if (save_tofile(filenameentry, pickdir_combo, pxb) != "fail") {
-					windowstate.statechanged(WindowState.NONE);
-					close_window();
-				}
-			});
+			decisionbuttons[1].clicked.connect(on_save_clicked);
 
 			// copy to clipboard
-			decisionbuttons[2].clicked.connect(() => {
-				clp.set_image(pxb);
-				windowstate.statechanged(WindowState.NONE);
-				close_window();
-			});
+			decisionbuttons[2].clicked.connect(on_clipboard_clicked);
 
 			// save to file. open in default
-			decisionbuttons[3].clicked.connect(() => {
-				string usedpath = save_tofile(filenameentry, pickdir_combo, pxb);
-				if (usedpath != "fail") {
-					open_indefaultapp(usedpath);
-					windowstate.statechanged(WindowState.NONE);
-					close_window();
-				}
-			});
+			decisionbuttons[3].clicked.connect(on_open_clicked);
 
 			this.set_titlebar(bar);
 			this.show_all();
@@ -1007,14 +1090,14 @@ namespace Budgie {
 			return now.format(@"Snapshot_%F_%H-%M-%S.$extension");
 		}
 
-		private string save_tofile(Gtk.Entry entry, ComboBox combo, Pixbuf pxb) {
+		private string save_tofile(Gtk.Entry entry, ComboBox combo, Pixbuf save_pxb) {
 			string? found_dir = get_path_fromcombo(combo);
 			string fname = entry.get_text();
 			(fname.has_suffix(@".$extension"))? fname : fname = @"$fname.$extension";
 			string usedpath = @"$found_dir/$fname";
 
 			try {
-				pxb.save(usedpath, extension);
+				save_pxb.save(usedpath, extension);
 			} catch (Error e) {
 				warning("save_tofile %s", e.message);
 				Button savebutton = decisionbuttons[1];
@@ -1323,6 +1406,16 @@ namespace Budgie {
 		return -1;
 	}
 
+	private static void on_wayland_initialized() {
+		debug("WaylandClient ready, setting up D-Bus");
+		setup_dbus();
+	}
+
+	private static void on_wayland_initialization_failed() {
+		critical("WaylandClient initialization failed, exiting");
+		Gtk.main_quit();
+	}
+
 	public static int main(string[] args) {
 		Gtk.init(ref args);
 
@@ -1338,15 +1431,9 @@ namespace Budgie {
 			setup_dbus();
 		} else {
 			// Wait for initialization signal
-			client.initialized.connect(() => {
-				debug("WaylandClient ready, setting up D-Bus");
-				setup_dbus();
-			});
+			client.initialized.connect(on_wayland_initialized);
 
-			client.initialization_failed.connect(() => {
-				critical("WaylandClient initialization failed, exiting");
-				Gtk.main_quit();
-			});
+			client.initialization_failed.connect(on_wayland_initialization_failed);
 		}
 
 		Gtk.main();

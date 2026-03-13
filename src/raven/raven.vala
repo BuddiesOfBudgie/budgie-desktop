@@ -251,6 +251,46 @@ namespace Budgie {
 			}
 		}
 
+		private void on_scale_factor_changed() {
+			this.update_geometry(this.old_rect);
+			queue_resize();
+		}
+
+		private bool on_enter_notify(Gdk.EventCrossing event) {
+			steal_focus();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private void on_requested_draw() {
+			queue_draw();
+		}
+
+		private void on_dbus_name_lost(DBusConnection conn, string name) {
+			warning("Raven could not take dbus!");
+		}
+
+		private void on_animation_complete(Budgie.Animation? a) {
+			Budgie.Raven? r = a.widget as Budgie.Raven;
+			Gtk.Window? w = a.widget as Gtk.Window;
+
+			if (r != null && r.nscale == 0.0) {
+				set_opacity(0.0); // Mask scaling weirdness
+				Timeout.add(100, on_deferred_hide); // Defer until opacity set otherwise it glitches
+			} else if (w != null) {
+				shadow.set_opacity(1.0);
+				set_opacity(1.0);
+				w.present();
+				w.grab_focus();
+				this.steal_focus();
+				steal_focus();
+			}
+		}
+
+		private bool on_deferred_hide() {
+			this.hide();
+			return false;
+		}
+
 		private void on_bus_acquired(DBusConnection conn) {
 			try {
 				iface = new RavenIface(this);
@@ -327,10 +367,7 @@ namespace Budgie {
 			}
 
 			// Response to a scale factor change
-			notify["scale-factor"].connect(() => {
-				this.update_geometry(this.old_rect);
-				queue_resize();
-			});
+			notify["scale-factor"].connect(on_scale_factor_changed);
 
 			focus_out_event.connect(on_focus_out);
 
@@ -338,10 +375,7 @@ namespace Budgie {
 			layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			add(layout);
 
-			enter_notify_event.connect((e) => {
-				steal_focus();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			enter_notify_event.connect(on_enter_notify);
 
 			shadow = new Budgie.ShadowBlock(PanelPosition.RIGHT);
 			layout.pack_start(shadow, false, false, 0);
@@ -359,9 +393,7 @@ namespace Budgie {
 			main_view = new Budgie.MainView();
 			main_box.pack_start(main_view, true, true, 0);
 
-			main_view.requested_draw.connect(() => {
-				queue_draw();
-			});
+			main_view.requested_draw.connect(on_requested_draw);
 
 			resizable = false;
 			skip_taskbar_hint = true;
@@ -391,7 +423,7 @@ namespace Budgie {
 
 		public void setup_dbus() {
 			Bus.own_name(BusType.SESSION, Budgie.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
-				on_bus_acquired, () => {}, () => { warning("Raven could not take dbus!"); });
+				on_bus_acquired, null, on_dbus_name_lost);
 		}
 
 		/**
@@ -528,25 +560,7 @@ namespace Budgie {
 			set_opacity(1.0);
 			show();
 
-			anim.start((a) => {
-				Budgie.Raven? r = a.widget as Budgie.Raven;
-				Gtk.Window? w = a.widget as Gtk.Window;
-
-				if (r != null && r.nscale == 0.0) {
-					set_opacity(0.0); // Mask scaling weirdness
-					Timeout.add(100, () => {
-						r.hide();
-						return false;
-					}); // Defer until opacity set otherwise it glitches
-				} else if (w != null) {
-					shadow.set_opacity(1.0);
-					set_opacity(1.0);
-					w.present();
-					w.grab_focus();
-					this.steal_focus();
-					steal_focus();
-				}
-			});
+			anim.start(on_animation_complete);
 		}
 
 		public bool get_expanded() {
@@ -556,9 +570,9 @@ namespace Budgie {
 		public void update_uuids() {
 			string[] uuids = null;
 
-			widgets.foreach((widget_data) => {
+			foreach (var widget_data in widgets) {
 				uuids += widget_data.uuid;
-			});
+			}
 
 			widget_settings.set_strv("uuids", uuids);
 		}

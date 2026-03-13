@@ -36,24 +36,34 @@ namespace Budgie {
 				BusNameWatcherFlags.NONE, has_dialog, lost_dialog);
 		}
 
+		private void on_proxy_confirmed_logout() {
+			this.ConfirmedLogout();
+		}
+
+		private void on_proxy_confirmed_reboot() {
+			this.ConfirmedReboot();
+		}
+
+		private void on_proxy_confirmed_shutdown() {
+			this.ConfirmedShutdown();
+		}
+
+		private void on_proxy_canceled() {
+			this.Canceled();
+		}
+
+		private void on_proxy_closed() {
+			this.Closed();
+		}
+
 		void on_dialog_get(Object? o, AsyncResult? res) {
 			try {
 				proxy = Bus.get_proxy.end(res);
-				proxy.ConfirmedLogout.connect(() => {
-					this.ConfirmedLogout();
-				});
-				proxy.ConfirmedReboot.connect(() => {
-					this.ConfirmedReboot();
-				});
-				proxy.ConfirmedShutdown.connect(() => {
-					this.ConfirmedShutdown();
-				});
-				proxy.Canceled.connect(() => {
-					this.Canceled();
-				});
-				proxy.Closed.connect(() => {
-					this.Closed();
-				});
+				proxy.ConfirmedLogout.connect(on_proxy_confirmed_logout);
+				proxy.ConfirmedReboot.connect(on_proxy_confirmed_reboot);
+				proxy.ConfirmedShutdown.connect(on_proxy_confirmed_shutdown);
+				proxy.Canceled.connect(on_proxy_canceled);
+				proxy.Closed.connect(on_proxy_closed);
 			} catch (Error e) {
 				proxy = null;
 			}

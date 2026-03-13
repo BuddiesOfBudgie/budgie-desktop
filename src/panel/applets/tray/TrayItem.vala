@@ -103,26 +103,36 @@ internal class TrayItem : Gtk.EventBox {
 			context_menu = new DBusMenu(dbus_name, dbus_properties.menu);
 		}
 
-		dbus_item.new_icon.connect(() => {
-			update_dbus_properties();
-			reset_icon();
-		});
-		dbus_item.new_attention_icon.connect(() => {
-			update_dbus_properties();
-			reset_icon();
-		});
-		dbus_item.new_icon_theme_path.connect((new_path) => {
-			reset_icon_theme(new_path);
-		});
-		dbus_item.new_status.connect((new_status) => {
-			reset_icon(new_status);
-		});
-		dbus_item.new_tool_tip.connect(() => {
-			update_dbus_properties();
-			reset_tooltip();
-		});
+		dbus_item.new_icon.connect(on_new_icon);
+		dbus_item.new_attention_icon.connect(on_new_attention_icon);
+		dbus_item.new_icon_theme_path.connect(on_new_icon_theme_path);
+		dbus_item.new_status.connect(on_new_status);
+		dbus_item.new_tool_tip.connect(on_new_tool_tip);
 
 		show_all();
+	}
+
+	private void on_new_icon() {
+		update_dbus_properties();
+		reset_icon();
+	}
+
+	private void on_new_attention_icon() {
+		update_dbus_properties();
+		reset_icon();
+	}
+
+	private void on_new_icon_theme_path(string new_path) {
+		reset_icon_theme(new_path);
+	}
+
+	private void on_new_status(string new_status) {
+		reset_icon(new_status);
+	}
+
+	private void on_new_tool_tip() {
+		update_dbus_properties();
+		reset_tooltip();
 	}
 
 	private void update_dbus_properties() {

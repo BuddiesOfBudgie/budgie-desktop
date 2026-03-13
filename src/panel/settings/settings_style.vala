@@ -141,10 +141,7 @@ namespace Budgie {
 			ui_settings.bind("enable-animations", switch_animations, "active", SettingsBindFlags.DEFAULT);
 			this.theme_scanner = new ThemeScanner();
 
-			Idle.add(() => {
-				this.load_themes();
-				return false;
-			});
+			Idle.add(on_load_themes_idle);
 		}
 
 		// Check if labwc is the current window manager
@@ -195,9 +192,9 @@ namespace Budgie {
 			}
 
 			// Convert set to array
-			theme_set.foreach ((theme) => {
+			foreach (var theme in theme_set.get_values()) {
 				themes += theme;
-			});
+			}
 
 			return themes;
 		}
@@ -307,12 +304,7 @@ namespace Budgie {
 			labwc_theme_override.active_id = get_current_labwc_theme();
 
 			// Connect change signal
-			labwc_theme_override.changed.connect(() => {
-				string? theme_id = labwc_theme_override.get_active_id();
-				if (theme_id != null) {
-					set_labwc_theme(theme_id);
-				}
-			});
+			labwc_theme_override.changed.connect(on_labwc_theme_changed);
 
 			labwc_theme_row = new SettingsRow(labwc_theme_override,
 				_("Labwc Compositor Theme"),
@@ -320,63 +312,77 @@ namespace Budgie {
 			);
 		}
 
+		private bool on_load_themes_idle() {
+			this.load_themes();
+			return false;
+		}
+
+		private void on_labwc_theme_changed() {
+			string? theme_id = labwc_theme_override.get_active_id();
+			if (theme_id != null) {
+				set_labwc_theme(theme_id);
+			}
+		}
+
 		public void load_themes() {
 			/* Scan the themes */
-			this.theme_scanner.scan_themes.begin(() => {
-				/* Gtk themes */ {
-					Gtk.TreeIter iter;
-					var model = new Gtk.ListStore(1, typeof(string));
-					bool hit = false;
-					foreach (var theme in theme_scanner.get_gtk_themes()) {
-						model.append(out iter);
-						model.set(iter, 0, theme, -1);
-						hit = true;
-					}
-					combobox_gtk.set_model(model);
-					combobox_gtk.set_id_column(0);
-					model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
-					if (hit) {
-						combobox_gtk.sensitive = true;
-						ui_settings.bind("gtk-theme", combobox_gtk, "active-id", SettingsBindFlags.DEFAULT);
-					}
-				}
-				/* Icon themes */ {
-					Gtk.TreeIter iter;
-					var model = new Gtk.ListStore(1, typeof(string));
-					bool hit = false;
-					foreach (var theme in theme_scanner.get_icon_themes()) {
-						model.append(out iter);
-						model.set(iter, 0, theme, -1);
-						hit = true;
-					}
-					combobox_icon.set_model(model);
-					combobox_icon.set_id_column(0);
-					model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
-					if (hit) {
-						combobox_icon.sensitive = true;
-						ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
-					}
-				}
+			this.theme_scanner.scan_themes.begin(on_scan_themes_complete);
+		}
 
-				/* Cursor themes */ {
-					Gtk.TreeIter iter;
-					var model = new Gtk.ListStore(1, typeof(string));
-					bool hit = false;
-					foreach (var theme in theme_scanner.get_cursor_themes()) {
-						model.append(out iter);
-						model.set(iter, 0, theme, -1);
-						hit = true;
-					}
-					combobox_cursor.set_model(model);
-					combobox_cursor.set_id_column(0);
-					model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
-					if (hit) {
-						combobox_cursor.sensitive = true;
-						ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
-					}
+		private void on_scan_themes_complete(Object? obj, AsyncResult res) {
+			/* Gtk themes */ {
+				Gtk.TreeIter iter;
+				var model = new Gtk.ListStore(1, typeof(string));
+				bool hit = false;
+				foreach (var theme in theme_scanner.get_gtk_themes()) {
+					model.append(out iter);
+					model.set(iter, 0, theme, -1);
+					hit = true;
 				}
-				queue_resize();
-			});
+				combobox_gtk.set_model(model);
+				combobox_gtk.set_id_column(0);
+				model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+				if (hit) {
+					combobox_gtk.sensitive = true;
+					ui_settings.bind("gtk-theme", combobox_gtk, "active-id", SettingsBindFlags.DEFAULT);
+				}
+			}
+			/* Icon themes */ {
+				Gtk.TreeIter iter;
+				var model = new Gtk.ListStore(1, typeof(string));
+				bool hit = false;
+				foreach (var theme in theme_scanner.get_icon_themes()) {
+					model.append(out iter);
+					model.set(iter, 0, theme, -1);
+					hit = true;
+				}
+				combobox_icon.set_model(model);
+				combobox_icon.set_id_column(0);
+				model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+				if (hit) {
+					combobox_icon.sensitive = true;
+					ui_settings.bind("icon-theme", combobox_icon, "active-id", SettingsBindFlags.DEFAULT);
+				}
+			}
+
+			/* Cursor themes */ {
+				Gtk.TreeIter iter;
+				var model = new Gtk.ListStore(1, typeof(string));
+				bool hit = false;
+				foreach (var theme in theme_scanner.get_cursor_themes()) {
+					model.append(out iter);
+					model.set(iter, 0, theme, -1);
+					hit = true;
+				}
+				combobox_cursor.set_model(model);
+				combobox_cursor.set_id_column(0);
+				model.set_sort_column_id(0, Gtk.SortType.ASCENDING);
+				if (hit) {
+					combobox_cursor.sensitive = true;
+					ui_settings.bind("cursor-theme", combobox_cursor, "active-id", SettingsBindFlags.DEFAULT);
+				}
+			}
+			queue_resize();
 		}
 
 		/**

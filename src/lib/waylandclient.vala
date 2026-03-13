@@ -81,10 +81,7 @@ namespace Budgie {
             if (screen == null) {
                 critical("Failed to get default Xfw.Screen");
                 // Emit failure signal on next idle
-                Idle.add(() => {
-                    initialization_failed();
-                    return false;
-                });
+                Idle.add(on_initialization_failed_idle);
                 return;
             }
 
@@ -102,12 +99,19 @@ namespace Budgie {
             }
 
             // Schedule actual update after signals settle
-            smooth_timeout = Timeout.add(SMOOTH_MS, () => {
-                smooth_timeout = 0;
-                debug("Monitor changes settled, updating...");
-                on_monitors_changed();
-                return false;
-            });
+            smooth_timeout = Timeout.add(SMOOTH_MS, on_smooth_timeout);
+        }
+
+        private bool on_initialization_failed_idle() {
+            initialization_failed();
+            return false;
+        }
+
+        private bool on_smooth_timeout() {
+            smooth_timeout = 0;
+            debug("Monitor changes settled, updating...");
+            on_monitors_changed();
+            return false;
         }
 
         private void initialize_monitor_info() {

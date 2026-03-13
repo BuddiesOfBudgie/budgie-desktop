@@ -57,11 +57,13 @@ public class ButtonWrapper : Gtk.Revealer {
 			this.set_transition_type(Gtk.RevealerTransitionType.SLIDE_UP);
 		}
 
-		this.notify["child-revealed"].connect_after(() => {
-			this.hide();
-			this.destroy();
-		});
+		this.notify["child-revealed"].connect_after(on_child_revealed_changed);
 
 		this.set_reveal_child(false);
+	}
+
+	private void on_child_revealed_changed() {
+		this.hide();
+		this.destroy();
 	}
 }

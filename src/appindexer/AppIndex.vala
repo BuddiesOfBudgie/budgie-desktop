@@ -48,19 +48,14 @@ namespace Budgie {
 			};
 
 			this.monitor = AppInfoMonitor.@get();
-			this.monitor.changed.connect(() => {
-				this.queue_refresh();
-			});
+			this.monitor.changed.connect(on_app_info_changed);
 
 			// Start watching the desktop-directories folder for custom category support
 			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
 			var directory_file = File.new_for_path(path);
 			try {
 				this.file_monitor = directory_file.monitor_directory(FileMonitorFlags.NONE, null);
-				this.file_monitor.changed.connect(() => {
-					// Refresh the index when there is a category file change
-					this.queue_refresh();
-				});
+				this.file_monitor.changed.connect(on_file_monitor_changed);
 			} catch (IOError e) {
 				debug("Failed to create monitor for desktop directory: %s", e.message);
 			}
@@ -95,6 +90,24 @@ namespace Budgie {
 			return categories;
 		}
 
+		private void on_app_info_changed() {
+			this.queue_refresh();
+		}
+
+		private void on_file_monitor_changed(File file, File? other_file, FileMonitorEvent event_type) {
+			this.queue_refresh();
+		}
+
+		private bool on_refresh_timeout() {
+			this.refresh();
+			this.timeout_id = 0;
+			return Source.REMOVE;
+		}
+
+		private static int compare_categories_by_name(Category a, Category b) {
+			return a.name.collate(b.name);
+		}
+
 		/**
 		* Queue an update of the application system to run.
 		*
@@ -109,11 +122,7 @@ namespace Budgie {
 			}
 
 			// Update the application system after the timeout
-			this.timeout_id = Timeout.add_seconds(seconds, () => {
-				this.refresh();
-				this.timeout_id = 0;
-				return Source.REMOVE;
-			});
+			this.timeout_id = Timeout.add_seconds(seconds, on_refresh_timeout);
 		}
 
 		/**
@@ -223,7 +232,7 @@ namespace Budgie {
 			}
 
 			// sort the categories
-			this.categories.sort((a, b) => a.name.collate(b.name));
+			this.categories.sort(compare_categories_by_name);
 
 			// Emit our signal for changes
 			this.changed();

@@ -35,10 +35,12 @@ namespace NightLight {
 			settings.bind("night-light-enabled", item_grid, "sensitive", SettingsBindFlags.DEFAULT);
 			settings.bind("night-light-temperature", temperature_spinbutton, "value", SettingsBindFlags.DEFAULT);
 
-			settings.changed["night-light-schedule-automatic"].connect(() => {
-				schedule_combobox.set_active_id(settings.get_boolean("night-light-schedule-automatic").to_string());
-			});
+			settings.changed["night-light-schedule-automatic"].connect(on_schedule_automatic_changed);
 
+			schedule_combobox.set_active_id(settings.get_boolean("night-light-schedule-automatic").to_string());
+		}
+
+		private void on_schedule_automatic_changed() {
 			schedule_combobox.set_active_id(settings.get_boolean("night-light-schedule-automatic").to_string());
 		}
 

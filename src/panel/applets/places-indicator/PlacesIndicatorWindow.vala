@@ -400,7 +400,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		string? volume_class = volume.get_identifier("class");
 
 		VolumeItem volume_item = new VolumeItem(volume);
-		volume_item.close_popover.connect(() => { this.hide(); });
+		volume_item.close_popover.connect(on_close_popover);
 
 		if (volume_class == "network") {
 			networks_listbox.add(volume_item);
@@ -426,7 +426,7 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		}
 
 		MountItem mount_item = new MountItem(mount, mount_class);
-		mount_item.close_popover.connect(() => { this.hide(); });
+		mount_item.close_popover.connect(on_close_popover);
 
 		if (mount_class == "network") {
 			networks_listbox.add(mount_item);
@@ -469,11 +469,15 @@ public class PlacesIndicatorWindow : Budgie.Popover {
 		} else {
 			place_item = new PlaceItem(file, "place", null);
 		}
-		place_item.close_popover.connect(() => { this.hide(); });
+		place_item.close_popover.connect(on_close_popover);
 		places_list.add(unescaped_path);
 		places_section.add_item(place_item);
 
 		place_item.send_message.connect(set_message);
+	}
+
+	private void on_close_popover() {
+		this.hide();
 	}
 
 	private void set_message(string message) {

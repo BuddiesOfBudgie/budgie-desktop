@@ -84,9 +84,7 @@ public class IconButton : Gtk.ToggleButton {
 		if (app != null) {
 			set_tooltip_text(app.name);
 
-			app.launch_failed.connect_after(() => {
-				icon.waiting = false;
-			});
+			app.launch_failed.connect_after(on_launch_failed);
 		} else {
 			var window = window_group?.get_active_window() ?? window_group?.get_last_active_window();
 			if (window != null) set_tooltip_text(window.get_name());
@@ -97,6 +95,10 @@ public class IconButton : Gtk.ToggleButton {
 		add(icon);
 
 		size_allocate.connect(on_size_allocate);
+	}
+
+	private void on_launch_failed() {
+		icon.waiting = false;
 	}
 
 	private void on_size_allocate(Gtk.Allocation allocation) {
@@ -585,36 +587,46 @@ public class IconButton : Gtk.ToggleButton {
 			set_tooltip_text(window.get_name());
 		}
 
-		window_group.active_window_changed.connect((window) => {
-			if (window != null) {
-				set_tooltip_text(window.get_name());
-			}
-		});
+		window_group.active_window_changed.connect(on_active_window_changed);
 
-		window_group.app_icon_changed.connect_after(() => {
-			update_icon();
-		});
+		window_group.app_icon_changed.connect_after(on_app_icon_changed);
 
-		window_group.window_added.connect((window) => {
-			popover.add_window(window);
+		window_group.window_added.connect(on_window_added);
 
-			window.state_changed.connect((changed_mask, new_state) => {
-				if (!(Xfw.WindowState.URGENT in changed_mask)) {
-					return;
-				}
+		window_group.window_removed.connect(on_window_removed);
+	}
 
-				urgent = (new_state & Xfw.WindowState.URGENT) != 0;
+	private void on_active_window_changed(Xfw.Window? window) {
+		if (window != null) {
+			set_tooltip_text(window.get_name());
+		}
+	}
 
-				set_urgent(urgent);
-			});
+	private void on_app_icon_changed() {
+		update_icon();
+	}
 
-			update();
-		});
+	private void on_window_added(Xfw.Window window) {
+		popover.add_window(window);
 
-		window_group.window_removed.connect((window) => {
-			popover.remove_window(window);
-			update();
-		});
+		window.state_changed.connect(on_window_state_changed);
+
+		update();
+	}
+
+	private void on_window_state_changed(Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+		if (!(Xfw.WindowState.URGENT in changed_mask)) {
+			return;
+		}
+
+		urgent = (new_state & Xfw.WindowState.URGENT) != 0;
+
+		set_urgent(urgent);
+	}
+
+	private void on_window_removed(Xfw.Window window) {
+		popover.remove_window(window);
+		update();
 	}
 
 	public void update() {

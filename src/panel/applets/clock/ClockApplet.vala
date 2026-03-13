@@ -124,17 +124,7 @@ public class ClockApplet : Budgie.Applet {
 
 		menu.pack_start(time_button, false, false, 0);
 
-		widget.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				this.manager.show_popover(widget);
-			}
-			return Gdk.EVENT_STOP;
-		});
+		widget.button_press_event.connect(on_widget_button_press);
 
 		// make sure every setting is ready
 		this.update_setting(CLOCK_SETTINGS_SCHEMA, "show-date");
@@ -150,20 +140,36 @@ public class ClockApplet : Budgie.Applet {
 
 		Timeout.add_seconds_full(Priority.LOW, 1, update_clock);
 
-		settings.changed.connect((key) => {
-			update_setting(CLOCK_SETTINGS_SCHEMA, key);
-			update_clock();
-		});
-		gnome_settings.changed.connect((key) => {
-			update_setting(GNOME_SETTINGS_SCHEMA, key);
-			update_clock();
-		});
+		settings.changed.connect(on_clock_settings_changed);
+		gnome_settings.changed.connect(on_gnome_settings_changed);
 
 		add(widget);
 
 		popover.get_child().show_all();
 
 		show_all();
+	}
+
+	private bool on_widget_button_press(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		if (popover.get_visible()) {
+			popover.hide();
+		} else {
+			this.manager.show_popover(widget);
+		}
+		return Gdk.EVENT_STOP;
+	}
+
+	private void on_clock_settings_changed(string key) {
+		update_setting(CLOCK_SETTINGS_SCHEMA, key);
+		update_clock();
+	}
+
+	private void on_gnome_settings_changed(string key) {
+		update_setting(GNOME_SETTINGS_SCHEMA, key);
+		update_clock();
 	}
 
 	void on_date_activate() {
@@ -371,15 +377,7 @@ public class ClockSettings : Gtk.Grid {
 	public ClockSettings(Settings? settings, Settings? gnome_settings) {
 		settings.bind("show-date", this.show_date, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("show-seconds", this.show_seconds, "active", SettingsBindFlags.DEFAULT);
-		gnome_settings.bind_with_mapping("clock-format", this.use_24_hour_time, "active", SettingsBindFlags.DEFAULT, (value, variant, user_data) => {
-			value.set_boolean((variant.get_string() == "24h"));
-			return true;
-		}, (value, expected_type, user_data) => {
-			if (value.get_boolean()) {
-				return new Variant("s", "24h");
-			}
-			return new Variant("s", "12h");
-		}, null, null);
+		gnome_settings.bind_with_mapping("clock-format", this.use_24_hour_time, "active", SettingsBindFlags.DEFAULT, clock_format_get_mapping, clock_format_set_mapping, null, null);
 		settings.bind("use-custom-format", this.use_custom_format, "active", SettingsBindFlags.DEFAULT);
 		settings.bind("custom-format", this.custom_format, "text", SettingsBindFlags.DEFAULT);
 		settings.bind("use-custom-timezone", this.use_custom_timezone, "active", SettingsBindFlags.DEFAULT);
@@ -389,6 +387,18 @@ public class ClockSettings : Gtk.Grid {
 		this.use_custom_timezone.notify["active"].connect(this.updateSensitve);
 
 		this.updateSensitve();
+	}
+
+	private static bool clock_format_get_mapping(Value value, Variant variant, void* user_data) {
+		value.set_boolean((variant.get_string() == "24h"));
+		return true;
+	}
+
+	private static Variant clock_format_set_mapping(Value value, VariantType expected_type, void* user_data) {
+		if (value.get_boolean()) {
+			return new Variant("s", "24h");
+		}
+		return new Variant("s", "12h");
 	}
 
 	private void updateSensitve() {

@@ -233,17 +233,7 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 		widget = new Gtk.EventBox();
 
 		/* Hook up the popover clicks */
-		widget.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				this.manager.show_popover(widget);
-			}
-			return Gdk.EVENT_STOP;
-		});
+		widget.button_press_event.connect(on_widget_button_press);
 
 		get_style_context().add_class("keyboard-indicator");
 
@@ -285,6 +275,18 @@ public class KeyboardLayoutApplet : Budgie.Applet {
 
 		/* Go show up */
 		show_all();
+	}
+
+	private bool on_widget_button_press(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		if (popover.get_visible()) {
+			popover.hide();
+		} else {
+			this.manager.show_popover(widget);
+		}
+		return Gdk.EVENT_STOP;
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {

@@ -83,13 +83,7 @@ public class PlacesIndicatorApplet : Budgie.Applet {
 
 		popover = new PlacesIndicatorWindow(image);
 
-		ebox.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			toggle_popover();
-			return Gdk.EVENT_STOP;
-		});
+		ebox.button_press_event.connect(on_ebox_button_press);
 
 		popover.get_child().show_all();
 
@@ -101,6 +95,14 @@ public class PlacesIndicatorApplet : Budgie.Applet {
 		on_settings_changed("show-places");
 		on_settings_changed("show-drives");
 		on_settings_changed("show-networks");
+	}
+
+	private bool on_ebox_button_press(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		toggle_popover();
+		return Gdk.EVENT_STOP;
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {

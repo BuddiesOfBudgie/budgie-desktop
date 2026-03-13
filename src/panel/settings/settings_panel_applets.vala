@@ -117,16 +117,18 @@ namespace Budgie {
 				this.applet_added(applet);
 			}
 
-			Idle.add(() => {
-				this.settings_stack.set_visible_child_name("main");
-				return false;
-			});
+			Idle.add(on_initial_stack_idle);
 
 			toplevel.applet_added.connect(this.applet_added);
 			toplevel.applet_removed.connect(this.applet_removed);
 			toplevel.applets_changed.connect(this.applets_changed);
 
 			this.applets_changed();
+		}
+
+		private bool on_initial_stack_idle() {
+			this.settings_stack.set_visible_child_name("main");
+			return false;
 		}
 
 		/**

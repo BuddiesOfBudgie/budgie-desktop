@@ -106,7 +106,7 @@ namespace Budgie {
 			raven_settings.changed["allow-volume-overdrive"].connect(this.on_raven_sound_overdrive_change);
 
 
-			panel_settings.changed["dark-theme"].connect((key) => apply_dark_theme_pref());
+			panel_settings.changed["dark-theme"].connect(on_dark_theme_setting_changed);
 			apply_dark_theme_pref();
 
 			gnome_session_settings.changed["idle-delay"].connect(this.update_idle_delay);
@@ -119,6 +119,10 @@ namespace Budgie {
 
 			gnome_desktop_settings.changed.connect(this.on_gnome_desktop_settings_changed);
 			this.on_gnome_desktop_settings_changed("gtk-theme");
+		}
+
+		private void on_dark_theme_setting_changed() {
+			apply_dark_theme_pref();
 		}
 
 		/**
@@ -368,6 +372,30 @@ namespace Budgie {
 			this.gnome_wm_settings.set_value("button-layout", wm_set);
 		}
 
+		private bool on_caffeine_reset_delay() {
+			if (!gnome_session_settings.has_unapplied && !gnome_power_settings.has_unapplied) {
+				reset_values();
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		private bool on_caffeine_countdown_tick() {
+			var countdown = wm_settings.get_int("caffeine-mode-timer");
+			if (countdown != 0) {
+				countdown -= 1;
+				wm_settings.set_int("caffeine-mode-timer", countdown);
+			}
+
+			return (countdown != 0);
+		}
+
+		private bool on_re_enable_notification() {
+			temporary_notification_disabled = false;
+			return false;
+		}
+
 		/**
 		* set_caffeine_mode will set our various settings for caffeine mode
 		*/
@@ -380,14 +408,7 @@ namespace Budgie {
 				caffeine_settings_sync();
 			} else { // Disable Caffeine Mode
 				if (gnome_session_settings.has_unapplied || gnome_power_settings.has_unapplied) { // There are unapplied settings
-					Timeout.add_seconds(1, () => { // Delay reset a moment
-						if (!gnome_session_settings.has_unapplied && !gnome_power_settings.has_unapplied) { // No longer unapplied settings
-							reset_values();
-							return false;
-						} else { // Still unapplied, try again in a moment
-							return true;
-						}
-					}, Priority.HIGH);
+					Timeout.add_seconds(1, on_caffeine_reset_delay, Priority.HIGH);
 				} else {
 					reset_values(); // Reset the values
 				}
@@ -401,15 +422,7 @@ namespace Budgie {
 			var time = wm_settings.get_int("caffeine-mode-timer"); // Get our timer number
 			if (enabled && (time > 0)) { // If Caffeine Mode is enabled and we'll turn it off in a certain amount of time
 				Timeout.add_seconds(time * 60, this.do_disable, Priority.HIGH);
-				Timeout.add_seconds(60, () => {
-					var countdown = wm_settings.get_int("caffeine-mode-timer");
-					if (countdown != 0) {
-						countdown -= 1;
-						wm_settings.set_int("caffeine-mode-timer", countdown);
-					}
-
-					return (countdown != 0);
-				});
+				Timeout.add_seconds(60, on_caffeine_countdown_tick);
 			}
 
 			if (wm_settings.get_boolean("caffeine-mode-notification") && !disable_notification && !temporary_notification_disabled && Notify.is_initted()) { // Should show a notification
@@ -429,10 +442,7 @@ namespace Budgie {
 			}
 
 			if (temporary_notification_disabled) { // If we've temporarily disabled the Notification (such as for not providing a notification during End Session DIalog opening)
-				Timeout.add_seconds(60, () => { // Wait about a minute
-					temporary_notification_disabled = false; // Turn back off
-					return false;
-				}, Priority.HIGH);
+				Timeout.add_seconds(60, on_re_enable_notification, Priority.HIGH);
 			}
 		}
 

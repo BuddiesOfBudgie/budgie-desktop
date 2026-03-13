@@ -38,6 +38,8 @@ public class RavenTriggerApplet : Budgie.Applet {
 
 	private string raven_show_icon = "pane-show-symbolic";
 	private string raven_hide_icon = "pane-hide-symbolic";
+	private bool pending_expansion_state = false;
+	private bool pending_anchor_state = false;
 
 	static Mutex anchor_mutex;
 
@@ -78,13 +80,7 @@ public class RavenTriggerApplet : Budgie.Applet {
 			return false;
 		}
 
-		raven_proxy.ToggleAppletView.begin((obj,res) => {
-			try {
-				raven_proxy.ToggleAppletView.end(res);
-			} catch (Error e) {
-				message("Error in dbus: %s", e.message);
-			}
-		});
+		raven_proxy.ToggleAppletView.begin(on_toggle_applet_view_complete);
 
 		return false;
 	}
@@ -96,6 +92,34 @@ public class RavenTriggerApplet : Budgie.Applet {
 		if (raven_proxy == null) {
 			Bus.get_proxy.begin<RavenTriggerProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 		}
+	}
+
+	private void on_toggle_applet_view_complete(Object? obj, AsyncResult res) {
+		try {
+			raven_proxy.ToggleAppletView.end(res);
+		} catch (Error e) {
+			message("Error in dbus: %s", e.message);
+		}
+	}
+
+	private void on_expansion_changed(bool expanded) {
+		pending_expansion_state = expanded;
+		Idle.add(on_idle_expansion_changed);
+	}
+
+	private bool on_idle_expansion_changed() {
+		on_prop_changed(pending_expansion_state);
+		return false;
+	}
+
+	private void on_anchor_changed_signal(bool left_anchor) {
+		pending_anchor_state = left_anchor;
+		Idle.add(on_idle_anchor_changed);
+	}
+
+	private bool on_idle_anchor_changed() {
+		on_anchor_changed(pending_anchor_state);
+		return false;
 	}
 
 	/**
@@ -147,18 +171,8 @@ public class RavenTriggerApplet : Budgie.Applet {
 	void on_raven_get(Object? o, AsyncResult? res) {
 		try {
 			raven_proxy = Bus.get_proxy.end(res);
-			raven_proxy.ExpansionChanged.connect_after((e) => {
-				Idle.add(() => {
-					on_prop_changed(e);
-					return false;
-				});
-			});
-			raven_proxy.AnchorChanged.connect((e) => {
-				Idle.add(() => {
-					on_anchor_changed(e);
-					return false;
-				});
-			});
+			raven_proxy.ExpansionChanged.connect_after(on_expansion_changed);
+			raven_proxy.AnchorChanged.connect(on_anchor_changed_signal);
 
 			/* Stop Vala from getting scared. */
 			new Thread<void*>.try("raven-update-anchors", this.update_anchors);

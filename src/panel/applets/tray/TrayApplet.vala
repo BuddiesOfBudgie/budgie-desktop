@@ -63,6 +63,7 @@ public class TrayApplet : Budgie.Applet {
 	private SnWatcherInterface? watcher = null;
 	private int panel_size;
 	private const int DEFAULT_PANEL_SIZE = 36;
+	private string host_name;
 
 	public TrayApplet(string uuid) {
 		Object(uuid: uuid);
@@ -76,12 +77,8 @@ public class TrayApplet : Budgie.Applet {
 		settings_prefix = "/com/solus-project/tray";
 
 		settings = get_applet_settings(uuid);
-		settings.changed["spacing"].connect((key) => {
-			layout.set_spacing(settings.get_int("spacing"));
-		});
-		settings.changed["scaling"].connect((key) => {
-			items.get_values().foreach((item) => item.resize(get_target_panel_size()));
-		});
+		settings.changed["spacing"].connect(on_spacing_changed);
+		settings.changed["scaling"].connect(on_scaling_changed);
 
 		items = new HashTable<string, TrayItem>(str_hash, str_equal);
 		layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, settings.get_int("spacing"));
@@ -94,6 +91,16 @@ public class TrayApplet : Budgie.Applet {
 
 	~TrayApplet() {
 		Bus.unown_name(dbus_identifier);
+	}
+
+	private void on_spacing_changed() {
+		layout.set_spacing(settings.get_int("spacing"));
+	}
+
+	private void on_scaling_changed() {
+		foreach (var item in items.get_values()) {
+			item.resize(get_target_panel_size());
+		}
 	}
 
 	private void get_watcher_proxy() {
@@ -121,12 +128,22 @@ public class TrayApplet : Budgie.Applet {
 			BusType.SESSION,
 			"org.freedesktop.StatusNotifierWatcher",
 			0,
-			(conn, name, owner) => Timeout.add(100, () => {
-				on_watcher_init();
-				return false;
-			}),
-			(conn, name) => get_watcher_proxy()
+			on_watcher_name_appeared,
+			on_watcher_name_vanished
 		);
+	}
+
+	private void on_watcher_name_appeared(DBusConnection conn, string name, string name_owner) {
+		Timeout.add(100, on_watcher_init_timeout);
+	}
+
+	private void on_watcher_name_vanished(DBusConnection conn, string name) {
+		get_watcher_proxy();
+	}
+
+	private bool on_watcher_init_timeout() {
+		on_watcher_init();
+		return false;
 	}
 
 	private void on_watcher_init() {
@@ -141,29 +158,33 @@ public class TrayApplet : Budgie.Applet {
 
 		watcher.status_notifier_item_registered_budgie.connect(register_new_item);
 
-		watcher.status_notifier_item_unregistered_budgie.connect((name,path,sender)=>{
-			var key = sender + name + path;
-			if (key in items) {
-				layout.remove(items.get(key));
-				items.remove(key);
-			}
-		});
+		watcher.status_notifier_item_unregistered_budgie.connect(on_item_unregistered);
 
-		string host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
+		host_name = "org.freedesktop.StatusNotifierHost-budgie_" + uuid;
 
 		dbus_identifier = Bus.own_name(
 			BusType.SESSION,
 			host_name,
 			BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 			null,
-			(conn,name) => {
-				try {
-					watcher.register_status_notifier_host(host_name);
-				} catch (Error e) {
-					critical("Failed to register Status Notifier host: %s", e.message);
-				}
-			}
+			on_host_name_acquired
 		);
+	}
+
+	private void on_item_unregistered(string name, string path, string sender) {
+		var key = sender + name + path;
+		if (key in items) {
+			layout.remove(items.get(key));
+			items.remove(key);
+		}
+	}
+
+	private void on_host_name_acquired(DBusConnection conn, string name) {
+		try {
+			watcher.register_status_notifier_host(host_name);
+		} catch (Error e) {
+			critical("Failed to register Status Notifier host: %s", e.message);
+		}
 	}
 
 	private void register_new_item(string name, string object_path, string sender, string owner) {
@@ -207,9 +228,9 @@ public class TrayApplet : Budgie.Applet {
 
 	public override void panel_size_changed(int panel, int icon, int small_icon) {
 		panel_size = panel;
-		items.get_values().foreach((item) => {
+		foreach (var item in items.get_values()) {
 			item.resize(get_target_panel_size());
-		});
+		}
 	}
 
 	public override bool supports_settings() {

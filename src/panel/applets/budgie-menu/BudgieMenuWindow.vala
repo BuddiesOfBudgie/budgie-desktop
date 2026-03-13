@@ -87,68 +87,22 @@ public class BudgieMenuWindow : Gtk.Popover {
 		);
 
 		// Close the power menu on click if it is open
-		this.button_press_event.connect((event) => {
-			// Only care about left clicks
-			if (event.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-
-			// Don't do work if we don't need to
-			if (!this.overlay_menu.get_reveal_child()) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-
-			this.reset(false);
-			return Gdk.EVENT_STOP;
-		});
+		this.button_press_event.connect(on_button_press);
 
 		// searching functionality
-		this.search_entry.changed.connect(()=> {
-			var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
-			this.view.search_changed(search_term);
-		});
+		this.search_entry.changed.connect(on_search_entry_changed);
 
-		this.system_settings_button.clicked.connect(() => {
-			this.open_desktop_entry("org.buddiesofbudgie.ControlCenter.desktop");
-			this.hide();
-		});
+		this.system_settings_button.clicked.connect(on_system_settings_clicked);
 
-		this.budgie_desktop_prefs_button.clicked.connect(() => {
-			this.open_desktop_entry("org.buddiesofbudgie.BudgieDesktopSettings.desktop");
-			this.hide();
-		});
+		this.budgie_desktop_prefs_button.clicked.connect(on_budgie_desktop_prefs_clicked);
 
 		// Enabling activation by search entry
-		this.search_entry.activate.connect(() => {
-			// Make the view (and filter) is updated before calling activate
-			var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
-			this.view.search_changed(search_term);
+		this.search_entry.activate.connect(on_search_entry_activate);
 
-			this.view.on_search_entry_activated();
-		});
-
-		this.user_indicator.clicked.connect(() => {
-			if (this.overlay_menu.get_reveal_child()) {
-				this.reset(false);
-			} else {
-				this.open_overlay_menu("xdg");
-			}
-		});
+		this.user_indicator.clicked.connect(on_user_indicator_clicked);
 
 		// Show the Power Dialog when the user indicator is clicked
-		this.power_button.clicked.connect(() => {
-			if (power_dialog == null) {
-				return;
-			}
-
-			this.hide();
-
-			try {
-				power_dialog.Toggle();
-			} catch (Error e) {
-				warning("Error trying to show PowerDialog: %s", e.message);
-			}
-		});
+		this.power_button.clicked.connect(on_power_button_clicked);
 
 		// We should go away when a user menu button is clicked
 		this.overlay_menu.item_clicked.connect(this.hide);
@@ -162,6 +116,66 @@ public class BudgieMenuWindow : Gtk.Popover {
 			power_dialog = Bus.get_proxy.end(res);
 		} catch (Error e) {
 			critical("Unable to get PowerDialog DBus remote: %s", e.message);
+		}
+	}
+
+	private bool on_button_press(Gdk.EventButton event) {
+		// Only care about left clicks
+		if (event.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		// Don't do work if we don't need to
+		if (!this.overlay_menu.get_reveal_child()) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		this.reset(false);
+		return Gdk.EVENT_STOP;
+	}
+
+	private void on_search_entry_changed() {
+		var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
+		this.view.search_changed(search_term);
+	}
+
+	private void on_system_settings_clicked() {
+		this.open_desktop_entry("org.buddiesofbudgie.ControlCenter.desktop");
+		this.hide();
+	}
+
+	private void on_budgie_desktop_prefs_clicked() {
+		this.open_desktop_entry("org.buddiesofbudgie.BudgieDesktopSettings.desktop");
+		this.hide();
+	}
+
+	private void on_search_entry_activate() {
+		// Make the view (and filter) is updated before calling activate
+		var search_term = Budgie.RelevancyService.searchable_string(this.search_entry.text);
+		this.view.search_changed(search_term);
+
+		this.view.on_search_entry_activated();
+	}
+
+	private void on_user_indicator_clicked() {
+		if (this.overlay_menu.get_reveal_child()) {
+			this.reset(false);
+		} else {
+			this.open_overlay_menu("xdg");
+		}
+	}
+
+	private void on_power_button_clicked() {
+		if (power_dialog == null) {
+			return;
+		}
+
+		this.hide();
+
+		try {
+			power_dialog.Toggle();
+		} catch (Error e) {
+			warning("Error trying to show PowerDialog: %s", e.message);
 		}
 	}
 

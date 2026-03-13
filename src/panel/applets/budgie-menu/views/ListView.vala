@@ -41,6 +41,7 @@ public class ApplicationListView : ApplicationView {
 	private bool rollover_menus = true;
 
 	private bool reloading = false;
+	private Budgie.AppIndex? pending_app_tracker = null;
 
 	public ApplicationListView(Settings settings) {
 		Object(
@@ -52,9 +53,7 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	construct {
-		this.realize.connect(() => {
-			this.update_sizing();
-		});
+		this.realize.connect(on_realize);
 
 		this.set_size_request(current_width, current_height);
 		this.icon_size = settings.get_int("menu-icons-size");
@@ -80,9 +79,7 @@ public class ApplicationListView : ApplicationView {
 		// "All" button"
 		this.all_categories = new CategoryButton(null);
 		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
-		this.all_categories.toggled.connect(()=> {
-			this.update_category(all_categories);
-		});
+		this.all_categories.toggled.connect(on_all_categories_toggled);
 		this.categories.pack_start(all_categories, false);
 
 		var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -183,16 +180,13 @@ public class ApplicationListView : ApplicationView {
 		this.control_center_buttons.clear();
 
 		// Destroy all category items
-		this.categories.get_children().foreach((child) => {
+		foreach (var child in this.categories.get_children()) {
 			child.destroy();
-		});
+		}
 
 		// Load all of the new content in the background
-		Idle.add(() => {
-			this.load_menus(app_tracker);
-			this.invalidate();
-			return false;
-		});
+		this.pending_app_tracker = app_tracker;
+		Idle.add(on_idle_load_menus);
 
 		lock (this.reloading) {
 			this.reloading = false;
@@ -206,9 +200,7 @@ public class ApplicationListView : ApplicationView {
 		// "All" button"
 		this.all_categories = new CategoryButton(null);
 		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
-		this.all_categories.toggled.connect(()=> {
-			this.update_category(all_categories);
-		});
+		this.all_categories.toggled.connect(on_all_categories_toggled);
 		all_categories.show_all();
 		this.categories.pack_start(all_categories, false);
 
@@ -222,9 +214,9 @@ public class ApplicationListView : ApplicationView {
 			var btn = new CategoryButton(category);
 			btn.join_group(all_categories);
 			btn.enter_notify_event.connect(this.on_mouse_enter);
-			btn.toggled.connect(() => {
-				update_category(btn);
-			});
+			// NOTE: Lambda required because Vala signal handlers don't receive the sender,
+			// and each button in the loop needs to pass itself to the handler.
+			btn.toggled.connect(() => { update_category(btn); });
 
 			btn.show_all();
 			this.categories.pack_start(btn, false); // Add the button
@@ -233,10 +225,9 @@ public class ApplicationListView : ApplicationView {
 			foreach (var app in category.apps) {
 				var app_btn = new MenuButton(app, category, icon_size);
 
-				app_btn.clicked.connect(() => {
-					app.launch();
-					this.app_launched();
-				});
+				// NOTE: Lambda required because Vala signal handlers don't receive the sender,
+				// and each button in the loop needs to pass itself to the handler.
+				app_btn.clicked.connect(() => { app_btn.app.launch(); this.app_launched(); });
 
 				this.application_buttons.insert(app.desktop_id, app_btn);
 				app_btn.show_all();
@@ -283,6 +274,21 @@ public class ApplicationListView : ApplicationView {
 		btn.app.launch();
 		this.app_launched();
 	}
+
+	private void on_realize() {
+		this.update_sizing();
+	}
+
+	private void on_all_categories_toggled() {
+		this.update_category(all_categories);
+	}
+
+	private bool on_idle_load_menus() {
+		this.load_menus(this.pending_app_tracker);
+		this.invalidate();
+		return false;
+	}
+
 
 	/**
 	 * Permits "rolling" over categories.

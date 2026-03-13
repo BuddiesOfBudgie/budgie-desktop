@@ -20,6 +20,11 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 	/* one confirmation for many files in one session */
 	private ObjectPath many_files;
 
+	private SourceFunc? pending_callback = null;
+	private string? pending_session_destination = null;
+	private ObjectPath? pending_object_path = null;
+	private BluezObexError? pending_obex_error = null;
+
 	public signal void response_notify(string address, ObjectPath object_path);
 	public signal void response_accepted(string address, ObjectPath object_path);
 	public signal void transfer_view(string session_path);
@@ -81,39 +86,26 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 
 		Bluetooth.Obex.Session session = Bus.get_proxy_sync(BusType.SESSION, "org.bluez.obex", transfer.session);
 
+		// Store state needed by action handlers
+		pending_callback = callback;
+		pending_session_destination = session.destination;
+		pending_object_path = object_path;
+		pending_obex_error = null;
+
 		// Register application action to accept a file transfer
 		var accept_action = new SimpleAction("btaccept", VariantType.STRING);
 		GLib.Application.get_default().add_action(accept_action);
-		accept_action.activate.connect((parameter) => {
-			response_accepted(session.destination, object_path);
-			if (callback != null) {
-				Idle.add((owned) callback);
-			}
-		});
+		accept_action.activate.connect(on_accept_action_activated);
 
 		// Register application action to reject a file transfer
 		var cancel_action = new SimpleAction("btcancel", VariantType.STRING);
 		GLib.Application.get_default().add_action(cancel_action);
-		cancel_action.activate.connect((parameter) => {
-			obex_error = new BluezObexError.CANCELED("File transfer cancelled");
-			response_canceled(object_path);
-			if (callback != null) {
-				Idle.add((owned) callback);
-			}
-		});
+		cancel_action.activate.connect(on_cancel_action_activated);
 
 		// Automatically accept the transfer if there are multiple files for
 		// the one transfer
 		if (many_files == object_path) {
-			Idle.add(()=>{
-				response_accepted(session.destination, object_path);
-
-				if (callback != null) {
-					Idle.add((owned) callback);
-				}
-
-				return Source.REMOVE;
-			});
+			Idle.add(on_auto_accept_many_files);
 		} else {
 			// Not multple files, ask to accept or reject
 			response_notify(session.destination, object_path);
@@ -121,10 +113,37 @@ public class Bluetooth.Obex.Agent : GLib.Object {
 
 		yield;
 
+		obex_error = pending_obex_error;
+
 		if (obex_error != null) throw obex_error;
 
 		many_files = object_path;
 		return transfer.name;
+	}
+
+	private void on_accept_action_activated(SimpleAction action, Variant? parameter) {
+		response_accepted(pending_session_destination, pending_object_path);
+		if (pending_callback != null) {
+			Idle.add((owned) pending_callback);
+		}
+	}
+
+	private void on_cancel_action_activated(SimpleAction action, Variant? parameter) {
+		pending_obex_error = new BluezObexError.CANCELED("File transfer cancelled");
+		response_canceled(pending_object_path);
+		if (pending_callback != null) {
+			Idle.add((owned) pending_callback);
+		}
+	}
+
+	private bool on_auto_accept_many_files() {
+		response_accepted(pending_session_destination, pending_object_path);
+
+		if (pending_callback != null) {
+			Idle.add((owned) pending_callback);
+		}
+
+		return Source.REMOVE;
 	}
 
 	/**

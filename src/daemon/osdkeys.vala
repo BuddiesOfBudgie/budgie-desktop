@@ -82,13 +82,15 @@
 						retry_count, MAX_RETRIES, e.message);
 
 					// Wait before retrying
-					Timeout.add(RETRY_DELAY_MS, () => {
-						setup_osd_proxy.begin();
-						return false;
-					});
+					Timeout.add(RETRY_DELAY_MS, on_osd_proxy_retry);
 					return;
 				}
 			}
+		}
+
+		private bool on_osd_proxy_retry() {
+			setup_osd_proxy.begin();
+			return false;
 		}
 
 		public OSDKeys() {
@@ -102,15 +104,7 @@
 			brightness_manager = new BrightnessManager();
 
 			// Connect to ready signal to know when it's actually available
-			brightness_manager.ready.connect(() => {
-				debug("BrightnessManager is ready");
-				if (brightness_manager.is_available()) {
-					brightness_manager.brightness_changed.connect(on_brightness_changed);
-					debug("Connected to brightness_changed signal");
-				} else {
-					warning("BrightnessManager not available after initialization");
-				}
-			});
+			brightness_manager.ready.connect(on_brightness_manager_ready);
 
 			// Also check if it's already ready (in case ready() fired before we connected)
 			if (brightness_manager.is_ready) {
@@ -128,16 +122,28 @@
 
 			// wait a short while to allow the async mixer methods to complete otherwise
 			// we see the volume OSD on startup accidently when keymap changes are invoked
-			Timeout.add(200, () => {
-				initialising = false;
-				debug("Initialization complete");
-				map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
-				map.state_changed.connect(on_keymap_state_changed);
-				return false;
-			});
+			Timeout.add(200, on_init_complete);
 
 			wm_settings = new Settings("com.solus-project.budgie-wm");
 			wm_settings.changed["caffeine-mode"].connect(on_caffeine_mode);
+		}
+
+		private void on_brightness_manager_ready() {
+			debug("BrightnessManager is ready");
+			if (brightness_manager.is_available()) {
+				brightness_manager.brightness_changed.connect(on_brightness_changed);
+				debug("Connected to brightness_changed signal");
+			} else {
+				warning("BrightnessManager not available after initialization");
+			}
+		}
+
+		private bool on_init_complete() {
+			initialising = false;
+			debug("Initialization complete");
+			map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
+			map.state_changed.connect(on_keymap_state_changed);
+			return false;
 		}
 
 		/**
@@ -193,11 +199,13 @@
 			   by letting caffeine events to complete first
 			*/
 			debug("Caffeine mode disabled, waiting for events to settle...");
-			Timeout.add(1000, () => {
-				caffeine_was_enabled = false;
-				debug("Caffeine mode fully disabled");
-				return false;
-			});
+			Timeout.add(1000, on_caffeine_mode_settled);
+		}
+
+		private bool on_caffeine_mode_settled() {
+			caffeine_was_enabled = false;
+			debug("Caffeine mode fully disabled");
+			return false;
 		}
 
 		void on_mixer_sink_changed(uint id) {

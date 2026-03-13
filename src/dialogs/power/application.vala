@@ -66,6 +66,11 @@ namespace Budgie {
 			power_dbus.is_showing = false;
 		}
 
+		private bool on_grab_seat_timeout() {
+			grab_seat();
+			return Source.REMOVE;
+		}
+
 		private void on_toggle(bool show) {
 			if (window == null) {
 				critical("Tried to toggle visibility of PowerDialog, but the window hasn't been initialized");
@@ -93,10 +98,7 @@ namespace Budgie {
 			} else {
 				// click/sloppy: the 250ms delay is sufficient and avoids
 				// GDK_GRAB_STATUS_NOT_VIEWABLE on slower systems.
-				Timeout.add(250, () => {
-					grab_seat();
-					return Source.REMOVE;
-				});
+				Timeout.add(250, on_grab_seat_timeout);
 			}
 		}
 

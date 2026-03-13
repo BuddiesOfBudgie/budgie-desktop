@@ -23,7 +23,7 @@ public class StatusSettings : Gtk.Grid {
 
 	[GtkChild]
 	private unowned Gtk.SpinButton? spinbutton_spacing;
-	
+
 	[GtkChild]
 	private unowned Gtk.Switch? switch_show_battery_percentage;
 
@@ -54,17 +54,39 @@ public class StatusApplet : Budgie.Applet {
 	 * Set up an EventBox for popovers
 	 */
 	private void setup_popover(Gtk.Widget? parent_widget, Budgie.Popover? popover) {
-		parent_widget.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				this.manager.show_popover(parent_widget);
-			}
-			return Gdk.EVENT_STOP;
-		});
+		parent_widget.button_press_event.connect(on_popover_button_press);
+	}
+
+	private Budgie.Popover? current_popover = null;
+
+	private bool on_popover_button_press(Gtk.Widget source, Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		// Find the popover associated with this widget
+		Budgie.Popover? popover = null;
+		if (source == power.ebox) {
+			popover = power.popover;
+		} else if (source == sound.ebox) {
+			popover = sound.popover;
+		}
+#if WITH_BLUETOOTH
+		else if (source == blue.ebox) {
+			popover = blue.popover;
+		}
+#endif
+
+		if (popover == null) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		if (popover.get_visible()) {
+			popover.hide();
+		} else {
+			this.manager.show_popover(source);
+		}
+		return Gdk.EVENT_STOP;
 	}
 
 	public StatusApplet(string uuid) {
@@ -74,9 +96,7 @@ public class StatusApplet : Budgie.Applet {
 		settings_prefix = "/com/solus-project/budgie-panel/instance/status";
 
 		settings = get_applet_settings(uuid);
-		settings.changed["spacing"].connect((key) => {
-			if (widget != null) widget.set_spacing(settings.get_int("spacing"));
-		});
+		settings.changed["spacing"].connect(on_spacing_changed);
 
 		wrap = new Gtk.EventBox();
 		add(wrap);
@@ -87,14 +107,12 @@ public class StatusApplet : Budgie.Applet {
 		show_all();
 
 		power = new PowerIndicator();
-		
+
 		gnome_settings = new Settings(GNOME_SETTINGS_SCHEMA);
-		
+
 		power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
-		gnome_settings.changed["show-battery-percentage"].connect((key) => {
-			power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
-		});
-		
+		gnome_settings.changed["show-battery-percentage"].connect(on_show_battery_percentage_changed);
+
 		widget.pack_start(power, false, false, 0);
 		/* Power shows itself - we dont control that */
 
@@ -112,6 +130,14 @@ public class StatusApplet : Budgie.Applet {
 		/* Bluetooth widget shows itself - we dont control that */
 		this.setup_popover(blue.ebox, blue.popover);
 #endif
+	}
+
+	private void on_spacing_changed() {
+		if (widget != null) widget.set_spacing(settings.get_int("spacing"));
+	}
+
+	private void on_show_battery_percentage_changed() {
+		power.update_labels(gnome_settings.get_boolean("show-battery-percentage"));
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {

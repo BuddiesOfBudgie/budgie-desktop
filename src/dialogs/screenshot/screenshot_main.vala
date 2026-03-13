@@ -32,6 +32,41 @@ namespace Budgie {
 		{ null }
 	};
 
+	/* Stored reference for async callbacks */
+	static ScreenshotControl? stored_control = null;
+
+	private static void on_start_main_window_ready(Object? obj, AsyncResult res) {
+		try {
+			stored_control.StartMainWindow.end(res);
+		} catch (Error e) {
+			message("Failed to StartMainWindow: %s", e.message);
+		}
+	}
+
+	private static void on_start_area_select_ready(Object? obj, AsyncResult res) {
+		try {
+			stored_control.StartAreaSelect.end(res);
+		} catch (Error e) {
+			message("Failed to StartAreaSelect: %s", e.message);
+		}
+	}
+
+	private static void on_start_window_screenshot_ready(Object? obj, AsyncResult res) {
+		try {
+			stored_control.StartWindowScreenshot.end(res);
+		} catch (Error e) {
+			message("Failed to StartWindowScreenshot: %s", e.message);
+		}
+	}
+
+	private static void on_start_full_screenshot_ready(Object? obj, AsyncResult res) {
+		try {
+			stored_control.StartFullScreenshot.end(res);
+		} catch (Error e) {
+			message("Failed to StartFullScreenshot: %s", e.message);
+		}
+	}
+
 	public static int main(string[] args) {
 		ScreenshotControl control;
 		OptionContext ctx;
@@ -51,47 +86,25 @@ namespace Budgie {
 				"/org/buddiesofbudgie/ScreenshotControl"
 			);
 
+			stored_control = control;
+
 			if (interactive) {
-				control.StartMainWindow.begin((obj, res) => {
-					try {
-						control.StartMainWindow.end(res);
-					} catch (Error e) {
-						message("Failed to StartMainWindow: %s", e.message);
-					}
-				});
+				control.StartMainWindow.begin(on_start_main_window_ready);
 				GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
 				return 0;
 			}
 			if (area) {
-				control.StartAreaSelect.begin((obj, res) => {
-					try {
-						control.StartAreaSelect.end(res);
-					} catch (Error e) {
-						message("Failed to StartAreaSelect: %s", e.message);
-					}
-				});
+				control.StartAreaSelect.begin(on_start_area_select_ready);
 				GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
 				return 0;
 			}
 			if (window) {
-				control.StartWindowScreenshot.begin((obj, res) => {
-					try {
-						control.StartWindowScreenshot.end(res);
-					} catch (Error e) {
-						message("Failed to StartWindowScreenshot: %s", e.message);
-					}
-				});
+				control.StartWindowScreenshot.begin(on_start_window_screenshot_ready);
 				GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
 				return 0;
 			}
 
-			control.StartFullScreenshot.begin((obj, res) => {
-				try {
-					control.StartFullScreenshot.end(res);
-				} catch (Error e) {
-					message("Failed to StartFullScreenshot: %s", e.message);
-				}
-			});
+			control.StartFullScreenshot.begin(on_start_full_screenshot_ready);
 			GLib.Thread.usleep(2000); // pause the thread to allow the dbus call to complete
 			return 0;
 		}

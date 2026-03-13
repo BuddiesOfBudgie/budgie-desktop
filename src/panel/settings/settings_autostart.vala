@@ -154,10 +154,7 @@ namespace Budgie {
 				remove_button.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
 				remove_button.get_style_context().add_class("round-button");
 				remove_button.valign = Gtk.Align.CENTER;
-				remove_button.clicked.connect(() => {
-					autostart_item.delete();
-					this.destroy();
-				});
+				remove_button.clicked.connect(on_remove_clicked);
 			}
 
 			if (running) {
@@ -168,6 +165,11 @@ namespace Budgie {
 			}
 
 			this.show_all();
+		}
+
+		private void on_remove_clicked() {
+			autostart_item.delete();
+			this.destroy();
 		}
 	}
 
@@ -212,10 +214,7 @@ namespace Budgie {
 			search_entry = new Gtk.SearchEntry();
 			search_bar.add(search_entry);
 
-			search_entry.changed.connect(() => {
-				app_listbox.invalidate_filter();
-				app_listbox.invalidate_sort();
-			});
+			search_entry.changed.connect(on_search_changed);
 
 			Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow(null, null);
 			content_area.pack_start(scroll, true, true, 0);
@@ -233,6 +232,11 @@ namespace Budgie {
 
 			set_default_size(400, 450);
 			set_app_list(AppInfo.get_all());
+		}
+
+		private void on_search_changed() {
+			app_listbox.invalidate_filter();
+			app_listbox.invalidate_sort();
 		}
 
 		private bool search_filter(Gtk.ListBoxRow row) {
@@ -488,17 +492,7 @@ namespace Budgie {
 				return;
 			}
 
-			list_directory.begin(AUTOSTART_PATH, (obj, res) => {
-				string[] files = list_directory.end(res);
-				foreach (string file in files) {
-					DesktopAppInfo? info = new DesktopAppInfo.from_filename(file);
-					if (info != null) {
-						AutostartItem item = new AutostartItem.from_app_info(info);
-						add_item(item);
-						autostart_files.set(item.id, item.title);
-					}
-				}
-			});
+			list_directory.begin(AUTOSTART_PATH, on_list_directory_complete);
 		}
 
 		private Gtk.Menu create_menu() {
@@ -514,6 +508,18 @@ namespace Budgie {
 			menu.show_all();
 
 			return menu;
+		}
+
+		private void on_list_directory_complete(Object? obj, AsyncResult res) {
+			string[] files = list_directory.end(res);
+			foreach (string file in files) {
+				DesktopAppInfo? info = new DesktopAppInfo.from_filename(file);
+				if (info != null) {
+					AutostartItem item = new AutostartItem.from_app_info(info);
+					add_item(item);
+					autostart_files.set(item.id, item.title);
+				}
+			}
 		}
 
 		private void add_item(AutostartItem item) {

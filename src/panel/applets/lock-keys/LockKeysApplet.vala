@@ -38,12 +38,8 @@ public class LockKeysApplet : Budgie.Applet {
 		widget.pack_start(caps_box, false, false, 0);
 		widget.pack_start(num_box, false, false, 0);
 
-		caps_box.button_press_event.connect((eventbutton) => {
-			return on_panel_widget_clicked(eventbutton, "Caps_Lock");
-		});
-		num_box.button_press_event.connect((eventbutton) => {
-			return on_panel_widget_clicked(eventbutton, "Num_Lock");
-		});
+		caps_box.button_press_event.connect(on_caps_button_press);
+		num_box.button_press_event.connect(on_num_button_press);
 
 		map = Gdk.Keymap.get_for_display(Gdk.Display.get_default());
 		map.state_changed.connect(on_state_changed);
@@ -51,6 +47,14 @@ public class LockKeysApplet : Budgie.Applet {
 		on_state_changed();
 
 		show_all();
+	}
+
+	private bool on_caps_button_press(Gdk.EventButton eventbutton) {
+		return on_panel_widget_clicked(eventbutton, "Caps_Lock");
+	}
+
+	private bool on_num_button_press(Gdk.EventButton eventbutton) {
+		return on_panel_widget_clicked(eventbutton, "Num_Lock");
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {

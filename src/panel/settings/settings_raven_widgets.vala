@@ -69,11 +69,11 @@ namespace Budgie {
 			move_box.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
 			button_move_widget_up = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.MENU);
-			button_move_widget_up.clicked.connect(() => move_widget_by_offset(-1));
+			button_move_widget_up.clicked.connect(on_move_widget_up);
 			move_box.add(button_move_widget_up);
 
 			button_move_widget_down = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.MENU);
-			button_move_widget_down.clicked.connect(() => move_widget_by_offset(1));
+			button_move_widget_down.clicked.connect(on_move_widget_down);
 			move_box.add(button_move_widget_down);
 
 			button_remove_widget = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
@@ -173,10 +173,20 @@ namespace Budgie {
 			/* Empty placeholder for no selection .. */
 			var empty = new Gtk.EventBox();
 			settings_stack.add_named(empty, "main");
-			Idle.add(() => {
-				settings_stack.set_visible_child_name("main");
-				return false;
-			});
+			Idle.add(on_initial_settings_stack_idle);
+		}
+
+		private void on_move_widget_up() {
+			move_widget_by_offset(-1);
+		}
+
+		private void on_move_widget_down() {
+			move_widget_by_offset(1);
+		}
+
+		private bool on_initial_settings_stack_idle() {
+			settings_stack.set_visible_child_name("main");
+			return false;
 		}
 
 		/**

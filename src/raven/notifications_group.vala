@@ -112,20 +112,26 @@ namespace Budgie {
 			noti_box.invalidate_sort();
 			update_count();
 
-			widget.closed_individually.connect(() => { // When this notification is closed
-				remove_notification((uint) notification.id);
-			});
+			widget.closed_individually.connect(on_notification_closed_individually);
+		}
+
+		private void on_notification_closed_individually(uint32 id) {
+			remove_notification(id);
 		}
 
 		/**
 		 * dismiss_all is responsible for dismissing all notifications
 		 */
 		public void dismiss_all() {
-			notifications.foreach_remove((id, widget) => {
-				widget.destroy();
+			var ids = notifications.get_keys();
+			foreach (var id in ids) {
+				var widget = notifications.lookup(id);
+				if (widget != null) {
+					widget.destroy();
+				}
+				notifications.remove(id);
 				dismissed_notification(id);
-				return true;
-			});
+			}
 
 			update_count();
 			dismissed_group(app_name);
@@ -159,9 +165,7 @@ namespace Budgie {
 		public void limit_notifications() {
 			GLib.List<uint32> currnotifs = notifications.get_keys();
 
-			currnotifs.sort((a, b) => {
-				return (int) (a > b) - (int) (a < b);
-			});
+			currnotifs.sort(compare_notification_ids);
 
 			uint n_currnotifs = currnotifs.length();
 
@@ -181,6 +185,10 @@ namespace Budgie {
 				remove_notification(n);
 				count++;
 			}
+		}
+
+		private static int compare_notification_ids(uint32 a, uint32 b) {
+			return (int) (a > b) - (int) (a < b);
 		}
 
 		/**

@@ -22,6 +22,9 @@ public class Icon : Gtk.Image {
 	private double bounce_amount = 0.0;
 	private double attention_amount = 0.0;
 
+	private Budgie.Animation? pending_wait_animation = null;
+	private Budgie.Animation? pending_wait_animation1 = null;
+
 	public double bounce {
 		public set {
 			bounce_amount = value;
@@ -108,9 +111,11 @@ public class Icon : Gtk.Image {
 			};
 		}
 
-		attention_animation.start((a) => {
-			animate_attention(null);
-		});
+		attention_animation.start(on_attention_animation_complete);
+	}
+
+	private void on_attention_animation_complete(Budgie.Animation? src) {
+		animate_attention(null);
 	}
 
 	public void animate_wait() {
@@ -150,23 +155,34 @@ public class Icon : Gtk.Image {
 			}
 		};
 
-		wait_animation.start(() => {
-			this.icon_opacity = 0.3;
-		});
+		pending_wait_animation = wait_animation;
+		pending_wait_animation1 = wait_animation1;
 
-		Timeout.add(700, () => {
-			if (!waiting) {
-				wait_animation.stop();
-				wait_animation1.stop();
-				this.icon_opacity = 1.0;
-				return false;
-			}
-			wait_animation1.start((a) => {
-				this.icon_opacity = 1.0;
-				animate_wait();
-			});
+		wait_animation.start(on_wait_fade_out_complete);
+
+		Timeout.add(700, on_wait_timeout);
+	}
+
+	private void on_wait_fade_out_complete(Budgie.Animation? src) {
+		this.icon_opacity = 0.3;
+	}
+
+	private bool on_wait_timeout() {
+		if (!waiting) {
+			if (pending_wait_animation != null) pending_wait_animation.stop();
+			if (pending_wait_animation1 != null) pending_wait_animation1.stop();
+			this.icon_opacity = 1.0;
 			return false;
-		});
+		}
+		if (pending_wait_animation1 != null) {
+			pending_wait_animation1.start(on_wait_fade_in_complete);
+		}
+		return false;
+	}
+
+	private void on_wait_fade_in_complete(Budgie.Animation? src) {
+		this.icon_opacity = 1.0;
+		animate_wait();
 	}
 
 	public void animate_launch(Budgie.PanelPosition position) {
@@ -192,9 +208,11 @@ public class Icon : Gtk.Image {
 			}
 		};
 
-		launch_animation.start((a) => {
-			this.bounce = 0.0;
-		});
+		launch_animation.start(on_launch_animation_complete);
+	}
+
+	private void on_launch_animation_complete(Budgie.Animation? src) {
+		this.bounce = 0.0;
 	}
 
 	public override bool draw(Cairo.Context cr) {

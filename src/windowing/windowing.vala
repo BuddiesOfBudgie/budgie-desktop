@@ -416,17 +416,14 @@ namespace Budgie.Windowing {
 				minimized_windows_by_show_desktop = new List<Xfw.Window>();
 				SignalHandler.block(screen, active_window_changed_id);
 
-				windows.foreach((window) => {
-					if (should_filter_window(window, filter) || window.is_minimized()) return;
+				foreach (var window in windows) {
+					if (should_filter_window(window, filter) || window.is_minimized()) continue;
 
 					window.set_minimized(true);
 					minimized_windows_by_show_desktop.append(window);
-				});
+				}
 
-				Timeout.add(100, () => {
-					SignalHandler.unblock(screen, active_window_changed_id);
-					return false;
-				});
+				Timeout.add(100, on_unblock_active_window_changed);
 			} else {
 				// Restore only windows we minimized
 				foreach (var window in minimized_windows_by_show_desktop) {
@@ -435,6 +432,11 @@ namespace Budgie.Windowing {
 			}
 
 			desktop_shown(is_show_desktop);
+		}
+
+		private bool on_unblock_active_window_changed() {
+			SignalHandler.unblock(screen, active_window_changed_id);
+			return false;
 		}
 
 		/**

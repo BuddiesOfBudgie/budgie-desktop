@@ -166,13 +166,15 @@ namespace Budgie {
 			close_button.get_child().show();
 			header_box.pack_start(close_button, false, false, 0);
 
-			close_button.clicked.connect(() => {
-				this.closed();
-			});
+			close_button.clicked.connect(on_close_button_clicked);
 
 			this.text = text;
 			this.icon_name = icon_name;
 			this.can_close = can_close;
+		}
+
+		private void on_close_button_clicked() {
+			this.closed();
 		}
 
 		public void notify_expanded_change(bool value) {
@@ -213,19 +215,25 @@ namespace Budgie {
 			pack_start(content, false, false, 0);
 
 			this.header.bind_property("expanded", this, "expanded");
-			content.notify["child-revealed"].connect_after(() => {
-				this.get_toplevel().queue_draw();
-				this.track_animations = false;
-			});
+			content.notify["child-revealed"].connect_after(on_child_revealed);
 
-			content.notify["reveal-child"].connect(() => {
-				this.track_animations = true;
-			});
+			content.notify["reveal-child"].connect(on_reveal_child);
 
-			content.map.connect_after(() => {
-				var clock = content.get_frame_clock();
-				clock.after_paint.connect(this.after_paint);
-			});
+			content.map.connect_after(on_content_map);
+		}
+
+		private void on_child_revealed() {
+			this.get_toplevel().queue_draw();
+			this.track_animations = false;
+		}
+
+		private void on_reveal_child() {
+			this.track_animations = true;
+		}
+
+		private void on_content_map() {
+			var clock = content.get_frame_clock();
+			clock.after_paint.connect(this.after_paint);
 		}
 
 		/**

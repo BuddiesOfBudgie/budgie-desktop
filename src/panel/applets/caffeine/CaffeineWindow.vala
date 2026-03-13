@@ -57,24 +57,30 @@ namespace Caffeine {
 
 			update_ux_state(); // Set our initial toggle value
 
-			settings.changed["caffeine-mode"].connect(() => { // On Caffeine Mode schema change
-				update_ux_state(); // Update our toggle
-			});
+			settings.changed["caffeine-mode"].connect(on_caffeine_mode_schema_changed);
 
-			settings.changed["caffeine-mode-timer"].connect(() => { // On Caffeine Mode Timer value change
-				SignalHandler.block(timer, timer_id);
-				update_ux_state();
-				SignalHandler.unblock(timer, timer_id);
-			});
+			settings.changed["caffeine-mode-timer"].connect(on_caffeine_mode_timer_changed);
 
-			mode_id = mode.notify["active"].connect(() => { // On active change
-				SignalHandler.block(mode, mode_id); // Block to prevent update on set_caffeine_mode schema change
-				timer.sensitive = !mode.active; // Set timer sensitivity
-				settings.set_boolean("caffeine-mode", mode.active); // Update our caffeine-mode WM setting
-				SignalHandler.unblock(mode, mode_id);
-			});
+			mode_id = mode.notify["active"].connect(on_mode_active_changed);
 
 			timer_id = timer.value_changed.connect(update_timer_value);
+		}
+
+		private void on_caffeine_mode_schema_changed() {
+			update_ux_state();
+		}
+
+		private void on_caffeine_mode_timer_changed() {
+			SignalHandler.block(timer, timer_id);
+			update_ux_state();
+			SignalHandler.unblock(timer, timer_id);
+		}
+
+		private void on_mode_active_changed(ParamSpec pspec) {
+			SignalHandler.block(mode, mode_id);
+			timer.sensitive = !mode.active;
+			settings.set_boolean("caffeine-mode", mode.active);
+			SignalHandler.unblock(mode, mode_id);
 		}
 
 		/**

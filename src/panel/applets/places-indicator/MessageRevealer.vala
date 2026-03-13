@@ -13,6 +13,7 @@ public class MessageRevealer : Gtk.Revealer {
 	private Gtk.InfoBar info_bar;
 	private Gtk.Label message_label;
 	private uint expire_id = 0;
+	private ulong hide_connection = 0;
 
 	public MessageRevealer() {
 		Object(visible: false);
@@ -41,15 +42,20 @@ public class MessageRevealer : Gtk.Revealer {
 		}
 
 		expire_id = 0;
-		ulong connection = this.notify["child-revealed"].connect_after(() => {
-			set_no_show_all(true);
-			hide();
-		});
+		this.hide_connection = this.notify["child-revealed"].connect_after(on_child_revealed_for_hide);
 		set_reveal_child(false);
-		Timeout.add(300, () => {
-			this.disconnect(connection);
-			return false;
-		});
+		Timeout.add(300, on_disconnect_hide_connection);
+		return false;
+	}
+
+	private void on_child_revealed_for_hide(ParamSpec pspec) {
+		set_no_show_all(true);
+		hide();
+	}
+
+	private bool on_disconnect_hide_connection() {
+		this.disconnect(hide_connection);
+		hide_connection = 0;
 		return false;
 	}
 

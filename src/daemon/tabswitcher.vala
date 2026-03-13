@@ -80,21 +80,30 @@ namespace Budgie {
 			halign = Gtk.Align.CENTER;
 			valign = Gtk.Align.CENTER;
 
-			window.state_changed.connect((changed_mask, new_state) => {
-				if (
-					(Xfw.WindowState.ACTIVE in changed_mask) &&
-					(Xfw.WindowState.ACTIVE in new_state)
-				) {
-					activation_timestamp = get_time();
-					window_activated(window);
-				}
-			});
-
-			window.closed.connect(() => closed(this));
+			window.state_changed.connect(on_window_state_changed);
+			window.closed.connect(on_window_closed);
 			application.icon_changed.connect(set_icon);
 			window.icon_changed.connect(set_icon);
 			window.name_changed.connect(set_title);
-			window.workspace_changed.connect(() => workspace_changed());
+			window.workspace_changed.connect(on_window_workspace_changed);
+		}
+
+		private void on_window_state_changed(Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+			if (
+				(Xfw.WindowState.ACTIVE in changed_mask) &&
+				(Xfw.WindowState.ACTIVE in new_state)
+			) {
+				activation_timestamp = get_time();
+				window_activated(window);
+			}
+		}
+
+		private void on_window_closed() {
+			closed(this);
+		}
+
+		private void on_window_workspace_changed() {
+			workspace_changed();
 		}
 
 		private void set_icon() {
@@ -227,14 +236,16 @@ namespace Budgie {
 
 			window_widget.closed.connect(remove_window);
 
-			window_widget.workspace_changed.connect(() => {
-				window_box.invalidate_filter(); // Re-filter, maybe window is now on active workspace
-			});
+			window_widget.workspace_changed.connect(on_widget_workspace_changed);
 
 			window_box.invalidate_filter(); // Re-filter
 			window_box.invalidate_sort(); // Re-sort
 
 			update_sizing();
+		}
+
+		private void on_widget_workspace_changed() {
+			window_box.invalidate_filter(); // Re-filter, maybe window is now on active workspace
 		}
 
 		private bool flowbox_filter(FlowBoxChild box_child) {
@@ -440,7 +451,7 @@ namespace Budgie {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, SWITCHER_DBUS_NAME, flags,
-				on_bus_acquired, ()=> {}, DaemonNameLost);
+				on_bus_acquired, null, DaemonNameLost);
 			}
 
 			/**

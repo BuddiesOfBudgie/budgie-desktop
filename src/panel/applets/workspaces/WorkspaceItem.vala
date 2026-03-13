@@ -25,6 +25,10 @@ namespace Workspaces {
 		private Gtk.Allocation real_alloc;
 		private float size_multiplier;
 
+		private Gtk.Box button_box;
+		private Gtk.Entry entry;
+		private Gtk.Label name_label;
+
 		public WorkspaceItem(Xfw.Workspace space, float multiplier) {
 			this.get_style_context().add_class("workspace-item");
 			this.workspace = space;
@@ -49,7 +53,7 @@ namespace Workspaces {
 			Gtk.Box popover_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			popover.add(popover_box);
 
-			Gtk.Label name_label = new Gtk.Label(@"<big>$(workspace.get_name())</big>");
+			name_label = new Gtk.Label(@"<big>$(workspace.get_name())</big>");
 			popover_box.pack_start(name_label, false, false, 0);
 			name_label.get_style_context().add_class("dim-label");
 			name_label.halign = Gtk.Align.START;
@@ -66,7 +70,7 @@ namespace Workspaces {
 			popover_stack.set_interpolate_size(true);
 			popover_stack.set_homogeneous(false);
 
-			Gtk.Box button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			button_box.get_style_context().add_class("workspace-popover-button-box");
 			popover_stack.add(button_box);
 			Gtk.Button rename_button = new Gtk.Button.with_label(_("Rename"));
@@ -83,11 +87,7 @@ namespace Workspaces {
 			remove_button.get_child().margin_start = 0;
 			remove_button.set_relief(Gtk.ReliefStyle.NONE);
 
-			remove_button.button_release_event.connect((event) => {
-				popover.hide();
-				remove_workspace(workspace.get_number(), event.time);
-				return false;
-			});
+			remove_button.button_release_event.connect(on_remove_button_release);
 
 			Gtk.Box rename_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			popover_stack.add(rename_box);
@@ -96,7 +96,7 @@ namespace Workspaces {
 			rename_box.margin_end = 5;
 			rename_box.margin_top = 5;
 			rename_box.margin_bottom = 5;
-			Gtk.Entry entry = new Gtk.Entry();
+			entry = new Gtk.Entry();
 			entry.set_text(workspace.get_name());
 			rename_box.pack_start(entry, true, true, 0);
 			Gtk.Button rename_confirm = new Gtk.Button.from_icon_name("emblem-ok-symbolic", Gtk.IconSize.MENU);
@@ -123,34 +123,54 @@ namespace Workspaces {
 			this.drag_drop.connect(on_drag_drop);
 			this.drag_data_received.connect(on_drag_data_received);
 
-			rename_button.clicked.connect(() => {
-				popover_stack.set_visible_child(rename_box);
-			});
-
-			rename_confirm.clicked.connect(() => {
-				popover.hide();
-				workspace.name = entry.get_text();
-			});
-
-			entry.activate.connect(() => {
-				popover.hide();
-				workspace.name = entry.get_text();
-			});
-
-			popover.closed.connect(() => {
-				popover_stack.set_visible_child(button_box);
-				entry.set_text(workspace.get_name());
-				WorkspacesApplet.manager.unregister_popover(this);
-				WorkspacesApplet.dragging = false;
-			});
-
-			workspace.name_changed.connect(() => {
-				this.set_tooltip_text(workspace.get_name());
-				name_label.set_markup(@"<big>$(workspace.get_name())</big>");
-				entry.set_text(workspace.get_name());
-			});
+			rename_button.clicked.connect(on_rename_button_clicked);
+			rename_confirm.clicked.connect(on_rename_confirm_clicked);
+			entry.activate.connect(on_entry_activate);
+			popover.closed.connect(on_popover_closed);
+			workspace.name_changed.connect(on_workspace_name_changed);
 
 			this.show_all();
+		}
+
+		private bool on_remove_button_release(Gdk.EventButton event) {
+			popover.hide();
+			remove_workspace(workspace.get_number(), event.time);
+			return false;
+		}
+
+		private void on_rename_button_clicked() {
+			popover_stack.set_visible_child(entry.get_parent());
+		}
+
+		private void on_rename_confirm_clicked() {
+			popover.hide();
+			workspace.name = entry.get_text();
+		}
+
+		private void on_entry_activate() {
+			popover.hide();
+			workspace.name = entry.get_text();
+		}
+
+		private void on_popover_closed() {
+			popover_stack.set_visible_child(button_box);
+			entry.set_text(workspace.get_name());
+			WorkspacesApplet.manager.unregister_popover(this);
+			WorkspacesApplet.dragging = false;
+		}
+
+		private void on_workspace_name_changed() {
+			this.set_tooltip_text(workspace.get_name());
+			name_label.set_markup(@"<big>$(workspace.get_name())</big>");
+			entry.set_text(workspace.get_name());
+		}
+
+		private bool on_more_label_press(Gdk.EventButton event) {
+			popover_stack.set_visible_child(rest_of_the_icons);
+			WorkspacesApplet.dragging = true;
+			WorkspacesApplet.manager.register_popover(this, popover);
+			WorkspacesApplet.manager.show_popover(this);
+			return true;
 		}
 
 		private bool on_drag_drop(Gtk.Widget widget, Gdk.DragContext context, int x, int y, uint time) {
@@ -226,7 +246,7 @@ namespace Workspaces {
 				widget.destroy();
 			}
 
-			window_list.@foreach((window) => {
+			foreach (Xfw.Window window in window_list) {
 				WindowIcon icon = new WindowIcon(window);
 				if (window_counter < max_items || num_windows == max_items) {
 					icon_grid.attach(icon, column_counter, row_counter);
@@ -237,13 +257,7 @@ namespace Workspaces {
 					ebox.add(more_label);
 					icon_grid.attach(ebox, column_counter, row_counter);
 					ebox.show_all();
-					ebox.button_press_event.connect(() => {
-						popover_stack.set_visible_child(rest_of_the_icons);
-						WorkspacesApplet.dragging = true;
-						WorkspacesApplet.manager.register_popover(this, popover);
-						WorkspacesApplet.manager.show_popover(this);
-						return true;
-					});
+					ebox.button_press_event.connect(on_more_label_press);
 					ebox.halign = Gtk.Align.CENTER;
 					ebox.valign = Gtk.Align.CENTER;
 				}
@@ -261,9 +275,9 @@ namespace Workspaces {
 				}
 
 				if (row_counter >= num_rows) {
-					return;
+					break;
 				}
-			});
+			}
 
 			if (rest_of_the_icons.get_children().is_empty()) {
 				popover.hide();

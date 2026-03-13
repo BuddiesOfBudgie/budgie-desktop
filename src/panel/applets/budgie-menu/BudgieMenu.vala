@@ -107,11 +107,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 		settings.changed.connect(on_settings_changed);
 
 		ui_settings = new Settings("org.gnome.desktop.interface");
-		ui_settings.changed.connect((key) => {
-			if (key == "icon-theme") {
-				on_settings_changed("menu-icon");
-			}
-		});
+		ui_settings.changed.connect(on_ui_settings_changed);
 
 		app_index = Budgie.AppIndex.@get();
 
@@ -136,41 +132,9 @@ public class BudgieMenuApplet : Budgie.Applet {
 		popover = new BudgieMenuWindow(settings, widget);
 		popover.bind_property("visible", widget, "active");
 		popover.refresh(this.app_index, true);
-		app_index.changed.connect(() => {
-			/*
-			 * Refesh the view on application system change.
-			 * We don't want to update the UI when the popover
-			 * is open, because that has a jarring visual effect.
-			 * So, if the popover is open, add a 1 second timer
-			 * to check if it's still visible, and if not, refresh
-			 * the view.
-			 */
-			if (popover.get_visible()) {
-				Timeout.add_seconds(1, () => {
-					if (popover.is_visible()) {
-						return true;
-					}
+		app_index.changed.connect(on_app_index_changed);
 
-					popover.refresh(this.app_index);
-					return false;
-				}, Priority.DEFAULT_IDLE);
-			} else {
-				popover.refresh(this.app_index);
-			}
-		});
-
-		widget.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				popover.get_child().show_all();
-				this.manager.show_popover(widget);
-			}
-			return Gdk.EVENT_STOP;
-		});
+		widget.button_press_event.connect(on_widget_button_press);
 
 		popover.get_child().show_all();
 
@@ -187,19 +151,9 @@ public class BudgieMenuApplet : Budgie.Applet {
 		on_settings_changed("menu-label");
 
 		/* Potentially reload icon on pixel size jumps */
-		panel_size_changed.connect((p, i, s) => {
-			if (this.pixel_size != i) {
-				this.pixel_size = (int)i;
-				this.on_settings_changed("menu-icon");
-			}
-		});
+		panel_size_changed.connect(on_panel_size_changed);
 
-		popover.key_release_event.connect((e) => {
-			if (e.keyval == Gdk.Key.Escape) {
-				popover.hide();
-			}
-			return Gdk.EVENT_PROPAGATE;
-		});
+		popover.key_release_event.connect(on_popover_key_release);
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -219,6 +173,64 @@ public class BudgieMenuApplet : Budgie.Applet {
 				this.manager.show_popover(widget);
 			}
 		}
+	}
+
+	private void on_ui_settings_changed(string key) {
+		if (key == "icon-theme") {
+			on_settings_changed("menu-icon");
+		}
+	}
+
+	private void on_app_index_changed() {
+		/*
+		 * Refesh the view on application system change.
+		 * We don't want to update the UI when the popover
+		 * is open, because that has a jarring visual effect.
+		 * So, if the popover is open, add a 1 second timer
+		 * to check if it's still visible, and if not, refresh
+		 * the view.
+		 */
+		if (popover.get_visible()) {
+			Timeout.add_seconds(1, on_check_popover_visible, Priority.DEFAULT_IDLE);
+		} else {
+			popover.refresh(this.app_index);
+		}
+	}
+
+	private bool on_check_popover_visible() {
+		if (popover.is_visible()) {
+			return true;
+		}
+
+		popover.refresh(this.app_index);
+		return false;
+	}
+
+	private bool on_widget_button_press(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		if (popover.get_visible()) {
+			popover.hide();
+		} else {
+			popover.get_child().show_all();
+			this.manager.show_popover(widget);
+		}
+		return Gdk.EVENT_STOP;
+	}
+
+	private void on_panel_size_changed(int p, int i, int s) {
+		if (this.pixel_size != i) {
+			this.pixel_size = i;
+			this.on_settings_changed("menu-icon");
+		}
+	}
+
+	private bool on_popover_key_release(Gdk.EventKey e) {
+		if (e.keyval == Gdk.Key.Escape) {
+			popover.hide();
+		}
+		return Gdk.EVENT_PROPAGATE;
 	}
 
 	protected void on_settings_changed(string key) {

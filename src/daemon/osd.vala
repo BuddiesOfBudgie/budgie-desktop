@@ -151,6 +151,17 @@ namespace Budgie {
 			move_osd();
 		}
 
+		private bool on_set_monitor() {
+			var wayland_client = new WaylandClient();
+			var monitor = wayland_client.gdk_monitor;
+			if (monitor != null) {
+				GtkLayerShell.set_monitor(this, monitor);
+			} else {
+				warning("Failed to get valid monitor for OSD");
+			}
+			return true;
+		}
+
 		/**
 		* Move the OSD into the correct position
 		*/
@@ -162,15 +173,7 @@ namespace Budgie {
 				return;
 			}
 
-			wayland_client.with_valid_monitor(() => {
-				var monitor = wayland_client.gdk_monitor;
-				if (monitor != null) {
-					GtkLayerShell.set_monitor(this, monitor);
-				} else {
-					warning("Failed to get valid monitor for OSD");
-				}
-				return true;
-			});
+			wayland_client.with_valid_monitor(on_set_monitor);
 		}
 	}
 

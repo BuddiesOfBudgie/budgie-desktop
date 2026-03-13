@@ -85,11 +85,24 @@ namespace Budgie.Notifications {
 			this.add(revealer);
 
 			// Hook up the close button
-			close_button.button_release_event.connect(() => {
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
-				return Gdk.EVENT_STOP;
-			});
+			close_button.button_release_event.connect(on_close_button_release);
+		}
+
+		/**
+		 * Handles the close button being clicked.
+		 */
+		private bool on_close_button_release(Gdk.EventButton event) {
+			this.Closed(NotificationCloseReason.DISMISSED);
+			this.dismiss();
+			return Gdk.EVENT_STOP;
+		}
+
+		/**
+		 * Timeout callback for the dismiss animation.
+		 */
+		private bool on_dismiss_timeout() {
+			this.destroy();
+			return Source.REMOVE;
 		}
 
 		/**
@@ -98,10 +111,17 @@ namespace Budgie.Notifications {
 		public void dismiss() {
 			this.destroying = true;
 			this.revealer.reveal_child = false;
-			GLib.Timeout.add(revealer.transition_duration, () => {
-				this.destroy();
-				return Source.REMOVE;
-			});
+			GLib.Timeout.add(revealer.transition_duration, on_dismiss_timeout);
+		}
+
+		/**
+		 * Timeout callback for notification expiry.
+		 */
+		private bool on_expire_timeout() {
+			this.expire_id = 0;
+			this.Closed(NotificationCloseReason.EXPIRED);
+			this.dismiss();
+			return Source.REMOVE;
 		}
 
 		/**
@@ -118,12 +138,7 @@ namespace Budgie.Notifications {
 				this.revealer.reveal_child = true;
 			}
 
-			this.expire_id = GLib.Timeout.add(timeout, () => {
-				this.expire_id = 0;
-				this.Closed(NotificationCloseReason.EXPIRED);
-				this.dismiss();
-				return Source.REMOVE;
-			}, Priority.HIGH);
+			this.expire_id = GLib.Timeout.add(timeout, on_expire_timeout, Priority.HIGH);
 		}
 
 		/**
@@ -153,6 +168,8 @@ namespace Budgie.Notifications {
 
 		private Body? body;
 		private bool actioned = false; /* only ActionInvoked once for each popup */
+		private bool has_default_action = false;
+		private bool has_actions = false;
 
 		/**
 		 * Signal emitted when an action is clicked.
@@ -169,13 +186,12 @@ namespace Budgie.Notifications {
 		}
 
 		construct {
-			bool has_actions = this.notification.actions.length > 0;
-			bool has_default_action = false;
+			this.has_actions = this.notification.actions.length > 0;
 
 			// Check for a default action
 			foreach (string action in this.notification.actions) {
 				if (action == "default") {
-					has_default_action = true;
+					this.has_default_action = true;
 					break;
 				}
 			}
@@ -192,55 +208,85 @@ namespace Budgie.Notifications {
 			// Add notification actions if any are present
 			if (this.notification.actions.length > 0) {
 				var actions = new ActionBox(this.notification.actions, this.notification.hints.contains("action-icons"));
-				actions.ActionInvoked.connect((action_key) => {
-					if (!this.actioned) {
-						this.ActionInvoked(action_key);
-					}
-					this.actioned = true;
-					this.dismiss();
-				});
+				actions.ActionInvoked.connect(on_action_box_action_invoked);
 				content_box.pack_start(actions, true, true, 0);
 			}
 
 			// Handle mouse enter/leave events to pause/start popup decay
-			this.enter_notify_event.connect(() => {
-				this.stop_decay();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			this.enter_notify_event.connect(on_enter_notify);
 
-			this.leave_notify_event.connect((event) => {
-				// This keeps the decay timer from restarting when the mouse enters another
-				// widget in the popup.
-				if (event.detail == Gdk.NotifyType.INFERIOR) {
-					return Gdk.EVENT_STOP;
-				}
-
-				this.begin_decay(this.notification.expire_timeout);
-				return Gdk.EVENT_PROPAGATE;
-			});
+			this.leave_notify_event.connect(on_leave_notify);
 
 			// Handle interaction events
-			this.button_release_event.connect(() => {
-				if (has_default_action) {
-					if (!this.actioned) {
-						this.ActionInvoked("default");
-					}
-					this.actioned = true;
-				} else if (this.notification.app_info != null && !has_actions) {
-					// Try to launch the application that generated the notification
-					try {
-						notification.app_info.launch(null, null);
-					} catch (Error e) {
-						critical("Unable to launch app: %s", e.message);
-					}
-				}
+			this.button_release_event.connect(on_popup_button_release);
+		}
 
-				// Emit this signal since the notification will be closed to make sure
-				// our latest popup tracking doesn't break.
-				this.Closed(NotificationCloseReason.DISMISSED);
-				this.dismiss();
+		/**
+		 * Handles an action being invoked from the action box.
+		 */
+		private void on_action_box_action_invoked(string action_key) {
+			if (!this.actioned) {
+				this.ActionInvoked(action_key);
+			}
+			this.actioned = true;
+			this.dismiss();
+		}
+
+		/**
+		 * Handles mouse entering the popup to pause decay.
+		 */
+		private bool on_enter_notify(Gdk.EventCrossing event) {
+			this.stop_decay();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		/**
+		 * Handles mouse leaving the popup to restart decay.
+		 */
+		private bool on_leave_notify(Gdk.EventCrossing event) {
+			// This keeps the decay timer from restarting when the mouse enters another
+			// widget in the popup.
+			if (event.detail == Gdk.NotifyType.INFERIOR) {
 				return Gdk.EVENT_STOP;
-			});
+			}
+
+			this.begin_decay(this.notification.expire_timeout);
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		/**
+		 * Handles button release on the popup body.
+		 */
+		private bool on_popup_button_release(Gdk.EventButton event) {
+			if (this.has_default_action) {
+				if (!this.actioned) {
+					this.ActionInvoked("default");
+				}
+				this.actioned = true;
+			} else if (this.notification.app_info != null && !this.has_actions) {
+				// Try to launch the application that generated the notification
+				try {
+					notification.app_info.launch(null, null);
+				} catch (Error e) {
+					critical("Unable to launch app: %s", e.message);
+				}
+			}
+
+			// Emit this signal since the notification will be closed to make sure
+			// our latest popup tracking doesn't break.
+			this.Closed(NotificationCloseReason.DISMISSED);
+			this.dismiss();
+			return Gdk.EVENT_STOP;
+		}
+
+		/**
+		 * Handles an action being invoked from the replacement action box.
+		 */
+		private void on_replace_action_box_action_invoked(string action_key) {
+			if (!this.actioned) {
+				this.ActionInvoked(action_key);
+			}
+			this.actioned = true;
 		}
 
 		/**
@@ -258,12 +304,7 @@ namespace Budgie.Notifications {
 			// Add notification actions if any are present
 			if (new_notif.actions.length > 0) {
 				var actions = new ActionBox(new_notif.actions, new_notif.hints.contains("action-icons"));
-				actions.ActionInvoked.connect((action_key) => {
-					if (!this.actioned) {
-						this.ActionInvoked(action_key);
-					}
-					this.actioned = true;
-				});
+				actions.ActionInvoked.connect(on_replace_action_box_action_invoked);
 				content_box.pack_start(actions, false, true, 0);
 			}
 
@@ -394,15 +435,23 @@ namespace Budgie.Notifications {
 						button.set_can_default(false);
 					}
 
-					button.clicked.connect(() => {
-						this.ActionInvoked(action);
-					});
+					// Store the action key as data on the button so the handler can retrieve it
+					button.set_data<string>("action-key", action);
+					button.clicked.connect(on_action_button_clicked);
 
 					this.add(button);
 				} else {
 					i += 2;
 				}
 			}
+		}
+
+		/**
+		 * Handles an action button being clicked.
+		 */
+		private void on_action_button_clicked(Gtk.Button button) {
+			string action = button.get_data<string>("action-key");
+			this.ActionInvoked(action);
 		}
 	}
 }

@@ -46,13 +46,7 @@ public class MountItem : ListItem {
 		unmount_button.set_halign(Gtk.Align.END);
 		overlay.add_overlay(unmount_button);
 
-		unmount_button.clicked.connect(() => {
-			if (mount.can_eject()) {
-				do_eject();
-			} else {
-				do_unmount();
-			}
-		});
+		unmount_button.clicked.connect(on_unmount_button_clicked);
 
 		if (mount.can_eject()) {
 			unmount_button.set_tooltip_text(_("Eject"));
@@ -62,9 +56,19 @@ public class MountItem : ListItem {
 
 		name_button.set_tooltip_text(_("Open \"%s\"").printf(mount.get_name()));
 
-		name_button.clicked.connect(() => {
-			open_directory(mount.get_root());
-		});
+		name_button.clicked.connect(on_name_button_clicked);
+	}
+
+	private void on_unmount_button_clicked() {
+		if (mount.can_eject()) {
+			do_eject();
+		} else {
+			do_unmount();
+		}
+	}
+
+	private void on_name_button_clicked() {
+		open_directory(mount.get_root());
 	}
 
 	/*

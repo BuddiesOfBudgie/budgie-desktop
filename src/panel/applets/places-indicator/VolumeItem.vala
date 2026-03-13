@@ -42,7 +42,7 @@ public class VolumeItem : ListItem {
 
 		operation = new MountHelper();
 
-		operation.send_message.connect((message) => { send_message(message); });
+		operation.send_message.connect(on_operation_send_message);
 		operation.password_asked.connect(on_password_asked);
 		operation.request_mount.connect(do_mount);
 
@@ -59,6 +59,10 @@ public class VolumeItem : ListItem {
 		}
 
 		name_button.clicked.connect(on_name_button_clicked);
+	}
+
+	private void on_operation_send_message(string message) {
+		send_message(message);
 	}
 
 	private void on_eject_button_clicked() {

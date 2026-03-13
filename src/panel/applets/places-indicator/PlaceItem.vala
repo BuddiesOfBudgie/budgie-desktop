@@ -10,6 +10,12 @@
  */
 
 public class PlaceItem : ListItem {
+	private File place_file;
+
+	private void on_name_button_clicked() {
+		open_directory(place_file);
+	}
+
 	public PlaceItem(File file, string class, string? bookmark_name) {
 		item_class = class;
 
@@ -40,8 +46,7 @@ public class PlaceItem : ListItem {
 
 		name_button.set_tooltip_text(_("Open \"%s\"".printf(name.strip())));
 
-		name_button.clicked.connect(() => {
-			open_directory(file);
-		});
+		this.place_file = file;
+		name_button.clicked.connect(on_name_button_clicked);
 	}
 }

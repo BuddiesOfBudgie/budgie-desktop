@@ -15,6 +15,8 @@ public class DeviceRow : Gtk.ListBoxRow {
 
 	private static Gtk.SizeGroup size_group;
 
+	private Gtk.Image image;
+	private Gtk.Label label;
 	private Gtk.Button send_button;
 	private Gtk.Label state_label;
 
@@ -29,7 +31,7 @@ public class DeviceRow : Gtk.ListBoxRow {
 	}
 
 	construct {
-		var image = new Gtk.Image.from_icon_name(device.icon ?? "bluetooth-active", Gtk.IconSize.DND);
+		image = new Gtk.Image.from_icon_name(device.icon ?? "bluetooth-active", Gtk.IconSize.DND);
 
 		state_label = new Gtk.Label(null) {
 			use_markup = true,
@@ -47,7 +49,7 @@ public class DeviceRow : Gtk.ListBoxRow {
 			}
 		}
 
-		var label = new Gtk.Label(device_name) {
+		label = new Gtk.Label(device_name) {
 			ellipsize = Pango.EllipsizeMode.END,
 			hexpand = true,
 			xalign = 0,
@@ -77,32 +79,38 @@ public class DeviceRow : Gtk.ListBoxRow {
 
 		set_sensitive(adapter.powered);
 
-		((DBusProxy) adapter).g_properties_changed.connect((changed, invalid) => {
-			var powered = changed.lookup_value("Powered", new VariantType("b"));
-			if (powered != null) {
-				set_sensitive(adapter.powered);
-			}
-		});
+		((DBusProxy) adapter).g_properties_changed.connect(on_adapter_properties_changed);
 
-		((DBusProxy) device).g_properties_changed.connect((changed, invalid) => {
-			var name = changed.lookup_value("Alias", new VariantType("s"));
-			if (name != null) {
-				label.label = device.alias;
-			}
-
-			var icon = changed.lookup_value("Icon", new VariantType("s"));
-			if (icon != null) {
-				image.icon_name = device.icon ?? "bluetooth-active";
-			}
-		});
+		((DBusProxy) device).g_properties_changed.connect(on_device_properties_changed);
 
 		state_label.label = Markup.printf_escaped("<span font_size='small'>%s</span>", get_name_from_icon());
 
 		// Connect the send button
-		send_button.clicked.connect(() => {
-			send_clicked(device);
-			get_toplevel().destroy();
-		});
+		send_button.clicked.connect(on_send_button_clicked);
+	}
+
+	private void on_adapter_properties_changed(Variant changed, string[] invalid) {
+		var powered = changed.lookup_value("Powered", new VariantType("b"));
+		if (powered != null) {
+			set_sensitive(adapter.powered);
+		}
+	}
+
+	private void on_device_properties_changed(Variant changed, string[] invalid) {
+		var name = changed.lookup_value("Alias", new VariantType("s"));
+		if (name != null) {
+			label.label = device.alias;
+		}
+
+		var icon = changed.lookup_value("Icon", new VariantType("s"));
+		if (icon != null) {
+			image.icon_name = device.icon ?? "bluetooth-active";
+		}
+	}
+
+	private void on_send_button_clicked() {
+		send_clicked(device);
+		get_toplevel().destroy();
 	}
 
 	private string get_name_from_icon() {

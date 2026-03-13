@@ -12,7 +12,7 @@
 public class NotificationWidget : Gtk.ListBoxRow {
 	public Budgie.Notification notification { get; construct; }
 
-	public signal void closed_individually();
+	public signal void closed_individually(uint32 id);
 
 	public NotificationWidget(Budgie.Notification notification) {
 		Object(notification: notification);
@@ -85,6 +85,6 @@ public class NotificationWidget : Gtk.ListBoxRow {
 	 * Dismiss this notification
 	 */
 	public void Dismiss() {
-		closed_individually(); // Trigger our signal so Raven NotificationsView knows
+		closed_individually((uint32) notification.id); // Trigger our signal so Raven NotificationsView knows
 	}
 }

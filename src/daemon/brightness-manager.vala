@@ -42,25 +42,27 @@ namespace Budgie {
 			util = new BrightnessUtil();
 			util.find_backlight_device();
 
-			setup_logind_session.begin((obj, res) => {
-				setup_logind_session.end(res);
+			setup_logind_session.begin(on_setup_logind_session_complete);
+		}
 
-				debug("setup_logind_session completed - device=%s, session=%s",
+		private void on_setup_logind_session_complete(Object? obj, AsyncResult res) {
+			setup_logind_session.end(res);
+
+			debug("setup_logind_session completed - device=%s, session=%s",
+			util.backlight_device ?? "null",
+			logind_session != null ? "connected" : "null");
+
+			// Only set up monitoring once logind is connected
+			if (util.backlight_device != null && logind_session != null) {
+				setup_brightness_monitor();
+				_is_ready = true;
+				debug("Initialization complete, firing ready signal");
+				ready();
+			} else {
+				debug("BrightnessManager not available: device=%s, session=%s",
 				util.backlight_device ?? "null",
 				logind_session != null ? "connected" : "null");
-
-				// Only set up monitoring once logind is connected
-				if (util.backlight_device != null && logind_session != null) {
-					setup_brightness_monitor();
-					_is_ready = true;
-					debug("Initialization complete, firing ready signal");
-					ready();
-				} else {
-					debug("BrightnessManager not available: device=%s, session=%s",
-					util.backlight_device ?? "null",
-					logind_session != null ? "connected" : "null");
-				}
-			});
+			}
 		}
 
 		/**

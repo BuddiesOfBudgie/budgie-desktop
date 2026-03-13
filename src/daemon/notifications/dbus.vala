@@ -45,7 +45,7 @@
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
 			Bus.own_name(BusType.SESSION, Budgie.Notifications.NOTIFICATION_DBUS_NAME, flags,
-				on_dbus_acquired, ()=> {}, Budgie.DaemonNameLost);
+				on_dbus_acquired, null, Budgie.DaemonNameLost);
 		}
 
 		private void on_dbus_acquired(DBusConnection conn) {
@@ -118,16 +118,25 @@
 
 		private uint32 notif_id = 0;
 
-		private Dispatcher dispatcher { get; private set; default = null; }
+		internal Dispatcher dispatcher { get; private set; default = null; }
 		private RavenProxy raven { get; private set; default = null; }
-		private HashTable<uint32, Popup> popups;
+		internal HashTable<uint32, Popup> popups;
 		private Settings panel_settings { private get; private set; default = null; }
 
-		private uint32 latest_popup_id { private get; private set; default = 0; }
+		internal uint32 latest_popup_id { get; internal set; default = 0; }
 		private int32 latest_popup_y;
 		private int paused_notifications { private get; private set; default = 0; }
 
 		private Notify.Notification unpaused_noti = null;
+
+		/** Handlers for per-popup signal connections */
+		internal HashTable<uint32, PopupSignalHandler> popup_handlers;
+
+		/** Fields for capturing size_allocate context */
+		private Popup pending_popup;
+		private Gdk.Rectangle pending_mon_rect;
+		private Gdk.Monitor pending_monitor;
+		private ulong pending_size_handler_id;
 
 		construct {
 			this.dispatcher = new Dispatcher();
@@ -136,6 +145,7 @@
 			Bus.get_proxy.begin<RavenProxy>(BusType.SESSION, RAVEN_DBUS_NAME, RAVEN_DBUS_OBJECT_PATH, 0, null, on_raven_get);
 
 			this.popups = new HashTable<uint32, Popup>(direct_hash, direct_equal);
+			this.popup_handlers = new HashTable<uint32, PopupSignalHandler>(direct_hash, direct_equal);
 			this.panel_settings = new Settings(BUDGIE_PANEL_SCHEMA);
 		}
 
@@ -145,7 +155,7 @@
 			if (replace) {
 				flags |= BusNameOwnerFlags.REPLACE;
 			}
-			Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications", flags, on_bus_acquired, ()=> {}, Budgie.DaemonNameLost);
+			Bus.own_name(BusType.SESSION, "org.freedesktop.Notifications", flags, on_bus_acquired, null, Budgie.DaemonNameLost);
 			this.dispatcher.setup_dbus(replace);
 		}
 
@@ -315,18 +325,10 @@
 				this.latest_popup_id = id;
 				this.popups[id].begin_decay(notification.expire_timeout);
 
-				this.popups[id].ActionInvoked.connect((action_key) => {
-					this.ActionInvoked(id, action_key);
-				});
-
-				this.popups[id].Closed.connect((reason) => {
-					if (this.popups.length == 1 && this.latest_popup_id == id) {
-						this.latest_popup_id = 0;
-					}
-					this.popups.remove(id);
-					this.dispatcher.NotificationClosed(id, app_name, reason);
-					this.NotificationClosed(id, reason);
-				});
+				var handler = new PopupSignalHandler(this, id, app_name);
+				this.popup_handlers[id] = handler;
+				this.popups[id].ActionInvoked.connect(handler.on_action_invoked);
+				this.popups[id].Closed.connect(handler.on_closed);
 			}
 
 			// Play a sound for the notification if desired
@@ -365,6 +367,66 @@
 		}
 
 		/**
+		 * Handles size allocation for a popup during window configuration.
+		 */
+		private void on_popup_size_allocate(Gtk.Allocation alloc) {
+			this.pending_popup.get_child().disconnect(this.pending_size_handler_id);
+			this.pending_size_handler_id = 0;
+
+			calculate_position(this.pending_mon_rect.y);
+			GtkLayerShell.set_monitor(this.pending_popup, this.pending_monitor);
+
+			var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
+			int edge_a, edge_b;
+
+			switch (pos) {
+				case NotificationPosition.TOP_LEFT:
+				edge_a = GtkLayerShell.Edge.LEFT;
+				edge_b = GtkLayerShell.Edge.TOP;
+				break;
+				case NotificationPosition.BOTTOM_LEFT:
+				edge_a = GtkLayerShell.Edge.LEFT;
+				edge_b = GtkLayerShell.Edge.BOTTOM;
+				break;
+				case NotificationPosition.BOTTOM_RIGHT:
+				edge_a = GtkLayerShell.Edge.RIGHT;
+				edge_b = GtkLayerShell.Edge.BOTTOM;
+				break;
+				case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
+				default:
+				edge_a = GtkLayerShell.Edge.RIGHT;
+				edge_b = GtkLayerShell.Edge.TOP;
+				break;
+			}
+
+			GtkLayerShell.set_margin(this.pending_popup, edge_a, BUFFER_ZONE);
+			GtkLayerShell.set_margin(this.pending_popup, edge_b, this.latest_popup_y);
+			GtkLayerShell.set_anchor(this.pending_popup, edge_a, true);
+			GtkLayerShell.set_anchor(this.pending_popup, edge_b, true);
+		}
+
+		/**
+		 * Callback for with_valid_monitor during window configuration.
+		 */
+		private bool on_configure_monitor_valid() {
+			Gdk.Rectangle mon_rect = this.pending_mon_rect;
+			var monitor = this.pending_monitor;
+
+			if (monitor == null) {
+				warning("Monitor is null during window configuration");
+				return false;
+			}
+
+			GtkLayerShell.init_for_window(this.pending_popup);
+			GtkLayerShell.set_layer(this.pending_popup, GtkLayerShell.Layer.TOP);
+
+			this.pending_size_handler_id = this.pending_popup.get_child().size_allocate.connect(on_popup_size_allocate);
+
+			this.pending_popup.show_all();
+			return true;
+		}
+
+		/**
 		 * Configures the location of a notification popup and makes it visible on the screen.
 		 */
 		private void configure_window(Popup? popup) {
@@ -375,58 +437,11 @@
 				return;
 			}
 
-			bool configured = wayland_client.with_valid_monitor(() => {
-				Gdk.Rectangle mon_rect = wayland_client.monitor_res;
-				var monitor = wayland_client.gdk_monitor;
+			this.pending_popup = popup;
+			this.pending_mon_rect = wayland_client.monitor_res;
+			this.pending_monitor = wayland_client.gdk_monitor;
 
-				if (monitor == null) {
-					warning("Monitor is null during window configuration");
-					return false;
-				}
-
-				GtkLayerShell.init_for_window(popup);
-				GtkLayerShell.set_layer(popup, GtkLayerShell.Layer.TOP);
-
-				ulong handler_id = 0;
-				handler_id = popup.get_child().size_allocate.connect((alloc) => {
-					popup.get_child().disconnect(handler_id);
-					handler_id = 0;
-
-					calculate_position(mon_rect.y);
-					GtkLayerShell.set_monitor(popup, monitor);
-
-					var pos = (NotificationPosition) this.panel_settings.get_enum("notification-position");
-					int edge_a, edge_b;
-
-					switch (pos) {
-						case NotificationPosition.TOP_LEFT:
-						edge_a = GtkLayerShell.Edge.LEFT;
-						edge_b = GtkLayerShell.Edge.TOP;
-						break;
-						case NotificationPosition.BOTTOM_LEFT:
-						edge_a = GtkLayerShell.Edge.LEFT;
-						edge_b = GtkLayerShell.Edge.BOTTOM;
-						break;
-						case NotificationPosition.BOTTOM_RIGHT:
-						edge_a = GtkLayerShell.Edge.RIGHT;
-						edge_b = GtkLayerShell.Edge.BOTTOM;
-						break;
-						case NotificationPosition.TOP_RIGHT: // Top right should also be the default case
-						default:
-						edge_a = GtkLayerShell.Edge.RIGHT;
-						edge_b = GtkLayerShell.Edge.TOP;
-						break;
-					}
-
-					GtkLayerShell.set_margin(popup, edge_a, BUFFER_ZONE);
-					GtkLayerShell.set_margin(popup, edge_b, this.latest_popup_y);
-					GtkLayerShell.set_anchor(popup, edge_a, true);
-					GtkLayerShell.set_anchor(popup, edge_b, true);
-				});
-
-				popup.show_all();
-				return true;
-			});
+			bool configured = wayland_client.with_valid_monitor(on_configure_monitor_valid);
 
 			if (!configured) {
 				warning("Failed to configure notification popup window");
@@ -557,6 +572,44 @@
 			return sound;
 		}
 
+		/**
+		 * Handles the Notify action callback for viewing notifications.
+		 */
+		private void on_view_notifications_action(Notify.Notification notification, string action) {
+			this.raven.ToggleNotificationsView.begin(on_toggle_notifications_complete);
+		}
+
+		/**
+		 * Handles completion of the ToggleNotificationsView async call.
+		 */
+		private void on_toggle_notifications_complete(Object? obj, AsyncResult res) {
+			try {
+				this.raven.ToggleNotificationsView.end(res);
+			} catch (Error e) {
+				warning("Unable to open Raven notification view: %s", e.message);
+			}
+		}
+
+		/**
+		 * Handles the unpaused notification being closed.
+		 */
+		private void on_unpaused_noti_closed() {
+			this.unpaused_noti = null;
+		}
+
+		/**
+		 * Thread callback for showing the unpaused notification.
+		 */
+		private void* on_show_unpaused_noti_thread() {
+			try {
+				unpaused_noti.show();
+			} catch (Error e) {
+				critical("error sending unpause notification: %s", e.message);
+			}
+
+			return null;
+		}
+
 		private void on_property_changed(ParamSpec p) {
 			if (p.name != "notifications-paused") return;
 
@@ -587,38 +640,49 @@
 				// No existing ref, make a new notification
 				unpaused_noti = new Notify.Notification(summary, body, icon);
 				// translators: Text for a button on the notification to open Raven to the notifications view
-				unpaused_noti.add_action("view-notifications", _("View Notifications"), (notification, action) => {
-					// Open Raven to notifications view
-					this.raven.ToggleNotificationsView.begin((obj, res) => {
-						try {
-							this.raven.ToggleNotificationsView.end(res);
-						} catch (Error e) {
-							warning("Unable to open Raven notification view: %s", e.message);
-						}
-					});
-				});
+				unpaused_noti.add_action("view-notifications", _("View Notifications"), on_view_notifications_action);
 
 				// Remove our reference to the noti when it's closed
-				unpaused_noti.closed.connect(() => {
-					this.unpaused_noti = null;
-				});
+				unpaused_noti.closed.connect(on_unpaused_noti_closed);
 			}
 
 			// Show the noti. It has to be in another thread because otherwise
 			// it just times out and doesn't show.
 			try {
-				new Thread<void*>.try("budgie-daemon-notification", () => {
-					try {
-						unpaused_noti.show();
-					} catch (Error e) {
-						critical("error sending unpause notification: %s", e.message);
-					}
-
-					return null;
-				});
+				new Thread<void*>.try("budgie-daemon-notification", on_show_unpaused_noti_thread);
 			} catch (Error e) {
 				critical("Error starting notification thread: %s", e.message);
 			}
+		}
+	}
+
+	/**
+	 * Helper class to hold per-popup state for signal handlers,
+	 * replacing lambdas that captured local id and app_name variables.
+	 */
+	private class PopupSignalHandler {
+		private unowned Server server;
+		private uint32 id;
+		private string app_name;
+
+		public PopupSignalHandler(Server server, uint32 id, string app_name) {
+			this.server = server;
+			this.id = id;
+			this.app_name = app_name;
+		}
+
+		public void on_action_invoked(string action_key) {
+			this.server.ActionInvoked(this.id, action_key);
+		}
+
+		public void on_closed(NotificationCloseReason reason) {
+			if (this.server.popups.length == 1 && this.server.latest_popup_id == this.id) {
+				this.server.latest_popup_id = 0;
+			}
+			this.server.popups.remove(this.id);
+			this.server.popup_handlers.remove(this.id);
+			this.server.dispatcher.NotificationClosed(this.id, this.app_name, reason);
+			this.server.NotificationClosed(this.id, reason);
 		}
 	}
 

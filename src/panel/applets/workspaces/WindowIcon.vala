@@ -16,12 +16,12 @@ namespace Workspaces {
 	public class WindowIcon : Gtk.Button {
 		public Xfw.Window window { get; construct; }
 
+		private Gtk.Image icon;
+
 		construct {
 			this.set_relief(Gtk.ReliefStyle.NONE);
 			this.get_style_context().add_class("workspace-icon-button");
 			this.set_tooltip_text(window.get_name());
-
-			Gtk.Image icon;
 
 			// When a window has just been created, its application
 			// may not be set yet, so default to a generic icon if
@@ -38,16 +38,8 @@ namespace Workspaces {
 			this.add(icon);
 			icon.show();
 
-			window.name_changed.connect(() => {
-				this.set_tooltip_text(window.get_name());
-			});
-
-			window.icon_changed.connect(() => {
-				unowned var pixbuf = window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor());
-				icon.set_from_pixbuf(pixbuf);
-				icon.queue_draw();
-				Gtk.drag_source_set_icon_pixbuf(this, pixbuf);
-			});
+			window.name_changed.connect(on_window_name_changed);
+			window.icon_changed.connect(on_window_icon_changed);
 
 			Gtk.drag_source_set(
 				this,
@@ -65,6 +57,17 @@ namespace Workspaces {
 
 		public WindowIcon(Xfw.Window window) {
 			Object(window: window);
+		}
+
+		private void on_window_name_changed() {
+			this.set_tooltip_text(window.get_name());
+		}
+
+		private void on_window_icon_changed() {
+			unowned var pixbuf = window.get_icon(WORKSPACE_ICON_SIZE, get_scale_factor());
+			icon.set_from_pixbuf(pixbuf);
+			icon.queue_draw();
+			Gtk.drag_source_set_icon_pixbuf(this, pixbuf);
 		}
 
 		public override bool button_release_event(Gdk.EventButton event) {

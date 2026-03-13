@@ -78,17 +78,25 @@ namespace Budgie {
 			this.switcheroo = new Switcheroo();
 		}
 
+		private void on_context_launched(AppInfo info, Variant platform_data) {
+			this.launched(info, platform_data);
+		}
+
+		private void on_context_launch_failed(string startup_notify_id) {
+			this.launch_failed(startup_notify_id);
+		}
+
+		private static void on_child_watch(Pid pid, int status) {
+			GLib.Process.close_pid(pid);
+		}
+
 		public AppLaunchContext create_launch_context() {
 			// Create a launch context and try to apply a GPU profile
 			var context = new AppLaunchContext();
 
 			// Hook up our signals for rebroadcast
-			context.launched.connect((info, data) => {
-				this.launched(info, data);
-			});
-			context.launch_failed.connect((startup_id) => {
-				this.launch_failed(startup_id);
-			});
+			context.launched.connect(on_context_launched);
+			context.launch_failed.connect(on_context_launch_failed);
 
 			// Try to apply a GPU profile if necessary for multiple GPU setups
 			switcheroo.apply_gpu_profile(context, this.prefers_default_gpu);
@@ -170,9 +178,7 @@ namespace Budgie {
 					out child_pid
 				);
 
-				GLib.ChildWatch.add(child_pid, (pid, status) => {
-					GLib.Process.close_pid(pid);
-				});
+				GLib.ChildWatch.add(child_pid, on_child_watch);
 
 				return true;
 

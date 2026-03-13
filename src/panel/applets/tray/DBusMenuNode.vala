@@ -15,6 +15,7 @@ public class DBusMenuNode : Object {
 	public Gtk.Menu submenu;
 	private Properties properties;
 	private ulong activate_signal_handler = 0;
+	private DBusMenuItem dbus_item_ref;
 
 	public DBusMenuNode(int32 id, Variant props) {
 		this.id = id;
@@ -28,19 +29,34 @@ public class DBusMenuNode : Object {
 		}
 
 		submenu = new Gtk.Menu();
-		submenu.map.connect(() => opened());
-		submenu.unmap.connect(() => closed());
+		submenu.map.connect(on_submenu_map);
+		submenu.unmap.connect(on_submenu_unmap);
 
 		var dbus_item = new DBusMenuItem(properties, submenu);
-		activate_signal_handler = dbus_item.activate.connect(() => {
-			if (dbus_item.submenu != null) {
-				hovered();
-			} else {
-				clicked(dbus_item.should_draw_indicator ? new Variant.boolean(dbus_item.active) : null);
-			}
-		});
-		dbus_item.notify["visible"].connect(() => dbus_item.visible = properties.visible);
+		dbus_item_ref = dbus_item;
+		activate_signal_handler = dbus_item.activate.connect(on_dbus_item_activate);
+		dbus_item.notify["visible"].connect(on_dbus_item_visible_notify);
 		item = dbus_item;
+	}
+
+	private void on_submenu_map() {
+		opened(id);
+	}
+
+	private void on_submenu_unmap() {
+		closed(id);
+	}
+
+	private void on_dbus_item_activate() {
+		if (dbus_item_ref.submenu != null) {
+			hovered(id);
+		} else {
+			clicked(id, dbus_item_ref.should_draw_indicator ? new Variant.boolean(dbus_item_ref.active) : null);
+		}
+	}
+
+	private void on_dbus_item_visible_notify() {
+		dbus_item_ref.visible = properties.visible;
 	}
 
 	public void update_children(List<DBusMenuNode> new_children) {
@@ -120,10 +136,10 @@ public class DBusMenuNode : Object {
 		}
 	}
 
-	public signal void clicked(Variant? data);
-	public signal void hovered();
-	public signal void opened();
-	public signal void closed();
+	public signal void clicked(int32 node_id, Variant? data);
+	public signal void hovered(int32 node_id);
+	public signal void opened(int32 node_id);
+	public signal void closed(int32 node_id);
 }
 
 private class DBusMenuItem : Gtk.CheckMenuItem {
@@ -206,7 +222,7 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 
 		uint key = 0;
 		Gdk.ModifierType modifier = 0;
-		new_shortcut.foreach((it) => {
+		foreach (unowned string it in new_shortcut) {
 			switch (it) {
 				case "Control":
 					modifier |= Gdk.ModifierType.CONTROL_MASK;
@@ -225,7 +241,7 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 					Gtk.accelerator_parse(it, out key, out temp_modifier);
 					break;
 			}
-		});
+		}
 
 		label.set_accel(key, modifier);
 	}

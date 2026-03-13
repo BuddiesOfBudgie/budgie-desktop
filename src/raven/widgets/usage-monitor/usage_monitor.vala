@@ -23,6 +23,7 @@ public class UsageMonitorRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 
 public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	private Gtk.Revealer? content_revealer = null;
+	private Gtk.Button? header_reveal_button = null;
 	private UsageMonitorRow? cpu = null;
 	private UsageMonitorRow? ram = null;
 	private UsageMonitorRow? swap = null;
@@ -60,20 +61,12 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		content_revealer.reveal_child = true;
 		main_box.add(content_revealer);
 
-		var header_reveal_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		header_reveal_button = new Gtk.Button.from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
 		header_reveal_button.get_style_context().add_class("flat");
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
 		header_reveal_button.valign = Gtk.Align.CENTER;
-		header_reveal_button.clicked.connect(() => {
-			content_revealer.reveal_child = !content_revealer.child_revealed;
-			var image = (Gtk.Image?) header_reveal_button.get_image();
-			if (content_revealer.reveal_child) {
-				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-			} else {
-				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-			}
-		});
+		header_reveal_button.clicked.connect(on_header_reveal_clicked);
 		header.pack_end(header_reveal_button, false, false, 0);
 
 		var rows = new Gtk.Grid();
@@ -108,18 +101,32 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		update_cpu();
 		update_ram_and_swap();
 
-		raven_expanded.connect((expanded) => {
-			if (!expanded && timeout_id != 0) {
-				Source.remove(timeout_id);
-				timeout_id = 0;
-			} else if (expanded && timeout_id == 0) {
-				timeout_id = Timeout.add(1000, () => {
-					update_cpu();
-					update_ram_and_swap();
-					return GLib.Source.CONTINUE;
-				});
-			}
-		});
+		raven_expanded.connect(on_raven_expanded);
+	}
+
+	private void on_header_reveal_clicked() {
+		content_revealer.reveal_child = !content_revealer.child_revealed;
+		var image = (Gtk.Image?) header_reveal_button.get_image();
+		if (content_revealer.reveal_child) {
+			image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		} else {
+			image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		}
+	}
+
+	private void on_raven_expanded(bool expanded) {
+		if (!expanded && timeout_id != 0) {
+			Source.remove(timeout_id);
+			timeout_id = 0;
+		} else if (expanded && timeout_id == 0) {
+			timeout_id = Timeout.add(1000, on_update_timeout);
+		}
+	}
+
+	private bool on_update_timeout() {
+		update_cpu();
+		update_ram_and_swap();
+		return GLib.Source.CONTINUE;
 	}
 
 	private void settings_updated(string key) {

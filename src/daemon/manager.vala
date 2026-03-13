@@ -44,12 +44,7 @@ namespace Budgie {
 		public ServiceManager(bool replace) {
 			theme_manager = new Budgie.ThemeManager();
 			status_notifier = new Budgie.StatusNotifier.FreedesktopWatcher();
-			register_with_session.begin((o, res) => {
-				bool success = register_with_session.end(res);
-				if (!success) {
-					message("Failed to register with Session manager");
-				}
-			});
+			register_with_session.begin(on_register_with_session_complete);
 
 			// Set up OSD service first
 			debug("ServiceManager: Creating OSDManager...");
@@ -57,10 +52,7 @@ namespace Budgie {
 			osd.setup_dbus(replace);
 
 			// Wait for OSD to be ready before creating OSDKeys
-			osd.ready.connect(() => {
-				debug("ServiceManager: OSDManager ready, creating OSDKeys");
-				osdkeys = new Budgie.OSDKeys();
-			});
+			osd.ready.connect(on_osd_ready);
 
 			notifications = new Budgie.Notifications.Server();
 			notifications.setup_dbus(replace);
@@ -80,6 +72,18 @@ namespace Budgie {
 			screenshot_manager.serve();
 		}
 
+		private void on_register_with_session_complete(Object? obj, AsyncResult res) {
+			bool success = register_with_session.end(res);
+			if (!success) {
+				message("Failed to register with Session manager");
+			}
+		}
+
+		private void on_osd_ready() {
+			debug("ServiceManager: OSDManager ready, creating OSDKeys");
+			osdkeys = new Budgie.OSDKeys();
+		}
+
 		/**
 		* Attempt registration with the Session Manager
 		*/
@@ -90,16 +94,22 @@ namespace Budgie {
 				return false;
 			}
 
-			sclient.QueryEndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.EndSession.connect(() => {
-				end_session(false);
-			});
-			sclient.Stop.connect(() => {
-				end_session(true);
-			});
+			sclient.QueryEndSession.connect(on_query_end_session);
+			sclient.EndSession.connect(on_end_session);
+			sclient.Stop.connect(on_stop);
 			return true;
+		}
+
+		private void on_query_end_session() {
+			end_session(false);
+		}
+
+		private void on_end_session() {
+			end_session(false);
+		}
+
+		private void on_stop() {
+			end_session(true);
 		}
 
 		/**

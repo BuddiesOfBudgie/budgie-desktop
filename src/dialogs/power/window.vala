@@ -47,6 +47,9 @@ namespace Budgie {
 		private bool pointer_entered = false;
 		private GLib.Settings? wm_settings = null;
 
+		/* Instance field to store box reference for button_release_event handler */
+		private Box? main_box = null;
+
 		construct {
 			set_keep_above(true);
 			set_position(WindowPosition.CENTER_ALWAYS);
@@ -73,7 +76,7 @@ namespace Budgie {
 			set_titlebar(header);
 
 			// Create our layout
-			var box = new Box(Orientation.HORIZONTAL, 0) {
+			main_box = new Box(Orientation.HORIZONTAL, 0) {
 				halign = Align.CENTER,
 				valign = Align.CENTER
 			};
@@ -126,69 +129,76 @@ namespace Budgie {
 #endif
 
 			// Attach our grid to the window
-			box.pack_start(button_grid, true, false, 0);
-			add(box);
+			main_box.pack_start(button_grid, true, false, 0);
+			add(main_box);
 
 			// Connect events
-			button_release_event.connect((event) => {
-				// We only care about primary mouse clicks
-				if (event.button != BUTTON_PRIMARY) return EVENT_PROPAGATE;
-
-				// Get the allocation of the button box
-				Allocation allocation;
-				box.get_allocation(out allocation);
-
-				// Check if the click was inside the box
-				if (event.x >= allocation.x && event.x <= (allocation.x + allocation.width)) {
-					if (event.y >= allocation.y && event.y <= (allocation.y + allocation.height)) {
-						return EVENT_PROPAGATE;
-					}
-				}
-
-				// The event was not inside the box, hide the window
-				debug("hiding due to button_release_event");
-				hide();
-				return EVENT_STOP;
-			});
-
-			focus_out_event.connect(() => {
-				on_focus_out();
-				return Gdk.EVENT_STOP;
-			});
-
-			focus_in_event.connect(() => {
-				cancel_focus_hide();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			enter_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				pointer_entered = true;
-				cancel_focus_hide();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			leave_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
-				on_pointer_left();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			show.connect(() => {
-#if WITH_HIBERNATE
-
-				var can_hibernate = can_hibernate();
-				hibernate_button.sensitive = can_hibernate;
-				hibernate_button.set_tooltip_markup(can_hibernate ? null : _("This system does not support hibernation."));
-
-#endif
-				pointer_entered = false;
-				cancel_focus_hide();
-				update_layer_shell_properties();
-			});
+			button_release_event.connect(on_button_release);
+			focus_out_event.connect(on_focus_out_event);
+			focus_in_event.connect(on_focus_in_event);
+			enter_notify_event.connect(on_enter_notify);
+			leave_notify_event.connect(on_leave_notify);
+			show.connect(on_show);
 			event_controller = new EventControllerKey(this);
 			event_controller.key_released.connect(on_key_release);
+		}
+
+		private bool on_button_release(Gdk.EventButton event) {
+			// We only care about primary mouse clicks
+			if (event.button != BUTTON_PRIMARY) return EVENT_PROPAGATE;
+
+			// Get the allocation of the button box
+			Allocation allocation;
+			main_box.get_allocation(out allocation);
+
+			// Check if the click was inside the box
+			if (event.x >= allocation.x && event.x <= (allocation.x + allocation.width)) {
+				if (event.y >= allocation.y && event.y <= (allocation.y + allocation.height)) {
+					return EVENT_PROPAGATE;
+				}
+			}
+
+			// The event was not inside the box, hide the window
+			debug("hiding due to button_release_event");
+			hide();
+			return EVENT_STOP;
+		}
+
+		private bool on_focus_out_event(Gdk.EventFocus event) {
+			on_focus_out();
+			return Gdk.EVENT_STOP;
+		}
+
+		private bool on_focus_in_event(Gdk.EventFocus event) {
+			cancel_focus_hide();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_enter_notify(Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			pointer_entered = true;
+			cancel_focus_hide();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private bool on_leave_notify(Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+			on_pointer_left();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private void on_show() {
+#if WITH_HIBERNATE
+
+			var can_hibernate = can_hibernate();
+			hibernate_button.sensitive = can_hibernate;
+			hibernate_button.set_tooltip_markup(can_hibernate ? null : _("This system does not support hibernation."));
+
+#endif
+			pointer_entered = false;
+			cancel_focus_hide();
+			update_layer_shell_properties();
 		}
 
 		/**
@@ -225,14 +235,16 @@ namespace Budgie {
 			schedule_focus_hide();
 		}
 
+		private bool on_focus_hide_timeout() {
+			focus_hide_timeout = 0;
+			debug("hiding due to pointer leaving dialog");
+			hide();
+			return Source.REMOVE;
+		}
+
 		private void schedule_focus_hide() {
 			cancel_focus_hide();
-			focus_hide_timeout = Timeout.add(400, () => {
-				focus_hide_timeout = 0;
-				debug("hiding due to pointer leaving dialog");
-				hide();
-				return Source.REMOVE;
-			});
+			focus_hide_timeout = Timeout.add(400, on_focus_hide_timeout);
 		}
 
 		private void cancel_focus_hide() {
@@ -292,18 +304,20 @@ namespace Budgie {
 			lock_button.grab_focus();
 		}
 
+		private bool on_logout_idle() {
+			try {
+				session_manager.Logout(0);
+			} catch (Error e) {
+				warning("Failed to logout: %s", e.message);
+			}
+			return false;
+		}
+
 		private void logout() {
 			hide();
 			if (session_manager == null) return;
 
-			Idle.add(() => {
-				try {
-					session_manager.Logout(0);
-				} catch (Error e) {
-					warning("Failed to logout: %s", e.message);
-				}
-				return false;
-			});
+			Idle.add(on_logout_idle);
 		}
 
 #if WITH_HIBERNATE
@@ -317,67 +331,77 @@ namespace Budgie {
 			return can_hibernate;
 		}
 
+		private bool on_hibernate_idle() {
+			try {
+				lock_screen();
+				logind.hibernate(false);
+			} catch (Error e) {
+				warning("Cannot hibernate: %s", e.message);
+			}
+			return false;
+		}
+
 		private void hibernate() {
 			hide();
 			if (logind == null) return;
 
-			Idle.add(() => {
-				try {
-					lock_screen();
-					logind.hibernate(false);
-				} catch (Error e) {
-					warning("Cannot hibernate: %s", e.message);
-				}
-				return false;
-			});
+			Idle.add(on_hibernate_idle);
 		}
 #endif
+
+		private bool on_reboot_idle() {
+			session_manager.Reboot.begin();
+			return false;
+		}
 
 		private void reboot() {
 			hide();
 			if (session_manager == null) return;
 
-			Idle.add(() => {
-				session_manager.Reboot.begin();
-				return false;
-			});
+			Idle.add(on_reboot_idle);
+		}
+
+		private bool on_shutdown_idle() {
+			session_manager.Shutdown.begin();
+			return false;
 		}
 
 		private void shutdown() {
 			hide();
 			if (session_manager == null) return;
 
-			Idle.add(() => {
-				session_manager.Shutdown.begin();
-				return false;
-			});
+			Idle.add(on_shutdown_idle);
+		}
+
+		private bool on_suspend_idle() {
+			try {
+				lock_screen();
+				logind.suspend(false);
+			} catch (Error e) {
+				warning("Cannot suspend: %s", e.message);
+			}
+			return false;
 		}
 
 		private void suspend() {
 			hide();
 			if (logind == null) return;
 
-			Idle.add(() => {
-				try {
-					lock_screen();
-					logind.suspend(false);
-				} catch (Error e) {
-					warning("Cannot suspend: %s", e.message);
-				}
-				return false;
-			});
+			Idle.add(on_suspend_idle);
+		}
+
+		private bool on_lock_screen_idle() {
+			try {
+				screensaver.lock();
+			} catch (Error e) {
+				warning("Cannot lock screen: %s", e.message);
+			}
+			return false;
 		}
 
 		private void lock_screen() {
 			hide();
-			Idle.add(() => {
-				try {
-					screensaver.lock();
-				} catch (Error e) {
-					warning("Cannot lock screen: %s", e.message);
-				}
-				return false;
-			});
+			Idle.add(on_lock_screen_idle);
 		}
 	}
 }

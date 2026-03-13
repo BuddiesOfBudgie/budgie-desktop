@@ -122,40 +122,14 @@ public class MprisClientWidget : Gtk.Box {
 		btn.set_can_focus(false);
 
 		prev_btn = btn;
-		btn.clicked.connect(() => {
-			if (client.player.can_go_previous) {
-				client.player.previous.begin((obj, res) => {
-					try {
-						try {
-							client.player.previous.end(res);
-						} catch (IOError e) {
-							warning("Error going to the previous track %s: %s", client.player.identity, e.message);
-						}
-					} catch (DBusError e) {
-						warning("Error going to the previous track %s: %s", client.player.identity, e.message);
-					}
-				});
-			}
-		});
+		btn.clicked.connect(on_prev_clicked);
 		btn.get_style_context().add_class("flat");
 		controls.attach(btn, 0, 0);
 
 		btn = new Gtk.Button.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
 		play_btn = btn;
 		btn.set_can_focus(false);
-		btn.clicked.connect(() => {
-			client.player.play_pause.begin((obj, res) => {
-				try {
-					try {
-						client.player.play_pause.end(res);
-					} catch (IOError e) {
-						warning("Error toggling play state %s: %s", client.player.identity, e.message);
-					}
-				} catch (DBusError e) {
-					warning("Error toggling the play state %s: %s", client.player.identity, e.message);
-				}
-			});
-		});
+		btn.clicked.connect(on_play_clicked);
 		btn.get_style_context().add_class("flat");
 		controls.attach_next_to(btn, prev_btn, Gtk.PositionType.RIGHT);
 
@@ -163,21 +137,7 @@ public class MprisClientWidget : Gtk.Box {
 		btn.set_sensitive(false);
 		btn.set_can_focus(false);
 		next_btn = btn;
-		btn.clicked.connect(() => {
-			if (client.player.can_go_next) {
-				client.player.next.begin((obj, res) => {
-					try {
-						try {
-							client.player.next.end(res);
-						} catch (IOError e) {
-							warning("Error going to the next track %s: %s", client.player.identity, e.message);
-						}
-					} catch (DBusError e) {
-						warning("Error going to the next track %s: %s", client.player.identity, e.message);
-					}
-				});
-			}
-		});
+		btn.clicked.connect(on_next_clicked);
 		btn.get_style_context().add_class("flat");
 		controls.attach_next_to(btn, play_btn, Gtk.PositionType.RIGHT);
 
@@ -189,20 +149,7 @@ public class MprisClientWidget : Gtk.Box {
 		update_play_status();
 		update_controls();
 
-		client.prop.properties_changed.connect((i, p, inv) => {
-			if (i == "org.mpris.MediaPlayer2.Player") {
-				/* Handle mediaplayer2 iface */
-				p.foreach((k, v) => {
-					if (k == "Metadata") {
-						update_from_meta();
-					} else if (k == "PlaybackStatus") {
-						update_play_status();
-					} else if (k == "CanGoNext" || k == "CanGoPrevious") {
-						update_controls();
-					}
-				});
-			}
-		});
+		client.prop.properties_changed.connect(on_properties_changed);
 
 		player_box.get_style_context().add_class("raven-background");
 
@@ -228,15 +175,7 @@ public class MprisClientWidget : Gtk.Box {
 		header_reveal_button.get_style_context().add_class("expander-button");
 		header_reveal_button.margin = 4;
 		header_reveal_button.valign = Gtk.Align.CENTER;
-		header_reveal_button.clicked.connect(() => {
-			content_revealer.reveal_child = !content_revealer.child_revealed;
-			var image = (Gtk.Image?) header_reveal_button.get_image();
-			if (content_revealer.reveal_child) {
-				image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
-			} else {
-				image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
-			}
-		});
+		header_reveal_button.clicked.connect(on_header_reveal_clicked);
 		header.pack_end(header_reveal_button, false, false, 0);
 
 		if (client.player.can_quit) {
@@ -244,22 +183,106 @@ public class MprisClientWidget : Gtk.Box {
 			header_close_button.get_style_context().add_class("flat");
 			header_close_button.get_style_context().add_class("primary-control");
 			header_close_button.valign = Gtk.Align.CENTER;
-			header_close_button.clicked.connect(() => {
-				if (client.player.can_quit) {
-					client.player.quit.begin((obj, res) => {
-						try {
-							try {
-								client.player.quit.end(res);
-							} catch (IOError e) {
-								warning("Error closing %s: %s", client.player.identity, e.message);
-							}
-						} catch (DBusError e) {
-							warning("Error closing %s: %s", client.player.identity, e.message);
-						}
-					});
-				}
-			});
+			header_close_button.clicked.connect(on_close_clicked);
 			header.pack_end(header_close_button, false, false, 0);
+		}
+	}
+
+	private void on_prev_clicked() {
+		if (client.player.can_go_previous) {
+			client.player.previous.begin(on_previous_done);
+		}
+	}
+
+	private void on_previous_done(Object? obj, AsyncResult res) {
+		try {
+			try {
+				client.player.previous.end(res);
+			} catch (IOError e) {
+				warning("Error going to the previous track %s: %s", client.player.identity, e.message);
+			}
+		} catch (DBusError e) {
+			warning("Error going to the previous track %s: %s", client.player.identity, e.message);
+		}
+	}
+
+	private void on_play_clicked() {
+		client.player.play_pause.begin(on_play_pause_done);
+	}
+
+	private void on_play_pause_done(Object? obj, AsyncResult res) {
+		try {
+			try {
+				client.player.play_pause.end(res);
+			} catch (IOError e) {
+				warning("Error toggling play state %s: %s", client.player.identity, e.message);
+			}
+		} catch (DBusError e) {
+			warning("Error toggling the play state %s: %s", client.player.identity, e.message);
+		}
+	}
+
+	private void on_next_clicked() {
+		if (client.player.can_go_next) {
+			client.player.next.begin(on_next_done);
+		}
+	}
+
+	private void on_next_done(Object? obj, AsyncResult res) {
+		try {
+			try {
+				client.player.next.end(res);
+			} catch (IOError e) {
+				warning("Error going to the next track %s: %s", client.player.identity, e.message);
+			}
+		} catch (DBusError e) {
+			warning("Error going to the next track %s: %s", client.player.identity, e.message);
+		}
+	}
+
+	private void on_properties_changed(string i, HashTable<string,Variant> p, string[] inv) {
+		if (i == "org.mpris.MediaPlayer2.Player") {
+			/* Handle mediaplayer2 iface */
+			var iter = HashTableIter<string,Variant>(p);
+			string k;
+			Variant v;
+			while (iter.next(out k, out v)) {
+				if (k == "Metadata") {
+					update_from_meta();
+				} else if (k == "PlaybackStatus") {
+					update_play_status();
+				} else if (k == "CanGoNext" || k == "CanGoPrevious") {
+					update_controls();
+				}
+			}
+		}
+	}
+
+	private void on_header_reveal_clicked() {
+		content_revealer.reveal_child = !content_revealer.child_revealed;
+		var image = (Gtk.Image?) header_reveal_button.get_image();
+		if (content_revealer.reveal_child) {
+			image.set_from_icon_name("pan-down-symbolic", Gtk.IconSize.MENU);
+		} else {
+			image.set_from_icon_name("pan-end-symbolic", Gtk.IconSize.MENU);
+		}
+	}
+
+	private void on_close_clicked() {
+		if (client.player.can_quit) {
+			client.player.quit.begin(on_quit_done);
+		}
+	}
+
+	private void on_quit_done(Object? obj, AsyncResult res) {
+		try {
+			try {
+				client.player.quit.end(res);
+			} catch (IOError e) {
+				warning("Error closing %s: %s", client.player.identity, e.message);
+			}
+		} catch (DBusError e) {
+			warning("Error closing %s: %s", client.player.identity, e.message);
 		}
 	}
 
@@ -277,19 +300,21 @@ public class MprisClientWidget : Gtk.Box {
 			return Gdk.EVENT_PROPAGATE;
 		}
 
-		client.player.raise.begin((obj, res) => {
-			try {
-				try {
-					client.player.raise.end(res);
-				} catch (IOError e) {
-					warning("Error raising the client for %s: %s", client.player.identity, e.message);
-				}
-			} catch (DBusError e) {
-				warning("Error raising the client for %s: %s", client.player.identity, e.message);
-			}
-		});
+		client.player.raise.begin(on_raise_done);
 
 		return Gdk.EVENT_STOP;
+	}
+
+	private void on_raise_done(Object? obj, AsyncResult res) {
+		try {
+			try {
+				client.player.raise.end(res);
+			} catch (IOError e) {
+				warning("Error raising the client for %s: %s", client.player.identity, e.message);
+			}
+		} catch (DBusError e) {
+			warning("Error raising the client for %s: %s", client.player.identity, e.message);
+		}
 	}
 
 	/**

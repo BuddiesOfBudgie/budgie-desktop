@@ -124,53 +124,17 @@ public class UserIndicatorWindow : Budgie.Popover {
 
 		// Events
 
-		user_item.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			toggle_usersection();
-			return Gdk.EVENT_STOP;
-		});
+		user_item.button_release_event.connect(on_user_item_button_release);
 
-		lock_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			lock_screen();
-			return Gdk.EVENT_STOP;
-		});
+		lock_menu.button_release_event.connect(on_lock_menu_button_release);
 
-		suspend_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			suspend();
-			return Gdk.EVENT_STOP;
-		});
+		suspend_menu.button_release_event.connect(on_suspend_menu_button_release);
 
-		reboot_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			reboot();
-			return Gdk.EVENT_STOP;
-		});
+		reboot_menu.button_release_event.connect(on_reboot_menu_button_release);
 
-		hibernate_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			hibernate();
-			return Gdk.EVENT_STOP;
-		});
+		hibernate_menu.button_release_event.connect(on_hibernate_menu_button_release);
 
-		shutdown_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			shutdown();
-			return Gdk.EVENT_STOP;
-		});
+		shutdown_menu.button_release_event.connect(on_shutdown_menu_button_release);
 
 		this.unmap.connect(hide_usersection); // Ensure User Section is hidden.
 	}
@@ -208,15 +172,65 @@ public class UserIndicatorWindow : Budgie.Popover {
 		user_section_box.pack_start(logout_menu, false, false, 0); // Add the Logout item
 		user_section.add(user_section_box); // Add the User Section box
 
-		logout_menu.button_release_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			logout();
-			return Gdk.EVENT_STOP;
-		});
+		logout_menu.button_release_event.connect(on_logout_menu_button_release);
 
 		return user_section;
+	}
+
+	private bool on_user_item_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		toggle_usersection();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_lock_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		lock_screen();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_suspend_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		suspend();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_reboot_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		reboot();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_hibernate_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		hibernate();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_shutdown_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		shutdown();
+		return Gdk.EVENT_STOP;
+	}
+
+	private bool on_logout_menu_button_release(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+		logout();
+		return Gdk.EVENT_STOP;
 	}
 
 	public void toggle_usersection() {
@@ -292,14 +306,16 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(() => {
-			try {
-				session.Logout(0);
-			} catch (Error e) {
-				warning("Failed to logout: %s", e.message);
-			}
-			return false;
-		});
+		Idle.add(on_idle_logout);
+	}
+
+	private bool on_idle_logout() {
+		try {
+			session.Logout(0);
+		} catch (Error e) {
+			warning("Failed to logout: %s", e.message);
+		}
+		return false;
 	}
 
 	private void hibernate() {
@@ -308,15 +324,17 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(() => {
-			try {
-				lock_screen();
-				logind_interface.hibernate(false);
-			} catch (Error e) {
-				warning("Cannot hibernate: %s", e.message);
-			}
-			return false;
-		});
+		Idle.add(on_idle_hibernate);
+	}
+
+	private bool on_idle_hibernate() {
+		try {
+			lock_screen();
+			logind_interface.hibernate(false);
+		} catch (Error e) {
+			warning("Cannot hibernate: %s", e.message);
+		}
+		return false;
 	}
 
 	private void reboot() {
@@ -325,10 +343,12 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(() => {
-			session.Reboot.begin();
-			return false;
-		});
+		Idle.add(on_idle_reboot);
+	}
+
+	private bool on_idle_reboot() {
+		session.Reboot.begin();
+		return false;
 	}
 
 	private void shutdown() {
@@ -337,10 +357,12 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(() => {
-			session.Shutdown.begin();
-			return false;
-		});
+		Idle.add(on_idle_shutdown);
+	}
+
+	private bool on_idle_shutdown() {
+		session.Shutdown.begin();
+		return false;
 	}
 
 	private void suspend() {
@@ -349,27 +371,31 @@ public class UserIndicatorWindow : Budgie.Popover {
 			return;
 		}
 
-		Idle.add(() => {
-			try {
-				lock_screen();
-				logind_interface.suspend(false);
-			} catch (Error e) {
-				warning("Cannot suspend: %s", e.message);
-			}
-			return false;
-		});
+		Idle.add(on_idle_suspend);
+	}
+
+	private bool on_idle_suspend() {
+		try {
+			lock_screen();
+			logind_interface.suspend(false);
+		} catch (Error e) {
+			warning("Cannot suspend: %s", e.message);
+		}
+		return false;
 	}
 
 	private void lock_screen() {
 		hide();
-		Idle.add(() => {
-			try {
-				saver.lock();
-			} catch (Error e) {
-				warning("Cannot lock screen: %s", e.message);
-			}
-			return false;
-		});
+		Idle.add(on_idle_lock_screen);
+	}
+
+	private bool on_idle_lock_screen() {
+		try {
+			saver.lock();
+		} catch (Error e) {
+			warning("Cannot lock screen: %s", e.message);
+		}
+		return false;
 	}
 }
 

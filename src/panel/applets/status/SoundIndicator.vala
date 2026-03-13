@@ -137,17 +137,21 @@ public class SoundIndicator : Gtk.Bin {
 
 		settings_button.clicked.connect(open_sound_settings);
 
-		volume_down.clicked.connect(() => {
-			adjust_volume_increment(-step_size);
-		});
+		volume_down.clicked.connect(on_volume_down_clicked);
 
-		volume_up.clicked.connect(() => {
-			adjust_volume_increment(+step_size);
-		});
+		volume_up.clicked.connect(on_volume_up_clicked);
 
 		// Show the things
 
 		popover.get_child().show_all();
+	}
+
+	private void on_volume_down_clicked() {
+		adjust_volume_increment(-step_size);
+	}
+
+	private void on_volume_up_clicked() {
+		adjust_volume_increment(+step_size);
 	}
 
 	void on_sink_changed(uint id) {

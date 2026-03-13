@@ -84,10 +84,8 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 						label.set_xalign(0);
 					}
 
-					action_button.clicked.connect(() => {
-						app.launch_action(action);
-						hide();
-					});
+					action_button.set_data<string>("action", action);
+					action_button.clicked.connect(on_action_button_clicked);
 
 					desktop_actions.add(action_button);
 				}
@@ -162,6 +160,12 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 		stack.show_all();
 	}
 
+	private void on_action_button_clicked(Gtk.Button button) {
+		var action = button.get_data<string>("action");
+		app.launch_action(action);
+		hide();
+	}
+
 	private void on_pin_clicked() {
 		hide();
 		pinned = !pinned;
@@ -201,27 +205,31 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 	public void add_window(Xfw.Window window) {
 		var window_item = new WindowItem(window);
 
-		window_item.page_switch_clicked.connect(() => {
-			var controls_layout = new WindowControls(window);
-
-			controls_layout.return_clicked.connect(() => {
-				stack.set_visible_child_name("main");
-				stack.remove(controls_layout);
-				controls_layout.destroy();
-			});
-
-			var control = stack.get_child_by_name("controls");
-			if (control != null) {
-				stack.set_visible_child_name("main");
-				stack.remove(control);
-				control.destroy();
-			}
-
-			stack.add_named(controls_layout, "controls");
-			stack.set_visible_child_name("controls");
-		});
+		window_item.page_switch_clicked.connect(on_page_switch_clicked);
 
 		windows.add(window_item);
+	}
+
+	private void on_page_switch_clicked(WindowItem window_item) {
+		var controls_layout = new WindowControls(window_item.window);
+
+		controls_layout.return_clicked.connect(on_controls_return_clicked);
+
+		var control = stack.get_child_by_name("controls");
+		if (control != null) {
+			stack.set_visible_child_name("main");
+			stack.remove(control);
+			control.destroy();
+		}
+
+		stack.add_named(controls_layout, "controls");
+		stack.set_visible_child_name("controls");
+	}
+
+	private void on_controls_return_clicked(WindowControls controls_layout) {
+		stack.set_visible_child_name("main");
+		stack.remove(controls_layout);
+		controls_layout.destroy();
 	}
 
 	public void remove_window(Xfw.Window window) {
@@ -291,37 +299,45 @@ private class WindowControls : Gtk.Box {
 		pack_start(list_box);
 		pack_end(return_button, false, false, 0);
 
-		maximize_button.clicked.connect(() => {
-			var maximized = window.is_maximized();
+		maximize_button.clicked.connect(on_maximize_clicked);
 
-			try {
-				window.set_maximized(!maximized);
-			} catch (Error e) {
-				warning("Unable to set maximized on window %s: %s", window.get_name(), e.message);
-			}
-		});
+		minimize_button.clicked.connect(on_minimize_clicked);
 
-		minimize_button.clicked.connect(() => {
-			try {
-				window.set_minimized(true);
-			} catch (Error e) {
-				warning("Unable to set minimized on window %s: %s", window.get_name(), e.message);
-			}
-		});
+		return_button.clicked.connect(on_return_clicked);
 
-		return_button.clicked.connect(() => {
-			return_clicked();
-		});
-
-		window.state_changed.connect((changed_mask, new_state) => {
-			if (Xfw.WindowState.MAXIMIZED in changed_mask) {
-				update_maximize_label();
-			}
-		});
+		window.state_changed.connect(on_window_state_changed);
 
 		update_maximize_label();
 
 		show_all();
+	}
+
+	private void on_maximize_clicked() {
+		var maximized = window.is_maximized();
+
+		try {
+			window.set_maximized(!maximized);
+		} catch (Error e) {
+			warning("Unable to set maximized on window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_minimize_clicked() {
+		try {
+			window.set_minimized(true);
+		} catch (Error e) {
+			warning("Unable to set minimized on window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_return_clicked() {
+		return_clicked();
+	}
+
+	private void on_window_state_changed(Xfw.WindowState changed_mask, Xfw.WindowState new_state) {
+		if (Xfw.WindowState.MAXIMIZED in changed_mask) {
+			update_maximize_label();
+		}
 	}
 
 	private void build_workspace_buttons(Gtk.ListBox list_box) {
@@ -341,19 +357,24 @@ private class WindowControls : Gtk.Box {
 			var button_label = button.get_child() as Gtk.Label;
 			button_label.halign = Gtk.Align.START;
 
-			button.clicked.connect(() => {
-				if (workspace == window.get_workspace()) {
-					return;
-				}
-
-				try {
-					window.move_to_workspace(workspace);
-				} catch (Error e) {
-					warning("Unable to move window '%s' to new workspace: %s", window.get_name(), e.message);
-				}
-			});
+			button.set_data<unowned Xfw.Workspace>("workspace", workspace);
+			button.clicked.connect(on_workspace_button_clicked);
 
 			list_box.add(button);
+		}
+	}
+
+	private void on_workspace_button_clicked(Gtk.Button button) {
+		unowned Xfw.Workspace workspace = button.get_data<unowned Xfw.Workspace>("workspace");
+
+		if (workspace == window.get_workspace()) {
+			return;
+		}
+
+		try {
+			window.move_to_workspace(workspace);
+		} catch (Error e) {
+			warning("Unable to move window '%s' to new workspace: %s", window.get_name(), e.message);
 		}
 	}
 
@@ -414,30 +435,38 @@ private class WindowItem : Gtk.ListBoxRow {
 
 		add(box);
 
-		name_button.clicked.connect(() => {
-			try {
-				window.activate(null, Gtk.get_current_event_time());
-			} catch (Error e) {
-				warning("Unable to activate window %s: %s", window.get_name(), e.message);
-			}
-		});
+		name_button.clicked.connect(on_name_button_clicked);
 
-		close_button.clicked.connect(() => {
-			try {
-				window.close(Gtk.get_current_event_time());
-			} catch (Error e) {
-				warning("Unable to close window %s: %s", window.get_name(), e.message);
-			}
-		});
+		close_button.clicked.connect(on_close_button_clicked);
 
-		page_switch_button.clicked.connect(() => {
-			page_switch_clicked();
-		});
+		page_switch_button.clicked.connect(on_page_switch_button_clicked);
 
 		show_all();
 
-		window.name_changed.connect(() => {
-			name_label.label = window.get_name();
-		});
+		window.name_changed.connect(on_window_name_changed);
+	}
+
+	private void on_name_button_clicked() {
+		try {
+			window.activate(null, Gtk.get_current_event_time());
+		} catch (Error e) {
+			warning("Unable to activate window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_close_button_clicked() {
+		try {
+			window.close(Gtk.get_current_event_time());
+		} catch (Error e) {
+			warning("Unable to close window %s: %s", window.get_name(), e.message);
+		}
+	}
+
+	private void on_page_switch_button_clicked() {
+		page_switch_clicked();
+	}
+
+	private void on_window_name_changed() {
+		name_label.label = window.get_name();
 	}
 }

@@ -12,6 +12,7 @@
 public class FileSender : BaseDialog {
 	private int current_file = 0;
 	private int total_files = 0;
+	private int count_current = 0;
 
 	private DBusConnection connection;
 	private DBusProxy client_proxy;
@@ -34,14 +35,16 @@ public class FileSender : BaseDialog {
 		device_label.set_markup(Markup.printf_escaped("<b>%s</b>:", _("To")));
 
 		// Hook up the responses
-		response.connect((response_id) => {
-			if (response_id == Gtk.ResponseType.CANCEL) {
-				// Cancel the current session if it is active
-				if (transfer != null && transfer.status == "active") {
-					remove_session.begin();
-				}
+		response.connect(on_sender_response);
+	}
+
+	private void on_sender_response(int response_id) {
+		if (response_id == Gtk.ResponseType.CANCEL) {
+			// Cancel the current session if it is active
+			if (transfer != null && transfer.status == "active") {
+				remove_session.begin();
 			}
-		});
+		}
 	}
 
 	public void add_files(File[] files, Bluetooth.Device device) {
@@ -64,23 +67,25 @@ public class FileSender : BaseDialog {
 
 	private void total_n_current(bool total = false) {
 		total_files = 0;
-		int current = 0;
+		count_current = 0;
 
-		file_store.foreach((model, path, iter) => {
-			File file;
-			model.get(iter, 0, out file);
-
-			if (file == file_path) {
-				current = total_files;
-			}
-
-			total_files++;
-			return false;
-		});
+		file_store.foreach(on_count_file);
 
 		if (!total) {
-			current_file = current + 1;
+			current_file = count_current + 1;
 		}
+	}
+
+	private bool on_count_file(Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter) {
+		File file;
+		model.get(iter, 0, out file);
+
+		if (file == file_path) {
+			count_current = total_files;
+		}
+
+		total_files++;
+		return false;
 	}
 
 	private async void create_session() {
@@ -144,21 +149,23 @@ public class FileSender : BaseDialog {
 			var suggested_button = retry_dialog.add_button(_("Retry"), Gtk.ResponseType.ACCEPT);
 			suggested_button.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
-			retry_dialog.response.connect((response_id) => {
-				if (response_id == Gtk.ResponseType.ACCEPT) {
-					create_session.begin();
-					present();
-				} else {
-					destroy();
-				}
-
-				retry_dialog.destroy();
-			});
+			retry_dialog.response.connect(on_create_session_retry_response);
 
 			retry_dialog.show_all();
 			progress_label.label = e.message.split("org.bluez.obex.Error.Failed:")[1];
 			warning("Error transferring '%s' to '%s': %s", file_path.get_basename(), device.alias, e.message);
 		}
+	}
+
+	private void on_create_session_retry_response(Gtk.Widget dialog, int response_id) {
+		if (response_id == Gtk.ResponseType.ACCEPT) {
+			create_session.begin();
+			present();
+		} else {
+			destroy();
+		}
+
+		dialog.destroy();
 	}
 
 	private async void remove_session() {
@@ -193,12 +200,14 @@ public class FileSender : BaseDialog {
 			filename_label.set_markup(Markup.printf_escaped("<b>File name</b>: %s", transfer.name));
 			total_size = transfer.size;
 
-			((DBusProxy) transfer).g_properties_changed.connect((changed, invalid) => {
-				update_progress();
-			});
+			((DBusProxy) transfer).g_properties_changed.connect(on_send_transfer_properties_changed);
 		} catch (Error e) {
 			warning("Error transferring file '%s' to '%s': %s", transfer.name, device.alias, e.message);
 		}
+	}
+
+	private void on_send_transfer_properties_changed(Variant changed, string[] invalid) {
+		update_progress();
 	}
 
 	private void update_progress() {
@@ -225,16 +234,7 @@ public class FileSender : BaseDialog {
 				var suggested_button = retry_dialog.add_button(_("Retry"), Gtk.ResponseType.ACCEPT);
 				suggested_button.get_style_context().add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION);
 
-				retry_dialog.response.connect((response_id) => {
-					if (response_id == Gtk.ResponseType.ACCEPT) {
-						create_session.begin();
-						present();
-					} else {
-						destroy();
-					}
-
-					retry_dialog.destroy();
-				});
+				retry_dialog.response.connect(on_update_progress_retry_response);
 
 				retry_dialog.show_all();
 				progress_bar.fraction = 0.0;
@@ -254,6 +254,17 @@ public class FileSender : BaseDialog {
 			default:
 				break;
 		}
+	}
+
+	private void on_update_progress_retry_response(Gtk.Widget dialog, int response_id) {
+		if (response_id == Gtk.ResponseType.ACCEPT) {
+			create_session.begin();
+			present();
+		} else {
+			destroy();
+		}
+
+		dialog.destroy();
 	}
 
 	private bool try_next_file() {

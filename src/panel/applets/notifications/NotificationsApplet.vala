@@ -125,6 +125,14 @@ public class NotificationsApplet : Budgie.Applet {
 		}
 	}
 
+	void on_toggle_notifications_view_complete(Object? obj, AsyncResult res) {
+		try {
+			raven_proxy.ToggleNotificationsView.end(res);
+		} catch (Error e) {
+			warning("Failed to toggle Raven: %s", e.message);
+		}
+	}
+
 	void set_dnd_state(bool enabled) {
 		if (enabled) { // DND enabled
 			if (dnd_pixbuf != null) { // We have a pixbuf
@@ -147,13 +155,7 @@ public class NotificationsApplet : Budgie.Applet {
 
 		switch (button.button) {
 			case Gdk.BUTTON_PRIMARY:
-				raven_proxy.ToggleNotificationsView.begin((obj,res) => {
-					try {
-						raven_proxy.ToggleNotificationsView.end(res);
-					} catch (Error e) {
-						warning("Failed to toggle Raven: %s", e.message);
-					}
-				});
+				raven_proxy.ToggleNotificationsView.begin(on_toggle_notifications_view_complete);
 
 				return Gdk.EVENT_STOP;
 			case Gdk.BUTTON_MIDDLE:

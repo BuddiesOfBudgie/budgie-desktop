@@ -110,35 +110,40 @@ public abstract class BaseDialog : Gtk.Dialog {
 		reject_transfer.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
 
 		// Hook up the responses
-		response.connect((response_id) => {
-			if (response_id == Gtk.ResponseType.CANCEL) {
-				// Cancel the current transfer if it is active
-				if (transfer != null && transfer.status == "active") {
-					try {
-						transfer.cancel();
-					} catch (Error e) {
-						warning("Error cancelling Bluetooth transfer: %s", e.message);
-					}
-				}
+		response.connect(on_response);
 
-				destroy();
-			} else {
-				// Close button clicked, hide or close
-				if (transfer.status == "active") {
-					hide_on_delete();
-				} else {
-					destroy();
+		delete_event.connect(on_delete_event);
+	}
+
+	private void on_response(int response_id) {
+		if (response_id == Gtk.ResponseType.CANCEL) {
+			// Cancel the current transfer if it is active
+			if (transfer != null && transfer.status == "active") {
+				try {
+					transfer.cancel();
+				} catch (Error e) {
+					warning("Error cancelling Bluetooth transfer: %s", e.message);
 				}
 			}
-		});
 
-		delete_event.connect(() => {
+			destroy();
+		} else {
+			// Close button clicked, hide or close
 			if (transfer.status == "active") {
-				return hide_on_delete();
+				hide_on_delete();
 			} else {
 				destroy();
 			}
-		});
+		}
+	}
+
+	private bool on_delete_event() {
+		if (transfer.status == "active") {
+			return hide_on_delete();
+		} else {
+			destroy();
+			return true;
+		}
 	}
 
 	protected void on_transfer_progress(uint64 transferred) {
