@@ -9,6 +9,8 @@
  * (at your option) any later version.
  */
 
+using GTop;
+
 public class UsageMonitorRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 	public Budgie.RavenWidget new_widget_instance(string uuid, GLib.Settings? settings) {
 		return new UsageMonitorRavenWidget(uuid, settings);
@@ -24,12 +26,15 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	private UsageMonitorRow? cpu = null;
 	private UsageMonitorRow? ram = null;
 	private UsageMonitorRow? swap = null;
-	private ProcStatContents? prev = null;
+
+	private GTop.Cpu? prev_cpu = null;
 
 	private uint timeout_id = 0;
 
 	public UsageMonitorRavenWidget(string uuid, GLib.Settings? settings) {
 		initialize(uuid, settings);
+
+		GTop.init();
 
 		var main_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		add(main_box);
@@ -127,111 +132,42 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 	}
 
 	private void update_cpu() {
-		ProcStatContents? stat = read_proc_stat();
+		GTop.Cpu current_cpu;
+		GTop.get_cpu(out current_cpu);
 
-		if (prev != null && stat != null) {
-			float total_cpu_usage = (float) (stat.busy - prev.busy) / (float) (stat.total - prev.total);
-			cpu.update(total_cpu_usage);
+		if (prev_cpu != null) {
+			uint64 total_delta = current_cpu.total - prev_cpu.total;
+			if (total_delta > 0) {
+				// idle + iowait = time the CPU was not doing useful work
+				uint64 idle_delta = (current_cpu.idle + current_cpu.iowait) -
+				(prev_cpu.idle + prev_cpu.iowait);
+				float usage = (float)(total_delta - idle_delta) / (float)total_delta;
+				cpu.update(usage.clamp(0.0f, 1.0f));
+			}
 		}
 
-		prev = stat;
+		prev_cpu = current_cpu;
 	}
 
 	private void update_ram_and_swap() {
-		ProcMeminfoContents? meminfo = read_proc_meminfo();
+		GTop.Mem mem;
+		GTop.get_mem(out mem);
 
-		if (meminfo == null) {
-			ram.hide();
-			swap.hide();
-			return;
-		}
-
-		if (meminfo.swap_total > 0 && !swap.stay_hidden) {
-			var swap_used = meminfo.swap_total - meminfo.swap_free - meminfo.swap_cached;
-			swap.update((float) swap_used / (float) meminfo.swap_total);
-		} else {
-			swap.hide();
-		}
-
-		if (meminfo.mem_total > 0) {
-			var mem_used = meminfo.mem_total - meminfo.mem_available;
-			ram.update((float) mem_used / (float) meminfo.mem_total);
+		if (mem.total > 0) {
+			float mem_fraction = (float) mem.used / (float) mem.total;
+			ram.update(mem_fraction.clamp(0.0f, 1.0f));
 		} else {
 			ram.hide();
 		}
-	}
 
-	private ProcStatContents? read_proc_stat() {
-		var stat_file = File.new_for_path("/proc/stat");
-		if (!stat_file.query_exists()) return null;
+		GTop.Swap swap_info;
+		GTop.get_swap(out swap_info);
 
-		try {
-			var input_stream = new DataInputStream(stat_file.read());
-
-			string line;
-			while ((line = input_stream.read_line()) != null) {
-				if (!line.has_prefix("cpu ")) {
-					continue;
-				}
-
-				ulong user = 0;
-				ulong nice = 0;
-				ulong system = 0;
-				ulong idle = 0;
-				ulong iowait = 0;
-				ulong irq = 0;
-				ulong softirq = 0;
-
-				int read = line.scanf(
-					"%*s %lu %lu %lu %lu %lu %lu %lu",
-					&user, &nice, &system, &idle, &iowait, &irq, &softirq
-				);
-
-				if (read == 7) {
-					ProcStatContents? contents = ProcStatContents();
-					contents.total = user + nice + system + idle + iowait + irq + softirq;
-					contents.busy = contents.total - idle - iowait;
-					return contents;
-				}
-			}
-		} catch (Error e) {}
-
-		return null;
-	}
-
-	private ProcMeminfoContents? read_proc_meminfo() {
-		var meminfo_file = File.new_for_path("/proc/meminfo");
-		if (!meminfo_file.query_exists()) {
-			return null;
-		}
-
-		try {
-			var input_stream = new DataInputStream(meminfo_file.read());
-
-			var contents = ProcMeminfoContents();
-			string line;
-			while ((line = input_stream.read_line()) != null) {
-				string label = "";
-				ulong value = -1;
-
-				line.scanf("%s %lu", label, &value);
-
-				if (label == "MemTotal:") {
-					contents.mem_total = value;
-				} else if (label == "MemAvailable:") {
-					contents.mem_available = value;
-				} else if (label == "SwapTotal:") {
-					contents.swap_total = value;
-				} else if (label == "SwapFree:") {
-					contents.swap_free = value;
-				} else if (label == "SwapCached:") {
-					contents.swap_cached = value;
-				}
-			}
-
-			return contents;
-		} catch (Error e) {
-			return null;
+		if (swap_info.total > 0 && !swap.stay_hidden) {
+			float swap_fraction = (float) swap_info.used / (float) swap_info.total;
+			swap.update(swap_fraction.clamp(0.0f, 1.0f));
+		} else {
+			swap.hide();
 		}
 	}
 
@@ -248,19 +184,6 @@ public class UsageMonitorRavenWidgetSettings : Gtk.Grid {
 	public UsageMonitorRavenWidgetSettings(Settings? settings) {
 		settings.bind("show-swap-usage", switch_show_swap_usage, "active", SettingsBindFlags.DEFAULT);
 	}
-}
-
-private struct ProcMeminfoContents {
-	ulong mem_total;
-	ulong mem_available;
-	ulong swap_total;
-	ulong swap_free;
-	ulong swap_cached;
-}
-
-private struct ProcStatContents {
-	ulong total;
-	ulong busy;
 }
 
 private class UsageMonitorRow {
