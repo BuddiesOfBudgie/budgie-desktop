@@ -251,6 +251,9 @@ namespace Budgie {
 		private bool allow_animation = false;
 		private bool screen_occluded = false;
 
+		/* Monitor index for this panel */
+		private int target_monitor = 0;
+
 		public double nscale {
 			public set {
 				render_scale = value;
@@ -287,17 +290,18 @@ namespace Budgie {
 		/**
 		* Force update the geometry
 		*/
-		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int size = 0) {
+		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int monitor_index = 0) {
 			this.orig_scr = screen;
+			this.target_monitor = monitor_index;
 			string old_class = Budgie.position_class_name(this.position);
 
 			if (old_class != "") {
 				this.get_style_context().remove_class(old_class);
 			}
 
-			if (size == 0) {
-				size = intended_size;
-			}
+			//if (size == 0) {
+				int size = intended_size;
+			//}
 
 			this.settings.set_int(Budgie.PANEL_KEY_SIZE, size);
 			this.intended_size = size;
@@ -558,9 +562,12 @@ namespace Budgie {
 
 	void update_layer_shell_props() {
 		var default_display = Gdk.Display.get_default();
-		if (default_display != null) {
-			var monitor = default_display.get_primary_monitor();
-			if (monitor != null) GtkLayerShell.set_monitor(this, monitor);
+		if (default_display != null && default_display.get_n_monitors() > target_monitor) {
+			var monitor = default_display.get_monitor(target_monitor);
+			if (monitor != null) {
+				debug("Setting panel to monitor index %d", target_monitor);
+				GtkLayerShell.set_monitor(this, monitor);
+			}
 		}
 
 		GtkLayerShell.Edge position_edge = Budgie.panel_position_to_layer_shell_edge(this.position);
@@ -811,7 +818,7 @@ namespace Budgie {
 								expected_uuids.remove_link(g);
 							}
 
-							message("Unable to load invalid applet '%s': %s", applets[i], e.message);
+							debug("Unable to load invalid applet '%s': %s", applets[i], e.message);
 							applet_removed(applets[i]);
 
 							continue;
@@ -1292,16 +1299,6 @@ namespace Budgie {
 
 			// Get monitor geometry to constrain panel size
 			Gdk.Rectangle monitor_geom = orig_scr;
-			var screen = get_screen();
-			if (screen != null) {
-				var display = screen.get_display();
-				if (display != null) {
-					var monitor = display.get_primary_monitor();
-					if (monitor != null) {
-						monitor_geom = monitor.get_geometry();
-					}
-				}
-			}
 
 			// Constrain orig_scr to monitor dimensions
 			int max_width = monitor_geom.width;
@@ -1815,7 +1812,7 @@ namespace Budgie {
 			}
 			this.need_migratory = true;
 			if (this.is_fully_loaded) {
-				message("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
+				debug("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
 				this.add_migratory();
 			}
 		}
@@ -1830,7 +1827,7 @@ namespace Budgie {
 				}
 				need_migratory = false;
 				foreach (var new_applet in MIGRATION_1_APPLETS) {
-					message("Adding migratory applet: %s", new_applet);
+					debug("Adding migratory applet: %s", new_applet);
 					add_new_applet_at(new_applet, end_box);
 				}
 			}
