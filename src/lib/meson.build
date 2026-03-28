@@ -46,7 +46,6 @@ wayland_sources = files(
 wayland_deps = [
     dep_giounix,
     dep_gtk3,
-    dep_json,
     dep_xfce4windowing,
     meson.get_compiler('c').find_library('m', required: false),
 ]

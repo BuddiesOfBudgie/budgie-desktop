@@ -176,11 +176,5 @@
       <summary>Ordered list of primary and fallback monitors</summary>
       <description>Ordered list of monitor connectors. The first entry is the preferred primary monitor. If unavailable, subsequent entries are tried in order as fallbacks. Empty list uses automatic selection.</description>
     </key>
-
-    <key type="s" name="monitor-metadata-cache">
-      <default>'{}'</default>
-      <summary>Cached monitor metadata</summary>
-      <description>JSON cache of monitor information (manufacturer, model, resolution) for monitors that may be disconnected. Keys are connector names.</description>
-    </key>
   </schema>
 </schemalist>

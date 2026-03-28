@@ -16,6 +16,7 @@ namespace Budgie {
 		private Gtk.ListBox monitor_list;
 		private Gtk.ListBox fallback_list;
 		private WaylandClient? wayland_client = null;
+		const string WDISPLAYS = "network.cycles.wdisplays.desktop";
 
 		public DisplaysPage(DesktopManager? manager) {
 			Object(group: SETTINGS_GROUP_PANEL,
@@ -30,6 +31,23 @@ namespace Budgie {
 
 			var grid = new SettingsGrid();
 			this.add(grid);
+
+			// Configure displays button only if wdisplays is installed
+			var app_info = new DesktopAppInfo(WDISPLAYS);
+			if (app_info != null) {
+				string button_label = app_info.get_display_name();
+				string? tooltip = app_info.get_string("Comment");
+
+				var configure_button = new Gtk.Button.with_label(button_label);
+				configure_button.get_style_context().add_class("suggested-action");
+				configure_button.halign = Gtk.Align.START;
+				configure_button.clicked.connect(on_configure_displays_clicked);
+				if (tooltip != null && tooltip != "") {
+					configure_button.set_tooltip_text(tooltip);
+				}
+
+				grid.add_row(new SettingsRow(configure_button, null, null));
+			}
 
 			// Connected monitors section
 			var header_label = new Gtk.Label(null);
@@ -107,6 +125,17 @@ namespace Budgie {
 			if (this.get_visible()) {
 				refresh_monitor_list();
 				refresh_fallback_list();
+			}
+		}
+
+		private void on_configure_displays_clicked() {
+			try {
+				var app_info = new DesktopAppInfo(WDISPLAYS);
+				if (app_info != null) {
+					app_info.launch(null, null);
+				}
+			} catch (Error e) {
+				warning("Failed to launch wdisplays: %s", e.message);
 			}
 		}
 

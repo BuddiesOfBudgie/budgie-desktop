@@ -57,6 +57,9 @@ namespace Budgie {
 		private const uint SMOOTH_MS = 500;
 		private Settings? panel_settings = null;
 		private string? current_primary_connector = null;
+		private string cache_file_path;
+		private KeyFile cache_file;
+
 		// Screen power management
 		private static bool screen_power_suspended = false;
 
@@ -132,6 +135,23 @@ namespace Budgie {
 			// Try to load panel settings for primary monitor config
 			panel_settings = new Settings("com.solus-project.budgie-panel");
 			panel_settings.changed["primary-monitor-list"].connect(on_primary_monitor_list_changed);
+
+			// Initialize cache file
+			cache_file = new KeyFile();
+			cache_file_path = Path.build_filename(
+				Environment.get_user_config_dir(),
+				"budgie-desktop",
+				"display-cache.ini"
+			);
+
+			// Load existing cache if it exists
+			try {
+				cache_file.load_from_file(cache_file_path, KeyFileFlags.NONE);
+			} catch (Error e) {
+				if (!(e is FileError.NOENT)) {
+					warning("Failed to load display cache: %s", e.message);
+				}
+			}
 
 			screen.monitors_changed.connect(on_monitors_changed_smoothed);
 			initialize_monitor_info();
@@ -262,82 +282,61 @@ namespace Budgie {
 			* Cache metadata for a monitor
 			*/
 			private void cache_monitor_metadata(string connector, string manufacturer, string model, int width, int height, int scale) {
-				if (panel_settings == null) return;
+				cache_file.set_string(connector, "manufacturer", manufacturer);
+				cache_file.set_string(connector, "model", model);
+				cache_file.set_integer(connector, "last_width", width);
+				cache_file.set_integer(connector, "last_height", height);
+				cache_file.set_integer(connector, "last_scale", scale);
 
-				string cache_json = panel_settings.get_string("monitor-metadata-cache");
-				var parser = new Json.Parser();
+				// Save to disk
+				save_cache_file();
+			}
 
-				Json.Node? root = null;
-				if (cache_json != "" && cache_json != "{}") {
-					try {
-						parser.load_from_data(cache_json);
-						root = parser.get_root();
-					} catch (Error e) {
-						debug("Failed to parse existing cache, creating new: %s", e.message);
+			/**
+			* Save cache file to disk
+			*/
+			private void save_cache_file() {
+				try {
+					// Ensure directory exists
+					string config_dir = Path.build_filename(
+						Environment.get_user_config_dir(),
+						"budgie-desktop"
+					);
+
+					var dir = File.new_for_path(config_dir);
+					if (!dir.query_exists()) {
+						dir.make_directory_with_parents();
 					}
+
+					// Save the file
+					cache_file.save_to_file(cache_file_path);
+				} catch (Error e) {
+					warning("Failed to save display cache: %s", e.message);
 				}
-
-				var cache_obj = (root != null && root.get_node_type() == Json.NodeType.OBJECT)
-				? root.get_object()
-				: new Json.Object();
-
-				var metadata = new Json.Object();
-				metadata.set_string_member("manufacturer", manufacturer);
-				metadata.set_string_member("model", model);
-				metadata.set_int_member("last_width", width);
-				metadata.set_int_member("last_height", height);
-				metadata.set_int_member("last_scale", scale);
-				metadata.set_int_member("last_seen", (int64) GLib.get_real_time());
-
-				cache_obj.set_object_member(connector, metadata);
-
-				var gen = new Json.Generator();
-				var new_root = new Json.Node(Json.NodeType.OBJECT);
-				new_root.set_object(cache_obj);
-				gen.set_root(new_root);
-
-				panel_settings.set_string("monitor-metadata-cache", gen.to_data(null));
 			}
 
 			/**
 			* Get cached metadata for a monitor
 			*/
 			private MonitorMetadata? get_cached_metadata(string connector) {
-				if (panel_settings == null) return null;
-
-				string cache_json = panel_settings.get_string("monitor-metadata-cache");
-				if (cache_json == "" || cache_json == "{}") {
-					return null;
-				}
-
-				var parser = new Json.Parser();
 				try {
-					parser.load_from_data(cache_json);
+					if (!cache_file.has_group(connector)) {
+						return null;
+					}
+
+					MonitorMetadata metadata = MonitorMetadata() {
+						manufacturer = cache_file.get_string(connector, "manufacturer"),
+						model = cache_file.get_string(connector, "model"),
+						last_width = cache_file.get_integer(connector, "last_width"),
+						last_height = cache_file.get_integer(connector, "last_height"),
+						last_scale = cache_file.get_integer(connector, "last_scale")
+					};
+
+					return metadata;
 				} catch (Error e) {
-					debug("Failed to parse metadata cache for %s: %s", connector, e.message);
+					debug("Failed to read cached metadata for %s: %s", connector, e.message);
 					return null;
 				}
-
-				var root = parser.get_root();
-				if (root == null || root.get_node_type() != Json.NodeType.OBJECT) {
-					return null;
-				}
-
-				var cache_obj = root.get_object();
-				if (!cache_obj.has_member(connector)) {
-					return null;
-				}
-
-				var metadata_obj = cache_obj.get_object_member(connector);
-				MonitorMetadata metadata = MonitorMetadata() {
-					manufacturer = metadata_obj.get_string_member("manufacturer"),
-					model = metadata_obj.get_string_member("model"),
-					last_width = (int) metadata_obj.get_int_member("last_width"),
-					last_height = (int) metadata_obj.get_int_member("last_height"),
-					last_scale = (int) metadata_obj.get_int_member("last_scale")
-				};
-
-				return metadata;
 			}
 
 			/**
