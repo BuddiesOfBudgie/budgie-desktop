@@ -83,13 +83,15 @@ namespace Budgie {
 
 			try {
 				budgie_desktop_view_settings = new Settings("org.buddiesofbudgie.budgie-desktop-view");
-				budgie_desktop_view_settings.changed["show"].connect(() => {
-					debug("Desktop icons visibility changed, restarting Crystal Dock");
-					restart();
-				});
+				budgie_desktop_view_settings.changed["show"].connect(on_budgie_desktop_view_settings_changed);
 			} catch (Error e) {
 				warning("Failed to watch desktop icons setting: %s", e.message);
 			}
+		}
+
+		void on_budgie_desktop_view_settings_changed() {
+			debug("Desktop icons visibility changed, restarting Crystal Dock");
+			restart();
 		}
 
 		/**
