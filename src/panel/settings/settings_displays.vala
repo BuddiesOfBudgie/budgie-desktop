@@ -39,29 +39,15 @@ namespace Budgie {
 				string? tooltip = app_info.get_string("Comment");
 
 				var configure_button = new Gtk.Button.with_label(button_label);
-				configure_button.get_style_context().add_class("suggested-action");
+				//configure_button.get_style_context().add_class("suggested-action");
 				configure_button.halign = Gtk.Align.START;
 				configure_button.clicked.connect(on_configure_displays_clicked);
 				if (tooltip != null && tooltip != "") {
 					configure_button.set_tooltip_text(tooltip);
 				}
 
-				grid.add_row(new SettingsRow(configure_button, null, null));
+				grid.add_row(new SettingsRow(configure_button, _("Connected Monitors"), null));
 			}
-
-			// Connected monitors section
-			var header_label = new Gtk.Label(null);
-			header_label.set_markup("<b>%s</b>".printf(_("Connected Monitors")));
-			header_label.set_xalign(0.0f);
-			header_label.margin_bottom = 6;
-			grid.add_row(new SettingsRow(header_label, null, null));
-
-			var desc_label = new Gtk.Label(_("Select which monitor should be the primary display for panel placement."));
-			desc_label.get_style_context().add_class("dim-label");
-			desc_label.set_line_wrap(true);
-			desc_label.set_xalign(0.0f);
-			desc_label.margin_bottom = 12;
-			grid.add_row(new SettingsRow(desc_label, null, null));
 
 			var frame = new Gtk.Frame(null);
 			monitor_list = new Gtk.ListBox();
@@ -73,31 +59,17 @@ namespace Budgie {
 			scroll.add(monitor_list);
 			frame.add(scroll);
 
-			grid.add_row(new SettingsRow(frame, null, null));
+			grid.add_row(new SettingsRow(frame, _("Panel Placement"), _("Select which monitor should be the primary display for panel placement.")));
 
 			var clear_button = new Gtk.Button.with_label(_("Use Automatic Selection"));
 			clear_button.clicked.connect(on_clear_button_clicked);
 
 			grid.add_row(new SettingsRow(clear_button,
 				_("Clear Primary Monitor"),
-				_("Remove manual primary monitor selection and use automatic detection.")
+				_("Remove manual primary monitor selection.")
 			));
 
 			// Fallback monitors section
-			var fallback_header = new Gtk.Label(null);
-			fallback_header.set_markup("<b>%s</b>".printf(_("Fallback Monitors")));
-			fallback_header.set_xalign(0.0f);
-			fallback_header.margin_top = 24;
-			fallback_header.margin_bottom = 6;
-			grid.add_row(new SettingsRow(fallback_header, null, null));
-
-			var fallback_desc = new Gtk.Label(_("Previously used monitors. Use in the order given when the primary monitor is disconnected."));
-			fallback_desc.get_style_context().add_class("dim-label");
-			fallback_desc.set_line_wrap(true);
-			fallback_desc.set_xalign(0.0f);
-			fallback_desc.margin_bottom = 12;
-			grid.add_row(new SettingsRow(fallback_desc, null, null));
-
 			var fallback_frame = new Gtk.Frame(null);
 			fallback_list = new Gtk.ListBox();
 			fallback_list.set_selection_mode(Gtk.SelectionMode.NONE);
@@ -108,7 +80,7 @@ namespace Budgie {
 			fallback_scroll.add(fallback_list);
 			fallback_frame.add(fallback_scroll);
 
-			grid.add_row(new SettingsRow(fallback_frame, null, null));
+			grid.add_row(new SettingsRow(fallback_frame, _("Fallback Monitors"), _("Order used when primary is disconnected")));
 
 			if (wayland_client != null) {
 				wayland_client.primary_monitor_changed.connect(on_wayland_primary_monitor_changed);
