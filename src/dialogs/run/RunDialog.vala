@@ -118,32 +118,10 @@ namespace Budgie {
 			setup_window_positioning.begin();
 
 			/* Connect events */
-			focus_out_event.connect(() => {
-				if (!this.focus_quit) {
-					return Gdk.EVENT_STOP;
-				}
-				on_focus_out();
-				return Gdk.EVENT_STOP;
-			});
-
-			focus_in_event.connect(() => {
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			enter_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				pointer_entered = true;
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			leave_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
-				on_pointer_left();
-				return Gdk.EVENT_PROPAGATE;
-			});
+			focus_out_event.connect(on_focus_out_event);
+			focus_in_event.connect(on_focus_in_event);
+			enter_notify_event.connect(on_enter_notify_event);
+			leave_notify_event.connect(on_leave_notify_event);
 
 			this.key_release_event.connect(on_key_release);
 
@@ -151,6 +129,34 @@ namespace Budgie {
 			this.show_all();
 
 			setup_dbus.begin();
+		}
+
+		bool on_focus_out_event(Gtk.Widget widget, Gdk.EventFocus focus) {
+			if (!this.focus_quit) {
+				return Gdk.EVENT_STOP;
+			}
+			on_focus_out();
+			return Gdk.EVENT_STOP;
+		}
+
+		bool on_focus_in_event(Gtk.Widget widget, Gdk.EventFocus focus) {
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		bool  on_enter_notify_event(Gtk.Widget widget, Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			pointer_entered = true;
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		bool on_leave_notify_event(Gtk.Widget widget, Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+
+			on_pointer_left();
+			return Gdk.EVENT_PROPAGATE;
 		}
 
 		private async void setup_window_positioning() {

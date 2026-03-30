@@ -145,9 +145,9 @@ namespace Budgie {
 		}
 
 		private void refresh_monitor_list() {
-			monitor_list.foreach((widget) => {
-				monitor_list.remove(widget);
-			});
+			foreach (var child in monitor_list.get_children()) {
+				monitor_list.remove(child);
+			}
 
 			if (manager == null) {
 				return;
@@ -180,9 +180,9 @@ namespace Budgie {
 		}
 
 		private void refresh_fallback_list() {
-			fallback_list.foreach((widget) => {
-				fallback_list.remove(widget);
-			});
+			foreach (var child in fallback_list.get_children()) {
+				fallback_list.remove(child);
+			}
 
 			var panel_manager = manager as PanelManager;
 			if (panel_manager == null) {

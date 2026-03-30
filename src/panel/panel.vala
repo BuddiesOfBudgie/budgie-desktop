@@ -17,7 +17,7 @@ namespace Budgie {
 	*/
 	public class MainPanel : Gtk.Box {
 		private bool updating_constraints = false;
-		
+
 		public MainPanel() {
 			Object(orientation: Gtk.Orientation.HORIZONTAL);
 			get_style_context().add_class("budgie-panel");
@@ -46,14 +46,14 @@ namespace Budgie {
 				return;
 			}
 			updating_constraints = true;
-			
+
 			// Constrain each box to panel size minus other boxes' sizes
 			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
 				// Find start, center, and end boxes by their halign
 				Gtk.Widget? start_widget = null;
 				Gtk.Widget? center_widget = null;
 				Gtk.Widget? end_widget = null;
-				
+
 				foreach (var child in get_children()) {
 					var halign = child.get_halign();
 					if (halign == Gtk.Align.START) {
@@ -64,12 +64,12 @@ namespace Budgie {
 						end_widget = child;
 					}
 				}
-				
+
 				// Get current allocations
 				Gtk.Allocation start_alloc = Gtk.Allocation();
 				Gtk.Allocation center_alloc = Gtk.Allocation();
 				Gtk.Allocation end_alloc = Gtk.Allocation();
-				
+
 				if (start_widget != null) {
 					start_widget.get_allocation(out start_alloc);
 				}
@@ -79,7 +79,7 @@ namespace Budgie {
 				if (end_widget != null) {
 					end_widget.get_allocation(out end_alloc);
 				}
-				
+
 				// Constrain each box: max = panel_size - sum of other boxes' sizes
 				if (start_widget != null) {
 					int other_boxes_size = center_alloc.width + end_alloc.width;
@@ -89,7 +89,7 @@ namespace Budgie {
 						start_widget.size_allocate(start_alloc);
 					}
 				}
-				
+
 				if (center_widget != null) {
 					int other_boxes_size = start_alloc.width + end_alloc.width;
 					int max_center_width = int.max(0, allocation.width - other_boxes_size);
@@ -98,7 +98,7 @@ namespace Budgie {
 						center_widget.size_allocate(center_alloc);
 					}
 				}
-				
+
 				if (end_widget != null) {
 					int other_boxes_size = start_alloc.width + center_alloc.width;
 					int max_end_width = int.max(0, allocation.width - other_boxes_size);
@@ -112,7 +112,7 @@ namespace Budgie {
 				Gtk.Widget? start_widget = null;
 				Gtk.Widget? center_widget = null;
 				Gtk.Widget? end_widget = null;
-				
+
 				foreach (var child in get_children()) {
 					var valign = child.get_valign();
 					if (valign == Gtk.Align.START) {
@@ -123,11 +123,11 @@ namespace Budgie {
 						end_widget = child;
 					}
 				}
-				
+
 				Gtk.Allocation start_alloc = Gtk.Allocation();
 				Gtk.Allocation center_alloc = Gtk.Allocation();
 				Gtk.Allocation end_alloc = Gtk.Allocation();
-				
+
 				if (start_widget != null) {
 					start_widget.get_allocation(out start_alloc);
 				}
@@ -137,7 +137,7 @@ namespace Budgie {
 				if (end_widget != null) {
 					end_widget.get_allocation(out end_alloc);
 				}
-				
+
 				if (start_widget != null) {
 					int other_boxes_size = center_alloc.height + end_alloc.height;
 					int max_start_height = int.max(0, allocation.height - other_boxes_size);
@@ -146,7 +146,7 @@ namespace Budgie {
 						start_widget.size_allocate(start_alloc);
 					}
 				}
-				
+
 				if (center_widget != null) {
 					int other_boxes_size = start_alloc.height + end_alloc.height;
 					int max_center_height = int.max(0, allocation.height - other_boxes_size);
@@ -155,7 +155,7 @@ namespace Budgie {
 						center_widget.size_allocate(center_alloc);
 					}
 				}
-				
+
 				if (end_widget != null) {
 					int other_boxes_size = start_alloc.height + center_alloc.height;
 					int max_end_height = int.max(0, allocation.height - other_boxes_size);
@@ -299,10 +299,7 @@ namespace Budgie {
 				this.get_style_context().remove_class(old_class);
 			}
 
-			//if (size == 0) {
-				int size = intended_size;
-			//}
-
+			int size = intended_size;
 			this.settings.set_int(Budgie.PANEL_KEY_SIZE, size);
 			this.intended_size = size;
 			this.get_style_context().add_class(Budgie.position_class_name(position));
@@ -571,13 +568,13 @@ namespace Budgie {
 		}
 
 		GtkLayerShell.Edge position_edge = Budgie.panel_position_to_layer_shell_edge(this.position);
-		
+
 		// Explicitly set all edges first
 		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
 		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
 		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
-		
+
 		// Then anchor only the position edge
 		GtkLayerShell.set_anchor(this, position_edge, true);
 
@@ -588,24 +585,24 @@ namespace Budgie {
 	void calculate_panel_margins(out int margin_top, out int margin_bottom, out int margin_left, out int margin_right) {
 		Gtk.Allocation main_alloc;
 		main_layout.get_allocation(out main_alloc);
-		
+
 		Gtk.Allocation panel_alloc;
 		get_allocation(out panel_alloc);
-		
+
 		// Initialize margins
 		margin_top = 0;
 		margin_bottom = 0;
 		margin_left = 0;
 		margin_right = 0;
-		
+
 		// For non-dock mode, margins are always zero
 		if (!this.dock_mode) {
 			return;
 		}
-		
+
 		// For dock mode, calculate margins to center the panel
 		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
-		
+
 		if (horizontal) {
 			// For horizontal panels (TOP/BOTTOM), center horizontally
 			// Calculate equal left and right margins to center the panel
@@ -613,7 +610,7 @@ namespace Budgie {
 			int centered_margin = available_width / 2;
 			margin_left = orig_scr.x + centered_margin;
 			margin_right = centered_margin;
-			
+
 			// Ensure margins are non-negative
 			margin_left = int.max(0, margin_left);
 			margin_right = int.max(0, margin_right);
@@ -624,7 +621,7 @@ namespace Budgie {
 			int centered_margin = available_height / 2;
 			margin_top = orig_scr.y + centered_margin;
 			margin_bottom = centered_margin;
-			
+
 			// Ensure margins are non-negative
 			margin_top = int.max(0, margin_top);
 			margin_bottom = int.max(0, margin_bottom);
@@ -635,10 +632,10 @@ namespace Budgie {
 		// Calculate margins for the panel based on orientation and screen area
 		int margin_top, margin_bottom, margin_left, margin_right;
 		calculate_panel_margins(out margin_top, out margin_bottom, out margin_left, out margin_right);
-		
+
 		// Set margins using GtkLayerShell - set relevant margins and zero out the others
 		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
-		
+
 		if (horizontal) {
 		  	// For horizontal panels (TOP/BOTTOM), set left/right margins and zero top/bottom
 		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, -1);
@@ -1161,7 +1158,7 @@ namespace Budgie {
 			center_box.queue_resize();
 			end_box.queue_resize();
 			layout.queue_resize();
-			
+
 			// Use a timeout to ensure allocations are updated before constraining
 			Timeout.add(10, () => {
 				Gtk.Allocation layout_alloc;
@@ -1303,7 +1300,7 @@ namespace Budgie {
 			// Constrain orig_scr to monitor dimensions
 			int max_width = monitor_geom.width;
 			int max_height = monitor_geom.height;
-			
+
 			switch (position) {
 				case Budgie.PanelPosition.TOP:
 					x = orig_scr.x;
