@@ -112,11 +112,10 @@ public class TasklistButton : ToggleButton {
 	}
 
 	private void on_size_allocate(Allocation allocation) {
+		if (allocation.width <= 0 || allocation.height <= 0) return;
 		if (this.definite_allocation == allocation) {
 			return;
 		}
-
-		base.size_allocate(definite_allocation);
 
 		this.definite_allocation = allocation;
 
