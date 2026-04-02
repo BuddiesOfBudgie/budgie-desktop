@@ -192,7 +192,12 @@ namespace Budgie {
 			new_idle += calculate_dim();
 
 			if (idle_delay !=0 ) {
-				new_idle += "timeout " + idle_delay.to_string() + " 'wlopm --off \\*' resume 'wlopm --on \\*' ";
+				new_idle += "timeout " + idle_delay.to_string() + " '";
+				new_idle += "dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.ScreenPowerSuspend && ";
+				new_idle += "wlopm --off \\*' ";
+				new_idle += "resume '";
+				new_idle += "wlopm --on \\* && ";
+				new_idle += "dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.ScreenPowerResume' ";
 			}
 
 			if (lock_enabled && !disable_lock_screen) {
@@ -301,6 +306,16 @@ namespace Budgie {
 			} catch (SpawnError e) {
 				print("Error: %s\n", e.message);
 			}
+		}
+
+		public async void screen_power_suspend() throws GLib.DBusError, GLib.IOError {
+			debug("Screen power suspending");
+			WaylandClient.set_screen_power_suspended(true);
+		}
+
+		public async void screen_power_resume() throws GLib.DBusError, GLib.IOError {
+			debug("Screen power resuming");
+			WaylandClient.set_screen_power_suspended(false);
 		}
 
 		[DBus (visible = false)]

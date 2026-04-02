@@ -77,6 +77,7 @@ namespace Budgie {
 			sidebar = new Gtk.ListBox();
 			sidebar.set_header_func(this.do_headers);
 			sidebar.set_sort_func(this.do_sort);
+			sidebar.set_filter_func(this.do_filter);
 			sidebar.row_activated.connect(this.on_row_activate);
 			sidebar.set_activate_on_single_click(true);
 			scroll.add(sidebar);
@@ -121,6 +122,34 @@ namespace Budgie {
 		}
 
 		/**
+		* Filter sidebar items based on page visibility
+		*/
+		bool do_filter(Gtk.ListBoxRow row) {
+			SettingsItem? item = row.get_child() as SettingsItem;
+			if (item == null) {
+				return true;
+			}
+
+			// Always show the add panel button
+			if (item == this.item_add_panel) {
+				return true;
+			}
+
+			// Check if the corresponding page is visible
+			Budgie.SettingsPage? page = this.page_map.lookup(item.content_id);
+			if (page == null) {
+				return true;
+			}
+
+			return page.get_visible();
+		}
+
+		public void refresh_sidebar_filter() {
+			this.sidebar.invalidate_filter();
+			this.sidebar.invalidate_headers();
+		}
+
+		/**
 		* Static pages that will always be part of the UI
 		*/
 		void build_content() {
@@ -130,6 +159,7 @@ namespace Budgie {
 			this.add_page(new Budgie.WindowsPage());
 			this.add_page(new Budgie.AutostartPage());
 			this.add_page(new Budgie.RavenPage(this.manager));
+			this.add_page(new Budgie.DisplaysPage(this.manager));
 		}
 
 		public void requested_close() throws DBusError, IOError {
