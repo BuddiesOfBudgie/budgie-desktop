@@ -30,15 +30,13 @@ public class TasklistButton : ToggleButton {
 	private GLib.Settings settings;
 	private TasklistButtonPopover popover;
 
-	private Allocation definite_allocation;
+	private Allocation definite_allocation = {};
 
 	public Budgie.PopoverManager popover_manager { get; construct; }
 	public Xfw.Window window { get; construct; }
 
 	public bool show_label { get; set; }
 	public bool show_icon { get; set; }
-
-	private int target_icon_size = 0;
 
 	public TasklistButton(Xfw.Window window, Budgie.PopoverManager popover_manager, GLib.Settings settings) {
 		Object(window: window, popover_manager: popover_manager);
@@ -74,7 +72,6 @@ public class TasklistButton : ToggleButton {
 		container.pack_start(this.label, true, true, BUTTON_PADDING);
 
 		on_window_name_changed();
-		on_window_icon_changed();
 
 		// Only show after setting the name
 		this.show_all();
@@ -115,34 +112,22 @@ public class TasklistButton : ToggleButton {
 	}
 
 	private void on_size_allocate(Allocation allocation) {
+		if (allocation.width <= 0 || allocation.height <= 0) return;
 		if (this.definite_allocation == allocation) {
 			return;
 		}
 
-		base.size_allocate(definite_allocation);
-
-		// Determine icon size
-		int max = (int) Math.fmin(allocation.width, allocation.height);
-
-		if (max > FORMULA_SWAP_POINT) {
-			target_icon_size = max - BUTTON_PADDING;
-		} else {
-			target_icon_size = (int) Math.round(TARGET_ICON_SCALE * max);
-		}
+		this.definite_allocation = allocation;
 
 		var min_width = get_css_width(this);
 		min_width += get_css_width(this.get_child());
-		var min_image_width = target_icon_size + min_width + (2 * BUTTON_PADDING);
+		var min_image_width = compute_icon_size() + min_width + (2 * BUTTON_PADDING);
 
 		if (allocation.width < min_image_width + (2 * BUTTON_PADDING) &&
-		    allocation.width >= min_image_width) {
+			allocation.width >= min_image_width) {
 			show_label = false;
 		} else {
-			if (settings.get_boolean("show-labels")) {
-				show_label = true;
-			} else {
-				show_label = false;
-			}
+			show_label = settings.get_boolean("show-labels");
 		}
 
 		Idle.add(update_state_cb);
@@ -185,10 +170,16 @@ public class TasklistButton : ToggleButton {
 	}
 
 	private void on_window_icon_changed() {
-		var size = target_icon_size == 0 ? DEFAULT_ICON_SIZE : target_icon_size;
-		//  message("icon_size: %d", size);
-		unowned var pixbuf = window.get_icon(size, 1);
+		if (definite_allocation.width <= 0 || definite_allocation.height <= 0) return;
+
+		unowned var pixbuf = window.get_icon(compute_icon_size(), 1);
 		icon.set_from_pixbuf(pixbuf);
+	}
+
+	private int compute_icon_size() {
+		int max = (int) Math.fmin(definite_allocation.width, definite_allocation.height);
+		if (max > FORMULA_SWAP_POINT) return max - BUTTON_PADDING;
+		return (int) Math.round(TARGET_ICON_SCALE * max);
 	}
 
 	private int get_css_width(Widget widget) {
