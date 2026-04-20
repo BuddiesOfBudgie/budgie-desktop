@@ -76,6 +76,7 @@ libpanelplugin_gir = gnome.generate_gir(
         'Gio-2.0',
         'Gtk-3.0',
         'Peas-2',
+        'GtkLayerShell-0.1',
     ],
     symbol_prefix: 'budgie',
     identifier_prefix: 'Budgie',
@@ -108,10 +109,11 @@ pkgconfig.generate(
     subdirs: 'budgie-desktop',
     libraries: ['-L${libdir}', '-lbudgie-plugin'],
     requires: [
-        'gtk+-3.0 >= 3.24.0',
-        'libpeas-2 >= 1.99.0',
-        'glib-2.0 >= 2.46.0',
         'gio-unix-2.0 >= 2.46.0',
+        'glib-2.0 >= 2.46.0',
+        'gtk+-3.0 >= 3.24.0',
+        'gtk-layer-shell-0 >= 0.9.0',
+        'libpeas-2 >= 1.99.0',
     ],
 )
 
