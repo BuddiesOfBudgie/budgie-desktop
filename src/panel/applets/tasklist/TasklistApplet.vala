@@ -479,9 +479,13 @@ public class TasklistApplet : Budgie.Applet {
 		var button = get_button_for_window(window);
 		if (button == null) return;
 
-		if (window.workspace.get_state() == Xfw.WorkspaceState.ACTIVE) {
-			button.show();
+		var workspace = window.get_workspace();
+
+		if (workspace == null) return;
+
+		if ((window.workspace.get_state() & Xfw.WorkspaceState.ACTIVE) != 0) {
 			button.set_no_show_all(false);
+			button.show();
 		} else {
 			button.hide();
 			button.set_no_show_all(true); // make sure we don't randomly show buttons not belonging to the current workspace
