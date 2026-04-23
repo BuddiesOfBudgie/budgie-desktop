@@ -479,9 +479,13 @@ public class TasklistApplet : Budgie.Applet {
 		var button = get_button_for_window(window);
 		if (button == null) return;
 
-		if (window.workspace.get_state() == Xfw.WorkspaceState.ACTIVE) {
-			button.show();
+		var workspace = window.get_workspace();
+
+		if (workspace == null) return;
+
+		if ((window.workspace.get_state() & Xfw.WorkspaceState.ACTIVE) != 0) {
 			button.set_no_show_all(false);
+			button.show();
 		} else {
 			button.hide();
 			button.set_no_show_all(true); // make sure we don't randomly show buttons not belonging to the current workspace
@@ -568,21 +572,33 @@ public class TasklistApplet : Budgie.Applet {
 	 */
 	private bool on_button_release(Gtk.Widget widget, Gdk.EventButton event) {
 		var button = widget as TasklistButton;
+		var window = button.window;
 		var time = event.time;
 
 		switch (event.button) {
 			case Gdk.BUTTON_PRIMARY:
-				if (button.window.state == Xfw.WindowState.ACTIVE) {
+				if (window.is_minimized()) {
+					// Un-minimize and activate window if minimized.
 					try {
-						button.window.set_minimized(true);
+						window.set_minimized(false);
+						window.activate(null, time);
 					} catch (GLib.Error e) {
-						warning("Unable to minimize window '%s': %s", button.window.get_name(), e.message);
+						warning("Unable to activate window '%s': %s", window.get_name(), e.message);
 					}
 				} else {
-					try {
-						button.window.activate(null, time);
-					} catch (GLib.Error e) {
-						warning("Unable to activate window '%s': %s", button.window.get_name(), e.message);
+					// If window is active, minimize it. Otherwise, activate it.
+					if ((window.state & Xfw.WindowState.ACTIVE) != 0) {
+						try {
+							window.set_minimized(true);
+						} catch (GLib.Error e) {
+							warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
+						}
+					} else {
+						try {
+							window.activate(null, time);
+						} catch (GLib.Error e) {
+							warning("Unable to activate window '%s': %s", window.get_name(), e.message);
+						}
 					}
 				}
 				break;
@@ -591,9 +607,9 @@ public class TasklistApplet : Budgie.Applet {
 				return Gdk.EVENT_STOP;
 			case Gdk.BUTTON_MIDDLE:
 				try {
-					button.window.close(time);
+					window.close(time);
 				} catch (GLib.Error e) {
-					warning("Unable to close window '%s': %s", button.window.get_name(), e.message);
+					warning("Unable to close window '%s': %s", window.get_name(), e.message);
 				}
 				return Gdk.EVENT_STOP;
 		}
