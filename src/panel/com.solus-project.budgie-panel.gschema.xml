@@ -170,5 +170,11 @@
       <summary>Name of the default desktop layout</summary>
       <description>The name of the default layout used when resetting the panel</description>
     </key>
+
+    <key type="as" name="primary-monitor-list">
+      <default>[]</default>
+      <summary>Ordered list of primary and fallback monitors</summary>
+      <description>Ordered list of monitor connectors. The first entry is the preferred primary monitor. If unavailable, subsequent entries are tried in order as fallbacks. Empty list uses automatic selection.</description>
+    </key>
   </schema>
 </schemalist>
