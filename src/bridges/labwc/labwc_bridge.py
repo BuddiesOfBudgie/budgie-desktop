@@ -327,7 +327,6 @@ class Bridge:
     budgie_wm_settings = None
     desktop_input_sources_settings = None
     custom_keys_settings = None
-    default_terminal_settings= None
 
     # flag to indicate delaying writing the config until its true
     # this is needed where multiple bridge set config calls could potentially
@@ -457,9 +456,6 @@ class Bridge:
 
         self.peripherals_touchpad_settings.connect('changed::two-finger-scrolling-enabled', self.scrollmethod_changed)
         self.peripherals_touchpad_settings.connect('changed::edge-scrolling-enabled', self.scrollmethod_changed)
-
-        self.default_terminal_settings = Gio.Settings.new('org.gnome.desktop.default-applications.terminal')
-        self.default_terminal_settings.connect('changed', self.default_terminal_changed)
 
         # Setup locale1 monitoring for keyboard layout and locale
         self.setup_locale1_monitor()
@@ -1160,8 +1156,6 @@ class Bridge:
         self.desktop_input_sources_changed(self.desktop_input_sources_settings, "xkb-options")
 
         self.customkeys_changed(self.gsd_media_keys_settings, None)
-
-        self.default_terminal_changed(self.default_terminal_settings, "exec")
 
         touchpadkeys = {"natural-scroll",
                         "left-handed",
