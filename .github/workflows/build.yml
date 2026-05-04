@@ -46,6 +46,7 @@ jobs:
             gtklock \
             intltool \
             meson \
+            playerctl \
             sassc \
             slurp \
             swaybg \
