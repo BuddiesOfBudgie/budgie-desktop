@@ -298,7 +298,7 @@
       <description>Binding to launch the terminal.</description>
     </key>
     <key name="www" type="as">
-      <default>['']</default>
+      <default>['XF86WWW', 'XF86HomePage']</default>
       <summary>Launch web browser</summary>
       <description>Binding to launch the web browser.</description>
     </key>
