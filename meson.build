@@ -76,7 +76,6 @@ if get_option('with-runtime-dependencies')
     find_program('slurp', required: true)
     find_program('swaybg', required: true)
     find_program('eglinfo', required: true)
-    find_program('playerctl', required: true)
     found_gtklock = find_program('gtklock', required: false)
     if found_gtklock.found() == false
         find_program('swaylock', required: true)
