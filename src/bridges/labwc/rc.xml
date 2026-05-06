@@ -202,29 +202,20 @@
 		<keybind bridge="plugins.media-keys/mic-mute" key="XF86AudioMicMute">
 			<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/next" key="XF86AudioNext">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl next'" />
+		<keybind key="XF86AudioNext">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Next" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/next" key="C-XF86AudioNext">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl next'" />
+		<keybind key="XF86AudioPause">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Pause" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/pause" key="XF86AudioPause">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl play-pause'" />
+		<keybind key="XF86AudioPlay">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.PlayPause" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/play" key="XF86AudioPlay">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl play-pause'" />
+		<keybind key="XF86AudioPrev">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Previous" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/play" key="C-XF86AudioPlay">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl play-pause'" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/previous" key="XF86AudioPrev">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl previous'" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/previous" key="C-XF86AudioPrev">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl previous'" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/stop" key="XF86AudioStop">
-			<action name="Execute" command="bash -c 'DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus playerctl stop'" />
+		<keybind key="XF86AudioStop">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Stop" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/volume-down" key="XF86AudioLowerVolume">
 			<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" />

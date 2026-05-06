@@ -38,6 +38,9 @@ namespace Budgie {
 		/* screenshot */
 		ScreenshotManager? screenshot_manager;
 
+		/* MPRIS media-key controller */
+		Budgie.MprisController? mpris_controller;
+
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
@@ -78,6 +81,10 @@ namespace Budgie {
 
 			screenshot_manager = new ScreenshotManager();
 			screenshot_manager.serve();
+
+			// MPRIS controller: lets keybinds drive the current media player
+			mpris_controller = new Budgie.MprisController();
+			mpris_controller.setup_dbus(replace);
 		}
 
 		/**
