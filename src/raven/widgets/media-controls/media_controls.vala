@@ -20,9 +20,9 @@ public class MediaControlsRavenPlugin : Budgie.RavenPlugin, Peas.ExtensionBase {
 }
 
 public class MediaControlsRavenWidget : Budgie.RavenWidget {
-	private MprisDBusImpl impl;
+	private MprisTracker mpris_tracker;
 
-	private HashTable<string, MprisClientWidget> ifaces;
+	private HashTable<string, MprisClientWidget> widgets;
 	private Gtk.Box? content = null;
 	private StartListening? placeholder = null;
 
@@ -38,15 +38,18 @@ public class MediaControlsRavenWidget : Budgie.RavenWidget {
 		placeholder.get_style_context().add_class("raven-header");
 		content.pack_start(placeholder, false, false, 0);
 
-		ifaces = new HashTable<string, MprisClientWidget>(str_hash, str_equal);
+		widgets = new HashTable<string, MprisClientWidget>(str_hash, str_equal);
 
-		setup_dbus.begin();
+		// Use the shared MprisTracker
+		mpris_tracker = new MprisTracker();
+		mpris_tracker.client_added.connect(on_client_added);
+		mpris_tracker.client_removed.connect(on_client_removed);
 
 		size_allocate.connect(on_size_allocate);
 		show_all();
 	}
 
-	void on_size_allocate() {
+	private void on_size_allocate() {
 		int w = get_allocated_width();
 		if (w > our_width) {
 			our_width = w;
@@ -57,8 +60,8 @@ public class MediaControlsRavenWidget : Budgie.RavenWidget {
 		}
 	}
 
-	bool notify_clients_on_width_change() {
-		var iter = HashTableIter<string,MprisClientWidget>(ifaces);
+	private bool notify_clients_on_width_change() {
+		var iter = HashTableIter<string, MprisClientWidget>(widgets);
 		MprisClientWidget? widget = null;
 		while (iter.next(null, out widget)) {
 			widget.update_width(our_width);
@@ -66,80 +69,27 @@ public class MediaControlsRavenWidget : Budgie.RavenWidget {
 		return false;
 	}
 
-	/**
-	 * Add an interface handler/widget to known list and UI
-	 *
-	 * @param name DBUS name (object path)
-	 * @param iface The constructed MprisClient instance
-	 */
-	void add_iface(string name, MprisClient iface) {
-		MprisClientWidget widg = new MprisClientWidget(iface, our_width);
-		widg.show_all();
+	private void on_client_added(MprisClient client) {
+		var widget = new MprisClientWidget(client, our_width);
+		widget.show_all();
+
 		if (content.get_children().index(placeholder) != -1) {
 			content.remove(placeholder);
 		}
-		content.pack_start(widg, false, false, 0);
-		ifaces.insert(name, widg);
+
+		content.pack_start(widget, false, false, 0);
+		widgets.insert(client.bus_name, widget);
 	}
 
-	/**
-	 * Destroy an interface handler and remove from UI
-	 *
-	 * @param name DBUS name to remove handler for
-	 */
-	void destroy_iface(string name) {
-		var widg = ifaces[name];
-		if (widg != null) {
-			content.remove(widg);
-			ifaces.remove(name);
+	private void on_client_removed(MprisClient client) {
+		var widget = widgets.lookup(client.bus_name);
+		if (widget != null) {
+			content.remove(widget);
+			widgets.remove(client.bus_name);
 		}
 
-		if (ifaces.size() == 0) {
+		if (widgets.size() == 0) {
 			content.pack_start(placeholder, false, false, 0);
-		}
-	}
-
-	void on_name_owner_changed(string? n, string? o, string? ne) {
-		if (!n.has_prefix("org.mpris.MediaPlayer2.")) {
-			return;
-		}
-		if (o == "") {
-			new_iface.begin(n, (o, r) => {
-				var iface = new_iface.end(r);
-				if (iface != null) {
-					add_iface(n, iface);
-				}
-			});
-		} else {
-			Idle.add(() => {
-				destroy_iface(n);
-				return false;
-			});
-		}
-	}
-
-	/**
-	 * Do basic dbus initialisation
-	 */
-	public async void setup_dbus() {
-		try {
-			impl = yield Bus.get_proxy(BusType.SESSION, "org.freedesktop.DBus", "/org/freedesktop/DBus");
-			var names = yield impl.list_names();
-
-			/* Search for existing players (launched prior to our start) */
-			foreach (var name in names) {
-				if (name.has_prefix("org.mpris.MediaPlayer2.")) {
-					var iface = yield new_iface(name);
-					if (iface != null) {
-						add_iface(name, iface);
-					}
-				}
-			}
-
-			/* Also check for new mpris clients coming up while we're up */
-			impl.name_owner_changed.connect(on_name_owner_changed);
-		} catch (Error e) {
-			warning("Failed to initialise dbus: %s", e.message);
 		}
 	}
 }
