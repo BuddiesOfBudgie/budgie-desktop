@@ -1348,6 +1348,8 @@ class Bridge:
             updated = True
 
         if updated:
+            import time
+            time.sleep(0.5)
             self.write_config()
 
     # all gnome desktop interface gsettings changes are managed
