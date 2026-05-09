@@ -14,6 +14,7 @@ rundialog_deps = [
     link_libappindexer,
     link_libconfig,
     link_libtheme,
+    link_libbudgiewayland,
 ]
 
 executable(

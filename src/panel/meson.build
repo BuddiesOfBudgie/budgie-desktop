@@ -27,6 +27,7 @@ panel_sources = [
     'uuid.vala',
     'settings/settings_autostart.vala',
     'settings/settings_desktop.vala',
+    'settings/settings_displays.vala',
     'settings/settings_fonts.vala',
     'settings/settings_item.vala',
     'settings/settings_main.vala',
@@ -63,6 +64,7 @@ panel_deps = [
     libravenplugin_vapi,
     link_libraven,
     link_libwindowing,
+    link_libbudgiewayland,
     gvc.get_variable('libgvc_dep'),
 ]
 

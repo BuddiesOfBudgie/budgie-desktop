@@ -115,44 +115,113 @@ namespace Budgie {
 			/* Create our launcher buttons */
 			this.load_buttons();
 
-			/* Set size properties */
+			setup_window_positioning.begin();
+
+			/* Connect events */
+			focus_out_event.connect(on_focus_out_event);
+			focus_in_event.connect(on_focus_in_event);
+			enter_notify_event.connect(on_enter_notify_event);
+			leave_notify_event.connect(on_leave_notify_event);
+
+			this.key_release_event.connect(on_key_release);
+
+			/* Show and do DBus stuff */
+			this.show_all();
+
+			setup_dbus.begin();
+		}
+
+		bool on_focus_out_event(Gtk.Widget widget, Gdk.EventFocus focus) {
+			if (!this.focus_quit) {
+				return Gdk.EVENT_STOP;
+			}
+			on_focus_out();
+			return Gdk.EVENT_STOP;
+		}
+
+		bool on_focus_in_event(Gtk.Widget widget, Gdk.EventFocus focus) {
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		bool  on_enter_notify_event(Gtk.Widget widget, Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			pointer_entered = true;
+			cancel_focus_quit();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		bool on_leave_notify_event(Gtk.Widget widget, Gdk.EventCrossing event) {
+			if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
+			if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
+
+			on_pointer_left();
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		private async void setup_window_positioning() {
 			var display = Gdk.Display.get_default();
 			var screen = Gdk.Screen.get_default();
-			int x, y;
+			int x=0;
+			int y=0;
 			bool have_pos = false;
+
+			// Wait for WaylandClient to be ready
+			var wayland_client = new WaylandClient();
+			if (!wayland_client.is_initialised()) {
+				debug("Waiting for WaylandClient to initialize...");
+				// Connect to initialized signal and wait
+				SourceFunc callback = setup_window_positioning.callback;
+				wayland_client.initialized.connect(() => {
+					debug("WaylandClient ready, continuing with window positioning");
+					Idle.add((owned) callback);
+				});
+				yield;
+			}
+
 			// using the display seat should be reliable to find the point position
 			var seat = display.get_default_seat();
 			if (seat != null) {
 				var pointer = seat.get_pointer();
 				if (pointer != null) {
-					pointer.get_position( out screen, out x, out y);
+					pointer.get_position(out screen, out x, out y);
 					have_pos = true;
 				}
 			}
 
 			Gdk.Rectangle? rect = null;
+			Gdk.Monitor? monitor_obj = null;
+			int target_monitor_index = 0;
 
-			if (!have_pos) {
-				// if for some reason we can't determine the pointer position
-				// then assume we are placing on the primary monitor
-				var primary = display.get_primary_monitor();
-				if (primary != null) {
-					rect = primary.get_workarea();
-					x = rect.x + rect.width / 2;
-					y = rect.y + rect.height / 2;
+			// Get primary monitor from WaylandClient
+			string? primary_connector = wayland_client.get_primary_connector();
+			if (primary_connector != null) {
+				var available_monitors = wayland_client.get_available_monitors();
+				foreach (var mon_info in available_monitors) {
+					if (mon_info.connector == primary_connector) {
+						target_monitor_index = mon_info.index;
+						debug("Using primary monitor %d (%s)",
+								target_monitor_index, primary_connector);
+						break;
+					}
+				}
+			} else {
+				debug("No primary set, using fallback detection");
+			}
+
+			// Get the monitor object for the target index
+			if (display.get_n_monitors() > target_monitor_index) {
+				monitor_obj = display.get_monitor(target_monitor_index);
+			}
+
+			// Fallback to pointer position if primary not available
+			if (monitor_obj == null && have_pos) {
+				if (display.get_monitor_at_point != null) {
+					monitor_obj = display.get_monitor_at_point(x, y);
 				}
 			}
 
-			Gdk.Monitor? monitor_obj = null;
-			int monitor_index = 0;
-
-			// get the monitor for the pointer location
-			if (display.get_monitor_at_point != null) {
-				monitor_obj = display.get_monitor_at_point(x, y);
-			}
-
 			if (monitor_obj == null) {
-				// we still don't know the monitor ... so try to get the primary
 				monitor_obj = display.get_primary_monitor();
 			}
 
@@ -186,7 +255,9 @@ namespace Budgie {
 
 			if (monitor_obj != null) {
 				GtkLayerShell.set_monitor(this, monitor_obj);
+				debug("Set to monitor at %dx%d", rect.x, rect.y);
 			} else {
+				debug("Could not determine monitor");
 				return;
 			}
 
@@ -210,41 +281,6 @@ namespace Budgie {
 				int y_pos = rect.y + (rect.height - real_h) / 2;
 				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, y_pos - rect.y);
 			});
-
-			/* Connect events */
-			focus_out_event.connect(() => {
-				if (!this.focus_quit) {
-					return Gdk.EVENT_STOP;
-				}
-				on_focus_out();
-				return Gdk.EVENT_STOP;
-			});
-
-			focus_in_event.connect(() => {
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			enter_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				pointer_entered = true;
-				cancel_focus_quit();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			leave_notify_event.connect((event) => {
-				if (event.mode != Gdk.CrossingMode.NORMAL) return Gdk.EVENT_PROPAGATE;
-				if (event.detail == Gdk.NotifyType.INFERIOR) return Gdk.EVENT_PROPAGATE;
-				on_pointer_left();
-				return Gdk.EVENT_PROPAGATE;
-			});
-
-			this.key_release_event.connect(on_key_release);
-
-			/* Show and do DBus stuff */
-			this.show_all();
-
-			setup_dbus.begin();
 		}
 
 		public void prepare_for_show() {

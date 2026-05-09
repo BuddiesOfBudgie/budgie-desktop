@@ -15,10 +15,7 @@ namespace Budgie {
 	public const string DBUS_NAME = "org.budgie_desktop.Panel";
 	public const string DBUS_OBJECT_PATH = "/org/budgie_desktop/Panel";
 
-	public const string MIGRATION_1_APPLETS[] = {
-		"User Indicator",
-		"Raven Trigger",
-	};
+	public const string MIGRATION_1_APPLETS[] = {"User Indicator", "Raven Trigger",	};
 
 	[Flags]
 	public enum ResetFlags {
@@ -177,6 +174,8 @@ namespace Budgie {
 
 		private string default_layout = "default";
 
+		private Budgie.WaylandClient? wayland_client = null;
+
 		public void activate_action(int action) {
 			unowned string? uuid = null;
 			unowned Budgie.Panel? panel = null;
@@ -240,8 +239,89 @@ namespace Budgie {
 			windowing = new Budgie.Windowing.Windowing();
 			screens = new HashTable<int,Screen?>(direct_hash, direct_equal);
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
+			wayland_client = new WaylandClient();
+			wayland_client.primary_monitor_changed.connect(on_wayland_primary_monitor_changed);
 		}
 
+		private void on_wayland_primary_monitor_changed(string? connector) {
+			debug("Primary monitor changed to: %s", connector ?? "unknown");
+			this.on_monitors_changed();
+		}
+
+		public void set_primary_monitor(string connector) {
+			debug("Setting primary monitor to: %s", connector);
+
+			string[] current_list = settings.get_strv("primary-monitor-list");
+			string[] new_list = {};
+
+			new_list += connector;
+
+			foreach (string mon in current_list) {
+				if (mon != connector) {
+					new_list += mon;
+				}
+			}
+
+			settings.set_strv("primary-monitor-list", new_list);
+		}
+
+		public void clear_primary_monitor() {
+			debug("Clearing primary monitor selection");
+			settings.set_strv("primary-monitor-list", {});
+		}
+
+		public string? get_configured_primary() {
+			string[] monitor_list = settings.get_strv("primary-monitor-list");
+			if (monitor_list.length == 0) {
+				return null;
+			}
+			return monitor_list[0];
+		}
+
+		public string? get_current_primary_connector() {
+			return wayland_client.get_primary_connector();
+		}
+
+		public uint get_monitor_count() {
+			return wayland_client.get_monitor_count();
+		}
+
+		public Budgie.MonitorInfo[] get_available_monitors() {
+			return wayland_client.get_available_monitors();
+		}
+
+		public Budgie.MonitorInfo? get_monitor_info(string connector) {
+			return wayland_client.get_monitor_info(connector);
+		}
+
+		public void remove_from_monitor_list(string connector) {
+			string[] current_list = settings.get_strv("primary-monitor-list");
+			string[] new_list = {};
+
+			foreach (string mon in current_list) {
+				if (mon != connector) {
+					new_list += mon;
+				}
+			}
+
+			settings.set_strv("primary-monitor-list", new_list);
+			debug("Removed %s from monitor list", connector);
+		}
+
+		public string[] get_fallback_monitors() {
+			string[] monitor_list = settings.get_strv("primary-monitor-list");
+
+			if (monitor_list.length <= 1) {
+				return {};
+			}
+
+			string[] fallbacks = new string[monitor_list.length - 1];
+			for (int i = 1; i < monitor_list.length; i++) {
+				fallbacks[i - 1] = monitor_list[i];
+			}
+
+			return fallbacks;
+		}
 		/*
 		* Setup the events for listening to the windowing system changes
 		*/
@@ -329,8 +409,6 @@ namespace Budgie {
 			}
 			bool found_maximized_window = false;
 
-			Xfw.Workspace? active_workspace = windowing.get_active_workspace();
-
 			windowing.windows.foreach((window) => {
 				if (window.is_skip_pager()) return;
 				if (!this.window_on_primary(window)) return;
@@ -381,7 +459,7 @@ namespace Budgie {
 				return;
 			}
 			string argv[] = { "dconf", "reset", "-f", path};
-			message("Resetting dconf path: %s", path);
+			debug("Resetting dconf path: %s", path);
 			try {
 				Process.spawn_command_line_sync(string.joinv(" ", argv), null, null, null);
 			} catch (Error e) {
@@ -403,7 +481,12 @@ namespace Budgie {
 		* In future we'll support per-monitor panels, but for now everything
 		* must be in one of the edges on the primary monitor
 		*/
-		public void on_monitors_changed() {
+		void on_monitors_changed() {
+			if (wayland_client == null) {
+				warning("WaylandClient not available");
+				return;
+			}
+
 			var scr = Gdk.Screen.get_default();
 			var dis = scr.get_display();
 			HashTableIter<string,Budgie.Panel?> iter;
@@ -412,7 +495,6 @@ namespace Budgie {
 			unowned Screen? primary;
 			unowned Budgie.Panel? top = null;
 			unowned Budgie.Panel? bottom = null;
-
 			screens.remove_all();
 
 			int n_monitors = dis.get_n_monitors();
@@ -421,52 +503,73 @@ namespace Budgie {
 				return;
 			}
 
-			/* When we eventually get monitor-specific panels we'll find the ones that
-			* were left stray and find new homes, or temporarily disable
-			* them */
+			// Build screens hashtable
 			for (int i = 0; i < n_monitors; i++) {
 				Gdk.Monitor mon = dis.get_monitor(i);
 				if (mon == null) {
 					warning("Monitor %d is null, skipping", i);
 					continue;
 				}
-
 				Gdk.Rectangle usable_area = mon.get_geometry();
 				Budgie.Screen? screen = new Budgie.Screen();
 				screen.area = usable_area;
 				screen.slots = PanelPosition.NONE;
 				screens.insert(i, screen);
+			}
 
-				if (mon.is_primary()) {
-					primary_monitor = i;
+			// Get primary monitor from WaylandClient
+			string? primary_connector = wayland_client.get_primary_connector();
+			debug("WaylandClient reports primary connector: %s", primary_connector ?? "null");
+
+			bool found_primary = false;
+			if (primary_connector != null) {
+				// Get monitor list from WaylandClient which has connector info
+				var available_monitors = wayland_client.get_available_monitors();
+
+				foreach (var mon_info in available_monitors) {
+					if (mon_info.connector == primary_connector) {
+						// Use the index from WaylandClient's monitor list
+						primary_monitor = mon_info.index;
+						found_primary = true;
+						debug("Found primary monitor at index %d (connector: %s)", primary_monitor, primary_connector);
+						break;
+					}
+				}
+			}
+
+			// Fallback to GdkMonitor.is_primary() if we couldn't find it
+			if (!found_primary) {
+				debug("Falling back to GdkMonitor.is_primary() detection");
+				for (int i = 0; i < n_monitors; i++) {
+					Gdk.Monitor mon = dis.get_monitor(i);
+					if (mon != null && mon.is_primary()) {
+						primary_monitor = i;
+						debug("Found primary via is_primary() at index %d", i);
+						break;
+					}
 				}
 			}
 
 			primary = screens.lookup(primary_monitor);
-
 			if (primary == null) {
 				warning("Primary monitor not found (primary_monitor=%d). Cannot reposition panels.", primary_monitor);
-
 				if (screens.size() == 0) {
 					warning("No screens in hashtable. Skipping panel repositioning.");
 					return;
 				}
-
-				// This in theory shouldn't be reached - but we probably should be safe
-				// than sorry here - lets be helpful and try to find any valid screen as fallback
 				var first_screen = screens.lookup(0);
 				if (first_screen == null) {
 					warning("No valid screens available. Skipping panel repositioning.");
 					return;
 				}
-
 				warning("Using first available screen as fallback");
 				primary = first_screen;
 				primary_monitor = 0;
 			}
 
-			/* Fix all existing panels here */
-			Gdk.Rectangle raven_screen;
+			debug("Using primary monitor at index %d with geometry %dx%d+%d+%d",
+			primary_monitor, primary.area.width, primary.area.height,
+			primary.area.x, primary.area.y);
 
 			iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(out uuid, out panel)) {
@@ -475,8 +578,19 @@ namespace Budgie {
 					continue;
 				}
 
+				// Create normalized geometry (monitor-relative, not global)
+				Gdk.Rectangle panel_area = Gdk.Rectangle();
+				panel_area.x = 0;
+				panel_area.y = 0;
+				panel_area.width = primary.area.width;
+				panel_area.height = primary.area.height;
+
 				/* Force existing panels to update to new primary display */
-				panel.update_geometry(primary.area, panel.position);
+				debug("Repositioning panel %s to primary monitor %d (geometry: %dx%d+%d+%d)",
+				uuid, primary_monitor, panel_area.width, panel_area.height,
+				panel_area.x, panel_area.y);
+				panel.update_geometry(panel_area, panel.position, primary_monitor);
+
 				if (panel.position == Budgie.PanelPosition.TOP) {
 					top = panel;
 				} else if (panel.position == Budgie.PanelPosition.BOTTOM) {
@@ -486,17 +600,14 @@ namespace Budgie {
 				primary.slots |= panel.position;
 			}
 
-			raven_screen = primary.area;
-			if (top != null) {
-				raven_screen.y += top.intended_size;
-				raven_screen.height -= top.intended_size;
-			}
-			if (bottom != null) {
-				raven_screen.height -= bottom.intended_size;
-			}
-
-
-			this.raven.update_geometry(raven_screen);
+			debug("Updating Raven geometry");
+			// Also normalize for Raven
+			Gdk.Rectangle raven_area = Gdk.Rectangle();
+			raven_area.x = 0;
+			raven_area.y = 0;
+			raven_area.width = primary.area.width;
+			raven_area.height = primary.area.height;
+			this.raven.update_geometry(raven_area);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -524,7 +635,7 @@ namespace Budgie {
 				return;
 			}
 
-			message("Resetting budgie-desktop configuration");
+			debug("Resetting budgie-desktop configuration");
 
 			if (ResetFlags.PANEL in reset_flags) {
 				reset_panel_config();
@@ -539,7 +650,7 @@ namespace Budgie {
 		* Reset panel configuration
 		*/
 		void reset_panel_config() {
-			message("Resetting panel configuration to defaults");
+			debug("Resetting panel configuration to defaults");
 			Settings s = new Settings(Budgie.ROOT_SCHEMA);
 			this.default_layout = s.get_string(PANEL_KEY_LAYOUT);
 			this.reset_dconf_path(s);
@@ -552,7 +663,7 @@ namespace Budgie {
 		* Reset Raven widget configuration
 		*/
 		void reset_raven_config() {
-			message("Resetting Raven widget configuration to defaults");
+			debug("Resetting Raven widget configuration to defaults");
 
 			// Reset the main Raven widgets schema
 			Settings raven_widgets = new Settings("org.buddiesofbudgie.budgie-desktop.raven.widgets");
@@ -578,7 +689,7 @@ namespace Budgie {
 		* Reset after a failed load
 		*/
 		void do_live_reset() {
-			message("Resetting budgie-panel configuration due to failed load");
+			debug("Resetting budgie-panel configuration due to failed load");
 
 			string[]? toplevel_ids = null;
 
@@ -648,7 +759,7 @@ namespace Budgie {
 			raven.setup_dbus();
 
 			if (!load_panels()) {
-				message("Creating default panel layout");
+				debug("Creating default panel layout");
 
 				// TODO: Add gsetting for this name
 				create_default(this.default_layout);
@@ -660,7 +771,7 @@ namespace Budgie {
 			register_with_session.begin((o, res) => {
 				bool success = register_with_session.end(res);
 				if (!success) {
-					message("Failed to register with Session manager");
+					debug("Failed to register with Session manager");
 				}
 			});
 		}
@@ -755,18 +866,80 @@ namespace Budgie {
 		}
 
 		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency, AutohidePolicy policy,
-						bool dock_mode, bool shadow_visible, int spacing) {
+			bool dock_mode, bool shadow_visible, int spacing) {
 
 			Budgie.Panel? panel = panels.lookup(uuid);
-			unowned Screen? scr;
-
 			if (panel == null) {
-				warning("Asked to show non-existent panel: %s", uuid);
+				warning("show_panel called for non-existent panel: %s", uuid);
 				return;
 			}
 
-			scr = screens.lookup(this.primary_monitor);
-			scr.slots |= position;
+			// If WaylandClient isn't initialized yet, defer until it is
+			if (wayland_client != null && !wayland_client.is_initialised()) {
+				debug("Deferring show_panel for %s until WaylandClient is ready", uuid);
+
+				// Use a local variable to store the handler ID so we can disconnect
+				ulong handler_id = 0;
+				handler_id = wayland_client.initialized.connect(() => {
+					debug("WaylandClient ready, now showing panel %s", uuid);
+					wayland_client.disconnect(handler_id);  // Disconnect to prevent multiple calls
+					show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible, spacing);
+				});
+				return;
+			}
+
+			// Get the primary monitor geometry
+			int panel_monitor = 0;  // Default
+			Gdk.Rectangle panel_area = Gdk.Rectangle();
+
+			// Try to get primary monitor from WaylandClient
+			if (wayland_client != null) {
+				string? primary_connector = wayland_client.get_primary_connector();
+				if (primary_connector != null) {
+					var available_monitors = wayland_client.get_available_monitors();
+					foreach (var mon_info in available_monitors) {
+						if (mon_info.connector == primary_connector) {
+							panel_monitor = mon_info.index;
+							panel_area.x = 0;  // Panel expects relative coordinates
+							panel_area.y = 0;
+							panel_area.width = mon_info.width;
+							panel_area.height = mon_info.height;
+							debug("show_panel: Using primary monitor %d (%s) with geometry %dx%d",
+							panel_monitor, primary_connector, panel_area.width, panel_area.height);
+							break;
+						}
+					}
+				}
+			}
+
+			// If we didn't find a primary monitor via WaylandClient, fall back to first monitor
+			if (panel_area.width == 0) {
+				var screen = Gdk.Screen.get_default();
+				var dis = screen.get_display();
+				if (dis.get_n_monitors() > 0) {
+					var mon = dis.get_monitor(0);
+					if (mon != null) {
+						panel_area = mon.get_geometry();
+						panel_area.x = 0;  // Normalize
+						panel_area.y = 0;
+						warning("show_panel: Falling back to monitor 0 with geometry %dx%d",
+						panel_area.width, panel_area.height);
+					}
+				}
+			}
+
+			// Now update the panel's geometry with the correct monitor
+			debug("Calling update_geometry with area %dx%d+%d+%d and monitor index %d",
+			panel_area.width, panel_area.height, panel_area.x, panel_area.y, panel_monitor);
+			panel.update_geometry(panel_area, position, panel_monitor);
+
+			// Update our internal tracking
+			unowned Screen? scr = screens.lookup(panel_monitor);
+			if (scr != null) {
+				scr.slots |= position;
+			}
+
+			// Apply panel settings
 			this.set_placement(uuid, position);
 			this.set_transparency(uuid, transparency);
 			this.set_autohide(uuid, policy);
@@ -1382,9 +1555,9 @@ namespace Budgie {
 
 		private void on_name_lost(DBusConnection conn, string name) {
 			if (setup) {
-				message("Replaced existing budgie-panel");
+				debug("Replaced existing budgie-panel");
 			} else {
-				message("Another panel is already running. Use --replace to replace it");
+				debug("Another panel is already running. Use --replace to replace it");
 			}
 			Gtk.main_quit();
 		}
