@@ -1,6 +1,9 @@
-<labwc_config version="1">
-	<desktops number="4" />
+<labwc_config version="2">
+	<desktops number="2">
+		<popupTime>1000</popupTime>
+	</desktops>
 	<keyboard>
+		<numlock>off</numlock>
 		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">
 			<action name="" command="" />
 		</keybind>
@@ -26,27 +29,27 @@
 			<action name="ZoomOut" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/terminal" key="C-A-t">
-			<action name="Execute" command="xfce4-terminal" />
+			<action name="Execute" command="bash -c &quot;for c in xdg-terminal-exec x-terminal-emulator gnome-terminal konsole; do if command -v \$c &gt;/dev/null; then exec \$c; break; fi; done&quot;" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/home" key="undefined">
-			<action name="Execute" command="" />
+		<keybind bridge="plugins.media-keys/home" key="XF86Explorer">
+			<action name="Execute" command="xdg-open ." />
 		</keybind>
-		<keybind bridge="plugins.media-keys/calculator" key="undefined">
-			<action name="Execute" command="mate-calc" />
+		<keybind bridge="plugins.media-keys/calculator" key="XF86Calculator">
+			<action name="Execute" command="bash -c &quot;for c in gnome-calculator mate-calc kcalc; do if command -v \$c &gt;/dev/null; then exec \$c; break; fi; done&quot;" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/email" key="undefined">
+		<keybind bridge="plugins.media-keys/email" key="XF86Mail">
 			<action name="Execute" command="xdg-email" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/help" key="undefined">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/www" key="undefined">
-			<action name="" command="" />
+		<keybind bridge="plugins.media-keys/www" key="XF86WWW">
+			<action name="Execute" command="xdg-open about:blank" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/search" key="undefined">
-			<action name="" command="" />
+		<keybind bridge="plugins.media-keys/search" key="XF86Search">
+			<action name="Execute" command="" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/control-center" key="undefined">
+		<keybind bridge="plugins.media-keys/control-center" key="XF86Tools">
 			<action name="Execute" command="budgie-desktop-settings" />
 		</keybind>
 		<keybind bridge="wm.keybindings/show-desktop" key="W-d">
@@ -85,6 +88,18 @@
 		<keybind bridge="wm.keybindings/move-to-workspace-4" key="undefined">
 			<action name="SendToDesktop" to="4" wrap="no" />
 		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-5" key="undefined">
+			<action name="SendToDesktop" to="5" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-6" key="undefined">
+			<action name="SendToDesktop" to="6" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-7" key="undefined">
+			<action name="SendToDesktop" to="7" wrap="no" />
+		</keybind>
+		<keybind bridge="wm.keybindings/move-to-workspace-8" key="undefined">
+			<action name="SendToDesktop" to="8" wrap="no" />
+		</keybind>
 		<keybind bridge="wm.keybindings/switch-to-workspace-last" key="W-End">
 			<action name="GoToDesktop" to="last" />
 		</keybind>
@@ -100,16 +115,28 @@
 		<keybind bridge="wm.keybindings/switch-to-workspace-4" key="undefined">
 			<action name="GoToDesktop" to="4" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-to-workspace-left" key="W-Page_Up">
+		<keybind bridge="wm.keybindings/switch-to-workspace-5" key="undefined">
+			<action name="GoToDesktop" to="5" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-6" key="undefined">
+			<action name="GoToDesktop" to="6" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-7" key="undefined">
+			<action name="GoToDesktop" to="7" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-8" key="undefined">
+			<action name="GoToDesktop" to="8" />
+		</keybind>
+		<keybind bridge="wm.keybindings/switch-to-workspace-left" key="C-A-Left">
 			<action name="GoToDesktop" to="left" wrap="no" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-to-workspace-right" key="W-Page_Down">
+		<keybind bridge="wm.keybindings/switch-to-workspace-right" key="C-A-Right">
 			<action name="GoToDesktop" to="right" wrap="no" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-applications-backward" key="S-W-Tab">
+		<keybind bridge="wm.keybindings/switch-applications-backward" key="S-A-Tab">
 			<action name="PreviousWindow" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-applications" key="W-Tab">
+		<keybind bridge="wm.keybindings/switch-applications" key="A-Tab">
 			<action name="NextWindow" />
 		</keybind>
 		<keybind bridge="wm.keybindings/switch-panels-backward" key="S-C-A-Tab">
@@ -142,10 +169,10 @@
 		<keybind bridge="wm.keybindings/cycle-group" key="A-F6">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-group-backward" key="S-W-Above_Tab">
+		<keybind bridge="wm.keybindings/switch-group-backward" key="S-A-Above_Tab">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-group" key="W-Above_Tab">
+		<keybind bridge="wm.keybindings/switch-group" key="A-Above_Tab">
 			<action name="" command="" />
 		</keybind>
 		<keybind bridge="gnome.mutter/overlay-key" key="Super_L" onRelease="yes">
@@ -166,37 +193,37 @@
 		<keybind bridge="solus-project.budgie-wm/take-full-screenshot" key="Print">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/eject" key="undefined">
+		<keybind bridge="plugins.media-keys/eject" key="XF86Eject">
 			<action name="" command="" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/media" key="undefined">
-			<action name="" command="" />
+		<keybind bridge="plugins.media-keys/media" key="XF86AudioMedia">
+			<action name="Execute" command="bash -c 'gtk-launch $(xdg-mime query default audio/mpeg)'" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/mic-mute" key="undefined">
+		<keybind bridge="plugins.media-keys/mic-mute" key="XF86AudioMicMute">
 			<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/next" key="undefined">
-			<action name="" command="" />
+		<keybind key="XF86AudioNext">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Next" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/pause" key="undefined">
-			<action name="" command="" />
+		<keybind key="XF86AudioPause">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Pause" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/play" key="undefined">
-			<action name="" command="" />
+		<keybind key="XF86AudioPlay">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.PlayPause" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/previous" key="undefined">
-			<action name="" command="" />
+		<keybind key="XF86AudioPrev">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Previous" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/stop" key="undefined">
-			<action name="" command="" />
+		<keybind key="XF86AudioStop">
+			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Stop" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/volume-down" key="undefined">
+		<keybind bridge="plugins.media-keys/volume-down" key="XF86AudioLowerVolume">
 			<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/volume-mute" key="undefined">
+		<keybind bridge="plugins.media-keys/volume-mute" key="XF86AudioMute">
 			<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/volume-up" key="undefined">
+		<keybind bridge="plugins.media-keys/volume-up" key="XF86AudioRaiseVolume">
 			<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/screensaver" key="W-l">
@@ -247,7 +274,10 @@
 		<keybind bridge="wm.keybindings/unmaximize" key="W-Down">
 			<action name="UnMaximize" direction="both" />
 		</keybind>
-		<keybind bridge="wm.keybindings/toggle-fullscreen" key="undefined">
+		<keybind bridge="wm.keybindings/unmaximize" key="A-F5">
+			<action name="UnMaximize" direction="both" />
+		</keybind>
+		<keybind bridge="wm.keybindings/toggle-fullscreen" key="A-F11">
 			<action name="ToggleFullscreen" />
 		</keybind>
 		<keybind bridge="wm.keybindings/toggle-maximized" key="A-F10">
@@ -270,14 +300,14 @@
 		</keybind>
 	</keyboard>
 	<theme>
-		<name>theme_name</name>
+		<name>Pocillo-dark</name>
 		<dropShadows>yes</dropShadows>
-		<font place="ActiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
-		<font place="InactiveWindow" name="font name" weight="Bold" size="11" slant="Normal" />
+		<font place="ActiveWindow" name="Noto Sans" weight="Bold" size="11" slant="Normal" />
+		<font place="InactiveWindow" name="Noto Sans" weight="Bold" size="11" slant="Normal" />
 		<titlebar>
 			<layout>:iconify,max,close:</layout>
 		</titlebar>
-		<icon>icon_name</icon>
+		<icon>Pocillo</icon>
 	</theme>
 	<windowRules>
 		<windowRule identifier="Nemo-desktop" title="Desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
@@ -294,14 +324,14 @@
 		</windowRule>
 	</windowRules>
 	<placement>
-		<policy>automatic</policy>
+		<policy>center</policy>
 	</placement>
 	<focus>
 		<followMouse>no</followMouse>
 		<raiseOnFocus>no</raiseOnFocus>
 	</focus>
 	<snapping>
-		<range inner="10" outer="10" />
+		<range inner="10" outer="10">10</range>
 	</snapping>
 	<windowSwitcher style="thumbnail" allWorkspaces="no" />
 	<mouse>
@@ -310,7 +340,7 @@
 	<libinput>
 		<device category="touchpad">
 			<naturalScroll>no</naturalScroll>
-			<leftHanded>yes</leftHanded>
+			<leftHanded>no</leftHanded>
 			<pointerSpeed>0.0</pointerSpeed>
 			<accelProfile>flat</accelProfile>
 			<tap>yes</tap>
@@ -326,9 +356,9 @@
 		<device category="non-touch">
 			<naturalScroll>no</naturalScroll>
 			<leftHanded>no</leftHanded>
-			<pointerSpeed>0.051094890510948954</pointerSpeed>
+			<pointerSpeed>0.0</pointerSpeed>
 			<accelProfile>adaptive</accelProfile>
-			<middleEmulation>no</middleEmulation>
+			<middleEmulation>yes</middleEmulation>
 		</device>
 	</libinput>
 </labwc_config>
