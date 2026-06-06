@@ -199,10 +199,6 @@ namespace Budgie.Windowing {
 				if (group.has_window(new_window)) {
 					group.set_active_window(new_window);
 				}
-
-				if (old_window != null && group.has_window(old_window)) {
-					group.set_last_active_window(old_window);
-				}
 			}
 
 			// Reset showing_desktop state when a new non-minimized window becomes active
