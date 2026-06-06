@@ -33,25 +33,25 @@ For full dependency lists and distro-specific packages, see the [build documenta
 
 ### Source Directories (`src/`)
 
-| Directory | Purpose | Commit Scope |
-|-----------|---------|--------------|
-| `src/panel/` | Panel framework and core | `panel` |
-| `src/panel/applets/` | Panel applets (see below) | `panel/applets` or `<applet-name>` |
-| `src/raven/` | Notification/widget sidebar | `raven` |
-| `src/raven/widgets/` | Raven widgets (see below) | `raven/widgets` or `<widget-name>` |
-| `src/daemon/` | Background daemon | `daemon` |
-| `src/wm/` | Window management | `wm` |
-| `src/session/` | Session management | `session` |
-| `src/libsession/` | Session library | `session` |
-| `src/theme/` | Theming engine | `theme` |
-| `src/windowing/` | Windowing abstractions | `windowing` |
-| `src/appindexer/` | Application indexing | `appindexer` |
-| `src/dialogs/` | Dialogs (polkit, power, run, screenshot, sendto) | `dialogs` |
-| `src/lib/` | Shared library | `lib` |
-| `src/config/` | Configuration | `config` |
-| `src/bridges/` | Bridge interfaces | `bridges` |
-| `src/appsys/` | Application system | `appsys` |
-| `src/plugin/` | Plugin system | `plugin` |
+| Directory            | Purpose                                          | Commit Scope                       |
+| -------------------- | ------------------------------------------------ | ---------------------------------- |
+| `src/panel/`         | Panel framework and core                         | `panel`                            |
+| `src/panel/applets/` | Panel applets (see below)                        | `panel/applets` or `<applet-name>` |
+| `src/raven/`         | Notification/widget sidebar                      | `raven`                            |
+| `src/raven/widgets/` | Raven widgets (see below)                        | `raven/widgets` or `<widget-name>` |
+| `src/daemon/`        | Background daemon                                | `daemon`                           |
+| `src/wm/`            | Window management                                | `wm`                               |
+| `src/session/`       | Session management                               | `session`                          |
+| `src/libsession/`    | Session library                                  | `session`                          |
+| `src/theme/`         | Theming engine                                   | `theme`                            |
+| `src/windowing/`     | Windowing abstractions                           | `windowing`                        |
+| `src/appindexer/`    | Application indexing                             | `appindexer`                       |
+| `src/dialogs/`       | Dialogs (polkit, power, run, screenshot, sendto) | `dialogs`                          |
+| `src/lib/`           | Shared library                                   | `lib`                              |
+| `src/config/`        | Configuration                                    | `config`                           |
+| `src/bridges/`       | Bridge interfaces                                | `bridges`                          |
+| `src/appsys/`        | Application system                               | `appsys`                           |
+| `src/plugin/`        | Plugin system                                    | `plugin`                           |
 
 ### Panel Applets (`src/panel/applets/`)
 
@@ -63,13 +63,13 @@ calendar, media-controls, sound-input, sound-output, usage-monitor
 
 ### Other Key Directories
 
-| Directory | Purpose | Commit Scope |
-|-----------|---------|--------------|
-| `data/` | Data files, schemas, desktop entries | `data` |
-| `docs/` | Documentation, man pages | `docs` |
-| `po/` | Translations | `i18n` |
-| `vapi/` | Vala API bindings | `vapi` |
-| `subprojects/` | Git submodules | varies |
+| Directory      | Purpose                              | Commit Scope |
+| -------------- | ------------------------------------ | ------------ |
+| `data/`        | Data files, schemas, desktop entries | `data`       |
+| `docs/`        | Documentation, man pages             | `docs`       |
+| `po/`          | Translations                         | `i18n`       |
+| `vapi/`        | Vala API bindings                    | `vapi`       |
+| `subprojects/` | Git submodules                       | varies       |
 
 ## Wayland Context
 
@@ -95,7 +95,6 @@ Agents should web fetch these resources when relevant to the task:
 - **Contributing**: https://docs.buddiesofbudgie.org/developer/contributing — for DCO, sign-off, and contribution requirements
 - **AI Policy**: https://docs.buddiesofbudgie.org/organization/ai-policy — for attribution requirements and AI usage guidelines
 - **GTK 3 API reference**: https://docs.gtk.org/gtk3/ — for UI widget and API questions
-- **Vala language reference**: https://vala.dev/tutorials/programming-language/main/ — for language-specific syntax and patterns
 
 ## Attribution and Sign-off
 
