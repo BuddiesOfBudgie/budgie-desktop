@@ -24,8 +24,10 @@ namespace Budgie.Windowing {
 		public DesktopAppInfo? app_info { get; construct; default = null; }
 
 		private List<unowned Xfw.Window> windows;
+
+		// The most recently focused window in the group. Deliberately not cleared
+		// when focus leaves the group, so it always holds the last window used.
 		private unowned Xfw.Window? active_window = null;
-		private unowned Xfw.Window? last_active_window = null;
 
 		/**
 		 * Emitted when the active window in the group changes.
@@ -86,7 +88,7 @@ namespace Budgie.Windowing {
 			// example, the tasklist was restarted during a session with open
 			// windows.
 			if (windows.is_empty()) {
-				last_active_window = window;
+				active_window = window;
 			}
 
 			windows.append(window);
@@ -101,14 +103,9 @@ namespace Budgie.Windowing {
 			debug(@"removing window from group '$(application.get_name())': $(window.get_name())");
 
 			if (active_window == window) {
-				active_window = null;
-			}
-
-			if (last_active_window == window) {
-				// Set the last window before this one as the last active window.
-				// We do this so there should always be a valid window to focus
-				// when tasklist buttons are clicked.
-				last_active_window = get_next_window(window, true);
+				// Fall back to another open window so there is always a valid
+				// window to focus when tasklist buttons are clicked.
+				active_window = get_next_window(window, true);
 			}
 
 			window_removed(window);
@@ -140,7 +137,7 @@ namespace Budgie.Windowing {
 		 * Returns: the last active window, or NULL
 		 */
 		public unowned Xfw.Window? get_last_active_window() {
-			return last_active_window;
+			return active_window;
 		}
 
 		/**
@@ -263,13 +260,6 @@ namespace Budgie.Windowing {
 			active_window = window;
 
 			active_window_changed(window);
-		}
-
-		/**
-		 * Set the previously active window.
-		 */
-		public void set_last_active_window(Xfw.Window? window) {
-			last_active_window = window;
 		}
 	}
 }
