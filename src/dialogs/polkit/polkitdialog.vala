@@ -10,6 +10,7 @@
  */
 
 namespace Budgie {
+	static WaylandClient? wayland_client = null;
 	[GtkTemplate (ui="/com/solus-project/budgie/polkit/dialog.ui")]
 	public class AgentDialog : Gtk.Window {
 		[GtkChild]
@@ -154,23 +155,25 @@ namespace Budgie {
 			GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 
-			var wayland_client = new WaylandClient();
+			if (wayland_client == null) {
+				wayland_client = new WaylandClient();
 
-			if (!wayland_client.is_initialised()) {
-				warning("WaylandClient not initialized for polkit dialog");
-				// Fallback: just init the window without positioning
-			} else {
-				// Safe initialization with monitor
-				wayland_client.with_valid_monitor(() => {
-					var monitor = wayland_client.gdk_monitor;
-					if (monitor == null) {
-						warning("Failed to get monitor for polkit dialog");
-						return false;
-					}
+				if (!wayland_client.is_initialised()) {
+					warning("WaylandClient not initialized for polkit dialog");
+					// Fallback: just init the window without positioning
+				} else {
+					// Safe initialization with monitor
+					wayland_client.with_valid_monitor(() => {
+						var monitor = wayland_client.gdk_monitor;
+						if (monitor == null) {
+							warning("Failed to get monitor for polkit dialog");
+							return false;
+						}
 
-					GtkLayerShell.set_monitor(this, monitor);
-					return true;
-				});
+						GtkLayerShell.set_monitor(this, monitor);
+						return true;
+					});
+				}
 			}
 
 			key_release_event.connect(on_key_release);
