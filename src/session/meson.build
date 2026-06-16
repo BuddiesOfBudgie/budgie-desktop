@@ -68,6 +68,13 @@ if gsd_libexecdir == ''
 endif
 session_data.set('gsd_libexecdir', gsd_libexecdir)
 
+# Set the libexecdir for xdg-desktop-portal
+xdp_libexecdir = get_option('xdp-libexecdir')
+if xdp_libexecdir == ''
+    xdp_libexecdir = join_paths(libexecdirroot)
+endif
+session_data.set('xdp_libexecdir', xdp_libexecdir)
+
 # Write the budgie-desktop.session.in file from the .in.in
 session_conf = configure_file(
     input: 'budgie-desktop.session.in.in',
