@@ -1,3 +1,23 @@
+# libbudgiempris: minimal static library containing only the shared MPRIS
+# types (DBus interfaces, MprisClient, MprisTracker).
+
+libbudgiempris = static_library(
+    'budgie-mpris',
+    'mpris.vala',
+    dependencies: [
+        dep_giounix,
+        dep_gtk3,
+    ],
+    vala_header: 'budgie-mpris.h',
+    vala_vapi: 'budgie-mpris.vapi',
+    install: false,
+)
+
+link_libbudgiempris = declare_dependency(
+    link_with: libbudgiempris,
+    include_directories: include_directories('.'),
+)
+
 # libbudgieprivate provides a private ABI for Raven + Panel
 
 libbudgieprivate_sources = [

@@ -17,7 +17,8 @@ raven_plugin_mediacontrols_deps = [
     libravenplugin_vapi,
     dep_gtk3,
     dep_peas,
-    link_libravenplugin
+    link_libravenplugin,
+    link_libbudgiempris,
 ]
 
 shared_library(
