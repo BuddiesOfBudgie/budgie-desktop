@@ -9,8 +9,7 @@
  * (at your option) any later version.
  */
 
-#ifndef _PLUGIN_MANAGER_H
-#define _PLUGIN_MANAGER_H
+#pragma once
 
 #include <glib-object.h>
 #include <libpeas-2/libpeas.h>
@@ -62,5 +61,3 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 BudgieAppletInfo *budgie_panel_plugin_manager_create_applet(BudgiePanelPluginManager *self, const gchar *name, const gchar *uuid, GError **err);
 
 G_END_DECLS
-
-#endif
