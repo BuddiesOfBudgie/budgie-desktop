@@ -114,7 +114,6 @@ namespace Budgie {
 		void set_accountsservice_user_bg(string background) {
 			DBusConnection bus;
 			Variant variant;
-
 			try {
 				bus = Bus.get_sync(BusType.SYSTEM);
 			} catch (IOError e) {
@@ -122,6 +121,7 @@ namespace Budgie {
 				return;
 			}
 
+			// Find the user object path
 			try {
 				variant = bus.call_sync(ACCOUNTS_SCHEMA, "/org/freedesktop/Accounts", ACCOUNTS_SCHEMA, "FindUserByName",
 					new Variant("(s)", Environment.get_user_name()), new VariantType("(o)"), DBusCallFlags.NONE, -1, null);
@@ -130,7 +130,6 @@ namespace Budgie {
 				return;
 			}
 
-			// Validate variant structure before accessing
 			if (variant == null || variant.n_children() == 0) {
 				warning("Invalid response from AccountsService for user '%s'", Environment.get_user_name());
 				return;
@@ -138,13 +137,30 @@ namespace Budgie {
 
 			string object_path = variant.get_child_value(0).get_string();
 
+			// Primary: use the standard SetBackgroundFile method on org.freedesktop.Accounts.User
+			bool standard_succeeded = false;
+			try {
+				bus.call_sync(ACCOUNTS_SCHEMA, object_path, "org.freedesktop.Accounts.User", "SetBackgroundFile",
+					new Variant("(s)", background), new VariantType("()"), DBusCallFlags.NONE, -1, null);
+				standard_succeeded = true;
+			} catch (Error e) {
+				warning("Failed to set background via standard AccountsService interface: %s", e.message);
+			}
+
+			// Fallback/compatibility: also set via DisplayManager extension interface (LightDM convention)
+			// This ensures compatibility with display managers that read this interface
 			try {
 				bus.call_sync(ACCOUNTS_SCHEMA, object_path, "org.freedesktop.DBus.Properties", "Set",
 					new Variant("(ssv)", "org.freedesktop.DisplayManager.AccountsService", "BackgroundFile",
 						new Variant.string(background)
 					), new VariantType("()"), DBusCallFlags.NONE, -1, null);
 			} catch (Error e) {
-				warning("Failed to set the background '%s': %s", background, e.message);
+				// Only warn if the standard method also failed — otherwise this is non-critical
+				if (!standard_succeeded) {
+					warning("Failed to set background via DisplayManager interface too: %s", e.message);
+				} else {
+					debug("DisplayManager AccountsService interface not available (non-critical): %s", e.message);
+				}
 			}
 		}
 
