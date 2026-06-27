@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of budgie-desktop
+
+Copyright © Budgie Desktop Developers
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+-->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <template class="KeyboardPopover" parent="BudgiePopover">
+    <style>
+      <class name="bluetooth-popover"/>
+    </style>
+    <child>
+      <object class="GtkBox" id="content">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <property name="spacing">0</property>
+        <child>
+          <object class="KeyboardHeader"/>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="spacing">0</property>
+            <child>
+              <object class="GtkListBox" id="listbox">
+                <style>
+                  <class name="content-box"/>
+                </style>
+                <property name="can-focus">False</property>
+                <property name="selection-mode">GTK_SELECTION_BROWSE</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
