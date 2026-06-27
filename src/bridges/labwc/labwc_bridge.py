@@ -1148,6 +1148,7 @@ class Bridge:
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "titlebar-font")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "button-layout")
         self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "num-workspaces")
+        self.desktop_wm_preferences_changed(self.desktop_wm_preferences_settings, "auto-raise-delay")
         self.desktop_interface_changed(self.desktop_interface_settings, "gtk-theme")
         self.desktop_interface_changed(self.desktop_interface_settings, "icon-theme")
         self.desktop_interface_changed(self.desktop_interface_settings, "cursor-theme")
@@ -1193,6 +1194,55 @@ class Bridge:
         self.delay_config_write = False
         self.write_config()
 
+    def _process_focus_mode(self):
+        root = self.et.getroot()
+
+        path = "./focus/followMouse"
+        bridge = root.find(path)
+
+        if bridge == None:
+            return False
+
+        class Mode(StrEnum):
+            CLICK = 'click'
+            SLOPPY = 'sloppy'
+            MOUSE = 'mouse'
+
+        focus_mode = self.budgie_wm_settings["window-focus-mode"]
+
+        if focus_mode != Mode.CLICK:
+            bridge.text = "yes"
+        else:
+            bridge.text = "no"
+
+        pathraise = "./focus/raiseOnFocus"
+        bridgeraise = root.find(pathraise)
+
+        if bridgeraise == None:
+            return False
+
+        if focus_mode == Mode.MOUSE:
+            bridgeraise.text = "yes"
+        else:
+            bridgeraise.text = "no"
+
+        auto_raise_delay = self.desktop_wm_preferences_settings["auto-raise-delay"]
+
+        pathraisedelay = "./focus/raiseOnFocusDelay"
+        bridgeraisedelay = root.find(pathraisedelay)
+
+        if bridgeraisedelay == None:
+            focus = "./focus"
+            bridgeraisedelay = root.find(focus)
+            new_key = Et.Element("raiseOnFocusDelay")
+            bridgeraisedelay.append(new_key)
+
+            bridgeraisedelay = root.find(pathraisedelay)
+
+        bridgeraisedelay.text = str(auto_raise_delay)
+
+        return True
+
     # all solus-project budgie-wm gsettings changes are managed
     def budgie_wm_changed(self, settings, key):
         root = self.et.getroot()
@@ -1200,36 +1250,8 @@ class Bridge:
         updated = False
 
         if key == "window-focus-mode":
-            path = "./focus/followMouse"
-            bridge = root.find(path)
-
-            if bridge == None:
-                return
-
-            class Mode(StrEnum):
-                CLICK = 'click'
-                SLOPPY = 'sloppy'
-                MOUSE = 'mouse'
-
-            focus_mode = settings[key]
-
-            if focus_mode != Mode.CLICK:
-                bridge.text = "yes"
-            else:
-                bridge.text = "no"
-
-            updated = True
-
-            pathraise = "./focus/raiseOnFocus"
-            bridgeraise = root.find(pathraise)
-
-            if bridgeraise == None:
-                return
-
-            if focus_mode == Mode.MOUSE:
-                bridgeraise.text = "yes"
-            else:
-                bridgeraise.text = "no"
+            if self._process_focus_mode():
+                updated = True
 
         if key == "show-all-windows-tabswitcher":
             path = "./windowSwitcher"
@@ -1341,6 +1363,10 @@ class Bridge:
             bridge.attrib["number"] = str(settings[key])
 
             updated = True
+
+        if key == "auto-raise-delay":
+            if self._process_focus_mode():
+                updated = True
 
         if updated:
             time.sleep(0.5)
