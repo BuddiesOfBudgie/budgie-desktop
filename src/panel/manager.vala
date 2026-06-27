@@ -374,6 +374,11 @@ namespace Budgie {
 		* note Xfw window geometry includes scale factors
 		*/
 		bool window_on_primary(Xfw.Window? window) {
+			if (window == null) {
+				warning("Tried to check which monitor a window was on, but it was NULL");
+				return false;
+			}
+
 			unowned Gdk.Monitor? primary_monitor = this.get_primary_monitor();
 
 			if (primary_monitor == null) {
@@ -382,6 +387,11 @@ namespace Budgie {
 			}
 
 			unowned var monitors = window.get_monitors();
+
+			if (monitors == null) {
+				debug("Monitors for window is NULL");
+				return false;
+			}
 
 			foreach (var monitor in monitors) {
 				unowned var gdk_monitor = monitor.get_gdk_monitor();
