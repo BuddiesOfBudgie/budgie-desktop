@@ -9,6 +9,7 @@
 # (at your option) any later version.
 
 import signal
+import re
 import xml.etree.ElementTree as Et
 import os
 import shutil
@@ -31,6 +32,37 @@ from gi.repository import Pango
 mainloop = None
 
 CURRENT_RC_VERSION = 1
+
+def get_labwc_version(log):
+    """
+    Query the installed labwc binary for its version.
+
+    Args:
+        log: where to log
+
+    Returns:
+        Tuple of (major, minor, patch) ints, or None if labwc is not
+        found or its version could not be determined.
+    """
+    try:
+        result = subprocess.run(
+            ["labwc", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+    except Exception as e:
+        log.warning(f"Could not determine labwc version: {e}")
+        return None
+
+    output = (result.stdout or "") + (result.stderr or "")
+
+    match = re.search(r"labwc\s+(\d+)\.(\d+)\.(\d+)", output)
+    if not match:
+        log.warning(f"Could not parse labwc version from: {output.strip()}")
+        return None
+
+    return tuple(int(part) for part in match.groups())
 
 def read_key_value_file(filepath, strip_quotes=False):
     """
@@ -358,6 +390,60 @@ class Bridge:
         # reload config for labwc
         subprocess.call("labwc -r", shell=True)
 
+    def migrate_toggle_show_desktop_action(self):
+        """
+        migration: on labwc >= 0.20.0, switch the show-desktop
+        keybind from the existing Execute/dbus-send method to the native
+        labwc ToggleShowDesktop action.
+        """
+        min_labwc_version = (0, 20, 0)
+        bridge_key = "wm.keybindings/show-desktop"
+        migration_attr = "toggle_show_desktop_migrated"
+
+        root = self.et.getroot()
+
+        # Already migrated
+        if root.get(migration_attr) is not None:
+            return
+
+        version = get_labwc_version(self.log)
+        if version is None:
+            # Can't determine labwc's version
+            return
+
+        if version < min_labwc_version:
+            # Not yet upgraded to a labwc with ToggleShowDesktop support
+            return
+
+        path = "./keyboard/keybind[@bridge='" + bridge_key + "']"
+        keybinds = root.findall(path)
+
+        changed = False
+        for keybind in keybinds:
+            action = keybind.find("action")
+            if action is None:
+                continue
+
+            # Only migrate the default Execute/dbus-send workaround - if the
+            # user has already customised this action, leave it alone
+            if action.attrib.get("name") == "Execute":
+                action.attrib.clear()
+                action.attrib["name"] = "ToggleShowDesktop"
+                action.attrib["command"] = ""
+                action.text = None
+                changed = True
+
+        root.set(migration_attr, "1")
+
+        if changed:
+            self.log.info(
+                f"Migrated {bridge_key} keybind to ToggleShowDesktop "
+                f"action (labwc {'.'.join(str(v) for v in version)})"
+            )
+
+        # force a write to ensure at least the migration attrib is written
+        self.write_config()
+
     def search_for_config(self, config_file):
         # Check if a local labwc config_file exists - if doesn't
         # use the budgie-desktop shared file - or the distro variant if it exists
@@ -417,6 +503,10 @@ class Bridge:
             self.log.info("Old rc.xml format detected, performing migration")
             if not migration.migrate():
                 self.log.error("Migration failed, continuing with current config")
+
+        # migrate show-desktop to the native action labwc 0.20.0+
+        # ToggleShowDesktop action
+        self.migrate_toggle_show_desktop_action()
 
         signal.signal(signal.SIGINT, self.sigint_handler)
 
