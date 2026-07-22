@@ -167,6 +167,12 @@ public class BudgieMenuApplet : Budgie.Applet {
 				popover.hide();
 			} else {
 				popover.get_child().show_all();
+				// Explicitly reset (which sets the search entry as the popover's
+				// tracked focus_child) before showing. manager.show_popover() does
+				// NOT call popover.show()/our BudgieMenuWindow.show() override, so
+				// without this the focus_child bookkeeping reset() performs never
+				// runs via this code path. See: https://github.com/BuddiesOfBudgie/budgie-desktop/issues/842
+				popover.reset(true);
 				this.manager.show_popover(widget);
 			}
 			return Gdk.EVENT_STOP;
@@ -216,6 +222,11 @@ public class BudgieMenuApplet : Budgie.Applet {
 				popover.hide();
 			} else {
 				popover.get_child().show_all();
+				// See the identical comment in the button_press_event handler above:
+				// manager.show_popover() never triggers our BudgieMenuWindow.show()
+				// override, so reset() (which sets the search entry as focus_child)
+				// must be called explicitly here too. See: https://github.com/BuddiesOfBudgie/budgie-desktop/issues/842
+				popover.reset(true);
 				this.manager.show_popover(widget);
 			}
 		}

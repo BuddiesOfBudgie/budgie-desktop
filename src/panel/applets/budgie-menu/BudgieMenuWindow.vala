@@ -220,6 +220,28 @@ public class BudgieMenuWindow : Gtk.Popover {
 		base.show();
 	}
 
+	// GtkPopover hard-overrides grab_focus() (see gtk-3-24's gtkpopover.c,
+	// gtk_popover_grab_focus()) to unconditionally do:
+	//   child_focus(gtk_bin_get_child(popover), GTK_DIR_TAB_FORWARD)
+	// -- a relative TAB-order descent from whatever the popover's current
+	// focus_child already is. Since reset() already correctly sets focus_child to
+	// search_entry (via search_entry.grab_focus()), any later plain
+	// gtk_widget_grab_focus(popover) call (as done by popover-manager.c's deferred
+	// focus-in-event handler, needed to re-assert focus once real Wayland keyboard
+	// focus actually arrives) tabs PAST the already-focused search entry onto
+	// whatever's next -- landing on the active category radio button instead.
+	// Overriding grab_focus() here means popover-manager.c's existing
+	// gtk_widget_grab_focus(w) call (w = this popover) dispatches straight to
+	// search_entry instead, with no directional-descent side effects. This fixes
+	// both the initial reset() grab and the later re-assertion grab to agree on the
+	// same target. See: https://github.com/BuddiesOfBudgie/budgie-desktop/issues/842
+	public override void grab_focus() {
+		if (!this.get_mapped()) {
+			return;
+		}
+		this.search_entry.grab_focus();
+	}
+
 	/**
 	 * Opens our overlay menu and makes all other widgets insensitive.
 	 */
