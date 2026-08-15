@@ -21,6 +21,7 @@ import gettext
 from enum import StrEnum
 import dbus
 import dbus.mainloop.glib
+import time
 
 import gi
 from gi.repository import Gio, GLib
@@ -1342,6 +1343,7 @@ class Bridge:
             updated = True
 
         if updated:
+            time.sleep(0.5)
             self.write_config()
 
     # all gnome desktop interface gsettings changes are managed

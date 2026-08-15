@@ -127,22 +127,10 @@ namespace Budgie {
 
 		// build_workspace_option will build the workspace option for the settings
 		private void build_workspace_option() {
-			workspace_count = new Gtk.SpinButton.with_range(1, 8, 1); // Create our button, with a minimum of 1 workspace and max of 8
+			workspace_count = new Gtk.SpinButton.with_range(1.0, 8.0, 1.0); // Create our button, with a minimum of 1 workspace and max of 8
 			workspace_count.set_value((double) gnome_wm_settings.get_int("num-workspaces")); // Set our default value
 
-			workspace_count.value_changed.connect(() => { // On value change
-				int new_val = workspace_count.get_value_as_int(); // Get the value as an int
-
-				if (new_val < 1) { // Ensure valid minimum
-					new_val = 1;
-					workspace_count.set_value(1.0); // Set as 1
-				} else if (new_val > 8) { // Ensure valid maximum
-					new_val = 8;
-					workspace_count.set_value(8.0); // Set as 8
-				}
-
-				gnome_wm_settings.set_int("num-workspaces", new_val); // Update num-workspaces
-			});
+			gnome_wm_settings.bind("num-workspaces", workspace_count, "value", SettingsBindFlags.DEFAULT);
 
 			grid.add_row(new SettingsRow(workspace_count,
 				_("Number of virtual desktops"),
