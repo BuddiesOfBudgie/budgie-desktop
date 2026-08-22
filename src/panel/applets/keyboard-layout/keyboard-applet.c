@@ -14,7 +14,7 @@
 #include "input-source.h"
 #include "keyboard-popover.h"
 #include "locale-manager.h"
-#include "org.freedesktop.locale1.h"
+#include "org.buddiesofbudgie.BudgieKeyboardLayout.h"
 
 #define _GNU_SOURCE
 
@@ -36,10 +36,79 @@ struct _KeyboardAppletPrivate {
 	GtkWidget* event_box;
 	GtkWidget* event_box_stack;
 
+	/* Session-bus proxy for budgie-daemon's keyboard layout handler.
+	 * We apply layout changes through this instead of calling
+	 * org.freedesktop.locale1's SetX11Keyboard directly, because that
+	 * method is blocked by some distros. */
+	KeyboardLayoutProxy* layout_proxy;
+
 	GCancellable* set_layout_cancellable;
 };
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(KeyboardApplet, keyboard_applet, BUDGIE_TYPE_APPLET, 0, G_ADD_PRIVATE_DYNAMIC(KeyboardApplet))
+
+/**
+ * Builds a comma-separated "layout(variant)" string covering
+ * every configured xkb input source, with the var selected moved to the front so
+ * it becomes the active layout, while the rest remain available for
+ * cycling (e.g. selecting "us" out of a "gb,us" configuration changes the layout to
+ * "us,gb").
+ *
+ * Returns: the combined layout string, or NULL if selected has not a handled layout.
+ */
+static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, KeyboardInputSource* selected) {
+	KeyboardAppletPrivate* priv;
+	GListStore* model;
+	GString* result;
+	gchar* selected_layout = NULL;
+	guint i;
+
+	priv = keyboard_applet_get_instance_private(self);
+
+	selected_layout = keyboard_input_source_get_layout(selected);
+
+	if (selected_layout == NULL || selected_layout[0] == '\0') {
+		return NULL;
+	}
+
+	result = g_string_new(NULL);
+
+	gchar* selected_variant = keyboard_input_source_get_variant(selected);
+	if (selected_variant != NULL && selected_variant[0] != '\0') {
+		g_string_append_printf(result, "%s(%s)", selected_layout, selected_variant);
+	} else {
+		g_string_append(result, selected_layout);
+	}
+
+	model = keyboard_locale_manager_get_model(priv->locale_manager);
+
+	for (i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(model)); i++) {
+		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(model), i);
+		gchar* layout = NULL;
+		gchar* variant = NULL;
+
+		if (!KEYBOARD_IS_INPUT_SOURCE(source) || keyboard_input_source_equal(source, selected)) {
+			continue;
+		}
+
+		layout = keyboard_input_source_get_layout(source);
+
+		if (layout == NULL || layout[0] == '\0') {
+			/* Not an xkb source (e.g. an ibus engine) - nothing to add to XKB_DEFAULT_LAYOUT */
+			continue;
+		}
+
+		variant = keyboard_input_source_get_variant(source);
+
+		if (variant != NULL && variant[0] != '\0') {
+			g_string_append_printf(result, ",%s(%s)", layout, variant);
+		} else {
+			g_string_append_printf(result, ",%s", layout);
+		}
+	}
+
+	return g_string_free(result, FALSE);
+}
 
 /******************************************************************************
  * Callbacks
@@ -68,7 +137,7 @@ keyboard_applet_event_box_press_cb(GtkWidget* event_button, GdkEventButton* even
 	return GDK_EVENT_PROPAGATE;
 }
 
-static void keyboard_applet_keymap_set_cb(KeyboardLocale1Proxy* proxy, GAsyncResult* result, gpointer user_data) {
+static void keyboard_applet_layout_proxy_set_cb(KeyboardLayoutProxy* proxy, GAsyncResult* result, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 	KeyboardAppletPrivate* priv;
 	gboolean success = FALSE;
@@ -76,12 +145,10 @@ static void keyboard_applet_keymap_set_cb(KeyboardLocale1Proxy* proxy, GAsyncRes
 
 	priv = keyboard_applet_get_instance_private(self);
 
-	success = keyboard_locale1_call_set_x11_keyboard_finish(proxy, result, &error);
+	success = keyboard_layout_call_set_keyboard_layout_finish(proxy, result, &error);
 
 	if (!success) {
-		g_warning("Unable to set keymap: %s", error->message);
-		g_clear_object(&priv->set_layout_cancellable);
-		return;
+		g_warning("Unable to request keyboard layout change: %s", error->message);
 	}
 
 	g_clear_object(&priv->set_layout_cancellable);
@@ -91,10 +158,7 @@ static void
 keyboard_applet_layout_selected_cb(G_GNUC_UNUSED KeyboardPopover* popover, KeyboardInputSource* source, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 	KeyboardAppletPrivate* priv;
-	gchar* layout = NULL;
-	gchar* variant = NULL;
-	gchar* options = NULL;
-	KeyboardLocale1Proxy* proxy = NULL;
+	g_autofree gchar* layout_string = NULL;
 
 	if (source == NULL) {
 		return;
@@ -107,29 +171,28 @@ keyboard_applet_layout_selected_cb(G_GNUC_UNUSED KeyboardPopover* popover, Keybo
 		return;
 	}
 
-	proxy = keyboard_locale_manager_get_proxy(priv->locale_manager);
-	layout = keyboard_input_source_get_layout(source);
-	variant = keyboard_input_source_get_variant(source);
+	if (priv->layout_proxy == NULL) {
+		g_warning("No connection to the keyboard layout proxy, cannot change layout");
+		return;
+	}
 
-	if (keyboard_input_source_has_options(source)) {
-		options = keyboard_input_source_get_options(source);
-	} else {
-		options = "";
+	layout_string = keyboard_applet_build_layout_string(self, source);
+
+	if (layout_string == NULL) {
+		g_warning("Selected input source has no usable XKB layout");
+		return;
 	}
 
 	priv->set_layout_cancellable = g_cancellable_new();
 
-	keyboard_locale1_call_set_x11_keyboard(
-		proxy,
-		layout,
-		"", /* model */
-		variant,
-		options,
-		TRUE,  /* convert */
-		FALSE, /* interactive */
+	keyboard_layout_call_set_keyboard_layout(
+		priv->layout_proxy,
+		layout_string,
 		priv->set_layout_cancellable,
-		(GAsyncReadyCallback) keyboard_applet_keymap_set_cb,
+		(GAsyncReadyCallback) keyboard_applet_layout_proxy_set_cb,
 		user_data);
+
+	keyboard_locale_manager_set_current_input_source(priv->locale_manager, source);
 }
 
 static void
@@ -181,6 +244,7 @@ static void keyboard_applet_dispose(GObject* object) {
 	g_cancellable_cancel(priv->set_layout_cancellable);
 
 	g_clear_object(&priv->locale_manager);
+	g_clear_object(&priv->layout_proxy);
 	g_clear_pointer(&priv->uuid, g_free);
 
 	G_OBJECT_CLASS(keyboard_applet_parent_class)->dispose(object);
@@ -279,6 +343,19 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 	g_signal_connect_object(priv->locale_manager, "notify::current-source", G_CALLBACK(keyboard_applet_current_input_changed_cb), self, G_CONNECT_DEFAULT);
 	keyboard_locale_manager_start(priv->locale_manager);
 
+	g_autoptr(GError) error = NULL;
+
+	priv->layout_proxy = keyboard_layout_proxy_new_for_bus_sync(
+		G_BUS_TYPE_SESSION,
+		G_DBUS_PROXY_FLAGS_NONE,
+		"org.buddiesofbudgie.BudgieKeyboardLayout",
+		"/org/buddiesofbudgie/KeyboardLayout",
+		NULL,
+		&error);
+
+	if (priv->layout_proxy == NULL) {
+		g_warning("Unable to connect to keyboard layout proxy: %s", error->message);
+	}
 	gtk_widget_show_all(GTK_WIDGET(self));
 }
 

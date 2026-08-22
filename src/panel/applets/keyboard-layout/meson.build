@@ -36,6 +36,14 @@ applet_keyboardlayout_sources += gnome.gdbus_codegen(
     annotations: ['org.freedesktop.locale1', 'org.gtk.GDBus.C.Name', 'Locale1'],
 )
 
+applet_keyboardlayout_sources += gnome.gdbus_codegen(
+    'org.buddiesofbudgie.BudgieKeyboardLayout',
+    'dbus/org.buddiesofbudgie.BudgieKeyboardLayout.xml',
+    interface_prefix: 'org.buddiesofbudgie.',
+    namespace: 'Keyboard',
+    annotations: ['org.buddiesofbudgie.BudgieKeyboardLayout', 'org.gtk.GDBus.C.Name', 'Layout'],
+)
+
 applet_keyboardlayout_deps = [
     dep_gtk3,
     dep_peas,

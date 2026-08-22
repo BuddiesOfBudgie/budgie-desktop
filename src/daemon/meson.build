@@ -41,6 +41,7 @@ daemon_sources = [
     'main.vala',
     'manager.vala',
     'nightlight.vala',
+    'keyboard-layout.vala',
     'osd.vala',
     'settings.vala',
     'screenlock.vala',
