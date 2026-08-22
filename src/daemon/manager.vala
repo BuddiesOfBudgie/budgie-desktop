@@ -41,6 +41,9 @@ namespace Budgie {
 		/* MPRIS media-key controller */
 		Budgie.MprisController? mpris_controller;
 
+		/* Keyboard layout proxy: applet -> daemon -> compositor bridges */
+		Budgie.KeyboardLayoutManager? keyboard_layout_manager;
+
 		/**
 		* Construct a new ServiceManager and initialiase appropriately
 		*/
@@ -85,6 +88,10 @@ namespace Budgie {
 			// MPRIS controller: lets keybinds drive the current media player
 			mpris_controller = new Budgie.MprisController();
 			mpris_controller.setup_dbus(replace);
+
+			// Keyboard layout proxy: lets the keyboard layout applet request changes
+			keyboard_layout_manager = new Budgie.KeyboardLayoutManager();
+			keyboard_layout_manager.setup_dbus(replace);
 		}
 
 		/**

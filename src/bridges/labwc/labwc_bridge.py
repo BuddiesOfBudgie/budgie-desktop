@@ -32,6 +32,12 @@ mainloop = None
 
 CURRENT_RC_VERSION = 1
 
+# Connect to budgie-daemon budgie keyboard layout proxy to handle
+# requests to change the keyboard layout.
+KEYBOARD_LAYOUT_DBUS_INTERFACE = 'org.buddiesofbudgie.BudgieKeyboardLayout'
+KEYBOARD_LAYOUT_DBUS_OBJECT_PATH = '/org/buddiesofbudgie/KeyboardLayout'
+KEYBOARD_LAYOUT_DBUS_SIGNAL = 'LayoutChanged'
+
 def read_key_value_file(filepath, strip_quotes=False):
     """
     Read a key=value config file into a dict.
@@ -329,6 +335,10 @@ class Bridge:
     desktop_input_sources_settings = None
     custom_keys_settings = None
 
+    # keyboard layout override for requests via budgie-daemon keyboard
+    # dbus calls to give priority to this call to set the keyboard layout.
+    layout_override = None
+
     # flag to indicate delaying writing the config until its true
     # this is needed where multiple bridge set config calls could potentially
     # call labwc -r multiple times
@@ -461,6 +471,10 @@ class Bridge:
         # Setup locale1 monitoring for keyboard layout and locale
         self.setup_locale1_monitor()
 
+        # Subscribe to budgie-daemon's keyboard layout proxy to handle
+        # a request for a layout change
+        self.setup_keyboard_layout_client()
+
         self.bridge_config()
 
     def setup_locale1_monitor(self):
@@ -503,6 +517,45 @@ class Bridge:
         self.write_environment_file()
 
         # Reload labwc config if not delayed
+        if not self.delay_config_write:
+            subprocess.call("labwc -r", shell=True)
+
+    def setup_keyboard_layout_client(self):
+        """
+        Listen to budgie-daemon's LayoutChanged signal on
+        org.buddiesofbudgie.BudgieKeyboardLayout.
+        """
+        try:
+            session_bus = dbus.SessionBus()
+            session_bus.add_signal_receiver(
+                self.on_keyboard_layout_changed,
+                signal_name=KEYBOARD_LAYOUT_DBUS_SIGNAL,
+                dbus_interface=KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                path=KEYBOARD_LAYOUT_DBUS_OBJECT_PATH
+            )
+            self.log.info(f"Subscribed to {KEYBOARD_LAYOUT_DBUS_INTERFACE}.{KEYBOARD_LAYOUT_DBUS_SIGNAL}")
+        except dbus.DBusException as e:
+            self.log.warning(f"Could not subscribe to keyboard layout proxy: {e}")
+
+    def on_keyboard_layout_changed(self, layout):
+        """
+        Handler for budgie-daemon's LayoutChanged signal. Sets a bridge-side
+        override which takes priority over the normal GSettings/locale1/system file
+        auto-detection in get_keyboard_layout(), so that later, unrelated
+        environment file rewrites (triggered by e.g. a locale1
+        PropertiesChanged signal or a cursor theme change) don't silently
+        revert the applet's choice.
+        """
+        layout = str(layout).strip() if layout else ""
+        if not layout:
+            self.log.warning("Received LayoutChanged with an empty layout, ignoring")
+            return
+
+        self.log.info(f"Keyboard layout requested via daemon: {layout}")
+        self.layout_override = layout
+
+        self.write_environment_file()
+
         if not self.delay_config_write:
             subprocess.call("labwc -r", shell=True)
 
@@ -588,11 +641,17 @@ class Bridge:
     def get_keyboard_layout(self):
         """
         Extract keyboard layout in this order:
+        0. Applet-set override (via SetKeyboardLayout D-Bus call), if set
         1. GSettings input-sources (if exists and non-empty)
         2. systemd-localed X11Layout (if exists and non-empty)
         3. /etc/default/keyboard XKBLAYOUT (if defined)
         4. Default to "us"
         """
+
+        # Applet-set override takes priority over everything else
+        if self.layout_override:
+            self.log.info(f"Using applet-set keyboard layout override: {self.layout_override}")
+            return self.layout_override
 
         # GSettings input-sources (if exists and non-empty)
         if self.desktop_input_sources_settings:
