@@ -346,6 +346,17 @@ class RcXmlMigration:
 
 class Bridge:
 
+    # Dynamic media-keys - assign action/command if keybind is defined
+    DYNAMIC_MEDIA_KEY_ACTIONS = {
+        "on-screen-keyboard": [
+            {
+                "executable": "wvkbd-mobintl",
+                "action": "Execute",
+                "command": "pkill --signal SIGRTMIN -x wvkbd-mobintl",
+            },
+        ],
+    }
+
     # element tree to read/write
     et = None
     menuet = None
