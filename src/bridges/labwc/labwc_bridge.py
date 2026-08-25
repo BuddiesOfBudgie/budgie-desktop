@@ -345,6 +345,17 @@ class RcXmlMigration:
 
 class Bridge:
 
+    # Dynamic media-keys - assign action/command if keybind is defined
+    DYNAMIC_MEDIA_KEY_ACTIONS = {
+        "on-screen-keyboard": [
+            {
+                "executable": "wvkbd-mobintl",
+                "action": "Execute",
+                "command": "pkill --signal SIGRTMIN -x wvkbd-mobintl",
+            },
+        ],
+    }
+
     # element tree to read/write
     et = None
     menuet = None
@@ -1572,6 +1583,40 @@ class Bridge:
 
         return replacement
 
+    # Update media-keys that are defined as bridgeable and defined
+    # Uses the class var DYNAMIC_MEDIA_KEY_ACTIONS
+    def update_executable_media_key_action(self, keybind_element, media_key):
+        candidates = self.DYNAMIC_MEDIA_KEY_ACTIONS.get(media_key)
+        if not candidates:
+            return False
+
+        action = keybind_element.find("action")
+        if action is None:
+            return False
+
+        def clear_action():
+            changed = (action.attrib.get("name", "") != ""
+                       or action.attrib.get("command", "") != "")
+            action.attrib["name"] = ""
+            action.attrib["command"] = ""
+            return changed
+
+        is_defined = keybind_element.attrib.get("key", "undefined") not in ("undefined", "")
+
+        if not is_defined:
+            return clear_action()
+
+        for candidate in candidates:
+            if shutil.which(candidate["executable"]):
+                changed = (action.attrib.get("name", "") != candidate["action"]
+                           or action.attrib.get("command", "") != candidate["command"])
+                action.attrib["name"] = candidate["action"]
+                action.attrib["command"] = candidate["command"]
+
+                return changed
+
+        return clear_action()
+
     # all keybinds from various gsettings schemas are managed
     def keybindings_changed(self, settings, key):
 
@@ -1658,6 +1703,9 @@ class Bridge:
                     # Remove extra elements
                     keyboard_element.remove(bridge)
 
+            if key in self.DYNAMIC_MEDIA_KEY_ACTIONS and existing_keybinds:
+                self.update_executable_media_key_action(existing_keybinds[0], key)
+
             self.write_config()
             return
 
@@ -1700,6 +1748,10 @@ class Bridge:
             keyboard_element = root.find("./keyboard")
             for bridge in existing_keybinds[len(keybind):]:
                 keyboard_element.remove(bridge)
+
+        if key in self.DYNAMIC_MEDIA_KEY_ACTIONS:
+            for keybind_el in root.findall(path):
+                self.update_executable_media_key_action(keybind_el, key)
 
         self.write_config()
 
