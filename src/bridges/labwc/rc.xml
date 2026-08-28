@@ -4,21 +4,6 @@
 	</desktops>
 	<keyboard>
 		<numlock>off</numlock>
-		<keybind bridge="plugins.media-keys/decrease-text-size" key="undefined">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/toggle-contrast" key="undefined">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/increase-text-size" key="undefined">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/on-screen-keyboard" key="undefined">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/screenreader" key="A-W-s">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="plugins.media-keys/magnifier" key="A-W-8">
 			<action name="ToggleMagnify" />
 		</keybind>
@@ -40,32 +25,14 @@
 		<keybind bridge="plugins.media-keys/email" key="XF86Mail">
 			<action name="Execute" command="xdg-email" />
 		</keybind>
-		<keybind bridge="plugins.media-keys/help" key="undefined">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="plugins.media-keys/www" key="XF86WWW">
 			<action name="Execute" command="xdg-open about:blank" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/search" key="XF86Search">
-			<action name="Execute" command="" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/control-center" key="XF86Tools">
 			<action name="Execute" command="budgie-desktop-settings" />
 		</keybind>
 		<keybind bridge="wm.keybindings/show-desktop" key="W-d">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ToggleShowDesktop" />
-		</keybind>
-		<keybind bridge="wm.keybindings/move-to-monitor-down" key="W-S-Down">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/move-to-monitor-left" key="W-S-Left">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/move-to-monitor-right" key="W-S-Right">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/move-to-monitor-up" key="W-S-Up">
-			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/move-to-workspace-left" key="W-S-Page_Up">
 			<action name="SendToDesktop" to="left" wrap="no" />
@@ -139,41 +106,11 @@
 		<keybind bridge="wm.keybindings/switch-applications" key="A-Tab">
 			<action name="NextWindow" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-panels-backward" key="S-C-A-Tab">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-panels" key="C-A-Tab">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/cycle-panels-backward" key="S-C-A-Escape">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/cycle-panels" key="C-A-Escape">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-windows-backward" key="undefined">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-windows" key="undefined">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="wm.keybindings/cycle-windows-backward" key="S-A-Escape">
 			<action name="PreviousWindow" />
 		</keybind>
 		<keybind bridge="wm.keybindings/cycle-windows" key="A-Escape">
 			<action name="NextWindow" />
-		</keybind>
-		<keybind bridge="wm.keybindings/cycle-group-backward" key="S-A-F6">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/cycle-group" key="A-F6">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-group-backward" key="S-A-Above_Tab">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-group" key="A-Above_Tab">
-			<action name="" command="" />
 		</keybind>
 		<keybind bridge="gnome.mutter/overlay-key" key="Super_L" onRelease="yes">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
@@ -192,9 +129,6 @@
 		</keybind>
 		<keybind bridge="solus-project.budgie-wm/take-full-screenshot" key="Print">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
-		</keybind>
-		<keybind bridge="plugins.media-keys/eject" key="XF86Eject">
-			<action name="" command="" />
 		</keybind>
 		<keybind bridge="plugins.media-keys/media" key="XF86AudioMedia">
 			<action name="Execute" command="bash -c 'gtk-launch $(xdg-mime query default audio/mpeg)'" />
@@ -235,12 +169,6 @@
 		<keybind bridge="wm.keybindings/panel-run-dialog" key="A-F2">
 			<action name="Execute" command="budgie-run-dialog" />
 		</keybind>
-		<keybind bridge="wm.keybindings/switch-input-source" key="A-Shift_L">
-			<action name="" command="" />
-		</keybind>
-		<keybind bridge="wm.keybindings/switch-input-source-backward" key="W-S-space">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="wm.keybindings/close" key="A-F4">
 			<action name="Close" />
 		</keybind>
@@ -259,14 +187,8 @@
 		<keybind bridge="wm.keybindings/maximize-vertically" key="undefined">
 			<action name="Maximize" direction="left" />
 		</keybind>
-		<keybind bridge="wm.keybindings/begin-move" key="A-F7">
-			<action name="" command="" />
-		</keybind>
 		<keybind bridge="wm.keybindings/raise" key="undefined">
 			<action name="Raise" />
-		</keybind>
-		<keybind bridge="wm.keybindings/raise-or-lower" key="undefined">
-			<action name="" command="" />
 		</keybind>
 		<keybind bridge="wm.keybindings/begin-resize" key="A-F8">
 			<action name="Resize" />
@@ -282,9 +204,6 @@
 		</keybind>
 		<keybind bridge="wm.keybindings/toggle-maximized" key="A-F10">
 			<action name="ToggleMaximize" direction="both" />
-		</keybind>
-		<keybind bridge="wm.keybindings/toggle-on-all-workspaces" key="undefined">
-			<action name="" command="" />
 		</keybind>
 		<keybind bridge="mutter.keybindings/toggle-tiled-left" key="W-Left">
 			<action name="ToggleSnapToEdge" direction="left" />
