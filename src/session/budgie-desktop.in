@@ -20,5 +20,6 @@ compositor="@gsd_libexecdir@/budgie-session-compositor-ready"
 if command -v "$compositor" > /dev/null 2>&1 && "$compositor"; then
   @bindir@/org.buddiesofbudgie.Services &
   @xdp_libexecdir@/xdg-desktop-portal &
+@oo7_daemon@
   exec budgie-session --builtin --session=org.buddiesofbudgie.BudgieDesktop $*
 fi

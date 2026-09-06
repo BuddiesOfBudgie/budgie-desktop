@@ -181,6 +181,15 @@ if with_bluetooth == true
     add_project_arguments('-D', 'WITH_BLUETOOTH', language: 'vala')
 endif
 
+# oo7 provides the Secret Service and the xdg-desktop-portal Secret backend.
+oo7 = get_option('oo7')
+
+# Set the libexecdir for the oo7-* executables
+oo7_libexecdir = get_option('oo7-libexecdir')
+if oo7_libexecdir == ''
+    oo7_libexecdir = libexecdirroot
+endif
+
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
 # so we have to use a shared library to prevent multiple registration of the same types..
 rpath_libdir = join_paths(libdir, meson.project_name())
@@ -242,6 +251,7 @@ report = [
     '    gtk-doc:                                                                     @0@'.format(with_gtk_doc),
     '    stateless:                                                                   @0@'.format(with_stateless),
     '    bluetooth:                                                                   @0@'.format(with_bluetooth),
+    '    oo7:                                                                         @0@'.format(oo7),
 ]
 
 

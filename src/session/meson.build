@@ -75,6 +75,13 @@ if xdp_libexecdir == ''
 endif
 session_data.set('xdp_libexecdir', xdp_libexecdir)
 
+# Start oo7-daemon with the session when oo7 support is enabled
+if oo7 == true
+    session_data.set('oo7_daemon', '  ' + join_paths(oo7_libexecdir, 'oo7-daemon') + ' &')
+else
+    session_data.set('oo7_daemon', '')
+endif
+
 # Write the budgie-desktop.session.in file from the .in.in
 session_conf = configure_file(
     input: 'budgie-desktop.session.in.in',

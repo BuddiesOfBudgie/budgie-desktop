@@ -1,4 +1,6 @@
 option('ci', type: 'boolean', value: false, description: 'Continuous Integration flag (internal use only)')
+option('oo7', type: 'boolean', value: false, description: 'Enable support for oo7 Secret Service provider')
+option('oo7-libexecdir', type: 'string', description: 'Directory containing the oo7-* executables, particularly oo7-daemon')
 option('gsd-libexecdir', type: 'string', description: 'Directory containing the gsd-* executables')
 option('xdp-libexecdir', type: 'string', description: 'Directory containing the xdg-desktop-portal-* executables')
 option('labwc-bindir', type: 'string', description: 'Directory containing the labwc executable')

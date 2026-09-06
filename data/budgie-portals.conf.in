@@ -4,3 +4,4 @@ default=gtk
 # ... except for the ScreenCast and Screenshot
 org.freedesktop.impl.portal.ScreenCast=wlr
 org.freedesktop.impl.portal.Screenshot=wlr
+@secret_portal@
