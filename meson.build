@@ -190,6 +190,11 @@ if oo7_libexecdir == ''
     oo7_libexecdir = libexecdirroot
 endif
 
+if oo7 == true and get_option('with-runtime-dependencies')
+    find_program(join_paths(oo7_libexecdir, 'oo7-daemon'), required: true)
+    find_program(join_paths(oo7_libexecdir, 'oo7-portal'), required: true)
+endif
+
 # GVC rpath. it's evil, but gvc will bomb out glib2 due to static linking weirdness now,
 # so we have to use a shared library to prevent multiple registration of the same types..
 rpath_libdir = join_paths(libdir, meson.project_name())
