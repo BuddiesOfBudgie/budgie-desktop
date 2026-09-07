@@ -182,7 +182,7 @@ if with_bluetooth == true
 endif
 
 # oo7 provides the Secret Service and the xdg-desktop-portal Secret backend.
-oo7 = get_option('oo7')
+oo7 = get_option('with-oo7')
 
 # Set the libexecdir for the oo7-* executables
 oo7_libexecdir = get_option('oo7-libexecdir')
