@@ -15,6 +15,7 @@ import os
 import shutil
 import subprocess
 import logging
+import copy
 from systemd.journal import JournalHandler
 import psutil
 import sys
@@ -31,7 +32,10 @@ from gi.repository import Pango
 
 mainloop = None
 
-CURRENT_RC_VERSION = 1
+CURRENT_RC_VERSION = 2
+
+STATIC_KEYBIND_MANAGED_ATTR = "managed"
+STATIC_KEYBIND_MANAGED_VALUE = "labwc-bridge"
 
 # Connect to budgie-daemon budgie keyboard layout proxy to handle
 # requests to change the keyboard layout.
@@ -276,14 +280,9 @@ class RcXmlMigration:
         return None
 
     def replace_keyboard_section(self, user_et, template_et):
-        """Replace only the keyboard section from user config with template version"""
+        """Merge the template's keyboard section"""
         user_root = user_et.getroot()
         template_root = template_et.getroot()
-
-        # Find and remove old keyboard section from user config
-        old_keyboard = user_root.find('./keyboard')
-        if old_keyboard is not None:
-            user_root.remove(old_keyboard)
 
         # Find keyboard section in template
         template_keyboard = template_root.find('./keyboard')
@@ -291,32 +290,47 @@ class RcXmlMigration:
             self.log.error("Template has no keyboard section")
             return False
 
-        # Deep copy the template keyboard section
-        # We need to find the right position to insert it
-        # Typically keyboard comes after desktops but before theme
-        # Let's try to maintain reasonable ordering
+        user_keyboard = user_root.find('./keyboard')
 
-        # Find insertion point - try to insert before theme element
-        theme_element = user_root.find('./theme')
-        if theme_element is not None:
-            insert_index = list(user_root).index(theme_element)
-            user_root.insert(insert_index, template_keyboard)
-        else:
-            # If no theme element, try before windowRules
-            windowrules_element = user_root.find('./windowRules')
-            if windowrules_element is not None:
-                insert_index = list(user_root).index(windowrules_element)
-                user_root.insert(insert_index, template_keyboard)
+        if user_keyboard is None:
+            # Nothing of the user's to preserve - insert the template's
+            # keyboard section wholesale.
+            new_keyboard = copy.deepcopy(template_keyboard)
+
+            theme_element = user_root.find('./theme')
+            if theme_element is not None:
+                insert_index = list(user_root).index(theme_element)
+                user_root.insert(insert_index, new_keyboard)
             else:
-                # Just append at the end if we can't find a good spot
-                user_root.append(template_keyboard)
+                windowrules_element = user_root.find('./windowRules')
+                if windowrules_element is not None:
+                    insert_index = list(user_root).index(windowrules_element)
+                    user_root.insert(insert_index, new_keyboard)
+                else:
+                    user_root.append(new_keyboard)
 
-        self.log.info("Replaced keyboard section with template version")
+            self.log.info("Inserted keyboard section from template")
+            return True
+
+        # Bring over any non-keybind settings (e.g. <numlock>)
+        added_any = False
+        for template_child in template_keyboard:
+            if template_child.tag == "keybind":
+                continue
+            if user_keyboard.find(f"./{template_child.tag}") is None:
+                user_keyboard.append(copy.deepcopy(template_child))
+                added_any = True
+
+        if added_any:
+            self.log.info("Added missing non-keybind keyboard settings from template")
+        else:
+            self.log.info("Keyboard section already has all non-keybind settings - nothing to merge")
+
         return True
 
     def migrate(self):
-        """Perform the migration - replace keyboard section only"""
-        self.log.info("Starting rc.xml migration - replacing keyboard section only")
+        """Merge missing non-keybind keyboard settings from the template"""
+        self.log.info("Starting rc.xml migration")
 
         # Step 1: Backup current config
         if not self.backup_user_config():
@@ -357,6 +371,10 @@ class Bridge:
     # element tree to read/write
     et = None
     menuet = None
+
+    # hold template bridged keybinds and static keybinds
+    keybind_templates = {}
+    static_keybind_templates = {}
 
     # gsettings connections
     panel_settings = None
@@ -409,60 +427,6 @@ class Bridge:
         # reload config for labwc
         subprocess.call("labwc -r", shell=True)
 
-    def migrate_toggle_show_desktop_action(self):
-        """
-        migration: on labwc >= 0.20.0, switch the show-desktop
-        keybind from the existing Execute/dbus-send method to the native
-        labwc ToggleShowDesktop action.
-        """
-        min_labwc_version = (0, 20, 0)
-        bridge_key = "wm.keybindings/show-desktop"
-        migration_attr = "toggle_show_desktop_migrated"
-
-        root = self.et.getroot()
-
-        # Already migrated
-        if root.get(migration_attr) is not None:
-            return
-
-        version = get_labwc_version(self.log)
-        if version is None:
-            # Can't determine labwc's version
-            return
-
-        if version < min_labwc_version:
-            # Not yet upgraded to a labwc with ToggleShowDesktop support
-            return
-
-        path = "./keyboard/keybind[@bridge='" + bridge_key + "']"
-        keybinds = root.findall(path)
-
-        changed = False
-        for keybind in keybinds:
-            action = keybind.find("action")
-            if action is None:
-                continue
-
-            # Only migrate the default Execute/dbus-send workaround - if the
-            # user has already customised this action, leave it alone
-            if action.attrib.get("name") == "Execute":
-                action.attrib.clear()
-                action.attrib["name"] = "ToggleShowDesktop"
-                action.attrib["command"] = ""
-                action.text = None
-                changed = True
-
-        root.set(migration_attr, "1")
-
-        if changed:
-            self.log.info(
-                f"Migrated {bridge_key} keybind to ToggleShowDesktop "
-                f"action (labwc {'.'.join(str(v) for v in version)})"
-            )
-
-        # force a write to ensure at least the migration attrib is written
-        self.write_config()
-
     def search_for_config(self, config_file):
         # Check if a local labwc config_file exists - if doesn't
         # use the budgie-desktop shared file - or the distro variant if it exists
@@ -491,6 +455,8 @@ class Bridge:
 
         self.log = logging.getLogger('labwc_bridge')
         self.log.addHandler(JournalHandler())
+
+        self.labwc_version = get_labwc_version(self.log)
 
         path, search_path = self.search_for_config("menu.xml")
         if path == None:
@@ -523,16 +489,14 @@ class Bridge:
             if not migration.migrate():
                 self.log.error("Migration failed, continuing with current config")
 
-        # migrate show-desktop to the native action labwc 0.20.0+
-        # ToggleShowDesktop action
-        self.migrate_toggle_show_desktop_action()
-
         signal.signal(signal.SIGINT, self.sigint_handler)
 
         # this is the heart of the bridge - connect all the recognised gsetting schemas
         # that we will listen to and respond to changes
         self.panel_settings = Gio.Settings.new('com.solus-project.budgie-panel')
         self.panel_settings.connect('changed', self.panel_settings_changed)
+
+        self.keybind_templates, self.static_keybind_templates = self.load_keybind_templates()
 
         self.gsd_media_keys_settings = Gio.Settings.new('org.buddiesofbudgie.settings-daemon.plugins.media-keys')
         self.gsd_media_keys_settings.connect('changed', self.keybindings_changed)
@@ -1361,34 +1325,66 @@ class Bridge:
 
         self.write_config()
 
+    # Tidy up the local rc.xml to ensure static keybinds/bridged keybinds are merged and tagged
+    def cleanup_keybinds(self):
+        root = self.et.getroot()
+        keyboard_element = root.find("./keyboard")
+        if keyboard_element is None:
+            return
+
+        removed_any = False
+        for element in list(keyboard_element.findall("keybind")):
+            bridge_key = element.attrib.get("bridge")
+
+            if bridge_key:
+                if "custom" in bridge_key:
+                    continue
+                if bridge_key not in self.keybind_templates:
+                    keyboard_element.remove(element)
+                    removed_any = True
+                    self.log.info(f"Removed keybind '{bridge_key}'")
+                continue
+
+            if element.attrib.get(STATIC_KEYBIND_MANAGED_ATTR) != STATIC_KEYBIND_MANAGED_VALUE:
+                continue
+
+            static_key = element.attrib.get("key")
+            if static_key and static_key not in self.static_keybind_templates:
+                keyboard_element.remove(element)
+                removed_any = True
+                self.log.info(f"Removed static keybind '{static_key}'")
+
+        if removed_any:
+            self.write_config()
+
     # this forces a resync of all recognised gsettings and outputs to the labwc config files
     def bridge_config(self):
         self.delay_config_write = True
 
-        root = self.et.getroot()
-        path = "./keyboard/"
-        for bridge in root.findall(path):
-            if "bridge" in bridge.attrib:
-                try:
-                    short_schemakey = bridge.attrib["bridge"]
-                    if "custom" in short_schemakey:
-                        continue
+        self.cleanup_keybinds()
 
-                    short_schema = short_schemakey.split("/")[0]
-                    key = short_schemakey.split("/")[1]
+        if self.sync_static_keybinds():
+            self.write_config()
 
-                    if short_schema in "org.buddiesofbudgie.settings-daemon.plugins.media-keys":
-                        self.keybindings_changed(self.gsd_media_keys_settings, key)
-                    if short_schema in "org.gnome.desktop.wm.keybindings":
-                        self.keybindings_changed(self.desktop_wm_keybindings_settings, key)
-                    if short_schema in "com.solus-project.budgie-wm":
-                        self.keybindings_changed(self.budgie_wm_settings, key)
-                    if short_schema in "org.gnome.mutter":
-                        self.keybindings_changed(self.mutter_settings, key)
-                    elif short_schema in "org.gnome.mutter.keybindings":
-                        self.keybindings_changed(self.mutter_keybindings_settings, key)
-                except IndexError:
-                    pass
+        schema_settings = {
+            "plugins.media-keys": self.gsd_media_keys_settings,
+            "wm.keybindings": self.desktop_wm_keybindings_settings,
+            "solus-project.budgie-wm": self.budgie_wm_settings,
+            "mutter.keybindings": self.mutter_keybindings_settings,
+            "gnome.mutter": self.mutter_settings,
+        }
+        for bridge_key in self.keybind_templates.keys():
+            try:
+                short_schema, key = bridge_key.split("/", 1)
+            except ValueError:
+                continue
+
+            if "custom" in short_schema:
+                continue
+
+            settings = schema_settings.get(short_schema)
+            if settings is not None:
+                self.keybindings_changed(settings, key)
 
         budgie_wmkeys = {"window-focus-mode",
                          "show-all-windows-tabswitcher",
@@ -1477,7 +1473,7 @@ class Bridge:
         bridgeraise = root.find(pathraise)
 
         if bridgeraise == None:
-            return False
+            return
 
         if focus_mode == Mode.MOUSE:
             bridgeraise.text = "yes"
@@ -1740,6 +1736,204 @@ class Bridge:
 
         return replacement
 
+    def load_keybind_templates(self):
+        search_path = []
+        for system_dir in GLib.get_system_data_dirs():
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "labwc", "keybinds.xml"))
+            search_path.append(os.path.join(system_dir, "budgie-desktop", "labwc", "keybinds.xml.example"))
+
+        template_et = None
+        used_path = None
+        for path in search_path:
+            if not os.path.isfile(path):
+                continue
+            try:
+                template_et = Et.parse(path)
+                used_path = path
+                break
+            except Et.ParseError as e:
+                self.log.warning(f"Could not parse keybinds template {path}: {e}")
+            except OSError as e:
+                self.log.warning(f"Could not read keybinds template {path}: {e}")
+
+        if template_et is None:
+            self.log.warning(
+                "Could not find a usable keybinds template (checked: "
+                + ", ".join(search_path) + ") - no keybinds will be managed"
+            )
+            return {}, {}
+
+        self.log.info(f"Loaded keybinds template from {used_path}")
+
+        bridge_templates = {}
+        static_templates = {}
+        for keybind in template_et.getroot().findall("./keybind"):
+            bridge_key = keybind.attrib.get("bridge")
+            actions = [copy.deepcopy(a) for a in keybind.findall("action")]
+
+            if bridge_key:
+                bridge_templates[bridge_key] = actions
+                continue
+
+            static_key = keybind.attrib.get("key")
+            if not static_key:
+                continue
+            static_templates[static_key] = actions
+
+        return bridge_templates, static_templates
+
+    # Tidy up action element taking into account differences between labwc versions
+    def resolve_keybind_action(self, bridge_key):
+        candidates = self.keybind_templates.get(bridge_key)
+        if not candidates:
+            return None
+
+        for candidate in candidates:
+            if not candidate.attrib.get("name", ""):
+                continue
+
+            executable = candidate.attrib.get("executable")
+            if executable and not shutil.which(executable):
+                continue
+
+            min_version = candidate.attrib.get("min_labwc_version")
+            if min_version:
+                try:
+                    required = tuple(int(part) for part in min_version.split("."))
+                except ValueError:
+                    self.log.warning(f"Bad min_labwc_version '{min_version}' for '{bridge_key}' - ignoring candidate")
+                    continue
+                if self.labwc_version is None or self.labwc_version < required:
+                    continue
+
+            return candidate
+
+        return None
+
+    # Creates, updates, or removes the keybind elements
+    def sync_keybind(self, bridge_id, effective_keybind):
+        root = self.et.getroot()
+        keyboard_element = root.find("./keyboard")
+        path = "./keyboard/keybind[@bridge='" + bridge_id + "']"
+        existing_keybinds = root.findall(path)
+
+        resolved_action = self.resolve_keybind_action(bridge_id)
+        bindings = [binding for binding in (effective_keybind or []) if binding]
+
+        if resolved_action is None or not bindings:
+            if not existing_keybinds:
+                return False
+            for element in existing_keybinds:
+                keyboard_element.remove(element)
+            self.log.info(f"Removed keybind(s) for '{bridge_id}' (undefined key or no valid action)")
+            return True
+
+        desired_attribs = {
+            k: v for k, v in resolved_action.attrib.items()
+            if k not in ("executable", "min_labwc_version")
+        }
+        changed = False
+
+        for i, binding in enumerate(bindings):
+            calculated_key = self.calc_keybind(binding)
+
+            if i < len(existing_keybinds):
+                element = existing_keybinds[i]
+                if element.attrib.get("key") != calculated_key:
+                    element.attrib["key"] = calculated_key
+                    changed = True
+            else:
+                element = Et.SubElement(keyboard_element, "keybind")
+                element.attrib["bridge"] = bridge_id
+                element.attrib["key"] = calculated_key
+                changed = True
+
+            action = element.find("action")
+            if action is None:
+                action = Et.SubElement(element, "action")
+                action.attrib.update(desired_attribs)
+                changed = True
+            elif dict(action.attrib) != desired_attribs:
+                action.attrib.clear()
+                action.attrib.update(desired_attribs)
+                changed = True
+
+        if len(existing_keybinds) > len(bindings):
+            for element in existing_keybinds[len(bindings):]:
+                keyboard_element.remove(element)
+            changed = True
+
+        return changed
+
+    # Merge static keybinds
+    def sync_static_keybinds(self):
+        root = self.et.getroot()
+        keyboard_element = root.find("./keyboard")
+        if keyboard_element is None:
+            return False
+
+        changed = False
+
+        for key, action_templates in self.static_keybind_templates.items():
+            managed_element = None
+            unmanaged_element = None
+
+            for element in keyboard_element.findall("keybind"):
+                if "bridge" in element.attrib or element.attrib.get("key") != key:
+                    continue
+                if element.attrib.get(STATIC_KEYBIND_MANAGED_ATTR) == STATIC_KEYBIND_MANAGED_VALUE:
+                    managed_element = element
+                else:
+                    unmanaged_element = element
+
+            desired_action = action_templates[0] if action_templates else None
+            desired_attribs = dict(desired_action.attrib) if desired_action is not None else None
+
+            if managed_element is None and unmanaged_element is not None:
+                existing_action = unmanaged_element.find("action")
+                existing_attribs = dict(existing_action.attrib) if existing_action is not None else None
+
+                if existing_attribs == desired_attribs:
+                    unmanaged_element.attrib[STATIC_KEYBIND_MANAGED_ATTR] = STATIC_KEYBIND_MANAGED_VALUE
+                    managed_element = unmanaged_element
+                    changed = True
+                    self.log.info(f"Adopted pre-existing static keybind '{key}' (content matches template exactly)")
+                else:
+                    self.log.info(
+                        f"Not creating static keybind for '{key}' - a "
+                        f"user-defined keybind already uses this key"
+                    )
+                    continue
+
+            if managed_element is None:
+                if desired_action is None:
+                    continue
+                element = Et.SubElement(keyboard_element, "keybind")
+                element.attrib["key"] = key
+                element.attrib[STATIC_KEYBIND_MANAGED_ATTR] = STATIC_KEYBIND_MANAGED_VALUE
+                element.append(copy.deepcopy(desired_action))
+                changed = True
+                continue
+
+            action = managed_element.find("action")
+
+            if desired_action is None:
+                if action is not None:
+                    managed_element.remove(action)
+                    changed = True
+                continue
+
+            if action is None:
+                action = Et.SubElement(managed_element, "action")
+                action.attrib.update(desired_attribs)
+                changed = True
+            elif dict(action.attrib) != desired_attribs:
+                action.attrib.clear()
+                action.attrib.update(desired_attribs)
+                changed = True
+
+        return changed
+
     # all keybinds from various gsettings schemas are managed
     def keybindings_changed(self, settings, key):
 
@@ -1761,26 +1955,10 @@ class Bridge:
         if keybind == None:
             keybind = []
 
-        root = self.et.getroot()
-
-        partial = settings.props.schema.split(".")
-
-        if partial == None or len(partial) < 2:
-            return
-
-        partial = partial[-2] + "." + partial[-1] + "/" + key
-
-        # Find all existing keybind elements for this bridge key
-        path = "./keyboard/keybind[@bridge='" + partial + "']"
-        existing_keybinds = root.findall(path)
-
-        # If no existing keybinds found, nothing to update
-        if len(existing_keybinds) == 0:
-            return
-
-        # For media keys, check if we should use -static values
-        effective_keybind = keybind
         if settings == self.gsd_media_keys_settings:
+            bridge_id = "plugins.media-keys/" + key
+            effective_keybind = keybind
+
             # Check if main key is empty but -static key has values
             main_is_empty = len(keybind) == 0 or all(not binding for binding in keybind)
 
@@ -1796,80 +1974,21 @@ class Bridge:
                         if has_values:
                             self.log.info(f"Using -static values for '{key}'")
                             effective_keybind = static_keybind
-                            main_is_empty = False
                 except KeyError:
                     # No -static key exists
                     self.log.info(f"No -static key found for '{key}'")
                     pass
-
-        # Handle empty keybind array - keep one element with "undefined"
-        is_empty = False
-        if len(effective_keybind) == 0:
-            is_empty = True
         else:
-            # Check if all bindings are empty or None
-            all_empty = True
-            for binding in effective_keybind:
-                if binding:  # If any binding is not empty
-                    all_empty = False
-                    break
-            is_empty = all_empty
+            partial = settings.props.schema.split(".")
 
-        if is_empty:
-            # Remove all but the first keybind element
-            keyboard_element = root.find("./keyboard")
-            for i, bridge in enumerate(existing_keybinds):
-                if i == 0:
-                    # Keep first element but set to undefined
-                    bridge.attrib["key"] = "undefined"
-                else:
-                    # Remove extra elements
-                    keyboard_element.remove(bridge)
+            if partial == None or len(partial) < 2:
+                return
 
+            bridge_id = partial[-2] + "." + partial[-1] + "/" + key
+            effective_keybind = keybind
+
+        if self.sync_keybind(bridge_id, effective_keybind):
             self.write_config()
-            return
-
-        # Process each keybinding in the array
-        for i, binding in enumerate(effective_keybind):
-            calculated_key = self.calc_keybind(binding)
-
-            self.log.info(f"Processing keybind '{key}' index {i}: binding='{binding}' -> calculated='{calculated_key}'")
-
-            # Note: if we're using effective_keybind from -static,
-            # we don't need the fallback logic below since we already have the static values
-
-            # Update existing keybind or create new one
-            if i < len(existing_keybinds):
-                # Update existing element
-                existing_keybinds[i].attrib["key"] = calculated_key
-            else:
-                # Create new keybind element
-                # First, get the action structure from the first keybind
-                if len(existing_keybinds) > 0:
-                    # Clone the action element from the first keybind
-                    keyboard_element = root.find("./keyboard")
-                    new_keybind = Et.Element("keybind")
-                    new_keybind.attrib["bridge"] = partial
-                    new_keybind.attrib["key"] = calculated_key
-
-                    # Copy the action element(s) from the first keybind
-                    for action in existing_keybinds[0].findall("action"):
-                        new_action = Et.Element("action")
-                        new_action.attrib.update(action.attrib)
-                        new_action.text = action.text
-                        new_keybind.append(new_action)
-
-                    # Insert after the last existing keybind for this bridge
-                    insert_index = list(keyboard_element).index(existing_keybinds[-1]) + 1
-                    keyboard_element.insert(insert_index, new_keybind)
-
-        # Remove excess keybind elements if array shrank
-        if len(existing_keybinds) > len(keybind):
-            keyboard_element = root.find("./keyboard")
-            for bridge in existing_keybinds[len(keybind):]:
-                keyboard_element.remove(bridge)
-
-        self.write_config()
 
     # all solus-project panel gsettings changes are managed
     def panel_settings_changed(self, settings, key):

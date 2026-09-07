@@ -22,6 +22,7 @@ install_data(
 labwc_files = [
     'rc.xml',
     'menu.xml',
+    'keybinds.xml.example',
     'themerc-dark',
     'themerc-darkest',
     'themerc-mid',
