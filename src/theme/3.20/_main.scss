@@ -31,6 +31,19 @@
     "undershoot",
     "overshoot"
   );
+
+  border-radius: 3px;
+}
+
+// The menu is a transparent layer-shell window so the arrow can protrude past
+// the body as a triangle. The arrow is filled with its `color`.
+window.budgie-menu-window {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.budgie-menu-arrow {
+  color: $panel_bg;
 }
 
 // Menu Button

@@ -75,7 +75,7 @@ public class BudgieMenuSettings : Gtk.Grid {
 
 public class BudgieMenuApplet : Budgie.Applet {
 	protected Gtk.ToggleButton widget;
-	protected BudgieMenuWindow? popover;
+	protected BudgieMenuWindow? menu_window;
 	protected Settings settings;
 	private Settings ui_settings;
 	Gtk.Image img;
@@ -84,6 +84,9 @@ public class BudgieMenuApplet : Budgie.Applet {
 	int pixel_size = 32;
 
 	private unowned Budgie.PopoverManager? manager = null;
+
+	// When the menu last hid; see toggle_menu
+	private int64 last_hidden = 0;
 
 	public string uuid { public set ; public get; }
 
@@ -133,46 +136,14 @@ public class BudgieMenuApplet : Budgie.Applet {
 		var st = widget.get_style_context();
 		st.add_class("budgie-menu-launcher");
 		st.add_class("panel-button");
-		popover = new BudgieMenuWindow(settings, widget);
-		popover.bind_property("visible", widget, "active");
-		popover.refresh(this.app_index, true);
-		app_index.changed.connect(() => {
-			/*
-			 * Refesh the view on application system change.
-			 * We don't want to update the UI when the popover
-			 * is open, because that has a jarring visual effect.
-			 * So, if the popover is open, add a 1 second timer
-			 * to check if it's still visible, and if not, refresh
-			 * the view.
-			 */
-			if (popover.get_visible()) {
-				Timeout.add_seconds(1, () => {
-					if (popover.is_visible()) {
-						return true;
-					}
+		menu_window = new BudgieMenuWindow(settings, widget);
+		menu_window.bind_property("visible", widget, "active");
+		menu_window.notify["visible"].connect(on_menu_visible_changed);
+		menu_window.refresh(this.app_index, true);
+		app_index.changed.connect(on_app_index_changed);
 
-					popover.refresh(this.app_index);
-					return false;
-				}, Priority.DEFAULT_IDLE);
-			} else {
-				popover.refresh(this.app_index);
-			}
-		});
-
-		widget.button_press_event.connect((e) => {
-			if (e.button != 1) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				popover.get_child().show_all();
-				this.manager.show_popover(widget);
-			}
-			return Gdk.EVENT_STOP;
-		});
-
-		popover.get_child().show_all();
+		widget.button_press_event.connect(on_launcher_press);
+		this.destroy.connect(on_applet_destroy);
 
 		supported_actions = Budgie.PanelAction.MENU;
 
@@ -194,12 +165,81 @@ public class BudgieMenuApplet : Budgie.Applet {
 			}
 		});
 
-		popover.key_release_event.connect((e) => {
+		menu_window.key_release_event.connect((e) => {
 			if (e.keyval == Gdk.Key.Escape) {
-				popover.hide();
+				menu_window.hide();
 			}
 			return Gdk.EVENT_PROPAGATE;
 		});
+	}
+
+	// A toplevel window isn't destroyed with the applet
+	private void on_applet_destroy() {
+		if (menu_window != null) {
+			menu_window.destroy();
+			menu_window = null;
+		}
+	}
+
+	private void on_menu_visible_changed(Object sender, ParamSpec pspec) {
+		if (menu_window != null && !menu_window.visible) {
+			last_hidden = get_monotonic_time();
+		}
+	}
+
+	// Refreshing while the menu is open is jarring, so wait until it closes
+	private void on_app_index_changed() {
+		if (menu_window == null) {
+			return;
+		}
+
+		if (menu_window.get_visible()) {
+			Timeout.add_seconds(1, refresh_when_hidden, Priority.DEFAULT_IDLE);
+		} else {
+			menu_window.refresh(this.app_index);
+		}
+	}
+
+	private bool refresh_when_hidden() {
+		if (menu_window == null) {
+			return Source.REMOVE;
+		}
+
+		if (menu_window.is_visible()) {
+			return Source.CONTINUE;
+		}
+
+		menu_window.refresh(this.app_index);
+		return Source.REMOVE;
+	}
+
+	private bool on_launcher_press(Gdk.EventButton e) {
+		if (e.button != 1) {
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		toggle_menu();
+		// Stop the ToggleButton from toggling itself; the menu drives its state
+		return Gdk.EVENT_STOP;
+	}
+
+	private void toggle_menu() {
+		if (menu_window == null) {
+			return;
+		}
+
+		if (menu_window.get_visible()) {
+			menu_window.hide();
+			return;
+		}
+
+		// The click that took focus off the menu already closed it; don't reopen
+		if (get_monotonic_time() - last_hidden < 250000) {
+			widget.active = false;
+			return;
+		}
+
+		menu_window.present_menu(panel_position);
 	}
 
 	public override void panel_position_changed(Budgie.PanelPosition position) {
@@ -212,12 +252,7 @@ public class BudgieMenuApplet : Budgie.Applet {
 
 	public override void invoke_action(Budgie.PanelAction action) {
 		if ((action & Budgie.PanelAction.MENU) != 0) {
-			if (popover.get_visible()) {
-				popover.hide();
-			} else {
-				popover.get_child().show_all();
-				this.manager.show_popover(widget);
-			}
+			toggle_menu();
 		}
 	}
 
@@ -273,9 +308,9 @@ public class BudgieMenuApplet : Budgie.Applet {
 			theme_name == "hicolor" || theme_name == "HighContrast";
 	}
 
+	// A window can't register with the manager; focus handoff keeps one open anyway
 	public override void update_popovers(Budgie.PopoverManager? manager) {
 		this.manager = manager;
-		manager.register_popover(widget, popover);
 	}
 }
 
