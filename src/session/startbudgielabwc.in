@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 OPTS=""
 for OPT in "$@"; do
     if test "${OPT}" = "--help"; then
