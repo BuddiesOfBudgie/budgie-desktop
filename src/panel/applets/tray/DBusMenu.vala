@@ -53,7 +53,12 @@ public class DBusMenu : Object {
 		try {
 			iface.get_layout(0, -1, {}, out revision, out layout);
 		} catch (Error e) {
-			warning("Failed to update layout: %s", e.message);
+			if (e is DBusError.SERVICE_UNKNOWN) {
+				// this happens when the application exits while we still have its menu
+				debug("Failed to update layout: %s", e.message);
+			} else {
+				warning("Failed to update layout: %s", e.message);
+			}
 			return;
 		}
 

@@ -195,7 +195,12 @@ private class DBusMenuItem : Gtk.CheckMenuItem {
 		gicon = (icon_name != "") ? new ThemedIcon.with_default_fallbacks(icon_name) : gicon = new BytesIcon(icon_data);
 		icon.set_from_gicon(gicon, Gtk.IconSize.MENU);
 		icon.set_pixel_size(16);
-		box.pack_start(icon, false, false, 2);
+
+		if (icon.parent == null) {
+			box.pack_start(icon, false, false, 2);
+			box.reorder_child(icon, 0);
+			icon.show();
+		}
 	}
 
 	public void update_shortcut(List<string>? new_shortcut) {
