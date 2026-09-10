@@ -30,7 +30,7 @@ internal interface SnItemProperties : Object {
 	public abstract string id {owned get;}
 	public abstract string title {owned get;}
 	public abstract string status {owned get;}
-	public abstract uint32 window_id {get;}
+	public abstract int32 window_id {get;}
 	public abstract string icon_name {owned get;}
 	public abstract SnIconPixmap[] icon_pixmap {owned get;}
 	public abstract string overlay_icon_name {owned get;}
