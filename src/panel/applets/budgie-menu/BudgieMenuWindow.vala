@@ -14,7 +14,7 @@ public class BudgieMenuWindow : Gtk.Window {
 	protected Gtk.SearchEntry search_entry;
 	protected ApplicationView view;
 
-	private Gtk.Box outer_layout;
+	private Gtk.Overlay outer_layout;
 	private MenuArrow arrow;
 
 	private Gtk.Overlay overlay;
@@ -65,10 +65,12 @@ public class BudgieMenuWindow : Gtk.Window {
 
 		this.arrow = new MenuArrow();
 
-		// Contains the main contents and the arrow itself.
-		this.outer_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		this.outer_layout.pack_start(this.main_layout, true, true, 0);
-		this.outer_layout.pack_start(this.arrow, false, false, 0);
+		// The arrow reaches back over the body's border, so it can't be a sibling in a box.
+		// The body carries a margin on the panel-facing side for the arrow to sit in.
+		this.outer_layout = new Gtk.Overlay();
+		this.outer_layout.add(this.main_layout);
+		this.outer_layout.add_overlay(this.arrow);
+		this.outer_layout.set_overlay_pass_through(this.arrow, true);
 		this.add(this.outer_layout);
 
 		// Header items at the top with search input
@@ -423,13 +425,36 @@ public class BudgieMenuWindow : Gtk.Window {
 	 */
 	private void arrange_arrow(Budgie.PanelPosition position, bool vertical, int launcher_center, int menu_nat) {
 		this.arrow.position = position;
-		this.outer_layout.set_orientation(vertical ? Gtk.Orientation.HORIZONTAL : Gtk.Orientation.VERTICAL);
 
-		// The arrow comes first when the panel is above or left of the body
-		if (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.LEFT) {
-			this.outer_layout.reorder_child(this.arrow, 0);
-		} else {
-			this.outer_layout.reorder_child(this.main_layout, 0);
+		// Leave room for the arrow on the panel-facing side, and tell it how far
+		// back over the body's border it has to reach to cover the join
+		Gtk.StyleContext body_style = this.main_layout.get_style_context();
+		Gtk.Border body_border = body_style.get_border(body_style.get_state());
+
+		// Clear the room left for a previous panel position
+		this.main_layout.margin_top = 0;
+		this.main_layout.margin_bottom = 0;
+		this.main_layout.margin_start = 0;
+		this.main_layout.margin_end = 0;
+
+		switch (position) {
+			case Budgie.PanelPosition.TOP:
+				this.main_layout.margin_top = MenuArrow.ARROW_DEPTH;
+				this.arrow.overlap = body_border.top;
+				break;
+			case Budgie.PanelPosition.LEFT:
+				this.main_layout.margin_start = MenuArrow.ARROW_DEPTH;
+				this.arrow.overlap = body_border.left;
+				break;
+			case Budgie.PanelPosition.RIGHT:
+				this.main_layout.margin_end = MenuArrow.ARROW_DEPTH;
+				this.arrow.overlap = body_border.right;
+				break;
+			case Budgie.PanelPosition.BOTTOM:
+			default:
+				this.main_layout.margin_bottom = MenuArrow.ARROW_DEPTH;
+				this.arrow.overlap = body_border.bottom;
+				break;
 		}
 
 		// The menu may have been shifted to stay on the monitor; keep the arrow
@@ -444,12 +469,12 @@ public class BudgieMenuWindow : Gtk.Window {
 		this.arrow.margin_top = 0;
 		this.arrow.margin_start = 0;
 		if (vertical) {
-			this.arrow.halign = Gtk.Align.FILL;
+			this.arrow.halign = position == Budgie.PanelPosition.LEFT ? Gtk.Align.START : Gtk.Align.END;
 			this.arrow.valign = Gtk.Align.START;
 			this.arrow.margin_top = offset;
 		} else {
 			this.arrow.halign = Gtk.Align.START;
-			this.arrow.valign = Gtk.Align.FILL;
+			this.arrow.valign = position == Budgie.PanelPosition.TOP ? Gtk.Align.START : Gtk.Align.END;
 			this.arrow.margin_start = offset;
 		}
 

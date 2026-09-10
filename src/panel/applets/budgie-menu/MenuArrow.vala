@@ -19,6 +19,9 @@ public class MenuArrow : Gtk.DrawingArea {
 
 	public Budgie.PanelPosition position = Budgie.PanelPosition.BOTTOM;
 
+	// Rows of the tail drawn back over the body's border, so the join reads as one shape
+	public int overlap = 1;
+
 	construct {
 		this.get_style_context().add_class("budgie-menu-arrow");
 	}
@@ -28,12 +31,12 @@ public class MenuArrow : Gtk.DrawingArea {
 	}
 
 	public override void get_preferred_width(out int min, out int nat) {
-		min = points_sideways() ? ARROW_DEPTH : ARROW_BREADTH;
+		min = points_sideways() ? ARROW_DEPTH + overlap : ARROW_BREADTH;
 		nat = min;
 	}
 
 	public override void get_preferred_height(out int min, out int nat) {
-		min = points_sideways() ? ARROW_BREADTH : ARROW_DEPTH;
+		min = points_sideways() ? ARROW_BREADTH : ARROW_DEPTH + overlap;
 		nat = min;
 	}
 
@@ -51,23 +54,31 @@ public class MenuArrow : Gtk.DrawingArea {
 			case Budgie.PanelPosition.TOP:
 				ctx.move_to(0, h);
 				ctx.line_to(w, h);
+				ctx.line_to(w, h - overlap);
 				ctx.line_to(w / 2.0, 0);
+				ctx.line_to(0, h - overlap);
 				break;
 			case Budgie.PanelPosition.LEFT:
 				ctx.move_to(w, 0);
 				ctx.line_to(w, h);
+				ctx.line_to(w - overlap, h);
 				ctx.line_to(0, h / 2.0);
+				ctx.line_to(w - overlap, 0);
 				break;
 			case Budgie.PanelPosition.RIGHT:
 				ctx.move_to(0, 0);
 				ctx.line_to(0, h);
+				ctx.line_to(overlap, h);
 				ctx.line_to(w, h / 2.0);
+				ctx.line_to(overlap, 0);
 				break;
 			case Budgie.PanelPosition.BOTTOM:
 			default:
 				ctx.move_to(0, 0);
 				ctx.line_to(w, 0);
+				ctx.line_to(w, overlap);
 				ctx.line_to(w / 2.0, h);
+				ctx.line_to(0, overlap);
 				break;
 		}
 
