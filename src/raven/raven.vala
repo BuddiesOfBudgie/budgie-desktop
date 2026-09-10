@@ -214,6 +214,7 @@ namespace Budgie {
 		private RavenIface? iface = null;
 		private Settings? settings = null;
 		private Settings? widget_settings = null;
+		private Settings? wm_settings = null;
 
 		bool expanded = false;
 
@@ -289,6 +290,21 @@ namespace Budgie {
 			return Gdk.EVENT_PROPAGATE;
 		}
 
+		/**
+		* Closing on click-away needs a focus-out event, and a surface only gets one
+		* if it can take keyboard focus. Under sloppy or mouse focus, moving the
+		* pointer toward Raven focuses each window it crosses, which would close
+		* Raven before the pointer arrives, so only ask for focus under click
+		*/
+		private void update_keyboard_mode() {
+			bool click_to_focus = wm_settings.get_string("window-focus-mode") == "click";
+
+			GtkLayerShell.set_keyboard_mode(
+				this,
+				click_to_focus ? GtkLayerShell.KeyboardMode.ON_DEMAND : GtkLayerShell.KeyboardMode.NONE
+			);
+		}
+
 		private void steal_focus() {
 			unowned Gdk.Window? window = get_window();
 			if (window == null) {
@@ -302,9 +318,14 @@ namespace Budgie {
 
 		public Raven(Budgie.DesktopManager? manager, Budgie.RavenPluginManager? plugin_manager) {
 			Object(type_hint: Gdk.WindowTypeHint.DOCK, manager: manager);
+
+			wm_settings = new Settings("com.solus-project.budgie-wm");
+
 			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
 				GtkLayerShell.init_for_window(this);
 				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+				update_keyboard_mode();
+				wm_settings.changed["window-focus-mode"].connect(update_keyboard_mode);
 			}
 
 			get_style_context().add_class("budgie-container");
