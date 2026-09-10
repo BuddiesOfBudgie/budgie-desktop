@@ -503,8 +503,6 @@ namespace Budgie {
 			unowned string uuid;
 			unowned Budgie.Panel panel;
 			unowned Screen? primary;
-			unowned Budgie.Panel? top = null;
-			unowned Budgie.Panel? bottom = null;
 			screens.remove_all();
 
 			int n_monitors = dis.get_n_monitors();
@@ -601,23 +599,9 @@ namespace Budgie {
 				panel_area.x, panel_area.y);
 				panel.update_geometry(panel_area, panel.position, primary_monitor);
 
-				if (panel.position == Budgie.PanelPosition.TOP) {
-					top = panel;
-				} else if (panel.position == Budgie.PanelPosition.BOTTOM) {
-					bottom = panel;
-				}
 				/* Re-take the position */
 				primary.slots |= panel.position;
 			}
-
-			debug("Updating Raven geometry");
-			// Also normalize for Raven
-			Gdk.Rectangle raven_area = Gdk.Rectangle();
-			raven_area.x = 0;
-			raven_area.y = 0;
-			raven_area.width = primary.area.width;
-			raven_area.height = primary.area.height;
-			this.raven.update_geometry(raven_area);
 		}
 
 		private void on_bus_acquired(DBusConnection conn) {
@@ -858,6 +842,10 @@ namespace Budgie {
 			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
 			Budgie.Panel? panel = new Budgie.Panel(this, panel_plugin_manager, uuid, settings);
 			panels.insert(uuid, panel);
+
+			// Whenever a panel's reserved size changes (what it actually takes up), call update screen
+			// This will update all panel geometry as well as Raven's
+			panel.notify["reserved-size"].connect(this.update_screen);
 
 			if (!configure) {
 				return;
@@ -1104,7 +1092,6 @@ namespace Budgie {
 			Budgie.Toplevel? bottom = null;
 			Budgie.Toplevel? right = null;
 			Budgie.Toplevel? left = null;
-			Gdk.Rectangle raven_screen;
 
 			string? key = null;
 			Budgie.Panel? val = null;
@@ -1146,11 +1133,11 @@ namespace Budgie {
 					geom.width = area.area.width;
 					geom.height = area.area.height;
 					if (this.is_panel_huggable(top)) {
-						geom.y += top.intended_size;
-						geom.height -= top.intended_size;
+						geom.y += top.reserved_size;
+						geom.height -= top.reserved_size;
 					}
 					if (this.is_panel_huggable(bottom)) {
-						geom.height -= bottom.intended_size;
+						geom.height -= bottom.reserved_size;
 					}
 					val2.update_geometry(geom, val2.position, val2.intended_size);
 					break;
@@ -1160,40 +1147,20 @@ namespace Budgie {
 				}
 			}
 
-			raven_screen = area.area;
-			if (top != null && !top.dock_mode && top.autohide == AutohidePolicy.NONE) {
-				raven_screen.y += top.intended_size;
-				raven_screen.height -= top.intended_size;
-			}
-
-			if (bottom != null && !bottom.dock_mode && bottom.autohide == AutohidePolicy.NONE) {
-				raven_screen.height -= bottom.intended_size;
-			}
-
 			// Set which side of the screen Raven should appear on
 			switch (raven_position) {
 				case RavenPosition.LEFT:
-					/* Stick/maybe hug left */
 					raven.screen_edge = Gtk.PositionType.LEFT;
-					if (left != null) {
-						raven_screen.x += left.intended_size;
-					}
 					break;
 				case RavenPosition.RIGHT:
-					/* Stick/maybe hug right */
 					raven.screen_edge = Gtk.PositionType.RIGHT;
-					if (right != null) {
-						raven_screen.width -= (right.intended_size);
-					}
 					break;
 				case RavenPosition.AUTOMATIC:
 				default:
-					set_raven_position(left, right, ref raven_screen);
+					set_raven_position(left, right);
 					break;
 			}
 
-			/* Let Raven update itself accordingly */
-			raven.update_geometry(raven_screen);
 			this.panels_changed();
 		}
 
@@ -1211,44 +1178,28 @@ namespace Budgie {
 		}
 
 		/**
-		 * Use the current panel layouts to figure out Raven's position.
-		 *
-		 * This function sets which side of the screen Raven should be on,
-		 * as well as Raven's position or width (if it's on the right side).
+		 * Use the current panel layouts to figure out which side of the screen
+		 * Raven should be on.
 		 */
-		void set_raven_position(Toplevel? left, Toplevel? right, ref Gdk.Rectangle raven_screen) {
+		void set_raven_position(Toplevel? left, Toplevel? right) {
 			if (left != null && right == null) {
 				if (this.is_panel_huggable(left)) {
-					/* Hug left */
 					raven.screen_edge = Gtk.PositionType.LEFT;
-					raven_screen.x += left.intended_size;
 				} else {
-					/* Stick right */
 					raven.screen_edge = Gtk.PositionType.RIGHT;
 				}
 			} else if (right != null && left == null) {
 				if (this.is_panel_huggable(right)) {
-					/* Hug right */
-					raven_screen.width -= (right.intended_size);
 					raven.screen_edge = Gtk.PositionType.RIGHT;
 				} else {
-					/* Stick left */
 					raven.screen_edge = Gtk.PositionType.LEFT;
 				}
 			} else if (is_panel_huggable(left) && !is_panel_huggable(right)) {
-				/* Hug left */
 				raven.screen_edge = Gtk.PositionType.LEFT;
-				raven_screen.x += left.intended_size;
 			} else if (is_panel_huggable(right) && !is_panel_huggable(left)) {
-				/* Hug right */
-				raven_screen.width -= (right.intended_size);
 				raven.screen_edge = Gtk.PositionType.RIGHT;
 			} else {
-				/* Stick/maybe hug right */
 				raven.screen_edge = Gtk.PositionType.RIGHT;
-				if (right != null) {
-					raven_screen.width -= (right.intended_size);
-				}
 			}
 		}
 

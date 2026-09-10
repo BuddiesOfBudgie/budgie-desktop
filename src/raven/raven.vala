@@ -199,14 +199,16 @@ namespace Budgie {
 					raven_edge,
 					true
 				);
+
+				// Anchoring both of these leaves the compositor to size us to the
+				// usable area, which already excludes the panels
+				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
 		}
 			public get {
 				return this._screen_edge;
 			}
 		}
-
-		int our_width = 0;
-		int our_height = 0;
 
 		private Budgie.ShadowBlock? shadow;
 		private RavenIface? iface = null;
@@ -215,12 +217,9 @@ namespace Budgie {
 
 		bool expanded = false;
 
-		Gdk.Rectangle old_rect;
 		Gtk.Box layout;
 
 		private double scale = 0.0;
-
-		public int required_size { public get ; protected set; }
 
 		private Budgie.MainView? main_view = null;
 
@@ -328,7 +327,6 @@ namespace Budgie {
 
 			// Response to a scale factor change
 			notify["scale-factor"].connect(() => {
-				this.update_geometry(this.old_rect);
 				queue_resize();
 			});
 
@@ -379,47 +377,9 @@ namespace Budgie {
 			this.screen_edge = Gtk.PositionType.RIGHT;
 		}
 
-		public override void size_allocate(Gtk.Allocation rect) {
-			int w = 0;
-
-			base.size_allocate(rect);
-			if ((w = get_allocated_width()) != this.required_size) {
-				this.required_size = w;
-				this.update_geometry(this.old_rect);
-			}
-		}
-
 		public void setup_dbus() {
 			Bus.own_name(BusType.SESSION, Budgie.RAVEN_DBUS_NAME, BusNameOwnerFlags.ALLOW_REPLACEMENT|BusNameOwnerFlags.REPLACE,
 				on_bus_acquired, () => {}, () => { warning("Raven could not take dbus!"); });
-		}
-
-		/**
-		* Update our geometry based on other panels in the neighbourhood, and the screen we
-		* need to be on */
-		public void update_geometry(Gdk.Rectangle rect) {
-			int width = layout.get_allocated_width();
-
-			int height = rect.height;
-
-			this.old_rect = rect;
-
-			our_height = height;
-			our_width = width;
-
-			if (!get_visible()) {
-				queue_resize();
-			}
-		}
-
-		public override void get_preferred_height(out int m, out int n) {
-			m = our_height;
-			n = our_height;
-		}
-
-		public override void get_preferred_height_for_width(int w, out int m, out int n) {
-			m = our_height;
-			n = our_height;
 		}
 
 		public override bool draw(Cairo.Context cr) {
@@ -472,7 +432,6 @@ namespace Budgie {
 			}
 			double old_nscale_op, new_nscale_op;
 			if (exp) {
-				this.update_geometry(this.old_rect);
 				old_nscale_op = 0.0;
 				new_nscale_op = 1.0;
 			} else {

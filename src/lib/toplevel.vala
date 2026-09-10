@@ -37,6 +37,22 @@ namespace Budgie {
 		public int intended_size { public set ; public get; }
 
 		/**
+		* The extent of our window along the same axis as intended_size,
+		* including the shadow when it is visible
+		*/
+		public int targeted_size {
+			public get {
+				return intended_size + (shadow_visible ? ShadowBlock.SIZE : 0);
+			}
+		}
+
+		/**
+		* Thickness of the panel itself as allocated, excluding the shadow.
+		* This is the space we take from other surfaces
+		*/
+		public int reserved_size { public set; public get; }
+
+		/**
 		* Our configured applet spacing
 		*/
 		public int intended_spacing { public set; public get; }
@@ -55,6 +71,17 @@ namespace Budgie {
 		public Budgie.PanelTransparency transparency { public set; public get; default = Budgie.PanelTransparency.NONE; }
 		public Budgie.AutohidePolicy autohide { public set; public get; default = Budgie.AutohidePolicy.NONE; }
 
+		construct {
+			// Run on_size_input_changed whenever either of these two properties is set
+			notify["intended-size"].connect(on_size_input_changed);
+			notify["shadow-visible"].connect(on_size_input_changed);
+		}
+
+		private void on_size_input_changed() {
+			// targeted_size has no setter, so nothing emits notify for it on its own,
+			// so we need to basically notify on its behalf
+			notify_property("targeted-size");
+		}
 
 		public abstract List<Budgie.AppletInfo?> get_applets();
 		public signal void applet_added(Budgie.AppletInfo? info);

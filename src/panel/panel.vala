@@ -222,9 +222,6 @@ namespace Budgie {
 			position = PanelPosition.NONE;
 		}
 
-		/* Multiplier for strut operations on hi-dpi */
-		int scale = 1;
-
 		/* Box for the start of the panel */
 		ConstrainedBox? start_box;
 		/* Box for the center of the panel */
@@ -432,6 +429,7 @@ namespace Budgie {
 
 			intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
 			intended_spacing = settings.get_int(Budgie.PANEL_KEY_SPACING);
+			reserved_size = intended_size;
 			this.manager = manager;
 			this.plugin_manager = plugin_manager;
 
@@ -439,12 +437,10 @@ namespace Budgie {
 			skip_pager_hint = true;
 			set_decorated(false);
 
-			scale = get_scale_factor();
 			nscale = 1.0;
 
 			// Respond to a scale factor change
 			notify["scale-factor"].connect(() => {
-				this.scale = get_scale_factor();
 				this.placement();
 			});
 
@@ -516,19 +512,6 @@ namespace Budgie {
 			this.enter_notify_event.connect(on_enter_notify);
 			this.leave_notify_event.connect(on_leave_notify);
 
-			// Connect size_allocate signals to update margins when size changes
-			// Only update margins for main_layout to avoid recursive issues
-			//  main_layout.size_allocate.connect(() => {
-			//  	// Only update margins if we're in dock mode and have valid allocations
-			//  	if (this.dock_mode) {
-			//  		Gtk.Allocation alloc;
-			//  		main_layout.get_allocation(out alloc);
-			//  		if (alloc.width > 0 && alloc.height > 0) {
-			//  			update_panel_margins();
-			//  		}
-			//  	}
-			//  });
-
 			get_child().show_all();
 
 			// Immediately hide our inner boxes
@@ -537,6 +520,9 @@ namespace Budgie {
 			end_box.hide();
 
 			this.plugin_manager.extension_loaded.connect_after(this.on_extension_loaded);
+
+			this.notify["targeted-size"].connect(this.placement);
+			this.layout.size_allocate.connect(this.on_layout_allocated);
 
 			/* bit of a no-op. */
 			update_sizes();
@@ -601,9 +587,7 @@ namespace Budgie {
 		}
 
 		// For dock mode, calculate margins to center the panel
-		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
-
-		if (horizontal) {
+		if (is_horizontal()) {
 			// For horizontal panels (TOP/BOTTOM), center horizontally
 			// Calculate equal left and right margins to center the panel
 			int available_width = orig_scr.width - main_alloc.width;
@@ -634,9 +618,7 @@ namespace Budgie {
 		calculate_panel_margins(out margin_top, out margin_bottom, out margin_left, out margin_right);
 
 		// Set margins using GtkLayerShell - set relevant margins and zero out the others
-		bool horizontal = (position == PanelPosition.TOP || position == PanelPosition.BOTTOM);
-
-		if (horizontal) {
+		if (is_horizontal()) {
 		  	// For horizontal panels (TOP/BOTTOM), set left/right margins and zero top/bottom
 		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, -1);
 		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, -1);
@@ -660,7 +642,7 @@ namespace Budgie {
 			GtkLayerShell.set_exclusive_zone(this, 0);
 			set_below_other_surfaces();
 		} else {
-			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+			GtkLayerShell.set_exclusive_zone(this, this.reserved_size);
 			set_above_other_surfaces();
 		}
 	}
@@ -1286,7 +1268,7 @@ namespace Budgie {
 
 		void placement() {
 			this.update_layer_shell_props();
-			bool horizontal = false;
+			bool horizontal = is_horizontal();
 			Gtk.Allocation alloc;
 			main_layout.get_allocation(out alloc);
 
@@ -1294,67 +1276,42 @@ namespace Budgie {
 			int x = 0, y = 0;
 			int shadow_position = 0;
 
-			// Get monitor geometry to constrain panel size
-			Gdk.Rectangle monitor_geom = orig_scr;
-
-			// Constrain orig_scr to monitor dimensions
-			int max_width = monitor_geom.width;
-			int max_height = monitor_geom.height;
+			get_target_extents(out width, out height);
 
 			switch (position) {
 				case Budgie.PanelPosition.TOP:
 					x = orig_scr.x;
 					y = orig_scr.y;
-					width = int.min(orig_scr.width, max_width);
-					height = intended_size;
 					shadow_position = 1;
-					horizontal = true;
 					break;
 				case Budgie.PanelPosition.LEFT:
 					x = orig_scr.x;
 					y = orig_scr.y;
-					width = intended_size;
-					height = int.min(orig_scr.height, max_height);
 					shadow_position = 1;
 					break;
 				case Budgie.PanelPosition.RIGHT:
 					x = (orig_scr.x + orig_scr.width) - alloc.width;
 					y = orig_scr.y;
-					width = intended_size;
-					height = int.min(orig_scr.height, max_height);
 					shadow_position = 0;
 					break;
 				case Budgie.PanelPosition.BOTTOM:
 				default:
 					x = orig_scr.x;
 					y = orig_scr.y + (orig_scr.height - alloc.height);
-					width = int.min(orig_scr.width, max_width);
-					height = intended_size;
 					shadow_position = 0;
-					horizontal = true;
 					break;
 			}
 
 			// Special considerations for dock mode
 			if (this.dock_mode) {
+				// A dock is only as long as its applets: cap it at the screen if they
+				// overflow, otherwise request a small size and let them set the length
 				if (horizontal) {
-					if (alloc.width > max_width) {
-						width = max_width;
-					} else {
-						width = 100;
-					}
+					width = (alloc.width > orig_scr.width) ? orig_scr.width : 100;
 				} else {
-					if (alloc.height > max_height) {
-						height = max_height;
-					} else {
-						height = 100;
-					}
+					height = (alloc.height > orig_scr.height) ? orig_scr.height : 100;
 				}
 			}
-
-			// Ensure width and height don't exceed monitor dimensions
-			width = int.min(width, max_width);
-			height = int.min(height, max_height);
 
 			main_layout.child_set(shadow, "position", shadow_position);
 
@@ -1405,64 +1362,60 @@ namespace Budgie {
 				main_layout.hexpand = true;
 			}
 
-			layout.set_size_request(width, height);
+			// The panel is intended_size. The window is intended_size plus the shadow.
+			layout.set_size_request(
+				horizontal ? width : intended_size,
+				horizontal ? intended_size : height
+			);
 			set_size_request(width, height);
 		}
 
 		public override void get_preferred_width(out int minimum_width, out int natural_width) {
-			// Get monitor geometry to constrain panel size
-			Gdk.Rectangle monitor_geom = orig_scr;
-			var screen = get_screen();
-			if (screen != null) {
-				var display = screen.get_display();
-				if (display != null) {
-					var monitor = display.get_primary_monitor();
-					if (monitor != null) {
-						monitor_geom = monitor.get_geometry();
-					}
-				}
-			}
+			int width, height;
+			get_target_extents(out width, out height);
 
-			int max_width = monitor_geom.width;
-			bool horizontal = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
-
-			if (horizontal) {
-				// For horizontal panels, constrain width to monitor width
-				minimum_width = int.min(orig_scr.width, max_width);
-				natural_width = int.min(orig_scr.width, max_width);
-			} else {
-				// For vertical panels, width is the intended_size
-				minimum_width = intended_size;
-				natural_width = intended_size;
-			}
+			minimum_width = width;
+			natural_width = width;
 		}
 
 		public override void get_preferred_height(out int minimum_height, out int natural_height) {
-			// Get monitor geometry to constrain panel size
-			Gdk.Rectangle monitor_geom = orig_scr;
-			var screen = get_screen();
-			if (screen != null) {
-				var display = screen.get_display();
-				if (display != null) {
-					var monitor = display.get_primary_monitor();
-					if (monitor != null) {
-						monitor_geom = monitor.get_geometry();
-					}
-				}
-			}
+			int width, height;
+			get_target_extents(out width, out height);
 
-			int max_height = monitor_geom.height;
-			bool horizontal = (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
+			minimum_height = height;
+			natural_height = height;
+		}
 
-			if (horizontal) {
-				// For horizontal panels, height is the intended_size
-				minimum_height = intended_size;
-				natural_height = intended_size;
+		private bool is_horizontal() {
+			return (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
+		}
+
+		/**
+		* The size of our window: our full thickness on the axis we're thin on,
+		* the extent of our screen area on the other
+		*/
+		private void get_target_extents(out int width, out int height) {
+			if (is_horizontal()) {
+				width = orig_scr.width;
+				height = int.min(targeted_size, orig_scr.height);
 			} else {
-				// For vertical panels, constrain height to monitor height
-				minimum_height = int.min(orig_scr.height, max_height);
-				natural_height = int.min(orig_scr.height, max_height);
+				width = int.min(targeted_size, orig_scr.width);
+				height = orig_scr.height;
 			}
+		}
+
+		private void on_layout_allocated(Gtk.Allocation allocation) {
+			if (this.position == PanelPosition.NONE) {
+				return;
+			}
+
+			int allocated_size = is_horizontal() ? allocation.height : allocation.width;
+			if (allocated_size == this.reserved_size) {
+				return;
+			}
+
+			this.reserved_size = allocated_size;
+			this.update_exclusive_zone();
 		}
 
 		private bool applet_at_start_of_region(Budgie.AppletInfo? info) {
@@ -1764,9 +1717,9 @@ namespace Budgie {
 			get_allocation(out alloc);
 			/* Create a compatible buffer for the current scaling factor */
 			var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
-															alloc.width * this.scale_factor,
-															alloc.height * this.scale_factor,
-															this.scale_factor);
+															alloc.width,
+															alloc.height,
+															1);
 			var cr2 = new Cairo.Context(buffer);
 
 			propagate_draw(get_child(), cr2);
@@ -1833,7 +1786,7 @@ namespace Budgie {
 
 		private void set_above_other_surfaces() {
 			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP); // Ensure it is above other surfaces
-			GtkLayerShell.set_exclusive_zone(this, this.intended_size);
+			GtkLayerShell.set_exclusive_zone(this, this.reserved_size);
 		}
 
 		private void set_below_other_surfaces() {
