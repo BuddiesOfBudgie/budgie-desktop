@@ -11,6 +11,19 @@
 
 namespace Budgie {
 	/**
+	* Represents an action declared by an application's desktop file,
+	* such as "New Window".
+	*/
+	public class ApplicationAction : Object {
+		public string id { get; construct; }
+		public string name { get; construct; }
+
+		public ApplicationAction(string id, string name) {
+			Object(id: id, name: name);
+		}
+	}
+
+	/**
 	* Represents an application that can be ran.
 	*/
 	public class Application : Object {
@@ -27,7 +40,10 @@ namespace Budgie {
 		public bool prefers_default_gpu { get; private set; default = false; }
 		public bool should_show { get; private set; default = true; }
 		public bool dbus_activatable { get; private set; default = false; }
-		public string[] actions { get; private set; }
+
+		// An object array can't be a GObject property, so this is read
+		// through get_actions()
+		private ApplicationAction[] actions;
 
 		/**
 		* Emitted when the application is launched.
@@ -61,7 +77,7 @@ namespace Budgie {
 			this.prefers_default_gpu = !app_info.get_boolean("PrefersNonDefaultGPU");
 			this.should_show = app_info.should_show();
 			this.dbus_activatable = app_info.get_boolean("DBusActivatable");
-			this.actions = app_info.list_actions();
+			this.actions = parse_actions(app_info);
 
 			// Try to get an icon from the desktop file
 			var desktop_icon = app_info.get_icon();
@@ -76,6 +92,38 @@ namespace Budgie {
 
 		construct {
 			this.switcheroo = new Switcheroo();
+		}
+
+		/**
+		* The actions this application's desktop file declares.
+		*/
+		public unowned ApplicationAction[] get_actions() {
+			return this.actions;
+		}
+
+		/**
+		* Read the desktop file's actions and their display names.
+		*
+		* Actions without a name are dropped, as there is nothing to label
+		* them with.
+		*/
+		private static ApplicationAction[] parse_actions(DesktopAppInfo app_info) {
+			ApplicationAction[] parsed = {};
+
+			foreach (unowned var action in app_info.list_actions()) {
+				if (action.length == 0) {
+					continue;
+				}
+
+				var action_name = app_info.get_action_name(action);
+				if (action_name == null || action_name.length == 0) {
+					continue;
+				}
+
+				parsed += new ApplicationAction(action, action_name);
+			}
+
+			return parsed;
 		}
 
 		public AppLaunchContext create_launch_context() {
