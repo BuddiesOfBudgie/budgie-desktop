@@ -125,8 +125,19 @@ namespace Budgie {
 			toplevel.applet_added.connect(this.applet_added);
 			toplevel.applet_removed.connect(this.applet_removed);
 			toplevel.applets_changed.connect(this.applets_changed);
+			this.destroy.connect(this.on_destroy);
 
 			this.applets_changed();
+		}
+
+		/**
+		* A closed panel still emits for as long as something holds it, so stop
+		* listening before we go away
+		*/
+		private void on_destroy() {
+			this.toplevel.applet_added.disconnect(this.applet_added);
+			this.toplevel.applet_removed.disconnect(this.applet_removed);
+			this.toplevel.applets_changed.disconnect(this.applets_changed);
 		}
 
 		/**

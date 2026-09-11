@@ -1393,6 +1393,36 @@ namespace Budgie {
 
 			// Load panel again
 			load_panel(uuid, true);
+
+			// Moving leaves the old edge marked as in use, since show_panel() applies
+			// the new position before set_placement() can release it. Left alone,
+			// get_first_position() runs out of edges and new panels stop being created
+			this.update_slots();
+
+			// Anything holding the panel we just closed has to pick up the new one
+			this.panel_added(uuid, panels.lookup(uuid));
+		}
+
+		/**
+		* Recalculate which screen edges are in use from the panels we have now
+		*/
+		void update_slots() {
+			unowned Screen? area = screens.lookup(primary_monitor);
+			if (area == null) {
+				return;
+			}
+
+			string? key = null;
+			Budgie.Panel? val = null;
+
+			area.slots = PanelPosition.NONE;
+
+			// PanelPosition is a bitmask and slots is the set of edges taken, so
+			// walk the panels we have and OR in the edge each one sits on
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(out key, out val)) {
+				area.slots |= val.position;
+			}
 		}
 
 		/**

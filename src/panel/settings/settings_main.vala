@@ -344,7 +344,12 @@ namespace Budgie {
 		*/
 		private void on_panel_added(string uuid, Budgie.Toplevel? toplevel) {
 			string content_id = "panel-" + uuid;
-			if (content_id in this.page_map) {
+
+			// A UUID we already have a page for is a panel that was recreated in
+			// place, such as by a move, so hand the page its replacement
+			PanelPage? existing = this.page_map.lookup(content_id) as PanelPage;
+			if (existing != null) {
+				existing.rebind(toplevel);
 				return;
 			}
 			this.add_page(new PanelPage(this.manager, toplevel));
