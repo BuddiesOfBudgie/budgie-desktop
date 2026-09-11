@@ -323,12 +323,6 @@ public class ApplicationListView : ApplicationView {
 	 * Update everything that depends on which applications are favorited.
 	 */
 	private void on_favorites_changed() {
-		foreach (var child in this.applications.get_children()) {
-			var row = child as Gtk.ListBoxRow;
-			var btn = row.get_child() as MenuButton;
-			btn.update_favorite_label();
-		}
-
 		this.update_favorites_visibility();
 
 		// Favorites changed and is now empty (so we unfavorited our last item)
