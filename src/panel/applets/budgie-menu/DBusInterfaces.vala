@@ -22,7 +22,6 @@ interface AccountUserRemote : Object {
 [DBus (name="org.freedesktop.DBus.Properties")]
 interface PropertiesRemote : Object {
 	public abstract Variant get(string interface, string property) throws DBusError, IOError;
-	public signal void properties_changed();
 }
 
 /* Budgie */

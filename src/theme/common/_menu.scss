@@ -1,12 +1,23 @@
-@mixin budgie-menu($image_effect, $search, $image, $insensitive, $label, $undershoot, $overshoot) {
+@mixin budgie-menu(
+    $image_effect,
+    $search,
+    $image,
+    $insensitive,
+    $label,
+    $undershoot,
+    $overshoot
+) {
     @extend %reset_style;
 
     background-color: $panel_bg;
     padding: 8px;
 
-    .button:hover { -gtk-#{$image-effect}: none; }
+    .button:hover {
+        -gtk-#{$image-effect}: none;
+    }
 
-    label, #{$search} {
+    label,
+    #{$search} {
         color: darken($fg_color, 0.1);
 
         &:disabled {
@@ -19,8 +30,12 @@
 
         background-color: transparentize(white, 0.7);
 
-        &:hover { background-color: transparentize(white, 0.5); }
-        &:active { background-color: transparentize(white, 0.3); }
+        &:hover {
+            background-color: transparentize(white, 0.5);
+        }
+        &:active {
+            background-color: transparentize(white, 0.3);
+        }
     }
 
     #{$search} {
@@ -35,8 +50,14 @@
         #{$image} {
             color: currentColor;
 
-            &:dir(ltr) { padding-left: 8px; padding-right: 12px; }
-            &:dir(rtl) { padding-left: 12px; padding-right: 8px; }
+            &:dir(ltr) {
+                padding-left: 8px;
+                padding-right: 12px;
+            }
+            &:dir(rtl) {
+                padding-left: 12px;
+                padding-right: 8px;
+            }
         }
     }
 
@@ -50,12 +71,16 @@
             margin: 0;
 
             &:focus {
-                image, label {
+                image,
+                label {
                     color: $selected_fg_color;
                 }
                 background-color: $selected_bg_color;
             }
+        }
 
+        separator {
+            margin: 4px 8px;
         }
 
         button.flat {
@@ -67,7 +92,9 @@
             padding: 4px 8px;
             border-radius: 6px;
 
-            &:hover { background-color: transparentize(white, 0.9); }
+            &:hover {
+                background-color: transparentize(white, 0.9);
+            }
             &:active {
                 label {
                     color: $selected_fg_color;
@@ -78,13 +105,24 @@
             box {
                 @extend %reset_style;
 
-                label, image {
+                label,
+                image {
                     padding: 0;
                 }
 
                 image {
                     padding-right: 2px;
                 }
+            }
+        }
+
+        .menu-item-actions {
+            margin: 0 0 4px 18px;
+            padding: 2px 0 2px 14px;
+            border-left: 1px solid transparentize($fg_color, 0.85);
+
+            list {
+                padding: 0;
             }
         }
     }
@@ -103,10 +141,15 @@
             min-width: 24px;
             border-radius: 100%;
 
-            &:hover { background-color: transparentize(white, 0.9); }
-            &:active { background-color: transparentize(white, 0.8); }
+            &:hover {
+                background-color: transparentize(white, 0.9);
+            }
+            &:active {
+                background-color: transparentize(white, 0.8);
+            }
             &:focus {
-                image, label {
+                image,
+                label {
                     color: $selected_fg_color;
                 }
                 background-color: $selected_bg_color;
@@ -121,10 +164,15 @@
             padding: 4px 8px 4px 6px;
             border-radius: 6px;
 
-            &:hover { background-color: transparentize(white, 0.9); }
-            &:active { background-color: transparentize(white, 0.8); }
+            &:hover {
+                background-color: transparentize(white, 0.9);
+            }
+            &:active {
+                background-color: transparentize(white, 0.8);
+            }
             &:focus {
-                image, label {
+                image,
+                label {
                     color: $selected_fg_color;
                 }
                 background-color: $selected_bg_color;
@@ -132,7 +180,8 @@
         }
     }
 
-    .left-overlay-menu, .right-overlay-menu {
+    .left-overlay-menu,
+    .right-overlay-menu {
         @extend %reset_style;
 
         background-color: $raven_bg;
@@ -141,7 +190,8 @@
         padding: 8px;
 
         > row:focus {
-            image, label {
+            image,
+            label {
                 color: $selected_fg_color;
             }
             background-color: $selected_bg_color;
@@ -162,7 +212,9 @@
                 color: white;
             }
 
-            &:hover { background-color: transparentize(white, 0.9); }
+            &:hover {
+                background-color: transparentize(white, 0.9);
+            }
             &:active {
                 color: $selected_fg_color;
                 > image {
@@ -177,6 +229,10 @@
 
         margin: 0;
         padding: 0 5px 0 0;
+
+        separator {
+            margin: 4px 0;
+        }
     }
 
     .category-button {
@@ -188,8 +244,12 @@
         transition-property: background-color, color;
         transition: 170ms ease-out;
 
-        &:hover { background-color: transparentize(white, 0.9); }
-        &:active, &:checked, &:focus {
+        &:hover {
+            background-color: transparentize(white, 0.9);
+        }
+        &:active,
+        &:checked,
+        &:focus {
             label {
                 color: $selected_fg_color;
             }
@@ -200,7 +260,10 @@
         }
     }
 
-    #{$undershoot}, #{$overshoot} { background: none; }
+    #{$undershoot},
+    #{$overshoot} {
+        background: none;
+    }
 }
 
 // Menu Button
@@ -211,7 +274,9 @@
         padding: 0 2px;
         transition: background-color 170ms ease-out;
 
-        &:hover { background-color: transparentize(white, 0.9); }
+        &:hover {
+            background-color: transparentize(white, 0.9);
+        }
         &:active {
             color: $selected_fg_color;
             background-color: $selected_bg_color;

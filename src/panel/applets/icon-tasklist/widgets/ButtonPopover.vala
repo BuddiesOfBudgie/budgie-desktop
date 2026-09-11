@@ -39,7 +39,7 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 
 	private Gtk.Image pin_icon;
 	private Gtk.Stack? stack;
-	private Gtk.ListBox? desktop_actions;
+	private Budgie.ApplicationActionList? desktop_actions;
 	private Gtk.ListBox? windows;
 	private Gtk.Button? pin_button;
 	private Gtk.Button? new_instance_button;
@@ -54,44 +54,9 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 
 		get_style_context().add_class("icon-popover");
 
-		desktop_actions = new Gtk.ListBox() {
-			selection_mode = Gtk.SelectionMode.NONE,
-		};
-
-		if (app != null && app.actions != null) {
-			var app_info = new DesktopAppInfo(app.desktop_id);
-
-			if (app_info != null) {
-				// Iterate through actions
-				foreach (var action in app.actions) {
-					// Skip null or empty actions
-					if (action == null || action.length == 0) continue;
-
-					var action_label = app_info.get_action_name(action);
-
-					// Skip if we couldn't get a label
-					if (action_label == null || action_label.length == 0) {
-						debug(@"Skipping action '$action' - no label");
-						continue;
-					}
-
-					var action_button = new Gtk.Button.with_label(action_label) {
-						relief = Gtk.ReliefStyle.NONE,
-					};
-
-					var label = action_button.get_child() as Gtk.Label;
-					if (label != null) {
-						label.set_xalign(0);
-					}
-
-					action_button.clicked.connect(() => {
-						app.launch_action(action);
-						hide();
-					});
-
-					desktop_actions.add(action_button);
-				}
-			}
+		if (app != null) {
+			desktop_actions = new Budgie.ApplicationActionList(app);
+			desktop_actions.action_launched.connect(this.on_action_launched);
 		}
 
 		windows = new Gtk.ListBox() {
@@ -140,7 +105,7 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 
 		var main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-		if (!desktop_actions.get_children().is_empty()) {
+		if (desktop_actions != null && !desktop_actions.is_empty()) {
 			var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 
 			main_layout.pack_start(desktop_actions);
@@ -160,6 +125,10 @@ public class IconTasklistButtonPopover : Gtk.Popover {
 		add(stack);
 
 		stack.show_all();
+	}
+
+	private void on_action_launched() {
+		hide();
 	}
 
 	private void on_pin_clicked() {
