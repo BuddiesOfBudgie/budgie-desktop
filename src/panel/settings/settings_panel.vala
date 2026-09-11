@@ -29,6 +29,18 @@ namespace Budgie {
 	* PanelPage allows users to change aspects of the fonts used
 	*/
 	public class PanelPage : Budgie.SettingsPage {
+		/* Toplevel properties we mirror into our widgets */
+		private const string[] NEEDED_PROPS = {
+			"position",
+			"intended-size",
+			"spacing",
+			"transparency",
+			"autohide",
+			"shadow-visible",
+			"theme-regions",
+			"dock-mode",
+		};
+
 		unowned Budgie.Toplevel? toplevel;
 		Gtk.Stack stack;
 		Gtk.StackSwitcher switcher;
@@ -124,7 +136,6 @@ namespace Budgie {
 		}
 
 		void rebuild_position_model() {
-			position_model.clear();
 			Gtk.TreeIter iter;
 			const Budgie.PanelPosition[] positions = {
 				Budgie.PanelPosition.TOP,
@@ -132,6 +143,11 @@ namespace Budgie {
 				Budgie.PanelPosition.LEFT,
 				Budgie.PanelPosition.RIGHT,
 			};
+
+			// Clearing the model unsets the active row, so keep the handler out of
+			// it until we've put the panel's own position back
+			SignalHandler.block(this.combobox_position, this.position_id);
+			position_model.clear();
 
 			foreach (var pos in positions) {
 				var used = false;
@@ -157,6 +173,62 @@ namespace Budgie {
 
 				position_model.append(out iter);
 				position_model.set(iter, 0, pos.to_string(), 1, PanelPage.pos_to_display(pos), 2, pos, -1);
+			}
+
+			this.combobox_position.active_id = this.toplevel.position.to_string();
+			SignalHandler.unblock(this.combobox_position, this.position_id);
+		}
+
+		/**
+		* Moving a panel destroys and recreates it, so we point at the new
+		* Toplevel and refresh everything we track from it
+		*/
+		public void rebind(Budgie.Toplevel? toplevel) {
+			// Stop following the panel we were built with, which is closed but
+			// stays alive for as long as anything holds it
+			foreach (var prop in NEEDED_PROPS) {
+				this.toplevel.notify[prop].disconnect(this.panel_notify);
+			}
+
+			this.toplevel = toplevel;
+
+			// Take the new panel's state into our widgets, then follow it instead
+			foreach (var prop in NEEDED_PROPS) {
+				this.update_from_property(prop);
+				this.toplevel.notify[prop].connect_after(this.panel_notify);
+			}
+
+			// Our place in the sidebar is derived from the position
+			this.display_weight = PanelPage.get_panel_weight(this.toplevel);
+
+			this.rebuild_applets_page();
+		}
+
+		/**
+		* Replace the applets tab, as AppletsPage lists the applets of the single
+		* panel it was constructed with
+		*/
+		private void rebuild_applets_page() {
+			Gtk.Widget? existing = this.stack.get_child_by_name("main");
+			var showing = this.stack.get_visible_child_name() == "main";
+
+			if (existing != null) {
+				existing.destroy();
+			}
+
+			var page = this.applets_page();
+			this.stack.add_titled(page, "main", _("Applets"));
+
+			// add_titled() appends, and the applets tab belongs first
+			var position = Value(typeof(int));
+			position.set_int(0);
+			this.stack.child_set_property(page, "position", position);
+
+			page.show_all();
+
+			// Destroying the visible child moved the stack along, so come back
+			if (showing) {
+				this.stack.set_visible_child_name("main");
 			}
 		}
 
@@ -376,19 +448,7 @@ namespace Budgie {
 			combobox_autohide.add_attribute(render, "text", 1);
 			combobox_autohide.set_id_column(0);
 
-			/* Properties we needed to know about */
-			const string[] needed_props = {
-				"position",
-				"intended-size",
-				"spacing",
-				"transparency",
-				"autohide",
-				"shadow-visible",
-				"theme-regions",
-				"dock-mode",
-			};
-
-			foreach (var init in needed_props) {
+			foreach (var init in NEEDED_PROPS) {
 				this.update_from_property(init);
 				this.toplevel.notify[init].connect_after(this.panel_notify);
 			}
@@ -411,11 +471,8 @@ namespace Budgie {
 		private void update_from_property(string property) {
 			switch (property) {
 				case "position":
-					SignalHandler.block(this.combobox_position, this.position_id);
 					rebuild_position_model();
-					this.combobox_position.active_id = this.toplevel.position.to_string();
 					this.title = PanelPage.get_panel_name(toplevel);
-					SignalHandler.unblock(this.combobox_position, this.position_id);
 					break;
 				case "intended-size":
 					SignalHandler.block(this.spinbutton_size, this.size_id);
