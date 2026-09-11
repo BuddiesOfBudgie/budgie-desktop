@@ -35,7 +35,7 @@ public class MenuButton : Gtk.Box {
 
 	private Gtk.Button launch_button;
 	private Gtk.Revealer revealer;
-	private Gtk.Label favorite_label;
+	private Gtk.Label? favorite_label;
 
 	public MenuButton(Budgie.Application app, Budgie.Category category, int icon_size, FavoritesManager favorites) {
 		Object(
@@ -82,13 +82,20 @@ public class MenuButton : Gtk.Box {
 		launch_button.clicked.connect(this.on_launch_clicked);
 		launch_button.button_press_event.connect(this.on_button_press);
 
-		pack_start(launch_button, false, false, 0);
-		pack_start(this.build_revealer(), false, false, 0);
+		revealer = new Gtk.Revealer() {
+			transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN,
+			reveal_child = false
+		};
 
-		update_favorite_label();
+		pack_start(launch_button, false, false, 0);
+		pack_start(revealer, false, false, 0);
 	}
 
-	private Gtk.Revealer build_revealer() {
+	/**
+	 * Built when the item is first expanded. There is one menu item per
+	 * application per category, and most are never expanded.
+	 */
+	private Gtk.Box build_actions() {
 		favorite_label = new Gtk.Label(null) {
 			xalign = 0.0f
 		};
@@ -108,19 +115,13 @@ public class MenuButton : Gtk.Box {
 		layout.get_style_context().add_class("menu-item-actions");
 		layout.pack_start(favorite_list, false, false, 0);
 
-		var actions = new Budgie.ApplicationActionList(app);
-		if (!actions.is_empty()) {
+		if (app.get_actions().length > 0) {
+			var actions = new Budgie.ApplicationActionList(app);
 			actions.action_launched.connect(this.on_action_launched);
 			layout.pack_start(actions, false, false, 0);
 		}
 
-		revealer = new Gtk.Revealer() {
-			transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN,
-			reveal_child = false
-		};
-		revealer.add(layout);
-
-		return revealer;
+		return layout;
 	}
 
 	/**
@@ -139,14 +140,25 @@ public class MenuButton : Gtk.Box {
 	}
 
 	public void set_revealed(bool revealed) {
+		if (revealed && revealer.get_child() == null) {
+			var actions = this.build_actions();
+			revealer.add(actions);
+			actions.show_all();
+		}
+
 		revealer.reveal_child = revealed;
 
 		if (revealed) {
+			this.update_favorite_label();
 			this.expanded();
 		}
 	}
 
-	public void update_favorite_label() {
+	private void update_favorite_label() {
+		if (favorite_label == null) {
+			return;
+		}
+
 		favorite_label.label = favorites.is_favorite(app.desktop_id)
 			? _("Remove from favorites")
 			: _("Add to favorites");
