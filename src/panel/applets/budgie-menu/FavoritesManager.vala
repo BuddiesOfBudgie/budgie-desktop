@@ -27,9 +27,8 @@ public class FavoritesManager : Object {
 	}
 
 	construct {
-		this.reload();
-
 		this.settings.changed["favorites"].connect(this.on_settings_changed);
+		this.reload();
 	}
 
 	public bool is_favorite(string desktop_id) {
@@ -45,15 +44,19 @@ public class FavoritesManager : Object {
 	 * is already there.
 	 */
 	public void toggle(string desktop_id) {
-		string[] updated = {};
+		string[] updated;
 
-		foreach (unowned var id in this.favorites) {
-			if (id != desktop_id) {
-				updated += id;
+		// If it is currently in the favorites, meaning we need to remove it
+		if (this.is_favorite(desktop_id)) {
+			updated = {}; // Create the new array
+
+			foreach (unowned var id in this.favorites) {
+				if (id != desktop_id) { // For every desktop id that isn't the one we are removing
+					updated += id; // Add it to the new array
+				}
 			}
-		}
-
-		if (!this.is_favorite(desktop_id)) {
+		} else { // If we are adding it to the favorites, just copy and push
+			updated = this.favorites.copy();
 			updated += desktop_id;
 		}
 
