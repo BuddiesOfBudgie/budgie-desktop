@@ -20,21 +20,20 @@ public class FavoritesManager : Object {
 	 */
 	public signal void changed();
 
-	private GenericSet<string> favorites;
+	private string[] favorites;
 
 	public FavoritesManager(Settings settings) {
 		Object(settings: settings);
 	}
 
 	construct {
-		this.favorites = new GenericSet<string>(str_hash, str_equal);
 		this.reload();
 
 		this.settings.changed["favorites"].connect(this.on_settings_changed);
 	}
 
 	public bool is_favorite(string desktop_id) {
-		return this.favorites.contains(desktop_id);
+		return desktop_id in this.favorites;
 	}
 
 	public bool is_empty() {
@@ -48,18 +47,17 @@ public class FavoritesManager : Object {
 	public void toggle(string desktop_id) {
 		string[] updated = {};
 
-		if (this.favorites.contains(desktop_id)) {
-			foreach (unowned var id in this.settings.get_strv("favorites")) {
-				if (id != desktop_id) {
-					updated += id;
-				}
+		foreach (unowned var id in this.favorites) {
+			if (id != desktop_id) {
+				updated += id;
 			}
-		} else {
-			updated = this.settings.get_strv("favorites");
+		}
+
+		if (!this.is_favorite(desktop_id)) {
 			updated += desktop_id;
 		}
 
-		// on_settings_changed reloads the set
+		// on_settings_changed reloads our copy
 		this.settings.set_strv("favorites", updated);
 	}
 
@@ -69,10 +67,6 @@ public class FavoritesManager : Object {
 	}
 
 	private void reload() {
-		this.favorites.remove_all();
-
-		foreach (unowned var id in this.settings.get_strv("favorites")) {
-			this.favorites.add(id);
-		}
+		this.favorites = this.settings.get_strv("favorites");
 	}
 }
