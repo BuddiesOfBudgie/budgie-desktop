@@ -99,8 +99,12 @@ public class MenuButton : Gtk.Button {
 		);
 	}
 
-	private bool hide_toplevel() {
-		this.get_toplevel().hide();
+	private bool hide_menu() {
+		unowned var menu = this.get_ancestor(typeof(BudgieMenuWindow)) as BudgieMenuWindow;
+		if (menu != null) {
+			menu.hide();
+		}
+
 		return false;
 	}
 
@@ -109,7 +113,7 @@ public class MenuButton : Gtk.Button {
 	}
 
 	private new void drag_end(Gdk.DragContext context) {
-		Idle.add(this.hide_toplevel);
+		Idle.add(this.hide_menu);
 	}
 
 	private new void drag_data_get(Gdk.DragContext context, Gtk.SelectionData data, uint info, uint timestamp) {
