@@ -23,6 +23,7 @@ link_libbudgiempris = declare_dependency(
 libbudgieprivate_sources = [
     'animation.vala',
     'application.vala',
+    'applicationactionlist.vala',
     'toplevel.vala',
     'shadow.vala',
     'manager.vala',

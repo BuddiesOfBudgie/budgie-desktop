@@ -28,11 +28,16 @@ public class ApplicationListView : ApplicationView {
 	private Gtk.ScrolledWindow categories_scroll;
 	private Gtk.ScrolledWindow content_scroll;
 	private CategoryButton all_categories;
+	private CategoryButton favorites_category;
+	private MenuButton? expanded_row = null;
 
 	public Settings settings { get; construct; default = null; }
 
+	private FavoritesManager favorites;
+
 	// The current group
 	private Budgie.Category? current_category = null;
+	private bool favorites_selected = false;
 	private bool compact_mode;
 	private bool headers_visible;
 	private bool show_control_center_panels;
@@ -59,6 +64,9 @@ public class ApplicationListView : ApplicationView {
 		this.set_size_request(current_width, current_height);
 		this.icon_size = settings.get_int("menu-icons-size");
 
+		this.favorites = new FavoritesManager(settings);
+		this.favorites.changed.connect(this.on_favorites_changed);
+
 		this.categories = new Gtk.Box(Gtk.Orientation.VERTICAL, 0) {
 			margin_top = 3,
 			margin_bottom = 3
@@ -76,14 +84,6 @@ public class ApplicationListView : ApplicationView {
 		this.categories_scroll.get_style_context().add_class("sidebar");
 		this.categories_scroll.add(categories);
 		this.pack_start(categories_scroll, false, false, 0);
-
-		// "All" button"
-		this.all_categories = new CategoryButton(null);
-		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
-		this.all_categories.toggled.connect(()=> {
-			this.update_category(all_categories);
-		});
-		this.categories.pack_start(all_categories, false);
 
 		var right_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		this.pack_start(right_layout, true, true, 0);
@@ -125,6 +125,8 @@ public class ApplicationListView : ApplicationView {
 		// management of our listbox
 		this.applications.set_filter_func(do_filter_list);
 		this.applications.set_sort_func(do_sort_list);
+
+		this.build_static_categories();
 
 		this.update_sizing();
 	}
@@ -181,6 +183,7 @@ public class ApplicationListView : ApplicationView {
 		}
 		this.application_buttons.remove_all();
 		this.control_center_buttons.clear();
+		this.expanded_row = null;
 
 		// Destroy all category items
 		this.categories.get_children().foreach((child) => {
@@ -200,17 +203,51 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	/**
+	 * Build the category buttons that aren't backed by the application index.
+	 *
+	 * These are packed ahead of the indexed categories, and are rebuilt along
+	 * with them whenever the view refreshes.
+	 */
+	private void build_static_categories() {
+		this.favorites_category = new CategoryButton.for_favorites() {
+			no_show_all = true // Only appears once something has been favorited
+		};
+		this.favorites_category.enter_notify_event.connect(this.on_mouse_enter);
+		this.favorites_category.toggled.connect(this.on_category_toggled);
+		this.categories.pack_start(favorites_category, false);
+
+		this.all_categories = new CategoryButton(null);
+		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
+		this.all_categories.toggled.connect(this.on_category_toggled);
+		this.all_categories.show_all();
+		this.categories.pack_start(all_categories, false);
+
+		this.favorites_category.join_group(all_categories);
+
+		// These buttons are new, and a new group comes up on "All"
+		this.favorites_selected = false;
+		this.current_category = null;
+
+		this.update_favorites_visibility();
+	}
+
+	/**
 	 * Build the category and application lists.
 	 */
 	private void load_menus(Budgie.AppIndex app_tracker) {
-		// "All" button"
-		this.all_categories = new CategoryButton(null);
-		this.all_categories.enter_notify_event.connect(this.on_mouse_enter);
-		this.all_categories.toggled.connect(()=> {
-			this.update_category(all_categories);
-		});
-		all_categories.show_all();
-		this.categories.pack_start(all_categories, false);
+		this.build_static_categories();
+
+		// Nothing to separate if every category is empty
+		foreach (var category in app_tracker.get_categories()) {
+			if (category.apps.is_empty) {
+				continue;
+			}
+
+			var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+			separator.show();
+			this.categories.pack_start(separator, false, false, 0);
+			break;
+		}
 
 		foreach (var category in app_tracker.get_categories()) {
 			// Skip empty categories
@@ -222,21 +259,18 @@ public class ApplicationListView : ApplicationView {
 			var btn = new CategoryButton(category);
 			btn.join_group(all_categories);
 			btn.enter_notify_event.connect(this.on_mouse_enter);
-			btn.toggled.connect(() => {
-				update_category(btn);
-			});
+			btn.toggled.connect(this.on_category_toggled);
 
 			btn.show_all();
 			this.categories.pack_start(btn, false); // Add the button
 
 			// Create a button for each app in this category
 			foreach (var app in category.apps) {
-				var app_btn = new MenuButton(app, category, icon_size);
+				var app_btn = new MenuButton(app, category, icon_size, favorites);
 
-				app_btn.clicked.connect(() => {
-					app.launch();
-					this.app_launched();
-				});
+				app_btn.clicked.connect(this.on_app_clicked);
+				app_btn.action_launched.connect(this.on_app_action_launched);
+				app_btn.expanded.connect(this.on_row_expanded);
 
 				this.application_buttons.insert(app.desktop_id, app_btn);
 				app_btn.show_all();
@@ -250,9 +284,65 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	/**
+	 * Launch the application for a menu item.
+	 */
+	private void on_app_clicked(MenuButton btn) {
+		btn.app.launch();
+		this.app_launched();
+	}
+
+	private void on_app_action_launched() {
+		this.app_launched();
+	}
+
+	private void on_category_toggled(Gtk.ToggleButton button) {
+		this.update_category(button as CategoryButton);
+	}
+
+	/**
+	 * Only one menu item shows its actions at a time.
+	 */
+	private void on_row_expanded(MenuButton btn) {
+		if (this.expanded_row != null && this.expanded_row != btn) {
+			this.expanded_row.set_revealed(false);
+		}
+
+		this.expanded_row = btn;
+	}
+
+	private void collapse_expanded_row() {
+		if (this.expanded_row == null) {
+			return;
+		}
+
+		this.expanded_row.set_revealed(false);
+		this.expanded_row = null;
+	}
+
+	/**
+	 * Update everything that depends on which applications are favorited.
+	 */
+	private void on_favorites_changed() {
+		this.update_favorites_visibility();
+
+		// Favorites changed and is now empty (so we unfavorited our last item)
+		if (this.favorites_selected && this.favorites.is_empty()) {
+			this.all_categories.set_active(true); // Change to "All" category
+			return;
+		}
+
+		this.invalidate();
+	}
+
+	private void update_favorites_visibility() {
+		this.favorites_category.set_visible(!this.favorites.is_empty());
+	}
+
+	/**
 	 * Invalidate the application headers, filters, and sorting.
 	 */
 	public override void invalidate() {
+		this.collapse_expanded_row();
 		this.applications.invalidate_headers();
 		this.applications.invalidate_filter();
 		this.applications.invalidate_sort();
@@ -313,16 +403,12 @@ public class ApplicationListView : ApplicationView {
 				this.categories_scroll.no_show_all = vis;
 				this.categories_scroll.set_visible(vis);
 				this.compact_mode = vis;
+				this.update_header_func();
 				this.invalidate();
 				break;
 			case "menu-headers":
-				var hed = this.settings.get_boolean(key);
-				this.headers_visible = hed;
-				if (hed) {
-					this.applications.set_header_func(this.do_list_header);
-				} else {
-					this.applications.set_header_func(null);
-				}
+				this.headers_visible = this.settings.get_boolean(key);
+				this.update_header_func();
 				this.invalidate();
 				break;
 			case "menu-categories-hover":
@@ -353,46 +439,91 @@ public class ApplicationListView : ApplicationView {
 	}
 
 	/**
+	 * The header function only runs when there is something for it to draw:
+	 * category headers, or the break below the compact list's favorites.
+	 */
+	private void update_header_func() {
+		if (this.headers_visible || this.compact_mode) {
+			this.applications.set_header_func(this.do_list_header);
+		} else {
+			this.applications.set_header_func(null);
+		}
+	}
+
+	private bool is_favorite_row(Gtk.ListBoxRow row) {
+		var btn = row.get_child() as MenuButton;
+		return this.favorites.is_favorite(btn.app.desktop_id);
+	}
+
+	/**
 	 * Provide category headers in the "All" category
 	 */
-	private void do_list_header(Gtk.ListBoxRow? before, Gtk.ListBoxRow? after) {
+	private void do_list_header(Gtk.ListBoxRow? row, Gtk.ListBoxRow? before) {
 		MenuButton? child = null;
-		string? prev = null;
-		string? next = null;
+		string? group = null;
+		string? previous_group = null;
 
 		// In a category listing, kill headers
-		if (this.current_category != null) {
+		if (this.current_category != null || this.favorites_selected) {
+			if (row != null) {
+				row.set_header(null);
+			}
 			if (before != null) {
 				before.set_header(null);
-			}
-			if (after != null) {
-				after.set_header(null);
 			}
 			return;
 		}
 
-		// Just retrieve the category names
-		if (before != null) {
-			child = before.get_child() as MenuButton;
-			prev = child.category.name;
+		// Just retrieve the group names
+		if (row != null) {
+			child = row.get_child() as MenuButton;
+			group = this.group_name_for(child);
 		}
 
-		if (after != null) {
-			child = after.get_child() as MenuButton;
-			next = child.category.name;
+		if (before != null) {
+			child = before.get_child() as MenuButton;
+			previous_group = this.group_name_for(child);
+		}
+
+		// Compact mode sorts favorites to the top. With headers off there is
+		// no label to mark where they end, so use a separator
+		if (!this.headers_visible) {
+			// The separator belongs on the first non-favorite row that has a
+			// favorite above it. before is null for the list's first row,
+			// which has nothing above it to be separated from
+			if (this.compact_mode && before != null && this.is_favorite_row(before) && !this.is_favorite_row(row)) {
+				row.set_header(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+			} else {
+				row.set_header(null);
+			}
+			return;
 		}
 
 		// Only add one if we need one!
-		if (before == null || after == null || prev != next) {
-			var label = new Gtk.Label(Markup.printf_escaped("<big>%s</big>", prev));
+		if (row == null || before == null || group != previous_group) {
+			var label = new Gtk.Label(Markup.printf_escaped("<big>%s</big>", group));
 			label.get_style_context().add_class("dim-label");
 			label.halign = Gtk.Align.START;
 			label.use_markup = true;
-			before.set_header(label);
+			row.set_header(label);
 			label.margin = 6;
 		} else {
-			before.set_header(null);
+			row.set_header(null);
 		}
+	}
+
+	/**
+	 * The heading a menu item belongs under in the "All" listing.
+	 *
+	 * Compact mode has no category list, so favorites are grouped together
+	 * ahead of the categories instead.
+	 */
+	private string group_name_for(MenuButton btn) {
+		if (this.compact_mode && this.favorites.is_favorite(btn.app.desktop_id)) {
+			return _("Favorites");
+		}
+
+		return btn.category.name;
 	}
 
 	/**
@@ -420,6 +551,16 @@ public class ApplicationListView : ApplicationView {
 		// "enable" categories if not searching
 		this.categories.sensitive = true;
 
+		// If we have our favorites selected, filter out anything that isn't a favorite
+		if (this.favorites_selected) {
+			if (!this.favorites.is_favorite(child.app.desktop_id)) {
+				return false;
+			}
+
+			// An app belonging to several categories has an item in each
+			return !this.is_item_dupe(child);
+		}
+
 		// We are currently in the "All" category, so show this item
 		if (this.current_category == null) {
 			// Don't show this item if it's a control center panel and
@@ -428,6 +569,12 @@ public class ApplicationListView : ApplicationView {
 				if (!this.show_control_center_panels) {
 					return false;
 				}
+			}
+
+			// Favorites are grouped together at the top of the compact list,
+			// so they appear once rather than once per category
+			if (this.compact_mode && this.favorites.is_favorite(child.app.desktop_id)) {
+				return !this.is_item_dupe(child);
 			}
 
 			if (this.headers_visible) {
@@ -486,10 +633,20 @@ public class ApplicationListView : ApplicationView {
 			}
 		}
 
+		// Compact mode has no category list, so favorites go to the top of it
+		if (this.compact_mode) {
+			bool favorite1 = this.favorites.is_favorite(child1.app.desktop_id);
+			bool favorite2 = this.favorites.is_favorite(child2.app.desktop_id);
+
+			if (favorite1 != favorite2) {
+				return favorite1 ? -1 : 1;
+			}
+		}
+
 		// Only perform category grouping if headers are visible
-		string parentA = Budgie.RelevancyService.searchable_string(child1.category.name);
-		string parentB = Budgie.RelevancyService.searchable_string(child2.category.name);
-		if (child1.category != child2.category && this.headers_visible) {
+		string parentA = Budgie.RelevancyService.searchable_string(this.group_name_for(child1));
+		string parentB = Budgie.RelevancyService.searchable_string(this.group_name_for(child2));
+		if (!this.favorites_selected && parentA != parentB && this.headers_visible) {
 			return parentA.collate(parentB);
 		}
 
@@ -504,6 +661,7 @@ public class ApplicationListView : ApplicationView {
 	 */
 	private void update_category(CategoryButton btn) {
 		if (btn.active) {
+			this.favorites_selected = btn.favorites;
 			this.current_category = btn.category;
 			this.invalidate();
 		}
@@ -514,8 +672,17 @@ public class ApplicationListView : ApplicationView {
 	 * again! :)
 	 */
 	public override void on_show() {
-		this.all_categories.set_active(true);
-		this.update_category(all_categories);
+		this.update_favorites_visibility();
+
+		// Compact mode hides the category list (not to be confused with category headers),
+		// so it stays on "All" with the favorites sorted to the top instead
+		if (!this.compact_mode && !this.favorites.is_empty()) {
+			this.favorites_category.set_active(true);
+			this.update_category(favorites_category);
+		} else {
+			this.all_categories.set_active(true);
+			this.update_category(all_categories);
+		}
 
 		this.applications.select_row(null);
 		this.content_scroll.get_vadjustment().set_value(0);

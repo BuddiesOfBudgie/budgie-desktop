@@ -29,14 +29,16 @@ lib_applet_budgiemenu_resources = static_library(
 
 applet_budgiemenu_sources = [
     'BudgieMenu.vala',
-    'BudgieMenuButtons.vala',
     'BudgieMenuWindow.vala',
     'MenuArrow.vala',
     'IconChooser.vala',
     'DBusInterfaces.vala',
+    'FavoritesManager.vala',
     'OverlayMenus.vala',
     'UserButton.vala',
     'MenuItem.vala',
+    'buttons/CategoryButton.vala',
+    'buttons/MenuButton.vala',
     'views/ListView.vala',
     'views/View.vala',
 ]
