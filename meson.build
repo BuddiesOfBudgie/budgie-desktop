@@ -49,9 +49,6 @@ dep_gnomedesktop = dependency('gnome-desktop-3.0', version: gnome_minimum_versio
 dep_gsettings = dependency('gsettings-desktop-schemas', version: gnome_minimum_version)
 dep_gsd = dependency('gnome-settings-daemon', version: gnome_minimum_version)
 
-# wnck used all over the place..
-dep_wnck = dependency('libwnck-3.0', version: '>= 3.36.0')
-
 # accountsservice in multiple applets
 dep_accountsservice = dependency('accountsservice', version: '>= 0.6.55')
 

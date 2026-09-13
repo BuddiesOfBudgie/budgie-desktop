@@ -32,7 +32,6 @@ applet_workspaces_deps = [
     dep_gtk3,
     dep_xfce4windowing,
     dep_peas,
-    link_libappsys,
     link_libpanelplugin,
 ]
 

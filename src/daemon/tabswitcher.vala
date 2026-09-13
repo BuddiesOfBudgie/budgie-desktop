@@ -58,7 +58,7 @@ namespace Budgie {
 		public signal void window_activated(Xfw.Window window);
 		public signal void workspace_changed();
 
-		public TabSwitcherWidget(Budgie.AppSystem app_system, Xfw.Window? win) {
+		public TabSwitcherWidget(Xfw.Window? win) {
 			Object();
 			window = win;
 			ulong uid = (ulong) window.x11_get_xid();
@@ -66,11 +66,6 @@ namespace Budgie {
 			set_title();
 
 			application = win.get_application();
-
-			// Running under X11
-			if (Xfw.windowing_get() == Xfw.Windowing.X11) {
-				info = app_system.query_window_by_xid((ulong)uid);
-			}
 
 			image = new Gtk.Image();
 			add(image);
@@ -132,7 +127,6 @@ namespace Budgie {
 		private Gdk.Screen? default_screen;
 		private Xfw.Screen xfce_screen;
 		private unowned Xfw.WorkspaceManager workspace_manager;
-		private Budgie.AppSystem? app_system = null;
 
 		private Gdk.Monitor primary_monitor;
 
@@ -150,7 +144,6 @@ namespace Budgie {
 		}
 
 		construct {
-			app_system = new Budgie.AppSystem();
 			recency = new List<string?>();
 			ids = new HashTable<string?,TabSwitcherWidget?>(str_hash, str_equal);
 
@@ -215,7 +208,7 @@ namespace Budgie {
 		private void add_window(Xfw.Window window) {
 			if (window.is_skip_pager() || window.is_skip_tasklist()) return;
 
-			var window_widget = new TabSwitcherWidget(app_system, window);
+			var window_widget = new TabSwitcherWidget(window);
 			var id = window_widget.id;
 
 			ids.insert(id, window_widget);

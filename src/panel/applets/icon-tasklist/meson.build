@@ -43,7 +43,6 @@ applet_icontasklist_deps = [
     dep_peas,
     dep_xfce4windowing,
     link_libwindowing,
-    link_libappsys,
     link_libpanelplugin,
     link_libbudgieprivate,
     meson.get_compiler('c').find_library('m', required: false)
@@ -57,7 +56,6 @@ shared_library(
         lib_applet_icontasklist_resources,
     ],
     vala_args: [
-        '--vapidir', dir_libappsys,
         '--vapidir', dir_libwindowing,
         '--vapidir', join_paths(meson.project_source_root(), 'vapi'),
         # Make gresource work
