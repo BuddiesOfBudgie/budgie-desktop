@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.buddiesofbudgie.BudgieKeyboardLayout">
+    <!--
+      Session bus dbus interface via budgie-daemon. This
+      applet call SetKeyboardLayout to request a change of the active XKB
+      keyboard layout.
+      Note we don't use org.freedesktop.locale1's SetX11Keyboard 
+      since some distro's blocks this method with a permission denied error.
+    -->
+    <method name="SetKeyboardLayout">
+      <arg type="s" name="layout" direction="in"/>
+    </method>
+    <signal name="LayoutChanged">
+      <arg type="s" name="layout"/>
+    </signal>
+  </interface>
+</node>
