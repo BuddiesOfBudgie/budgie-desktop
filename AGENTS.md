@@ -49,8 +49,7 @@ For full dependency lists and distro-specific packages, see the [build documenta
 | `src/dialogs/`       | Dialogs (polkit, power, run, screenshot, sendto) | `dialogs`                          |
 | `src/lib/`           | Shared library                                   | `lib`                              |
 | `src/config/`        | Configuration                                    | `config`                           |
-| `src/bridges/`       | Bridge interfaces                                | `bridges`                          |
-| `src/appsys/`        | Application system                               | `appsys`                           |
+| `src/bridges/`       | Bridge interfaces                                | `bridges`                          |     |
 | `src/plugin/`        | Plugin system                                    | `plugin`                           |
 
 ### Panel Applets (`src/panel/applets/`)

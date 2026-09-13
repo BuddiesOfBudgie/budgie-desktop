@@ -5,9 +5,6 @@ subdir('config')
 subdir('plugin')
 subdir('libsession')
 
-# Needed for daemon + applets
-subdir('appsys')
-
 subdir('theme')
 subdir('lib')
 subdir('raven')

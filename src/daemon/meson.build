@@ -65,7 +65,6 @@ daemon_deps = [
     link_libbudgieprivate,
     link_libbudgiempris,
     libpanelplugin_vapi,
-    link_libappsys,
     link_libconfig,
     link_libtheme,
     link_libsession,
@@ -94,7 +93,6 @@ executable(
     vala_args: [
         '--vapidir', dir_libtheme,
         '--vapidir', dir_libconfig,
-        '--vapidir', dir_libappsys,
         '--vapidir', top_vapidir,
         '--pkg', 'theme',
         '--pkg', 'budgie-config',

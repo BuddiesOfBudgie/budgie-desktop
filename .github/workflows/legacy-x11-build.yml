@@ -12,7 +12,7 @@ jobs:
     container: "registry.fedoraproject.org/fedora:43"
     steps:
       - name: Swap in the full systemd
-        run: 'dnf swap --assumeyes systemd-standalone-sysusers systemd'
+        run: "dnf swap --assumeyes systemd-standalone-sysusers systemd"
       - name: Install prerequisites
         run: |
           dnf install --assumeyes \
@@ -28,7 +28,6 @@ jobs:
             'pkgconfig(libnotify)' \
             'pkgconfig(libpeas-2)' \
             'pkgconfig(libpulse)' \
-            'pkgconfig(libwnck-3.0)' \
             'pkgconfig(libxfce4windowing-0)' \
             'pkgconfig(polkit-agent-1)' \
             'pkgconfig(upower-glib)' \
