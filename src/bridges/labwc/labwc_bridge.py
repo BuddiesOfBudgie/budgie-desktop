@@ -15,7 +15,10 @@ import os
 import shutil
 import subprocess
 import logging
-from systemd.journal import JournalHandler
+try:
+    from systemd.journal import JournalHandler
+except ImportError:
+    JournalHandler = None
 import psutil
 import sys
 import gettext
@@ -32,6 +35,8 @@ from gi.repository import Pango
 mainloop = None
 
 CURRENT_RC_VERSION = 1
+
+LOG_LEVEL_VAR = "BUDGIE_LABWC_BRIDGE_LOG_LEVEL"
 
 def get_labwc_version(log):
     """
@@ -471,7 +476,16 @@ class Bridge:
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
         self.log = logging.getLogger('labwc_bridge')
-        self.log.addHandler(JournalHandler())
+        if JournalHandler is not None:
+            self.log.addHandler(JournalHandler())
+        else:
+            # systemd captures our stderr when the session starts us
+            self.log.addHandler(logging.StreamHandler())
+
+        level = logging.getLevelName(os.environ.get(LOG_LEVEL_VAR, 'INFO').upper())
+        if not isinstance(level, int):
+            level = logging.INFO
+        self.log.setLevel(level)
 
         path, search_path = self.search_for_config("menu.xml")
         if path == None:
@@ -582,12 +596,12 @@ class Bridge:
         self.log.info(f"locale1 PropertiesChanged received for interface: {interface}")
 
         if changed:
-            self.log.info("Changed properties:")
+            self.log.debug("Changed properties:")
             for k, v in dict(changed).items():
-                self.log.info(f"  {k}: {v}")
+                self.log.debug(f"  {k}: {v}")
 
         if invalidated:
-            self.log.info(f"Invalidated properties: {list(invalidated)}")
+            self.log.debug(f"Invalidated properties: {list(invalidated)}")
 
         # Update environment file with new locale/keyboard settings
         self.write_environment_file()
@@ -644,7 +658,7 @@ class Bridge:
             layout_info['options'] = str(props['X11Options'])
 
         if layout_info['layout']:
-            self.log.info(f"Got keyboard layout from locale1: {layout_info}")
+            self.log.debug(f"Got keyboard layout from locale1: {layout_info}")
 
         return layout_info
 
@@ -671,7 +685,7 @@ class Bridge:
             layout_info['options'] = keyboard_config['XKBOPTIONS']
 
         if layout_info['layout']:
-            self.log.info(f"Got keyboard layout from /etc/default/keyboard: {layout_info}")
+            self.log.debug(f"Got keyboard layout from /etc/default/keyboard: {layout_info}")
 
         return layout_info
 
@@ -701,7 +715,7 @@ class Bridge:
 
             if layout_parts:
                 layout = ','.join(layout_parts)
-                self.log.info(f"Using keyboard layout from GSettings: {layout}")
+                self.log.debug(f"Using keyboard layout from GSettings: {layout}")
                 return layout
 
         # systemd-localed X11Layout (if exists and non-empty)
@@ -709,7 +723,7 @@ class Bridge:
 
         formatted = format_keyboard_layout(locale1_layout['layout'], locale1_layout['variant'])
         if formatted:
-            self.log.info(f"Using keyboard layout from locale1: {formatted}")
+            self.log.debug(f"Using keyboard layout from locale1: {formatted}")
             return formatted
 
         # /etc/default/keyboard XKBLAYOUT (if defined)
@@ -717,11 +731,11 @@ class Bridge:
 
         formatted = format_keyboard_layout(system_layout['layout'], system_layout['variant'])
         if formatted:
-            self.log.info(f"Using keyboard layout from /etc/default/keyboard: {formatted}")
+            self.log.debug(f"Using keyboard layout from /etc/default/keyboard: {formatted}")
             return formatted
 
         # Default fallback
-        self.log.info("Using default keyboard layout: us")
+        self.log.debug("Using default keyboard layout: us")
         return "us"
 
     def get_merged_xkb_options(self):
@@ -748,7 +762,7 @@ class Bridge:
                     # User explicitly set it (even if empty)
                     gsettings_options = self.desktop_input_sources_settings.get_strv("xkb-options")
                     options_set = set(gsettings_options)
-                    self.log.info(f"Using USER GSettings XKB options: {options_set}")
+                    self.log.debug(f"Using USER GSettings XKB options: {options_set}")
                 else:
                     # Not user-modified → store default for possible fallback
                     gsettings_options = self.desktop_input_sources_settings.get_strv("xkb-options")
@@ -764,22 +778,22 @@ class Bridge:
             locale1_layout = self.get_keyboard_layout_from_locale1()
             options_set = parse_options_string(locale1_layout.get('options', ''))
             if options_set:
-                self.log.info(f"Got XKB options from locale1: {options_set}")
+                self.log.debug(f"Got XKB options from locale1: {options_set}")
 
         # /etc/default/keyboard XKBOPTIONS (if not found above)
         if not options_set:
             system_layout = self.get_keyboard_layout_from_system_files()
             options_set = parse_options_string(system_layout.get('options', ''))
             if options_set:
-                self.log.info(f"Got XKB options from /etc/default/keyboard: {options_set}")
+                self.log.debug(f"Got XKB options from /etc/default/keyboard: {options_set}")
 
         if not options_set and gsettings_default:
             options_set = gsettings_default
-            self.log.info(f"Using DEFAULT GSettings XKB options: {options_set}")
+            self.log.debug(f"Using DEFAULT GSettings XKB options: {options_set}")
 
         # Empty if nothing found
         if not options_set:
-            self.log.info("No XKB options found from any source")
+            self.log.debug("No XKB options found from any source")
             options_set = set()
 
         # Normalize: remove duplicate option families (keep only first of each family)
@@ -795,10 +809,10 @@ class Bridge:
         # Inject default grp:alt_shift_toggle if multiple layouts and no grp: option
         if has_multiple_layouts and not has_grp_option:
             options_set.add('grp:alt_shift_toggle')
-            self.log.info("Injected grp:alt_shift_toggle for multiple layouts")
+            self.log.debug("Injected grp:alt_shift_toggle for multiple layouts")
 
         result = ','.join(sorted(options_set))
-        self.log.info(f"Final XKB options: {result}")
+        self.log.debug(f"Final XKB options: {result}")
         return result
 
     # this translate all menu labels if not already done
@@ -950,7 +964,7 @@ class Bridge:
                     schema = yesno[key]
                     textvalue = 'yes' if settings[key] else 'no'
                 else:
-                    self.log.info("unknown key " + key + " for peripherals category " + category)
+                    self.log.debug("unknown key " + key + " for peripherals category " + category)
                     return
 
         # If the mouse left-handed setting changed, re-evaluate touchpad leftHanded
@@ -968,7 +982,7 @@ class Bridge:
             if bridge is not None:
                 bridge.text = textvalue
             else:
-                self.log.info("cannot find schema " + schema + " to set the value " + textvalue)
+                self.log.warning("cannot find schema " + schema + " to set the value " + textvalue)
         else:
             # Use the helper to ensure structure exists
             element = self.ensure_peripheral_element(category, schema)
@@ -1028,11 +1042,11 @@ class Bridge:
         # Get locale settings from locale1 D-Bus interface
         locale_from_locale1 = self.get_locale_from_locale1()
         if locale_from_locale1:
-            self.log.info(f"Got {len(locale_from_locale1)} locale variables from locale1")
+            self.log.debug(f"Got {len(locale_from_locale1)} locale variables from locale1")
             new_vars.update(locale_from_locale1)
         else:
             # Fallback to current environment if locale1 not available
-            self.log.info("No locale from locale1, using environment fallback")
+            self.log.debug("No locale from locale1, using environment fallback")
             for var in fully_managed_vars:
                 if var.startswith('LANG') or var.startswith('LC_'):
                     value = os.environ.get(var)
@@ -1093,7 +1107,7 @@ class Bridge:
         with open(path, "w") as file:
             file.writelines(lines)
 
-        self.log.info(f"Updated environment file: {path}")
+        self.log.info(f"Updated environment file: {path} (layout {layout})")
 
     # this handles cursor changes
     def cursor_changed(self, settings, key):
@@ -1620,18 +1634,18 @@ class Bridge:
                 try:
                     static_key = key + "-static"
                     static_keybind = settings[static_key]
-                    self.log.info(f"Main key '{key}' is empty, checking -static: {static_keybind}")
+                    self.log.debug(f"Main key '{key}' is empty, checking -static: {static_keybind}")
 
                     # If -static has values, use those instead
                     if static_keybind and len(static_keybind) > 0:
                         has_values = any(binding for binding in static_keybind)
                         if has_values:
-                            self.log.info(f"Using -static values for '{key}'")
+                            self.log.debug(f"Using -static values for '{key}'")
                             effective_keybind = static_keybind
                             main_is_empty = False
                 except KeyError:
                     # No -static key exists
-                    self.log.info(f"No -static key found for '{key}'")
+                    self.log.debug(f"No -static key found for '{key}'")
                     pass
 
         # Handle empty keybind array - keep one element with "undefined"
@@ -1665,7 +1679,7 @@ class Bridge:
         for i, binding in enumerate(effective_keybind):
             calculated_key = self.calc_keybind(binding)
 
-            self.log.info(f"Processing keybind '{key}' index {i}: binding='{binding}' -> calculated='{calculated_key}'")
+            self.log.debug(f"Processing keybind '{key}' index {i}: binding='{binding}' -> calculated='{calculated_key}'")
 
             # Note: if we're using effective_keybind from -static,
             # we don't need the fallback logic below since we already have the static values
