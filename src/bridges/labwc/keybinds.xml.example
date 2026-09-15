@@ -1,0 +1,244 @@
+<keybinds version="1">
+	<keybind bridge="plugins.media-keys/decrease-text-size" />
+	<keybind bridge="plugins.media-keys/toggle-contrast" />
+	<keybind bridge="plugins.media-keys/increase-text-size" />
+	<keybind bridge="plugins.media-keys/on-screen-keyboard">
+		<action executable="wvkbd-mobintl" name="Execute" command="pkill --signal SIGRTMIN -x wvkbd-mobintl" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/screenreader" />
+	<keybind bridge="plugins.media-keys/magnifier">
+		<action name="ToggleMagnify" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/magnifier-zoom-in">
+		<action name="ZoomIn" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/magnifier-zoom-out">
+		<action name="ZoomOut" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/terminal">
+		<action name="Execute" command="bash -c &quot;for c in xdg-terminal-exec x-terminal-emulator gnome-terminal konsole; do if command -v \$c &gt;/dev/null; then exec \$c; break; fi; done&quot;" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/home">
+		<action name="Execute" command="xdg-open ." />
+	</keybind>
+	<keybind bridge="plugins.media-keys/calculator">
+		<action name="Execute" command="bash -c &quot;for c in gnome-calculator mate-calc kcalc; do if command -v \$c &gt;/dev/null; then exec \$c; break; fi; done&quot;" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/email">
+		<action name="Execute" command="xdg-email" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/help" />
+	<keybind bridge="plugins.media-keys/www">
+		<action name="Execute" command="xdg-open about:blank" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/search" />
+	<keybind bridge="plugins.media-keys/control-center">
+		<action name="Execute" command="budgie-desktop-settings" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/eject" />
+	<keybind bridge="plugins.media-keys/media">
+		<action name="Execute" command="bash -c 'gtk-launch $(xdg-mime query default audio/mpeg)'" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/mic-mute">
+		<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/volume-down">
+		<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/volume-mute">
+		<action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/volume-up">
+		<action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/screensaver">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Lock" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/logout">
+		<action name="Execute" command="budgie-session-quit" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/screen-brightness-up">
+		<action name="Execute" command="budgie-brightness-helper --up" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/screen-brightness-down">
+		<action name="Execute" command="budgie-brightness-helper --down" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/next">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Next" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/previous">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Previous" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/play">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.PlayPause" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/pause">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Pause" />
+	</keybind>
+	<keybind bridge="plugins.media-keys/stop">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Stop" />
+	</keybind>
+	<keybind bridge="wm.keybindings/show-desktop">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ToggleShowDesktop" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-monitor-down" />
+	<keybind bridge="wm.keybindings/move-to-monitor-left" />
+	<keybind bridge="wm.keybindings/move-to-monitor-right" />
+	<keybind bridge="wm.keybindings/move-to-monitor-up" />
+	<keybind bridge="wm.keybindings/move-to-workspace-left">
+		<action name="SendToDesktop" to="left" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-right">
+		<action name="SendToDesktop" to="right" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-last">
+		<action name="SendToDesktop" to="1" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-1">
+		<action name="SendToDesktop" to="1" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-2">
+		<action name="SendToDesktop" to="2" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-3">
+		<action name="SendToDesktop" to="3" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-4">
+		<action name="SendToDesktop" to="4" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-5">
+		<action name="SendToDesktop" to="5" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-6">
+		<action name="SendToDesktop" to="6" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-7">
+		<action name="SendToDesktop" to="7" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/move-to-workspace-8">
+		<action name="SendToDesktop" to="8" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-last">
+		<action name="GoToDesktop" to="last" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-1">
+		<action name="GoToDesktop" to="1" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-2">
+		<action name="GoToDesktop" to="2" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-3">
+		<action name="GoToDesktop" to="3" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-4">
+		<action name="GoToDesktop" to="4" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-5">
+		<action name="GoToDesktop" to="5" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-6">
+		<action name="GoToDesktop" to="6" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-7">
+		<action name="GoToDesktop" to="7" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-8">
+		<action name="GoToDesktop" to="8" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-left">
+		<action name="GoToDesktop" to="left" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-to-workspace-right">
+		<action name="GoToDesktop" to="right" wrap="no" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-applications-backward">
+		<action name="PreviousWindow" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-applications">
+		<action name="NextWindow" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-panels-backward" />
+	<keybind bridge="wm.keybindings/switch-panels" />
+	<keybind bridge="wm.keybindings/cycle-panels-backward" />
+	<keybind bridge="wm.keybindings/cycle-panels" />
+	<keybind bridge="wm.keybindings/switch-windows-backward" />
+	<keybind bridge="wm.keybindings/switch-windows" />
+	<keybind bridge="wm.keybindings/cycle-windows-backward">
+		<action name="PreviousWindow" />
+	</keybind>
+	<keybind bridge="wm.keybindings/cycle-windows">
+		<action name="NextWindow" />
+	</keybind>
+	<keybind bridge="wm.keybindings/cycle-group-backward" />
+	<keybind bridge="wm.keybindings/cycle-group" />
+	<keybind bridge="wm.keybindings/switch-group-backward" />
+	<keybind bridge="wm.keybindings/switch-group" />
+	<keybind bridge="gnome.mutter/overlay-key">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
+	</keybind>
+	<keybind bridge="solus-project.budgie-wm/clear-notifications">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ClearNotifications" />
+	</keybind>
+	<keybind bridge="solus-project.budgie-wm/toggle-notifications">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleNotificationsView" />
+	</keybind>
+	<keybind bridge="solus-project.budgie-wm/toggle-raven">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleAppletView" />
+	</keybind>
+	<keybind bridge="solus-project.budgie-wm/take-region-screenshot">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartAreaSelect" />
+	</keybind>
+	<keybind bridge="solus-project.budgie-wm/take-full-screenshot">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
+	</keybind>
+	<keybind bridge="wm.keybindings/panel-run-dialog">
+		<action name="Execute" command="budgie-run-dialog" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-input-source" />
+	<keybind bridge="wm.keybindings/switch-input-source-backward" />
+	<keybind bridge="wm.keybindings/close">
+		<action name="Close" />
+	</keybind>
+	<keybind bridge="wm.keybindings/minimize">
+		<action name="Iconify" />
+	</keybind>
+	<keybind bridge="wm.keybindings/lower">
+		<action name="Lower" />
+	</keybind>
+	<keybind bridge="wm.keybindings/maximize">
+		<action name="Maximize" direction="both" />
+	</keybind>
+	<keybind bridge="wm.keybindings/maximize-horizontally">
+		<action name="Maximize" direction="right" />
+	</keybind>
+	<keybind bridge="wm.keybindings/maximize-vertically">
+		<action name="Maximize" direction="left" />
+	</keybind>
+	<keybind bridge="wm.keybindings/begin-move" />
+	<keybind bridge="wm.keybindings/raise">
+		<action name="Raise" />
+	</keybind>
+	<keybind bridge="wm.keybindings/raise-or-lower" />
+	<keybind bridge="wm.keybindings/begin-resize">
+		<action name="Resize" />
+	</keybind>
+	<keybind bridge="wm.keybindings/unmaximize">
+		<action name="UnMaximize" direction="both" />
+	</keybind>
+	<keybind bridge="wm.keybindings/unmaximize">
+		<action name="UnMaximize" direction="both" />
+	</keybind>
+	<keybind bridge="wm.keybindings/toggle-fullscreen">
+		<action name="ToggleFullscreen" />
+	</keybind>
+	<keybind bridge="wm.keybindings/toggle-maximized">
+		<action name="ToggleMaximize" direction="both" />
+	</keybind>
+	<keybind bridge="wm.keybindings/toggle-on-all-workspaces" />
+	<keybind bridge="mutter.keybindings/toggle-tiled-left">
+		<action name="ToggleSnapToEdge" direction="left" />
+	</keybind>
+	<keybind bridge="mutter.keybindings/toggle-tiled-right">
+		<action name="ToggleSnapToEdge" direction="right" />
+	</keybind>
+</keybinds>
