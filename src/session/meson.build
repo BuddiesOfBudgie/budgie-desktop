@@ -58,18 +58,25 @@ session_data.set('labwc_bindir', labwc_bindir)
 #endif
 #session_data.set('magpie_bindir', magpie_bindir)
 
+# Set libexecdir to budgie-session
+budgie_session_libexecdir = get_option('budgie-session-libexecdir')
+if budgie_session_libexecdir == ''
+    budgie_session_libexecdir = libexecdirroot
+endif
+session_data.set('budgie_session_libexecdir', budgie_session_libexecdir)
+
 # Set libexecdir to gnome-settings-daemon
 # Unfortunately this info is not provided by its pkgconfig file
 gsd_libexecdir = get_option('gsd-libexecdir')
 if gsd_libexecdir == ''
-    gsd_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+    gsd_libexecdir = libexecdirroot
 endif
 session_data.set('gsd_libexecdir', gsd_libexecdir)
 
 # Set the libexecdir for xdg-desktop-portal
 xdp_libexecdir = get_option('xdp-libexecdir')
 if xdp_libexecdir == ''
-    xdp_libexecdir = join_paths(libexecdirroot)
+    xdp_libexecdir = libexecdirroot
 endif
 session_data.set('xdp_libexecdir', xdp_libexecdir)
 
