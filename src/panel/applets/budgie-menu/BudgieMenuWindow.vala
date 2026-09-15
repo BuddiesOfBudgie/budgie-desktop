@@ -49,7 +49,7 @@ public class BudgieMenuWindow : Gtk.Window {
 		if (GtkLayerShell.is_supported()) {
 			GtkLayerShell.init_for_window(this);
 			GtkLayerShell.set_namespace(this, "budgie-menu");
-			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
 			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
 		}
 
