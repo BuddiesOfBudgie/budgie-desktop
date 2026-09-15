@@ -1,4 +1,5 @@
 option('ci', type: 'boolean', value: false, description: 'Continuous Integration flag (internal use only)')
+option('budgie-session-libexecdir', type: 'string', description: 'Directory containing the budgie-session executables (e.g. budgie-session-compositor-ready)')
 option('oo7-libexecdir', type: 'string', description: 'Directory containing the oo7-* executables, particularly oo7-daemon')
 option('gsd-components', type: 'array', description: 'Supported gnome-settings-daemon components', value: [
     'A11ySettings',

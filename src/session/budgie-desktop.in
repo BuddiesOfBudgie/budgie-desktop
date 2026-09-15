@@ -16,7 +16,7 @@ fi
 export BUDGIE_SESSION_VERSION=${BUDGIE_VERSION}
 
 # Wait until the server starts before launching the session
-compositor="@gsd_libexecdir@/budgie-session-compositor-ready"
+compositor="@budgie_session_libexecdir@/budgie-session-compositor-ready"
 if command -v "$compositor" > /dev/null 2>&1 && "$compositor"; then
   @bindir@/org.buddiesofbudgie.Services &
   @xdp_libexecdir@/xdg-desktop-portal &
