@@ -34,7 +34,7 @@ CURRENT_RC_VERSION = 1
 
 # Connect to budgie-daemon budgie keyboard layout proxy to handle
 # requests to change the keyboard layout.
-KEYBOARD_LAYOUT_DBUS_INTERFACE = 'org.buddiesofbudgie.BudgieKeyboardLayout'
+KEYBOARD_LAYOUT_DBUS_INTERFACE = 'org.buddiesofbudgie.KeyboardLayout'
 KEYBOARD_LAYOUT_DBUS_OBJECT_PATH = '/org/buddiesofbudgie/KeyboardLayout'
 KEYBOARD_LAYOUT_DBUS_SIGNAL = 'LayoutChanged'
 
@@ -523,7 +523,7 @@ class Bridge:
     def setup_keyboard_layout_client(self):
         """
         Listen to budgie-daemon's LayoutChanged signal on
-        org.buddiesofbudgie.BudgieKeyboardLayout.
+        org.buddiesofbudgie.KeyboardLayout.
         """
         try:
             session_bus = dbus.SessionBus()

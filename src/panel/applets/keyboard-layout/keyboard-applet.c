@@ -14,7 +14,7 @@
 #include "input-source.h"
 #include "keyboard-popover.h"
 #include "locale-manager.h"
-#include "org.buddiesofbudgie.BudgieKeyboardLayout.h"
+#include "org.buddiesofbudgie.KeyboardLayout.h"
 
 #define _GNU_SOURCE
 
@@ -348,7 +348,7 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 	priv->layout_proxy = keyboard_layout_proxy_new_for_bus_sync(
 		G_BUS_TYPE_SESSION,
 		G_DBUS_PROXY_FLAGS_NONE,
-		"org.buddiesofbudgie.BudgieKeyboardLayout",
+		"org.buddiesofbudgie.KeyboardLayout",
 		"/org/buddiesofbudgie/KeyboardLayout",
 		NULL,
 		&error);

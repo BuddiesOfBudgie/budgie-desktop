@@ -10,7 +10,7 @@
  */
 
 namespace Budgie {
-	public const string KEYBOARD_LAYOUT_DBUS_NAME = "org.buddiesofbudgie.BudgieKeyboardLayout";
+	public const string KEYBOARD_LAYOUT_DBUS_NAME = "org.buddiesofbudgie.KeyboardLayout";
 	public const string KEYBOARD_LAYOUT_DBUS_PATH = "/org/buddiesofbudgie/KeyboardLayout";
 
 	/**
@@ -22,7 +22,7 @@ namespace Budgie {
 	 *  N.B. Its th compositor's responsibility via the its bridge to
 	 *  set the keyboard layout.
 	 */
-	[DBus (name = "org.buddiesofbudgie.BudgieKeyboardLayout")]
+	[DBus (name = "org.buddiesofbudgie.KeyboardLayout")]
 	public class KeyboardLayoutManager : GLib.Object {
 
 		[DBus (visible = false)]
