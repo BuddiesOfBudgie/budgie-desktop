@@ -67,17 +67,17 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 
 	selected_layout = keyboard_input_source_get_layout(selected);
 
-	if (selected_layout == NULL || selected_layout[0] == '\0') {
+	if (selected_layout == NULL || g_str_equal(selected_layout, "")) {
 		return NULL;
 	}
 
 	result = g_string_new(NULL);
 
 	gchar* selected_variant = keyboard_input_source_get_variant(selected);
-	if (selected_variant != NULL && selected_variant[0] != '\0') {
-		g_string_append_printf(result, "%s(%s)", selected_layout, selected_variant);
-	} else {
+	if (selected_variant == NULL || g_str_equal(selected_variant, "")) {
 		g_string_append(result, selected_layout);
+	} else {
+		g_string_append_printf(result, "%s(%s)", selected_layout, selected_variant);
 	}
 
 	model = keyboard_locale_manager_get_model(priv->locale_manager);
@@ -93,21 +93,21 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 
 		layout = keyboard_input_source_get_layout(source);
 
-		if (layout == NULL || layout[0] == '\0') {
+		if (layout == NULL || g_str_equal(layout, "")) {
 			/* Not an xkb source (e.g. an ibus engine) - nothing to add to XKB_DEFAULT_LAYOUT */
 			continue;
 		}
 
 		variant = keyboard_input_source_get_variant(source);
 
-		if (variant != NULL && variant[0] != '\0') {
-			g_string_append_printf(result, ",%s(%s)", layout, variant);
-		} else {
+		if (variant == NULL || g_str_equal(variant, "")) {
 			g_string_append_printf(result, ",%s", layout);
+		} else {
+			g_string_append_printf(result, ",%s(%s)", layout, variant);
 		}
 	}
 
-	return g_string_free(result, FALSE);
+	return g_string_free_and_steal(result);
 }
 
 /******************************************************************************
