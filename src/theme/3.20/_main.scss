@@ -55,6 +55,9 @@ window.budgie-menu-window {
 // Places Menu
 @include places_menu(button, list, row, entry);
 
+// Keyboard Layout
+@include keyboard_popover(list, row, label, disabled);
+
 // Budgie styled Gtk Menus
 .budgie-menubar {
   @include budgie_menubar(menu, arrow, menuitem, accelerator);

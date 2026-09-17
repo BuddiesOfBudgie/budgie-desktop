@@ -29,6 +29,7 @@ sass_depend_files = files([
     'common/_functions.scss',
     'common/_icon_tasklist.scss',
     'common/_imports.scss',
+    'common/_keyboard.scss',
     'common/_menubar.scss',
     'common/_menu.scss',
     'common/_nightlight.scss',
