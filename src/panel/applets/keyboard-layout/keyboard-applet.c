@@ -35,6 +35,8 @@ struct _KeyboardAppletPrivate {
 	KeyboardPopover* popover;
 	GtkWidget* event_box;
 	GtkWidget* event_box_stack;
+	GtkWidget* event_box_content;
+	GtkWidget* event_box_image;
 
 	/* Session-bus proxy for budgie-daemon's keyboard layout handler.
 	 * We apply layout changes through this instead of calling
@@ -108,6 +110,79 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 	}
 
 	return g_string_free_and_steal(result);
+}
+
+static void keyboard_applet_set_label(KeyboardApplet* self, const gchar* layout) {
+	KeyboardAppletPrivate* priv;
+	GtkWidget* child;
+
+	priv = keyboard_applet_get_instance_private(self);
+
+	if (layout == NULL || g_str_equal(layout, "")) {
+		return;
+	}
+
+	child = gtk_stack_get_child_by_name(GTK_STACK(priv->event_box_stack), layout);
+
+	if (child == NULL) {
+		/* Each layout keeps its own child so the stack can animate between them */
+		GtkWidget* label = gtk_label_new(layout);
+
+		gtk_widget_set_halign(label, GTK_ALIGN_FILL);
+
+		child = gtk_event_box_new();
+		gtk_style_context_add_class(gtk_widget_get_style_context(child), "keyboard-label");
+		gtk_container_add(GTK_CONTAINER(child), label);
+
+		gtk_stack_add_named(GTK_STACK(priv->event_box_stack), child, layout);
+		gtk_widget_show_all(child);
+	}
+
+	gtk_stack_set_visible_child(GTK_STACK(priv->event_box_stack), child);
+}
+
+/* Returns: (transfer full) (nullable): The layout to show in the panel */
+static gchar* keyboard_applet_get_display_layout(KeyboardApplet* self) {
+	KeyboardAppletPrivate* priv;
+	GListStore* model;
+	guint i;
+
+	priv = keyboard_applet_get_instance_private(self);
+
+	/* Prefer CurrentLayout from the daemon. The bridge only sets it once it
+	 * has applied a layout, so it is empty early in the session. */
+	if (priv->layout_proxy != NULL) {
+		gchar* current = keyboard_layout_dup_current_layout(KEYBOARD_LAYOUT(priv->layout_proxy));
+
+		if (current != NULL && !g_str_equal(current, "")) {
+			return current;
+		}
+
+		g_free(current);
+	}
+
+	/* No layout published yet, so the first configured source that has one is
+	 * still the active layout: the bridge builds XKB_DEFAULT_LAYOUT from this
+	 * same list, in this same order. */
+	model = keyboard_locale_manager_get_model(priv->locale_manager);
+
+	for (i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(model)); i++) {
+		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(model), i);
+
+		if (KEYBOARD_IS_INPUT_SOURCE(source) && keyboard_input_source_has_layout(source)) {
+			return keyboard_input_source_get_layout(source);
+		}
+	}
+
+	return NULL;
+}
+
+static void keyboard_applet_update_label(KeyboardApplet* self) {
+	g_autofree gchar* layout = NULL;
+
+	layout = keyboard_applet_get_display_layout(self);
+
+	keyboard_applet_set_label(self, layout);
 }
 
 /******************************************************************************
@@ -199,7 +274,7 @@ static void
 keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamSpec* pspec, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 	KeyboardAppletPrivate* priv;
-	KeyboardInputSource* source = NULL;
+	g_autoptr(KeyboardInputSource) source = NULL;
 
 	g_return_if_fail(KEYBOARD_IS_APPLET(self));
 
@@ -209,7 +284,17 @@ keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamS
 		source = keyboard_locale_manager_get_current_input_source(manager);
 
 		keyboard_popover_set_current_source(priv->popover, source);
+		keyboard_applet_update_label(self);
 	}
+}
+
+static void
+keyboard_applet_current_layout_changed_cb(G_GNUC_UNUSED KeyboardLayoutProxy* proxy, G_GNUC_UNUSED GParamSpec* pspec, gpointer user_data) {
+	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
+
+	g_return_if_fail(KEYBOARD_IS_APPLET(self));
+
+	keyboard_applet_update_label(self);
 }
 
 /******************************************************************************
@@ -218,6 +303,24 @@ keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamS
 
 static gboolean keyboard_applet_supports_settings(BudgieApplet* base) {
 	return FALSE;
+}
+
+static void keyboard_applet_panel_position_changed(BudgieApplet* base, BudgiePanelPosition position) {
+	KeyboardApplet* self = KEYBOARD_APPLET(base);
+	KeyboardAppletPrivate* priv;
+	GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
+	gint margin = 4;
+
+	priv = keyboard_applet_get_instance_private(self);
+
+	if (position == BUDGIE_PANEL_POSITION_LEFT || position == BUDGIE_PANEL_POSITION_RIGHT) {
+		/* A side panel doesn't have the space for icon and label side by side */
+		orientation = GTK_ORIENTATION_VERTICAL;
+		margin = 0;
+	}
+
+	gtk_widget_set_margin_end(priv->event_box_image, margin);
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(priv->event_box_content), orientation);
 }
 
 static void keyboard_applet_update_popovers(BudgieApplet* base, BudgiePopoverManager* manager) {
@@ -285,6 +388,7 @@ static void keyboard_applet_class_init(KeyboardAppletClass* klass) {
 
 	applet_class->update_popovers = keyboard_applet_update_popovers;
 	applet_class->supports_settings = keyboard_applet_supports_settings;
+	applet_class->panel_position_changed = keyboard_applet_panel_position_changed;
 
 	/**
 	 * KeyboardApplet:uuid:
@@ -305,8 +409,6 @@ static void keyboard_applet_class_init(KeyboardAppletClass* klass) {
 
 static void keyboard_applet_init(KeyboardApplet* self) {
 	KeyboardAppletPrivate* priv;
-	GtkWidget* event_box_content;
-	GtkWidget* event_box_image;
 	GtkStyleContext* style_context;
 	GListStore* model = NULL;
 
@@ -318,18 +420,18 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 	gtk_style_context_add_class(style_context, "keyboard-indicator");
 
 	/* Panel widget UI */
-	event_box_image = gtk_image_new_from_icon_name("input-keyboard-symbolic", GTK_ICON_SIZE_MENU);
+	priv->event_box_image = gtk_image_new_from_icon_name("input-keyboard-symbolic", GTK_ICON_SIZE_MENU);
 	priv->event_box_stack = gtk_stack_new();
 	gtk_stack_set_transition_type(GTK_STACK(priv->event_box_stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
 
-	event_box_content = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-	gtk_box_pack_start(GTK_BOX(event_box_content), event_box_image, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(event_box_content), priv->event_box_stack, FALSE, FALSE, 0);
+	priv->event_box_content = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_box_pack_start(GTK_BOX(priv->event_box_content), priv->event_box_image, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(priv->event_box_content), priv->event_box_stack, FALSE, FALSE, 0);
 
 	priv->event_box = gtk_event_box_new();
 	g_signal_connect(priv->event_box, "button-press-event", G_CALLBACK(keyboard_applet_event_box_press_cb), self);
 
-	gtk_container_add(GTK_CONTAINER(priv->event_box), event_box_content);
+	gtk_container_add(GTK_CONTAINER(priv->event_box), priv->event_box_content);
 	gtk_container_add(GTK_CONTAINER(self), priv->event_box);
 
 	/* Keyboard popover */
@@ -355,7 +457,12 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 
 	if (priv->layout_proxy == NULL) {
 		g_warning("Unable to connect to keyboard layout proxy: %s", error->message);
+	} else {
+		g_signal_connect_object(priv->layout_proxy, "notify::current-layout", G_CALLBACK(keyboard_applet_current_layout_changed_cb), self, G_CONNECT_DEFAULT);
 	}
+
+	keyboard_applet_update_label(self);
+
 	gtk_widget_show_all(GTK_WIDGET(self));
 }
 

@@ -1,0 +1,8 @@
+// Keyboard Layout
+// %reset_style blanks .budgie-popover list and row, so the selected layout
+// needs its highlight back.
+@mixin keyboard_popover($list, $row, $label, $insensitive) {
+    .keyboard-popover {
+        @include lists($list, $row, $label, $insensitive);
+    }
+}

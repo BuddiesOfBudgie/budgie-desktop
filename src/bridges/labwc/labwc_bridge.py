@@ -38,6 +38,9 @@ CURRENT_RC_VERSION = 1
 KEYBOARD_LAYOUT_DBUS_INTERFACE = 'org.buddiesofbudgie.KeyboardLayout'
 KEYBOARD_LAYOUT_DBUS_OBJECT_PATH = '/org/buddiesofbudgie/KeyboardLayout'
 KEYBOARD_LAYOUT_DBUS_SIGNAL = 'LayoutChanged'
+KEYBOARD_LAYOUT_DBUS_PROPERTY = 'CurrentLayout'
+
+DBUS_PROPERTIES_INTERFACE = 'org.freedesktop.DBus.Properties'
 
 def get_labwc_version(log):
     """
@@ -371,6 +374,12 @@ class Bridge:
     # dbus calls to give priority to this call to set the keyboard layout.
     layout_override = None
 
+    # watches the environment file so CurrentLayout follows what was written,
+    # and the last value published to budgie-daemon
+    dbus_session_bus = None
+    environment_monitor = None
+    current_layout_published = None
+
     # flag to indicate delaying writing the config until its true
     # this is needed where multiple bridge set config calls could potentially
     # call labwc -r multiple times
@@ -565,6 +574,10 @@ class Bridge:
         # a request for a layout change
         self.setup_keyboard_layout_client()
 
+        # Seed CurrentLayout from the file the previous session left behind,
+        # before bridge_config() rewrites it
+        self.setup_environment_monitor()
+
         self.bridge_config()
 
     def setup_locale1_monitor(self):
@@ -617,15 +630,31 @@ class Bridge:
         """
         try:
             session_bus = dbus.SessionBus()
+            self.dbus_session_bus = session_bus
             session_bus.add_signal_receiver(
                 self.on_keyboard_layout_changed,
                 signal_name=KEYBOARD_LAYOUT_DBUS_SIGNAL,
                 dbus_interface=KEYBOARD_LAYOUT_DBUS_INTERFACE,
                 path=KEYBOARD_LAYOUT_DBUS_OBJECT_PATH
             )
+            session_bus.watch_name_owner(
+                KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                self.on_keyboard_layout_owner_changed
+            )
             self.log.info(f"Subscribed to {KEYBOARD_LAYOUT_DBUS_INTERFACE}.{KEYBOARD_LAYOUT_DBUS_SIGNAL}")
         except dbus.DBusException as e:
             self.log.warning(f"Could not subscribe to keyboard layout proxy: {e}")
+
+    def on_keyboard_layout_owner_changed(self, owner):
+        """
+        budgie-daemon holds CurrentLayout in memory, so a restart of it drops
+        the value and we have to publish again.
+        """
+        if not owner:
+            return
+
+        self.current_layout_published = None
+        self.publish_current_layout()
 
     def on_keyboard_layout_changed(self, layout):
         """
@@ -648,6 +677,84 @@ class Bridge:
 
         if not self.delay_config_write:
             subprocess.call("labwc -r", shell=True)
+
+    def setup_environment_monitor(self):
+        """
+        Watch the environment file so CurrentLayout reflects what was written.
+        Called again after each write, since on a first boot there is no file
+        to watch yet.
+        """
+        if self.environment_monitor is not None:
+            return
+
+        path = self.user_config("environment")
+
+        # Nothing to watch yet; write_environment_file() calls back once it
+        # has created the file
+        if not os.path.exists(path):
+            return
+
+        try:
+            gfile = Gio.File.new_for_path(path)
+            self.environment_monitor = gfile.monitor_file(Gio.FileMonitorFlags.NONE, None)
+            self.environment_monitor.connect("changed", self.on_environment_file_changed)
+        except GLib.Error as e:
+            self.log.warning(f"Could not monitor {path}: {e}")
+            return
+
+        self.log.info(f"Monitoring {path} for keyboard layout changes")
+
+        # The file is already on disk, so nothing will fire the monitor for it
+        self.publish_current_layout()
+
+    def on_environment_file_changed(self, monitor, gfile, other_file, event):
+        # write_environment_file() truncates and rewrites in place, so a plain
+        # CHANGED can land mid-write.
+        if event not in (Gio.FileMonitorEvent.CHANGES_DONE_HINT, Gio.FileMonitorEvent.CREATED):
+            return
+
+        self.publish_current_layout()
+
+    def read_current_layout(self):
+        """
+        The layout in use, from the environment file. XKB_DEFAULT_LAYOUT is
+        ordered with the active layout first, and may carry a variant.
+        """
+        env = read_key_value_file(self.user_config("environment"))
+        layout = env.get('XKB_DEFAULT_LAYOUT', '').strip()
+
+        if not layout:
+            return ''
+
+        # e.g. "fi(nodeadkeys),us" -> "fi"
+        return layout.split(',')[0].split('(')[0].strip()
+
+    def publish_current_layout(self):
+        """Hand the layout to budgie-daemon so the applet can display it."""
+        layout = self.read_current_layout()
+
+        # A cursor or locale change rewrites the file without touching the
+        # layout, so only publish when the value has moved
+        if self.dbus_session_bus is None or not layout or layout == self.current_layout_published:
+            return
+
+        try:
+            proxy = self.dbus_session_bus.get_object(
+                KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                KEYBOARD_LAYOUT_DBUS_OBJECT_PATH
+            )
+            properties = dbus.Interface(proxy, DBUS_PROPERTIES_INTERFACE)
+            properties.Set(
+                KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                KEYBOARD_LAYOUT_DBUS_PROPERTY,
+                dbus.String(layout)
+            )
+        except dbus.DBusException as e:
+            self.log.warning(f"Could not publish {KEYBOARD_LAYOUT_DBUS_PROPERTY}: {e}")
+            return
+
+        self.current_layout_published = layout
+        self.log.info(f"Published {KEYBOARD_LAYOUT_DBUS_PROPERTY}={layout}")
 
     def get_locale_from_locale1(self):
         """Get locale settings from systemd-localed via dbus-python"""
@@ -1153,6 +1260,8 @@ class Bridge:
             file.writelines(lines)
 
         self.log.info(f"Updated environment file: {path}")
+
+        self.setup_environment_monitor()
 
     # this handles cursor changes
     def cursor_changed(self, settings, key):

@@ -24,9 +24,17 @@ namespace Budgie {
 	 */
 	[DBus (name = "org.buddiesofbudgie.KeyboardLayout")]
 	public class KeyboardLayoutManager : GLib.Object {
+		private DBusConnection? connection = null;
+
+		/**
+		 * The XKB layout currently in use, e.g. "fi". Set by the compositor
+		 * bridge once it has applied a layout change.
+		 */
+		public string current_layout { get; set; default = ""; }
 
 		[DBus (visible = false)]
 		public KeyboardLayoutManager() {
+			notify["current-layout"].connect(on_current_layout_notify);
 		}
 
 		[DBus (visible = false)]
@@ -40,9 +48,33 @@ namespace Budgie {
 		private void on_bus_acquired(DBusConnection conn) {
 			try {
 				conn.register_object(KEYBOARD_LAYOUT_DBUS_PATH, this);
+				connection = conn;
 				debug("KeyboardLayoutManager: registered on DBus");
 			} catch (Error e) {
 				critical("KeyboardLayoutManager: failed to register: %s", e.message);
+			}
+		}
+
+		/**
+		 * valac does not emit PropertiesChanged for exported properties, so
+		 * clients watching CurrentLayout need us to emit it ourselves.
+		 */
+		private void on_current_layout_notify() {
+			if (connection == null) return;
+
+			var changed = new VariantBuilder(new VariantType("a{sv}"));
+			changed.add("{sv}", "CurrentLayout", new Variant.string(current_layout));
+
+			try {
+				connection.emit_signal(null, KEYBOARD_LAYOUT_DBUS_PATH,
+					"org.freedesktop.DBus.Properties", "PropertiesChanged",
+					new Variant.tuple({
+						new Variant.string(KEYBOARD_LAYOUT_DBUS_NAME),
+						changed.end(),
+						new Variant.strv({})
+					}));
+			} catch (Error e) {
+				warning("KeyboardLayoutManager: failed to emit PropertiesChanged: %s", e.message);
 			}
 		}
 
