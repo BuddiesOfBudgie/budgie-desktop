@@ -274,7 +274,7 @@ static void
 keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamSpec* pspec, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 	KeyboardAppletPrivate* priv;
-	KeyboardInputSource* source = NULL;
+	g_autoptr(KeyboardInputSource) source = NULL;
 
 	g_return_if_fail(KEYBOARD_IS_APPLET(self));
 
