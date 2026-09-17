@@ -16,5 +16,11 @@
     <signal name="LayoutChanged">
       <arg type="s" name="layout" />
     </signal>
+    <!--
+      The layout in use, e.g. "fi". Written by the compositor bridge once it
+      has applied a layout change, since neither the applet nor the daemon can
+      tell which of the configured layouts is active.
+    -->
+    <property name="CurrentLayout" type="s" access="readwrite" />
   </interface>
 </node>
