@@ -6,21 +6,19 @@ session_data.set('PACKAGE_VERSION', package_version)
 session_data.set('libexecdir', libexecdir)
 session_data.set('libexecdirroot', libexecdirroot)
 
-# mandatory gnome-settings-daemon components
-budgie_session_324_components = [
-    'org.buddiesofbudgie.SettingsDaemon.A11ySettings',
-    'org.buddiesofbudgie.SettingsDaemon.Datetime',
-    'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
-    'org.buddiesofbudgie.SettingsDaemon.Housekeeping',
-    'org.buddiesofbudgie.SettingsDaemon.Power',
-    'org.buddiesofbudgie.SettingsDaemon.PrintNotifications',
-    'org.buddiesofbudgie.SettingsDaemon.Rfkill',
-    'org.buddiesofbudgie.SettingsDaemon.Sharing',
-    'org.buddiesofbudgie.SettingsDaemon.Smartcard',
-    'org.buddiesofbudgie.SettingsDaemon.Sound',
-    'org.buddiesofbudgie.SettingsDaemon.UsbProtection',
-    'org.buddiesofbudgie.SettingsDaemon.Wwan'
-]
+# gnome-settings-daemon components
+gsd_components_excluded = get_option('gsd-components-excluded')
+gsd_components = []
+foreach component: get_option('gsd-components')
+    if component not in gsd_components_excluded
+        gsd_components += component
+    endif
+endforeach
+
+budgie_session_324_components = []
+foreach component: gsd_components
+    budgie_session_324_components += 'org.buddiesofbudgie.SettingsDaemon.' + component
+endforeach
 
 # Always in Budgie
 budgie_components = [
@@ -60,18 +58,25 @@ session_data.set('labwc_bindir', labwc_bindir)
 #endif
 #session_data.set('magpie_bindir', magpie_bindir)
 
+# Set libexecdir to budgie-session
+budgie_session_libexecdir = get_option('budgie-session-libexecdir')
+if budgie_session_libexecdir == ''
+    budgie_session_libexecdir = libexecdirroot
+endif
+session_data.set('budgie_session_libexecdir', budgie_session_libexecdir)
+
 # Set libexecdir to gnome-settings-daemon
 # Unfortunately this info is not provided by its pkgconfig file
 gsd_libexecdir = get_option('gsd-libexecdir')
 if gsd_libexecdir == ''
-    gsd_libexecdir = join_paths(get_option('prefix'), get_option('libexecdir'))
+    gsd_libexecdir = libexecdirroot
 endif
 session_data.set('gsd_libexecdir', gsd_libexecdir)
 
 # Set the libexecdir for xdg-desktop-portal
 xdp_libexecdir = get_option('xdp-libexecdir')
 if xdp_libexecdir == ''
-    xdp_libexecdir = join_paths(libexecdirroot)
+    xdp_libexecdir = libexecdirroot
 endif
 session_data.set('xdp_libexecdir', xdp_libexecdir)
 
@@ -187,13 +192,7 @@ custom_target('desktop-file-screenshotdialog',
 
 # install gnome-settings-daemon desktop files to ensure they autostart
 
-settings_daemon_components = budgie_session_324_components + [
-    'org.buddiesofbudgie.SettingsDaemon.DiskUtilityNotify',
-    'org.buddiesofbudgie.SettingsDaemon.UsbProtection',
-    'org.buddiesofbudgie.SettingsDaemon.Wwan',
-]
-
-foreach component: settings_daemon_components
+foreach component: budgie_session_324_components
     configure_file(
         input: join_paths('settingsdaemon', component + '.desktop.in'),
         output: '@BASENAME@',
