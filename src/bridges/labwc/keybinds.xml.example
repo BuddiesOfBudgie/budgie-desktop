@@ -261,9 +261,6 @@
 	<keybind bridge="wm.keybindings/unmaximize">
 		<action name="UnMaximize" direction="both" />
 	</keybind>
-	<keybind bridge="wm.keybindings/unmaximize">
-		<action name="UnMaximize" direction="both" />
-	</keybind>
 	<keybind bridge="wm.keybindings/toggle-fullscreen">
 		<action name="ToggleFullscreen" />
 	</keybind>
