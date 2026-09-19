@@ -12,8 +12,6 @@
 #include "input-row.h"
 #include "input-source.h"
 
-#define _GNU_SOURCE
-
 struct _KeyboardInputRow {
 	GtkListBoxRow parent_instance;
 
@@ -37,19 +35,14 @@ G_DEFINE_FINAL_TYPE(KeyboardInputRow, keyboard_input_row, GTK_TYPE_LIST_BOX_ROW)
 static void keyboard_input_row_constructed(GObject* object) {
 	KeyboardInputRow* self = KEYBOARD_INPUT_ROW(object);
 	g_autofree gchar* label_text = NULL;
-	g_autofree gchar* short_name_text = NULL;
-	g_autofree gchar* layout_text = NULL;
-	g_autofree gchar* variant_label_text = NULL;
-	GtkWidget* label;
-	GtkWidget* variant_label;
 
 	if (keyboard_input_source_has_display_name(self->source)) {
 		label_text = keyboard_input_source_get_display_name(self->source);
 	} else {
-		g_object_get(self->source, "type", &label_text, NULL);
+		label_text = keyboard_input_source_get_id(self->source);
 	}
 
-	gtk_label_set_text(GTK_LABEL(self->label), label_text);
+	gtk_label_set_text(GTK_LABEL(self->label), label_text != NULL ? label_text : "");
 
 	gtk_widget_show_all(GTK_WIDGET(self));
 
@@ -69,7 +62,10 @@ static void keyboard_input_row_get_property(GObject* object, guint property_id, 
 
 	switch ((KeyboardInputRowProps) property_id) {
 		case PROP_INPUT_SOURCE:
-			g_value_set_pointer(value, keyboard_input_row_get_source(self));
+			g_value_set_object(value, keyboard_input_row_get_source(self));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -80,6 +76,9 @@ static void keyboard_input_row_set_property(GObject* object, guint property_id, 
 	switch ((KeyboardInputRowProps) property_id) {
 		case PROP_INPUT_SOURCE:
 			keyboard_input_row_set_source(self, g_value_get_object(value));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -155,7 +154,7 @@ KeyboardInputSource* keyboard_input_row_get_source(KeyboardInputRow* self) {
  * Sets the input source for this row.
  */
 void keyboard_input_row_set_source(KeyboardInputRow* self, KeyboardInputSource* source) {
-	g_return_if_fail(KEYBOARD_INPUT_ROW(self));
+	g_return_if_fail(KEYBOARD_IS_INPUT_ROW(self));
 
 	if (g_set_object(&self->source, source)) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_INPUT_SOURCE]);

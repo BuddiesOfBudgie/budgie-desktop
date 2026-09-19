@@ -55,8 +55,20 @@ shared_library(
     'keyboardlayoutapplet',
     applet_keyboardlayout_sources,
     dependencies: applet_keyboardlayout_deps,
+    # The project adds -w and two -Wno- flags globally so that valac-generated C
+    # stays quiet. Target arguments come after those, so this re-enables warnings
+    # for the hand-written C here without touching the Vala builds.
     c_args: [
         '-DGNOME_DESKTOP_USE_UNSTABLE_API',
+        '-Wall',
+        '-Wextra',
+        '-Wno-unused-parameter',
+        '-Wdiscarded-qualifiers',
+        '-Wimplicit-function-declaration',
+        '-Wincompatible-pointer-types',
+        '-Wmissing-prototypes',
+        '-Wshadow',
+        '-Wstrict-prototypes',
     ],
     install: true,
     install_dir: applet_keyboardlayout_dir,

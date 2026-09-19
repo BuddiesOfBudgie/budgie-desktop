@@ -11,13 +11,10 @@
 
 #include "keyboard-popover.h"
 
-#include <gio-unix-2.0/gio/gdesktopappinfo.h>
 #include <glib/gi18n.h>
 
 #include "input-row.h"
 #include "keyboard-header.h"
-
-#define _GNU_SOURCE
 
 struct _KeyboardPopover {
 	BudgiePopover parent_instance;
@@ -60,27 +57,18 @@ static GtkWidget* keyboard_popover_get_row_from_source(KeyboardPopover* self, Ke
 
 	children = gtk_container_get_children(GTK_CONTAINER(self->listbox));
 
-	while (children) {
-		if (!KEYBOARD_IS_INPUT_ROW(children->data)) {
-			children = children->next;
-			continue;
-		}
-
-		child_source = keyboard_input_row_get_source(KEYBOARD_INPUT_ROW(children->data));
+	/* g_list_free walks forward from whatever node it is given, so iterate with
+	 * elem and leave children pointing at the head. */
+	for (elem = children; elem != NULL; elem = elem->next) {
+		child_source = keyboard_input_row_get_source(KEYBOARD_INPUT_ROW(elem->data));
 
 		if (keyboard_input_source_equal(child_source, source)) {
-			child = children->data;
+			child = elem->data;
 			break;
 		}
-
-		children = children->next;
 	}
 
 	g_list_free(children);
-
-	if (!child) {
-		return NULL;
-	}
 
 	return child;
 }
@@ -110,7 +98,7 @@ static void keyboard_popover_row_selected_cb(G_GNUC_UNUSED GtkListBox* list_box,
 static void keyboard_popover_constructed(GObject* object) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(object);
 
-	gtk_list_box_bind_model(GTK_LIST_BOX(self->listbox), self->model, (GtkListBoxCreateWidgetFunc) keyboard_input_row_new, NULL, NULL);
+	gtk_list_box_bind_model(GTK_LIST_BOX(self->listbox), G_LIST_MODEL(self->model), (GtkListBoxCreateWidgetFunc) keyboard_input_row_new, NULL, NULL);
 
 	self->handler_id = g_signal_connect(self->listbox, "row-selected", G_CALLBACK(keyboard_popover_row_selected_cb), self);
 
@@ -124,26 +112,29 @@ keyboard_popover_dispose(GObject* object) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(object);
 
 	g_clear_object(&self->current_source);
+	g_clear_object(&self->model);
 
 	G_OBJECT_CLASS(keyboard_popover_parent_class)->dispose(object);
 }
 
-void keyboard_popover_get_property(GObject* object, guint property_id, GValue* value, GParamSpec* spec) {
+static void keyboard_popover_get_property(GObject* object, guint property_id, GValue* value, GParamSpec* spec) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(object);
 
 	switch ((KeyboardPopoverProps) property_id) {
 		case PROP_MODEL:
-			g_value_set_pointer(value, keyboard_popover_get_model(self));
+			g_value_set_object(value, keyboard_popover_get_model(self));
 			break;
 		case PROP_CURRENT_SOURCE:
-			g_value_set_pointer(value, keyboard_popover_get_current_source(self));
+			g_value_set_object(value, keyboard_popover_get_current_source(self));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
 
-void keyboard_popover_set_property(GObject* object, guint property_id, const GValue* value, GParamSpec* spec) {
+static void keyboard_popover_set_property(GObject* object, guint property_id, const GValue* value, GParamSpec* spec) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(object);
-	gpointer ptr = NULL;
 
 	switch ((KeyboardPopoverProps) property_id) {
 		case PROP_MODEL:
@@ -151,6 +142,9 @@ void keyboard_popover_set_property(GObject* object, guint property_id, const GVa
 			break;
 		case PROP_CURRENT_SOURCE:
 			keyboard_popover_set_current_source(self, g_value_get_object(value));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -185,7 +179,7 @@ static void keyboard_popover_class_init(KeyboardPopoverClass* klass) {
 		NULL, NULL, NULL,
 		G_TYPE_NONE,
 		1,
-		G_TYPE_POINTER);
+		KEYBOARD_TYPE_INPUT_SOURCE);
 
 	/**
 	 * KeyboardPopover:model:

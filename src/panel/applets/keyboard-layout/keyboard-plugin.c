@@ -12,8 +12,6 @@
 #include "keyboard-plugin.h"
 #include "keyboard-applet.h"
 
-#define _GNU_SOURCE
-
 static void keyboard_plugin_iface_init(BudgiePluginIface* iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED(KeyboardPlugin, keyboard_plugin, G_TYPE_OBJECT, 0,
@@ -29,14 +27,7 @@ static BudgieApplet* keyboard_applet_get_panel_widget(BudgiePlugin* base, gchar*
  * GObject
  *****************************************************************************/
 
-static void keyboard_plugin_dispose(GObject* object) {
-	G_OBJECT_CLASS(keyboard_plugin_parent_class)->dispose(object);
-}
-
-static void keyboard_plugin_class_init(KeyboardPluginClass* klass) {
-	GObjectClass* obj_class = G_OBJECT_CLASS(klass);
-
-	obj_class->dispose = keyboard_plugin_dispose;
+static void keyboard_plugin_class_init(G_GNUC_UNUSED KeyboardPluginClass* klass) {
 }
 
 static void keyboard_plugin_iface_init(BudgiePluginIface* iface) {

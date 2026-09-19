@@ -59,22 +59,22 @@ G_DEFINE_FINAL_TYPE(KeyboardLocaleManager, keyboard_locale_manager, G_TYPE_OBJEC
 
 static KeyboardInputSource* keyboard_locale_manager_get_fallback_source(KeyboardLocaleManager* self) {
 	KeyboardInputSource* source;
-	gchar* type = NULL;
-	gchar* id = NULL;
-	gchar* layout = NULL;
-	gchar* variant = NULL;
-	gchar* display_name = NULL;
-	gchar* short_name = NULL;
-	gchar* locale = NULL;
-	gchar* options = NULL;
-	gchar** languages = NULL;
+	const gchar* type = NULL;
+	const gchar* id = NULL;
+	const gchar* layout = NULL;
+	const gchar* variant = NULL;
+	const gchar* display_name = NULL;
+	const gchar* short_name = NULL;
+	const gchar* locale = NULL;
+	const gchar* options = NULL;
+	const gchar* const* languages = NULL;
 
 	g_return_val_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self), NULL);
 
 	languages = g_get_language_names();
 
-	if (languages && g_strv_length(languages) > 0) {
-		locale = g_strdup(languages[0]);
+	if (languages != NULL && languages[0] != NULL) {
+		locale = languages[0];
 	}
 
 	if (!locale || !g_strstr_len(locale, -1, "_")) {
@@ -102,9 +102,8 @@ static KeyboardInputSource* keyboard_locale_manager_get_fallback_source(Keyboard
 }
 
 static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) {
-	GList* sources = NULL;
-	KeyboardInputSource* fallback_source = NULL;
-	GVariant* value;
+	g_autoptr(KeyboardInputSource) fallback_source = NULL;
+	g_autoptr(GVariant) value = NULL;
 	guint i;
 
 	g_return_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self));
@@ -116,16 +115,16 @@ static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) 
 	// Iterate over the configured layouts, and create
 	// input sources from them.
 	for (i = 0; i < g_variant_n_children(value); i++) {
-		KeyboardInputSource* source;
+		g_autoptr(KeyboardInputSource) source = NULL;
 		g_autofree gchar* id = NULL;
 		g_autofree gchar* type = NULL;
-		gchar** split = NULL;
-		gchar* language = NULL;
-		gchar* display_name = NULL;
-		gchar* short_name = NULL;
-		gchar* layout = NULL;
-		gchar* variant = NULL;
-		gchar* options = NULL;
+		g_auto(GStrv) split = NULL;
+		const gchar* language = NULL;
+		const gchar* display_name = NULL;
+		const gchar* short_name = NULL;
+		const gchar* layout = NULL;
+		const gchar* variant = NULL;
+		const gchar* options = NULL;
 
 		g_variant_get_child(value, i, "(ss)", &id, &type, NULL);
 
@@ -151,9 +150,8 @@ static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) 
 			source = keyboard_input_source_new(type, i, FALSE);
 		}
 
+		/* insert_sorted takes its own reference, so ours still needs dropping */
 		g_list_store_insert_sorted(self->model, source, (GCompareDataFunc) keyboard_input_source_compare, NULL);
-
-		g_strfreev(split);
 	}
 
 	// If there are no valid sources, add a fallback source.
@@ -315,6 +313,9 @@ static void keyboard_locale_manager_get_property(GObject* object, guint property
 			 * reference, and set_object would add another one and leak it. */
 			g_value_take_object(value, keyboard_locale_manager_get_current_input_source(self));
 			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
+			break;
 	}
 }
 
@@ -324,6 +325,9 @@ static void keyboard_locale_manager_set_property(GObject* object, guint property
 	switch ((KeyboardLocaleManagerProps) property_id) {
 		case PROP_CURRENT_SOURCE:
 			keyboard_locale_manager_set_current_input_source(self, g_value_get_object(value));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -353,7 +357,7 @@ static void keyboard_locale_manager_init(KeyboardLocaleManager* self) {
 	GSettings* input_settings;
 
 	input_settings = g_settings_new(INPUT_SOURCES_SCHEMA);
-	g_signal_connect(input_settings, "changed::" KEY_SOURCES, keyboard_locale_manager_settings_changed_cb, self);
+	g_signal_connect(input_settings, "changed::" KEY_SOURCES, G_CALLBACK(keyboard_locale_manager_settings_changed_cb), self);
 
 	self->input_settings = input_settings;
 
@@ -477,9 +481,9 @@ GListStore* keyboard_locale_manager_get_model(KeyboardLocaleManager* self) {
  *
  * Gets the D-Bus proxy for org.freedesktop.Locale1.
  *
- * Returns: (type KeyboardLocale1Proxy*) (transfer none): The proxy
+ * Returns: (type KeyboardLocale1*) (transfer none): The proxy
  */
-KeyboardLocale1Proxy* keyboard_locale_manager_get_proxy(KeyboardLocaleManager* self) {
+KeyboardLocale1* keyboard_locale_manager_get_proxy(KeyboardLocaleManager* self) {
 	g_return_val_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self), NULL);
 
 	return self->proxy;

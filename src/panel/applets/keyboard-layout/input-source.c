@@ -11,7 +11,7 @@
 
 #include "input-source.h"
 
-#define _GNU_SOURCE
+#include <string.h>
 
 struct _KeyboardInputSource {
 	GObject parent_instance;
@@ -62,29 +62,34 @@ static void keyboard_input_source_get_property(GObject* object, guint property_i
 	KeyboardInputSource* self = KEYBOARD_INPUT_SOURCE(object);
 
 	switch ((KeyboardInputSourceProps) property_id) {
+		/* take_string, not set_string: the getters already return a copy, and
+		 * set_string would make a second one and leak the first. */
 		case PROP_ID:
-			g_value_set_string(value, keyboard_input_source_get_id(self));
+			g_value_take_string(value, keyboard_input_source_get_id(self));
 			break;
 		case PROP_DISPLAY_NAME:
-			g_value_set_string(value, keyboard_input_source_get_display_name(self));
+			g_value_take_string(value, keyboard_input_source_get_display_name(self));
 			break;
 		case PROP_SHORT_NAME:
-			g_value_set_string(value, keyboard_input_source_get_short_name(self));
+			g_value_take_string(value, keyboard_input_source_get_short_name(self));
 			break;
 		case PROP_LAYOUT:
-			g_value_set_string(value, keyboard_input_source_get_layout(self));
+			g_value_take_string(value, keyboard_input_source_get_layout(self));
 			break;
 		case PROP_VARIANT:
-			g_value_set_string(value, keyboard_input_source_get_variant(self));
+			g_value_take_string(value, keyboard_input_source_get_variant(self));
 			break;
 		case PROP_OPTIONS:
-			g_value_set_string(value, keyboard_input_source_get_options(self));
+			g_value_take_string(value, keyboard_input_source_get_options(self));
 			break;
 		case PROP_INDEX:
 			g_value_set_uint(value, self->index);
 			break;
 		case PROP_XKB:
 			g_value_set_boolean(value, self->is_xkb);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -116,6 +121,9 @@ static void keyboard_input_source_set_property(GObject* object, guint property_i
 			break;
 		case PROP_XKB:
 			keyboard_input_source_set_xkb(self, g_value_get_boolean(value));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
 			break;
 	}
 }
@@ -255,7 +263,7 @@ static void keyboard_input_source_init(KeyboardInputSource* self) {
  *
  * Returns: (transfer full): A new #KeyboardInputSource
  */
-KeyboardInputSource* keyboard_input_source_new(gchar* id, guint index, gboolean is_xkb) {
+KeyboardInputSource* keyboard_input_source_new(const gchar* id, guint index, gboolean is_xkb) {
 	return keyboard_input_source_new_full(id, index, "", "", "", "", "", is_xkb);
 }
 
@@ -275,13 +283,13 @@ KeyboardInputSource* keyboard_input_source_new(gchar* id, guint index, gboolean 
  * Returns: (transfer full): A new #KeyboardInputSource
  */
 KeyboardInputSource* keyboard_input_source_new_full(
-	gchar* id,
+	const gchar* id,
 	guint index,
-	gchar* display_name,
-	gchar* short_name,
-	gchar* layout,
-	gchar* variant,
-	gchar* options,
+	const gchar* display_name,
+	const gchar* short_name,
+	const gchar* layout,
+	const gchar* variant,
+	const gchar* options,
 	gboolean is_xkb) {
 	return g_object_new(KEYBOARD_TYPE_INPUT_SOURCE,
 		"id", id,
@@ -322,7 +330,7 @@ gchar* keyboard_input_source_get_id(KeyboardInputSource* self) {
  *
  * Sets the ID of this input source.
  */
-void keyboard_input_source_set_id(KeyboardInputSource* self, gchar* id) {
+void keyboard_input_source_set_id(KeyboardInputSource* self, const gchar* id) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->id, id)) {
@@ -429,7 +437,7 @@ gchar* keyboard_input_source_get_display_name(KeyboardInputSource* self) {
  *
  * Sets the display name for this input source.
  */
-void keyboard_input_source_set_display_name(KeyboardInputSource* self, gchar* display_name) {
+void keyboard_input_source_set_display_name(KeyboardInputSource* self, const gchar* display_name) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->display_name, display_name)) {
@@ -478,7 +486,7 @@ gchar* keyboard_input_source_get_short_name(KeyboardInputSource* self) {
  *
  * Sets the short name for this input source.
  */
-void keyboard_input_source_set_short_name(KeyboardInputSource* self, gchar* short_name) {
+void keyboard_input_source_set_short_name(KeyboardInputSource* self, const gchar* short_name) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->short_name, short_name)) {
@@ -527,7 +535,7 @@ gchar* keyboard_input_source_get_layout(KeyboardInputSource* self) {
  *
  * Sets the layout for this input source.
  */
-void keyboard_input_source_set_layout(KeyboardInputSource* self, gchar* layout) {
+void keyboard_input_source_set_layout(KeyboardInputSource* self, const gchar* layout) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->layout, layout)) {
@@ -576,7 +584,7 @@ gchar* keyboard_input_source_get_variant(KeyboardInputSource* self) {
  *
  * Sets the variant for this input source.
  */
-void keyboard_input_source_set_variant(KeyboardInputSource* self, gchar* variant) {
+void keyboard_input_source_set_variant(KeyboardInputSource* self, const gchar* variant) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->variant, variant)) {
@@ -611,7 +619,7 @@ gboolean keyboard_input_source_has_options(KeyboardInputSource* self) {
 gchar* keyboard_input_source_get_options(KeyboardInputSource* self) {
 	gchar* options = NULL;
 
-	g_return_val_if_fail(KEYBOARD_IS_INPUT_SOURCE(self), FALSE);
+	g_return_val_if_fail(KEYBOARD_IS_INPUT_SOURCE(self), NULL);
 
 	if (self->options) {
 		options = g_strdup(self->options);
@@ -627,7 +635,7 @@ gchar* keyboard_input_source_get_options(KeyboardInputSource* self) {
  *
  * Sets the options for this input source.
  */
-void keyboard_input_source_set_options(KeyboardInputSource* self, gchar* options) {
+void keyboard_input_source_set_options(KeyboardInputSource* self, const gchar* options) {
 	g_return_if_fail(KEYBOARD_IS_INPUT_SOURCE(self));
 
 	if (g_set_str(&self->options, options)) {
@@ -679,15 +687,17 @@ gboolean keyboard_input_source_equal(KeyboardInputSource* self, KeyboardInputSou
 		return FALSE;
 	}
 
-	if (!g_str_equal(self->id, other->id)) {
+	/* g_strcmp0, not g_str_equal: gnome_xkb_info_get_layout_info leaves the
+	 * variant NULL for a layout that has none, and g_str_equal is a strcmp. */
+	if (g_strcmp0(self->id, other->id) != 0) {
 		return FALSE;
 	}
 
-	if (!g_str_equal(self->options, other->options)) {
+	if (g_strcmp0(self->options, other->options) != 0) {
 		return FALSE;
 	}
 
-	if (!g_str_equal(self->variant, other->variant)) {
+	if (g_strcmp0(self->variant, other->variant) != 0) {
 		return FALSE;
 	}
 

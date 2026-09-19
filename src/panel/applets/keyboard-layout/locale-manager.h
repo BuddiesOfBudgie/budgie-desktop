@@ -33,6 +33,6 @@ void keyboard_locale_manager_set_current_input_source(KeyboardLocaleManager* sel
 
 GListStore* keyboard_locale_manager_get_model(KeyboardLocaleManager* self);
 
-KeyboardLocale1Proxy* keyboard_locale_manager_get_proxy(KeyboardLocaleManager* self);
+KeyboardLocale1* keyboard_locale_manager_get_proxy(KeyboardLocaleManager* self);
 
 G_END_DECLS

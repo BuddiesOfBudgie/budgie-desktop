@@ -16,8 +16,6 @@
 #include "locale-manager.h"
 #include "org.buddiesofbudgie.KeyboardLayout.h"
 
-#define _GNU_SOURCE
-
 typedef enum {
 	PROP_UUID = 1,
 } KeyboardAppletProps;
@@ -42,7 +40,7 @@ struct _KeyboardAppletPrivate {
 	 * We apply layout changes through this instead of calling
 	 * org.freedesktop.locale1's SetX11Keyboard directly, because that
 	 * method is blocked by some distros. */
-	KeyboardLayoutProxy* layout_proxy;
+	KeyboardLayout* layout_proxy;
 
 	GCancellable* set_layout_cancellable;
 };
@@ -152,7 +150,7 @@ static gchar* keyboard_applet_get_display_layout(KeyboardApplet* self) {
 	/* Prefer CurrentLayout from the daemon. The bridge only sets it once it
 	 * has applied a layout, so it is empty early in the session. */
 	if (priv->layout_proxy != NULL) {
-		gchar* current = keyboard_layout_dup_current_layout(KEYBOARD_LAYOUT(priv->layout_proxy));
+		gchar* current = keyboard_layout_dup_current_layout(priv->layout_proxy);
 
 		if (current != NULL && !g_str_equal(current, "")) {
 			return current;
@@ -198,8 +196,8 @@ keyboard_applet_event_box_press_cb(GtkWidget* event_button, GdkEventButton* even
 
 	switch (event->button) {
 		case 1: /* Toggle popover on left-click */
-			if (gtk_widget_is_visible(priv->popover)) {
-				gtk_widget_hide(priv->popover);
+			if (gtk_widget_is_visible(GTK_WIDGET(priv->popover))) {
+				gtk_widget_hide(GTK_WIDGET(priv->popover));
 			} else {
 				budgie_popover_manager_show_popover(priv->popover_manager, event_button);
 			}
@@ -212,7 +210,7 @@ keyboard_applet_event_box_press_cb(GtkWidget* event_button, GdkEventButton* even
 	return GDK_EVENT_PROPAGATE;
 }
 
-static void keyboard_applet_layout_proxy_set_cb(KeyboardLayoutProxy* proxy, GAsyncResult* result, gpointer user_data) {
+static void keyboard_applet_layout_proxy_set_cb(KeyboardLayout* proxy, GAsyncResult* result, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 	KeyboardAppletPrivate* priv;
 	gboolean success = FALSE;
@@ -227,6 +225,9 @@ static void keyboard_applet_layout_proxy_set_cb(KeyboardLayoutProxy* proxy, GAsy
 	}
 
 	g_clear_object(&priv->set_layout_cancellable);
+
+	/* Balances the reference taken when the call was started */
+	g_object_unref(self);
 }
 
 static void
@@ -260,12 +261,14 @@ keyboard_applet_layout_selected_cb(G_GNUC_UNUSED KeyboardPopover* popover, Keybo
 
 	priv->set_layout_cancellable = g_cancellable_new();
 
+	/* Cancelling does not stop the callback running, so hold a reference until
+	 * the reply arrives or it would run against a freed applet */
 	keyboard_layout_call_set_keyboard_layout(
 		priv->layout_proxy,
 		layout_string,
 		priv->set_layout_cancellable,
 		(GAsyncReadyCallback) keyboard_applet_layout_proxy_set_cb,
-		user_data);
+		g_object_ref(self));
 
 	keyboard_locale_manager_set_current_input_source(priv->locale_manager, source);
 }
@@ -289,7 +292,7 @@ keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamS
 }
 
 static void
-keyboard_applet_current_layout_changed_cb(G_GNUC_UNUSED KeyboardLayoutProxy* proxy, G_GNUC_UNUSED GParamSpec* pspec, gpointer user_data) {
+keyboard_applet_current_layout_changed_cb(G_GNUC_UNUSED KeyboardLayout* proxy, G_GNUC_UNUSED GParamSpec* pspec, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
 
 	g_return_if_fail(KEYBOARD_IS_APPLET(self));
@@ -332,7 +335,7 @@ static void keyboard_applet_update_popovers(BudgieApplet* base, BudgiePopoverMan
 	budgie_popover_manager_register_popover(
 		manager,
 		priv->event_box,
-		priv->popover);
+		GTK_POPOVER(priv->popover));
 
 	priv->popover_manager = manager;
 }
@@ -357,8 +360,12 @@ static void keyboard_applet_get_property(GObject* obj, guint prop_id, GValue* va
 	KeyboardApplet* self = KEYBOARD_APPLET(obj);
 
 	switch ((KeyboardAppletProps) prop_id) {
+		/* take_string, not set_string: get_uuid already returns a copy */
 		case PROP_UUID:
-			g_value_set_string(val, keyboard_applet_get_uuid(self));
+			g_value_take_string(val, keyboard_applet_get_uuid(self));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, prop_id, spec);
 			break;
 	}
 }
@@ -369,6 +376,9 @@ static void keyboard_applet_set_property(GObject* obj, guint prop_id, const GVal
 	switch ((KeyboardAppletProps) prop_id) {
 		case PROP_UUID:
 			keyboard_applet_set_uuid(self, g_value_get_string(val));
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(obj, prop_id, spec);
 			break;
 	}
 }
@@ -440,7 +450,7 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 	model = keyboard_locale_manager_get_model(priv->locale_manager);
 
 	priv->popover = keyboard_popover_new(GTK_WIDGET(priv->event_box), model);
-	g_signal_connect(priv->popover, "layout-selected", keyboard_applet_layout_selected_cb, self);
+	g_signal_connect(priv->popover, "layout-selected", G_CALLBACK(keyboard_applet_layout_selected_cb), self);
 
 	g_signal_connect_object(priv->locale_manager, "notify::current-source", G_CALLBACK(keyboard_applet_current_input_changed_cb), self, G_CONNECT_DEFAULT);
 	keyboard_locale_manager_start(priv->locale_manager);

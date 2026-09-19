@@ -19,21 +19,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(KeyboardInputSource, keyboard_input_source, KEYBOARD, INPUT_SOURCE, GObject)
 
-KeyboardInputSource* keyboard_input_source_new(gchar* id, guint index, gboolean is_xkb);
+KeyboardInputSource* keyboard_input_source_new(const gchar* id, guint index, gboolean is_xkb);
 
 KeyboardInputSource* keyboard_input_source_new_full(
-	gchar* id,
+	const gchar* id,
 	guint index,
-	gchar* display_name,
-	gchar* short_name,
-	gchar* layout,
-	gchar* variant,
-	gchar* options,
+	const gchar* display_name,
+	const gchar* short_name,
+	const gchar* layout,
+	const gchar* variant,
+	const gchar* options,
 	gboolean is_xkb);
 
 gchar* keyboard_input_source_get_id(KeyboardInputSource* self);
 
-void keyboard_input_source_set_id(KeyboardInputSource* self, gchar* id);
+void keyboard_input_source_set_id(KeyboardInputSource* self, const gchar* id);
 
 guint keyboard_input_source_get_index(KeyboardInputSource* self);
 
@@ -47,31 +47,31 @@ gboolean keyboard_input_source_has_display_name(KeyboardInputSource* self);
 
 gchar* keyboard_input_source_get_display_name(KeyboardInputSource* self);
 
-void keyboard_input_source_set_display_name(KeyboardInputSource* self, gchar* display_name);
+void keyboard_input_source_set_display_name(KeyboardInputSource* self, const gchar* display_name);
 
 gboolean keyboard_input_source_has_short_name(KeyboardInputSource* self);
 
 gchar* keyboard_input_source_get_short_name(KeyboardInputSource* self);
 
-void keyboard_input_source_set_short_name(KeyboardInputSource* self, gchar* short_name);
+void keyboard_input_source_set_short_name(KeyboardInputSource* self, const gchar* short_name);
 
 gboolean keyboard_input_source_has_layout(KeyboardInputSource* self);
 
 gchar* keyboard_input_source_get_layout(KeyboardInputSource* self);
 
-void keyboard_input_source_set_layout(KeyboardInputSource* self, gchar* layout);
+void keyboard_input_source_set_layout(KeyboardInputSource* self, const gchar* layout);
 
 gboolean keyboard_input_source_has_variant(KeyboardInputSource* self);
 
 gchar* keyboard_input_source_get_variant(KeyboardInputSource* self);
 
-void keyboard_input_source_set_variant(KeyboardInputSource* self, gchar* variant);
+void keyboard_input_source_set_variant(KeyboardInputSource* self, const gchar* variant);
 
 gboolean keyboard_input_source_has_options(KeyboardInputSource* self);
 
 gchar* keyboard_input_source_get_options(KeyboardInputSource* self);
 
-void keyboard_input_source_set_options(KeyboardInputSource* self, gchar* options);
+void keyboard_input_source_set_options(KeyboardInputSource* self, const gchar* options);
 
 gint keyboard_input_source_compare(KeyboardInputSource* self, KeyboardInputSource* other, gpointer user_data);
 

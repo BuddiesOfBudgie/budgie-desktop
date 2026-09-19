@@ -47,12 +47,7 @@ static void keyboard_header_button_clicked_cb(G_GNUC_UNUSED GtkButton* button, g
  * GObject
  *****************************************************************************/
 
-static void keyboard_header_dispose(GObject* object) {
-	G_OBJECT_CLASS(keyboard_header_parent_class)->dispose(object);
-}
-
 static void keyboard_header_class_init(KeyboardHeaderClass* klass) {
-	GObjectClass* object_class = G_OBJECT_CLASS(klass);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS(klass);
 
 	gtk_widget_class_set_template_from_resource(widget_class, "/org/budgie-desktop/keyboard-layout/keyboard-header.ui");
@@ -60,25 +55,8 @@ static void keyboard_header_class_init(KeyboardHeaderClass* klass) {
 	gtk_widget_class_bind_template_child(widget_class, KeyboardHeader, button);
 
 	gtk_widget_class_bind_template_callback(widget_class, keyboard_header_button_clicked_cb);
-
-	object_class->dispose = keyboard_header_dispose;
 }
 
 static void keyboard_header_init(KeyboardHeader* self) {
 	gtk_widget_init_template(GTK_WIDGET(self));
-}
-
-/******************************************************************************
- * Public API
- *****************************************************************************/
-
-/**
- * keyboard_header_new:
- *
- * Creates a new #KeyboardHeader.
- *
- * Returns: (transfer full): A new #KeyboardHeader
- */
-KeyboardHeader* keyboard_header_new(void) {
-	return g_object_new(KEYBOARD_TYPE_HEADER, NULL);
 }

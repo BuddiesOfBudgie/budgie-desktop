@@ -19,6 +19,4 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE(KeyboardHeader, keyboard_header, KEYBOARD, HEADER, GtkBox)
 
-KeyboardHeader* keyboard_header_new(void);
-
 G_END_DECLS
