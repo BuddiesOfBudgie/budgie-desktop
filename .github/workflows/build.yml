@@ -45,6 +45,10 @@ jobs:
             gtklock \
             intltool \
             meson \
+            python3-dbus \
+            python3-gobject-base \
+            python3-psutil \
+            python3-systemd \
             sassc \
             slurp \
             swaybg \
