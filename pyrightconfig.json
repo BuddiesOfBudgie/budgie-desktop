@@ -1,0 +1,6 @@
+{
+  "include": ["src"],
+  "exclude": ["build", "subprojects"],
+  "typeCheckingMode": "standard",
+  "reportMissingModuleSource": "none"
+}
