@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 17:28+0200\n"
+"POT-Creation-Date: 2026-09-19 14:35+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
 "Last-Translator: pomon pl, 2026\n"
 "Language-Team: Polish (https://app.transifex.com/buddiesofbudgie/teams/129844/pl/)\n"
@@ -21,6 +21,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr "Nowa kategoria"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -79,11 +84,6 @@ msgstr "Narzędzia systemowe"
 msgid "Universal Access"
 msgstr "Ustawienie dostępu"
 
-#. Make sure we have a default name
-#: src/appindexer/Category.vala:51
-msgid "New Category"
-msgstr "Nowa kategoria"
-
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
@@ -108,24 +108,6 @@ msgstr[3] ""
 #: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "Wyświetl powiadomienia"
-
-#. Should show a notification
-#: src/daemon/settings.vala:416
-msgid "Turned on Caffeine Boost"
-msgstr "Włączono tryb Caffeine Boost"
-
-#: src/daemon/settings.vala:416
-msgid "Turned off Caffeine Boost"
-msgstr "Wyłączono tryb kofeinowy"
-
-#: src/daemon/settings.vala:421
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: src/daemon/endsession.vala:161
 msgid "Log out"
@@ -155,11 +137,29 @@ msgstr "Num Lock jest włączony"
 msgid "Num Lock is off"
 msgstr "Num Lock jest wyłączony"
 
-#: src/dialogs/polkit/polkitdialog.vala:224
+#. Should show a notification
+#: src/daemon/settings.vala:416
+msgid "Turned on Caffeine Boost"
+msgstr "Włączono tryb Caffeine Boost"
+
+#: src/daemon/settings.vala:416
+msgid "Turned off Caffeine Boost"
+msgstr "Wyłączono tryb kofeinowy"
+
+#: src/daemon/settings.vala:421
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/dialogs/polkit/polkitdialog.vala:227
 msgid "Authentication failed"
 msgstr "Uwierzytelnianie nieudane"
 
-#: src/dialogs/polkit/polkitdialog.vala:312
+#: src/dialogs/polkit/polkitdialog.vala:315
 msgid "Group:"
 msgstr "Grupa:"
 
@@ -192,53 +192,6 @@ msgstr "Wył_ącz"
 msgid "This system does not support hibernation."
 msgstr "Ten system nie obsługuje hibernacji."
 
-#: src/dialogs/sendto/Application.vala:75
-msgid "Files to send"
-msgstr "Pliki do wysłania"
-
-#: src/dialogs/sendto/Application.vala:78
-msgid "_Cancel"
-msgstr "_Anuluj"
-
-#: src/dialogs/sendto/Application.vala:79
-msgid "_Open"
-msgstr "_Otwórz"
-
-#: src/dialogs/sendto/Application.vala:193
-msgid "Send Files via Bluetooth"
-msgstr "Wyślij pliki przez Bluetooth"
-
-#: src/dialogs/sendto/Application.vala:195
-msgid "Send files to device…"
-msgstr "Wyślij pliki na urządzenie…"
-
-#: src/dialogs/sendto/Application.vala:301
-msgid "Rejected file"
-msgstr "Plik został odrzucony"
-
-#: src/dialogs/sendto/Application.vala:302
-#, c-format
-msgid "File already exists: %s"
-msgstr "Plik już istnieje: %s"
-
-#. Create a notification prompting the user what to do
-#: src/dialogs/sendto/Application.vala:314
-msgid "Receiving file"
-msgstr "Odbieranie pliku"
-
-#: src/dialogs/sendto/Application.vala:315
-#, c-format
-msgid "Device '%s' wants to send a file: %s %s"
-msgstr "Urządzenie '%s' chce wysłać plik: %s %s"
-
-#: src/dialogs/sendto/Application.vala:317
-msgid "Accept"
-msgstr "Akceptuj"
-
-#: src/dialogs/sendto/Application.vala:321
-msgid "Reject"
-msgstr "Odrzuć"
-
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
 msgstr "Nazwa pliku"
@@ -257,7 +210,7 @@ msgstr "Zamknij"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -461,8 +414,55 @@ msgstr "Upewnij się, że Twoje urządzenia są widoczne i gotowe do parowania"
 msgid "Available Devices"
 msgstr "Dostępne urządzenia"
 
-#: src/dialogs/screenshot/screenshot.vala:365
-#: src/dialogs/screenshot/screenshot.vala:833
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr "Pliki do wysłania"
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr "_Anuluj"
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr "_Otwórz"
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr "Wyślij pliki przez Bluetooth"
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr "Wyślij pliki na urządzenie…"
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr "Plik został odrzucony"
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr "Plik już istnieje: %s"
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr "Odbieranie pliku"
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr "Urządzenie '%s' chce wysłać plik: %s %s"
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr "Akceptuj"
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr "Odrzuć"
+
+#: src/dialogs/screenshot/screenshot.vala:363
+#: src/dialogs/screenshot/screenshot.vala:831
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -470,48 +470,48 @@ msgstr "Zrzut ekranu Budgie"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:481
+#: src/dialogs/screenshot/screenshot.vala:479
 msgid "Screenshot entire screen"
 msgstr "Zrzut całego ekranu"
 
-#: src/dialogs/screenshot/screenshot.vala:483
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot active window"
 msgstr "Zrzut aktywnego okna"
 
-#: src/dialogs/screenshot/screenshot.vala:485
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot selected area"
 msgstr "Zrzut wybranego obszaru ekranu"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:894
 msgid "Cancel screenshot"
 msgstr "Anuluj zrzut ekranu"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:895
 msgid "Save screenshot to the selected directory"
 msgstr "Zapisz zrzut ekranu w wybranym katalogu"
 
-#: src/dialogs/screenshot/screenshot.vala:899
+#: src/dialogs/screenshot/screenshot.vala:896
 msgid "Copy screenshot to the clipboard"
 msgstr "Skopiuj zrzut ekranu do schowka"
 
-#: src/dialogs/screenshot/screenshot.vala:900
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Open screenshot in default application"
 msgstr "Otwórz zrzut ekranu w domyślnej aplikacji"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1191
+#: src/dialogs/screenshot/screenshot.vala:1188
 msgid "Other..."
 msgstr "Inny..."
 
 #. Hide the AfterShot window while the file chooser is open
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1280
+#: src/dialogs/screenshot/screenshot.vala:1277
 msgid "Open Folder"
 msgstr "Otwórz folder"
 
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 msgid "Open"
 msgstr "Otwórz"
 
@@ -521,6 +521,16 @@ msgstr "Otwórz"
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
 msgstr "Tryb kofeinowy"
+
+#. placeholder in case of no results
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
+msgid "Sorry, no items found"
+msgstr "Przepraszamy, nie znaleziono plików"
+
+#: src/panel/applets/budgie-menu/views/ListView.vala:523
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:43
+msgid "Favorites"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -538,28 +548,31 @@ msgstr "Wszystkie pliki"
 msgid "Set icon"
 msgstr "Ustaw ikonę"
 
-#. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:111
-msgid "Sorry, no items found"
-msgstr "Przepraszamy, nie znaleziono plików"
-
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:108
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr "Ustawienia Pulpitu Budgie"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:111
 msgid "System Settings"
 msgstr "Ustawienia"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:114
 msgid "Power"
 msgstr "Power"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:45
 msgid "All"
 msgstr "Wszystkie"
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:163
+msgid "Remove from favorites"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:164
+msgid "Add to favorites"
+msgstr ""
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -570,51 +583,51 @@ msgid "System time and date settings"
 msgstr "Ustawienia czasu i daty systemu"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Unfavorite"
 msgstr "Usuń z ulubionych"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Favorite"
 msgstr "Ulubiony"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:111
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:76
 msgid "Close all windows"
 msgstr "Zamknij wszystkie okna"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:129
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:94
 msgid "Launch new instance"
 msgstr "Uruchom nową instancję"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:271
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:240
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimalizuj"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:338
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:307
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Cofnij maksymalizację"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maksymalizuj"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:400
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:369
 msgid "Close window"
 msgstr "Zamknij okno"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:405
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:374
 msgid "Show window controls"
 msgstr "Pokaż przyciski okna"
 
@@ -648,6 +661,12 @@ msgstr[3] ""
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "Brak nieprzeczytanych powiadomień"
+
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
+#: src/panel/applets/places-indicator/MountItem.vala:63
+#, c-format
+msgid "Open \"%s\""
+msgstr "Otwórz „%s”"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -685,12 +704,6 @@ msgstr "Wysuń"
 msgid "Unmount"
 msgstr "Odmontuj"
 
-#: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:41
-#, c-format
-msgid "Open \"%s\""
-msgstr "Otwórz „%s”"
-
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
@@ -714,6 +727,18 @@ msgstr "Błąd podczas odmontowywania woluminu"
 msgid "Places"
 msgstr "Miejsca"
 
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "Nie ma nic do wyświetlenia"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "Zamontuj jakiś nośnik"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Włącz więcej sekcji"
+
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -731,18 +756,6 @@ msgstr "Podane hasło jest nieprawidłowe"
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "Wystąpił nieznany błąd podczas montowania tego woluminu"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "Nie ma nic do wyświetlenia"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "Zamontuj jakiś nośnik"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "Włącz więcej sekcji"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:37
 msgid "Toggle the desktop"
@@ -805,6 +818,7 @@ msgid "Failed to connect"
 msgstr "Połączenie nie powiodło się"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
+#: src/panel/settings/settings_displays.vala:358
 msgid "Connected"
 msgstr "Połączony"
 
@@ -981,121 +995,6 @@ msgstr "Dodaj aplikację"
 msgid "Add Command"
 msgstr "Dodaj komendę"
 
-#: src/panel/settings/settings_desktop.vala:52
-msgid "Desktop"
-msgstr "Pulpit"
-
-#. Budgie native implementation
-#. Get the settings for Budgie Desktop View
-#. Update our switches on change
-#. Desktop Folder
-#. Get the settings for DesktopType
-#. Update our switches on change
-#. Nemo
-#. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-
-#. specific
-#. Universal show
-#: src/panel/settings/settings_desktop.vala:77
-msgid "Desktop Icons"
-msgstr "Ikony pulpitu"
-
-#: src/panel/settings/settings_desktop.vala:78
-msgid "Control whether to allow icons on the desktop."
-msgstr "Zezwól na ikony na pulpicie."
-
-#. DesktopFolder doesn't support fancy options like showing home folder,
-#. trash, or active mounts
-#. DesktopType is the only one that doesn't support showing mounts
-#. Switcher to show or hide active mounts
-#: src/panel/settings/settings_desktop.vala:87
-msgid "Active Mounts"
-msgstr "Zamontowane dyski"
-
-#: src/panel/settings/settings_desktop.vala:88
-msgid "Show all active mounts on the desktop."
-msgstr "Pokaż wszystkie zamontowane dyski na pulpicie."
-
-#. Switcher to show or hide our Home folder
-#: src/panel/settings/settings_desktop.vala:95
-msgid "Home directory"
-msgstr "Katalog domowy"
-
-#: src/panel/settings/settings_desktop.vala:96
-msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Dodaj skrót do katalogu domowego na pulpicie."
-
-#. Switcher to show or hide a shortcut to Trash
-#: src/panel/settings/settings_desktop.vala:103
-msgid "Trash"
-msgstr "Kosz"
-
-#: src/panel/settings/settings_desktop.vala:104
-msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Dodaj skrót do Kosza na pulpicie."
-
-#. DesktopType doesn't support icon size changing. Nemo might but needs
-#. validation.
-#. Click Policy combo box
-#. Icon Size combo box
-#: src/panel/settings/settings_desktop.vala:116
-msgid "Icon Size"
-msgstr "Rozmiar ikon"
-
-#: src/panel/settings/settings_desktop.vala:117
-msgid "Set the desired size of icons on the desktop."
-msgstr "Dostosuj wielkość ikon na pulpicie."
-
-#: src/panel/settings/settings_desktop.vala:148
-msgid "Number of virtual desktops"
-msgstr "Liczba wirtualnych pulpitów"
-
-#: src/panel/settings/settings_desktop.vala:149
-msgid ""
-"Number of virtual desktops / workspaces to create automatically on startup."
-msgstr ""
-"Liczba wirtualnych pulpitów / przestrzeni roboczych tworzonych automatycznie"
-" przy starcie systemu."
-
-#: src/panel/settings/settings_desktop.vala:217
-msgid "Single"
-msgstr "Pojedyncze"
-
-#. If the click policy is to double click
-#: src/panel/settings/settings_desktop.vala:221
-msgid "Double"
-msgstr "Podwójne"
-
-#: src/panel/settings/settings_desktop.vala:236
-msgid "Click Policy"
-msgstr "Polityka kliknięć"
-
-#: src/panel/settings/settings_desktop.vala:237
-msgid ""
-"Click Policy determines if we should open items on a single or double click."
-msgstr ""
-"Polityka kliknięć określa czy dany obiekt otwierać pojedynczym czy podwójnym"
-" kliknięciem myszy."
-
-#: src/panel/settings/settings_desktop.vala:289
-msgid "Normal"
-msgstr "Normalne"
-
-#. Small
-#: src/panel/settings/settings_desktop.vala:292
-msgid "Small"
-msgstr "Małe"
-
-#. Large
-#: src/panel/settings/settings_desktop.vala:294
-msgid "Large"
-msgstr "Duże"
-
-#. Massive
-#: src/panel/settings/settings_desktop.vala:296
-msgid "Massive"
-msgstr "Ogromne"
-
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
 msgstr "Czcionki"
@@ -1154,7 +1053,7 @@ msgstr "Drobny"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:318
 msgid "None"
 msgstr "Żaden"
 
@@ -1181,51 +1080,6 @@ msgstr "Wygładzanie krawędzi"
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "Ustaw typ wygładzania krawędzi."
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Wygląd"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panele"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Sesja"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Stwórz nowy panel"
-
-#: src/panel/settings/settings_panel_applets.vala:21
-msgid "Applet Settings"
-msgstr "Ustawienia apletu"
-
-#: src/panel/settings/settings_panel_applets.vala:235
-msgid "Add applet"
-msgstr "Dodaj aplet"
-
-#: src/panel/settings/settings_panel_applets.vala:236
-msgid "Choose a new applet to add to this panel"
-msgstr "Wybierz nowy aplet do dodania do tego panelu"
-
-#: src/panel/settings/settings_panel_applets.vala:250
-#: src/panel/settings/settings_raven_widgets.vala:164
-msgid "No settings available"
-msgstr "Brak dostępnych ustawień"
-
-#: src/panel/settings/settings_panel_applets.vala:403
-msgid "Start"
-msgstr "Początek"
-
-#: src/panel/settings/settings_panel_applets.vala:406
-msgid "Center"
-msgstr "Środek"
-
-#: src/panel/settings/settings_panel_applets.vala:409
-msgid "End"
-msgstr "Koniec"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -1301,7 +1155,7 @@ msgid "Widgets"
 msgstr "Widżety"
 
 #: src/panel/settings/settings_raven.vala:48
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:103
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -1340,6 +1194,11 @@ msgstr "Dodaj widżet"
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
 msgstr "Wybierz nowy widget, który chcesz dodać do widoku Widgetów"
+
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:261
+msgid "No settings available"
+msgstr "Brak dostępnych ustawień"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
@@ -1381,162 +1240,89 @@ msgstr ""
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Nie udało się utworzyć instancji widżetu z powodu nieznanego błędu."
 
-#: src/panel/settings/settings_panel.vala:90
-msgid "Applets"
-msgstr "Aplety"
+#: src/panel/settings/settings_style.vala:36
+msgid "Style"
+msgstr "Styl"
 
-#: src/panel/settings/settings_panel.vala:93
-msgid "Remove Panel"
-msgstr "Usuń panel"
+#: src/panel/settings/settings_style.vala:53
+msgid "Set the appearance of window decorations and controls"
+msgstr "Ustaw wygląd dekoratorów i przycisków okna"
 
-#: src/panel/settings/settings_panel.vala:94
-msgid "Remove this panel from the screen"
-msgstr "Usuń ten panel z ekranu"
+#: src/panel/settings/settings_style.vala:57
+msgid "Icons"
+msgstr "Ikony"
 
-#: src/panel/settings/settings_panel.vala:171
-msgid "Top Dock"
-msgstr "Górny Dock"
+#: src/panel/settings/settings_style.vala:58
+msgid "Set the globally used icon theme"
+msgstr "Ustaw globalny motyw ikon"
 
-#: src/panel/settings/settings_panel.vala:173
-msgid "Right Dock"
-msgstr "Prawy Dock"
+#: src/panel/settings/settings_style.vala:62
+msgid "Cursors"
+msgstr "Kursory"
 
-#: src/panel/settings/settings_panel.vala:175
-msgid "Left Dock"
-msgstr "Lewy Dock"
+#: src/panel/settings/settings_style.vala:63
+msgid "Set the globally used mouse cursor theme"
+msgstr "Ustaw globalny motyw kursora"
 
-#: src/panel/settings/settings_panel.vala:177
-msgid "Bottom Dock"
-msgstr "Dolny Dock"
+#: src/panel/settings/settings_style.vala:67
+msgid "Notification Position"
+msgstr "Umiejscowienie powiadomień"
 
-#: src/panel/settings/settings_panel.vala:182
-msgid "Top Panel"
-msgstr "Górny panel"
+#: src/panel/settings/settings_style.vala:68
+msgid "Set the location for notification popups"
+msgstr "Ustaw umiejscowienie powiadomień"
 
-#: src/panel/settings/settings_panel.vala:184
-msgid "Right Panel"
-msgstr "Prawy panel"
+#: src/panel/settings/settings_style.vala:77
+msgid "Dark theme"
+msgstr "Ciemny styl"
 
-#: src/panel/settings/settings_panel.vala:186
-msgid "Left Panel"
-msgstr "Lewy panel"
+#: src/panel/settings/settings_style.vala:84
+msgid "Built-in theme"
+msgstr "Wbudowany styl"
 
-#: src/panel/settings/settings_panel.vala:188
-msgid "Bottom Panel"
-msgstr "Dolny panel"
-
-#: src/panel/settings/settings_panel.vala:225
-msgid "Top"
-msgstr "Góra"
-
-#: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
-msgid "Right"
-msgstr "Prawy"
-
-#: src/panel/settings/settings_panel.vala:229
-#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Lewy"
-
-#: src/panel/settings/settings_panel.vala:231
-msgid "Bottom"
-msgstr "Dół"
-
-#: src/panel/settings/settings_panel.vala:241
-msgid "Always"
-msgstr "Zawsze"
-
-#: src/panel/settings/settings_panel.vala:243
-msgid "Dynamic"
-msgstr "Dynamiczny"
-
-#: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "Automatyczny"
-
-#: src/panel/settings/settings_panel.vala:258
-msgid "Intelligent"
-msgstr "Inteligentny"
-
-#: src/panel/settings/settings_panel.vala:261
-msgid "Never"
-msgstr "Nigdy"
-
-#: src/panel/settings/settings_panel.vala:278
-msgid "Position"
-msgstr "Położenie"
-
-#: src/panel/settings/settings_panel.vala:279
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Wybierz krawędź ekranu, na której umieszczony zostanie ten panel"
-
-#: src/panel/settings/settings_panel.vala:287
-msgid "Size"
-msgstr "Rozmiar"
-
-#: src/panel/settings/settings_panel.vala:288
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr ""
-"Ustaw rozmiar (szerokość lub wysokość, w zależności od orientacji) tego "
-"panelu"
-
-#: src/panel/settings/settings_panel.vala:295
-msgid "Spacing"
-msgstr "Odstępy"
-
-#: src/panel/settings/settings_panel.vala:296
-msgid "Set the spacing between applets for this panel"
-msgstr "Ustaw odstępy między apletami dla tego panelu"
-
-#: src/panel/settings/settings_panel.vala:303
-msgid "Automatically hide"
-msgstr "Ukryj automatycznie"
-
-#: src/panel/settings/settings_panel.vala:304
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr ""
-"Kiedy aktywne, ten panel zniknie z widoku, by zmaksymalizować powierzchnię "
-"pulpitu"
-
-#: src/panel/settings/settings_panel.vala:311
-msgid "Transparency"
-msgstr "Przezroczystość"
-
-#: src/panel/settings/settings_panel.vala:312
-msgid "Control when this panel should have a solid background"
-msgstr "Kontroluj, kiedy ten panel powinien mieć jednolite tło"
-
-#: src/panel/settings/settings_panel.vala:317
-msgid "Shadow"
-msgstr "Cień"
-
-#: src/panel/settings/settings_panel.vala:318
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Dodaje ozdobny cień, idealny dla nieprzejrzystych okien"
-
-#: src/panel/settings/settings_panel.vala:324
-msgid "Stylize regions"
-msgstr "Stylizowanie obszarów"
-
-#: src/panel/settings/settings_panel.vala:325
+#: src/panel/settings/settings_style.vala:85
 msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
+"When enabled, the built-in theme will override the desktop component styling"
 msgstr ""
-"Dodaje podpowiedź do panelu, dzięki której każdy z trzech głównych obszarów "
-"panelu może mieć inny motyw."
+"Kiedy aktywne, styl komponentów pulpitu zostanie zastąpiony wbudowanym"
 
-#: src/panel/settings/settings_panel.vala:332
-msgid "Dock mode"
-msgstr "Tryb doku"
+#: src/panel/settings/settings_style.vala:98
+msgid "Animations"
+msgstr "Animacje"
 
-#: src/panel/settings/settings_panel.vala:333
+#: src/panel/settings/settings_style.vala:99
+msgid "Control whether windows and controls use animations"
+msgstr "Kontroluj, czy okna i przyciski mają używać animacji"
+
+#. Get display name for theme
+#: src/panel/settings/settings_style.vala:207
+msgid "Use theme"
+msgstr "Użyj motywu"
+
+#: src/panel/settings/settings_style.vala:318
+msgid "Labwc Compositor Theme"
+msgstr "Motyw kompozytora Labwc"
+
+#: src/panel/settings/settings_style.vala:319
 msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr ""
-"Kiedy w trybie doku, ten panel będzie używał możliwie najmniej miejsca, "
-"zwalniając cenną przestrzeń pulpitu"
+"Override the labwc compositor theme independently from the desktop theme."
+msgstr "Zastąp motyw kompozytora labwc niezależnie od motywu pulpitu."
+
+#: src/panel/settings/settings_style.vala:388
+msgid "Top Left"
+msgstr "Lewy górny"
+
+#: src/panel/settings/settings_style.vala:390
+msgid "Bottom Left"
+msgstr "Lewy dolny"
+
+#: src/panel/settings/settings_style.vala:392
+msgid "Bottom Right"
+msgstr "Prawy dolny"
+
+#: src/panel/settings/settings_style.vala:395
+msgid "Top Right"
+msgstr "Prawy górny"
 
 #: src/panel/settings/settings_wm.vala:29
 msgid "Windows"
@@ -1596,13 +1382,15 @@ msgstr ""
 
 #: src/panel/settings/settings_wm.vala:68
 msgid "Window focus mode"
-msgstr ""
+msgstr "Tryb ostrości okien"
 
 #: src/panel/settings/settings_wm.vala:69
 msgid ""
 "Choose how windows receive focus: click to focus; sloppy to focus without "
 "raising windows; mouse to focus with raising."
 msgstr ""
+"Wybierz sposób aktywacji okien: kliknięcie aktywuje; najechanie kursorem "
+"aktywuje bez wysuwania; najechanie kursorem aktywuje i wysuwa."
 
 #: src/panel/settings/settings_wm.vala:74
 msgid "Show all windows in tab switcher"
@@ -1620,121 +1408,391 @@ msgstr ""
 msgid "Right (standard)"
 msgstr "Prawy (standard)"
 
+#: src/panel/settings/settings_wm.vala:84
+#: src/panel/settings/settings_panel.vala:301 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Lewy"
+
 #: src/panel/settings/settings_wm.vala:97
 msgid "Click"
-msgstr ""
+msgstr "Kliknięcie"
 
 #: src/panel/settings/settings_wm.vala:99
 msgid "Sloppy"
-msgstr ""
+msgstr "Najechanie kursorem"
 
-#: src/panel/settings/settings_style.vala:36
-msgid "Style"
-msgstr "Styl"
+#: src/panel/settings/settings_desktop.vala:52
+msgid "Desktop"
+msgstr "Pulpit"
 
-#: src/panel/settings/settings_style.vala:53
-msgid "Set the appearance of window decorations and controls"
-msgstr "Ustaw wygląd dekoratorów i przycisków okna"
+#. Budgie native implementation
+#. Get the settings for Budgie Desktop View
+#. Update our switches on change
+#. Desktop Folder
+#. Get the settings for DesktopType
+#. Update our switches on change
+#. Nemo
+#. Update our switches on change
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
+#. Universal show
+#: src/panel/settings/settings_desktop.vala:77
+msgid "Desktop Icons"
+msgstr "Ikony pulpitu"
 
-#: src/panel/settings/settings_style.vala:57
-msgid "Icons"
-msgstr "Ikony"
+#: src/panel/settings/settings_desktop.vala:78
+msgid "Control whether to allow icons on the desktop."
+msgstr "Zezwól na ikony na pulpicie."
 
-#: src/panel/settings/settings_style.vala:58
-msgid "Set the globally used icon theme"
-msgstr "Ustaw globalny motyw ikon"
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
+#. DesktopType is the only one that doesn't support showing mounts
+#. Switcher to show or hide active mounts
+#: src/panel/settings/settings_desktop.vala:87
+msgid "Active Mounts"
+msgstr "Zamontowane dyski"
 
-#: src/panel/settings/settings_style.vala:62
-msgid "Cursors"
-msgstr "Kursory"
+#: src/panel/settings/settings_desktop.vala:88
+msgid "Show all active mounts on the desktop."
+msgstr "Pokaż wszystkie zamontowane dyski na pulpicie."
 
-#: src/panel/settings/settings_style.vala:63
-msgid "Set the globally used mouse cursor theme"
-msgstr "Ustaw globalny motyw kursora"
+#. Switcher to show or hide our Home folder
+#: src/panel/settings/settings_desktop.vala:95
+msgid "Home directory"
+msgstr "Katalog domowy"
 
-#: src/panel/settings/settings_style.vala:67
-msgid "Notification Position"
-msgstr "Umiejscowienie powiadomień"
+#: src/panel/settings/settings_desktop.vala:96
+msgid "Add a shortcut to your home directory on the desktop."
+msgstr "Dodaj skrót do katalogu domowego na pulpicie."
 
-#: src/panel/settings/settings_style.vala:68
-msgid "Set the location for notification popups"
-msgstr "Ustaw umiejscowienie powiadomień"
+#. Switcher to show or hide a shortcut to Trash
+#: src/panel/settings/settings_desktop.vala:103
+msgid "Trash"
+msgstr "Kosz"
 
-#: src/panel/settings/settings_style.vala:77
-msgid "Dark theme"
-msgstr "Ciemny styl"
+#: src/panel/settings/settings_desktop.vala:104
+msgid "Add a shortcut to the Trash directory on the desktop."
+msgstr "Dodaj skrót do Kosza na pulpicie."
 
-#: src/panel/settings/settings_style.vala:84
-msgid "Built-in theme"
-msgstr "Wbudowany styl"
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
+#. Click Policy combo box
+#. Icon Size combo box
+#: src/panel/settings/settings_desktop.vala:116
+msgid "Icon Size"
+msgstr "Rozmiar ikon"
 
-#: src/panel/settings/settings_style.vala:85
+#: src/panel/settings/settings_desktop.vala:117
+msgid "Set the desired size of icons on the desktop."
+msgstr "Dostosuj wielkość ikon na pulpicie."
+
+#: src/panel/settings/settings_desktop.vala:136
+msgid "Number of virtual desktops"
+msgstr "Liczba wirtualnych pulpitów"
+
+#: src/panel/settings/settings_desktop.vala:137
 msgid ""
-"When enabled, the built-in theme will override the desktop component styling"
+"Number of virtual desktops / workspaces to create automatically on startup."
 msgstr ""
-"Kiedy aktywne, styl komponentów pulpitu zostanie zastąpiony wbudowanym"
+"Liczba wirtualnych pulpitów / przestrzeni roboczych tworzonych automatycznie"
+" przy starcie systemu."
 
-#: src/panel/settings/settings_style.vala:98
-msgid "Animations"
-msgstr "Animacje"
+#: src/panel/settings/settings_desktop.vala:205
+msgid "Single"
+msgstr "Pojedyncze"
 
-#: src/panel/settings/settings_style.vala:99
-msgid "Control whether windows and controls use animations"
-msgstr "Kontroluj, czy okna i przyciski mają używać animacji"
+#. If the click policy is to double click
+#: src/panel/settings/settings_desktop.vala:209
+msgid "Double"
+msgstr "Podwójne"
 
-#. Get display name for theme
-#: src/panel/settings/settings_style.vala:207
-msgid "Use theme"
-msgstr ""
+#: src/panel/settings/settings_desktop.vala:224
+msgid "Click Policy"
+msgstr "Polityka kliknięć"
 
-#: src/panel/settings/settings_style.vala:318
-msgid "Labwc Compositor Theme"
-msgstr ""
-
-#: src/panel/settings/settings_style.vala:319
+#: src/panel/settings/settings_desktop.vala:225
 msgid ""
-"Override the labwc compositor theme independently from the desktop theme."
+"Click Policy determines if we should open items on a single or double click."
+msgstr ""
+"Polityka kliknięć określa czy dany obiekt otwierać pojedynczym czy podwójnym"
+" kliknięciem myszy."
+
+#: src/panel/settings/settings_desktop.vala:277
+msgid "Normal"
+msgstr "Normalne"
+
+#. Small
+#: src/panel/settings/settings_desktop.vala:280
+msgid "Small"
+msgstr "Małe"
+
+#. Large
+#: src/panel/settings/settings_desktop.vala:282
+msgid "Large"
+msgstr "Duże"
+
+#. Massive
+#: src/panel/settings/settings_desktop.vala:284
+msgid "Massive"
+msgstr "Ogromne"
+
+#: src/panel/settings/settings_displays.vala:24
+msgid "Displays"
 msgstr ""
 
-#: src/panel/settings/settings_style.vala:388
-msgid "Top Left"
-msgstr "Lewy górny"
+#: src/panel/settings/settings_displays.vala:49
+msgid "Connected Monitors"
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:390
-msgid "Bottom Left"
-msgstr "Lewy dolny"
+#: src/panel/settings/settings_displays.vala:62
+msgid "Panel Placement"
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:392
-msgid "Bottom Right"
-msgstr "Prawy dolny"
+#: src/panel/settings/settings_displays.vala:62
+msgid ""
+"Select which monitor should be the primary display for panel placement."
+msgstr ""
 
-#: src/panel/settings/settings_style.vala:395
-msgid "Top Right"
-msgstr "Prawy górny"
+#: src/panel/settings/settings_displays.vala:64
+msgid "Use Automatic Selection"
+msgstr ""
 
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "Powiadomienia"
+#: src/panel/settings/settings_displays.vala:68
+msgid "Clear Primary Monitor"
+msgstr ""
 
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr "Nie dodano żadnych widżetów."
+#: src/panel/settings/settings_displays.vala:69
+msgid "Remove manual primary monitor selection."
+msgstr ""
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "Nie ma nic do wyświetlenia"
+#: src/panel/settings/settings_displays.vala:83
+msgid "Fallback Monitors"
+msgstr ""
 
-#: src/raven/notifications_view.vala:123
-msgid "No new notifications"
-msgstr "Brak nowych powiadomień"
+#: src/panel/settings/settings_displays.vala:83
+msgid "Order used when primary is disconnected"
+msgstr ""
 
-#: src/raven/widgets/media-controls/media_controls.vala:155
-msgid "No apps are currently playing audio."
-msgstr "Żadne aplikacje nie odtwarzają obecnie dźwięku."
+#: src/panel/settings/settings_displays.vala:165
+msgid "No monitors detected"
+msgstr ""
 
-#: src/raven/widgets/media-controls/media_controls.vala:164
-msgid "Play some music"
-msgstr "Odtwórz muzykę"
+#: src/panel/settings/settings_displays.vala:195
+msgid "No fallback monitors configured"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:232
+msgid "Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:256
+msgid "Unknown model"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:278
+msgid "Set as Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:342
+msgid "(last known)"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:349
+msgid "No cached information"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Wygląd"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panele"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Sesja"
+
+#: src/panel/settings/settings_main.vala:100
+msgid "Create new panel"
+msgstr "Stwórz nowy panel"
+
+#: src/panel/settings/settings_panel.vala:102
+#: src/panel/settings/settings_panel.vala:220
+msgid "Applets"
+msgstr "Aplety"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Remove Panel"
+msgstr "Usuń panel"
+
+#: src/panel/settings/settings_panel.vala:106
+msgid "Remove this panel from the screen"
+msgstr "Usuń ten panel z ekranu"
+
+#: src/panel/settings/settings_panel.vala:243
+msgid "Top Dock"
+msgstr "Górny Dock"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Right Dock"
+msgstr "Prawy Dock"
+
+#: src/panel/settings/settings_panel.vala:247
+msgid "Left Dock"
+msgstr "Lewy Dock"
+
+#: src/panel/settings/settings_panel.vala:249
+msgid "Bottom Dock"
+msgstr "Dolny Dock"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Top Panel"
+msgstr "Górny panel"
+
+#: src/panel/settings/settings_panel.vala:256
+msgid "Right Panel"
+msgstr "Prawy panel"
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Left Panel"
+msgstr "Lewy panel"
+
+#: src/panel/settings/settings_panel.vala:260
+msgid "Bottom Panel"
+msgstr "Dolny panel"
+
+#: src/panel/settings/settings_panel.vala:297
+msgid "Top"
+msgstr "Góra"
+
+#: src/panel/settings/settings_panel.vala:299 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Prawy"
+
+#: src/panel/settings/settings_panel.vala:303
+msgid "Bottom"
+msgstr "Dół"
+
+#: src/panel/settings/settings_panel.vala:313
+msgid "Always"
+msgstr "Zawsze"
+
+#: src/panel/settings/settings_panel.vala:315
+msgid "Dynamic"
+msgstr "Dynamiczny"
+
+#: src/panel/settings/settings_panel.vala:328 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Automatyczny"
+
+#: src/panel/settings/settings_panel.vala:330
+msgid "Intelligent"
+msgstr "Inteligentny"
+
+#: src/panel/settings/settings_panel.vala:333
+msgid "Never"
+msgstr "Nigdy"
+
+#: src/panel/settings/settings_panel.vala:350
+msgid "Position"
+msgstr "Położenie"
+
+#: src/panel/settings/settings_panel.vala:351
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Wybierz krawędź ekranu, na której umieszczony zostanie ten panel"
+
+#: src/panel/settings/settings_panel.vala:359
+msgid "Size"
+msgstr "Rozmiar"
+
+#: src/panel/settings/settings_panel.vala:360
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr ""
+"Ustaw rozmiar (szerokość lub wysokość, w zależności od orientacji) tego "
+"panelu"
+
+#: src/panel/settings/settings_panel.vala:367
+msgid "Spacing"
+msgstr "Odstępy"
+
+#: src/panel/settings/settings_panel.vala:368
+msgid "Set the spacing between applets for this panel"
+msgstr "Ustaw odstępy między apletami dla tego panelu"
+
+#: src/panel/settings/settings_panel.vala:375
+msgid "Automatically hide"
+msgstr "Ukryj automatycznie"
+
+#: src/panel/settings/settings_panel.vala:376
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr ""
+"Kiedy aktywne, ten panel zniknie z widoku, by zmaksymalizować powierzchnię "
+"pulpitu"
+
+#: src/panel/settings/settings_panel.vala:383
+msgid "Transparency"
+msgstr "Przezroczystość"
+
+#: src/panel/settings/settings_panel.vala:384
+msgid "Control when this panel should have a solid background"
+msgstr "Kontroluj, kiedy ten panel powinien mieć jednolite tło"
+
+#: src/panel/settings/settings_panel.vala:389
+msgid "Shadow"
+msgstr "Cień"
+
+#: src/panel/settings/settings_panel.vala:390
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "Dodaje ozdobny cień, idealny dla nieprzejrzystych okien"
+
+#: src/panel/settings/settings_panel.vala:396
+msgid "Stylize regions"
+msgstr "Stylizowanie obszarów"
+
+#: src/panel/settings/settings_panel.vala:397
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr ""
+"Dodaje podpowiedź do panelu, dzięki której każdy z trzech głównych obszarów "
+"panelu może mieć inny motyw."
+
+#: src/panel/settings/settings_panel.vala:404
+msgid "Dock mode"
+msgstr "Tryb doku"
+
+#: src/panel/settings/settings_panel.vala:405
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Kiedy w trybie doku, ten panel będzie używał możliwie najmniej miejsca, "
+"zwalniając cenną przestrzeń pulpitu"
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr "Ustawienia apletu"
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Add applet"
+msgstr "Dodaj aplet"
+
+#: src/panel/settings/settings_panel_applets.vala:247
+msgid "Choose a new applet to add to this panel"
+msgstr "Wybierz nowy aplet do dodania do tego panelu"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Start"
+msgstr "Początek"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "Center"
+msgstr "Środek"
+
+#: src/panel/settings/settings_panel_applets.vala:420
+msgid "End"
+msgstr "Koniec"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
@@ -1761,6 +1819,14 @@ msgstr "Odtwarzanie — %s"
 msgid "Paused - %s"
 msgstr "Wstrzymano — %s"
 
+#: src/raven/widgets/media-controls/media_controls.vala:105
+msgid "No apps are currently playing audio."
+msgstr "Żadne aplikacje nie odtwarzają obecnie dźwięku."
+
+#: src/raven/widgets/media-controls/media_controls.vala:114
+msgid "Play some music"
+msgstr "Odtwórz muzykę"
+
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
 msgstr "Żadna aplikacja nie odtwarza dźwięku."
@@ -1773,22 +1839,38 @@ msgstr "Aplikacje"
 msgid "Devices"
 msgstr "Urządzenia"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:52
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
 msgstr "Monitor wykorzystania"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "CPU"
 msgstr "CPU"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "RAM"
 msgstr "RAM"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:98
 msgid "Swap"
 msgstr "Swap"
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "Powiadomienia"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr "Nie dodano żadnych widżetów."
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "Nie ma nic do wyświetlenia"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "Brak nowych powiadomień"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
@@ -1950,6 +2032,14 @@ msgstr "Środkowy przycisk myszy otwiera nowe okno"
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
 msgstr "Wymagaj podwójnego kliknięcia aby otworzyć nowe okno"
+
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:1
+msgid "Keyboard Layout"
+msgstr ""
+
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:2
+msgid "Keyboard Layout Settings"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"

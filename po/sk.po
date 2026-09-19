@@ -5,22 +5,27 @@
 # 
 # Translators:
 # Adam Wagner, 2023
-# Patrik Tapušík (tapo), 2024
+# Patrik Tapušík, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 17:28+0200\n"
+"POT-Creation-Date: 2026-09-19 14:35+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: Patrik Tapušík (tapo), 2024\n"
+"Last-Translator: Patrik Tapušík, 2024\n"
 "Language-Team: Slovak (https://app.transifex.com/buddiesofbudgie/teams/129844/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sk\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr "Nová kategória"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -79,11 +84,6 @@ msgstr "Systémové nástroje"
 msgid "Universal Access"
 msgstr "Univerzálny prístup"
 
-#. Make sure we have a default name
-#: src/appindexer/Category.vala:51
-msgid "New Category"
-msgstr "Nová kategória"
-
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
@@ -108,24 +108,6 @@ msgstr[3] "Dostali ste %d notifikácií počas režimu celej obrazovky."
 #: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "Zobraziť upozornenia"
-
-#. Should show a notification
-#: src/daemon/settings.vala:416
-msgid "Turned on Caffeine Boost"
-msgstr "Nepretržitý režim bol aktivovaný"
-
-#: src/daemon/settings.vala:416
-msgid "Turned off Caffeine Boost"
-msgstr "Nepretržitý režim bol vypnutý"
-
-#: src/daemon/settings.vala:421
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] "Vypne sa o minútu"
-msgstr[1] "Vypne sa o %d minúty"
-msgstr[2] "Vypne sa o %d minút"
-msgstr[3] "Vypne sa o %d minút"
 
 #: src/daemon/endsession.vala:161
 msgid "Log out"
@@ -155,11 +137,29 @@ msgstr ""
 msgid "Num Lock is off"
 msgstr ""
 
-#: src/dialogs/polkit/polkitdialog.vala:224
+#. Should show a notification
+#: src/daemon/settings.vala:416
+msgid "Turned on Caffeine Boost"
+msgstr "Nepretržitý režim bol aktivovaný"
+
+#: src/daemon/settings.vala:416
+msgid "Turned off Caffeine Boost"
+msgstr "Nepretržitý režim bol vypnutý"
+
+#: src/daemon/settings.vala:421
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "Vypne sa o minútu"
+msgstr[1] "Vypne sa o %d minúty"
+msgstr[2] "Vypne sa o %d minút"
+msgstr[3] "Vypne sa o %d minút"
+
+#: src/dialogs/polkit/polkitdialog.vala:227
 msgid "Authentication failed"
 msgstr "Overenie zlyhalo"
 
-#: src/dialogs/polkit/polkitdialog.vala:312
+#: src/dialogs/polkit/polkitdialog.vala:315
 msgid "Group:"
 msgstr "Banda:"
 
@@ -192,53 +192,6 @@ msgstr "Vypnúť"
 msgid "This system does not support hibernation."
 msgstr "Tento systém nepodporuje hibernáciu."
 
-#: src/dialogs/sendto/Application.vala:75
-msgid "Files to send"
-msgstr "Súbory na odoslanie"
-
-#: src/dialogs/sendto/Application.vala:78
-msgid "_Cancel"
-msgstr "_Zrušiť"
-
-#: src/dialogs/sendto/Application.vala:79
-msgid "_Open"
-msgstr "_Otvoriť"
-
-#: src/dialogs/sendto/Application.vala:193
-msgid "Send Files via Bluetooth"
-msgstr "Odoslať súbory cez Bluetooth"
-
-#: src/dialogs/sendto/Application.vala:195
-msgid "Send files to device…"
-msgstr "Odoslať súbory do zariadenia..."
-
-#: src/dialogs/sendto/Application.vala:301
-msgid "Rejected file"
-msgstr "Odmietnuté súbory"
-
-#: src/dialogs/sendto/Application.vala:302
-#, c-format
-msgid "File already exists: %s"
-msgstr "Položka už existuje: %s"
-
-#. Create a notification prompting the user what to do
-#: src/dialogs/sendto/Application.vala:314
-msgid "Receiving file"
-msgstr "Prijíma sa súbor"
-
-#: src/dialogs/sendto/Application.vala:315
-#, c-format
-msgid "Device '%s' wants to send a file: %s %s"
-msgstr "Zariadenie '%s' žiada poslanie súboru: %s %s"
-
-#: src/dialogs/sendto/Application.vala:317
-msgid "Accept"
-msgstr "Akceptovať"
-
-#: src/dialogs/sendto/Application.vala:321
-msgid "Reject"
-msgstr "Odmietnuť"
-
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
 msgstr "Meno súboru"
@@ -257,7 +210,7 @@ msgstr "Zatvoriť"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -462,8 +415,55 @@ msgstr ""
 msgid "Available Devices"
 msgstr "Viditeľné zariadenia"
 
-#: src/dialogs/screenshot/screenshot.vala:365
-#: src/dialogs/screenshot/screenshot.vala:833
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr "Súbory na odoslanie"
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr "_Zrušiť"
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr "_Otvoriť"
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr "Odoslať súbory cez Bluetooth"
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr "Odoslať súbory do zariadenia..."
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr "Odmietnuté súbory"
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr "Položka už existuje: %s"
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr "Prijíma sa súbor"
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr "Zariadenie '%s' žiada poslanie súboru: %s %s"
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr "Akceptovať"
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr "Odmietnuť"
+
+#: src/dialogs/screenshot/screenshot.vala:363
+#: src/dialogs/screenshot/screenshot.vala:831
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -471,48 +471,48 @@ msgstr "Snímka obrazovky"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:481
+#: src/dialogs/screenshot/screenshot.vala:479
 msgid "Screenshot entire screen"
 msgstr "Urobiť snímku celej obrazovky"
 
-#: src/dialogs/screenshot/screenshot.vala:483
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot active window"
 msgstr "Urobiť snímku aktívneho okna"
 
-#: src/dialogs/screenshot/screenshot.vala:485
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot selected area"
 msgstr "Urobiť snímku vyznačenej oblasti"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:894
 msgid "Cancel screenshot"
 msgstr "Zrušiť snímku obrazovky"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:895
 msgid "Save screenshot to the selected directory"
 msgstr "Uložiť snímku do vybraného priečinka"
 
-#: src/dialogs/screenshot/screenshot.vala:899
+#: src/dialogs/screenshot/screenshot.vala:896
 msgid "Copy screenshot to the clipboard"
 msgstr "Skopírovať snímku do schránky"
 
-#: src/dialogs/screenshot/screenshot.vala:900
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Open screenshot in default application"
 msgstr "Otvoriť snímku v predvolenej aplikácii "
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1191
+#: src/dialogs/screenshot/screenshot.vala:1188
 msgid "Other..."
 msgstr "Ďalšie..."
 
 #. Hide the AfterShot window while the file chooser is open
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1280
+#: src/dialogs/screenshot/screenshot.vala:1277
 msgid "Open Folder"
 msgstr "Otvoriť priečinok"
 
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 msgid "Open"
 msgstr "Otvoriť"
 
@@ -522,6 +522,16 @@ msgstr "Otvoriť"
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
 msgstr "Nepretržitý režim"
+
+#. placeholder in case of no results
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
+msgid "Sorry, no items found"
+msgstr "Sorko, žiadne položky neboli nájdené"
+
+#: src/panel/applets/budgie-menu/views/ListView.vala:523
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:43
+msgid "Favorites"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -539,28 +549,31 @@ msgstr "Akýkoľvek súbor"
 msgid "Set icon"
 msgstr "Nastaviť ikonu"
 
-#. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:111
-msgid "Sorry, no items found"
-msgstr "Sorko, žiadne položky neboli nájdené"
-
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:108
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr "Nastavenia desktopu Budgie"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:111
 msgid "System Settings"
 msgstr "Systémové nastavenia"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:114
 msgid "Power"
 msgstr "Výkon"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:45
 msgid "All"
 msgstr "Všetky"
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:163
+msgid "Remove from favorites"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:164
+msgid "Add to favorites"
+msgstr ""
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -571,51 +584,51 @@ msgid "System time and date settings"
 msgstr "Nastavenia systému a dátumu"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Unfavorite"
 msgstr "Odobrať z obľúbených"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Favorite"
 msgstr "Pridať do obľúbených"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:111
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:76
 msgid "Close all windows"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:129
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:94
 msgid "Launch new instance"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:271
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:240
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "Minimalizovať"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:338
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:307
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "Vypnúť maximalizovanie"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "Maximalizovať"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:400
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:369
 msgid "Close window"
 msgstr ""
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:405
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:374
 msgid "Show window controls"
 msgstr ""
 
@@ -649,6 +662,12 @@ msgstr[3] "%u neprečítaných upozornení"
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "Žiadne neprečítané upozornenia"
+
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
+#: src/panel/applets/places-indicator/MountItem.vala:63
+#, c-format
+msgid "Open \"%s\""
+msgstr "Otvoriť \"%s\""
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -686,12 +705,6 @@ msgstr "Vysunúť"
 msgid "Unmount"
 msgstr "Odpojiť disk"
 
-#: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:41
-#, c-format
-msgid "Open \"%s\""
-msgstr "Otvoriť \"%s\""
-
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
@@ -715,6 +728,18 @@ msgstr "Chyba pri odpájaní diskovej jednotky"
 msgid "Places"
 msgstr "Priečinky"
 
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "Zatiaľ ništ na zobrazenie"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "Pripojiť nejaké disky"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "Povoliť viacero sekcii"
+
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -732,18 +757,6 @@ msgstr "Zadané heslo je nesprávne"
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "Pri pripájaní diskovej jednotky nastala neznáma chyba"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "Zatiaľ ništ na zobrazenie"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "Pripojiť nejaké disky"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "Povoliť viacero sekcii"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:37
 msgid "Toggle the desktop"
@@ -806,6 +819,7 @@ msgid "Failed to connect"
 msgstr "Pripojenie zlyhalo"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
+#: src/panel/settings/settings_displays.vala:358
 msgid "Connected"
 msgstr "Pripojené"
 
@@ -982,117 +996,6 @@ msgstr "Pridať aplikáciu"
 msgid "Add Command"
 msgstr "Pridať príkaz"
 
-#: src/panel/settings/settings_desktop.vala:52
-msgid "Desktop"
-msgstr "Plocha"
-
-#. Budgie native implementation
-#. Get the settings for Budgie Desktop View
-#. Update our switches on change
-#. Desktop Folder
-#. Get the settings for DesktopType
-#. Update our switches on change
-#. Nemo
-#. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-
-#. specific
-#. Universal show
-#: src/panel/settings/settings_desktop.vala:77
-msgid "Desktop Icons"
-msgstr "Ikony na ploche"
-
-#: src/panel/settings/settings_desktop.vala:78
-msgid "Control whether to allow icons on the desktop."
-msgstr "Viditeľné ikony na ploche"
-
-#. DesktopFolder doesn't support fancy options like showing home folder,
-#. trash, or active mounts
-#. DesktopType is the only one that doesn't support showing mounts
-#. Switcher to show or hide active mounts
-#: src/panel/settings/settings_desktop.vala:87
-msgid "Active Mounts"
-msgstr "Pripojené disky"
-
-#: src/panel/settings/settings_desktop.vala:88
-msgid "Show all active mounts on the desktop."
-msgstr "Zobraziť všetky pripojené disky na ploche"
-
-#. Switcher to show or hide our Home folder
-#: src/panel/settings/settings_desktop.vala:95
-msgid "Home directory"
-msgstr "Domovský priečinok "
-
-#: src/panel/settings/settings_desktop.vala:96
-msgid "Add a shortcut to your home directory on the desktop."
-msgstr "Pridať odkaz domovského priečinoku na plochu"
-
-#. Switcher to show or hide a shortcut to Trash
-#: src/panel/settings/settings_desktop.vala:103
-msgid "Trash"
-msgstr "Smecák"
-
-#: src/panel/settings/settings_desktop.vala:104
-msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "Pridať odkaz Smecáku na plochu"
-
-#. DesktopType doesn't support icon size changing. Nemo might but needs
-#. validation.
-#. Click Policy combo box
-#. Icon Size combo box
-#: src/panel/settings/settings_desktop.vala:116
-msgid "Icon Size"
-msgstr "Veľkosť ikón"
-
-#: src/panel/settings/settings_desktop.vala:117
-msgid "Set the desired size of icons on the desktop."
-msgstr "Vybrať veľkosť ikón"
-
-#: src/panel/settings/settings_desktop.vala:148
-msgid "Number of virtual desktops"
-msgstr "Počet plôch"
-
-#: src/panel/settings/settings_desktop.vala:149
-msgid ""
-"Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "Počet plôch vytvorených po štarte"
-
-#: src/panel/settings/settings_desktop.vala:217
-msgid "Single"
-msgstr "Jeden"
-
-#. If the click policy is to double click
-#: src/panel/settings/settings_desktop.vala:221
-msgid "Double"
-msgstr "Dvojitý"
-
-#: src/panel/settings/settings_desktop.vala:236
-msgid "Click Policy"
-msgstr "Počet klikov"
-
-#: src/panel/settings/settings_desktop.vala:237
-msgid ""
-"Click Policy determines if we should open items on a single or double click."
-msgstr "Koľko klikov je potrebných na otvorenie súboru"
-
-#: src/panel/settings/settings_desktop.vala:289
-msgid "Normal"
-msgstr "Normálné"
-
-#. Small
-#: src/panel/settings/settings_desktop.vala:292
-msgid "Small"
-msgstr "Malé"
-
-#. Large
-#: src/panel/settings/settings_desktop.vala:294
-msgid "Large"
-msgstr "Veľké"
-
-#. Massive
-#: src/panel/settings/settings_desktop.vala:296
-msgid "Massive"
-msgstr "Obrovské"
-
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
 msgstr "Fonty"
@@ -1151,7 +1054,7 @@ msgstr "Jemné"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:318
 msgid "None"
 msgstr "Žiadne"
 
@@ -1178,51 +1081,6 @@ msgstr "Antialiasing"
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "Nastaviť typ antialiasingu"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "Vzhľad"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "Panely"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "Relácia"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "Vytvoriť nový ponel"
-
-#: src/panel/settings/settings_panel_applets.vala:21
-msgid "Applet Settings"
-msgstr "Nastavenia appletu"
-
-#: src/panel/settings/settings_panel_applets.vala:235
-msgid "Add applet"
-msgstr "Pridať applet"
-
-#: src/panel/settings/settings_panel_applets.vala:236
-msgid "Choose a new applet to add to this panel"
-msgstr "Vyberte nový applet pre tento panel"
-
-#: src/panel/settings/settings_panel_applets.vala:250
-#: src/panel/settings/settings_raven_widgets.vala:164
-msgid "No settings available"
-msgstr "Nie sú dostupné nastavenia"
-
-#: src/panel/settings/settings_panel_applets.vala:403
-msgid "Start"
-msgstr "Začiatok"
-
-#: src/panel/settings/settings_panel_applets.vala:406
-msgid "Center"
-msgstr "Stred"
-
-#: src/panel/settings/settings_panel_applets.vala:409
-msgid "End"
-msgstr "Koniec"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -1301,7 +1159,7 @@ msgid "Widgets"
 msgstr "Doplnky"
 
 #: src/panel/settings/settings_raven.vala:48
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:103
 msgid "Settings"
 msgstr "Nastavenia"
 
@@ -1336,6 +1194,11 @@ msgstr "Pridať doplnok"
 #: src/panel/settings/settings_raven_widgets.vala:150
 msgid "Choose a new widget to add to the Widgets view"
 msgstr "Vyberte nový doplnok ktorý bude pridaný do zobrazenie doplnkov"
+
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:261
+msgid "No settings available"
+msgstr "Nie sú dostupné nastavenia"
 
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
@@ -1376,241 +1239,6 @@ msgstr ""
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "Pri vytváraní dopnku sa vyskytla neznáma chyba."
-
-#: src/panel/settings/settings_panel.vala:90
-msgid "Applets"
-msgstr "Applety"
-
-#: src/panel/settings/settings_panel.vala:93
-msgid "Remove Panel"
-msgstr "Odstrániť panel"
-
-#: src/panel/settings/settings_panel.vala:94
-msgid "Remove this panel from the screen"
-msgstr "Odstrániť panel z obrazovky"
-
-#: src/panel/settings/settings_panel.vala:171
-msgid "Top Dock"
-msgstr "Horný dock"
-
-#: src/panel/settings/settings_panel.vala:173
-msgid "Right Dock"
-msgstr "Pravý dock"
-
-#: src/panel/settings/settings_panel.vala:175
-msgid "Left Dock"
-msgstr "Ľavý dock"
-
-#: src/panel/settings/settings_panel.vala:177
-msgid "Bottom Dock"
-msgstr "Spodný dock"
-
-#: src/panel/settings/settings_panel.vala:182
-msgid "Top Panel"
-msgstr "Horný panel"
-
-#: src/panel/settings/settings_panel.vala:184
-msgid "Right Panel"
-msgstr "Pravý panel"
-
-#: src/panel/settings/settings_panel.vala:186
-msgid "Left Panel"
-msgstr "Ľavý panel"
-
-#: src/panel/settings/settings_panel.vala:188
-msgid "Bottom Panel"
-msgstr "Spodný panel"
-
-#: src/panel/settings/settings_panel.vala:225
-msgid "Top"
-msgstr "Hore"
-
-#: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
-msgid "Right"
-msgstr "Vpravo"
-
-#: src/panel/settings/settings_panel.vala:229
-#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
-msgid "Left"
-msgstr "Vľavo"
-
-#: src/panel/settings/settings_panel.vala:231
-msgid "Bottom"
-msgstr "Dole"
-
-#: src/panel/settings/settings_panel.vala:241
-msgid "Always"
-msgstr "Stále"
-
-#: src/panel/settings/settings_panel.vala:243
-msgid "Dynamic"
-msgstr "Dynamické"
-
-#: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "Automatické"
-
-#: src/panel/settings/settings_panel.vala:258
-msgid "Intelligent"
-msgstr "Inteligentné"
-
-#: src/panel/settings/settings_panel.vala:261
-msgid "Never"
-msgstr "Nikdy"
-
-#: src/panel/settings/settings_panel.vala:278
-msgid "Position"
-msgstr "Pozícia"
-
-#: src/panel/settings/settings_panel.vala:279
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "Nastaví, na akej strane obrazovky bude panel priliehať"
-
-#: src/panel/settings/settings_panel.vala:287
-msgid "Size"
-msgstr "Veľkosť"
-
-#: src/panel/settings/settings_panel.vala:288
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "Nastaví veľkosť (šírku alebo výšku, závisí od orientácie) panelu"
-
-#: src/panel/settings/settings_panel.vala:295
-msgid "Spacing"
-msgstr "Medzera"
-
-#: src/panel/settings/settings_panel.vala:296
-msgid "Set the spacing between applets for this panel"
-msgstr "Nastaví medzery medzi appletami pre tento panel"
-
-#: src/panel/settings/settings_panel.vala:303
-msgid "Automatically hide"
-msgstr "Automaticky skryť"
-
-#: src/panel/settings/settings_panel.vala:304
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "Pokiaľ zaškrtnuté, panel bude ukrytý pre maximálne využitie obrazovky"
-
-#: src/panel/settings/settings_panel.vala:311
-msgid "Transparency"
-msgstr "Priehladnosť"
-
-#: src/panel/settings/settings_panel.vala:312
-msgid "Control when this panel should have a solid background"
-msgstr "Nastavuje, ako má byť priehľadné pozadie"
-
-#: src/panel/settings/settings_panel.vala:317
-msgid "Shadow"
-msgstr "Tieň"
-
-#: src/panel/settings/settings_panel.vala:318
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "Pridá dekoratívny tieň (ideálne pre nepriehľadné panely)"
-
-#: src/panel/settings/settings_panel.vala:324
-msgid "Stylize regions"
-msgstr "Štylizovať oblasti"
-
-#: src/panel/settings/settings_panel.vala:325
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr "Odlíši tri hlavné sekcie panelu, aby každá mohla použiť iný motív."
-
-#: src/panel/settings/settings_panel.vala:332
-msgid "Dock mode"
-msgstr "Režim docku"
-
-#: src/panel/settings/settings_panel.vala:333
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr ""
-"Pokiaľ zapnutý, panel bude zaberať najmenej možného miesta, a uvoľní tak "
-"cenný priestor na obrazovke"
-
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "Okná"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "Rozloženie tlačidiel"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "Zmeniť rozloženie tlačidiel v hlavičke okien."
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "Umiestniť nové okná na stred"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "Umiestniť nové okná na stred na tejto obrazovke."
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "Vypnúť nočné osvetlenie pri režime na celú obrazovku"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "Vypne nočné osvetlenie pri režime na celú obrazovku a opäť ho zapne."
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "Pozastaviť notifikácie pri režime na celú obrazovku"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "Pozastaví notifikácie pri režime na celú obrazovku a opäť ich zapne."
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "Automatické usporiadanie"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr ""
-"Okná sa automaticky usporiadajú po pretiahnutí do rohov alebo okrajom "
-"obrazovky."
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Window focus mode"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Choose how windows receive focus: click to focus; sloppy to focus without "
-"raising windows; mouse to focus with raising."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "Zobraziť všetky okná pri ALT-TABe"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "Budú zobrazené všetké okná nehľadúc na aktuálne aktívnu plochu."
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "Vpravo (základné)"
-
-#: src/panel/settings/settings_wm.vala:97
-msgid "Click"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:99
-msgid "Sloppy"
-msgstr ""
 
 #: src/panel/settings/settings_style.vala:36
 msgid "Style"
@@ -1695,29 +1323,457 @@ msgstr "Pravý dolný roh"
 msgid "Top Right"
 msgstr "Pravý horný roh"
 
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "Upozornenia"
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "Okná"
 
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr "Žiadne doplnky neboli pridané"
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "Rozloženie tlačidiel"
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "Ništ tu nehladaj"
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "Zmeniť rozloženie tlačidiel v hlavičke okien."
 
-#: src/raven/notifications_view.vala:123
-msgid "No new notifications"
-msgstr "Žiadne nové notifikácie"
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "Umiestniť nové okná na stred"
 
-#: src/raven/widgets/media-controls/media_controls.vala:155
-msgid "No apps are currently playing audio."
-msgstr "Žiadna aplikácia aktuálne neprehráva audio."
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "Umiestniť nové okná na stred na tejto obrazovke."
 
-#: src/raven/widgets/media-controls/media_controls.vala:164
-msgid "Play some music"
-msgstr "Prehrať hudbu"
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "Vypnúť nočné osvetlenie pri režime na celú obrazovku"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "Vypne nočné osvetlenie pri režime na celú obrazovku a opäť ho zapne."
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "Pozastaviť notifikácie pri režime na celú obrazovku"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "Pozastaví notifikácie pri režime na celú obrazovku a opäť ich zapne."
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "Automatické usporiadanie"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr ""
+"Okná sa automaticky usporiadajú po pretiahnutí do rohov alebo okrajom "
+"obrazovky."
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "Zobraziť všetky okná pri ALT-TABe"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "Budú zobrazené všetké okná nehľadúc na aktuálne aktívnu plochu."
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "Vpravo (základné)"
+
+#: src/panel/settings/settings_wm.vala:84
+#: src/panel/settings/settings_panel.vala:301 src/raven/raven.vala:33
+msgid "Left"
+msgstr "Vľavo"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr ""
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:52
+msgid "Desktop"
+msgstr "Plocha"
+
+#. Budgie native implementation
+#. Get the settings for Budgie Desktop View
+#. Update our switches on change
+#. Desktop Folder
+#. Get the settings for DesktopType
+#. Update our switches on change
+#. Nemo
+#. Update our switches on change
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
+#. Universal show
+#: src/panel/settings/settings_desktop.vala:77
+msgid "Desktop Icons"
+msgstr "Ikony na ploche"
+
+#: src/panel/settings/settings_desktop.vala:78
+msgid "Control whether to allow icons on the desktop."
+msgstr "Viditeľné ikony na ploche"
+
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
+#. DesktopType is the only one that doesn't support showing mounts
+#. Switcher to show or hide active mounts
+#: src/panel/settings/settings_desktop.vala:87
+msgid "Active Mounts"
+msgstr "Pripojené disky"
+
+#: src/panel/settings/settings_desktop.vala:88
+msgid "Show all active mounts on the desktop."
+msgstr "Zobraziť všetky pripojené disky na ploche"
+
+#. Switcher to show or hide our Home folder
+#: src/panel/settings/settings_desktop.vala:95
+msgid "Home directory"
+msgstr "Domovský priečinok "
+
+#: src/panel/settings/settings_desktop.vala:96
+msgid "Add a shortcut to your home directory on the desktop."
+msgstr "Pridať odkaz domovského priečinoku na plochu"
+
+#. Switcher to show or hide a shortcut to Trash
+#: src/panel/settings/settings_desktop.vala:103
+msgid "Trash"
+msgstr "Smecák"
+
+#: src/panel/settings/settings_desktop.vala:104
+msgid "Add a shortcut to the Trash directory on the desktop."
+msgstr "Pridať odkaz Smecáku na plochu"
+
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
+#. Click Policy combo box
+#. Icon Size combo box
+#: src/panel/settings/settings_desktop.vala:116
+msgid "Icon Size"
+msgstr "Veľkosť ikón"
+
+#: src/panel/settings/settings_desktop.vala:117
+msgid "Set the desired size of icons on the desktop."
+msgstr "Vybrať veľkosť ikón"
+
+#: src/panel/settings/settings_desktop.vala:136
+msgid "Number of virtual desktops"
+msgstr "Počet plôch"
+
+#: src/panel/settings/settings_desktop.vala:137
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr "Počet plôch vytvorených po štarte"
+
+#: src/panel/settings/settings_desktop.vala:205
+msgid "Single"
+msgstr "Jeden"
+
+#. If the click policy is to double click
+#: src/panel/settings/settings_desktop.vala:209
+msgid "Double"
+msgstr "Dvojitý"
+
+#: src/panel/settings/settings_desktop.vala:224
+msgid "Click Policy"
+msgstr "Počet klikov"
+
+#: src/panel/settings/settings_desktop.vala:225
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr "Koľko klikov je potrebných na otvorenie súboru"
+
+#: src/panel/settings/settings_desktop.vala:277
+msgid "Normal"
+msgstr "Normálné"
+
+#. Small
+#: src/panel/settings/settings_desktop.vala:280
+msgid "Small"
+msgstr "Malé"
+
+#. Large
+#: src/panel/settings/settings_desktop.vala:282
+msgid "Large"
+msgstr "Veľké"
+
+#. Massive
+#: src/panel/settings/settings_desktop.vala:284
+msgid "Massive"
+msgstr "Obrovské"
+
+#: src/panel/settings/settings_displays.vala:24
+msgid "Displays"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:49
+msgid "Connected Monitors"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:62
+msgid "Panel Placement"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:62
+msgid ""
+"Select which monitor should be the primary display for panel placement."
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:64
+msgid "Use Automatic Selection"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:68
+msgid "Clear Primary Monitor"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:69
+msgid "Remove manual primary monitor selection."
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:83
+msgid "Fallback Monitors"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:83
+msgid "Order used when primary is disconnected"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:165
+msgid "No monitors detected"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:195
+msgid "No fallback monitors configured"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:232
+msgid "Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:256
+msgid "Unknown model"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:278
+msgid "Set as Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:342
+msgid "(last known)"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:349
+msgid "No cached information"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "Vzhľad"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "Panely"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "Relácia"
+
+#: src/panel/settings/settings_main.vala:100
+msgid "Create new panel"
+msgstr "Vytvoriť nový ponel"
+
+#: src/panel/settings/settings_panel.vala:102
+#: src/panel/settings/settings_panel.vala:220
+msgid "Applets"
+msgstr "Applety"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Remove Panel"
+msgstr "Odstrániť panel"
+
+#: src/panel/settings/settings_panel.vala:106
+msgid "Remove this panel from the screen"
+msgstr "Odstrániť panel z obrazovky"
+
+#: src/panel/settings/settings_panel.vala:243
+msgid "Top Dock"
+msgstr "Horný dock"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Right Dock"
+msgstr "Pravý dock"
+
+#: src/panel/settings/settings_panel.vala:247
+msgid "Left Dock"
+msgstr "Ľavý dock"
+
+#: src/panel/settings/settings_panel.vala:249
+msgid "Bottom Dock"
+msgstr "Spodný dock"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Top Panel"
+msgstr "Horný panel"
+
+#: src/panel/settings/settings_panel.vala:256
+msgid "Right Panel"
+msgstr "Pravý panel"
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Left Panel"
+msgstr "Ľavý panel"
+
+#: src/panel/settings/settings_panel.vala:260
+msgid "Bottom Panel"
+msgstr "Spodný panel"
+
+#: src/panel/settings/settings_panel.vala:297
+msgid "Top"
+msgstr "Hore"
+
+#: src/panel/settings/settings_panel.vala:299 src/raven/raven.vala:35
+msgid "Right"
+msgstr "Vpravo"
+
+#: src/panel/settings/settings_panel.vala:303
+msgid "Bottom"
+msgstr "Dole"
+
+#: src/panel/settings/settings_panel.vala:313
+msgid "Always"
+msgstr "Stále"
+
+#: src/panel/settings/settings_panel.vala:315
+msgid "Dynamic"
+msgstr "Dynamické"
+
+#: src/panel/settings/settings_panel.vala:328 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "Automatické"
+
+#: src/panel/settings/settings_panel.vala:330
+msgid "Intelligent"
+msgstr "Inteligentné"
+
+#: src/panel/settings/settings_panel.vala:333
+msgid "Never"
+msgstr "Nikdy"
+
+#: src/panel/settings/settings_panel.vala:350
+msgid "Position"
+msgstr "Pozícia"
+
+#: src/panel/settings/settings_panel.vala:351
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "Nastaví, na akej strane obrazovky bude panel priliehať"
+
+#: src/panel/settings/settings_panel.vala:359
+msgid "Size"
+msgstr "Veľkosť"
+
+#: src/panel/settings/settings_panel.vala:360
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr "Nastaví veľkosť (šírku alebo výšku, závisí od orientácie) panelu"
+
+#: src/panel/settings/settings_panel.vala:367
+msgid "Spacing"
+msgstr "Medzera"
+
+#: src/panel/settings/settings_panel.vala:368
+msgid "Set the spacing between applets for this panel"
+msgstr "Nastaví medzery medzi appletami pre tento panel"
+
+#: src/panel/settings/settings_panel.vala:375
+msgid "Automatically hide"
+msgstr "Automaticky skryť"
+
+#: src/panel/settings/settings_panel.vala:376
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr "Pokiaľ zaškrtnuté, panel bude ukrytý pre maximálne využitie obrazovky"
+
+#: src/panel/settings/settings_panel.vala:383
+msgid "Transparency"
+msgstr "Priehladnosť"
+
+#: src/panel/settings/settings_panel.vala:384
+msgid "Control when this panel should have a solid background"
+msgstr "Nastavuje, ako má byť priehľadné pozadie"
+
+#: src/panel/settings/settings_panel.vala:389
+msgid "Shadow"
+msgstr "Tieň"
+
+#: src/panel/settings/settings_panel.vala:390
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "Pridá dekoratívny tieň (ideálne pre nepriehľadné panely)"
+
+#: src/panel/settings/settings_panel.vala:396
+msgid "Stylize regions"
+msgstr "Štylizovať oblasti"
+
+#: src/panel/settings/settings_panel.vala:397
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr "Odlíši tri hlavné sekcie panelu, aby každá mohla použiť iný motív."
+
+#: src/panel/settings/settings_panel.vala:404
+msgid "Dock mode"
+msgstr "Režim docku"
+
+#: src/panel/settings/settings_panel.vala:405
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr ""
+"Pokiaľ zapnutý, panel bude zaberať najmenej možného miesta, a uvoľní tak "
+"cenný priestor na obrazovke"
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr "Nastavenia appletu"
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Add applet"
+msgstr "Pridať applet"
+
+#: src/panel/settings/settings_panel_applets.vala:247
+msgid "Choose a new applet to add to this panel"
+msgstr "Vyberte nový applet pre tento panel"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Start"
+msgstr "Začiatok"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "Center"
+msgstr "Stred"
+
+#: src/panel/settings/settings_panel_applets.vala:420
+msgid "End"
+msgstr "Koniec"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
@@ -1744,6 +1800,14 @@ msgstr "Prehrávanie - %s"
 msgid "Paused - %s"
 msgstr "Pozastavené %s"
 
+#: src/raven/widgets/media-controls/media_controls.vala:105
+msgid "No apps are currently playing audio."
+msgstr "Žiadna aplikácia aktuálne neprehráva audio."
+
+#: src/raven/widgets/media-controls/media_controls.vala:114
+msgid "Play some music"
+msgstr "Prehrať hudbu"
+
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
 msgstr "Žiadna aplikácia neprehráva audio."
@@ -1756,22 +1820,38 @@ msgstr "Aplikácie"
 msgid "Devices"
 msgstr "Zariadenia"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:52
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
 msgstr "Monitorovanie záťaže"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "CPU"
 msgstr "Procesor"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "RAM"
 msgstr "RAMka"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:98
 msgid "Swap"
 msgstr "Swapka"
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "Upozornenia"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr "Žiadne doplnky neboli pridané"
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "Ništ tu nehladaj"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "Žiadne nové notifikácie"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
@@ -1933,6 +2013,14 @@ msgstr "Stredným tlačítkom (kolečkom) otvoriť nové okno"
 #: src/panel/applets/icon-tasklist/settings.ui.h:6
 msgid "Require a double-click to launch new window"
 msgstr "Vyžaduje dvojitý klik na otvorenie nového okna"
+
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:1
+msgid "Keyboard Layout"
+msgstr ""
+
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:2
+msgid "Keyboard Layout Settings"
+msgstr ""
 
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"

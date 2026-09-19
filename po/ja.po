@@ -6,22 +6,27 @@
 # Translators:
 # rexhent 1, 2023
 # Joshua Strobl <joshua.strobl@outlook.com>, 2023
-# green <usergreen@users.osdn.me>, 2025
+# green <usergreen@users.osdn.me>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: budgie-desktop 10.10.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-07 17:28+0200\n"
+"POT-Creation-Date: 2026-09-19 14:35+0300\n"
 "PO-Revision-Date: 2022-01-02 09:45+0000\n"
-"Last-Translator: green <usergreen@users.osdn.me>, 2025\n"
+"Last-Translator: green <usergreen@users.osdn.me>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/buddiesofbudgie/teams/129844/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Make sure we have a default name
+#: src/appindexer/Category.vala:51
+msgid "New Category"
+msgstr "新しいカテゴリ"
 
 #. Create our misc category, but don't add it to the list until it actually
 #. has apps in it
@@ -80,11 +85,6 @@ msgstr "システムツール"
 msgid "Universal Access"
 msgstr "ユニバーサルアクセス"
 
-#. Make sure we have a default name
-#: src/appindexer/Category.vala:51
-msgid "New Category"
-msgstr "新しいカテゴリ"
-
 #. Do nothing if there were no held notifications
 #. translators: This is the title of a notification that is shown after
 #. notifications have been blocked because an application was in fullscreen
@@ -106,21 +106,6 @@ msgstr[0] "すべて調べたところ、%d 件の通知があります。"
 #: src/daemon/notifications/dbus.vala:590
 msgid "View Notifications"
 msgstr "通知の表示"
-
-#. Should show a notification
-#: src/daemon/settings.vala:416
-msgid "Turned on Caffeine Boost"
-msgstr "カフェインブースト ON"
-
-#: src/daemon/settings.vala:416
-msgid "Turned off Caffeine Boost"
-msgstr "カフェインブースト OFF"
-
-#: src/daemon/settings.vala:421
-#, c-format
-msgid "Will turn off in a minute"
-msgid_plural "Will turn off in %d minutes"
-msgstr[0] "%d 分で電源を切る"
 
 #: src/daemon/endsession.vala:161
 msgid "Log out"
@@ -150,11 +135,26 @@ msgstr "Num Lock がオンです"
 msgid "Num Lock is off"
 msgstr "Num Lock がオフです"
 
-#: src/dialogs/polkit/polkitdialog.vala:224
+#. Should show a notification
+#: src/daemon/settings.vala:416
+msgid "Turned on Caffeine Boost"
+msgstr "カフェインブースト ON"
+
+#: src/daemon/settings.vala:416
+msgid "Turned off Caffeine Boost"
+msgstr "カフェインブースト OFF"
+
+#: src/daemon/settings.vala:421
+#, c-format
+msgid "Will turn off in a minute"
+msgid_plural "Will turn off in %d minutes"
+msgstr[0] "%d 分で電源を切る"
+
+#: src/dialogs/polkit/polkitdialog.vala:227
 msgid "Authentication failed"
 msgstr "認証に失敗"
 
-#: src/dialogs/polkit/polkitdialog.vala:312
+#: src/dialogs/polkit/polkitdialog.vala:315
 msgid "Group:"
 msgstr "グループ:"
 
@@ -187,53 +187,6 @@ msgstr "シャットダウン(_D)"
 msgid "This system does not support hibernation."
 msgstr "このシステムではハイバネートをサポートしません。"
 
-#: src/dialogs/sendto/Application.vala:75
-msgid "Files to send"
-msgstr "送信するファイル"
-
-#: src/dialogs/sendto/Application.vala:78
-msgid "_Cancel"
-msgstr "キャンセル(_C)"
-
-#: src/dialogs/sendto/Application.vala:79
-msgid "_Open"
-msgstr "開く(_O)"
-
-#: src/dialogs/sendto/Application.vala:193
-msgid "Send Files via Bluetooth"
-msgstr "Bluetooth 経由でファイルを送信する"
-
-#: src/dialogs/sendto/Application.vala:195
-msgid "Send files to device…"
-msgstr "ファイルをデバイスに送信する…"
-
-#: src/dialogs/sendto/Application.vala:301
-msgid "Rejected file"
-msgstr "拒否されたファイル"
-
-#: src/dialogs/sendto/Application.vala:302
-#, c-format
-msgid "File already exists: %s"
-msgstr "すでに存在するファイル: %s"
-
-#. Create a notification prompting the user what to do
-#: src/dialogs/sendto/Application.vala:314
-msgid "Receiving file"
-msgstr "ファイルを受信中"
-
-#: src/dialogs/sendto/Application.vala:315
-#, c-format
-msgid "Device '%s' wants to send a file: %s %s"
-msgstr "デバイス '%s' が次のファイルを送信しようとしています: %s %s"
-
-#: src/dialogs/sendto/Application.vala:317
-msgid "Accept"
-msgstr "了解"
-
-#: src/dialogs/sendto/Application.vala:321
-msgid "Reject"
-msgstr "拒否"
-
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:62
 msgid "File name"
 msgstr "ファイル名"
@@ -252,7 +205,7 @@ msgstr "閉じる"
 #: src/dialogs/sendto/Dialog/BaseDialog.vala:109
 #: src/dialogs/sendto/Dialog/FileSender.vala:143
 #: src/dialogs/sendto/Dialog/FileSender.vala:224
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 #: src/panel/applets/budgie-menu/IconChooser.vala:52
 #: src/panel/settings/settings_autostart.vala:194
 #: src/panel/settings/settings_autostart.vala:359
@@ -444,8 +397,55 @@ msgstr "デバイスが視認可能で、ペアリングが準備できている
 msgid "Available Devices"
 msgstr "利用可能なデバイス"
 
-#: src/dialogs/screenshot/screenshot.vala:365
-#: src/dialogs/screenshot/screenshot.vala:833
+#: src/dialogs/sendto/Application.vala:75
+msgid "Files to send"
+msgstr "送信するファイル"
+
+#: src/dialogs/sendto/Application.vala:78
+msgid "_Cancel"
+msgstr "キャンセル(_C)"
+
+#: src/dialogs/sendto/Application.vala:79
+msgid "_Open"
+msgstr "開く(_O)"
+
+#: src/dialogs/sendto/Application.vala:193
+msgid "Send Files via Bluetooth"
+msgstr "Bluetooth 経由でファイルを送信する"
+
+#: src/dialogs/sendto/Application.vala:195
+msgid "Send files to device…"
+msgstr "ファイルをデバイスに送信する…"
+
+#: src/dialogs/sendto/Application.vala:301
+msgid "Rejected file"
+msgstr "拒否されたファイル"
+
+#: src/dialogs/sendto/Application.vala:302
+#, c-format
+msgid "File already exists: %s"
+msgstr "すでに存在するファイル: %s"
+
+#. Create a notification prompting the user what to do
+#: src/dialogs/sendto/Application.vala:314
+msgid "Receiving file"
+msgstr "ファイルを受信中"
+
+#: src/dialogs/sendto/Application.vala:315
+#, c-format
+msgid "Device '%s' wants to send a file: %s %s"
+msgstr "デバイス '%s' が次のファイルを送信しようとしています: %s %s"
+
+#: src/dialogs/sendto/Application.vala:317
+msgid "Accept"
+msgstr "了解"
+
+#: src/dialogs/sendto/Application.vala:321
+msgid "Reject"
+msgstr "拒否"
+
+#: src/dialogs/screenshot/screenshot.vala:363
+#: src/dialogs/screenshot/screenshot.vala:831
 #: src/daemon/org.buddiesofbudgie.BudgieScreenshot.desktop.in.h:1
 #: src/dialogs/screenshot/budgie-screenshot.desktop.in.h:1
 msgid "Budgie Screenshot"
@@ -453,48 +453,48 @@ msgstr "Budgie スクリーンショット"
 
 #. Translators: be as brief as possible; popovers are cut off if broader than
 #. the window
-#: src/dialogs/screenshot/screenshot.vala:481
+#: src/dialogs/screenshot/screenshot.vala:479
 msgid "Screenshot entire screen"
 msgstr "画面全体を撮影"
 
-#: src/dialogs/screenshot/screenshot.vala:483
+#: src/dialogs/screenshot/screenshot.vala:481
 msgid "Screenshot active window"
 msgstr "アクティブな画面のみ撮影"
 
-#: src/dialogs/screenshot/screenshot.vala:485
+#: src/dialogs/screenshot/screenshot.vala:483
 msgid "Screenshot selected area"
 msgstr "選択部分を撮影"
 
 #. translate
-#: src/dialogs/screenshot/screenshot.vala:897
+#: src/dialogs/screenshot/screenshot.vala:894
 msgid "Cancel screenshot"
 msgstr "スクリーンショットの取り消し"
 
-#: src/dialogs/screenshot/screenshot.vala:898
+#: src/dialogs/screenshot/screenshot.vala:895
 msgid "Save screenshot to the selected directory"
 msgstr "スクリーンショットを選択したディレクトリへ保存"
 
-#: src/dialogs/screenshot/screenshot.vala:899
+#: src/dialogs/screenshot/screenshot.vala:896
 msgid "Copy screenshot to the clipboard"
 msgstr "スクリーンショットをクリップボードへ貼り付け"
 
-#: src/dialogs/screenshot/screenshot.vala:900
+#: src/dialogs/screenshot/screenshot.vala:897
 msgid "Open screenshot in default application"
 msgstr "スクリーンショットを既定のアプリケーションで開く"
 
 #. Other -> call Filebrowser (path = null)
 #. 'Other' is about setting a custom directory on a dropdown list
-#: src/dialogs/screenshot/screenshot.vala:1191
+#: src/dialogs/screenshot/screenshot.vala:1188
 msgid "Other..."
 msgstr "その他..."
 
 #. Hide the AfterShot window while the file chooser is open
 #. set custom dir to found dir
-#: src/dialogs/screenshot/screenshot.vala:1280
+#: src/dialogs/screenshot/screenshot.vala:1277
 msgid "Open Folder"
 msgstr "フォルダを開く"
 
-#: src/dialogs/screenshot/screenshot.vala:1281
+#: src/dialogs/screenshot/screenshot.vala:1278
 msgid "Open"
 msgstr "開く"
 
@@ -504,6 +504,16 @@ msgstr "開く"
 #: src/panel/applets/caffeine/CaffeineWindow.vala:37
 msgid "Caffeine Mode"
 msgstr "カフェインモード"
+
+#. placeholder in case of no results
+#: src/panel/applets/budgie-menu/views/ListView.vala:111
+msgid "Sorry, no items found"
+msgstr "アイテムが見つかりませんでした"
+
+#: src/panel/applets/budgie-menu/views/ListView.vala:523
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:43
+msgid "Favorites"
+msgstr ""
 
 #: src/panel/applets/budgie-menu/IconChooser.vala:24
 msgid "Set menu icon from file"
@@ -521,28 +531,31 @@ msgstr "すべてのファイル"
 msgid "Set icon"
 msgstr "アイコンの設定"
 
-#. placeholder in case of no results
-#: src/panel/applets/budgie-menu/views/ListView.vala:111
-msgid "Sorry, no items found"
-msgstr "アイテムが見つかりませんでした"
-
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:66
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:108
 #: src/panel/settings/settings_main.vala:68
 #: src/panel/budgie-desktop-settings.desktop.in.h:1
 msgid "Budgie Desktop Settings"
 msgstr "Budgie デスクトップの設定"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:69
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:111
 msgid "System Settings"
 msgstr "システムの設定"
 
-#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:72
+#: src/panel/applets/budgie-menu/BudgieMenuWindow.vala:114
 msgid "Power"
 msgstr "電源"
 
-#: src/panel/applets/budgie-menu/BudgieMenuButtons.vala:33
+#: src/panel/applets/budgie-menu/buttons/CategoryButton.vala:45
 msgid "All"
 msgstr "すべて"
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:163
+msgid "Remove from favorites"
+msgstr ""
+
+#: src/panel/applets/budgie-menu/buttons/MenuButton.vala:164
+msgid "Add to favorites"
+msgstr ""
 
 #: src/panel/applets/caffeine/CaffeineWindow.vala:39
 msgid "Timer (minutes)"
@@ -553,51 +566,51 @@ msgid "System time and date settings"
 msgstr "システムの時刻と日付の設定"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Unfavorite"
 msgstr "パネルから削除"
 
 #: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:30
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:122
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:87
 msgid "Favorite"
 msgstr "パネルへ追加"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:111
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:76
 msgid "Close all windows"
 msgstr "すべてのウィンドウを閉じる"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:129
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:94
 msgid "Launch new instance"
 msgstr "新しいインスタンスを開始"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:271
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:240
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:32
 msgid "Minimize"
 msgstr "ウィンドウを最小化"
 
 #. Translators: This is used for buttons to move applications to another
 #. Workspace
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:338
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:307
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:106
 #, c-format
 msgid "Move to %s"
 msgstr "%s へ移動"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Unmaximize"
 msgstr "最大化しない"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:361
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:330
 #: src/panel/applets/tasklist/TasklistButtonPopover.vala:129
 msgid "Maximize"
 msgstr "ウィンドウを最大化"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:400
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:369
 msgid "Close window"
 msgstr "ウィンドウを閉じる"
 
-#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:405
+#: src/panel/applets/icon-tasklist/widgets/ButtonPopover.vala:374
 msgid "Show window controls"
 msgstr "ウィンドウコントロールを表示"
 
@@ -628,6 +641,12 @@ msgstr[0] "%u 件の未読通知"
 #: src/raven/notifications_view.vala:343
 msgid "No unread notifications"
 msgstr "未読通知はありません"
+
+#: src/panel/applets/places-indicator/PlaceItem.vala:41
+#: src/panel/applets/places-indicator/MountItem.vala:63
+#, c-format
+msgid "Open \"%s\""
+msgstr "\"%s\" を開く"
 
 #: src/panel/applets/places-indicator/MountHelper.vala:35
 msgid "Volume is in use by other processes"
@@ -665,12 +684,6 @@ msgstr "取り出し"
 msgid "Unmount"
 msgstr "アンマウント"
 
-#: src/panel/applets/places-indicator/MountItem.vala:63
-#: src/panel/applets/places-indicator/PlaceItem.vala:41
-#, c-format
-msgid "Open \"%s\""
-msgstr "\"%s\" を開く"
-
 #: src/panel/applets/places-indicator/MountItem.vala:75
 #: src/panel/applets/places-indicator/VolumeItem.vala:83
 msgid "You can now safely remove"
@@ -694,6 +707,18 @@ msgstr "ボリュームのアンマウント中にエラーが発生しました
 msgid "Places"
 msgstr "場所"
 
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
+msgid "Nothing to display right now"
+msgstr "表示可能なものはありません"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Mount some drives"
+msgstr "ドライブをマウントしました"
+
+#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
+msgid "Enable more sections"
+msgstr "ほかのセクションも有効にする"
+
 #: src/panel/applets/places-indicator/VolumeItem.vala:41
 #, c-format
 msgid "Mount and open \"%s\""
@@ -711,18 +736,6 @@ msgstr "入力したパスワードは正しくありません"
 #: src/panel/applets/places-indicator/VolumeItem.vala:116
 msgid "An unknown error occurred while attempting to mount this volume"
 msgstr "このボリュームをマウントしている最中に不明なエラーが発生しました"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:179
-msgid "Nothing to display right now"
-msgstr "表示可能なものはありません"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Mount some drives"
-msgstr "ドライブをマウントしました"
-
-#: src/panel/applets/places-indicator/PlacesIndicatorWindow.vala:183
-msgid "Enable more sections"
-msgstr "ほかのセクションも有効にする"
 
 #: src/panel/applets/show-desktop/ShowDesktopApplet.vala:37
 msgid "Toggle the desktop"
@@ -785,6 +798,7 @@ msgid "Failed to connect"
 msgstr "接続に失敗しました"
 
 #: src/panel/applets/status/BluetoothIndicator.vala:656
+#: src/panel/settings/settings_displays.vala:358
 msgid "Connected"
 msgstr "接続済み"
 
@@ -961,117 +975,6 @@ msgstr "アプリケーションの追加"
 msgid "Add Command"
 msgstr "コマンドを追加"
 
-#: src/panel/settings/settings_desktop.vala:52
-msgid "Desktop"
-msgstr "デスクトップ"
-
-#. Budgie native implementation
-#. Get the settings for Budgie Desktop View
-#. Update our switches on change
-#. Desktop Folder
-#. Get the settings for DesktopType
-#. Update our switches on change
-#. Nemo
-#. Update our switches on change
-#. Using some desktop type, set up some universal options then implementation-
-#. specific
-#. Universal show
-#: src/panel/settings/settings_desktop.vala:77
-msgid "Desktop Icons"
-msgstr "デスクトップアイコン"
-
-#: src/panel/settings/settings_desktop.vala:78
-msgid "Control whether to allow icons on the desktop."
-msgstr "デスクトップにアイコンを表示するかどうかを制御します。"
-
-#. DesktopFolder doesn't support fancy options like showing home folder,
-#. trash, or active mounts
-#. DesktopType is the only one that doesn't support showing mounts
-#. Switcher to show or hide active mounts
-#: src/panel/settings/settings_desktop.vala:87
-msgid "Active Mounts"
-msgstr "アクティブなマウント"
-
-#: src/panel/settings/settings_desktop.vala:88
-msgid "Show all active mounts on the desktop."
-msgstr "デスクトップ上に有効なマウントすべて表示します。"
-
-#. Switcher to show or hide our Home folder
-#: src/panel/settings/settings_desktop.vala:95
-msgid "Home directory"
-msgstr "ホームディレクトリ"
-
-#: src/panel/settings/settings_desktop.vala:96
-msgid "Add a shortcut to your home directory on the desktop."
-msgstr "デスクトップにホームディレクトリへのショートカットを追加します。"
-
-#. Switcher to show or hide a shortcut to Trash
-#: src/panel/settings/settings_desktop.vala:103
-msgid "Trash"
-msgstr "ゴミ箱"
-
-#: src/panel/settings/settings_desktop.vala:104
-msgid "Add a shortcut to the Trash directory on the desktop."
-msgstr "デスクトップにゴミ箱へのショートカットを追加します。"
-
-#. DesktopType doesn't support icon size changing. Nemo might but needs
-#. validation.
-#. Click Policy combo box
-#. Icon Size combo box
-#: src/panel/settings/settings_desktop.vala:116
-msgid "Icon Size"
-msgstr "アイコンの大きさ"
-
-#: src/panel/settings/settings_desktop.vala:117
-msgid "Set the desired size of icons on the desktop."
-msgstr "デスクトップ上に任意の大きさのアイコンを設定します。"
-
-#: src/panel/settings/settings_desktop.vala:148
-msgid "Number of virtual desktops"
-msgstr "仮想デスクトップの数"
-
-#: src/panel/settings/settings_desktop.vala:149
-msgid ""
-"Number of virtual desktops / workspaces to create automatically on startup."
-msgstr "起動時に自動的に作成する仮想デスクトップまたはワークスペースの個数です。"
-
-#: src/panel/settings/settings_desktop.vala:217
-msgid "Single"
-msgstr "シングル"
-
-#. If the click policy is to double click
-#: src/panel/settings/settings_desktop.vala:221
-msgid "Double"
-msgstr "ダブル"
-
-#: src/panel/settings/settings_desktop.vala:236
-msgid "Click Policy"
-msgstr "マウスをクリックした時の振る舞い"
-
-#: src/panel/settings/settings_desktop.vala:237
-msgid ""
-"Click Policy determines if we should open items on a single or double click."
-msgstr "クリックポリシーでは、一回のクリックでアイテムを開くか、二回のクリックでアイテムを開くかを決定します。"
-
-#: src/panel/settings/settings_desktop.vala:289
-msgid "Normal"
-msgstr "標準"
-
-#. Small
-#: src/panel/settings/settings_desktop.vala:292
-msgid "Small"
-msgstr "小さい"
-
-#. Large
-#: src/panel/settings/settings_desktop.vala:294
-msgid "Large"
-msgstr "大きい"
-
-#. Massive
-#: src/panel/settings/settings_desktop.vala:296
-msgid "Massive"
-msgstr "特大"
-
 #: src/panel/settings/settings_fonts.vala:31
 msgid "Fonts"
 msgstr "フォント"
@@ -1130,7 +1033,7 @@ msgstr "最小"
 
 #: src/panel/settings/settings_fonts.vala:83
 #: src/panel/settings/settings_fonts.vala:109
-#: src/panel/settings/settings_panel.vala:246
+#: src/panel/settings/settings_panel.vala:318
 msgid "None"
 msgstr "なし"
 
@@ -1157,51 +1060,6 @@ msgstr "アンチエイリアス"
 #: src/panel/settings/settings_fonts.vala:125
 msgid "Set the type of antialiasing to use."
 msgstr "アンチエイリアスの処理方法を設定します。"
-
-#: src/panel/settings/settings_main.vala:57
-msgid "Appearance"
-msgstr "外観"
-
-#: src/panel/settings/settings_main.vala:58
-msgid "Panels"
-msgstr "パネル"
-
-#: src/panel/settings/settings_main.vala:59
-msgid "Session"
-msgstr "セッション"
-
-#: src/panel/settings/settings_main.vala:99
-msgid "Create new panel"
-msgstr "新しいパネルの作成"
-
-#: src/panel/settings/settings_panel_applets.vala:21
-msgid "Applet Settings"
-msgstr "アプレットの設定"
-
-#: src/panel/settings/settings_panel_applets.vala:235
-msgid "Add applet"
-msgstr "アプレットの追加"
-
-#: src/panel/settings/settings_panel_applets.vala:236
-msgid "Choose a new applet to add to this panel"
-msgstr "このパネルに追加する新しいアプレットを選択します"
-
-#: src/panel/settings/settings_panel_applets.vala:250
-#: src/panel/settings/settings_raven_widgets.vala:164
-msgid "No settings available"
-msgstr "設定がありません"
-
-#: src/panel/settings/settings_panel_applets.vala:403
-msgid "Start"
-msgstr "パネルの先頭"
-
-#: src/panel/settings/settings_panel_applets.vala:406
-msgid "Center"
-msgstr "パネルの中央"
-
-#: src/panel/settings/settings_panel_applets.vala:409
-msgid "End"
-msgstr "パネルの後尾"
 
 #: src/panel/settings/settings_panel_dialogs.vala:24
 msgid "Confirm panel removal"
@@ -1277,7 +1135,7 @@ msgid "Widgets"
 msgstr "ウィジェット（アプレット）"
 
 #: src/panel/settings/settings_raven.vala:48
-#: src/panel/settings/settings_panel.vala:91
+#: src/panel/settings/settings_panel.vala:103
 msgid "Settings"
 msgstr "設定"
 
@@ -1313,6 +1171,11 @@ msgstr "ウィジェットの追加"
 msgid "Choose a new widget to add to the Widgets view"
 msgstr "ウィジェット一覧に追加する新しいウィジェットを選択してください"
 
+#: src/panel/settings/settings_raven_widgets.vala:164
+#: src/panel/settings/settings_panel_applets.vala:261
+msgid "No settings available"
+msgstr "設定がありません"
+
 #: src/panel/settings/settings_raven_widgets.vala:237
 msgid ""
 "Failed to create the widget instance. The plugin engine could not find info "
@@ -1347,237 +1210,6 @@ msgstr ""
 #: src/panel/settings/settings_raven_widgets.vala:252
 msgid "Failed to create the widget instance due to an unknown failure."
 msgstr "不明な障害によって、ウィジェットのインスタンス作成に失敗しました。"
-
-#: src/panel/settings/settings_panel.vala:90
-msgid "Applets"
-msgstr "アプレット"
-
-#: src/panel/settings/settings_panel.vala:93
-msgid "Remove Panel"
-msgstr "パネルを削除する"
-
-#: src/panel/settings/settings_panel.vala:94
-msgid "Remove this panel from the screen"
-msgstr "画面上からこのパネルを削除します。"
-
-#: src/panel/settings/settings_panel.vala:171
-msgid "Top Dock"
-msgstr "上部のドック"
-
-#: src/panel/settings/settings_panel.vala:173
-msgid "Right Dock"
-msgstr "右端のドック"
-
-#: src/panel/settings/settings_panel.vala:175
-msgid "Left Dock"
-msgstr "左端のドック"
-
-#: src/panel/settings/settings_panel.vala:177
-msgid "Bottom Dock"
-msgstr "下部のドック"
-
-#: src/panel/settings/settings_panel.vala:182
-msgid "Top Panel"
-msgstr "トップパネル"
-
-#: src/panel/settings/settings_panel.vala:184
-msgid "Right Panel"
-msgstr "右端パネル"
-
-#: src/panel/settings/settings_panel.vala:186
-msgid "Left Panel"
-msgstr "左端パネル"
-
-#: src/panel/settings/settings_panel.vala:188
-msgid "Bottom Panel"
-msgstr "ボトムパネル"
-
-#: src/panel/settings/settings_panel.vala:225
-msgid "Top"
-msgstr "上"
-
-#: src/panel/settings/settings_panel.vala:227 src/raven/raven.vala:35
-msgid "Right"
-msgstr "右"
-
-#: src/panel/settings/settings_panel.vala:229
-#: src/panel/settings/settings_wm.vala:84 src/raven/raven.vala:33
-msgid "Left"
-msgstr "左"
-
-#: src/panel/settings/settings_panel.vala:231
-msgid "Bottom"
-msgstr "下"
-
-#: src/panel/settings/settings_panel.vala:241
-msgid "Always"
-msgstr "常時"
-
-#: src/panel/settings/settings_panel.vala:243
-msgid "Dynamic"
-msgstr "動的"
-
-#: src/panel/settings/settings_panel.vala:256 src/raven/raven.vala:38
-msgid "Automatic"
-msgstr "自動"
-
-#: src/panel/settings/settings_panel.vala:258
-msgid "Intelligent"
-msgstr "おまかせ"
-
-#: src/panel/settings/settings_panel.vala:261
-msgid "Never"
-msgstr "なし"
-
-#: src/panel/settings/settings_panel.vala:278
-msgid "Position"
-msgstr "位置"
-
-#: src/panel/settings/settings_panel.vala:279
-msgid "Set the edge of the screen that this panel will stay on"
-msgstr "このパネルを表示する画面の端を設定します。"
-
-#: src/panel/settings/settings_panel.vala:287
-msgid "Size"
-msgstr "大きさ"
-
-#: src/panel/settings/settings_panel.vala:288
-msgid "Set the size (width or height, depending on orientation) of this panel"
-msgstr "パネルの大きさ（幅か高さかは向きによります）を設定します。"
-
-#: src/panel/settings/settings_panel.vala:295
-msgid "Spacing"
-msgstr "余白"
-
-#: src/panel/settings/settings_panel.vala:296
-msgid "Set the spacing between applets for this panel"
-msgstr "パネル上のアプレット同士の間隔を設定"
-
-#: src/panel/settings/settings_panel.vala:303
-msgid "Automatically hide"
-msgstr "自動的に隠す"
-
-#: src/panel/settings/settings_panel.vala:304
-msgid "When set, this panel will hide from view to maximize screen estate"
-msgstr "この設定で、ウィンドウを最大限に表示するためパネルを自動的に隠します。"
-
-#: src/panel/settings/settings_panel.vala:311
-msgid "Transparency"
-msgstr "透過度"
-
-#: src/panel/settings/settings_panel.vala:312
-msgid "Control when this panel should have a solid background"
-msgstr "このパネルが単一色の背景と調和するように設定します。"
-
-#: src/panel/settings/settings_panel.vala:317
-msgid "Shadow"
-msgstr "シャドウ（影）"
-
-#: src/panel/settings/settings_panel.vala:318
-msgid "Adds a decorative drop-shadow, ideal for opaque panels"
-msgstr "不透明なパネルに適した装飾的なドロップシャドウを追加します。"
-
-#: src/panel/settings/settings_panel.vala:324
-msgid "Stylize regions"
-msgstr "領域に合わせる"
-
-#: src/panel/settings/settings_panel.vala:325
-msgid ""
-"Adds a hint to the panel so that each of the panel's three main areas may be"
-" themed differently."
-msgstr "パネルにヒントを追加して、パネルの3つの主要エリアに各々異なるテーマが設定できるようにします。"
-
-#: src/panel/settings/settings_panel.vala:332
-msgid "Dock mode"
-msgstr "ドックモード"
-
-#: src/panel/settings/settings_panel.vala:333
-msgid ""
-"When in dock mode, the panel will use the minimal amount of space possible, "
-"freeing up valuable screen estate"
-msgstr "ドックモードではパネルが最小限の大きさとなり、利用可能な画面領域が広くなります。"
-
-#: src/panel/settings/settings_wm.vala:29
-msgid "Windows"
-msgstr "ウィンドウ"
-
-#: src/panel/settings/settings_wm.vala:38
-msgid "Button layout"
-msgstr "ボタンの位置"
-
-#: src/panel/settings/settings_wm.vala:39
-msgid "Change the layout of buttons in application titlebars."
-msgstr "アプリケーションの見出しにあるボタンの場所を変更します。"
-
-#: src/panel/settings/settings_wm.vala:44
-msgid "Center new windows on screen"
-msgstr "新規ウィンドウを画面中央に表示"
-
-#: src/panel/settings/settings_wm.vala:45
-msgid "Center newly launched windows on the current screen."
-msgstr "新しく起動したウィンドウを現在ある画面の中央部に配置します。"
-
-#: src/panel/settings/settings_wm.vala:50
-msgid "Disable Night Light mode when windows are fullscreen"
-msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効化"
-
-#: src/panel/settings/settings_wm.vala:51
-msgid ""
-"Disables Night Light mode when a window is fullscreen. Re-enables when "
-"leaving fullscreen."
-msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効にします。全画面表示をを解除すると、再び有効になります。"
-
-#: src/panel/settings/settings_wm.vala:56
-msgid "Pause notifications when windows are fullscreen"
-msgstr "全画面表示のとき、通知を一時停止"
-
-#: src/panel/settings/settings_wm.vala:57
-msgid ""
-"Prevents notifications from appearing when a window is fullscreen. Unpauses "
-"when leaving fullscreen."
-msgstr "全画面表示のとき、通知を表示しないようにします。全画面表示を止めると一時停止を解除します。"
-
-#: src/panel/settings/settings_wm.vala:62
-msgid "Automatic tiling"
-msgstr "自動的にタイル化"
-
-#: src/panel/settings/settings_wm.vala:63
-msgid ""
-"Windows will automatically tile when dragged into the top of the screen or "
-"the far corners."
-msgstr "画面の上部や四隅へドラッグすると、ウィンドウが自動的にタイル状になります。"
-
-#: src/panel/settings/settings_wm.vala:68
-msgid "Window focus mode"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:69
-msgid ""
-"Choose how windows receive focus: click to focus; sloppy to focus without "
-"raising windows; mouse to focus with raising."
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:74
-msgid "Show all windows in tab switcher"
-msgstr "タブスイッチですべてのウィンドウを表示"
-
-#: src/panel/settings/settings_wm.vala:75
-msgid ""
-"All tabs will be displayed in tab switcher regardless of the workspace in "
-"use."
-msgstr "利用中のワークスペースが何であっても、タブスイッチですべてのタブを表示します。"
-
-#: src/panel/settings/settings_wm.vala:82
-msgid "Right (standard)"
-msgstr "右（標準）"
-
-#: src/panel/settings/settings_wm.vala:97
-msgid "Click"
-msgstr ""
-
-#: src/panel/settings/settings_wm.vala:99
-msgid "Sloppy"
-msgstr ""
 
 #: src/panel/settings/settings_style.vala:36
 msgid "Style"
@@ -1635,7 +1267,7 @@ msgstr "ウィンドウとコントールでアニメーション表示するか
 #. Get display name for theme
 #: src/panel/settings/settings_style.vala:207
 msgid "Use theme"
-msgstr ""
+msgstr "テーマを使用する"
 
 #: src/panel/settings/settings_style.vala:318
 msgid "Labwc Compositor Theme"
@@ -1662,29 +1294,455 @@ msgstr "右下"
 msgid "Top Right"
 msgstr "右上"
 
-#: src/raven/main_view.vala:56
-msgid "Notifications"
-msgstr "通知"
+#: src/panel/settings/settings_wm.vala:29
+msgid "Windows"
+msgstr "ウィンドウ"
 
-#: src/raven/main_view.vala:68
-msgid "No widgets added."
-msgstr "追加したアプリはありません。"
+#: src/panel/settings/settings_wm.vala:38
+msgid "Button layout"
+msgstr "ボタンの位置"
 
-#: src/raven/notifications_view.vala:31
-msgid "Nothing to see here"
-msgstr "表示可能なものはありません"
+#: src/panel/settings/settings_wm.vala:39
+msgid "Change the layout of buttons in application titlebars."
+msgstr "アプリケーションの見出しにあるボタンの場所を変更します。"
 
-#: src/raven/notifications_view.vala:123
-msgid "No new notifications"
-msgstr "新しい通知はありません"
+#: src/panel/settings/settings_wm.vala:44
+msgid "Center new windows on screen"
+msgstr "新規ウィンドウを画面中央に表示"
 
-#: src/raven/widgets/media-controls/media_controls.vala:155
-msgid "No apps are currently playing audio."
-msgstr "現在、演奏中のアプリはありません。"
+#: src/panel/settings/settings_wm.vala:45
+msgid "Center newly launched windows on the current screen."
+msgstr "新しく起動したウィンドウを現在ある画面の中央部に配置します。"
 
-#: src/raven/widgets/media-controls/media_controls.vala:164
-msgid "Play some music"
-msgstr "音楽を再生する"
+#: src/panel/settings/settings_wm.vala:50
+msgid "Disable Night Light mode when windows are fullscreen"
+msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効化"
+
+#: src/panel/settings/settings_wm.vala:51
+msgid ""
+"Disables Night Light mode when a window is fullscreen. Re-enables when "
+"leaving fullscreen."
+msgstr "ウィンドウが全画面表示のとき、夜間照明モードを無効にします。全画面表示をを解除すると、再び有効になります。"
+
+#: src/panel/settings/settings_wm.vala:56
+msgid "Pause notifications when windows are fullscreen"
+msgstr "全画面表示のとき、通知を一時停止"
+
+#: src/panel/settings/settings_wm.vala:57
+msgid ""
+"Prevents notifications from appearing when a window is fullscreen. Unpauses "
+"when leaving fullscreen."
+msgstr "全画面表示のとき、通知を表示しないようにします。全画面表示を止めると一時停止を解除します。"
+
+#: src/panel/settings/settings_wm.vala:62
+msgid "Automatic tiling"
+msgstr "自動的にタイル化"
+
+#: src/panel/settings/settings_wm.vala:63
+msgid ""
+"Windows will automatically tile when dragged into the top of the screen or "
+"the far corners."
+msgstr "画面の上部や四隅へドラッグすると、ウィンドウが自動的にタイル状になります。"
+
+#: src/panel/settings/settings_wm.vala:68
+msgid "Window focus mode"
+msgstr "ウィンドウのフォーカスモード"
+
+#: src/panel/settings/settings_wm.vala:69
+msgid ""
+"Choose how windows receive focus: click to focus; sloppy to focus without "
+"raising windows; mouse to focus with raising."
+msgstr ""
+"ウィンドウのフォーカス取得方法を選択します: "
+"クリックでフォーカス、スロッピー（ウィンドウを前面に出さずにフォーカス）、マウスでフォーカス（ウィンドウを前面に出してフォーカス）。"
+
+#: src/panel/settings/settings_wm.vala:74
+msgid "Show all windows in tab switcher"
+msgstr "タブスイッチですべてのウィンドウを表示"
+
+#: src/panel/settings/settings_wm.vala:75
+msgid ""
+"All tabs will be displayed in tab switcher regardless of the workspace in "
+"use."
+msgstr "利用中のワークスペースが何であっても、タブスイッチですべてのタブを表示します。"
+
+#: src/panel/settings/settings_wm.vala:82
+msgid "Right (standard)"
+msgstr "右（標準）"
+
+#: src/panel/settings/settings_wm.vala:84
+#: src/panel/settings/settings_panel.vala:301 src/raven/raven.vala:33
+msgid "Left"
+msgstr "左"
+
+#: src/panel/settings/settings_wm.vala:97
+msgid "Click"
+msgstr "クリック"
+
+#: src/panel/settings/settings_wm.vala:99
+msgid "Sloppy"
+msgstr ""
+
+#: src/panel/settings/settings_desktop.vala:52
+msgid "Desktop"
+msgstr "デスクトップ"
+
+#. Budgie native implementation
+#. Get the settings for Budgie Desktop View
+#. Update our switches on change
+#. Desktop Folder
+#. Get the settings for DesktopType
+#. Update our switches on change
+#. Nemo
+#. Update our switches on change
+#. Using some desktop type, set up some universal options then implementation-
+#. specific
+#. Universal show
+#: src/panel/settings/settings_desktop.vala:77
+msgid "Desktop Icons"
+msgstr "デスクトップアイコン"
+
+#: src/panel/settings/settings_desktop.vala:78
+msgid "Control whether to allow icons on the desktop."
+msgstr "デスクトップにアイコンを表示するかどうかを制御します。"
+
+#. DesktopFolder doesn't support fancy options like showing home folder,
+#. trash, or active mounts
+#. DesktopType is the only one that doesn't support showing mounts
+#. Switcher to show or hide active mounts
+#: src/panel/settings/settings_desktop.vala:87
+msgid "Active Mounts"
+msgstr "アクティブなマウント"
+
+#: src/panel/settings/settings_desktop.vala:88
+msgid "Show all active mounts on the desktop."
+msgstr "デスクトップ上に有効なマウントすべて表示します。"
+
+#. Switcher to show or hide our Home folder
+#: src/panel/settings/settings_desktop.vala:95
+msgid "Home directory"
+msgstr "ホームディレクトリ"
+
+#: src/panel/settings/settings_desktop.vala:96
+msgid "Add a shortcut to your home directory on the desktop."
+msgstr "デスクトップにホームディレクトリへのショートカットを追加します。"
+
+#. Switcher to show or hide a shortcut to Trash
+#: src/panel/settings/settings_desktop.vala:103
+msgid "Trash"
+msgstr "ゴミ箱"
+
+#: src/panel/settings/settings_desktop.vala:104
+msgid "Add a shortcut to the Trash directory on the desktop."
+msgstr "デスクトップにゴミ箱へのショートカットを追加します。"
+
+#. DesktopType doesn't support icon size changing. Nemo might but needs
+#. validation.
+#. Click Policy combo box
+#. Icon Size combo box
+#: src/panel/settings/settings_desktop.vala:116
+msgid "Icon Size"
+msgstr "アイコンの大きさ"
+
+#: src/panel/settings/settings_desktop.vala:117
+msgid "Set the desired size of icons on the desktop."
+msgstr "デスクトップ上に任意の大きさのアイコンを設定します。"
+
+#: src/panel/settings/settings_desktop.vala:136
+msgid "Number of virtual desktops"
+msgstr "仮想デスクトップの数"
+
+#: src/panel/settings/settings_desktop.vala:137
+msgid ""
+"Number of virtual desktops / workspaces to create automatically on startup."
+msgstr "起動時に自動的に作成する仮想デスクトップまたはワークスペースの個数です。"
+
+#: src/panel/settings/settings_desktop.vala:205
+msgid "Single"
+msgstr "シングル"
+
+#. If the click policy is to double click
+#: src/panel/settings/settings_desktop.vala:209
+msgid "Double"
+msgstr "ダブル"
+
+#: src/panel/settings/settings_desktop.vala:224
+msgid "Click Policy"
+msgstr "マウスをクリックした時の振る舞い"
+
+#: src/panel/settings/settings_desktop.vala:225
+msgid ""
+"Click Policy determines if we should open items on a single or double click."
+msgstr "クリックポリシーでは、一回のクリックでアイテムを開くか、二回のクリックでアイテムを開くかを決定します。"
+
+#: src/panel/settings/settings_desktop.vala:277
+msgid "Normal"
+msgstr "標準"
+
+#. Small
+#: src/panel/settings/settings_desktop.vala:280
+msgid "Small"
+msgstr "小さい"
+
+#. Large
+#: src/panel/settings/settings_desktop.vala:282
+msgid "Large"
+msgstr "大きい"
+
+#. Massive
+#: src/panel/settings/settings_desktop.vala:284
+msgid "Massive"
+msgstr "特大"
+
+#: src/panel/settings/settings_displays.vala:24
+msgid "Displays"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:49
+msgid "Connected Monitors"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:62
+msgid "Panel Placement"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:62
+msgid ""
+"Select which monitor should be the primary display for panel placement."
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:64
+msgid "Use Automatic Selection"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:68
+msgid "Clear Primary Monitor"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:69
+msgid "Remove manual primary monitor selection."
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:83
+msgid "Fallback Monitors"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:83
+msgid "Order used when primary is disconnected"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:165
+msgid "No monitors detected"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:195
+msgid "No fallback monitors configured"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:232
+msgid "Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:256
+msgid "Unknown model"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:278
+msgid "Set as Primary"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:342
+msgid "(last known)"
+msgstr ""
+
+#: src/panel/settings/settings_displays.vala:349
+msgid "No cached information"
+msgstr ""
+
+#: src/panel/settings/settings_main.vala:57
+msgid "Appearance"
+msgstr "外観"
+
+#: src/panel/settings/settings_main.vala:58
+msgid "Panels"
+msgstr "パネル"
+
+#: src/panel/settings/settings_main.vala:59
+msgid "Session"
+msgstr "セッション"
+
+#: src/panel/settings/settings_main.vala:100
+msgid "Create new panel"
+msgstr "新しいパネルの作成"
+
+#: src/panel/settings/settings_panel.vala:102
+#: src/panel/settings/settings_panel.vala:220
+msgid "Applets"
+msgstr "アプレット"
+
+#: src/panel/settings/settings_panel.vala:105
+msgid "Remove Panel"
+msgstr "パネルを削除する"
+
+#: src/panel/settings/settings_panel.vala:106
+msgid "Remove this panel from the screen"
+msgstr "画面上からこのパネルを削除します。"
+
+#: src/panel/settings/settings_panel.vala:243
+msgid "Top Dock"
+msgstr "上部のドック"
+
+#: src/panel/settings/settings_panel.vala:245
+msgid "Right Dock"
+msgstr "右端のドック"
+
+#: src/panel/settings/settings_panel.vala:247
+msgid "Left Dock"
+msgstr "左端のドック"
+
+#: src/panel/settings/settings_panel.vala:249
+msgid "Bottom Dock"
+msgstr "下部のドック"
+
+#: src/panel/settings/settings_panel.vala:254
+msgid "Top Panel"
+msgstr "トップパネル"
+
+#: src/panel/settings/settings_panel.vala:256
+msgid "Right Panel"
+msgstr "右端パネル"
+
+#: src/panel/settings/settings_panel.vala:258
+msgid "Left Panel"
+msgstr "左端パネル"
+
+#: src/panel/settings/settings_panel.vala:260
+msgid "Bottom Panel"
+msgstr "ボトムパネル"
+
+#: src/panel/settings/settings_panel.vala:297
+msgid "Top"
+msgstr "上"
+
+#: src/panel/settings/settings_panel.vala:299 src/raven/raven.vala:35
+msgid "Right"
+msgstr "右"
+
+#: src/panel/settings/settings_panel.vala:303
+msgid "Bottom"
+msgstr "下"
+
+#: src/panel/settings/settings_panel.vala:313
+msgid "Always"
+msgstr "常時"
+
+#: src/panel/settings/settings_panel.vala:315
+msgid "Dynamic"
+msgstr "動的"
+
+#: src/panel/settings/settings_panel.vala:328 src/raven/raven.vala:38
+msgid "Automatic"
+msgstr "自動"
+
+#: src/panel/settings/settings_panel.vala:330
+msgid "Intelligent"
+msgstr "おまかせ"
+
+#: src/panel/settings/settings_panel.vala:333
+msgid "Never"
+msgstr "なし"
+
+#: src/panel/settings/settings_panel.vala:350
+msgid "Position"
+msgstr "位置"
+
+#: src/panel/settings/settings_panel.vala:351
+msgid "Set the edge of the screen that this panel will stay on"
+msgstr "このパネルを表示する画面の端を設定します。"
+
+#: src/panel/settings/settings_panel.vala:359
+msgid "Size"
+msgstr "大きさ"
+
+#: src/panel/settings/settings_panel.vala:360
+msgid "Set the size (width or height, depending on orientation) of this panel"
+msgstr "パネルの大きさ（幅か高さかは向きによります）を設定します。"
+
+#: src/panel/settings/settings_panel.vala:367
+msgid "Spacing"
+msgstr "余白"
+
+#: src/panel/settings/settings_panel.vala:368
+msgid "Set the spacing between applets for this panel"
+msgstr "パネル上のアプレット同士の間隔を設定"
+
+#: src/panel/settings/settings_panel.vala:375
+msgid "Automatically hide"
+msgstr "自動的に隠す"
+
+#: src/panel/settings/settings_panel.vala:376
+msgid "When set, this panel will hide from view to maximize screen estate"
+msgstr "この設定で、ウィンドウを最大限に表示するためパネルを自動的に隠します。"
+
+#: src/panel/settings/settings_panel.vala:383
+msgid "Transparency"
+msgstr "透過度"
+
+#: src/panel/settings/settings_panel.vala:384
+msgid "Control when this panel should have a solid background"
+msgstr "このパネルが単一色の背景と調和するように設定します。"
+
+#: src/panel/settings/settings_panel.vala:389
+msgid "Shadow"
+msgstr "シャドウ（影）"
+
+#: src/panel/settings/settings_panel.vala:390
+msgid "Adds a decorative drop-shadow, ideal for opaque panels"
+msgstr "不透明なパネルに適した装飾的なドロップシャドウを追加します。"
+
+#: src/panel/settings/settings_panel.vala:396
+msgid "Stylize regions"
+msgstr "領域に合わせる"
+
+#: src/panel/settings/settings_panel.vala:397
+msgid ""
+"Adds a hint to the panel so that each of the panel's three main areas may be"
+" themed differently."
+msgstr "パネルにヒントを追加して、パネルの3つの主要エリアに各々異なるテーマが設定できるようにします。"
+
+#: src/panel/settings/settings_panel.vala:404
+msgid "Dock mode"
+msgstr "ドックモード"
+
+#: src/panel/settings/settings_panel.vala:405
+msgid ""
+"When in dock mode, the panel will use the minimal amount of space possible, "
+"freeing up valuable screen estate"
+msgstr "ドックモードではパネルが最小限の大きさとなり、利用可能な画面領域が広くなります。"
+
+#: src/panel/settings/settings_panel_applets.vala:21
+msgid "Applet Settings"
+msgstr "アプレットの設定"
+
+#: src/panel/settings/settings_panel_applets.vala:246
+msgid "Add applet"
+msgstr "アプレットの追加"
+
+#: src/panel/settings/settings_panel_applets.vala:247
+msgid "Choose a new applet to add to this panel"
+msgstr "このパネルに追加する新しいアプレットを選択します"
+
+#: src/panel/settings/settings_panel_applets.vala:414
+msgid "Start"
+msgstr "パネルの先頭"
+
+#: src/panel/settings/settings_panel_applets.vala:417
+msgid "Center"
+msgstr "パネルの中央"
+
+#: src/panel/settings/settings_panel_applets.vala:420
+msgid "End"
+msgstr "パネルの後尾"
 
 #: src/raven/widgets/media-controls/mpris_gui.vala:107
 #: src/raven/widgets/media-controls/mpris_gui.vala:430
@@ -1711,6 +1769,14 @@ msgstr "%s を再生"
 msgid "Paused - %s"
 msgstr "%s の一時停止"
 
+#: src/raven/widgets/media-controls/media_controls.vala:105
+msgid "No apps are currently playing audio."
+msgstr "現在、演奏中のアプリはありません。"
+
+#: src/raven/widgets/media-controls/media_controls.vala:114
+msgid "Play some music"
+msgstr "音楽を再生する"
+
 #: src/raven/widgets/sound-output/sound_output.vala:173
 msgid "No apps are playing audio."
 msgstr "オーディオ再生中のアプリは存在しません。"
@@ -1723,22 +1789,38 @@ msgstr "アプリ"
 msgid "Devices"
 msgstr "デバイス"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:47
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:52
 #: src/raven/widgets/usage-monitor/UsageMonitor.plugin.in.h:1
 msgid "Usage Monitor"
 msgstr "使用状況モニタ"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:83
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
 msgid "CPU"
 msgstr "CPU"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:88
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
 msgid "RAM"
 msgstr "RAM"
 
-#: src/raven/widgets/usage-monitor/usage_monitor.vala:93
+#: src/raven/widgets/usage-monitor/usage_monitor.vala:98
 msgid "Swap"
 msgstr "Swap"
+
+#: src/raven/main_view.vala:56
+msgid "Notifications"
+msgstr "通知"
+
+#: src/raven/main_view.vala:68
+msgid "No widgets added."
+msgstr "追加したアプリはありません。"
+
+#: src/raven/notifications_view.vala:31
+msgid "Nothing to see here"
+msgstr "表示可能なものはありません"
+
+#: src/raven/notifications_view.vala:123
+msgid "No new notifications"
+msgstr "新しい通知はありません"
 
 #: src/raven/raven.vala:49
 msgid "Oldest to newest"
@@ -1901,6 +1983,14 @@ msgstr "中クリックで新規ウィンドウを起動"
 msgid "Require a double-click to launch new window"
 msgstr "新しいウィンドウを起動するにはダブルクリックが必要"
 
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:1
+msgid "Keyboard Layout"
+msgstr ""
+
+#: src/panel/applets/keyboard-layout/keyboard-header.ui.h:2
+msgid "Keyboard Layout Settings"
+msgstr ""
+
 #: src/panel/applets/night-light/indicator_window.ui.h:1
 msgid "Night Light"
 msgstr "夜間モード"
@@ -2028,11 +2118,11 @@ msgstr "200 %"
 
 #: src/panel/applets/tasklist/settings.ui.h:1
 msgid "Show button icons"
-msgstr ""
+msgstr "ボタンのアイコンを表示する"
 
 #: src/panel/applets/tasklist/settings.ui.h:2
 msgid "Show button labels"
-msgstr ""
+msgstr "ボタンのラベルを表示する"
 
 #: src/raven/widgets/calendar/settings.ui.h:1
 msgid "Show Week Numbers"
