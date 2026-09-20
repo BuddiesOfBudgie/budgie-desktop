@@ -227,6 +227,9 @@
 	<keybind bridge="solus-project.budgie-wm/take-full-screenshot">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
 	</keybind>
+	<keybind bridge="solus-project.budgie-wm/show-power-dialog">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.PowerDialog /org/buddiesofbudgie/PowerDialog org.buddiesofbudgie.PowerDialog.Toggle" />
+	</keybind>
 	<keybind bridge="wm.keybindings/panel-run-dialog">
 		<action name="Execute" command="budgie-run-dialog" />
 	</keybind>
