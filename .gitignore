@@ -10,3 +10,5 @@ justfile
 /.cache/
 
 subprojects/.wraplock
+
+__pycache__/
