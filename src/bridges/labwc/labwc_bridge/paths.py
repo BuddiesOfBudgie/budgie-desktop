@@ -38,6 +38,9 @@ def search_for_config(config_file: str) -> tuple[str, list[str]]:
     search path, whose head is where the user's copy belongs.
     """
     search_path = [user_config(config_file)]
+    search_path += shipped("distro-" + config_file, config_file)
+
+    # Releases before these files moved under labwc/ installed them a level up
     for system_dir in GLib.get_system_data_dirs():
         search_path.append(
             os.path.join(system_dir, "budgie-desktop", "distro-" + config_file)
