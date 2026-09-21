@@ -248,10 +248,10 @@
 		<action name="Maximize" direction="both" />
 	</keybind>
 	<keybind bridge="wm.keybindings/maximize-horizontally">
-		<action name="Maximize" direction="right" />
+		<action name="Maximize" direction="horizontal" />
 	</keybind>
 	<keybind bridge="wm.keybindings/maximize-vertically">
-		<action name="Maximize" direction="left" />
+		<action name="Maximize" direction="vertical" />
 	</keybind>
 	<keybind bridge="wm.keybindings/begin-move" />
 	<keybind bridge="wm.keybindings/raise">
