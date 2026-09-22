@@ -16,6 +16,7 @@ import logging
 import os
 import shutil
 import xml.etree.ElementTree as Et
+from dataclasses import dataclass
 
 from . import paths
 from .config import LabwcConfig, save
@@ -23,6 +24,39 @@ from .config import LabwcConfig, save
 log = logging.getLogger(__name__)
 
 CURRENT_RC_VERSION = 2
+
+
+@dataclass(frozen=True)
+class ActionRewrite:
+    """One action attribute an rc.xml version replaces, and the value it replaces."""
+
+    bridge: str
+    action: str
+    attribute: str
+    stale: str
+    value: str
+
+
+# Keyed by the rc.xml version that introduced the change; a config is brought up to
+# date by applying every version above its own, oldest first
+ACTION_REWRITES: dict[int, tuple[ActionRewrite, ...]] = {
+    2: (
+        ActionRewrite(
+            bridge="wm.keybindings/maximize-horizontally",
+            action="Maximize",
+            attribute="direction",
+            stale="right",
+            value="horizontal",
+        ),
+        ActionRewrite(
+            bridge="wm.keybindings/maximize-vertically",
+            action="Maximize",
+            attribute="direction",
+            stale="left",
+            value="vertical",
+        ),
+    ),
+}
 
 
 class RcXmlMigration:
@@ -129,9 +163,49 @@ class RcXmlMigration:
 
         return True
 
+    @staticmethod
+    def apply_rewrite(user_root: Et.Element, rewrite: ActionRewrite) -> bool:
+        """Apply one action rewrite wherever it still holds the value we shipped; True when any did"""
+        changed = False
+
+        for keybind in user_root.findall(
+            f"./keyboard/keybind[@bridge='{rewrite.bridge}']"
+        ):
+            action = keybind.find(f"./action[@name='{rewrite.action}']")
+            # Any other value is the user's own, or a rewrite already applied
+            if action is None or action.get(rewrite.attribute) != rewrite.stale:
+                continue
+
+            action.set(rewrite.attribute, rewrite.value)
+            changed = True
+            log.info(
+                f"Set '{rewrite.bridge}' {rewrite.action} {rewrite.attribute} "
+                f"from '{rewrite.stale}' to '{rewrite.value}'"
+            )
+
+        return changed
+
+    def apply_rewrites(
+        self, user_et: Et.ElementTree[Et.Element], from_version: int
+    ) -> bool:
+        """Apply the action rewrites of every rc.xml version above from_version; True when any did"""
+        user_root = user_et.getroot()
+        changed = False
+
+        for version in sorted(ACTION_REWRITES):
+            if version <= from_version:
+                continue
+
+            log.info(f"Applying rc.xml version {version} action rewrites")
+            for rewrite in ACTION_REWRITES[version]:
+                changed |= self.apply_rewrite(user_root, rewrite)
+
+        return changed
+
     def migrate(self) -> bool:
-        """Merge missing non-keybind keyboard settings from the template"""
-        log.info("Starting rc.xml migration")
+        """Merge missing non-keybind keyboard settings from the template and apply the action rewrites"""
+        user_version = self.get_rc_version(self.config.et)
+        log.info(f"Starting rc.xml migration from version {user_version}")
 
         # Step 1: Backup current config
         if not self.backup_user_config():
@@ -150,11 +224,14 @@ class RcXmlMigration:
             log.error("Migration aborted - failed to replace keyboard section")
             return False
 
-        # Step 4: Set version number on user config
+        # Step 4: Bring actions written by older versions up to date
+        self.apply_rewrites(user_et, user_version)
+
+        # Step 5: Set version number on user config
         user_root = user_et.getroot()
         user_root.set("version", str(CURRENT_RC_VERSION))
 
-        # Step 5: Write updated config
+        # Step 6: Write updated config
         save(user_et, self.config.path)
 
         return True
