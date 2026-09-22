@@ -148,7 +148,7 @@ class RcXmlMigration:
         return changed
 
     def migrate(self) -> bool:
-        """Merge missing non-keybind keyboard settings from the template and apply the rewrites"""
+        """Merge the template's keyboard settings, apply the rewrites, and record the version"""
         user_version = self.get_rc_version(self.config.et)
         log.info(f"Starting rc.xml migration from version {user_version}")
 
@@ -173,8 +173,7 @@ class RcXmlMigration:
         self.apply_rewrites(user_et, user_version)
 
         # Step 5: Set version number on user config
-        user_root = user_et.getroot()
-        user_root.set("version", str(CURRENT_RC_VERSION))
+        user_et.getroot().set("version", str(CURRENT_RC_VERSION))
 
         # Step 6: Write updated config
         save(user_et, self.config.path)

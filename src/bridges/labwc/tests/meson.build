@@ -15,10 +15,11 @@ bridge_test_env.set('PYTHONDONTWRITEBYTECODE', '1')
 bridge_tests = ['rewrites']
 
 # migration.py reaches GLib through paths.py, which a build configured without
-# the runtime dependencies is entitled not to have
-gi = run_command(python3, '-c', 'import gi', check: false)
+# the runtime dependencies is entitled not to have. Importing gi proves nothing
+# about the typelib, so probe exactly what paths.py does.
+glib = run_command(python3, '-c', 'from gi.repository import GLib', check: false)
 
-if gi.returncode() == 0
+if glib.returncode() == 0
     bridge_tests += 'migration'
 else
     message('PyGObject not found, skipping the labwc bridge migration tests')

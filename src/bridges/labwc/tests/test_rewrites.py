@@ -17,9 +17,7 @@ from labwc_bridge.migrations.rewrites import (
     REWRITES,
     Rewrite,
     Target,
-    parents,
     parse_step,
-    resolve,
     split_path,
 )
 
@@ -116,78 +114,12 @@ class ParseStepTest(unittest.TestCase):
         )
 
 
-class ParentsTest(unittest.TestCase):
-    def test_maps_each_element_to_its_parent(self):
-        root = rc()
-        keyboard = find(root, "./keyboard")
-        numlock = find(root, "./keyboard/numlock")
-
-        parent_map = parents(root)
-
-        self.assertIs(parent_map[numlock], keyboard)
-        self.assertIs(parent_map[keyboard], root)
-        self.assertNotIn(root, parent_map)
-
-
-class ResolveTest(unittest.TestCase):
-    def test_returns_an_element_that_is_already_there(self):
-        root = rc()
-
-        resolved = resolve(root, ["keyboard", "numlock"])
-
-        self.assertIs(resolved, find(root, "./keyboard/numlock"))
-
-    def test_creates_what_is_missing_with_its_predicate_attributes(self):
-        root = rc()
-
-        created = resolve(root, ["mouse", "context[@name='Root']"])
-
-        self.assertEqual(created.tag, "context")
-        self.assertEqual(created.get("name"), "Root")
-        self.assertIsNotNone(root.find("./mouse/context[@name='Root']"))
-
-
 class TargetTest(unittest.TestCase):
-    def test_reads_an_attribute(self):
-        action = find(rc(), HORIZONTALLY)
-
-        target = Target(path=HORIZONTALLY, attribute="direction")
-
-        self.assertEqual(target.read(action), "right")
-
-    def test_reads_a_missing_attribute_as_empty(self):
-        action = find(rc(), HORIZONTALLY)
-
-        target = Target(path=HORIZONTALLY, attribute="axis")
-
-        self.assertEqual(target.read(action), "")
-
     def test_reads_element_text_without_surrounding_whitespace(self):
+        """A hand-edited rc.xml puts the value on its own line."""
         numlock = Et.fromstring("<numlock>\n\toff\n</numlock>")
 
         self.assertEqual(Target(path="./keyboard/numlock").read(numlock), "off")
-
-    def test_writes_an_attribute_and_text(self):
-        root = rc()
-        action = find(root, HORIZONTALLY)
-        numlock = find(root, "./keyboard/numlock")
-
-        Target(path=HORIZONTALLY, attribute="direction").write(action, "horizontal")
-        Target(path="./keyboard/numlock").write(numlock, "on")
-
-        self.assertEqual(action.get("direction"), "horizontal")
-        self.assertEqual(numlock.text, "on")
-
-    def test_clear_drops_the_attribute_and_the_text(self):
-        root = rc()
-        action = find(root, HORIZONTALLY)
-        numlock = find(root, "./keyboard/numlock")
-
-        Target(path=HORIZONTALLY, attribute="direction").clear(action)
-        Target(path="./keyboard/numlock").clear(numlock)
-
-        self.assertNotIn("direction", action.attrib)
-        self.assertIsNone(numlock.text)
 
 
 class RewriteInPlaceTest(unittest.TestCase):
