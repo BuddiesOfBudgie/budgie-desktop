@@ -67,7 +67,7 @@ class Bridge:
             self.settings, self.layout, locale1, self.config
         )
         self.keyboard_layout = KeyboardLayoutClient(
-            self.layout, self.environment, self.config
+            self.layout, self.environment, locale1, self.config
         )
         self.keybinds = Keybinds(self.config, self.settings, templates, labwc_version)
         self.peripherals = Peripherals(self.config, self.settings)

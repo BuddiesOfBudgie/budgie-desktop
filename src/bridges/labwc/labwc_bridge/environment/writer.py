@@ -81,8 +81,13 @@ class EnvironmentWriter:
 
         return locale_vars
 
-    def write(self) -> None:
-        """Write environment file with keyboard layout, XKB options, cursor, and locale settings"""
+    def write(self) -> bool:
+        """
+        Write environment file with keyboard layout, XKB options, cursor, and locale settings
+
+        Returns:
+            True when the file changed, so the caller knows whether to reload labwc.
+        """
         path = paths.user_config("environment")
 
         # Read existing variables to preserve user customizations
@@ -182,28 +187,39 @@ class EnvironmentWriter:
             for key in sorted(other_vars.keys()):
                 lines.append(f"{key}={other_vars[key]}\n")
 
+        content = "".join(lines)
+
+        try:
+            with open(path) as file:
+                unchanged = file.read() == content
+        except OSError:
+            unchanged = False
+
+        # An identical rewrite fires the file monitor and reloads labwc for nothing
+        if unchanged:
+            return False
+
         with open(path, "w") as file:
-            file.writelines(lines)
+            file.write(content)
 
         log.info(f"Updated environment file: {path}")
+        return True
 
     def interface_changed(self, settings: Gio.Settings, key: str) -> None:
         """Rewrites the environment file when the cursor theme or size changes."""
         if key not in CURSOR_KEYS:
             return
 
-        self.write()
-
-        self.config.reload()
+        if self.write():
+            self.config.reload()
 
     def input_sources_changed(self, settings: Gio.Settings, key: str) -> None:
         """Rewrites the environment file when the layouts or XKB options change."""
         if key not in ["sources", "xkb-options"]:
             return
 
-        self.write()
-
-        self.config.reload()
+        if self.write():
+            self.config.reload()
 
     def _locale1_changed(self, interface, changed, invalidated) -> None:
         """
@@ -220,8 +236,5 @@ class EnvironmentWriter:
         if invalidated:
             log.info(f"Invalidated properties: {list(invalidated)}")
 
-        # Update environment file with new locale/keyboard settings
-        self.write()
-
-        # Reload labwc config if not delayed
-        self.config.reload()
+        if self.write():
+            self.config.reload()

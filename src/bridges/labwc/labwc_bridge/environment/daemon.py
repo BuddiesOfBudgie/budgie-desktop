@@ -16,6 +16,7 @@ from gi.repository import Gio, GLib
 from .. import paths
 from ..config import KeyValueConfig, LabwcConfig
 from .layout import LayoutResolver
+from .locale1 import Locale1
 from .writer import EnvironmentWriter
 
 log = logging.getLogger(__name__)
@@ -37,10 +38,12 @@ class KeyboardLayoutClient:
         self,
         layout: LayoutResolver,
         environment: EnvironmentWriter,
+        locale1: Locale1,
         config: LabwcConfig,
     ) -> None:
         self.layout = layout
         self.environment = environment
+        self.locale1 = locale1
         self.config = config
 
         # watches the environment file so CurrentLayout follows what was written,
@@ -127,6 +130,8 @@ class KeyboardLayoutClient:
         self.environment.write()
 
         self.config.reload()
+
+        self.locale1.set_x11_keyboard(layout)
 
     def _environment_file_changed(self, monitor, gfile, other_file, event) -> None:
         """Republishes CurrentLayout once a rewrite of the environment file has finished."""
