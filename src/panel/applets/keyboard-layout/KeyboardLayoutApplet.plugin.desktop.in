@@ -1,9 +1,9 @@
 [Plugin]
-Module=tasklistapplet.so
+Module=keyboardlayoutapplet.so
 Builtin=true
-Name=Task List
-_Description=An application task list with icons and labels.
+Name=Keyboard Layout
+Description=Indicates which keyboard layout is currently in use.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=task-list
+Icon=input-keyboard

@@ -4,10 +4,14 @@ gnome = import('gnome')
 
 applet_clock_dir = applets_dir + '.clock'
 
-custom_target('plugin-file-clock',
-    input : 'ClockApplet.plugin.in',
+budgie_pot_templates += files('ClockApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'ClockApplet.plugin.desktop.in',
     output : 'ClockApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_clock_dir)
 
@@ -34,7 +38,7 @@ applet_clock_sources = [
 ]
 
 
-shared_library(
+budgie_pot_targets += shared_library(
     'clockapplet',
     applet_clock_sources,
     dependencies: [

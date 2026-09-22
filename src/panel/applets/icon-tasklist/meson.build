@@ -2,10 +2,14 @@
 
 applet_icontasklist_dir = applets_dir + '.icon-tasklist'
 
-custom_target('plugin-file-icontasklist',
-    input : 'IconTasklistApplet.plugin.in',
+budgie_pot_templates += files('IconTasklistApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'IconTasklistApplet.plugin.desktop.in',
     output : 'IconTasklistApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_icontasklist_dir)
 
@@ -48,7 +52,7 @@ applet_icontasklist_deps = [
     meson.get_compiler('c').find_library('m', required: false)
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'icontasklistapplet',
     applet_icontasklist_sources,
     dependencies: applet_icontasklist_deps,

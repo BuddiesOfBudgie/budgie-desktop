@@ -2,10 +2,14 @@
 
 applet_separator_dir = applets_dir + '.separator'
 
-custom_target('plugin-file-separator',
-    input : 'SeparatorApplet.plugin.in',
+budgie_pot_templates += files('SeparatorApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'SeparatorApplet.plugin.desktop.in',
     output : 'SeparatorApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_separator_dir)
 
@@ -20,7 +24,7 @@ applet_separator_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'separatorapplet',
     applet_separator_sources,
     dependencies: applet_separator_deps,

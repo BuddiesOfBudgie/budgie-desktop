@@ -17,7 +17,7 @@ rundialog_deps = [
     link_libbudgiewayland,
 ]
 
-executable(
+budgie_pot_targets += executable(
     'budgie-run-dialog', rundialog_sources,
     dependencies: rundialog_deps,
     vala_args: [

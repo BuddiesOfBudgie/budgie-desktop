@@ -1,9 +1,9 @@
 [Plugin]
-Module=libplacesindicator.so
+Module=tasklistapplet.so
 Builtin=true
-Name=Places
-_Description=Show drives and favorite folders.
+Name=Task List
+Description=An application task list with icons and labels.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=folder
+Icon=task-list

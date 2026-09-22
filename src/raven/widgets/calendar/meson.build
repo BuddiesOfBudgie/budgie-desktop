@@ -1,9 +1,13 @@
 raven_plugin_calendar_dir = raven_plugin_dir + '.Calendar'
 
-custom_target('raven-plugin-calendar-file',
-    input : 'Calendar.plugin.in',
+budgie_pot_templates += files('Calendar.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'Calendar.plugin.desktop.in',
     output : 'Calendar.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : raven_plugin_calendar_dir)
 
@@ -29,7 +33,7 @@ raven_plugin_calendar_deps = [
     link_libravenplugin
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.Calendar',
     raven_plugin_calendar_sources,
     dependencies: raven_plugin_calendar_deps,

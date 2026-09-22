@@ -2,10 +2,14 @@
 
 applet_lockkeys_dir = applets_dir + '.lock-keys'
 
-custom_target('plugin-file-lockkeys',
-    input : 'LockKeysApplet.plugin.in',
+budgie_pot_templates += files('LockKeysApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'LockKeysApplet.plugin.desktop.in',
     output : 'LockKeysApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_lockkeys_dir)
 
@@ -20,7 +24,7 @@ applet_lockkeys_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'lockkeysapplet',
     applet_lockkeys_sources,
     dependencies: applet_lockkeys_deps,

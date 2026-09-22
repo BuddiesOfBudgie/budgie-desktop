@@ -1,9 +1,9 @@
 [Plugin]
-Module=caffeineapplet.so
+Module=notificationsapplet.so
 Builtin=true
-Name=Caffeine
-_Description=Prevent the system and screen from sleeping.
+Name=Notifications
+Description=Open the Raven notifications view.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=my-caffeine-on
+Icon=notifications-applet

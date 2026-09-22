@@ -38,3 +38,5 @@ link_libwindowing = declare_dependency(
 
 # Expose the current directory so that we can use vapidir
 dir_libwindowing = meson.current_build_dir()
+
+budgie_pot_targets += libwindowing

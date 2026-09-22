@@ -21,6 +21,7 @@ add_global_arguments(am_cflags, language: 'c')
 meson.add_install_script('scripts/mesonPostInstall.sh')
 
 fs = import('fs')
+i18n = import('i18n')
 
 # Budgie needs a minimum GNOME 40 stack with GTK 3.24+
 gnome_minimum_version = '>= 40.0'
@@ -110,12 +111,6 @@ cdata.set_quoted('DATADIR', datadir)
 cdata.set_quoted('SYSCONFDIR', confdir)
 cdata.set_quoted('LOCALEDIR', localedir)
 cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
-
-# Handle i18n on the .desktop file
-# Originally stolem from TingPing:
-# https://github.com/vinszent/gnome-twitch/blob/master/data/meson.build
-# Later changed to use intltool as we use _Key style files
-intltool = find_program('intltool-merge')
 
 # Make sure this is accessible to panel applet builds
 plugin_libdir = join_paths(libdir, meson.project_name(), 'plugins')
@@ -221,11 +216,23 @@ gvc = subproject('gvc',
     ],
 )
 
-# Prep translations prior to build
-subdir('po')
+# src/ appends to these, po/ reads them, so subdir('po') must follow subdir('src')
+budgie_pot_targets = []
+budgie_pot_templates = []
+
+budgie_pot_ui = files(
+    run_command(
+        find_program('po/listUiFiles.py'),
+        meson.project_source_root(),
+        check: true,
+    ).stdout().strip().split('\n'),
+)
 
 # Now build Budgie proper
 subdir('src')
+
+# Prep translations, using what src/ collected
+subdir('po')
 
 # Take care of documentation
 with_gtk_doc = get_option('with-gtk-doc')

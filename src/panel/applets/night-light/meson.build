@@ -2,10 +2,14 @@
 
 applet_nightlight_dir = applets_dir + '.night-light'
 
-custom_target('plugin-file-nightlight',
-    input : 'NightLight.plugin.in',
+budgie_pot_templates += files('NightLight.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'NightLight.plugin.desktop.in',
     output : 'NightLight.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_nightlight_dir)
 
@@ -40,7 +44,7 @@ applet_nightlight_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'nightlightapplet',
     applet_nightlight_sources,
     dependencies: applet_nightlight_deps,

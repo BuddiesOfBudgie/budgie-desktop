@@ -1,9 +1,9 @@
 [Plugin]
-Module=separatorapplet.so
+Module=trayapplet.so
 Builtin=true
-Name=Separator
-_Description=Visual separator between applets.
+Name=System Tray
+Description=System tray implementing the Freedesktop Status Notifier specification.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=separator
+Icon=system-tray

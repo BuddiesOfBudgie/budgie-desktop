@@ -50,7 +50,7 @@ namespace Budgie {
 			pack_start(main_stack, true, true, 0);
 
 			scroll = new Gtk.ScrolledWindow(null, null);
-			main_stack.add_titled(scroll, "widgets", _("Widgets"));
+			main_stack.add_titled(scroll, "widgets", C_("Raven", "Widgets"));
 			/* Dummy - no notifications right now */
 			var not = new NotificationsView();
 			main_stack.add_titled(not, "notifications", _("Notifications"));

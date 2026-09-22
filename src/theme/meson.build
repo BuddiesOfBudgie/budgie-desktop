@@ -130,3 +130,5 @@ link_libtheme = declare_dependency(
 
 # Expose the current directory so that we can use vapidir
 dir_libtheme = meson.current_source_dir()
+
+budgie_pot_targets += lib_theme

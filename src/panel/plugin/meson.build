@@ -27,3 +27,5 @@ link_libpanelpluginmanager = declare_dependency(
   link_with: libpanelpluginmanager,
   include_directories: include_directories('.')
 )
+
+budgie_pot_targets += libpanelpluginmanager

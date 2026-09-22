@@ -44,7 +44,7 @@ namespace Budgie {
 			swbox.pack_start(switcher, true, true, 0);
 			pack_start(stack, true, true, 0);
 
-			stack.add_titled(new Budgie.RavenWidgetsPage(manager), "widgets", _("Widgets"));
+			stack.add_titled(new Budgie.RavenWidgetsPage(manager), "widgets", C_("Raven", "Widgets"));
 			stack.add_titled(new Budgie.RavenSettingsPage(), "settings", _("Settings"));
 
 			show_all();

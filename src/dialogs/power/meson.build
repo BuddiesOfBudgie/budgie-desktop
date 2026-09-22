@@ -15,7 +15,7 @@ powerdialog_deps = [
     link_libtheme
 ]
 
-executable(
+budgie_pot_targets += executable(
     'budgie-power-dialog',
     powerdialog_sources,
     dependencies: powerdialog_deps,

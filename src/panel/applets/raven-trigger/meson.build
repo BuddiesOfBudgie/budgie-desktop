@@ -2,10 +2,14 @@
 
 applet_raventrigger_dir = applets_dir + '.raven-trigger'
 
-custom_target('plugin-file-raventrigger',
-    input : 'RavenTriggerApplet.plugin.in',
+budgie_pot_templates += files('RavenTriggerApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'RavenTriggerApplet.plugin.desktop.in',
     output : 'RavenTriggerApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_raventrigger_dir)
 
@@ -20,7 +24,7 @@ applet_raventrigger_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'raventriggerapplet',
     applet_raventrigger_sources,
     dependencies: applet_raventrigger_deps,

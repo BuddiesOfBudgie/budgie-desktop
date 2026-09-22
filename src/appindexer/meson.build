@@ -35,3 +35,5 @@ link_libappindexer = declare_dependency(
 
 # Expose the current directory so that we can use vapidir
 dir_libappindexer = meson.current_source_dir()
+
+budgie_pot_targets += libappindexer

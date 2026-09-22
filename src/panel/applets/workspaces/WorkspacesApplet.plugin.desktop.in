@@ -1,9 +1,9 @@
 [Plugin]
-Module=libuserindicator.so
+Module=workspacesapplet.so
 Builtin=true
-Name=User Indicator
-_Description=Opens the power dialog.
+Name=Workspace Switcher
+Description=Display workspaces and switch between them.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=system-shutdown
+Icon=workspace-switcher

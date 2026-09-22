@@ -1,9 +1,9 @@
 [Plugin]
-Module=icontasklistapplet.so
+Module=caffeineapplet.so
 Builtin=true
-Name=Icon Task List
-_Description=A configurable application task list.
+Name=Caffeine
+Description=Prevent the system and screen from sleeping.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=icon-task-list
+Icon=my-caffeine-on

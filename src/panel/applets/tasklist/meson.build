@@ -2,10 +2,14 @@
 
 applet_tasklist_dir = applets_dir + '.tasklist'
 
-custom_target('plugin-file-tasklist',
-    input : 'TasklistApplet.plugin.in',
+budgie_pot_templates += files('TasklistApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'TasklistApplet.plugin.desktop.in',
     output : 'TasklistApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_tasklist_dir)
 
@@ -42,7 +46,7 @@ lib_applet_tasklist_resources = static_library(
     c_args: ['-Wno-overlength-strings'], # gresource generates overlength strings...
 )
 
-shared_library(
+budgie_pot_targets += shared_library(
     'tasklistapplet',
     applet_tasklist_sources,
     dependencies: applet_tasklist_deps,

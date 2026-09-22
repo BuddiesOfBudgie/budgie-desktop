@@ -1,9 +1,13 @@
 applet_tray_dir = applets_dir + '.tray'
 
-custom_target('plugin-file-tray',
-    input : 'TrayApplet.plugin.in',
+budgie_pot_templates += files('TrayApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'TrayApplet.plugin.desktop.in',
     output : 'TrayApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_tray_dir)
 
@@ -32,7 +36,7 @@ applet_tray_deps = [
     meson.get_compiler('c').find_library('m', required: false)
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'trayapplet',
     applet_tray_sources,
     dependencies: applet_tray_deps,

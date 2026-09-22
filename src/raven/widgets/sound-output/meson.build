@@ -1,9 +1,13 @@
 raven_plugin_sound_output_dir = raven_plugin_dir + '.SoundOutput'
 
-custom_target('raven-plugin-sound-output-file',
-    input : 'SoundOutput.plugin.in',
+budgie_pot_templates += files('SoundOutput.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'SoundOutput.plugin.desktop.in',
     output : 'SoundOutput.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : raven_plugin_sound_output_dir)
 
@@ -35,7 +39,7 @@ raven_plugin_sound_output_deps = [
 
 top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
-shared_library(
+budgie_pot_targets += shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.SoundOutput',
     raven_plugin_sound_output_sources,
     dependencies: raven_plugin_sound_output_deps,

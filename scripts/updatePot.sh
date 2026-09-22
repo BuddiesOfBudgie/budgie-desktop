@@ -1,39 +1,32 @@
 #!/bin/bash
+#
+# Regenerate po/budgie-desktop.pot, then push it to Transifex.
+#
+# Extraction itself is meson's: po/meson.build reads the sources off the build
+# targets and holds the xgettext keywords. Needs meson >= 1.8.0.
 
-function do_gettext()
-{
-    xgettext --package-name=budgie-desktop --package-version=10.10.2 $* --default-domain=budgie-desktop --join-existing --from-code=UTF-8 --no-wrap
-}
+set -e
 
-function do_intltool()
-{
-    intltool-extract --type=$1 $2
-}
+srcroot="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$srcroot"
 
-rm budgie-desktop.po -f
-touch budgie-desktop.po
+builddir="${1:-build}"
 
-for file in `find src -not -path '*/gvc/*' -name "*.c" -or -name "*.vala"`; do
-    if [[ `grep -F "_(\"" $file` ]]; then
-        do_gettext $file --add-comments
-    fi
-done
+if [[ ! -d "$builddir" ]]; then
+    echo "no meson build directory at '$builddir'" >&2
+    echo "run: meson setup $builddir --prefix=/usr --sysconfdir=/etc" >&2
+    exit 1
+fi
 
-for file in `find src -name "*.ui"`; do
-    if [[ `grep -F "translatable=\"yes\"" $file` ]]; then
-        do_intltool gettext/glade $file
-        do_gettext ${file}.h --add-comments --keyword=N_:1
-        rm $file.h
-    fi
-done
+ninja -C "$builddir" po/budgie-desktop.pot
+cp "$builddir/po/budgie-desktop.pot" po/budgie-desktop.pot
 
-for file in `find src -name "*.in"`; do
-    if [[ `grep -E "^_*" $file` ]]; then
-        do_intltool gettext/keys $file
-        do_gettext ${file}.h --add-comments --keyword=N_:1
-        rm $file.h
-    fi
-done
+# xgettext writes the references relative to the build directory, so without
+# this the pot depends on where that is
+sed -i -E \
+    -e "\|^#:| s|[^ ]*$srcroot/||g" \
+    -e "\|^#:| s|(\.\./)+||g" \
+    -e "\|^#: | { :a; s|(:[0-9]+) ([^ ]+:[0-9]+)|\1\n#: \2|; ta }" \
+    po/budgie-desktop.pot
 
-mv budgie-desktop.po po/budgie-desktop.pot
-tx push -s
+#tx push -s
