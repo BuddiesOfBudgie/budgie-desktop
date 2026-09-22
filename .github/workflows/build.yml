@@ -63,3 +63,5 @@ jobs:
         run: |
           meson build -Dci=true -Dwith-runtime-dependencies=true
           meson compile -C build
+      - name: Run unit tests
+        run: meson test -C build --print-errorlogs
