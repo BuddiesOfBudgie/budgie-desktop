@@ -233,8 +233,10 @@ class LayoutResolver:
         4. GSettings default (if nothing else found)
         5. Empty otherwise
 
-        Then normalize (remove duplicate families) and inject grp:alt_shift_toggle
-        if multiple layouts and no grp: option exists.
+        Then normalize, removing duplicate families.
+
+        A grp: option is not added here. It would let xkb move the active group
+        without telling us, and the layout order we write assumes group 0.
         """
         options_set = set()
         gsettings_default = set()
@@ -288,18 +290,6 @@ class LayoutResolver:
 
         # Normalize: remove duplicate option families (keep only first of each family)
         options_set = _normalize_xkb_options(options_set)
-
-        # Get current keyboard layout to check if multiple layouts
-        current_layout = self.keyboard_layout()
-        has_multiple_layouts = "," in current_layout
-
-        # Check if any grp: option exists
-        has_grp_option = any(opt.startswith("grp:") for opt in options_set)
-
-        # Inject default grp:alt_shift_toggle if multiple layouts and no grp: option
-        if has_multiple_layouts and not has_grp_option:
-            options_set.add("grp:alt_shift_toggle")
-            log.info("Injected grp:alt_shift_toggle for multiple layouts")
 
         result = ",".join(sorted(options_set))
         log.info(f"Final XKB options: {result}")

@@ -26,6 +26,8 @@ log = logging.getLogger(__name__)
 KEYBOARD_LAYOUT_DBUS_INTERFACE = "org.buddiesofbudgie.KeyboardLayout"
 KEYBOARD_LAYOUT_DBUS_OBJECT_PATH = "/org/buddiesofbudgie/KeyboardLayout"
 KEYBOARD_LAYOUT_DBUS_SIGNAL = "LayoutChanged"
+KEYBOARD_LAYOUT_DBUS_NEXT_SIGNAL = "SwitchLayoutNextRequested"
+KEYBOARD_LAYOUT_DBUS_PREVIOUS_SIGNAL = "SwitchLayoutPreviousRequested"
 KEYBOARD_LAYOUT_DBUS_PROPERTY = "CurrentLayout"
 
 DBUS_PROPERTIES_INTERFACE = "org.freedesktop.DBus.Properties"
@@ -63,6 +65,18 @@ class KeyboardLayoutClient:
             session_bus.add_signal_receiver(
                 self._layout_changed,
                 signal_name=KEYBOARD_LAYOUT_DBUS_SIGNAL,
+                dbus_interface=KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                path=KEYBOARD_LAYOUT_DBUS_OBJECT_PATH,
+            )
+            session_bus.add_signal_receiver(
+                self._switch_layout_next,
+                signal_name=KEYBOARD_LAYOUT_DBUS_NEXT_SIGNAL,
+                dbus_interface=KEYBOARD_LAYOUT_DBUS_INTERFACE,
+                path=KEYBOARD_LAYOUT_DBUS_OBJECT_PATH,
+            )
+            session_bus.add_signal_receiver(
+                self._switch_layout_previous,
+                signal_name=KEYBOARD_LAYOUT_DBUS_PREVIOUS_SIGNAL,
                 dbus_interface=KEYBOARD_LAYOUT_DBUS_INTERFACE,
                 path=KEYBOARD_LAYOUT_DBUS_OBJECT_PATH,
             )
@@ -132,6 +146,27 @@ class KeyboardLayoutClient:
         self.config.reload()
 
         self.locale1.set_x11_keyboard(layout)
+
+    def _switch_layout_next(self) -> None:
+        """Handler for budgie-daemon's SwitchLayoutNextRequested signal."""
+        self._rotate_layouts(1)
+
+    def _switch_layout_previous(self) -> None:
+        """Handler for budgie-daemon's SwitchLayoutPreviousRequested signal."""
+        self._rotate_layouts(-1)
+
+    def _rotate_layouts(self, at: int) -> None:
+        """
+        Applies the layout `at` places along. The layout in use is always the
+        first entry, so moving through them is a rotation.
+        """
+        layouts = self.layout.keyboard_layout().split(",")
+
+        if len(layouts) < 2:
+            log.info("Only one keyboard layout configured, nothing to switch to")
+            return
+
+        self._layout_changed(",".join(layouts[at:] + layouts[:at]))
 
     def _environment_file_changed(self, monitor, gfile, other_file, event) -> None:
         """Republishes CurrentLayout once a rewrite of the environment file has finished."""

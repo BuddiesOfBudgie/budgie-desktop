@@ -233,8 +233,12 @@
 	<keybind bridge="wm.keybindings/panel-run-dialog">
 		<action name="Execute" command="budgie-run-dialog" />
 	</keybind>
-	<keybind bridge="wm.keybindings/switch-input-source" />
-	<keybind bridge="wm.keybindings/switch-input-source-backward" />
+	<keybind bridge="wm.keybindings/switch-input-source">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.KeyboardLayout /org/buddiesofbudgie/KeyboardLayout org.buddiesofbudgie.KeyboardLayout.SwitchLayoutNext" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-input-source-backward">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.KeyboardLayout /org/buddiesofbudgie/KeyboardLayout org.buddiesofbudgie.KeyboardLayout.SwitchLayoutPrevious" />
+	</keybind>
 	<keybind bridge="wm.keybindings/close">
 		<action name="Close" />
 	</keybind>

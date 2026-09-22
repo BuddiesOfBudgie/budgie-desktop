@@ -226,6 +226,10 @@ class EnvironmentWriter:
         Handler for PropertiesChanged signals from locale1.
         Signature (s, a{sv}, as) -> interface name, changed dict, invalidated list
         """
+        if self.locale1.recently_set:
+            log.debug("Ignoring the locale1 PropertiesChanged for our own write")
+            return
+
         log.info(f"locale1 PropertiesChanged received for interface: {interface}")
 
         if changed:

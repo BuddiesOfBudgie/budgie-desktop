@@ -13,8 +13,12 @@ import logging
 from collections.abc import Callable
 
 import dbus
+from gi.repository import GLib
 
 log = logging.getLogger(__name__)
+
+# A PropertiesChanged arriving within this many seconds of our own write is the echo of it
+SELF_CHANGE_WINDOW = 2
 
 
 def _split_keyboard_layout(combined: str) -> tuple[str, str]:
@@ -53,6 +57,26 @@ class Locale1:
         except Exception as e:
             log.warning(f"Could not setup locale1 monitoring: {e}")
             self.bus = None
+
+        self._self_change_timeout = None
+
+    @property
+    def recently_set(self) -> bool:
+        """True while a PropertiesChanged signal is still expected from our own write."""
+        return self._self_change_timeout is not None
+
+    def _mark_recently_set(self) -> None:
+        if self._self_change_timeout is not None:
+            GLib.source_remove(self._self_change_timeout)
+
+        self._self_change_timeout = GLib.timeout_add_seconds(
+            SELF_CHANGE_WINDOW, self._clear_recently_set
+        )
+
+    def _clear_recently_set(self) -> bool:
+        self._self_change_timeout = None
+
+        return GLib.SOURCE_REMOVE
 
     def properties(self) -> dict:
         """
@@ -123,6 +147,8 @@ class Locale1:
         except dbus.DBusException as e:
             log.debug(f"locale1 refused SetX11Keyboard: {e}")
             return False
+
+        self._mark_recently_set()
 
         log.info(f"Set locale1 X11Layout to {layout}")
         return True
