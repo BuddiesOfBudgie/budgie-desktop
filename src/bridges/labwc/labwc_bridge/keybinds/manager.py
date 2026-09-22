@@ -75,6 +75,14 @@ def _set_attrib(element: Et.Element, name: str, value: str) -> bool:
     return True
 
 
+def _set_attribs(element: Et.Element, attribs: dict[str, str]) -> bool:
+    """Sets each attribute; True when any value changed."""
+    changed = False
+    for name, value in attribs.items():
+        changed |= _set_attrib(element, name, value)
+    return changed
+
+
 def _set_action(keybind: Et.Element, attribs: dict[str, str]) -> bool:
     """Makes the keybind's action carry exactly `attribs`, creating it if needed; True when anything changed."""
     action = keybind.find("action")
@@ -233,11 +241,12 @@ class Keybinds:
             return False
 
         existing = keyboard.findall(f"./keybind[@bridge='{bridge_id}']")
+        template = self.templates.bridged.get(bridge_id)
         action = self.templates.resolve(bridge_id, self.labwc_version)
         bindings = [binding for binding in (bindings or []) if binding]
 
         # The user cleared the shortcut, or nothing in the template runs here: whatever we wrote before goes
-        if action is None or not bindings:
+        if template is None or action is None or not bindings:
             for keybind in existing:
                 keyboard.remove(keybind)
             if existing:
@@ -259,6 +268,7 @@ class Keybinds:
                 changed = True
 
             changed |= _set_attrib(keybind, "key", calc_keybind(binding))
+            changed |= _set_attribs(keybind, template.attribs)
             changed |= _set_action(keybind, attribs)
 
         # Accelerators removed in gsettings leave surplus keybinds behind
@@ -300,9 +310,9 @@ class Keybinds:
 
         changed = False
 
-        for key, candidates in self.templates.static.items():
+        for key, template in self.templates.static.items():
             # Static templates take their first action as written, selector attributes included
-            desired = dict(candidates[0].attrib) if candidates else None
+            desired = dict(template.actions[0].attrib) if template.actions else None
             managed, unmanaged = self._static_owners(keyboard, key)
 
             # The user got here first. Claim it only if it is byte-for-byte what we
@@ -339,6 +349,7 @@ class Keybinds:
             if desired is None:
                 changed |= _remove_action(managed)
             else:
+                changed |= _set_attribs(managed, template.attribs)
                 changed |= _set_action(managed, desired)
 
         return changed

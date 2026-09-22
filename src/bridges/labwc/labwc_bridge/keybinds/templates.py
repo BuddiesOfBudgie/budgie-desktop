@@ -21,12 +21,23 @@ from .. import paths
 log = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True)
+class Template:
+    """
+    One keybind a keybinds.xml defines: the labwc attributes to write on it, such
+    as onRelease, and the actions to choose between.
+    """
+
+    attribs: dict[str, str]
+    actions: list[Et.Element]
+
+
 @dataclass
 class Templates:
     """The keybind templates a keybinds.xml ships: bridge ids and static shortcuts."""
 
-    bridged: dict[str, list[Et.Element]]
-    static: dict[str, list[Et.Element]]
+    bridged: dict[str, Template]
+    static: dict[str, Template]
 
     @classmethod
     def load(cls) -> Templates:
@@ -61,22 +72,29 @@ class Templates:
 
         # Several actions per keybind are allowed; resolve() later decides
         # which of them this system can run
-        bridge_templates: dict[str, list[Et.Element]] = {}
-        static_templates: dict[str, list[Et.Element]] = {}
+        bridge_templates: dict[str, Template] = {}
+        static_templates: dict[str, Template] = {}
         for keybind in template_et.getroot().findall("./keybind"):
             bridge_key = keybind.attrib.get("bridge")
             actions = [copy.deepcopy(a) for a in keybind.findall("action")]
 
+            # bridge and key say which keybind this is; the rest is labwc's own
+            attribs = {
+                name: value
+                for name, value in keybind.attrib.items()
+                if name not in ("bridge", "key")
+            }
+
             # Keyed by the gsettings key it follows
             if bridge_key:
-                bridge_templates[bridge_key] = actions
+                bridge_templates[bridge_key] = Template(attribs, actions)
                 continue
 
             # Otherwise static, keyed by the shortcut itself
             static_key = keybind.attrib.get("key")
             if not static_key:
                 continue
-            static_templates[static_key] = actions
+            static_templates[static_key] = Template(attribs, actions)
 
         return cls(bridge_templates, static_templates)
 
@@ -88,12 +106,12 @@ class Templates:
         candidates may require a given executable or a minimum labwc version,
         which is how one template serves several distros and labwc releases.
         """
-        candidates = self.bridged.get(bridge_key)
-        if not candidates:
+        template = self.bridged.get(bridge_key)
+        if template is None:
             return None
 
         # Template order is the preference order
-        for candidate in candidates:
+        for candidate in template.actions:
             # An action with no name does nothing in labwc
             if not candidate.attrib.get("name", ""):
                 continue

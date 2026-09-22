@@ -6,6 +6,9 @@
 
 	Any other user keybind is kept as is.
 
+	Attributes beyond bridge and key, such as onRelease, are written
+	through to the keybind in rc.xml.
+
 	Distros can ship their own version as the file keybinds.xml
 -->
 
@@ -209,7 +212,7 @@
 	<keybind bridge="wm.keybindings/cycle-group" />
 	<keybind bridge="wm.keybindings/switch-group-backward" />
 	<keybind bridge="wm.keybindings/switch-group" />
-	<keybind bridge="gnome.mutter/overlay-key">
+	<keybind bridge="gnome.mutter/overlay-key" onRelease="yes">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
 	</keybind>
 	<keybind bridge="solus-project.budgie-wm/clear-notifications">
