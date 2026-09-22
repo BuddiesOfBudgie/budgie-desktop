@@ -31,6 +31,8 @@ KeyboardInputSource* keyboard_locale_manager_get_current_input_source(KeyboardLo
 
 void keyboard_locale_manager_set_current_input_source(KeyboardLocaleManager* self, KeyboardInputSource* source);
 
+void keyboard_locale_manager_set_current_layout(KeyboardLocaleManager* self, const gchar* layout);
+
 GListStore* keyboard_locale_manager_get_model(KeyboardLocaleManager* self);
 
 KeyboardLocale1* keyboard_locale_manager_get_proxy(KeyboardLocaleManager* self);

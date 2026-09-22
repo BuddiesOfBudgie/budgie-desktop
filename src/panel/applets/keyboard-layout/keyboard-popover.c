@@ -22,8 +22,6 @@ struct _KeyboardPopover {
 	GtkWidget* content;
 	GtkWidget* listbox;
 
-	gulong handler_id;
-
 	GListStore* model;
 	KeyboardInputSource* current_source;
 };
@@ -77,16 +75,15 @@ static GtkWidget* keyboard_popover_get_row_from_source(KeyboardPopover* self, Ke
  * Callbacks
  *****************************************************************************/
 
-static void keyboard_popover_row_selected_cb(G_GNUC_UNUSED GtkListBox* list_box, GtkListBoxRow* row, gpointer user_data) {
+static void keyboard_popover_row_activated_cb(G_GNUC_UNUSED GtkListBox* list_box, GtkListBoxRow* row, gpointer user_data) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(user_data);
-	KeyboardInputRow* input_row = KEYBOARD_INPUT_ROW(row);
 	KeyboardInputSource* source = NULL;
 
 	if (row == NULL) {
 		return;
 	}
 
-	source = keyboard_input_row_get_source(input_row);
+	source = keyboard_input_row_get_source(KEYBOARD_INPUT_ROW(row));
 
 	g_signal_emit(self, signals[SIGNAL_LAYOUT_SELECTED], 0, source);
 }
@@ -100,7 +97,8 @@ static void keyboard_popover_constructed(GObject* object) {
 
 	gtk_list_box_bind_model(GTK_LIST_BOX(self->listbox), G_LIST_MODEL(self->model), (GtkListBoxCreateWidgetFunc) keyboard_input_row_new, NULL, NULL);
 
-	self->handler_id = g_signal_connect(self->listbox, "row-selected", G_CALLBACK(keyboard_popover_row_selected_cb), self);
+	/* A click on the already-selected row changes no selection, so GtkListBox emits only row-activated */
+	g_signal_connect(self->listbox, "row-activated", G_CALLBACK(keyboard_popover_row_activated_cb), self);
 
 	gtk_widget_show_all(self->content);
 
@@ -214,7 +212,6 @@ static void keyboard_popover_class_init(KeyboardPopoverClass* klass) {
 static void keyboard_popover_init(KeyboardPopover* self) {
 	self->model = NULL;
 	self->current_source = NULL;
-	self->handler_id = 0;
 
 	gtk_widget_init_template(GTK_WIDGET(self));
 	gtk_widget_set_size_request(GTK_WIDGET(self), 275, -1);
@@ -284,9 +281,7 @@ void keyboard_popover_set_current_source(KeyboardPopover* self, KeyboardInputSou
 		return;
 	}
 
-	g_signal_handler_block(self->listbox, self->handler_id);
 	gtk_list_box_select_row(GTK_LIST_BOX(self->listbox), GTK_LIST_BOX_ROW(row));
-	g_signal_handler_unblock(self->listbox, self->handler_id);
 }
 
 /**

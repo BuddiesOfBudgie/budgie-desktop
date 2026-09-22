@@ -462,6 +462,50 @@ void keyboard_locale_manager_set_current_input_source(KeyboardLocaleManager* sel
 }
 
 /**
+ * keyboard_locale_manager_set_current_layout:
+ * @self: A #KeyboardLocaleManager
+ * @layout: (nullable): An XKB layout code, e.g. "fi"
+ *
+ * Makes the configured source for @layout the current input source.
+ *
+ * Nothing happens when the current source already uses @layout: the code
+ * carries no variant, so it cannot pick between two sources sharing a layout.
+ */
+void keyboard_locale_manager_set_current_layout(KeyboardLocaleManager* self, const gchar* layout) {
+	guint i;
+
+	g_return_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self));
+
+	if (layout == NULL || g_str_equal(layout, "")) {
+		return;
+	}
+
+	if (self->current_input_source != NULL) {
+		g_autofree gchar* current = keyboard_input_source_get_layout(self->current_input_source);
+
+		if (keyboard_locale_manager_str_equal(current, layout)) {
+			return;
+		}
+	}
+
+	for (i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(self->model)); i++) {
+		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(self->model), i);
+		g_autofree gchar* source_layout = NULL;
+
+		if (!KEYBOARD_IS_INPUT_SOURCE(source)) {
+			continue;
+		}
+
+		source_layout = keyboard_input_source_get_layout(source);
+
+		if (keyboard_locale_manager_str_equal(source_layout, layout)) {
+			keyboard_locale_manager_set_current_input_source(self, source);
+			return;
+		}
+	}
+}
+
+/**
  * keyboard_locale_manager_get_model:
  * @self: a #KeyboardLocaleManager
  *

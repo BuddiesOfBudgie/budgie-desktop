@@ -292,10 +292,18 @@ keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamS
 }
 
 static void
-keyboard_applet_current_layout_changed_cb(G_GNUC_UNUSED KeyboardLayout* proxy, G_GNUC_UNUSED GParamSpec* pspec, gpointer user_data) {
+keyboard_applet_current_layout_changed_cb(KeyboardLayout* proxy, G_GNUC_UNUSED GParamSpec* pspec, gpointer user_data) {
 	KeyboardApplet* self = KEYBOARD_APPLET(user_data);
+	KeyboardAppletPrivate* priv;
+	g_autofree gchar* layout = NULL;
 
 	g_return_if_fail(KEYBOARD_IS_APPLET(self));
+
+	priv = keyboard_applet_get_instance_private(self);
+
+	/* The compositor can change the layout on its own, and our request can fail, so the selection follows the bridge */
+	layout = keyboard_layout_dup_current_layout(proxy);
+	keyboard_locale_manager_set_current_layout(priv->locale_manager, layout);
 
 	keyboard_applet_update_label(self);
 }
@@ -470,6 +478,10 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 	} else {
 		g_signal_connect_object(priv->layout_proxy, "notify::current-layout", G_CALLBACK(keyboard_applet_current_layout_changed_cb), self, G_CONNECT_DEFAULT);
 	}
+
+	g_autofree gchar* current_layout = keyboard_applet_get_display_layout(self);
+
+	keyboard_locale_manager_set_current_layout(priv->locale_manager, current_layout);
 
 	keyboard_applet_update_label(self);
 
