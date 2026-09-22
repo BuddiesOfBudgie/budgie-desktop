@@ -23,7 +23,7 @@ from .handlers.peripherals import Peripherals
 from .handlers.window_manager import WindowManager
 from .keybinds.manager import Keybinds
 from .keybinds.templates import Templates
-from .migration import RcXmlMigration
+from .migrations.migration import RcXmlMigration
 from .settings import Settings
 
 log = logging.getLogger(__name__)
