@@ -22,16 +22,14 @@ struct _KeyboardPopover {
 	GtkWidget* content;
 	GtkWidget* listbox;
 
-	GListStore* model;
-	KeyboardInputSource* current_source;
+	/* Set while we move the selection ourselves, so row-selected can tell that
+	 * apart from the user picking a row */
+	gboolean syncing_selection;
+
+	/* The row and event time of the last emit, compared only, never dereferenced */
+	GtkListBoxRow* emitted_row;
+	guint32 emitted_time;
 };
-
-typedef enum {
-	PROP_MODEL = 1,
-	PROP_CURRENT_SOURCE,
-} KeyboardPopoverProps;
-
-static GParamSpec* properties[PROP_CURRENT_SOURCE + 1] = {NULL};
 
 enum {
 	SIGNAL_LAYOUT_SELECTED,
@@ -71,90 +69,45 @@ static GtkWidget* keyboard_popover_get_row_from_source(KeyboardPopover* self, Ke
 	return child;
 }
 
+static void keyboard_popover_emit_layout_selected(KeyboardPopover* self, GtkListBoxRow* row) {
+	self->emitted_row = row;
+	self->emitted_time = gtk_get_current_event_time();
+
+	g_signal_emit(self, signals[SIGNAL_LAYOUT_SELECTED], 0, keyboard_input_row_get_source(KEYBOARD_INPUT_ROW(row)));
+}
+
 /******************************************************************************
  * Callbacks
  *****************************************************************************/
 
-static void keyboard_popover_row_activated_cb(G_GNUC_UNUSED GtkListBox* list_box, GtkListBoxRow* row, gpointer user_data) {
+static void keyboard_popover_row_selected_cb(G_GNUC_UNUSED GtkListBox* list_box, GtkListBoxRow* row, gpointer user_data) {
 	KeyboardPopover* self = KEYBOARD_POPOVER(user_data);
-	KeyboardInputSource* source = NULL;
 
-	if (row == NULL) {
+	if (self->syncing_selection || row == NULL) {
 		return;
 	}
 
-	source = keyboard_input_row_get_source(KEYBOARD_INPUT_ROW(row));
+	keyboard_popover_emit_layout_selected(self, row);
+}
 
-	g_signal_emit(self, signals[SIGNAL_LAYOUT_SELECTED], 0, source);
+static void keyboard_popover_row_activated_cb(G_GNUC_UNUSED GtkListBox* list_box, GtkListBoxRow* row, gpointer user_data) {
+	KeyboardPopover* self = KEYBOARD_POPOVER(user_data);
+
+	/* A click or Return on an unselected row emits row-selected and then
+	 * row-activated for the same event */
+	if (row == NULL || (row == self->emitted_row && gtk_get_current_event_time() == self->emitted_time)) {
+		return;
+	}
+
+	keyboard_popover_emit_layout_selected(self, row);
 }
 
 /******************************************************************************
  * GObject
  *****************************************************************************/
 
-static void keyboard_popover_constructed(GObject* object) {
-	KeyboardPopover* self = KEYBOARD_POPOVER(object);
-
-	gtk_list_box_bind_model(GTK_LIST_BOX(self->listbox), G_LIST_MODEL(self->model), (GtkListBoxCreateWidgetFunc) keyboard_input_row_new, NULL, NULL);
-
-	/* A click on the already-selected row changes no selection, so GtkListBox emits only row-activated */
-	g_signal_connect(self->listbox, "row-activated", G_CALLBACK(keyboard_popover_row_activated_cb), self);
-
-	gtk_widget_show_all(self->content);
-
-	G_OBJECT_CLASS(keyboard_popover_parent_class)->constructed(object);
-}
-
-static void
-keyboard_popover_dispose(GObject* object) {
-	KeyboardPopover* self = KEYBOARD_POPOVER(object);
-
-	g_clear_object(&self->current_source);
-	g_clear_object(&self->model);
-
-	G_OBJECT_CLASS(keyboard_popover_parent_class)->dispose(object);
-}
-
-static void keyboard_popover_get_property(GObject* object, guint property_id, GValue* value, GParamSpec* spec) {
-	KeyboardPopover* self = KEYBOARD_POPOVER(object);
-
-	switch ((KeyboardPopoverProps) property_id) {
-		case PROP_MODEL:
-			g_value_set_object(value, keyboard_popover_get_model(self));
-			break;
-		case PROP_CURRENT_SOURCE:
-			g_value_set_object(value, keyboard_popover_get_current_source(self));
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
-			break;
-	}
-}
-
-static void keyboard_popover_set_property(GObject* object, guint property_id, const GValue* value, GParamSpec* spec) {
-	KeyboardPopover* self = KEYBOARD_POPOVER(object);
-
-	switch ((KeyboardPopoverProps) property_id) {
-		case PROP_MODEL:
-			keyboard_popover_set_model(self, g_value_get_object(value));
-			break;
-		case PROP_CURRENT_SOURCE:
-			keyboard_popover_set_current_source(self, g_value_get_object(value));
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, spec);
-			break;
-	}
-}
-
 static void keyboard_popover_class_init(KeyboardPopoverClass* klass) {
-	GObjectClass* object_class = G_OBJECT_CLASS(klass);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS(klass);
-
-	object_class->constructed = keyboard_popover_constructed;
-	object_class->dispose = keyboard_popover_dispose;
-	object_class->get_property = keyboard_popover_get_property;
-	object_class->set_property = keyboard_popover_set_property;
 
 	g_type_ensure(KEYBOARD_TYPE_HEADER);
 
@@ -178,43 +131,22 @@ static void keyboard_popover_class_init(KeyboardPopoverClass* klass) {
 		G_TYPE_NONE,
 		1,
 		KEYBOARD_TYPE_INPUT_SOURCE);
-
-	/**
-	 * KeyboardPopover:model:
-	 *
-	 * The model of configured input sources.
-	 *
-	 * This model will be used by the internal list box to display
-	 * the configured input sources.
-	 */
-	properties[PROP_MODEL] = g_param_spec_object(
-		"model",
-		NULL,
-		NULL,
-		G_TYPE_LIST_STORE,
-		G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-	/**
-	 * KeyboardPopover:current-source:
-	 *
-	 * The current [type@Keyboard.InputSource] being used.
-	 */
-	properties[PROP_CURRENT_SOURCE] = g_param_spec_object(
-		"current-source",
-		NULL,
-		NULL,
-		KEYBOARD_TYPE_INPUT_SOURCE,
-		G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-	g_object_class_install_properties(object_class, G_N_ELEMENTS(properties), properties);
 }
 
 static void keyboard_popover_init(KeyboardPopover* self) {
-	self->model = NULL;
-	self->current_source = NULL;
+	self->syncing_selection = FALSE;
+	self->emitted_row = NULL;
+	self->emitted_time = 0;
 
 	gtk_widget_init_template(GTK_WIDGET(self));
 	gtk_widget_set_size_request(GTK_WIDGET(self), 275, -1);
+
+	/* Arrow keys move the selection without activating, and a click on the
+	 * already-selected row activates without moving it, so both are needed */
+	g_signal_connect(self->listbox, "row-selected", G_CALLBACK(keyboard_popover_row_selected_cb), self);
+	g_signal_connect(self->listbox, "row-activated", G_CALLBACK(keyboard_popover_row_activated_cb), self);
+
+	gtk_widget_show_all(self->content);
 }
 
 /******************************************************************************
@@ -224,7 +156,6 @@ static void keyboard_popover_init(KeyboardPopover* self) {
 /**
  * keyboard_popover_new:
  * @relative_to: The #GtkWidget that the popover is connected to
- * @current_source: The currently configured #KeyboardInputSource
  * @model: The model of configured input sources
  *
  * Creates a new #KeyboardPopover.
@@ -232,25 +163,11 @@ static void keyboard_popover_init(KeyboardPopover* self) {
  * Returns: (transfer full): A new #KeyboardPopover
  */
 KeyboardPopover* keyboard_popover_new(GtkWidget* relative_to, GListStore* model) {
-	return g_object_new(
-		KEYBOARD_TYPE_POPOVER,
-		"relative-to", relative_to,
-		"model", model,
-		NULL);
-}
+	KeyboardPopover* self = g_object_new(KEYBOARD_TYPE_POPOVER, "relative-to", relative_to, NULL);
 
-/**
- * keyboard_popover_get_current_source:
- * @self: A #KeyboardPopover
- *
- * Gets the current input source.
- *
- * Returns: (transfer none): A #KeyboardInputSource
- */
-KeyboardInputSource* keyboard_popover_get_current_source(KeyboardPopover* self) {
-	g_return_val_if_fail(KEYBOARD_IS_POPOVER(self), NULL);
+	gtk_list_box_bind_model(GTK_LIST_BOX(self->listbox), G_LIST_MODEL(model), (GtkListBoxCreateWidgetFunc) keyboard_input_row_new, NULL, NULL);
 
-	return self->current_source;
+	return self;
 }
 
 /**
@@ -265,50 +182,21 @@ void keyboard_popover_set_current_source(KeyboardPopover* self, KeyboardInputSou
 
 	g_return_if_fail(KEYBOARD_IS_POPOVER(self));
 
-	if (g_set_object(&self->current_source, current_source)) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CURRENT_SOURCE]);
-	}
-
-	if (!KEYBOARD_IS_INPUT_SOURCE(self->current_source)) {
+	if (!KEYBOARD_IS_INPUT_SOURCE(current_source)) {
 		g_debug("Unselecting all input sources");
+		self->syncing_selection = TRUE;
 		gtk_list_box_unselect_all(GTK_LIST_BOX(self->listbox));
+		self->syncing_selection = FALSE;
 		return;
 	}
 
 	row = keyboard_popover_get_row_from_source(self, current_source);
 
-	if G_UNLIKELY (!GTK_LIST_BOX_ROW(row)) {
+	if G_UNLIKELY (row == NULL) {
 		return;
 	}
 
+	self->syncing_selection = TRUE;
 	gtk_list_box_select_row(GTK_LIST_BOX(self->listbox), GTK_LIST_BOX_ROW(row));
-}
-
-/**
- * keyboard_popover_get_model:
- * @self: A #KeyboardPopover
- *
- * Gets the model for the internal listbox.
- *
- * Returns: (transfer none): A #GListStore
- */
-GListStore* keyboard_popover_get_model(KeyboardPopover* self) {
-	g_return_val_if_fail(KEYBOARD_IS_POPOVER(self), NULL);
-
-	return self->model;
-}
-
-/**
- * keyboard_popover_set_model:
- * @self: A #KeyboardPopover
- * @model: (nullable): A model to bind to an internal listbox
- *
- * Sets the model for the internal listbox.
- */
-void keyboard_popover_set_model(KeyboardPopover* self, GListStore* model) {
-	g_return_if_fail(KEYBOARD_IS_POPOVER(self));
-
-	if (g_set_object(&self->model, model)) {
-		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_MODEL]);
-	}
+	self->syncing_selection = FALSE;
 }

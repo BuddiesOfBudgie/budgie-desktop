@@ -34,7 +34,7 @@ G_DEFINE_FINAL_TYPE(KeyboardInputRow, keyboard_input_row, GTK_TYPE_LIST_BOX_ROW)
 
 static void keyboard_input_row_constructed(GObject* object) {
 	KeyboardInputRow* self = KEYBOARD_INPUT_ROW(object);
-	g_autofree gchar* label_text = NULL;
+	const gchar* label_text = NULL;
 
 	if (keyboard_input_source_has_display_name(self->source)) {
 		label_text = keyboard_input_source_get_display_name(self->source);

@@ -60,12 +60,14 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 	KeyboardAppletPrivate* priv;
 	GListStore* model;
 	GString* result;
-	gchar* selected_layout = NULL;
+	const gchar* selected_layout = NULL;
+	const gchar* selected_variant = NULL;
 	guint i;
 
 	priv = keyboard_applet_get_instance_private(self);
 
 	selected_layout = keyboard_input_source_get_layout(selected);
+	selected_variant = keyboard_input_source_get_variant(selected);
 
 	if (selected_layout == NULL || g_str_equal(selected_layout, "")) {
 		return NULL;
@@ -73,7 +75,6 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 
 	result = g_string_new(NULL);
 
-	gchar* selected_variant = keyboard_input_source_get_variant(selected);
 	if (selected_variant == NULL || g_str_equal(selected_variant, "")) {
 		g_string_append(result, selected_layout);
 	} else {
@@ -84,8 +85,8 @@ static gchar* keyboard_applet_build_layout_string(KeyboardApplet* self, Keyboard
 
 	for (i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(model)); i++) {
 		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(model), i);
-		gchar* layout = NULL;
-		gchar* variant = NULL;
+		const gchar* layout = NULL;
+		const gchar* variant = NULL;
 
 		if (!KEYBOARD_IS_INPUT_SOURCE(source) || keyboard_input_source_equal(source, selected)) {
 			continue;
@@ -168,19 +169,11 @@ static gchar* keyboard_applet_get_display_layout(KeyboardApplet* self) {
 		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(model), i);
 
 		if (KEYBOARD_IS_INPUT_SOURCE(source) && keyboard_input_source_has_layout(source)) {
-			return keyboard_input_source_get_layout(source);
+			return g_strdup(keyboard_input_source_get_layout(source));
 		}
 	}
 
 	return NULL;
-}
-
-static void keyboard_applet_update_label(KeyboardApplet* self) {
-	g_autofree gchar* layout = NULL;
-
-	layout = keyboard_applet_get_display_layout(self);
-
-	keyboard_applet_set_label(self, layout);
 }
 
 /******************************************************************************
@@ -194,20 +187,17 @@ keyboard_applet_event_box_press_cb(GtkWidget* event_button, GdkEventButton* even
 
 	priv = keyboard_applet_get_instance_private(self);
 
-	switch (event->button) {
-		case 1: /* Toggle popover on left-click */
-			if (gtk_widget_is_visible(GTK_WIDGET(priv->popover))) {
-				gtk_widget_hide(GTK_WIDGET(priv->popover));
-			} else {
-				budgie_popover_manager_show_popover(priv->popover_manager, event_button);
-			}
-			return GDK_EVENT_STOP;
-			break;
-		default:
-			return GDK_EVENT_PROPAGATE;
+	if (event->button != 1) {
+		return GDK_EVENT_PROPAGATE;
 	}
 
-	return GDK_EVENT_PROPAGATE;
+	if (gtk_widget_is_visible(GTK_WIDGET(priv->popover))) {
+		gtk_widget_hide(GTK_WIDGET(priv->popover));
+	} else {
+		budgie_popover_manager_show_popover(priv->popover_manager, event_button);
+	}
+
+	return GDK_EVENT_STOP;
 }
 
 static void keyboard_applet_layout_proxy_set_cb(KeyboardLayout* proxy, GAsyncResult* result, gpointer user_data) {
@@ -287,7 +277,6 @@ keyboard_applet_current_input_changed_cb(KeyboardLocaleManager* manager, GParamS
 		source = keyboard_locale_manager_get_current_input_source(manager);
 
 		keyboard_popover_set_current_source(priv->popover, source);
-		keyboard_applet_update_label(self);
 	}
 }
 
@@ -305,7 +294,7 @@ keyboard_applet_current_layout_changed_cb(KeyboardLayout* proxy, G_GNUC_UNUSED G
 	layout = keyboard_layout_dup_current_layout(proxy);
 	keyboard_locale_manager_set_current_layout(priv->locale_manager, layout);
 
-	keyboard_applet_update_label(self);
+	keyboard_applet_set_label(self, layout);
 }
 
 /******************************************************************************
@@ -483,7 +472,7 @@ static void keyboard_applet_init(KeyboardApplet* self) {
 
 	keyboard_locale_manager_set_current_layout(priv->locale_manager, current_layout);
 
-	keyboard_applet_update_label(self);
+	keyboard_applet_set_label(self, current_layout);
 
 	gtk_widget_show_all(GTK_WIDGET(self));
 }
