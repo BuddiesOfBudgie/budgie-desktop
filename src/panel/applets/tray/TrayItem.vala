@@ -165,10 +165,15 @@ internal class TrayItem : Gtk.EventBox {
 		if (icon_name != null && icon_name.length > 0) {
 			if (FileUtils.test(icon_name, FileTest.IS_REGULAR)) {
 				// needed for noncompliant apps that use absolute paths for icon names
-				var pixbuf = new Gdk.Pixbuf.from_file(icon_name);
-				if (pixbuf != null) {
-					pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
-					icon.set_from_pixbuf(pixbuf);
+				try {
+					var pixbuf = new Gdk.Pixbuf.from_file(icon_name);
+					if (pixbuf != null) {
+						pixbuf = pixbuf.scale_simple(target_icon_size, target_icon_size, Gdk.InterpType.BILINEAR);
+						icon.set_from_pixbuf(pixbuf);
+					}
+				} catch (Error e) {
+					warning("Failed to load icon file %s for tray icon: %s", icon_name, e.message);
+					icon.set_from_icon_name(fallback_icon_name, Gtk.IconSize.LARGE_TOOLBAR);
 				}
 			} else if (icon_theme_path != null && !Gtk.IconTheme.get_default().has_icon(icon_name)) {
 				var icon_theme = new Gtk.IconTheme();

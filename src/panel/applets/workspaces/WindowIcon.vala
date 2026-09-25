@@ -71,7 +71,7 @@ namespace Workspaces {
 			if (event.button != 1) return Gdk.EVENT_STOP;
 
 			try {
-				window.activate(null, event.time);
+				window.activate((Xfw.Seat?) null, event.time);
 			} catch (Error e) {
 				warning("Failed to activate window: %s", e.message);
 			}

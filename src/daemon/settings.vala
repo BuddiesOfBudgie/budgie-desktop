@@ -188,11 +188,7 @@ namespace Budgie {
 		*/
 		private void change_brightness(int32 value) {
 			if (this.gnome_power_props != null) {
-				try {
-					this.gnome_power_props.brightness = value;
-				} catch {
-					warning("Error: Failed to change change the brightness during Caffeine Mode toggle.");
-				}
+				this.gnome_power_props.brightness = value;
 			}
 		}
 
@@ -249,11 +245,7 @@ namespace Budgie {
 			get_power_defaults(); // Get our sleep ac and battery timeout defaults
 
 			if (gnome_power_props != null) {
-				try {
-					default_brightness = gnome_power_props.brightness;
-				} catch {
-					warning("Could not set default value.");
-				}
+				default_brightness = gnome_power_props.brightness;
 			}
 		}
 
@@ -437,15 +429,6 @@ namespace Budgie {
 		}
 
 		/* we have to use a thread to show notifications */
-		private void* update_notification() {
-			try {
-				this.caffeine_notification.show();
-			} catch (Error e) {
-				warning("Failed to send our Caffeine notification: %s", e.message);
-			}
-			return null;
-		}
-
 		private void* show_notification() {
 			if (this.caffeine_notification == null) { // Caffeine Notification not yet created
 					this.caffeine_notification = new Notify.Notification(

@@ -189,7 +189,7 @@ namespace Budgie {
 				}
 			}
 
-			Gdk.Rectangle? rect = null;
+			Gdk.Rectangle rect = { 0, 0, 0, 0 };
 			Gdk.Monitor? monitor_obj = null;
 			int target_monitor_index = 0;
 
@@ -216,9 +216,7 @@ namespace Budgie {
 
 			// Fallback to pointer position if primary not available
 			if (monitor_obj == null && have_pos) {
-				if (display.get_monitor_at_point != null) {
-					monitor_obj = display.get_monitor_at_point(x, y);
-				}
+				monitor_obj = display.get_monitor_at_point(x, y);
 			}
 
 			if (monitor_obj == null) {
@@ -227,21 +225,11 @@ namespace Budgie {
 
 			// ultimate fallback - just use monitor index of zero to find the monitor
 			if (monitor_obj == null) {
-				if (display.get_monitor != null) {
-					monitor_obj = display.get_monitor(0);
-				}
+				monitor_obj = display.get_monitor(0);
 			}
 
-			// if we have a handle on the current monitor try to get its dimensions
 			if (monitor_obj != null) {
 				rect = monitor_obj.get_workarea();
-			} else {
-				// ultimate fallback - use deprecated methods to get screen width and height
-				rect = Gdk.Rectangle();
-				rect.x = 0;
-				rect.y = 0;
-				rect.width = screen.get_width();
-				rect.height = screen.get_height();
 			}
 
 			var width = (rect.width / 3).clamp(420, 840);

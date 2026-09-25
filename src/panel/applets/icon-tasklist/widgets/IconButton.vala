@@ -192,7 +192,7 @@ public class IconButton : Gtk.ToggleButton {
 
 				// Attempt to activate the target window
 				try {
-					target_window.activate(null, event.time);
+					target_window.activate((Xfw.Seat?) null, event.time);
 				} catch (Error e) {
 					warning("Error activating and unminimizing window '%s': %s", target_window.get_name(), e.message);
 				}

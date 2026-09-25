@@ -81,12 +81,8 @@ namespace Budgie {
 				return;
 			}
 
-			try {
-				budgie_desktop_view_settings = new Settings("org.buddiesofbudgie.budgie-desktop-view");
-				budgie_desktop_view_settings.changed["show"].connect(on_budgie_desktop_view_settings_changed);
-			} catch (Error e) {
-				warning("Failed to watch desktop icons setting: %s", e.message);
-			}
+			budgie_desktop_view_settings = new Settings("org.buddiesofbudgie.budgie-desktop-view");
+			budgie_desktop_view_settings.changed["show"].connect(on_budgie_desktop_view_settings_changed);
 		}
 
 		void on_budgie_desktop_view_settings_changed() {

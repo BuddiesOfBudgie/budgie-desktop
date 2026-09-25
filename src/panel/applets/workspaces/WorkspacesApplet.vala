@@ -140,16 +140,12 @@ namespace Workspaces {
 			add_button.drag_data_received.connect(on_add_button_drag_data_received);
 
 			add_button.button_release_event.connect((event) => {
-				try {
-					add_new_workspace();
-					uint new_index = workspace_group.get_workspace_count() - 1;
+				add_new_workspace();
+				uint new_index = workspace_group.get_workspace_count() - 1;
 
-					 if (new_index != -1) {
-					 	set_current_workspace();
-					 }
-				} catch (Error e) {
-					warning("Failed to append new workspace: %s", e.message);
-				}
+				 if (new_index != -1) {
+				 	set_current_workspace();
+				 }
 
 				return false;
 			});
@@ -334,10 +330,6 @@ namespace Workspaces {
 		}
 
 		private void window_opened(Xfw.Window window) {
-			if (window.get_window_type() != Xfw.WindowType.NORMAL) {
-				return;
-			}
-
 			if (Xfw.windowing_get() != Xfw.Windowing.WAYLAND) return;
 
 			if (window_connections.contains(window)) {
@@ -516,7 +508,7 @@ namespace Workspaces {
 				List<Xfw.Window> window_list = new List<Xfw.Window>();
 
 				windows.foreach((window) => {
-					if (window.get_workspace() == item.get_workspace() && !window.is_skip_tasklist() && !window.is_skip_pager() && window.get_window_type() == Xfw.WindowType.NORMAL) {
+					if (window.get_workspace() == item.get_workspace() && !window.is_skip_tasklist() && !window.is_skip_pager()) {
 						window_list.append(window);
 					}
 				});

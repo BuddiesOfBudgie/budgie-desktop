@@ -18,8 +18,8 @@ namespace Budgie {
 		/* Keep track of our SessionManager */
 		private LibSession.SessionClient? sclient;
 
-		// define a reference to WaylandClient once for this process
-		private WaylandClient wayland_client = new WaylandClient();
+		// Holds the WaylandClient singleton for the daemon's lifetime, since [SingleInstance] only keeps a weak ref
+		public WaylandClient wayland_client = new WaylandClient();
 
 		/* On Screen Display */
 		Budgie.OSDManager? osd;

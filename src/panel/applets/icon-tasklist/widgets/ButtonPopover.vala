@@ -385,7 +385,7 @@ private class WindowItem : Gtk.ListBoxRow {
 
 		name_button.clicked.connect(() => {
 			try {
-				window.activate(null, Gtk.get_current_event_time());
+				window.activate((Xfw.Seat?) null, Gtk.get_current_event_time());
 			} catch (Error e) {
 				warning("Unable to activate window %s: %s", window.get_name(), e.message);
 			}

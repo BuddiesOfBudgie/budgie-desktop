@@ -351,7 +351,6 @@ namespace Budgie {
 				return;
 			}
 			if (!has_toplevel_focus) {
-				Gdk.Display? display = screen.get_display();
 				window.focus(Gtk.get_current_event_time());
 			}
 		}
@@ -513,11 +512,11 @@ namespace Budgie {
 			if (!this.get_settings().gtk_enable_animations) {
 				if (!exp) {
 					this.nscale = 0.0;
-					this.set_opacity(0.0);
+					this.opacity = 0.0;
 					this.hide();
 				} else {
 					this.nscale = 1.0;
-					this.set_opacity(1.0);
+					this.opacity = 1.0;
 					this.present();
 					this.grab_focus();
 					this.steal_focus();
@@ -553,7 +552,7 @@ namespace Budgie {
 			}
 
 			// Raven is invisible before fade-in animation; make window visible before we start the animation
-			set_opacity(1.0);
+			opacity = 1.0;
 			show();
 
 			anim.start(on_anim_complete);
@@ -563,13 +562,13 @@ namespace Budgie {
 			anim = null;
 
 			if (nscale == 0.0) {
-				set_opacity(0.0); // Mask scaling weirdness
+				opacity = 0.0; // Mask scaling weirdness
 				hide_id = Timeout.add(100, this.on_hide_timeout); // Defer until opacity set otherwise it glitches
 				return;
 			}
 
 			shadow.set_opacity(1.0);
-			set_opacity(1.0);
+			opacity = 1.0;
 			present();
 			grab_focus();
 			steal_focus();
