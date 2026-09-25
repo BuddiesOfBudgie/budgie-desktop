@@ -66,7 +66,7 @@ public class IconButton : Gtk.ToggleButton {
 		get_style_context().remove_class("toggle");
 		get_style_context().add_class("launcher");
 
-		add_events(Gdk.EventMask.SCROLL_MASK);
+		add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
 		definite_allocation.width = 0;
 		definite_allocation.height = 0;
@@ -172,7 +172,20 @@ public class IconButton : Gtk.ToggleButton {
 			active_window = window_group.get_last_active_window();
 		}
 
-		switch (event.direction) {
+		var direction = event.direction;
+
+		// Touchpads only send smooth events, and a zero delta marks the end of a scroll
+		if (direction == Gdk.ScrollDirection.SMOOTH) {
+			if (event.delta_y < 0) {
+				direction = Gdk.ScrollDirection.UP;
+			} else if (event.delta_y > 0) {
+				direction = Gdk.ScrollDirection.DOWN;
+			} else {
+				return Gdk.EVENT_STOP;
+			}
+		}
+
+		switch (direction) {
 			case Gdk.ScrollDirection.UP:
 				// Get the next window in the group to activate
 				target_window = window_group.get_next_window(active_window);
