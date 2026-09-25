@@ -27,6 +27,9 @@ namespace Budgie {
 		}
 	}
 
+	[CCode (cname = "gdk_wayland_window_set_application_id", cheader_filename = "gdk/gdkwayland.h")]
+	extern void gdk_wayland_window_set_application_id(Gdk.Window window, string application_id);
+
 	public class SettingsWindow : Gtk.Window {
 		private SettingsIface? iface;
 		private DBusConnection? conn;
@@ -63,10 +66,10 @@ namespace Budgie {
 			layout = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			add(layout);
 
-			/* Have to override wmclass for pinning support */
 			set_icon_name("preferences-desktop");
 			set_title(_("Budgie Desktop Settings"));
-			set_wmclass("budgie-desktop-settings", "budgie-desktop-settings");
+
+			map.connect_after(on_map);
 
 			/* Fit even on a spud resolution */
 			set_default_size(750, 550);
@@ -160,6 +163,11 @@ namespace Budgie {
 			this.add_page(new Budgie.AutostartPage());
 			this.add_page(new Budgie.RavenPage(this.manager));
 			this.add_page(new Budgie.DisplaysPage(this.manager));
+		}
+
+		// GTK uses the process name, budgie-panel, as the app_id when mapping, so match the desktop file after that
+		private void on_map() {
+			gdk_wayland_window_set_application_id(get_window(), "budgie-desktop-settings");
 		}
 
 		public void requested_close() throws DBusError, IOError {

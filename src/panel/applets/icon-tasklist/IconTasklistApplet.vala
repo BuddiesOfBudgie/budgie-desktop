@@ -584,14 +584,14 @@ public class IconTasklistApplet : Budgie.Applet {
 						foreach (var window in windows) {
 							try {
 								if (window.is_minimized()) window.set_minimized(false);
-								if (window != last_active_window) window.activate(null, event.time);
+								if (window != last_active_window) window.activate((Xfw.Seat?) null, event.time);
 							} catch (Error e) {
 								warning("Unable to minimize window '%s': %s", window.get_name(), e.message);
 							}
 						}
 						if (last_active_window != null) {
 							try {
-								last_active_window.activate(null, event.time);
+								last_active_window.activate((Xfw.Seat?) null, event.time);
 							} catch (Error e) {
 								warning("Unable to activate last window '%s': %s", last_active_window.get_name(), e.message);
 							}
@@ -613,7 +613,7 @@ public class IconTasklistApplet : Budgie.Applet {
 						var window = group.get_last_active_window();
 
 						try {
-							window.activate(null, event.time);
+							window.activate((Xfw.Seat?) null, event.time);
 						} catch (Error e) {
 							warning("Unable to activate window %s: %s", window.get_name(), e.message);
 						}

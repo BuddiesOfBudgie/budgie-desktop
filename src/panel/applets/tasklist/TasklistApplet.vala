@@ -581,7 +581,7 @@ public class TasklistApplet : Budgie.Applet {
 					// Un-minimize and activate window if minimized.
 					try {
 						window.set_minimized(false);
-						window.activate(null, time);
+						window.activate((Xfw.Seat?) null, time);
 					} catch (GLib.Error e) {
 						warning("Unable to activate window '%s': %s", window.get_name(), e.message);
 					}
@@ -595,7 +595,7 @@ public class TasklistApplet : Budgie.Applet {
 						}
 					} else {
 						try {
-							window.activate(null, time);
+							window.activate((Xfw.Seat?) null, time);
 						} catch (GLib.Error e) {
 							warning("Unable to activate window '%s': %s", window.get_name(), e.message);
 						}
