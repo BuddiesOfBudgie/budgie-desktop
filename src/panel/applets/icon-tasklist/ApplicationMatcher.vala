@@ -247,7 +247,10 @@ namespace Budgie {
 			string desktop_id,
 			string instance
 		) {
-			var exec = Path.get_basename(desktop_info.get_executable());
+			unowned string? executable = desktop_info.get_executable();
+			if (executable == null) return new MatchResult();
+
+			var exec = Path.get_basename(executable);
 			if (instance == exec) {
 				debug(@"Matched via InstanceToExec: $desktop_id");
 				return create_match_result(desktop_id);

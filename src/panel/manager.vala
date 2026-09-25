@@ -938,7 +938,6 @@ namespace Budgie {
 			}
 
 			// Apply panel settings
-			this.set_placement(uuid, position);
 			this.set_transparency(uuid, transparency);
 			this.set_autohide(uuid, policy);
 			this.set_dock_mode(uuid, dock_mode);
