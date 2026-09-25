@@ -55,8 +55,15 @@ install_data(
 )
 
 install_data(
-    'labwc_bridge.py',
-    install_dir: libexecdir
+    'labwc-bridge',
+    install_dir: libexecdir,
+    install_mode: 'rwxr-xr-x'
+)
+
+install_subdir(
+    'labwc_bridge',
+    install_dir: libexecdir,
+    exclude_directories: '__pycache__'
 )
 
 labwc_files = [
@@ -74,3 +81,8 @@ install_data(
     labwc_files,
     install_dir: join_paths(datadir, 'budgie-desktop', 'labwc')
 )
+
+# Where the labwc_bridge package sits, for the tests to import it uninstalled
+labwc_bridge_sourcedir = meson.current_source_dir()
+
+subdir('tests')

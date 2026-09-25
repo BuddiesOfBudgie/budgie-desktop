@@ -17,18 +17,11 @@
 #include "input-source.h"
 #include "org.freedesktop.locale1.h"
 
-#define _GNU_SOURCE
-
 #define INPUT_SOURCES_SCHEMA "org.gnome.desktop.input-sources"
 #define KEY_SOURCES "sources"
 
-#define KEY_LAYOUT "X11Layout"
-#define KEY_OPTIONS "X11Options"
-#define KEY_VARIANT "X11Variant"
-
 #define ORG_FREEDESKTOP_LOCALE1_DBUS_PATH "/org/freedesktop/locale1"
 #define ORG_FREEDESKTOP_LOCALE1_DBUS_NAME "org.freedesktop.locale1"
-#define ORG_FREEDESKTOP_LOCALE1_DBUS_IFACE "org.freedesktop.locale1"
 
 typedef enum {
 	PROP_CURRENT_SOURCE = 1,
@@ -57,19 +50,74 @@ G_DEFINE_FINAL_TYPE(KeyboardLocaleManager, keyboard_locale_manager, G_TYPE_OBJEC
  * Helpers
  *****************************************************************************/
 
+/* g_str_equal is a plain strcmp and crashes on NULL. locale1 leaves a property
+ * NULL when it is unset, and so does a source with no variant, so compare with
+ * NULL and "" meaning the same thing. */
+static gboolean keyboard_locale_manager_str_equal(const gchar* a, const gchar* b) {
+	return g_strcmp0(a != NULL ? a : "", b != NULL ? b : "") == 0;
+}
+
+/* locale1 puts every layout and options in one property, like "us,fi", so
+ * split to get the first (active) one */
+static gchar* keyboard_locale_manager_first_entry(const gchar* list) {
+	g_auto(GStrv) entries = NULL;
+
+	if (list == NULL) {
+		return NULL;
+	}
+
+	entries = g_strsplit(list, ",", 2);
+
+	return g_strdup(entries[0]);
+}
+
+/* Returns: (transfer full) (nullable): The active locale1 layout as a GSettings
+ * xkb id, e.g. "us+intl" */
+static gchar* keyboard_locale_manager_get_locale1_id(KeyboardLocaleManager* self) {
+	g_autofree gchar* layouts = NULL;
+	g_autofree gchar* variants = NULL;
+	g_autofree gchar* layout = NULL;
+	g_autofree gchar* variant = NULL;
+
+	if (self->proxy == NULL) {
+		return NULL;
+	}
+
+	layouts = keyboard_locale1_dup_x11_layout(self->proxy);
+	variants = keyboard_locale1_dup_x11_variant(self->proxy);
+	layout = keyboard_locale_manager_first_entry(layouts);
+	variant = keyboard_locale_manager_first_entry(variants);
+
+	if (layout == NULL || g_str_equal(layout, "")) {
+		return NULL;
+	}
+
+	if (variant == NULL || g_str_equal(variant, "")) {
+		return g_steal_pointer(&layout);
+	}
+
+	return g_strdup_printf("%s+%s", layout, variant);
+}
+
 static KeyboardInputSource* keyboard_locale_manager_get_fallback_source(KeyboardLocaleManager* self) {
-	KeyboardInputSource* source;
+	g_autofree gchar* locale1_id = NULL;
 	const gchar* type = NULL;
 	const gchar* id = NULL;
 	const gchar* layout = NULL;
 	const gchar* variant = NULL;
 	const gchar* display_name = NULL;
-	const gchar* short_name = NULL;
 	const gchar* locale = NULL;
-	const gchar* options = NULL;
 	const gchar* const* languages = NULL;
 
 	g_return_val_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self), NULL);
+
+	/* The installer sets the keyboard in locale1, which is also what the
+	 * bridge applies when no sources are configured */
+	locale1_id = keyboard_locale_manager_get_locale1_id(self);
+
+	if (locale1_id != NULL && gnome_xkb_info_get_layout_info(self->xkb_info, locale1_id, &display_name, NULL, &layout, &variant)) {
+		return keyboard_input_source_new(locale1_id, 0, display_name, layout, variant);
+	}
 
 	languages = g_get_language_names();
 
@@ -90,15 +138,12 @@ static KeyboardInputSource* keyboard_locale_manager_get_fallback_source(Keyboard
 		return NULL;
 	}
 
-	if (!gnome_xkb_info_get_layout_info(self->xkb_info, id, &display_name, &short_name, &layout, &variant)) {
+	if (!gnome_xkb_info_get_layout_info(self->xkb_info, id, &display_name, NULL, &layout, &variant)) {
 		layout = "us";
 		variant = "";
 	}
 
-	options = "";
-	source = keyboard_input_source_new_full(id, 0, display_name, short_name, layout, variant, options, TRUE);
-
-	return source;
+	return keyboard_input_source_new(id, 0, display_name, layout, variant);
 }
 
 static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) {
@@ -116,38 +161,24 @@ static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) 
 	// input sources from them.
 	for (i = 0; i < g_variant_n_children(value); i++) {
 		g_autoptr(KeyboardInputSource) source = NULL;
-		g_autofree gchar* id = NULL;
 		g_autofree gchar* type = NULL;
-		g_auto(GStrv) split = NULL;
-		const gchar* language = NULL;
+		g_autofree gchar* id = NULL;
 		const gchar* display_name = NULL;
-		const gchar* short_name = NULL;
 		const gchar* layout = NULL;
 		const gchar* variant = NULL;
-		const gchar* options = NULL;
 
-		g_variant_get_child(value, i, "(ss)", &id, &type, NULL);
+		g_variant_get_child(value, i, "(ss)", &type, &id);
 
-		if (g_str_equal(id, "xkb")) {
-			// Split the language from the options
-			split = g_strsplit(type, "+", -1);
-			language = split[0];
-			options = "";
-
-			// Get the layout info for this language
-			if (!gnome_xkb_info_get_layout_info(self->xkb_info, language, &display_name, &short_name, &layout, &variant)) {
-				g_warning("Could not get layout info for language '%s'", language);
+		if (g_str_equal(type, "xkb")) {
+			/* The id is "layout+variant", which is the form xkb_info looks up */
+			if (!gnome_xkb_info_get_layout_info(self->xkb_info, id, &display_name, NULL, &layout, &variant)) {
+				g_warning("Could not get layout info for '%s'", id);
 				continue;
 			}
 
-			// Check if this layout has options we need to set
-			if (g_strv_length(split) == 2) {
-				options = split[1];
-			}
-
-			source = keyboard_input_source_new_full(type, i, display_name, short_name, layout, variant, options, TRUE);
+			source = keyboard_input_source_new(id, i, display_name, layout, variant);
 		} else {
-			source = keyboard_input_source_new(type, i, FALSE);
+			source = keyboard_input_source_new(id, i, NULL, NULL, NULL);
 		}
 
 		/* insert_sorted takes its own reference, so ours still needs dropping */
@@ -167,22 +198,16 @@ static void keyboard_locale_manager_update_sources(KeyboardLocaleManager* self) 
 	}
 }
 
-/* g_str_equal is a plain strcmp and crashes on NULL. locale1 leaves a property
- * NULL when it is unset, and so does a source with no variant or options, so
- * compare with NULL and "" meaning the same thing. */
-static gboolean keyboard_locale_manager_str_equal(const gchar* a, const gchar* b) {
-	return g_strcmp0(a != NULL ? a : "", b != NULL ? b : "") == 0;
-}
-
 /* The caller owns the returned reference, so hold it in a
  * g_autoptr(KeyboardInputSource) - set_current_input_source takes its own. */
 static KeyboardInputSource*
 keyboard_locale_manager_find_current_input_source(
 	KeyboardLocaleManager* self,
 	const gchar* current_layout,
-	const gchar* current_options,
 	const gchar* current_variant) {
 	KeyboardInputSource* source = NULL;
+	g_autofree gchar* active_layout = NULL;
+	g_autofree gchar* active_variant = NULL;
 	guint i = 0;
 
 	g_return_val_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self), NULL);
@@ -193,24 +218,16 @@ keyboard_locale_manager_find_current_input_source(
 		return NULL;
 	}
 
-	while ((source = g_list_model_get_item(G_LIST_MODEL(self->model), i)) != NULL) {
-		g_autofree gchar* layout = NULL;
-		g_autofree gchar* options = NULL;
-		g_autofree gchar* variant = NULL;
+	active_layout = keyboard_locale_manager_first_entry(current_layout);
+	active_variant = keyboard_locale_manager_first_entry(current_variant);
 
+	while ((source = g_list_model_get_item(G_LIST_MODEL(self->model), i)) != NULL) {
 		i++;
 
-		if (KEYBOARD_IS_INPUT_SOURCE(source)) {
-			layout = keyboard_input_source_get_layout(source);
-			options = keyboard_input_source_get_options(source);
-			variant = keyboard_input_source_get_variant(source);
-
-			if (keyboard_locale_manager_str_equal(layout, current_layout) &&
-				keyboard_locale_manager_str_equal(options, current_options) &&
-				keyboard_locale_manager_str_equal(variant, current_variant)) {
-				// We found our match
-				break;
-			}
+		if (KEYBOARD_IS_INPUT_SOURCE(source) &&
+			keyboard_locale_manager_str_equal(keyboard_input_source_get_layout(source), active_layout) &&
+			keyboard_locale_manager_str_equal(keyboard_input_source_get_variant(source), active_variant)) {
+			break;
 		}
 
 		g_object_unref(source);
@@ -219,16 +236,39 @@ keyboard_locale_manager_find_current_input_source(
 	return source;
 }
 
+static void keyboard_locale_manager_refresh_current_input_source(KeyboardLocaleManager* self) {
+	g_autoptr(KeyboardInputSource) source = NULL;
+	g_autofree gchar* layout = NULL;
+	g_autofree gchar* variant = NULL;
+
+	/* start() has not run yet, or there is no localed to talk to */
+	if (self->proxy != NULL) {
+		layout = keyboard_locale1_dup_x11_layout(self->proxy);
+		variant = keyboard_locale1_dup_x11_variant(self->proxy);
+	}
+
+	source = keyboard_locale_manager_find_current_input_source(self, layout, variant);
+
+	if (!KEYBOARD_IS_INPUT_SOURCE(source)) {
+		/* locale1 names a layout that is not configured, and the applet always
+		 * shows one, so the first source is the best answer available */
+		source = g_list_model_get_item(G_LIST_MODEL(self->model), 0);
+	}
+
+	if (!KEYBOARD_IS_INPUT_SOURCE(source)) {
+		/* Passing NULL on is what leaves the popover with no row selected */
+		return;
+	}
+
+	keyboard_locale_manager_set_current_input_source(self, source);
+}
+
 /******************************************************************************
  * Callbacks
  *****************************************************************************/
 
 static void keyboard_locale_manager_settings_changed_cb(G_GNUC_UNUSED GSettings* settings, gchar* key, gpointer user_data) {
 	KeyboardLocaleManager* self = KEYBOARD_LOCALE_MANAGER(user_data);
-	g_autoptr(KeyboardInputSource) source = NULL;
-	g_autofree gchar* layout = NULL;
-	g_autofree gchar* options = NULL;
-	g_autofree gchar* variant = NULL;
 
 	if (!g_str_equal(key, KEY_SOURCES)) {
 		return;
@@ -236,56 +276,20 @@ static void keyboard_locale_manager_settings_changed_cb(G_GNUC_UNUSED GSettings*
 
 	keyboard_locale_manager_update_sources(self);
 
-	/* start() has not run yet, or there is no localed to talk to */
-	if (self->proxy != NULL) {
-		layout = keyboard_locale1_dup_x11_layout(self->proxy);
-		options = keyboard_locale1_dup_x11_options(self->proxy);
-		variant = keyboard_locale1_dup_x11_variant(self->proxy);
-	}
-
-	source = keyboard_locale_manager_find_current_input_source(self, layout, options, variant);
-
-	keyboard_locale_manager_set_current_input_source(self, source);
+	keyboard_locale_manager_refresh_current_input_source(self);
 }
 
 static void
 keyboard_locale_manager_properties_changed_cb(
 	G_GNUC_UNUSED GDBusProxy* proxy,
-	GVariant* changed_properties,
+	G_GNUC_UNUSED GVariant* changed_properties,
 	G_GNUC_UNUSED const gchar* const* invalidated_properties,
 	gpointer user_data) {
 	KeyboardLocaleManager* self = KEYBOARD_LOCALE_MANAGER(user_data);
-	GVariantIter iter;
-	GVariant* entry;
-	g_autoptr(KeyboardInputSource) source = NULL;
 
-	gchar* current_layout = "";
-	gchar* current_options = "";
-	gchar* current_variant = "";
-
-	g_variant_iter_init(&iter, changed_properties);
-
-	while ((entry = g_variant_iter_next_value(&iter)) != NULL) {
-		const gchar* key;
-		GVariant* value;
-
-		g_variant_get(entry, "{&sv}", &key, &value);
-
-		if (g_str_equal(key, KEY_LAYOUT)) {
-			current_layout = g_variant_get_string(value, NULL);
-		} else if (g_str_equal(key, KEY_OPTIONS)) {
-			current_options = g_variant_get_string(value, NULL);
-		} else if (g_str_equal(key, KEY_VARIANT)) {
-			current_variant = g_variant_get_string(value, NULL);
-		}
-
-		g_variant_unref(value);
-		g_variant_unref(entry);
-	}
-
-	source = keyboard_locale_manager_find_current_input_source(self, current_layout, current_options, current_variant);
-
-	keyboard_locale_manager_set_current_input_source(self, source);
+	/* locale1 names only the properties that changed, and the proxy has already
+	 * cached them, so all three are read back from there */
+	keyboard_locale_manager_refresh_current_input_source(self);
 }
 
 /******************************************************************************
@@ -389,10 +393,6 @@ KeyboardLocaleManager* keyboard_locale_manager_new(void) {
 void keyboard_locale_manager_start(KeyboardLocaleManager* self) {
 	KeyboardLocale1* proxy = NULL;
 	g_autoptr(GError) error = NULL;
-	g_autofree gchar* current_layout = NULL;
-	g_autofree gchar* current_options = NULL;
-	g_autofree gchar* current_variant = NULL;
-	g_autoptr(KeyboardInputSource) current_source = NULL;
 
 	g_return_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self));
 
@@ -409,22 +409,17 @@ void keyboard_locale_manager_start(KeyboardLocaleManager* self) {
 		return;
 	}
 
-	current_layout = keyboard_locale1_dup_x11_layout(proxy);
-	current_options = keyboard_locale1_dup_x11_options(proxy);
-	current_variant = keyboard_locale1_dup_x11_variant(proxy);
-	current_source = keyboard_locale_manager_find_current_input_source(self, current_layout, current_options, current_variant);
+	self->proxy = proxy;
 
-	if (KEYBOARD_IS_INPUT_SOURCE(current_source)) {
-		keyboard_locale_manager_set_current_input_source(self, current_source);
-	}
+	/* The fallback source reads locale1, which was not available in init */
+	keyboard_locale_manager_update_sources(self);
+	keyboard_locale_manager_refresh_current_input_source(self);
 
 	g_signal_connect(
 		proxy,
 		"g-properties-changed",
 		G_CALLBACK(keyboard_locale_manager_properties_changed_cb),
 		self);
-
-	self->proxy = proxy;
 }
 
 /**
@@ -458,6 +453,44 @@ void keyboard_locale_manager_set_current_input_source(KeyboardLocaleManager* sel
 
 	if (g_set_object(&self->current_input_source, source)) {
 		g_object_notify_by_pspec(G_OBJECT(self), properties[PROP_CURRENT_SOURCE]);
+	}
+}
+
+/**
+ * keyboard_locale_manager_set_current_layout:
+ * @self: A #KeyboardLocaleManager
+ * @layout: (nullable): An XKB layout code, e.g. "fi"
+ *
+ * Makes the configured source for @layout the current input source.
+ *
+ * Nothing happens when the current source already uses @layout: the code
+ * carries no variant, so it cannot pick between two sources sharing a layout.
+ */
+void keyboard_locale_manager_set_current_layout(KeyboardLocaleManager* self, const gchar* layout) {
+	guint i;
+
+	g_return_if_fail(KEYBOARD_IS_LOCALE_MANAGER(self));
+
+	if (layout == NULL || g_str_equal(layout, "")) {
+		return;
+	}
+
+	if (self->current_input_source != NULL &&
+		keyboard_locale_manager_str_equal(keyboard_input_source_get_layout(self->current_input_source), layout)) {
+		return;
+	}
+
+	for (i = 0; i < g_list_model_get_n_items(G_LIST_MODEL(self->model)); i++) {
+		g_autoptr(KeyboardInputSource) source = g_list_model_get_item(G_LIST_MODEL(self->model), i);
+
+		if (!KEYBOARD_IS_INPUT_SOURCE(source)) {
+			continue;
+		}
+
+		if (keyboard_locale_manager_str_equal(keyboard_input_source_get_layout(source), layout)) {
+			keyboard_locale_manager_set_current_input_source(self, source);
+			return;
+		}
 	}
 }
 

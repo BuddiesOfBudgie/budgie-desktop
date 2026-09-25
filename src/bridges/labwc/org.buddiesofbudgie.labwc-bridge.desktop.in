@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Labwc Bridge
 Comment=Bridge between GNOME Settings to Labwc
-Exec=python3 @libexecdir@/labwc_bridge.py
+Exec=@libexecdir@/labwc-bridge
 Type=Application
 NoDisplay=true
 Categories=System;

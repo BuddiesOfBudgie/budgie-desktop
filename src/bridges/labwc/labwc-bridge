@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# This file is part of budgie-desktop
+#
+# Copyright Budgie Desktop Developers
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+import os
+import signal
+import sys
+import xml.etree.ElementTree as Et
+
+import psutil
+from gi.repository import GLib
+from labwc_bridge import log
+from labwc_bridge.bridge import Bridge
+
+
+def labwc_running() -> bool:
+    """Whether labwc runs for this user; without it the bridge has nothing to do."""
+    uid = os.getuid()
+
+    # Asking process_iter for the attributes has it skip processes that exit mid-scan and
+    # yield None for ones it cannot read, so one unrelated process cannot decide the answer
+    for process in psutil.process_iter(["name", "uids"]):
+        uids = process.info["uids"]
+        # The compositor runs as the session user, so another user's labwc is not ours
+        if (
+            uids is not None
+            and uids.real == uid
+            and "labwc" in (process.info["name"] or "")
+        ):
+            return True
+
+    return False
+
+
+def main() -> int:
+    """Runs the bridge until SIGINT; exits early when labwc is not running or a config is missing."""
+    logger = log.setup(debug="--debug" in sys.argv)
+
+    if not labwc_running():
+        return 0
+
+    # Held for the life of the loop; the components hang off it, and their signal handlers with them
+    try:
+        _bridge = Bridge()
+    except (FileNotFoundError, Et.ParseError) as e:
+        logger.critical(f"Cannot start: {e}")
+        return 1
+
+    mainloop = GLib.MainLoop()
+    # Ctrl-C would otherwise surface as a KeyboardInterrupt traceback out of GLib's loop
+    signal.signal(signal.SIGINT, lambda _sig, _frame: mainloop.quit())
+    mainloop.run()
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

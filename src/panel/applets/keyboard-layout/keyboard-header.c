@@ -26,9 +26,7 @@ G_DEFINE_FINAL_TYPE(KeyboardHeader, keyboard_header, GTK_TYPE_BOX)
  * Callbacks
  *****************************************************************************/
 
-static void keyboard_header_button_clicked_cb(G_GNUC_UNUSED GtkButton* button, gpointer user_data) {
-	KeyboardHeader* self = KEYBOARD_HEADER(user_data);
-	gboolean success = FALSE;
+static void keyboard_header_button_clicked_cb(G_GNUC_UNUSED GtkButton* button, G_GNUC_UNUSED gpointer user_data) {
 	g_autoptr(GDesktopAppInfo) app_info = NULL;
 	g_autoptr(GError) error = NULL;
 

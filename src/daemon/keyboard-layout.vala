@@ -91,11 +91,31 @@ namespace Budgie {
 			layout_changed(layout);
 		}
 
+		/**
+		 * Called by the keyboard layout shortcuts. The bridge holds the order of
+		 * the configured layouts, so it picks which one the move lands on.
+		 */
+		public void switch_layout_next() throws DBusError, IOError {
+			debug("KeyboardLayoutManager.SwitchLayoutNext requested");
+			switch_layout_next_requested();
+		}
+
+		public void switch_layout_previous() throws DBusError, IOError {
+			debug("KeyboardLayoutManager.SwitchLayoutPrevious requested");
+			switch_layout_previous_requested();
+		}
+
 		// ------------------------------------------------------------------ //
 		// DBus signals
 		// ------------------------------------------------------------------ //
 
 		/** Broadcast to any listening compositor bridge that a layout change has been requested. */
 		public signal void layout_changed(string layout);
+
+		/** Broadcast to any listening compositor bridge that the next layout has been requested. */
+		public signal void switch_layout_next_requested();
+
+		/** Broadcast to any listening compositor bridge that the previous layout has been requested. */
+		public signal void switch_layout_previous_requested();
 	}
 }

@@ -37,7 +37,7 @@ the Free Software Foundation; either version 2 of the License, or
                   <class name="content-box"/>
                 </style>
                 <property name="can-focus">False</property>
-                <property name="selection-mode">GTK_SELECTION_BROWSE</property>
+                <property name="selection-mode">GTK_SELECTION_SINGLE</property>
               </object>
               <packing>
                 <property name="expand">True</property>

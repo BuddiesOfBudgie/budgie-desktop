@@ -6,6 +6,9 @@
 
 	Any other user keybind is kept as is.
 
+	Attributes beyond bridge and key, such as onRelease, are written
+	through to the keybind in rc.xml.
+
 	Distros can ship their own version as the file keybinds.xml
 -->
 
@@ -209,7 +212,7 @@
 	<keybind bridge="wm.keybindings/cycle-group" />
 	<keybind bridge="wm.keybindings/switch-group-backward" />
 	<keybind bridge="wm.keybindings/switch-group" />
-	<keybind bridge="gnome.mutter/overlay-key">
+	<keybind bridge="gnome.mutter/overlay-key" onRelease="yes">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.ActivateAction int32:2" />
 	</keybind>
 	<keybind bridge="solus-project.budgie-wm/clear-notifications">
@@ -227,11 +230,18 @@
 	<keybind bridge="solus-project.budgie-wm/take-full-screenshot">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartFullScreenshot" />
 	</keybind>
+	<keybind bridge="solus-project.budgie-wm/show-power-dialog">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.PowerDialog /org/buddiesofbudgie/PowerDialog org.buddiesofbudgie.PowerDialog.Toggle" />
+	</keybind>
 	<keybind bridge="wm.keybindings/panel-run-dialog">
 		<action name="Execute" command="budgie-run-dialog" />
 	</keybind>
-	<keybind bridge="wm.keybindings/switch-input-source" />
-	<keybind bridge="wm.keybindings/switch-input-source-backward" />
+	<keybind bridge="wm.keybindings/switch-input-source">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.KeyboardLayout /org/buddiesofbudgie/KeyboardLayout org.buddiesofbudgie.KeyboardLayout.SwitchLayoutNext" />
+	</keybind>
+	<keybind bridge="wm.keybindings/switch-input-source-backward">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.KeyboardLayout /org/buddiesofbudgie/KeyboardLayout org.buddiesofbudgie.KeyboardLayout.SwitchLayoutPrevious" />
+	</keybind>
 	<keybind bridge="wm.keybindings/close">
 		<action name="Close" />
 	</keybind>
@@ -245,10 +255,10 @@
 		<action name="Maximize" direction="both" />
 	</keybind>
 	<keybind bridge="wm.keybindings/maximize-horizontally">
-		<action name="Maximize" direction="right" />
+		<action name="Maximize" direction="horizontal" />
 	</keybind>
 	<keybind bridge="wm.keybindings/maximize-vertically">
-		<action name="Maximize" direction="left" />
+		<action name="Maximize" direction="vertical" />
 	</keybind>
 	<keybind bridge="wm.keybindings/begin-move" />
 	<keybind bridge="wm.keybindings/raise">
