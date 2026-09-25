@@ -31,6 +31,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_
 
 static void budgie_popover_manager_widget_died(BudgiePopoverManager* self, GtkWidget* child);
 static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover);
+static void on_popover_unmap(GtkWidget* popover, gpointer user_data);
 
 /**
  * budgie_popover_manager_new:
@@ -85,6 +86,7 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidg
 	gtk_popover_set_relative_to(popover, parent_widget);
 
 	g_signal_connect_swapped(parent_widget, "destroy", G_CALLBACK(budgie_popover_manager_widget_died), self);
+	g_signal_connect(popover, "unmap", G_CALLBACK(on_popover_unmap), NULL);
 	g_hash_table_insert(self->priv->popovers, parent_widget, popover);
 }
 
@@ -110,7 +112,8 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 
 	GtkWidget * toplevel = gtk_widget_get_toplevel(parent_widget);
 
-	g_signal_connect(toplevel, "focus-out-event", G_CALLBACK(on_focus_out), popover);
+	g_signal_handlers_disconnect_by_func(toplevel, G_CALLBACK(on_focus_out), popover);
+	g_signal_connect_object(toplevel, "focus-out-event", G_CALLBACK(on_focus_out), popover, 0);
 
 	BudgiePanelPosition * position = NULL;
 	g_object_get(G_OBJECT(toplevel), "position", &position, NULL);
@@ -151,6 +154,17 @@ static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *pop
 
 	gtk_widget_hide(GTK_WIDGET(popover));
 	return GDK_EVENT_PROPAGATE;
+}
+
+static void on_popover_unmap(GtkWidget* popover, __budgie_unused__ gpointer user_data) {
+	GtkWidget* toplevel = gtk_widget_get_toplevel(popover);
+
+	if (!GTK_IS_WINDOW(toplevel)) return;
+
+	// GtkWindow never clears a destroyed popover from its default widget, so do it before that can happen
+	if (gtk_window_get_default_widget(GTK_WINDOW(toplevel)) == popover) {
+		gtk_window_set_default(GTK_WINDOW(toplevel), NULL);
+	}
 }
 
 /**
