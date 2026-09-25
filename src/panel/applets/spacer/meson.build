@@ -2,10 +2,14 @@
 
 applet_spacer_dir = applets_dir + '.spacer'
 
-custom_target('plugin-file-spacer',
-    input : 'SpacerApplet.plugin.in',
+budgie_pot_templates += files('SpacerApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'SpacerApplet.plugin.desktop.in',
     output : 'SpacerApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_spacer_dir)
 
@@ -31,7 +35,7 @@ applet_spacer_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'spacerapplet',
     applet_spacer_sources,
     dependencies: applet_spacer_deps,

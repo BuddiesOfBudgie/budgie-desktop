@@ -1,9 +1,13 @@
 raven_plugin_mediacontrols_dir = raven_plugin_dir + '.MediaControls'
 
-custom_target('raven-plugin-mediacontrols-file',
-    input : 'MediaControls.plugin.in',
+budgie_pot_templates += files('MediaControls.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'MediaControls.plugin.desktop.in',
     output : 'MediaControls.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : raven_plugin_mediacontrols_dir)
 
@@ -21,7 +25,7 @@ raven_plugin_mediacontrols_deps = [
     link_libbudgiempris,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'org.buddiesofbudgie.budgie-desktop.raven.widget.MediaControls',
     raven_plugin_mediacontrols_sources,
     dependencies: raven_plugin_mediacontrols_deps,

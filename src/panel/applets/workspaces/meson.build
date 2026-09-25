@@ -2,10 +2,14 @@
 
 applet_workspaces_dir = applets_dir + '.workspaces'
 
-custom_target('plugin-file-workspaces',
-    input : 'WorkspacesApplet.plugin.in',
+budgie_pot_templates += files('WorkspacesApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'WorkspacesApplet.plugin.desktop.in',
     output : 'WorkspacesApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_workspaces_dir)
 
@@ -35,7 +39,7 @@ applet_workspaces_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'workspacesapplet',
     applet_workspaces_sources,
     dependencies: applet_workspaces_deps,

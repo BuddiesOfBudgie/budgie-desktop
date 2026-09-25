@@ -2,10 +2,14 @@
 
 applet_caffeine_dir = applets_dir + '.caffeine'
 
-custom_target('plugin-file-caffeine',
-    input : 'CaffeineApplet.plugin.in',
+budgie_pot_templates += files('CaffeineApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'CaffeineApplet.plugin.desktop.in',
     output : 'CaffeineApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_caffeine_dir)
 
@@ -33,7 +37,7 @@ applet_caffeine_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'caffeineapplet',
     applet_caffeine_sources,
     dependencies: applet_caffeine_deps,

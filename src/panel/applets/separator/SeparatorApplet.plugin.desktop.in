@@ -1,9 +1,9 @@
 [Plugin]
-Module=raventriggerapplet.so
+Module=separatorapplet.so
 Builtin=true
-Name=Raven Trigger
-_Description=Open the Raven sidebar.
+Name=Separator
+Description=Visual separator between applets.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=pane-show
+Icon=separator

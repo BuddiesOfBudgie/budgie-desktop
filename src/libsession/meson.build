@@ -17,3 +17,5 @@ link_libsession = declare_dependency(
     link_with: libsession,
     include_directories: include_directories('.'),
 )
+
+budgie_pot_targets += libsession

@@ -2,10 +2,14 @@
 
 applet_showdesktop_dir = applets_dir + '.show-desktop'
 
-custom_target('plugin-file-showdesktop',
-    input : 'ShowDesktopApplet.plugin.in',
+budgie_pot_templates += files('ShowDesktopApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'ShowDesktopApplet.plugin.desktop.in',
     output : 'ShowDesktopApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_showdesktop_dir)
 
@@ -21,7 +25,7 @@ applet_showdesktop_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'showdesktopapplet',
     applet_showdesktop_sources,
     dependencies: applet_showdesktop_deps,

@@ -1,9 +1,9 @@
 [Plugin]
-Module=showdesktopapplet.so
+Module=raventriggerapplet.so
 Builtin=true
-Name=Show Desktop Button
-_Description=A button that toggles visibility of the desktop.
+Name=Raven Trigger
+Description=Open the Raven sidebar.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=user-desktop
+Icon=pane-show

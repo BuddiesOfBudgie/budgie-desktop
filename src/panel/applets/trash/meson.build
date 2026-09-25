@@ -1,9 +1,13 @@
 applet_trash_dir = applets_dir + '.trash'
 
-custom_target('plugin-file-trash',
-    input : 'TrashApplet.plugin.in',
+budgie_pot_templates += files('TrashApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'TrashApplet.plugin.desktop.in',
     output : 'TrashApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_trash_dir)
 
@@ -38,7 +42,7 @@ applet_trash_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'trashapplet',
     applet_trash_sources,
     dependencies: applet_trash_deps,

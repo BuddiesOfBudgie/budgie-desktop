@@ -113,3 +113,5 @@ link_libravenplugin = declare_dependency(
 
 # Expose the current directory so that we can use vapidir
 dir_libravenplugin = meson.current_source_dir()
+
+budgie_pot_targets += [libravenenum, libravenplugin]

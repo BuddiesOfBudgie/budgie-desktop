@@ -3,24 +3,31 @@
 screenshot_config_data = configuration_data()
 screenshot_config_data.set('libexecdir', libexecdir)
 
+budgie_pot_templates += files(
+    'budgie-screenshot-dialog.desktop.in.in',
+    'budgie-screenshot.desktop.in',
+)
+
 screenshot_dialog_desktop = configure_file(
     input: 'budgie-screenshot-dialog.desktop.in.in',
     output: 'budgie-screenshot-dialog.desktop.in',
     configuration: screenshot_config_data,
 )
 
-custom_target('desktop-file-screenshot-dialog',
+i18n.merge_file(
     input : screenshot_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgieScreenshotDialog.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : xdg_appdir)
 
 
-custom_target('desktop-file-screenshot',
+i18n.merge_file(
     input : 'budgie-screenshot.desktop.in',
     output : 'org.buddiesofbudgie.BudgieScreenshot.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : join_paths(datadir, 'applications'))
 
@@ -55,7 +62,7 @@ top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
 screenshot_vala_args = ['-D', 'USE_GSD_DOUBLES']
 
-executable(
+budgie_pot_targets += executable(
     'budgie-screenshot-dialog', screenshot_sources,
     dependencies: screenshot_deps,
     vala_args: [
@@ -79,7 +86,7 @@ ScreenshotMainDependencies = [
     dep_gtk3,
 ]
 
-executable(
+budgie_pot_targets += executable(
     'org.buddiesofbudgie.BudgieScreenshot', main_sources,
     dependencies: ScreenshotMainDependencies,
     install: true

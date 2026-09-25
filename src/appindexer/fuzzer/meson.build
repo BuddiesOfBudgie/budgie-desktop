@@ -19,3 +19,5 @@ link_libfuzzer = declare_dependency(
     link_with: libfuzzer,
     include_directories: include_directories('.'),
 )
+
+budgie_pot_targets += libfuzzer

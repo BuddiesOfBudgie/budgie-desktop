@@ -1,9 +1,9 @@
 [Plugin]
-Module=nightlightapplet.so
+Module=spacerapplet.so
 Builtin=true
-Name=Night Light
-_Description=Toggle and modify Night Light settings.
+Name=Spacer
+Description=Adjustable spacer to put between other applets.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=weather-clear-night
+Icon=spacer

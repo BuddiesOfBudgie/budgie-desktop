@@ -128,3 +128,5 @@ link_libpanelplugin = declare_dependency(
 
 # Expose the current directory so that we can use vapidir
 dir_libpanelplugin = meson.current_source_dir()
+
+budgie_pot_targets += [libpanelenum, libpanelplugin]

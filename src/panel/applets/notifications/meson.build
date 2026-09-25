@@ -2,10 +2,14 @@
 
 applet_notifications_dir = applets_dir + '.notifications'
 
-custom_target('plugin-file-notifications',
-    input : 'NotificationsApplet.plugin.in',
+budgie_pot_templates += files('NotificationsApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'NotificationsApplet.plugin.desktop.in',
     output : 'NotificationsApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_notifications_dir)
 
@@ -20,7 +24,7 @@ applet_notifications_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'notificationsapplet',
     applet_notifications_sources,
     dependencies: applet_notifications_deps,

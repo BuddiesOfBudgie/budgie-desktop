@@ -3,16 +3,19 @@
 polkit_config_data = configuration_data()
 polkit_config_data.set('libexecdir', libexecdir)
 
+budgie_pot_templates += files('budgie-polkit.desktop.in.in')
+
 polkit_dialog_desktop = configure_file(
     input: 'budgie-polkit.desktop.in.in',
     output: 'budgie-polkit.desktop.in',
     configuration: polkit_config_data,
 )
 
-custom_target('desktop-file-polkit',
+i18n.merge_file(
     input : polkit_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgiePolkit.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : join_paths(datadir, 'applications'))
 
@@ -51,7 +54,7 @@ pkvapi = join_paths(meson.project_source_root(), 'vapi')
 # Need absolute path to gresource
 gresource = join_paths(meson.current_source_dir(), 'budgie-polkit.gresource.xml')
 
-executable(
+budgie_pot_targets += executable(
     'budgie-polkit-dialog', polkit_sources,
     dependencies: polkit_deps,
     vala_args: [

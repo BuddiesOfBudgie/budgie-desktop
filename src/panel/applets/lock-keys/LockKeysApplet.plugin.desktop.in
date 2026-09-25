@@ -1,9 +1,9 @@
 [Plugin]
-Module=workspacesapplet.so
+Module=lockkeysapplet.so
 Builtin=true
-Name=Workspace Switcher
-_Description=Display workspaces and switch between them.
+Name=Lock Keys Indicator
+Description=Show status of lock keys.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=workspace-switcher
+Icon=num-lock

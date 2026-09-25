@@ -49,7 +49,7 @@ namespace Budgie {
 
 			combobox_gtk = new Gtk.ComboBox();
 			grid.add_row(new SettingsRow(combobox_gtk,
-				_("Widgets"),
+				C_("Styling", "Widgets"),
 				_("Set the appearance of window decorations and controls")));
 
 			combobox_icon = new Gtk.ComboBox();
@@ -316,7 +316,7 @@ namespace Budgie {
 
 			labwc_theme_row = new SettingsRow(labwc_theme_override,
 				_("Labwc Compositor Theme"),
-				_("Override the labwc compositor theme independently from the desktop theme.")
+				_("Override the labwc compositor theme independently from the desktop theme")
 			);
 		}
 

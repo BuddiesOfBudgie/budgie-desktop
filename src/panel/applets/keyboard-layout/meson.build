@@ -1,9 +1,13 @@
 applet_keyboardlayout_dir = applets_dir + '.keyboard-layout'
 
-custom_target('plugin-file-keyboardlayout',
-    input : 'KeyboardLayoutApplet.plugin.in',
+budgie_pot_templates += files('KeyboardLayoutApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'KeyboardLayoutApplet.plugin.desktop.in',
     output : 'KeyboardLayoutApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_keyboardlayout_dir)
 
@@ -51,7 +55,7 @@ applet_keyboardlayout_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'keyboardlayoutapplet',
     applet_keyboardlayout_sources,
     dependencies: applet_keyboardlayout_deps,

@@ -1,9 +1,12 @@
 # Provides budgie-daemon component
 
-custom_target('desktop-file-daemon',
+budgie_pot_templates += files('budgie-daemon.desktop.in')
+
+i18n.merge_file(
     input : 'budgie-daemon.desktop.in',
     output : 'org.buddiesofbudgie.BudgieDaemon.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : join_paths(datadir, 'applications'))
 
@@ -85,7 +88,7 @@ endif
 
 top_vapidir = join_paths(meson.project_source_root(), 'vapi')
 
-executable(
+budgie_pot_targets += executable(
     'budgie-daemon', daemon_sources,
     dependencies: daemon_deps,
     link_whole: [
@@ -138,3 +141,5 @@ install_data(
     files('notifications/20_buddiesofbudgie.budgie-desktop.notifications.gschema.override'),
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
+
+budgie_pot_targets += budgie_brightness_helper

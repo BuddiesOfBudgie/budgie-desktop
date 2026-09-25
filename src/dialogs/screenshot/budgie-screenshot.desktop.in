@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-_Name=Budgie Screenshot
-_Comment=Budgie screenshot app
+Name=Budgie Screenshot
+Comment=Budgie screenshot app
 Exec=org.buddiesofbudgie.BudgieScreenshot -i
 Icon=org.buddiesofbudgie.BudgieScreenshot
 Categories=Utility;

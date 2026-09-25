@@ -1,9 +1,9 @@
 [Plugin]
-Module=lockkeysapplet.so
+Module=budgiemenuapplet.so
 Builtin=true
-Name=Lock Keys Indicator
-_Description=Show status of lock keys.
+Name=Budgie Menu
+Description=Search for and start up applications.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=num-lock
+Icon=view-grid-symbolic

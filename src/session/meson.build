@@ -87,18 +87,29 @@ else
     session_data.set('oo7_daemon', '')
 endif
 
+# magpie is here while its merge is commented out, to keep its translations
+budgie_pot_templates += files(
+    'budgie-desktop.session.desktop.in.in',
+    'budgie-desktop.desktop.in.in',
+    'budgie-desktop-magpie.desktop.in.in',
+    'budgie-desktop-nm-applet.desktop.in',
+    'budgie-desktop-powerdialog.desktop.in.in',
+    'budgie-desktop-screenshotdialog.desktop.in.in',
+)
+
 # Write the budgie-desktop.session.in file from the .in.in
 session_conf = configure_file(
-    input: 'budgie-desktop.session.in.in',
+    input: 'budgie-desktop.session.desktop.in.in',
     output: 'budgie-desktop.session.in',
     configuration: session_data,
 )
 
 # Now merge the translations of the .desktop.in to a .desktop
-custom_target('desktop-file-session-main',
+i18n.merge_file(
     input : session_conf,
     output : 'org.buddiesofbudgie.BudgieDesktop.session',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : join_paths(datadir, 'gnome-session', 'sessions'),
 )
@@ -127,10 +138,11 @@ waylandsession_conf = configure_file(
 )
 
 # Now merge the translations of the .desktop.in to a .desktop
-custom_target('desktop-file-waylandsession',
+i18n.merge_file(
     input : waylandsession_conf,
     output : 'budgie-desktop.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : join_paths(datadir, 'wayland-sessions'),
 )
@@ -143,19 +155,21 @@ custom_target('desktop-file-waylandsession',
 #)
 
 # Now merge the translations of the .desktop.in to a .desktop
-#custom_target('desktop-file-waylandmagpiesession',
+#i18n.merge_file(
 #    input : waylandmagpiesession_conf,
 #    output : 'budgie-desktop-magpie.desktop',
-#    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+#    type : 'desktop',
+#    po_dir : podir,
 #    install : true,
 #    install_dir : join_paths(datadir, 'wayland-sessions'),
 #)
 
 # Merge + install nm-applet
-custom_target('desktop-file-nm-applet',
+i18n.merge_file(
     input : 'budgie-desktop-nm-applet.desktop.in',
     output : 'org.buddiesofbudgie.BudgieDesktopNmApplet.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : xdg_appdir,
 )
@@ -167,10 +181,11 @@ session_power_dialog_desktop = configure_file(
     configuration: session_data,
 )
 
-custom_target('desktop-file-powerdialog',
+i18n.merge_file(
     input : session_power_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgiePowerDialog.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : xdg_appdir,
 )
@@ -182,10 +197,11 @@ session_screenshot_dialog_desktop = configure_file(
     configuration: session_data,
 )
 
-custom_target('desktop-file-screenshotdialog',
+i18n.merge_file(
     input : session_screenshot_dialog_desktop,
     output : 'org.buddiesofbudgie.BudgieScreenshotDialog.desktop',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
     install : true,
     install_dir : xdg_appdir,
 )

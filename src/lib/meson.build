@@ -91,3 +91,5 @@ link_libbudgiewayland = declare_dependency(
     link_with: libbudgiewayland,
     include_directories: include_directories('.'),
 )
+
+budgie_pot_targets += [libbudgiempris, libbudgieprivate, libbudgiewayland]

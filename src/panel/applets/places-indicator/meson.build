@@ -2,10 +2,14 @@
 
 applet_placesindicator_dir = applets_dir + '.places-indicator'
 
-custom_target('plugin-file-placesindicator',
-    input : 'PlacesIndicator.plugin.in',
+budgie_pot_templates += files('PlacesIndicator.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'PlacesIndicator.plugin.desktop.in',
     output : 'PlacesIndicator.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_placesindicator_dir)
 
@@ -46,7 +50,7 @@ applet_placesindicator_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'placesindicator',
     applet_placesindicator_sources,
     dependencies: applet_placesindicator_deps,

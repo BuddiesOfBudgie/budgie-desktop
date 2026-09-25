@@ -1,9 +1,9 @@
 [Plugin]
-Module=notificationsapplet.so
+Module=libuserindicator.so
 Builtin=true
-Name=Notifications
-_Description=Open the Raven notifications view.
+Name=User Indicator
+Description=Opens the power dialog.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=notifications-applet
+Icon=system-shutdown

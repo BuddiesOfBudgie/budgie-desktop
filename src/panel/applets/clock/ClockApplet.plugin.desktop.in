@@ -1,9 +1,9 @@
 [Plugin]
-Module=spacerapplet.so
+Module=clockapplet.so
 Builtin=true
-Name=Spacer
-_Description=Adjustable spacer to put between other applets.
+Name=Clock
+Description=A digital clock with a customizable format.
 Authors=Budgie Desktop Developers
 Copyright=Copyright Budgie Desktop Developers
 Website=https://buddiesofbudgie.org/
-Icon=spacer
+Icon=clock-applet

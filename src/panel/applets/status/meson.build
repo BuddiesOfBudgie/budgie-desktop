@@ -2,10 +2,14 @@
 
 applet_status_dir = applets_dir + '.status'
 
-custom_target('plugin-file-status',
-    input : 'StatusApplet.plugin.in',
+budgie_pot_templates += files('StatusApplet.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'StatusApplet.plugin.desktop.in',
     output : 'StatusApplet.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_status_dir)
 
@@ -47,7 +51,7 @@ applet_status_deps = [
     meson.get_compiler('c').find_library('m', required: false),
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'statusapplet',
     sources: applet_status_sources,
     dependencies: applet_status_deps,

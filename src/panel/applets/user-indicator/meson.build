@@ -2,10 +2,14 @@
 
 applet_userindicator_dir = applets_dir + '.user-indicator'
 
-custom_target('plugin-file-userindicator',
-    input : 'UserIndicator.plugin.in',
+budgie_pot_templates += files('UserIndicator.plugin.desktop.in')
+
+i18n.merge_file(
+    input : 'UserIndicator.plugin.desktop.in',
     output : 'UserIndicator.plugin',
-    command : [intltool, '--desktop-style', podir, '@INPUT@', '@OUTPUT@'],
+    type : 'desktop',
+    po_dir : podir,
+    args : ['--keyword=Description'],
     install : true,
     install_dir : applet_userindicator_dir)
 
@@ -21,7 +25,7 @@ applet_userindicator_deps = [
     link_libpanelplugin,
 ]
 
-shared_library(
+budgie_pot_targets += shared_library(
     'userindicator',
     applet_userindicator_sources,
     dependencies: applet_userindicator_deps,

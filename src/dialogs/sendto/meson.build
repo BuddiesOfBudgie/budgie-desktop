@@ -21,7 +21,7 @@ sendto_deps = [
     link_libtheme,
 ]
 
-executable(
+budgie_pot_targets += executable(
     'org.buddiesofbudgie.sendto',
     sendto_sources,
     dependencies: sendto_deps,
