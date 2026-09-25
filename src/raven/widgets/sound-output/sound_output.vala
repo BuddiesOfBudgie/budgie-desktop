@@ -300,7 +300,16 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 			}
 		});
 
+		bool had_primary = this.primary_stream != null;
 		this.primary_stream = stream;
+
+		// Streams that appeared before the first default sink were skipped
+		if (!had_primary) {
+			foreach (unowned Gvc.MixerStream existing in mixer.get_streams()) {
+				on_stream_added(existing.get_id());
+			}
+		}
+
 		update_volume();
 		devices_list.queue_draw();
 		devices_state_changed();
@@ -392,6 +401,8 @@ public class SoundOutputRavenWidget : Budgie.RavenWidget {
 	 * on_stream_added will handle when a stream (like an application) has been added
 	 */
 	private void on_stream_added(uint id) {
+		if (primary_stream == null || apps.contains(id)) return;
+
 		Gvc.MixerStream stream = mixer.lookup_stream_id(id); // Get our stream
 
 		if ((stream != null) && (stream.get_card_index() == -1)) { // If this isn't a card
