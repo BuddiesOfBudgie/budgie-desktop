@@ -98,6 +98,11 @@ def _format_keyboard_layout(layout: str | None, variant: str | None = "") -> str
     return ",".join(combined)
 
 
+def _base_layout(entry: str) -> str:
+    """The layout without its variant: "fi(nodeadkeys)" becomes "fi"."""
+    return entry.split("(", 1)[0].strip()
+
+
 class LayoutResolver:
     """Resolves the keyboard layout and XKB options to write to the environment file."""
 
@@ -223,6 +228,46 @@ class LayoutResolver:
         # Default fallback
         log.info("Using default keyboard layout: us")
         return "us"
+
+    def reconcile_override(self) -> None:
+        """Bring the override in line with the configured layouts after they change."""
+        if not self.override:
+            return
+
+        # The first entry is the layout in use
+        previous = [entry.strip() for entry in self.override.split(",")]
+
+        # keyboard_layout() returns the override when one is set, so clear it to read the configured layouts
+        self.override = None
+        current = [entry.strip() for entry in self.keyboard_layout().split(",")]
+
+        # Each configured layout matches at most one previous entry, and any left unmatched were newly added
+        unmatched = list(current)
+        kept: list[str | None] = []
+
+        for entry in previous:
+            # Exact match first, so "fi" and "fi(nodeadkeys)" configured together each keep their own entry
+            match = entry if entry in unmatched else None
+
+            # A variant change in Control Center still counts as the same layout
+            if match is None:
+                base = _base_layout(entry)
+                match = next((c for c in unmatched if _base_layout(c) == base), None)  # first unmatched layout with the same base, or None
+
+            if match is not None:  # remove it so no later entry can match the same layout
+                unmatched.remove(match)
+
+            # None marks a layout that is no longer configured, and it is dropped below
+            kept.append(match)
+
+        # The layout in use was removed, so the first configured one takes over
+        if kept[0] is None:
+            log.info(f"Active layout {previous[0]} was removed, clearing the override")
+            return
+
+        # Keep the existing order, which a layout shortcut may have rotated, and add new layouts last
+        self.override = ",".join([entry for entry in kept if entry] + unmatched)
+        log.info(f"Keyboard layout override reconciled to: {self.override}")
 
     def xkb_options(self) -> str:
         """
