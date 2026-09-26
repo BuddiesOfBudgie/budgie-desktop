@@ -23,7 +23,6 @@ namespace Budgie {
 		private Gee.ArrayList<Category> categories;
 		private Category misc_category;
 
-		private AppInfoMonitor monitor;
 		private FileMonitor file_monitor;
 		private uint timeout_id = 0;
 
@@ -47,10 +46,7 @@ namespace Budgie {
 				excluded_applications = { "htop.desktop", "onboard.desktop", "org.gnome.FileRoller.desktop", "org.gnome.font-viewer.desktop" }
 			};
 
-			this.monitor = AppInfoMonitor.@get();
-			this.monitor.changed.connect(() => {
-				this.queue_refresh();
-			});
+			AppInfoStore.get_default().changed.connect(on_apps_changed);
 
 			// Start watching the desktop-directories folder for custom category support
 			var path = Path.build_path(Path.DIR_SEPARATOR_S, Environment.get_home_dir(), ".local", "share", "desktop-directories");
@@ -67,6 +63,10 @@ namespace Budgie {
 
 			// Start building the tree right now
 			this.refresh();
+		}
+
+		private void on_apps_changed() {
+			this.queue_refresh();
 		}
 
 		/**
@@ -207,12 +207,7 @@ namespace Budgie {
 			this.create_custom_categories();
 
 			// Iterate over all registered AppInfos and try to put them in categories
-			foreach (var app in AppInfo.get_all()) {
-				unowned var desktop_app = app as DesktopAppInfo;
-				if (desktop_app == null) {
-					continue;
-				}
-
+			foreach (unowned var desktop_app in AppInfoStore.get_default().get_apps()) {
 				// Sort the application based on its DesktopAppInfo
 				this.sort_application(desktop_app);
 			}
