@@ -23,7 +23,6 @@ jobs:
             'pkgconfig(gnome-settings-daemon)' \
             'pkgconfig(gstreamer-1.0)' \
             'pkgconfig(gtk-layer-shell-0)' \
-            'pkgconfig(ibus-1.0)' \
             'pkgconfig(libcanberra)' \
             'pkgconfig(libgtop-2.0)' \
             'pkgconfig(libnotify)' \
@@ -36,6 +35,7 @@ jobs:
             'pkgconfig(vapigen)' \
             budgie-desktop-view \
             desktop-file-utils \
+            egl-utils \
             gammastep \
             gcc \
             gettext \
@@ -53,8 +53,7 @@ jobs:
             slurp \
             swaybg \
             swayidle \
-            wlopm \
-            egl-utils
+            wlopm
       - name: Checkout
         uses: actions/checkout@v6
         with:
