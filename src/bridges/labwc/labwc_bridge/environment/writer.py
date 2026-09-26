@@ -218,6 +218,9 @@ class EnvironmentWriter:
         if key not in ["sources", "xkb-options"]:
             return
 
+        if key == "sources":
+            self.layout.reconcile_override()
+
         if self.write():
             self.config.reload()
 
@@ -239,6 +242,13 @@ class EnvironmentWriter:
 
         if invalidated:
             log.info(f"Invalidated properties: {list(invalidated)}")
+
+        # Only a layout change should touch the override, so a locale change keeps the applet's pick
+        layout_properties = {"X11Layout", "X11Variant"}
+
+        # PropertiesChanged can carry a property with its new value or list it as invalidated, so check both
+        if layout_properties & (set(dict(changed or {})) | set(invalidated or [])):
+            self.layout.reconcile_override()
 
         if self.write():
             self.config.reload()
