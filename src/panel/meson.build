@@ -50,6 +50,7 @@ panel_sources = [
 
 panel_deps = [
     libpanelplugin_vapi,
+    dep_gee,
     dep_giounix,
     dep_girepository,
     dep_gtk3,
@@ -68,6 +69,7 @@ panel_deps = [
     link_libraven,
     link_libwindowing,
     link_libbudgiewayland,
+    link_libappindexer,
     gvc.get_variable('libgvc_dep'),
 ]
 
