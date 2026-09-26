@@ -232,7 +232,7 @@ namespace Budgie {
 			content_area.show_all();
 
 			set_default_size(400, 450);
-			set_app_list(AppInfo.get_all());
+			set_app_list(AppInfoStore.get_default().get_apps());
 		}
 
 		private bool search_filter(Gtk.ListBoxRow row) {
@@ -291,19 +291,16 @@ namespace Budgie {
 			}
 		}
 
-		private void set_app_list(List<AppInfo> app_list) {
+		private void set_app_list(List<DesktopAppInfo> app_list) {
 			foreach (var child in app_listbox.get_children()) {
 				child.destroy();
 			}
 
-			foreach (var app in app_list) {
-				if (app.should_show()) {
-					DesktopAppInfo? info = new DesktopAppInfo(app.get_id());
-					if (info != null) {
-						AutostartItem item = new AutostartItem.from_app_info(info);
-						bool running = running_processes.contains(item.executable);
-						app_listbox.add(new AutostartItemWidget(item, false, running));
-					}
+			foreach (unowned var info in app_list) {
+				if (info.should_show()) {
+					AutostartItem item = new AutostartItem.from_app_info(info);
+					bool running = running_processes.contains(item.executable);
+					app_listbox.add(new AutostartItemWidget(item, false, running));
 				}
 			}
 			this.show_all();

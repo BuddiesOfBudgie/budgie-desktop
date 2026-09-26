@@ -42,6 +42,7 @@ applet_icontasklist_sources = [
 
 applet_icontasklist_deps = [
     libpanelplugin_vapi,
+    dep_gee,
     dep_giounix,
     dep_gtk3,
     dep_peas,
@@ -49,6 +50,7 @@ applet_icontasklist_deps = [
     link_libwindowing,
     link_libpanelplugin,
     link_libbudgieprivate,
+    link_libappindexer,
     meson.get_compiler('c').find_library('m', required: false)
 ]
 

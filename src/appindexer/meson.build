@@ -2,6 +2,7 @@ subdir('fuzzer')
 
 appindexer_sources = [
     'AppIndex.vala',
+    'AppInfoStore.vala',
     'Category.vala',
     'RelevancyService.vala',
 ]

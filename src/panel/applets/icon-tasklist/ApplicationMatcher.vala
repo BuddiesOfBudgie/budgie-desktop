@@ -61,7 +61,7 @@ namespace Budgie {
 
 			// Collect all installed desktop files
 			DesktopAppInfo[] desktop_infos = {};
-			foreach (var app_info in AppInfo.get_all()) {
+			foreach (var app_info in AppInfoStore.get_default().get_apps()) {
 				var desktop_info = app_info as DesktopAppInfo;
 				if (desktop_info == null || desktop_info.get_id() == null) continue;
 
