@@ -59,6 +59,8 @@ namespace Budgie {
 
 		public signal void NotificationClosed(uint32 id, string app_name, NotificationCloseReason reason);
 
+		public signal void DoNotDisturbChanged(bool value);
+
 		public abstract bool get_do_not_disturb() throws DBusError, IOError;
 		public abstract void toggle_do_not_disturb() throws DBusError, IOError;
 	}
@@ -179,9 +181,9 @@ namespace Budgie {
 				this.dispatcher = Bus.get_proxy.end(res);
 				this.dispatcher.NotificationAdded.connect(on_notification_added);
 				this.dispatcher.NotificationClosed.connect(on_notification_closed);
+				this.dispatcher.DoNotDisturbChanged.connect(on_do_not_disturb_changed);
 
-				this.do_not_disturb = this.dispatcher.get_do_not_disturb();
-				this.button_mute.set_image(this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled);
+				on_do_not_disturb_changed(this.dispatcher.get_do_not_disturb());
 			} catch (Error e) {
 				critical("Unable to connect to notifications dispatcher: %s", e.message);
 			}
@@ -359,10 +361,12 @@ namespace Budgie {
 			Raven.get_instance().ReadNotifications();
 		}
 
-		void do_not_disturb_toggle() {
-			this.do_not_disturb = !this.do_not_disturb;
-			this.button_mute.set_image(!this.do_not_disturb ? image_notifications_enabled : image_notifications_disabled);
+		private void on_do_not_disturb_changed(bool enabled) {
+			this.do_not_disturb = enabled;
+			this.button_mute.set_image(this.do_not_disturb ? image_notifications_disabled : image_notifications_enabled);
+		}
 
+		void do_not_disturb_toggle() {
 			try {
 				this.dispatcher.toggle_do_not_disturb();
 			} catch (Error e) {

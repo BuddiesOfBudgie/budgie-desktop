@@ -33,6 +33,7 @@ public interface RavenRemote : GLib.Object {
 
 [DBus (name="org.buddiesofbudgie.budgie.Dispatcher")]
 public interface DispatcherRemote : GLib.Object {
+	public abstract bool get_do_not_disturb() throws DBusError, IOError;
 	public abstract void toggle_do_not_disturb() throws DBusError, IOError;
 	public signal void DoNotDisturbChanged(bool value);
 }
@@ -91,6 +92,8 @@ public class NotificationsApplet : Budgie.Applet {
 		try {
 			this.dispatcher = Bus.get_proxy.end(res);
 			this.dispatcher.DoNotDisturbChanged.connect(on_dnd_changed);
+
+			set_dnd_state(this.dispatcher.get_do_not_disturb());
 		} catch (Error e) {
 			warning("Failed to get notification dispatcher proxy: %s", e.message);
 		}
