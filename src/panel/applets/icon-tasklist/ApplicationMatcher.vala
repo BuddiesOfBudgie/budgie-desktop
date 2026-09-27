@@ -59,29 +59,39 @@ namespace Budgie {
 			// Extract all possible name variants from the instance
 			string[] variants = extract_name_variants(instance);
 
-			// Search all installed desktop files
-			var apps = AppInfo.get_all();
-			foreach (var app_info in apps) {
-				if (!(app_info is DesktopAppInfo)) continue;
-
+			// Collect all installed desktop files
+			DesktopAppInfo[] desktop_infos = {};
+			foreach (var app_info in AppInfo.get_all()) {
 				var desktop_info = app_info as DesktopAppInfo;
-				var desktop_id = desktop_info.get_id();
-				if (desktop_id == null) continue;
+				if (desktop_info == null || desktop_info.get_id() == null) continue;
 
-				// Try each matching strategy in priority order
-				match_result = try_startup_wm_class(desktop_info, desktop_id, instance, class_name, variants);
+				desktop_infos += desktop_info;
+			}
+
+			// Run each strategy over every desktop file before trying the next, looser one,
+			// so an exact match in one file beats a fuzzy match in a file listed earlier
+			foreach (var desktop_info in desktop_infos) {
+				match_result = try_startup_wm_class(desktop_info, desktop_info.get_id(), instance, class_name, variants);
 				if (match_result.matched()) return match_result;
+			}
 
-				match_result = try_desktop_id_match(desktop_info, desktop_id, instance, class_name, variants);
+			foreach (var desktop_info in desktop_infos) {
+				match_result = try_desktop_id_match(desktop_info, desktop_info.get_id(), instance, class_name, variants);
 				if (match_result.matched()) return match_result;
+			}
 
-				match_result = try_reverse_dns_match(desktop_info, desktop_id, instance, class_name, variants);
+			foreach (var desktop_info in desktop_infos) {
+				match_result = try_reverse_dns_match(desktop_info, desktop_info.get_id(), instance, class_name, variants);
 				if (match_result.matched()) return match_result;
+			}
 
-				match_result = try_snap_pattern_match(desktop_info, desktop_id, instance, class_name, variants);
+			foreach (var desktop_info in desktop_infos) {
+				match_result = try_snap_pattern_match(desktop_info, desktop_info.get_id(), instance, class_name, variants);
 				if (match_result.matched()) return match_result;
+			}
 
-				match_result = try_instance_to_exec_match(desktop_info, desktop_id, instance);
+			foreach (var desktop_info in desktop_infos) {
+				match_result = try_instance_to_exec_match(desktop_info, desktop_info.get_id(), instance);
 				if (match_result.matched()) return match_result;
 			}
 
