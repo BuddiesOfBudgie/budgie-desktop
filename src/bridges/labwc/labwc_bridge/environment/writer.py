@@ -224,6 +224,9 @@ class EnvironmentWriter:
         if self.write():
             self.config.reload()
 
+        if key == "sources":
+            self.locale1.set_x11_keyboard(self.layout.keyboard_layout())
+
     def _locale1_changed(self, interface, changed, invalidated) -> None:
         """
         Handler for PropertiesChanged signals from locale1.
