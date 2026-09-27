@@ -26,6 +26,7 @@ namespace GTop {
         public uint64 shared;
         public uint64 buffer;
         public uint64 cached;
+        public uint64 user;
     }
 
     [CCode (cname = "glibtop_get_mem")]

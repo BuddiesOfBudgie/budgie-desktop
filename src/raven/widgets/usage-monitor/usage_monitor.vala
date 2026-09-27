@@ -154,7 +154,7 @@ public class UsageMonitorRavenWidget : Budgie.RavenWidget {
 		GTop.get_mem(out mem);
 
 		if (mem.total > 0) {
-			float mem_fraction = (float) mem.used / (float) mem.total;
+			float mem_fraction = (float) mem.user / (float) mem.total;
 			ram.update(mem_fraction.clamp(0.0f, 1.0f));
 		} else {
 			ram.hide();
