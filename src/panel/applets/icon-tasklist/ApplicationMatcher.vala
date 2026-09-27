@@ -256,7 +256,16 @@ namespace Budgie {
 				return create_match_result(desktop_id);
 			}
 
-			if (!instance.contains(" ")) return new MatchResult(); // No whitespace, return early since subsequent logic requires it
+			var exec_lower = exec.down();
+			var instance_lower = instance.down();
+
+			if (!instance.contains(" ")) { // No whitespace, only a case-insensitive comparison is left
+				if (instance_lower == exec_lower) {
+					debug(@"Matched via InstanceToExec (case-insensitive): $desktop_id");
+					return create_match_result(desktop_id);
+				}
+				return new MatchResult();
+			}
 
 			// Have a comparison between exec and a string replaced instance of whitespace to dashes
 			// This comparison would effectively check if "proton pass" as proton-pass is the same as the executable
@@ -270,6 +279,13 @@ namespace Budgie {
 				debug(@"Matched via InstanceToExec: $desktop_id");
 				return create_match_result(desktop_id);
 			}
+
+			// Electron apps report a titled app ID (e.g. "Proton Pass") for a lowercase exec (proton-pass)
+			if (instance_lower == exec_lower || instance_dash.down() == exec_lower || instance_dot.down() == exec_lower) {
+				debug(@"Matched via InstanceToExec (case-insensitive): $desktop_id");
+				return create_match_result(desktop_id);
+			}
+
 			return new MatchResult();
 		}
 
