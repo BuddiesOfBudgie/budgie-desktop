@@ -59,7 +59,7 @@ namespace Budgie {
 				app_name = app_name.substring(0, (app_name.length - 1)); // Replace the prefix
 			}
 
-			DesktopAppInfo info = new DesktopAppInfo(app_name + ".desktop"); // Attempt to get the application info
+			DesktopAppInfo? info = find_app_info(app_name);
 
 			if (info != null) { // Successfully got app info
 				string desktop_app_name = info.get_string("Name");
@@ -73,11 +73,14 @@ namespace Budgie {
 
 			Gtk.IconTheme current_theme = Gtk.IconTheme.get_default(); // Get our default IconTheme
 			string usable_icon_name = c_icon;
+			Icon? desktop_icon = null;
 
 			if (current_theme.has_icon(app_name)) { // Has icon based on app name
 				usable_icon_name = app_name;
 			} else if (current_theme.has_icon(stream_name)) { // Has icon based on stream name
 				usable_icon_name = stream_name; // Set to icon name
+			} else if (info != null) {
+				desktop_icon = info.get_icon();
 			}
 
 			if (usable_icon_name != "applications-multimedia") { // Successfully got an icon from a valid app
@@ -126,13 +129,61 @@ namespace Budgie {
 			app_info.pack_start(app_info_header, true, false, 0);
 			app_info.pack_end(volume_slider, true, false, 0);
 
-			app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
+			if (desktop_icon != null) {
+				app_image = new Gtk.Image.from_gicon(desktop_icon, Gtk.IconSize.DND);
+			} else {
+				app_image = new Gtk.Image.from_icon_name(usable_icon_name, Gtk.IconSize.DND);
+			}
+
+			app_image.pixel_size = 32;
 
 			if (app_image != null) {
 				pack_start(app_image, false, false, 0);
 			}
 
 			pack_end(app_info, true, true, 0);
+		}
+
+		/**
+		 * find_app_info will get the desktop app info for a stream's app name, falling back to
+		 * matching the StartupWMClass or the last segment of a reverse-DNS desktop ID (e.g. Flatpaks)
+		 */
+		private DesktopAppInfo? find_app_info(string name) {
+			DesktopAppInfo? info = new DesktopAppInfo(name + ".desktop");
+
+			if (info != null) {
+				return info;
+			}
+
+			string wanted = name.down();
+
+			foreach (AppInfo app in AppInfo.get_all()) {
+				var desktop_app = app as DesktopAppInfo;
+
+				if (desktop_app == null) {
+					continue;
+				}
+
+				string? wm_class = desktop_app.get_startup_wm_class();
+
+				if (wm_class != null && wm_class.down() == wanted) {
+					return desktop_app;
+				}
+
+				string? id = desktop_app.get_id();
+
+				if (id == null || !id.has_suffix(".desktop")) {
+					continue;
+				}
+
+				string base_id = id.substring(0, id.length - ".desktop".length).down();
+
+				if (base_id.substring(base_id.last_index_of(".") + 1) == wanted) {
+					return desktop_app;
+				}
+			}
+
+			return null;
 		}
 
 		/**
