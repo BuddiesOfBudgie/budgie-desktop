@@ -33,10 +33,19 @@ RC_XML = """<labwc_config version="1">
 	</keyboard>
 </labwc_config>"""
 
-TEMPLATE_XML = """<labwc_config version="4">
+TEMPLATE_XML = """<labwc_config version="5">
 	<keyboard>
 		<numlock>off</numlock>
 	</keyboard>
+	<mouse>
+		<doubleClickTime>400</doubleClickTime>
+		<default />
+		<context name="Desktop">
+			<mousebind button="Right" action="Press">
+				<action name="ShowMenu" menu="root-menu" />
+			</mousebind>
+		</context>
+	</mouse>
 </labwc_config>"""
 
 
@@ -134,7 +143,8 @@ class ApplyRewritesTest(unittest.TestCase):
         self.assertEqual(et.getroot().findtext("./keyboard/numlock"), "1")
 
     def test_corrects_the_maximize_directions_of_every_older_config(self):
-        for version in range(migration.CURRENT_RC_VERSION):
+        # The maximize rewrites are keyed at version 4
+        for version in range(4):
             with self.subTest(version=version):
                 et = tree(RC_XML)
 
@@ -152,6 +162,97 @@ class ApplyRewritesTest(unittest.TestCase):
         applied = self.subject.apply_rewrites(et, migration.CURRENT_RC_VERSION)
 
         self.assertFalse(applied)
+
+
+class MergeMouseSectionTest(unittest.TestCase):
+    def setUp(self):
+        self.subject = subject_for(RC_XML)
+
+    def merged(self, user_xml: str, template_xml: str = TEMPLATE_XML) -> Et.Element:
+        et = tree(user_xml)
+        self.subject.merge_mouse_section(et, tree(template_xml))
+        return et.getroot()
+
+    def layout(self, root: Et.Element) -> list[tuple[str, str | None]]:
+        return [(child.tag, child.get("name")) for child in find(root, "./mouse")]
+
+    def test_inserts_the_whole_section_when_the_user_has_none(self):
+        root = self.merged(RC_XML)
+
+        self.assertEqual(
+            self.layout(root),
+            [("doubleClickTime", None), ("default", None), ("context", "Desktop")],
+        )
+
+    def test_adds_what_an_existing_section_lacks(self):
+        root = self.merged(
+            """<labwc_config>
+	<mouse>
+		<doubleClickTime>250</doubleClickTime>
+	</mouse>
+</labwc_config>"""
+        )
+
+        self.assertEqual(
+            self.layout(root),
+            [("doubleClickTime", None), ("default", None), ("context", "Desktop")],
+        )
+        self.assertEqual(root.findtext("./mouse/doubleClickTime"), "250")
+
+    def test_places_default_ahead_of_the_user_contexts(self):
+        root = self.merged(
+            """<labwc_config>
+	<mouse>
+		<context name="Frame">
+			<mousebind button="A-Left" action="Drag"><action name="Move" /></mousebind>
+		</context>
+	</mouse>
+</labwc_config>"""
+        )
+
+        self.assertEqual(
+            self.layout(root),
+            [
+                ("doubleClickTime", None),
+                ("default", None),
+                ("context", "Desktop"),
+                ("context", "Frame"),
+            ],
+        )
+
+    def test_leaves_a_desktop_context_the_user_has_alone(self):
+        root = self.merged(
+            """<labwc_config>
+	<mouse>
+		<default />
+		<context name="Desktop">
+			<mousebind button="Middle" action="Press">
+				<action name="ShowMenu" menu="client-list-combined-menu" />
+			</mousebind>
+		</context>
+	</mouse>
+</labwc_config>"""
+        )
+
+        desktop = root.findall("./mouse/context[@name='Desktop']")
+        self.assertEqual(len(desktop), 1)
+        self.assertEqual(
+            [bind.get("button") for bind in desktop[0].findall("./mousebind")],
+            ["Middle"],
+        )
+        self.assertEqual(len(root.findall("./mouse/default")), 1)
+
+    def test_is_idempotent(self):
+        once = self.merged(RC_XML)
+        twice = tree(Et.tostring(once, encoding="unicode"))
+        self.subject.merge_mouse_section(twice, tree(TEMPLATE_XML))
+
+        self.assertEqual(self.layout(twice.getroot()), self.layout(once))
+
+    def test_a_template_without_a_mouse_section_changes_nothing(self):
+        root = self.merged(RC_XML, "<labwc_config><keyboard /></labwc_config>")
+
+        self.assertIsNone(root.find("./mouse"))
 
 
 class MigrateTest(unittest.TestCase):
@@ -209,6 +310,14 @@ class MigrateTest(unittest.TestCase):
 
         self.assertEqual(self.directions(self.written()), ["horizontal", "vertical"])
 
+    def test_writes_the_template_mouse_settings(self):
+        with self.with_template():
+            self.subject.migrate()
+
+        written = self.written()
+        self.assertIsNotNone(written.find("./mouse/default"))
+        self.assertIsNotNone(written.find("./mouse/context[@name='Desktop']"))
+
     def test_backs_the_config_up_before_writing(self):
         with self.with_template():
             self.subject.migrate()
@@ -233,6 +342,14 @@ class MigrateTest(unittest.TestCase):
 
 
 class ShippedConfigTest(unittest.TestCase):
+    def test_the_shipped_rc_xml_loads_default_mousebinds_ahead_of_its_contexts(self):
+        mouse = find(Et.parse(SHIPPED_RC).getroot(), "./mouse")
+        tags = [child.tag for child in mouse]
+
+        self.assertIn("default", tags)
+        if "context" in tags:
+            self.assertLess(tags.index("default"), tags.index("context"))
+
     def test_the_shipped_rc_xml_is_at_the_current_version(self):
         """
         A fresh install copies this file verbatim. A version below the constant
