@@ -1,13 +1,11 @@
-<labwc_config version="4">
+<labwc_config version="5">
 	<desktops number="2">
 		<popupTime>1000</popupTime>
 	</desktops>
 	<keyboard>
 		<numlock>off</numlock>
 
-		<!-- bridged keybinds merged from keybinds.xml(.example) and current
-		     gsettings bridged keys.
-		-->
+		<!-- bridged keybinds merged from keybinds.xml(.example) and current gsettings bridged keys. -->
 
 		<keybind key="XF86AudioNext">
 			<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieMprisController /org/buddiesofbudgie/MprisController org.buddiesofbudgie.BudgieMprisController.Next" />
@@ -63,6 +61,18 @@
 	<windowSwitcher style="thumbnail" allWorkspaces="no" />
 	<mouse>
 		<doubleClickTime>400</doubleClickTime>
+		<default />
+		<context name="Desktop">
+    		<!-- Left click: Closes open menus, does not open anything -->
+    		<mousebind button="Left" action="Press">
+        		<action name="Focus" />
+    		</mousebind>
+
+    		<!-- Right click: Opens the desktop menu -->
+    		<mousebind button="Right" action="Press">
+        		<action name="ShowMenu" menu="root-menu" />
+    		</mousebind>
+		</context>
 	</mouse>
 	<libinput>
 		<device category="touchpad">

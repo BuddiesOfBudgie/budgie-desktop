@@ -23,7 +23,7 @@ from .rewrites import REWRITES
 
 log = logging.getLogger(__name__)
 
-CURRENT_RC_VERSION = 4
+CURRENT_RC_VERSION = 5
 
 
 class RcXmlMigration:
@@ -130,6 +130,53 @@ class RcXmlMigration:
 
         return True
 
+    def merge_mouse_section(
+        self,
+        user_et: Et.ElementTree[Et.Element],
+        template_et: Et.ElementTree[Et.Element],
+    ) -> None:
+        """Add the template's mouse settings and contexts the user's config lacks"""
+        template_mouse = template_et.getroot().find("./mouse")
+        if template_mouse is None:
+            log.info("Template has no mouse section - nothing to merge")
+            return
+
+        user_root = user_et.getroot()
+        user_mouse = user_root.find("./mouse")
+
+        if user_mouse is None:
+            user_root.append(copy.deepcopy(template_mouse))
+            log.info("Inserted mouse section from template")
+            return
+
+        # labwc keeps the later of two identical mousebinds, so <default /> must precede contexts
+        insert_at = 0
+        added_any = False
+        for template_child in template_mouse:
+            existing = self.find_mouse_child(user_mouse, template_child)
+            if existing is not None:
+                insert_at = list(user_mouse).index(existing) + 1
+                continue
+
+            user_mouse.insert(insert_at, copy.deepcopy(template_child))
+            insert_at += 1
+            added_any = True
+
+        if added_any:
+            log.info("Added missing mouse settings from template")
+        else:
+            log.info("Mouse section already has all template settings - nothing to merge")
+
+    def find_mouse_child(
+        self, user_mouse: Et.Element, template_child: Et.Element
+    ) -> Et.Element | None:
+        """The user's counterpart of a template <mouse> child, a context matched by name"""
+        name = template_child.get("name")
+        for child in user_mouse:
+            if child.tag == template_child.tag and child.get("name") == name:
+                return child
+        return None
+
     def apply_rewrites(
         self, user_et: Et.ElementTree[Et.Element], from_version: int
     ) -> bool:
@@ -148,7 +195,7 @@ class RcXmlMigration:
         return changed
 
     def migrate(self) -> bool:
-        """Merge the template's keyboard settings, apply the rewrites, and record the version"""
+        """Merge the template's keyboard and mouse settings, apply the rewrites, and record the version"""
         user_version = self.get_rc_version(self.config.et)
         log.info(f"Starting rc.xml migration from version {user_version}")
 
@@ -169,13 +216,16 @@ class RcXmlMigration:
             log.error("Migration aborted - failed to replace keyboard section")
             return False
 
-        # Step 4: Bring values written by older versions up to date
+        # Step 4: Add mouse settings and contexts the user's config lacks
+        self.merge_mouse_section(user_et, template_et)
+
+        # Step 5: Bring values written by older versions up to date
         self.apply_rewrites(user_et, user_version)
 
-        # Step 5: Set version number on user config
+        # Step 6: Set version number on user config
         user_et.getroot().set("version", str(CURRENT_RC_VERSION))
 
-        # Step 6: Write updated config
+        # Step 7: Write updated config
         save(user_et, self.config.path)
 
         return True
