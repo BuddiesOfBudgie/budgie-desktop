@@ -1339,6 +1339,11 @@ namespace Budgie {
 				} catch (Error e) {
 					warning("create_panel(): %s", e.message);
 				}
+
+				// The layout did not say where this panel goes, so pick an edge for it
+				if (position == PanelPosition.NONE) {
+					position = fallback_position();
+				}
 			} else {
 				position = get_first_position(this.primary_monitor);
 				if (position == PanelPosition.NONE) {
@@ -1349,6 +1354,8 @@ namespace Budgie {
 
 			var uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
 			load_panel(uuid, false);
+			// show_panel may be deferred, so store the edge now
+			panels.lookup(uuid).set_position_setting(position);
 
 			set_panels();
 			show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible, spacing);
