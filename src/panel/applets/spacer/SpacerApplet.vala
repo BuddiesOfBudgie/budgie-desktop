@@ -73,40 +73,29 @@ public class SpacerApplet : Budgie.Applet {
 		queue_resize();
 	}
 
+	private bool on_vertical_panel() {
+		return this.panel_position == Budgie.PanelPosition.LEFT ||
+			this.panel_position == Budgie.PanelPosition.RIGHT;
+	}
+
 	public override void get_preferred_width(out int min, out int nat) {
-		min = -1;
-		nat = -1;
-		if (this.panel_position == Budgie.PanelPosition.TOP ||
-			this.panel_position == Budgie.PanelPosition.BOTTOM) {
-				min = nat = space_size;
-		}
+		// On a horizontal panel our width is the configured spacing; on a vertical one the panel decides our width, so request 0
+		min = nat = on_vertical_panel() ? 0 : space_size;
 	}
 
 	public override void get_preferred_width_for_height(int h, out int min, out int nat) {
-		min = -1;
-		nat = -1;
-		if (this.panel_position == Budgie.PanelPosition.TOP ||
-			this.panel_position == Budgie.PanelPosition.BOTTOM) {
-				min = nat = space_size;
-		}
+		// Same as get_preferred_width
+		min = nat = on_vertical_panel() ? 0 : space_size;
 	}
 
 	public override void get_preferred_height(out int min, out int nat) {
-		min = -1;
-		nat = -1;
-		if (this.panel_position == Budgie.PanelPosition.LEFT ||
-			this.panel_position == Budgie.PanelPosition.RIGHT) {
-				min = nat = space_size;
-		}
+		// On a vertical panel our height is the configured spacing; on a horizontal one the panel decides our height, so request 0
+		min = nat = on_vertical_panel() ? space_size : 0;
 	}
 
 	public override void get_preferred_height_for_width(int h, out int min, out int nat) {
-		min = -1;
-		nat = -1;
-		if (this.panel_position == Budgie.PanelPosition.LEFT ||
-			this.panel_position == Budgie.PanelPosition.RIGHT) {
-				min = nat = space_size;
-		}
+		// Same as get_preferred_height
+		min = nat = on_vertical_panel() ? space_size : 0;
 	}
 }
 

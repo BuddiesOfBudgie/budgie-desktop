@@ -863,6 +863,19 @@ namespace Budgie {
 			this.show_panel(uuid, position, transparency, policy, dock_mode, shadow_visible, spacing);
 		}
 
+		/**
+		* Pick an edge for a panel whose stored location is unset
+		*/
+		PanelPosition fallback_position() {
+			unowned Screen? area = screens.lookup(primary_monitor);
+			if (area == null || (area.slots & PanelPosition.BOTTOM) == 0) {
+				return PanelPosition.BOTTOM;
+			}
+
+			PanelPosition position = get_first_position(primary_monitor);
+			return position == PanelPosition.NONE ? PanelPosition.BOTTOM : position;
+		}
+
 		void show_panel(string uuid, PanelPosition position, PanelTransparency transparency, AutohidePolicy policy,
 			bool dock_mode, bool shadow_visible, int spacing) {
 
@@ -870,6 +883,11 @@ namespace Budgie {
 			if (panel == null) {
 				warning("show_panel called for non-existent panel: %s", uuid);
 				return;
+			}
+
+			if (position == PanelPosition.NONE) {
+				position = fallback_position();
+				warning("Panel %s has no stored location, placing it on the %s edge", uuid, position.to_string());
 			}
 
 			// If WaylandClient isn't initialized yet, defer until it is
