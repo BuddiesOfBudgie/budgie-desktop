@@ -52,11 +52,7 @@ namespace Budgie {
 
 
 		void update_position(PanelPosition? old) {
-			if (pos == PanelPosition.TOP || pos == PanelPosition.BOTTOM) {
-				horizontal = true;
-			} else {
-				horizontal = false;
-			}
+			horizontal = (pos != PanelPosition.LEFT && pos != PanelPosition.RIGHT);
 			queue_resize();
 		}
 

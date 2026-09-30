@@ -188,7 +188,7 @@ namespace Budgie {
 			case PanelPosition.RIGHT:
 				return GtkLayerShell.Edge.RIGHT;
 			case PanelPosition.BOTTOM:
-			case PanelPosition.NONE: // Note: NONE will never actually be hit because of checks where we are calling this function
+			case PanelPosition.NONE:
 				return GtkLayerShell.Edge.BOTTOM;
 		}
 		return GtkLayerShell.Edge.BOTTOM;
@@ -1387,7 +1387,7 @@ namespace Budgie {
 		}
 
 		private bool is_horizontal() {
-			return (position == Budgie.PanelPosition.TOP || position == Budgie.PanelPosition.BOTTOM);
+			return (position != Budgie.PanelPosition.LEFT && position != Budgie.PanelPosition.RIGHT);
 		}
 
 		/**
