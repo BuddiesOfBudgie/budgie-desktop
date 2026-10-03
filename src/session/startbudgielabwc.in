@@ -67,7 +67,7 @@ if [ -z "${GDK_BACKEND}" ]; then
     export GDK_BACKEND
 fi
 if [ -z "${QT_QPA_PLATFORM}" ]; then
-    QT_QPA_PLATFORM="wayland"
+    QT_QPA_PLATFORM="wayland;xcb"
     export QT_QPA_PLATFORM
 fi
 
