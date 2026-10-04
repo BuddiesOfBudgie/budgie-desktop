@@ -395,26 +395,37 @@ public class BudgieMenuWindow : Gtk.Window {
 
 		this.arrange_arrow(position, vertical, launcher_offset + launcher_extent / 2 - margin, menu_nat);
 
+		// The compositor keeps the menu clear of a panel's exclusive zone; an autohide or dock panel has none, so clear it by hand
+		int panel_gap = 0;
+		Budgie.Toplevel? toplevel = panel as Budgie.Toplevel;
+		if (toplevel != null && GtkLayerShell.get_exclusive_zone(toplevel) == 0) {
+			panel_gap = toplevel.reserved_size;
+		}
+
 		switch (position) {
 			case Budgie.PanelPosition.TOP:
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, panel_gap);
 				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin);
 				break;
 			case Budgie.PanelPosition.LEFT:
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, panel_gap);
 				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, margin);
 				break;
 			case Budgie.PanelPosition.RIGHT:
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, true);
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, panel_gap);
 				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, margin);
 				break;
 			case Budgie.PanelPosition.BOTTOM:
 			default:
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, true);
 				GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
+				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, panel_gap);
 				GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin);
 				break;
 		}

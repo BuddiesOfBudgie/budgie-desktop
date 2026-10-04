@@ -330,8 +330,6 @@ namespace Workspaces {
 		}
 
 		private void window_opened(Xfw.Window window) {
-			if (Xfw.windowing_get() != Xfw.Windowing.WAYLAND) return;
-
 			if (window_connections.contains(window)) {
 				ulong conn = window_connections.get(window);
 				if (SignalHandler.is_connected(window, conn)) {

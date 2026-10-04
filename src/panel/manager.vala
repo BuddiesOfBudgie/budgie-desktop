@@ -126,6 +126,10 @@ namespace Budgie {
 			this.manager.activate_action(action);
 		}
 
+		public void TogglePanels() throws DBusError, IOError {
+			this.manager.toggle_panels();
+		}
+
 		public void OpenSettings() throws DBusError, IOError {
 			this.manager.open_settings();
 		}
@@ -176,6 +180,10 @@ namespace Budgie {
 
 		private Budgie.WaylandClient? wayland_client = null;
 
+		public bool fullscreen_active { get; private set; default = false; } // a non-minimized fullscreen window is on the primary monitor, where the panels are
+
+		private bool panels_summoned = false;
+
 		public void activate_action(int action) {
 			unowned string? uuid = null;
 			unowned Budgie.Panel? panel = null;
@@ -184,9 +192,77 @@ namespace Budgie {
 			/* Only let one panel take the action, and one applet per panel */
 			while (iter.next(out uuid, out panel)) {
 				if (panel.activate_action(action)) {
+					summon_panels();
 					break;
 				}
 			}
+		}
+
+		/**
+		* Dismisses the panels if they are summoned, otherwise summons them
+		* when one is hidden or a fullscreen window covers them
+		*/
+		public void toggle_panels() {
+			if (panels_summoned) {
+				dismiss_panels();
+			} else if (fullscreen_active || any_panel_hidden()) {
+				summon_panels();
+			}
+		}
+
+		/**
+		* Whether autohide has slid out at least one panel
+		*/
+		private bool any_panel_hidden() {
+			Budgie.Panel? panel = null;
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(null, out panel)) {
+				if (panel.is_hidden()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		* Brings every panel up for a keyboard-triggered action, not just the
+		* one whose applet took it
+		*/
+		private void summon_panels() {
+			panels_summoned = true;
+			Budgie.Panel? panel = null;
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(null, out panel)) {
+				panel.summon();
+			}
+		}
+
+		/**
+		* Ends the summon on every panel and lets autohide decide again
+		*/
+		private void dismiss_panels() {
+			panels_summoned = false;
+			Budgie.Panel? panel = null;
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(null, out panel)) {
+				panel.dismiss();
+			}
+		}
+
+		/**
+		* Ends a summon for all panels together once none of them has an open
+		* popover or the pointer on it
+		*/
+		private void on_panel_usage_changed() {
+			Budgie.Panel? panel = null;
+			var iter = HashTableIter<string,Budgie.Panel?>(panels);
+			while (iter.next(null, out panel)) {
+				if (panel.in_use()) {
+					return;
+				}
+			}
+
+			dismiss_panels();
 		}
 
 		public void show_desktop(bool show) {
@@ -364,6 +440,7 @@ namespace Budgie {
 
 			var display = ((Gtk.Window) panel).get_display();
 			var gdk_window = ((Gtk.Widget) panel).get_window();
+			if (gdk_window == null) return null;
 
 			return display.get_monitor_at_window(gdk_window);
 		}
@@ -413,45 +490,48 @@ namespace Budgie {
 		*   - Not minimized/iconified
 		*/
 		public void check_windows() {
-			if (raven.get_expanded()) {
-				set_panel_transparent(false, true);
-				return;
-			}
 			bool found_maximized_window = false;
+			bool found_fullscreen_window = false;
+			bool active_maximized = false;
+			unowned Xfw.Window? active = windowing.get_active_window();
 
-			windowing.windows.foreach((window) => {
-				if (window.is_skip_pager()) return;
-				if (!this.window_on_primary(window)) return;
-				if ((window.is_maximized() && !window.is_minimized())) {
-					found_maximized_window = true;
-					return;
+			foreach (unowned Xfw.Window window in windowing.windows) {
+				if (window.is_skip_pager() || !window_on_primary(window) || window.is_minimized()) {
+					continue;
 				}
-			});
+				if (window.is_fullscreen()) {
+					found_fullscreen_window = true;
+				}
+				if (!window.is_maximized()) {
+					continue;
+				}
+				found_maximized_window = true;
+				if (window == active) {
+					active_maximized = true;
+				}
+			}
 
-			set_panel_transparent(!found_maximized_window);
-			set_panel_occluded(found_maximized_window);
-		}
+			set_panel_transparent(raven.get_expanded() ? false : !found_maximized_window);
+			if (found_fullscreen_window != fullscreen_active) { // notify only on a real change; check_windows runs on every window event
+				fullscreen_active = found_fullscreen_window;
+			}
 
-		void set_panel_occluded(bool occluded) {
 			Budgie.Panel? panel = null;
 			var iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(null, out panel)) {
-				panel.set_occluded(occluded);
+				panel.set_occluded(panel.autohide == AutohidePolicy.INTELLIGENT ? active_maximized : found_maximized_window);
 			}
 		}
 
 		/*
 		* Control the transparency for panels with dynamic transparency on
 		*/
-		void set_panel_transparent(bool transparent, bool raven_force = false) {
+		void set_panel_transparent(bool transparent) {
 			Budgie.Panel? panel = null;
 			var iter = HashTableIter<string,Budgie.Panel?>(panels);
 			while (iter.next(null, out panel)) {
 				if (panel.transparency == PanelTransparency.DYNAMIC) {
 					panel.set_transparent(transparent);
-				}
-				if (panel.autohide == AutohidePolicy.AUTOMATIC) {
-					panel.set_occluded(raven_force ? transparent : !transparent);
 				}
 			}
 		}
@@ -841,6 +921,7 @@ namespace Budgie {
 
 			var settings = new Settings.with_path(Budgie.TOPLEVEL_SCHEMA, path);
 			Budgie.Panel? panel = new Budgie.Panel(this, panel_plugin_manager, uuid, settings);
+			panel.usage_changed.connect(on_panel_usage_changed);
 			panels.insert(uuid, panel);
 
 			// Whenever a panel's reserved size changes (what it actually takes up), call update screen
@@ -1068,6 +1149,7 @@ namespace Budgie {
 				return;
 			}
 			panel.set_autohide_policy(policy);
+			check_windows();
 
 			// Raven needs to know about the autohide mode
 			this.update_screen();
@@ -1156,10 +1238,10 @@ namespace Budgie {
 					if (this.is_panel_huggable(bottom)) {
 						geom.height -= bottom.reserved_size;
 					}
-					val2.update_geometry(geom, val2.position, val2.intended_size);
+					val2.update_geometry(geom, val2.position);
 					break;
 				default:
-					val2.update_geometry(area.area, val2.position, val2.intended_size);
+					val2.update_geometry(area.area, val2.position);
 					break;
 				}
 			}

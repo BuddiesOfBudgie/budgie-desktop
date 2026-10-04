@@ -9,318 +9,254 @@
  * (at your option) any later version.
  */
 
-using LibUUID;
-
 namespace Budgie {
 	/**
-	* The main panel area - i.e. the bit that's rendered
-	*/
-	public class MainPanel : Gtk.Box {
-		private bool updating_constraints = false;
-
-		public MainPanel() {
-			Object(orientation: Gtk.Orientation.HORIZONTAL);
-			get_style_context().add_class("budgie-panel");
-			get_style_context().add_class(Gtk.STYLE_CLASS_BACKGROUND);
-		}
-
-		public void set_transparent(bool transparent) {
-			if (transparent) {
-				get_style_context().add_class("transparent");
-			} else {
-				get_style_context().remove_class("transparent");
-			}
-		}
-
-		public void set_dock_mode(bool dock_mode) {
-			if (dock_mode) {
-				get_style_context().add_class("dock-mode");
-			} else {
-				get_style_context().remove_class("dock-mode");
-			}
-		}
-
-		public void update_box_constraints(Gtk.Allocation allocation) {
-			// Prevent infinite recursion
-			if (updating_constraints) {
-				return;
-			}
-			updating_constraints = true;
-
-			// Constrain each box to panel size minus other boxes' sizes
-			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-				// Find start, center, and end boxes by their halign
-				Gtk.Widget? start_widget = null;
-				Gtk.Widget? center_widget = null;
-				Gtk.Widget? end_widget = null;
-
-				foreach (var child in get_children()) {
-					var halign = child.get_halign();
-					if (halign == Gtk.Align.START) {
-						start_widget = child;
-					} else if (halign == Gtk.Align.CENTER) {
-						center_widget = child;
-					} else if (halign == Gtk.Align.END) {
-						end_widget = child;
-					}
-				}
-
-				// Get current allocations
-				Gtk.Allocation start_alloc = Gtk.Allocation();
-				Gtk.Allocation center_alloc = Gtk.Allocation();
-				Gtk.Allocation end_alloc = Gtk.Allocation();
-
-				if (start_widget != null) {
-					start_widget.get_allocation(out start_alloc);
-				}
-				if (center_widget != null) {
-					center_widget.get_allocation(out center_alloc);
-				}
-				if (end_widget != null) {
-					end_widget.get_allocation(out end_alloc);
-				}
-
-				// Constrain each box: max = panel_size - sum of other boxes' sizes
-				if (start_widget != null) {
-					int other_boxes_size = center_alloc.width + end_alloc.width;
-					int max_start_width = int.max(0, allocation.width - other_boxes_size);
-					if (start_alloc.width > max_start_width) {
-						start_alloc.width = max_start_width;
-						start_widget.size_allocate(start_alloc);
-					}
-				}
-
-				if (center_widget != null) {
-					int other_boxes_size = start_alloc.width + end_alloc.width;
-					int max_center_width = int.max(0, allocation.width - other_boxes_size);
-					if (center_alloc.width > max_center_width) {
-						center_alloc.width = max_center_width;
-						center_widget.size_allocate(center_alloc);
-					}
-				}
-
-				if (end_widget != null) {
-					int other_boxes_size = start_alloc.width + center_alloc.width;
-					int max_end_width = int.max(0, allocation.width - other_boxes_size);
-					if (end_alloc.width > max_end_width) {
-						end_alloc.width = max_end_width;
-						end_widget.size_allocate(end_alloc);
-					}
-				}
-			} else {
-				// Vertical layout - same logic but for height
-				Gtk.Widget? start_widget = null;
-				Gtk.Widget? center_widget = null;
-				Gtk.Widget? end_widget = null;
-
-				foreach (var child in get_children()) {
-					var valign = child.get_valign();
-					if (valign == Gtk.Align.START) {
-						start_widget = child;
-					} else if (valign == Gtk.Align.CENTER) {
-						center_widget = child;
-					} else if (valign == Gtk.Align.END) {
-						end_widget = child;
-					}
-				}
-
-				Gtk.Allocation start_alloc = Gtk.Allocation();
-				Gtk.Allocation center_alloc = Gtk.Allocation();
-				Gtk.Allocation end_alloc = Gtk.Allocation();
-
-				if (start_widget != null) {
-					start_widget.get_allocation(out start_alloc);
-				}
-				if (center_widget != null) {
-					center_widget.get_allocation(out center_alloc);
-				}
-				if (end_widget != null) {
-					end_widget.get_allocation(out end_alloc);
-				}
-
-				if (start_widget != null) {
-					int other_boxes_size = center_alloc.height + end_alloc.height;
-					int max_start_height = int.max(0, allocation.height - other_boxes_size);
-					if (start_alloc.height > max_start_height) {
-						start_alloc.height = max_start_height;
-						start_widget.size_allocate(start_alloc);
-					}
-				}
-
-				if (center_widget != null) {
-					int other_boxes_size = start_alloc.height + end_alloc.height;
-					int max_center_height = int.max(0, allocation.height - other_boxes_size);
-					if (center_alloc.height > max_center_height) {
-						center_alloc.height = max_center_height;
-						center_widget.size_allocate(center_alloc);
-					}
-				}
-
-				if (end_widget != null) {
-					int other_boxes_size = start_alloc.height + center_alloc.height;
-					int max_end_height = int.max(0, allocation.height - other_boxes_size);
-					if (end_alloc.height > max_end_height) {
-						end_alloc.height = max_end_height;
-						end_widget.size_allocate(end_alloc);
-					}
-				}
-			}
-			updating_constraints = false;
-		}
-	}
-
-	/**
-	* This is used to track panel animations, i.e. within the toplevel
-	* itself to provide dock like behavior
-	*/
-	public enum PanelAnimation {
-		NONE = 0,
-		SHOW,
-		HIDE
-	}
-
-	public GtkLayerShell.Edge panel_position_to_layer_shell_edge(Budgie.PanelPosition position) {
-		switch (position) {
-			case PanelPosition.TOP:
-				return GtkLayerShell.Edge.TOP;
-			case PanelPosition.LEFT:
-				return GtkLayerShell.Edge.LEFT;
-			case PanelPosition.RIGHT:
-				return GtkLayerShell.Edge.RIGHT;
-			case PanelPosition.BOTTOM:
-			case PanelPosition.NONE:
-				return GtkLayerShell.Edge.BOTTOM;
-		}
-		return GtkLayerShell.Edge.BOTTOM;
-	}
-
-	/**
-	* The toplevel window for a panel
+	* The toplevel window for a panel. Placement, visibility and the applets
+	* are handled by PanelPlacement, PanelVisibility and PanelApplets
 	*/
 	public class Panel : Budgie.Toplevel {
-		MainPanel layout;
-		Gtk.Box main_layout;
-		Gdk.Rectangle orig_scr;
+		MainPanel layout; // the styled panel box holding the regions
+		Gtk.Box main_layout; // the window's only child: panel box plus shadow
 
-		public Settings settings { construct set ; public get; }
-		private unowned Budgie.PanelManager? manager;
-		private unowned Budgie.PanelPluginManager? plugin_manager;
+		public Settings settings { construct set ; public get; } // this panel's GSettings, at a path derived from its uuid
+		private unowned Budgie.PanelManager? manager; // for check_windows() and dconf resets
+		private unowned Budgie.PanelPluginManager? plugin_manager; // loads plugins and creates applets
 
-		PopoverManager? popover_manager;
+		PopoverManager? popover_manager; // every applet on this panel registers its popovers here
 
-		Budgie.ShadowBlock shadow;
-
-		HashTable<string,HashTable<string,string>> pending = null;
-		HashTable<string,HashTable<string,string>> creating = null;
-		HashTable<string,Budgie.AppletInfo?> applets = null;
-
-		HashTable<string,Budgie.AppletInfo?> initial_config = null;
-
-		List<string?> expected_uuids;
+		Budgie.ShadowBlock shadow; // drop shadow on the panel's screen-facing side
 
 		construct {
-			position = PanelPosition.NONE;
+			position = PanelPosition.NONE; // the manager assigns the real edge through update_geometry()
 		}
 
-		/* Box for the start of the panel */
-		ConstrainedBox? start_box;
-		/* Box for the center of the panel */
-		ConstrainedBox? center_box;
-		/* Box for the end of the panel */
-		ConstrainedBox? end_box;
+		ConstrainedBox? start_box; // region at the start of the edge
+		ConstrainedBox? center_box; // region in the middle
+		ConstrainedBox? end_box; // region at the end
 
-		int[] icon_sizes = {
-			16, 24, 32, 48, 96, 128, 256
-		};
+		private PanelPlacement placement; // where the window sits and how big it is
+		private PanelVisibility visibility; // shown, hidden, or sliding between the two
+		private PanelApplets applets; // what is on the panel
+		private Budgie.PanelAction pending_action; // set by activate_action, run from idle by invoke_pending_action
 
-		int current_icon_size;
-		int current_small_icon_size;
+		public signal void usage_changed(); // in_use() may have changed; the manager ends a summon once no panel is in use
 
-		/* Track initial load */
-		private bool is_fully_loaded = false;
-		private bool need_migratory = false;
+		/**
+		* Builds the widget tree, then the helpers in dependency order, then
+		* loads the applets. The window maps once they are in.
+		*/
+		public Panel(Budgie.PanelManager? manager, Budgie.PanelPluginManager? plugin_manager, string? uuid, Settings? settings) {
+			Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
 
-		public signal void panel_loaded();
+			intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
+			intended_spacing = settings.get_int(Budgie.PANEL_KEY_SPACING);
+			reserved_size = intended_size; // until the panel box is allocated and PanelPlacement learns the real thickness
+			this.manager = manager;
+			this.plugin_manager = plugin_manager;
 
-		/* Animation tracking */
-		private double render_scale = 0.0;
-		private PanelAnimation animation = PanelAnimation.SHOW;
-		private bool allow_animation = false;
-		private bool screen_occluded = false;
+			skip_taskbar_hint = true;
+			skip_pager_hint = true;
+			set_decorated(false);
 
-		/* Monitor index for this panel */
-		private int target_monitor = 0;
+			GtkLayerShell.init_for_window(this); // has to precede realization
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP); // above normal windows, below fullscreen ones
+			GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND); // keyboard focus only while an applet asks for it
 
-		public double nscale {
-			public set {
-				render_scale = value;
-				queue_draw();
+			popover_manager = new PopoverManager();
+			visibility = new PanelVisibility(this, manager, popover_manager);
+			visibility.usage_changed.connect(on_usage_changed);
+
+			var vis = screen.get_rgba_visual(); // the panel draws with transparency
+			if (vis == null) {
+				warning("Compositing not available, things will Look Bad (TM)");
+			} else {
+				set_visual(vis);
 			}
-			public get {
-				return render_scale;
-			}
-		}
+			resizable = false;
+			app_paintable = true; // the background is ours to draw, including nothing at all while hidden
+			get_style_context().add_class("budgie-container");
 
-		public bool activate_action(int remote_action) {
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? info = null;
+			main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+			add(main_layout);
 
-			Budgie.PanelAction action = (Budgie.PanelAction)remote_action;
+			layout = new MainPanel();
+			layout.valign = Gtk.Align.FILL;
+			layout.halign = Gtk.Align.FILL;
 
-			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
-			while (iter.next(out uuid, out info)) {
-				if ((info.applet.supported_actions & action) != 0) {
-					this.present();
-					set_occluded(false);
-					this.set_above_other_surfaces(); // Ensure the surface is above others before we invoke the action
+			main_layout.pack_start(layout, true, true, 0);
+			main_layout.valign = Gtk.Align.START;
 
-					Idle.add(() => {
-						info.applet.invoke_action(action);
-						return false;
-					});
-					return true;
-				}
-			}
-			return false;
+			shadow = new Budgie.ShadowBlock(this.position);
+			shadow.hexpand = false;
+			shadow.halign = Gtk.Align.FILL;
+			shadow.show_all();
+			main_layout.pack_start(shadow, false, false, 0); // PanelPlacement moves it to the screen-facing side
+
+			this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "active", SettingsBindFlags.GET);
+			this.settings.bind(Budgie.PANEL_KEY_DOCK_MODE, this, "dock-mode", SettingsBindFlags.DEFAULT);
+
+			this.notify["dock-mode"].connect(this.update_dock_mode);
+			layout.set_dock_mode(this.dock_mode);
+
+			shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
+			this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
+
+			start_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2); // the regions; PanelPlacement re-orients and re-aligns them per edge
+			start_box.halign = Gtk.Align.START;
+			layout.pack_start(start_box, false, false, 0);
+
+			center_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
+			layout.set_center_widget(center_box);
+
+			end_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
+			layout.pack_end(end_box, false, false, 0);
+			end_box.halign = Gtk.Align.END;
+
+			placement = new PanelPlacement(this, main_layout, layout, shadow, start_box, center_box, end_box);
+			notify["scale-factor"].connect(placement.apply);
+			notify["targeted-size"].connect(placement.apply); // intended size or shadow visibility changed
+
+			applets = new PanelApplets(this, manager, plugin_manager, settings, popover_manager, layout, start_box, center_box, end_box);
+			applets.loaded.connect(on_applets_loaded);
+
+			update_spacing();
+
+			this.theme_regions = this.settings.get_boolean(Budgie.PANEL_KEY_REGIONS);
+			this.notify["theme-regions"].connect(update_theme_regions);
+			this.settings.bind(Budgie.PANEL_KEY_REGIONS, this, "theme-regions", SettingsBindFlags.DEFAULT);
+			this.update_theme_regions();
+
+			get_child().show_all();
+
+			start_box.hide(); // regions stay hidden until an applet lands in them
+			center_box.hide();
+			end_box.hide();
+
+			applets.update_sizes();
+			applets.load();
+			update_dock_mode(); // first placement
 		}
 
 		/**
-		* Force update the geometry
+		* Places the window once it is realized
 		*/
-		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int monitor_index = 0) {
-			this.orig_scr = screen;
-			this.target_monitor = monitor_index;
+		public override void map() {
+			base.map();
+			placement.apply();
+		}
+
+		/**
+		* GTK sizing comes from the placement so the widget tree agrees with
+		* the layer-shell request
+		*/
+		public override void get_preferred_width(out int minimum_width, out int natural_width) {
+			int width, height;
+			placement.get_target_extents(out width, out height);
+
+			minimum_width = width;
+			natural_width = width;
+		}
+
+		/**
+		* The other axis of get_preferred_width
+		*/
+		public override void get_preferred_height(out int minimum_height, out int natural_height) {
+			int width, height;
+			placement.get_target_extents(out width, out height);
+
+			minimum_height = height;
+			natural_height = height;
+		}
+
+		/**
+		* The hidden and sliding states are painted by the visibility
+		* controller; otherwise the widget tree draws as usual
+		*/
+		public override bool draw(Cairo.Context cr) {
+			if (visibility.draw(cr)) {
+				return Gdk.EVENT_STOP;
+			}
+			return base.draw(cr);
+		}
+
+		/**
+		* The manager calls this on creation and whenever monitors change,
+		* with the monitor's logical geometry at 0,0. Also persists size and
+		* position.
+		*/
+		public void update_geometry(Gdk.Rectangle screen, PanelPosition position, int monitor_index = -1) {
 			string old_class = Budgie.position_class_name(this.position);
 
-			if (old_class != "") {
+			if (old_class != "") { // the theme styles each edge through a class named after it
 				this.get_style_context().remove_class(old_class);
 			}
 
-			int size = intended_size;
-			this.settings.set_int(Budgie.PANEL_KEY_SIZE, size);
-			this.intended_size = size;
+			this.settings.set_int(Budgie.PANEL_KEY_SIZE, intended_size);
 			this.get_style_context().add_class(Budgie.position_class_name(position));
 
-			// Check if the position has been altered and notify our applets
-			if (position != this.position) {
+			if (position != this.position) { // the applets flip their layout for a new edge
 				this.position = position;
 				this.set_position_setting(position);
-				this.update_positions();
+				applets.update_positions();
 			}
 
 			this.shadow.position = position;
-			this.update_layer_shell_props();
+			placement.set_screen(screen, monitor_index);
+			placement.apply();
 			this.layout.queue_resize();
 			queue_resize();
 			queue_draw();
-			placement();
-			update_sizes();
+			applets.update_sizes();
 		}
 
+		/**
+		* Persists the edge; the manager also calls this directly when it
+		* moves a panel
+		*/
 		public void set_position_setting(PanelPosition position) {
 			this.settings.set_enum(Budgie.PANEL_KEY_POSITION, position);
 		}
 
+		/**
+		* dock-mode changed: restyle the panel box and re-place the window
+		*/
+		void update_dock_mode() {
+			layout.set_dock_mode(this.dock_mode);
+			placement.apply();
+		}
+
+		/**
+		* Persists and applies the gap between applets, and between the regions
+		*/
+		public void update_spacing() {
+			this.settings.set_int(Budgie.PANEL_KEY_SPACING, this.intended_spacing);
+
+			layout.set_spacing(this.intended_spacing);
+			start_box.set_spacing(this.intended_spacing);
+			center_box.set_spacing(this.intended_spacing);
+			end_box.set_spacing(this.intended_spacing);
+		}
+
+		/**
+		* Optional classes so a theme can style the three regions separately
+		*/
+		void update_theme_regions() {
+			if (this.theme_regions) {
+				start_box.get_style_context().add_class("start-region");
+				center_box.get_style_context().add_class("center-region");
+				end_box.get_style_context().add_class("end-region");
+			} else {
+				start_box.get_style_context().remove_class("start-region");
+				center_box.get_style_context().remove_class("center-region");
+				end_box.get_style_context().remove_class("end-region");
+			}
+			this.queue_draw();
+		}
+
+		/**
+		* ALWAYS and NONE apply directly; DYNAMIC asks the manager to look at
+		* the windows, which calls set_transparent() back
+		*/
 		public void update_transparency(PanelTransparency transparency) {
 			this.transparency = transparency;
 
@@ -339,10 +275,17 @@ namespace Budgie {
 			this.settings.set_enum(Budgie.PANEL_KEY_TRANSPARENCY, transparency);
 		}
 
+		/**
+		* Toggles the theme's transparent styling on the panel box
+		*/
 		public void set_transparent(bool transparent) {
 			layout.set_transparent(transparent);
 		}
 
+		/**
+		* Persists the shadow toggle; the binding on shadow_visible resizes
+		* the window
+		*/
 		public void update_shadow(bool visible) {
 			this.shadow_visible = visible;
 
@@ -350,1472 +293,169 @@ namespace Budgie {
 		}
 
 		/**
-		* Specific for docks, regardless of transparency, and determines
-		* how our "screen blocked by thingy" policy works.
+		* Never reserves screen space again, Automatic and Intelligent release
+		* it; the visibility controller then shows or hides to match
+		*/
+		public void set_autohide_policy(AutohidePolicy policy) {
+			if (policy == autohide) {
+				return;
+			}
+			settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
+			autohide = policy;
+			placement.update_layer_shell_props();
+			visibility.update();
+		}
+
+		/**
+		* The manager's verdict on whether a window covers this panel's
+		* monitor; it drives autohide
 		*/
 		public void set_occluded(bool occluded) {
-			this.screen_occluded = occluded;
-			if (this.autohide == AutohidePolicy.NONE) {
-				return;
-			}
-			this.update_exclusive_zone();
+			visibility.set_occluded(occluded);
 		}
 
+		/**
+		* Brings the panel up for a keyboard-triggered action until dismiss()
+		*/
+		public void summon() {
+			visibility.summon();
+		}
+
+		/**
+		* Ends a summon and lets autohide decide again
+		*/
+		public void dismiss() {
+			visibility.dismiss();
+		}
+
+		/**
+		* Whether one of the panel's popovers is open or the pointer is on it
+		*/
+		public bool in_use() {
+			return visibility.in_use;
+		}
+
+		/**
+		* Whether autohide has slid the panel out
+		*/
+		public bool is_hidden() {
+			return visibility.hidden;
+		}
+
+		/**
+		* Re-emits PanelVisibility.usage_changed for the manager
+		*/
+		private void on_usage_changed() {
+			usage_changed();
+		}
+
+		/**
+		* Nothing animates or hides until the applets are in place
+		*/
+		private void on_applets_loaded() {
+			visibility.start();
+		}
+
+		/**
+		* Runs a panel keybinding action on the applet that supports it.
+		* The manager summons the panels first, so the applet's popover does
+		* not open under a hidden panel.
+		*/
+		public bool activate_action(int remote_action) {
+			Budgie.PanelAction action = (Budgie.PanelAction)remote_action;
+			unowned Budgie.AppletInfo? info = applets.find_supporting(action);
+			if (info == null) {
+				return false;
+			}
+
+			this.present();
+
+			pending_action = action;
+			Idle.add(invoke_pending_action); // let the show land before the applet grabs focus for its popover
+			return true;
+		}
+
+		/**
+		* Invokes the action queued by activate_action on the applet that
+		* supports it
+		*/
+		private bool invoke_pending_action() {
+			unowned Budgie.AppletInfo? info = applets.find_supporting(pending_action);
+			if (info != null) {
+				info.applet.invoke_action(pending_action);
+			}
+			return false;
+		}
+
+		/**
+		* The Toplevel applet API forwards to PanelApplets; the settings UI
+		* only sees Toplevel
+		*/
 		public override List<AppletInfo?> get_applets() {
-			List<Budgie.AppletInfo?> ret = new List<Budgie.AppletInfo?>();
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? appl_info = null;
-
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-			while (iter.next(out key, out appl_info)) {
-				ret.append(appl_info);
-			}
-			return ret;
+			return applets.get_applets();
 		}
 
 		/**
-		* Loop the applets, performing a reparent or reposition
-		*/
-		private void initial_applet_placement(bool repar = false, bool repos = false) {
-			if (!repar && !repos) {
-				return;
-			}
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? info = null;
-
-			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
-
-			while (iter.next(out uuid, out info)) {
-				if (repar) {
-					applet_reparent(info);
-				}
-				if (repos) {
-					applet_reposition(info);
-				}
-			}
-		}
-
-		/* Handle being "fully" loaded */
-		private void on_fully_loaded() {
-			if (applets.size() < 1) {
-				if (!initial_anim) {
-					Idle.add(initial_animation);
-				}
-				return;
-			}
-
-			/* All applets loaded and positioned, now re-sort them */
-			initial_applet_placement(true, false);
-			initial_applet_placement(false, true);
-
-			/* Let everyone else know we're in business */
-			applets_changed();
-			if (!initial_anim) {
-				Idle.add(initial_animation);
-			}
-			lock (need_migratory) {
-				if (!need_migratory) {
-					return;
-				}
-			}
-			/* In half a second, add_migratory so the user sees them added */
-			Timeout.add(500, add_migratory);
-		}
-
-		public Panel(Budgie.PanelManager? manager, Budgie.PanelPluginManager? plugin_manager, string? uuid, Settings? settings) {
-			Object(type_hint: Gdk.WindowTypeHint.DOCK, window_position: Gtk.WindowPosition.NONE, settings: settings, uuid: uuid);
-
-			initial_config = new HashTable<string,Budgie.AppletInfo>(str_hash, str_equal);
-
-			intended_size = settings.get_int(Budgie.PANEL_KEY_SIZE);
-			intended_spacing = settings.get_int(Budgie.PANEL_KEY_SPACING);
-			reserved_size = intended_size;
-			this.manager = manager;
-			this.plugin_manager = plugin_manager;
-
-			skip_taskbar_hint = true;
-			skip_pager_hint = true;
-			set_decorated(false);
-
-			nscale = 1.0;
-
-			// Respond to a scale factor change
-			notify["scale-factor"].connect(() => {
-				this.placement();
-			});
-
-			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
-				GtkLayerShell.init_for_window(this);
-				set_above_other_surfaces();
-				GtkLayerShell.set_keyboard_mode(this, GtkLayerShell.KeyboardMode.ON_DEMAND);
-			}
-
-			popover_manager = new PopoverManager();
-			pending = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
-			creating = new HashTable<string,HashTable<string,string>>(str_hash, str_equal);
-			applets = new HashTable<string,Budgie.AppletInfo?>(str_hash, str_equal);
-			expected_uuids = new List<string?>();
-			panel_loaded.connect(on_fully_loaded);
-
-			var vis = screen.get_rgba_visual();
-			if (vis == null) {
-				warning("Compositing not available, things will Look Bad (TM)");
-			} else {
-				set_visual(vis);
-			}
-			resizable = false;
-			app_paintable = true;
-			get_style_context().add_class("budgie-container");
-
-			main_layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			add(main_layout);
-
-			layout = new MainPanel();
-			layout.valign = Gtk.Align.FILL;
-			layout.halign = Gtk.Align.FILL;
-
-			main_layout.pack_start(layout, true, true, 0);
-			main_layout.valign = Gtk.Align.START;
-
-			/* Shadow.. */
-			shadow = new Budgie.ShadowBlock(this.position);
-			shadow.hexpand = false;
-			shadow.halign = Gtk.Align.FILL;
-			shadow.show_all();
-			main_layout.pack_start(shadow, false, false, 0);
-
-			this.settings.bind(Budgie.PANEL_KEY_SHADOW, shadow, "active", SettingsBindFlags.GET);
-			this.settings.bind(Budgie.PANEL_KEY_DOCK_MODE, this, "dock-mode", SettingsBindFlags.DEFAULT);
-
-			this.notify["dock-mode"].connect(this.update_dock_mode);
-			layout.set_dock_mode(this.dock_mode);
-
-			shadow_visible = this.settings.get_boolean(Budgie.PANEL_KEY_SHADOW);
-			this.settings.bind(Budgie.PANEL_KEY_SHADOW, this, "shadow-visible", SettingsBindFlags.DEFAULT);
-
-			/* Assign our applet holder boxes */
-			start_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
-			start_box.halign = Gtk.Align.START;
-			layout.pack_start(start_box, false, false, 0);
-			center_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
-			layout.set_center_widget(center_box);
-			end_box = new ConstrainedBox(Gtk.Orientation.HORIZONTAL, 2);
-			layout.pack_end(end_box, false, false, 0);
-			end_box.halign = Gtk.Align.END;
-			update_spacing();
-
-			this.theme_regions = this.settings.get_boolean(Budgie.PANEL_KEY_REGIONS);
-			this.notify["theme-regions"].connect(update_theme_regions);
-			this.settings.bind(Budgie.PANEL_KEY_REGIONS, this, "theme-regions", SettingsBindFlags.DEFAULT);
-			this.update_theme_regions();
-
-			this.enter_notify_event.connect(on_enter_notify);
-			this.leave_notify_event.connect(on_leave_notify);
-
-			get_child().show_all();
-
-			// Immediately hide our inner boxes
-			start_box.hide();
-			center_box.hide();
-			end_box.hide();
-
-			this.plugin_manager.extension_loaded.connect_after(this.on_extension_loaded);
-
-			this.notify["targeted-size"].connect(this.placement);
-			this.layout.size_allocate.connect(this.on_layout_allocated);
-
-			/* bit of a no-op. */
-			update_sizes();
-			load_applets();
-			update_dock_mode();
-		}
-
-		void update_theme_regions() {
-			if (this.theme_regions) {
-				start_box.get_style_context().add_class("start-region");
-				center_box.get_style_context().add_class("center-region");
-				end_box.get_style_context().add_class("end-region");
-			} else {
-				start_box.get_style_context().remove_class("start-region");
-				center_box.get_style_context().remove_class("center-region");
-				end_box.get_style_context().remove_class("end-region");
-			}
-			this.queue_draw();
-		}
-
-	void update_layer_shell_props() {
-		var default_display = Gdk.Display.get_default();
-		if (default_display != null && default_display.get_n_monitors() > target_monitor) {
-			var monitor = default_display.get_monitor(target_monitor);
-			if (monitor != null) {
-				debug("Setting panel to monitor index %d", target_monitor);
-				GtkLayerShell.set_monitor(this, monitor);
-			}
-		}
-
-		GtkLayerShell.Edge position_edge = Budgie.panel_position_to_layer_shell_edge(this.position);
-
-		// Explicitly set all edges first
-		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, false);
-		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, false);
-		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, false);
-		GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, false);
-
-		// Then anchor only the position edge
-		GtkLayerShell.set_anchor(this, position_edge, true);
-
-		// Update the exclusive zone based on the autohide policy
-		this.update_exclusive_zone();
-	}
-
-	void calculate_panel_margins(out int margin_top, out int margin_bottom, out int margin_left, out int margin_right) {
-		Gtk.Allocation main_alloc;
-		main_layout.get_allocation(out main_alloc);
-
-		Gtk.Allocation panel_alloc;
-		get_allocation(out panel_alloc);
-
-		// Initialize margins
-		margin_top = 0;
-		margin_bottom = 0;
-		margin_left = 0;
-		margin_right = 0;
-
-		// For non-dock mode, margins are always zero
-		if (!this.dock_mode) {
-			return;
-		}
-
-		// For dock mode, calculate margins to center the panel
-		if (is_horizontal()) {
-			// For horizontal panels (TOP/BOTTOM), center horizontally
-			// Calculate equal left and right margins to center the panel
-			int available_width = orig_scr.width - main_alloc.width;
-			int centered_margin = available_width / 2;
-			margin_left = orig_scr.x + centered_margin;
-			margin_right = centered_margin;
-
-			// Ensure margins are non-negative
-			margin_left = int.max(0, margin_left);
-			margin_right = int.max(0, margin_right);
-		} else {
-			// For vertical panels (LEFT/RIGHT), center vertically
-			// Calculate equal top and bottom margins to center the panel
-			int available_height = orig_scr.height - main_alloc.height;
-			int centered_margin = available_height / 2;
-			margin_top = orig_scr.y + centered_margin;
-			margin_bottom = centered_margin;
-
-			// Ensure margins are non-negative
-			margin_top = int.max(0, margin_top);
-			margin_bottom = int.max(0, margin_bottom);
-		}
-	}
-
-	void update_panel_margins() {
-		// Calculate margins for the panel based on orientation and screen area
-		int margin_top, margin_bottom, margin_left, margin_right;
-		calculate_panel_margins(out margin_top, out margin_bottom, out margin_left, out margin_right);
-
-		// Set margins using GtkLayerShell - set relevant margins and zero out the others
-		if (is_horizontal()) {
-		  	// For horizontal panels (TOP/BOTTOM), set left/right margins and zero top/bottom
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, -1);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, -1);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, margin_left);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, margin_right);
-		  } else {
-		  	// For vertical panels (LEFT/RIGHT), set top/bottom margins and zero left/right
-		 	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, margin_top);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, margin_bottom);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, -1);
-		  	GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, -1);
-		  }
-	}
-
-	void update_exclusive_zone() {
-		// Update panel margins
-		update_panel_margins();
-
-		// If our panel is set to intelligent autohide and the screen is occluded, we want to ensure there is no exclusive zone and the panel goes behind other surfaces
-		if (this.autohide == AutohidePolicy.INTELLIGENT && screen_occluded) {
-			GtkLayerShell.set_exclusive_zone(this, 0);
-			set_below_other_surfaces();
-		} else {
-			GtkLayerShell.set_exclusive_zone(this, this.reserved_size);
-			set_above_other_surfaces();
-		}
-	}
-
-		void update_sizes() {
-			int size = icon_sizes[0];
-			int small_size = icon_sizes[0];
-
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? info = null;
-
-			for (int i = 1; i < icon_sizes.length; i++) {
-				if (icon_sizes[i] > intended_size) {
-					break;
-				}
-				size = icon_sizes[i];
-				small_size = icon_sizes[i-1];
-			}
-
-			this.current_icon_size = size;
-			this.current_small_icon_size = small_size;
-
-			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
-			while (iter.next(out key, out info)) {
-				info.applet.panel_size_changed(intended_size, size, small_size);
-			}
-		}
-
-		void update_positions() {
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? info = null;
-
-			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
-			while (iter.next(out key, out info)) {
-				info.applet.panel_position_changed(this.position);
-			}
-		}
-
-		public void update_spacing() {
-			this.settings.set_int(Budgie.PANEL_KEY_SPACING, this.intended_spacing);
-
-			layout.set_spacing(this.intended_spacing);
-			start_box.set_spacing(this.intended_spacing);
-			center_box.set_spacing(this.intended_spacing);
-			end_box.set_spacing(this.intended_spacing);
-		}
-
-		public void destroy_children() {
-			unowned string key;
-			unowned AppletInfo? info;
-
-			var iter = HashTableIter<string?,AppletInfo?>(applets);
-			while (iter.next(out key, out info)) {
-				Settings? app_settings = info.applet.get_applet_settings(info.uuid);
-				if (app_settings != null) {
-					app_settings.ref();
-				}
-
-				// Stop it screaming when it dies
-				ulong notify_id = info.get_data("notify_id");
-
-				SignalHandler.disconnect(info, notify_id);
-				info.applet.get_parent().remove(info.applet);
-
-				// Clean up the settings
-				this.manager.reset_dconf_path(info.settings);
-
-				// Nuke it's own settings
-				if (app_settings != null) {
-					this.manager.reset_dconf_path(app_settings);
-				}
-			}
-		}
-
-		void on_extension_loaded(string name) {
-			unowned HashTable<string,string>? todo = null;
-			todo = pending.lookup(name);
-			if (todo != null) {
-				var iter = HashTableIter<string,string>(todo);
-				string? uuid = null;
-
-				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = null;
-					string? uname = null;
-					try {
-						info = this.plugin_manager.load_applet_instance(uuid, null, out uname);
-						add_applet(info);
-					} catch (Error e) {
-						critical("Failed to load applet when we know it exists: %s", uname);
-					}
-				}
-				pending.remove(name);
-			}
-
-			todo = null;
-
-			todo = creating.lookup(name);
-			if (todo != null) {
-				var iter = HashTableIter<string,string>(todo);
-				string? uuid = null;
-
-				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = null;
-
-					try {
-						info = this.plugin_manager.create_applet(name, uuid);
-						this.add_applet(info);
-						/* this.configure_applet(info); */
-					} catch (Error e) {
-						critical("Failed to load applet when we know it exists");
-					}
-				}
-				creating.remove(name);
-			}
-		}
-
-		/**
-		* Load all pre-configured applets
-		*/
-		void load_applets() {
-			string[]? applets = settings.get_strv(Budgie.PANEL_KEY_APPLETS);
-			if (applets == null || applets.length == 0) {
-				this.panel_loaded();
-				this.is_fully_loaded = true;
-				return;
-			}
-
-			CompareFunc<Budgie.AppletInfo?> infocmp = (a, b) => {
-				return (int) (a.position > b.position) - (int) (a.position < b.position);
-			};
-
-			lock (expected_uuids) {
-				for (int i = 0; i < applets.length; i++) {
-					this.expected_uuids.append(applets[i]);
-				}
-
-				var start_applets = new List<Budgie.AppletInfo?>();
-				var center_applets = new List<Budgie.AppletInfo?>();
-				var end_applets = new List<Budgie.AppletInfo?>();
-
-				for (int i = 0; i < applets.length; i++) {
-					string? name = null;
-					Budgie.AppletInfo? info = null;
-
-					try {
-						info = this.plugin_manager.load_applet_instance(applets[i], null, out name);
-					} catch (Error e) {
-						if (name == null) {
-							unowned List<string?> g = expected_uuids.find_custom(applets[i], strcmp);
-
-							if (g != null) {
-								expected_uuids.remove_link(g);
-							}
-
-							debug("Unable to load invalid applet '%s': %s", applets[i], e.message);
-							applet_removed(applets[i]);
-
-							continue;
-						} else {
-							info = this.add_pending(applets[i], name);
-
-							if (info == null) {
-								continue;
-							}
-						}
-					}
-
-					if (info.alignment == "start") {
-						start_applets.insert_sorted(info, infocmp);
-					} else if (info.alignment == "center") {
-						center_applets.insert_sorted(info, infocmp);
-					} else {
-						end_applets.insert_sorted(info, infocmp);
-					}
-				}
-
-				for (int i = 0; i < start_applets.length(); i++) {
-					start_applets.nth_data(i).position = i;
-					add_applet(start_applets.nth_data(i));
-				}
-				for (int i = 0; i < center_applets.length(); i++) {
-					center_applets.nth_data(i).position = i;
-					add_applet(center_applets.nth_data(i));
-				}
-				for (int i = 0; i < end_applets.length(); i++) {
-					end_applets.nth_data(i).position = i;
-					add_applet(end_applets.nth_data(i));
-				}
-
-				if (!this.is_fully_loaded && expected_uuids.is_empty()) { // no stored applet was loadable, so add_applet never emitted it
-					this.is_fully_loaded = true;
-					this.panel_loaded();
-				}
-			}
-		}
-
-		/**
-		* Add a new applet to the panel (Raven UI)
-		*
-		* Explanation: Try to find the most underpopulated region first,
-		* and add the applet there. Determine a suitable position,
-		* set the alignment+position, stuff an initial config in,
-		* and hope for the best when we initiate add_new
-		*
-		* If the @target_region is set, we'll use that instead
-		*/
-		private void add_new_applet_at(string id, Gtk.Box? target_region) {
-			/* First, determine a panel to place this guy */
-			int position = (int) applets.size() + 1;
-			unowned Gtk.Box? target = null;
-			string? align = null;
-			AppletInfo? info = null;
-			string? uuid = null;
-
-			Gtk.Box?[] regions = {
-				start_box,
-				center_box,
-				end_box
-			};
-
-			/* Use the requested target_region for internal migration adds */
-			if (target_region != null) {
-				var kids = target_region.get_children();
-				position = (int) (kids.length());
-				target = target_region;
-			} else {
-				/* No region specified, find the first available slot */
-				foreach (var region in regions) {
-					var kids = region.get_children();
-					var len = kids.length();
-					if (len < position) {
-						position = (int)len;
-						target = region;
-					}
-				}
-			}
-
-			if (target == start_box) {
-				align = "start";
-			} else if (target == center_box) {
-				align = "center";
-			} else {
-				align = "end";
-			}
-
-			uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
-			info = new AppletInfo.from_uuid(uuid);
-			info.alignment = align;
-
-			/* Safety clamp */
-			var kids = target.get_children();
-			uint nkids = kids.length();
-
-			if (position >= nkids) {
-				position = (int) nkids;
-			}
-
-			if (position < 0) {
-				position = 0;
-			}
-
-			info.position = position;
-
-			initial_config.insert(uuid, info);
-			add_new(id, uuid);
-		}
-
-		/**
-		* Add a new applet to the panel (Raven UI)
+		* Toplevel override, forwarded to PanelApplets
 		*/
 		public override void add_new_applet(string id) {
-			add_new_applet_at(id, null);
+			applets.add_new_applet(id);
 		}
 
-		public void create_default_layout(string name, KeyFile config) {
-			int s_index = -1;
-			int c_index = -1;
-			int e_index = -1;
-			int index = 0;
-
-			try {
-				if (!config.has_key(name, "Children")) {
-					warning("Config for panel %s does not specify applets", name);
-					return;
-				}
-				string[] applets = config.get_string_list(name, "Children");
-				foreach (string appl in applets) {
-					AppletInfo? info = null;
-					string? uuid = null;
-					appl = appl.strip();
-					string alignment = "start"; /* center, end */
-
-					if (!config.has_group(appl)) {
-						warning("Panel applet %s missing from config", appl);
-						continue;
-					}
-
-					if (!config.has_key(appl, "ID")) {
-						warning("Applet %s is missing ID", appl);
-						continue;
-					}
-
-					uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
-
-					var id = config.get_string(appl, "ID").strip();
-					if (uuid == null || uuid.strip() == "") {
-						warning("Could not add new applet %s from config %s", id, name);
-						continue;
-					}
-
-					info = new AppletInfo.from_uuid(uuid);
-					if (config.has_key(appl, "Alignment")) {
-						alignment = config.get_string(appl, "Alignment").strip();
-					}
-
-					switch (alignment) {
-						case "center":
-							index = ++c_index;
-							break;
-						case "end":
-							index = ++e_index;
-							break;
-						default:
-							index = ++s_index;
-							break;
-					}
-					info.alignment = alignment;
-					info.position = index;
-
-					initial_config.insert(uuid, info);
-					add_new(id, uuid);
-				}
-			} catch (Error e) {
-				warning("Error loading default config: %s", e.message);
-			}
-		}
-
-		// toggle_container_visibilities is used to toggle the visibility of a panel container (start, center, end) based on if it has children
-		void toggle_container_visibilities() {
-			Gtk.Box?[] regions = { start_box, center_box, end_box };
-
-			for (var i = 0; i < regions.length; i++) {
-				Gtk.Box region = regions[i];
-
-				if (!region.get_children().is_empty()) { // If this has a child
-					if (!region.get_visible()) { // Not already visible
-						region.show(); // Ensure we show the panel specifically. Using show_all results in hidden widgets of children being shown, like Budgie Menu label. Only happens in weird cases like reset.
-						region.queue_draw(); // Ensure we queue a draw
-					}
-				} else {
-					region.hide(); // Hide this area
-				}
-			}
-		}
-
-		void set_applets() {
-			string[]? uuids = null;
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? plugin = null;
-
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-			while (iter.next(out uuid, out plugin)) {
-				uuids += uuid;
-			}
-
-			settings.set_strv(Budgie.PANEL_KEY_APPLETS, uuids);
-		}
-
+		/**
+		* Toplevel override, forwarded to PanelApplets
+		*/
 		public override void remove_applet(Budgie.AppletInfo? info) {
-			if (info == null) {
-				return;
-			}
-
-			int position = info.position;
-			string alignment = info.alignment;
-			string uuid = info.uuid;
-
-			ulong notify_id = info.get_data("notify_id");
-
-			SignalHandler.disconnect(info, notify_id);
-			Gtk.Box applet_parent = (Gtk.Box) info.applet.get_parent();
-			applet_parent.remove(info.applet);
-			toggle_container_visibilities();
-
-			Settings? app_settings = info.applet.get_applet_settings(uuid);
-			if (app_settings != null) {
-				app_settings.ref();
-			}
-
-			this.manager.reset_dconf_path(info.settings);
-
-			/* TODO: Add refcounting and unload unused plugins. */
-			applets.remove(uuid);
-			applet_removed(uuid);
-
-			if (app_settings != null) {
-				this.manager.reset_dconf_path(app_settings);
-			}
-
-			set_applets();
-			budge_em_left(alignment, position);
-		}
-
-		void add_applet(Budgie.AppletInfo? info) {
-			unowned Gtk.Box? pack_target = null;
-			Budgie.AppletInfo? initial_info = null;
-
-			initial_info = initial_config.lookup(info.uuid);
-			if (initial_info != null) {
-				info.alignment = initial_info.alignment;
-				info.position = initial_info.position;
-				initial_config.remove(info.uuid);
-			}
-
-			if (!this.is_fully_loaded) {
-				lock (expected_uuids) {
-					unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, strcmp);
-					if (exp_fin != null) {
-						expected_uuids.remove_link(exp_fin);
-					}
-				}
-			}
-
-			/* figure out the alignment */
-			switch (info.alignment) {
-				case "start":
-					pack_target = start_box;
-					break;
-				case "end":
-					pack_target = end_box;
-					break;
-				default:
-					pack_target = center_box;
-					break;
-			}
-
-			this.applets.insert(info.uuid, info);
-			this.set_applets();
-
-			info.applet.update_popovers(this.popover_manager);
-			info.applet.panel_size_changed(intended_size, this.current_icon_size, this.current_small_icon_size);
-			info.applet.panel_position_changed(this.position);
-			pack_target.pack_start(info.applet, false, false, 0);
-
-			pack_target.child_set(info.applet, "position", info.position);
-			toggle_container_visibilities(); // Ensure container is updated
-
-			ulong id = info.notify.connect(applet_updated);
-			info.set_data("notify_id", id);
-			this.applet_added(info);
-
-			if (this.is_fully_loaded) {
-				return;
-			}
-
-			lock (expected_uuids) {
-				if (expected_uuids.is_empty()) {
-					this.is_fully_loaded = true;
-					this.panel_loaded();
-				}
-			}
-		}
-
-		void applet_reparent(Budgie.AppletInfo? info) {
-			/* Handle being reparented. */
-			unowned Gtk.Box? new_parent = null;
-			switch (info.alignment) {
-				case "start":
-					new_parent = this.start_box;
-					break;
-				case "end":
-					new_parent = this.end_box;
-					break;
-				default:
-					new_parent = this.center_box;
-					break;
-			}
-			/* Don't needlessly reparent */
-			Gtk.Box current_parent = (Gtk.Box) info.applet.get_parent();
-			if (new_parent != current_parent) {
-			current_parent.remove(info.applet);
-			new_parent.add(info.applet);
-
-			toggle_container_visibilities(); // Update the containers
-
-				info.applet.queue_resize();
-				update_sizes();
-				update_box_size_constraints();
-			}
-		}
-
-		void applet_reposition(Budgie.AppletInfo? info) {
-			info.applet.get_parent().child_set(info.applet, "position", info.position);
-			toggle_container_visibilities(); // Update the containers
-		}
-
-		void update_box_size_constraints() {
-			// Force boxes to recalculate preferred sizes
-			start_box.queue_resize();
-			center_box.queue_resize();
-			end_box.queue_resize();
-			layout.queue_resize();
-
-			// Use a timeout to ensure allocations are updated before constraining
-			Timeout.add(10, () => {
-				Gtk.Allocation layout_alloc;
-				layout.get_allocation(out layout_alloc);
-				layout.update_box_constraints(layout_alloc);
-				return false;
-			});
-		}
-
-		void applet_updated(Object o, ParamSpec p) {
-			unowned AppletInfo? info = o as AppletInfo;
-
-			/* Prevent a massive amount of resorting */
-			if (!this.is_fully_loaded) {
-				return;
-			}
-
-			if (p.name == "alignment") {
-				applet_reparent(info);
-			} else if (p.name == "position") {
-				applet_reposition(info);
-			}
-			this.applets_changed();
-		}
-
-		void add_new(string plugin_name, string? initial_uuid = null) {
-			string? uuid = null;
-			unowned HashTable<string,string>? table = null;
-
-			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
-				warning("Not loading invalid plugin: %s", plugin_name);
-				return;
-			}
-			if (initial_uuid == null) {
-				uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
-			} else {
-				uuid = initial_uuid;
-			}
-
-			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
-				/* Request a load of the new guy */
-				table = creating.lookup(plugin_name);
-				if (table != null) {
-					if (!table.contains(uuid)) {
-						table.insert(uuid, uuid);
-					}
-					return;
-				}
-				/* Looks insane but avoids copies */
-				creating.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
-				table = creating.lookup(plugin_name);
-				table.insert(uuid, uuid);
-				this.plugin_manager.modprobe(plugin_name);
-				return;
-			}
-			/* Already exists */
-			try {
-				Budgie.AppletInfo? info = this.plugin_manager.create_applet(plugin_name, uuid);
-				this.add_applet(info);
-			} catch (Error e) {
-				critical("Failed to load applet when we know it exists");
-				return;
-			}
-		}
-
-		Budgie.AppletInfo? add_pending(string uuid, string plugin_name) {
-			string? rname = null;
-			unowned HashTable<string,string>? table = null;
-
-			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
-				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
-				stop_expecting(uuid);
-				return null;
-			}
-
-			if (!this.plugin_manager.is_plugin_loaded(plugin_name)) {
-				/* Request a load of the new guy */
-				table = pending.lookup(plugin_name);
-				if (table != null) {
-					if (!table.contains(uuid)) {
-						table.insert(uuid, uuid);
-					}
-					return null;
-				}
-				/* Looks insane but avoids copies */
-				pending.insert(plugin_name, new HashTable<string,string>(str_hash, str_equal));
-				table = pending.lookup(plugin_name);
-				table.insert(uuid, uuid);
-				this.plugin_manager.modprobe(plugin_name);
-
-				if (!this.plugin_manager.is_plugin_loaded(plugin_name)) { // modprobe is synchronous, so the plugin failed to load
-					warning("Not adding applet whose plugin failed to load: %s %s", plugin_name, uuid);
-					pending.remove(plugin_name);
-					stop_expecting(uuid);
-				}
-				return null;
-			}
-
-			/* Already exists */
-			Budgie.AppletInfo? info = null;
-
-			try {
-				info = this.plugin_manager.load_applet_instance(uuid, null, out rname);
-			} catch (Error e) {
-				critical("Failed to load applet when we know it exists");
-			}
-
-			return info;
+			applets.remove_applet(info);
 		}
 
 		/**
-		* Stop waiting on an applet that will never be added, so the
-		* panel can still finish loading
+		* Toplevel override, forwarded to PanelApplets
 		*/
-		void stop_expecting(string uuid) {
-			lock (expected_uuids) {
-				unowned List<string?> g = expected_uuids.find_custom(uuid, strcmp);
-				if (g != null) {
-					expected_uuids.remove_link(g);
-				}
-			}
-		}
-
-		public override void map() {
-			base.map();
-			placement();
-		}
-
-		public void set_autohide_policy(AutohidePolicy policy) {
-			if (policy != this.autohide) {
-				this.settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
-				this.autohide = policy;
-				this.update_layer_shell_props();
-			}
-		}
-
-		/**
-		* Update the internal representation of the panel based on whether
-		* we're in dock mode or not
-		*/
-		void update_dock_mode() {
-			layout.set_dock_mode(this.dock_mode);
-			this.placement();
-		}
-
-		void placement() {
-			this.update_layer_shell_props();
-			bool horizontal = is_horizontal();
-			Gtk.Allocation alloc;
-			main_layout.get_allocation(out alloc);
-
-			int width = 0, height = 0;
-			int x = 0, y = 0;
-			int shadow_position = 0;
-
-			get_target_extents(out width, out height);
-
-			switch (position) {
-				case Budgie.PanelPosition.TOP:
-					x = orig_scr.x;
-					y = orig_scr.y;
-					shadow_position = 1;
-					break;
-				case Budgie.PanelPosition.LEFT:
-					x = orig_scr.x;
-					y = orig_scr.y;
-					shadow_position = 1;
-					break;
-				case Budgie.PanelPosition.RIGHT:
-					x = (orig_scr.x + orig_scr.width) - alloc.width;
-					y = orig_scr.y;
-					shadow_position = 0;
-					break;
-				case Budgie.PanelPosition.BOTTOM:
-				default:
-					x = orig_scr.x;
-					y = orig_scr.y + (orig_scr.height - alloc.height);
-					shadow_position = 0;
-					break;
-			}
-
-			// Special considerations for dock mode
-			if (this.dock_mode) {
-				// A dock is only as long as its applets: cap it at the screen if they
-				// overflow, otherwise request a small size and let them set the length
-				if (horizontal) {
-					width = (alloc.width > orig_scr.width) ? orig_scr.width : 100;
-				} else {
-					height = (alloc.height > orig_scr.height) ? orig_scr.height : 100;
-				}
-			}
-
-			main_layout.child_set(shadow, "position", shadow_position);
-
-			if (horizontal) {
-				start_box.halign = Gtk.Align.START;
-				center_box.halign = Gtk.Align.CENTER;
-				end_box.halign = Gtk.Align.END;
-
-				start_box.valign = Gtk.Align.FILL;
-				center_box.valign = Gtk.Align.FILL;
-				end_box.valign = Gtk.Align.FILL;
-
-				start_box.set_orientation(Gtk.Orientation.HORIZONTAL);
-				center_box.set_orientation(Gtk.Orientation.HORIZONTAL);
-				end_box.set_orientation(Gtk.Orientation.HORIZONTAL);
-				layout.set_orientation(Gtk.Orientation.HORIZONTAL);
-
-				main_layout.set_orientation(Gtk.Orientation.VERTICAL);
-				main_layout.valign = Gtk.Align.FILL;
-				if (this.dock_mode) {
-					main_layout.halign = Gtk.Align.CENTER;
-				} else {
-					main_layout.halign = Gtk.Align.FILL;
-				}
-				main_layout.hexpand = false;
-				layout.valign = Gtk.Align.FILL;
-			} else {
-				start_box.halign = Gtk.Align.FILL;
-				center_box.halign = Gtk.Align.FILL;
-				end_box.halign = Gtk.Align.FILL;
-
-				start_box.valign = Gtk.Align.START;
-				center_box.valign = Gtk.Align.CENTER;
-				end_box.valign = Gtk.Align.END;
-
-				start_box.set_orientation(Gtk.Orientation.VERTICAL);
-				center_box.set_orientation(Gtk.Orientation.VERTICAL);
-				end_box.set_orientation(Gtk.Orientation.VERTICAL);
-				layout.set_orientation(Gtk.Orientation.VERTICAL);
-
-				main_layout.set_orientation(Gtk.Orientation.HORIZONTAL);
-				if (this.dock_mode) {
-					main_layout.valign = Gtk.Align.CENTER;
-				} else {
-					main_layout.valign = Gtk.Align.FILL;
-				}
-				main_layout.halign = Gtk.Align.FILL;
-				main_layout.hexpand = true;
-			}
-
-			// The panel is intended_size. The window is intended_size plus the shadow.
-			layout.set_size_request(
-				horizontal ? width : intended_size,
-				horizontal ? intended_size : height
-			);
-			set_size_request(width, height);
-		}
-
-		public override void get_preferred_width(out int minimum_width, out int natural_width) {
-			int width, height;
-			get_target_extents(out width, out height);
-
-			minimum_width = width;
-			natural_width = width;
-		}
-
-		public override void get_preferred_height(out int minimum_height, out int natural_height) {
-			int width, height;
-			get_target_extents(out width, out height);
-
-			minimum_height = height;
-			natural_height = height;
-		}
-
-		private bool is_horizontal() {
-			return (position != Budgie.PanelPosition.LEFT && position != Budgie.PanelPosition.RIGHT);
-		}
-
-		/**
-		* The size of our window: our full thickness on the axis we're thin on,
-		* the extent of our screen area on the other
-		*/
-		private void get_target_extents(out int width, out int height) {
-			if (is_horizontal()) {
-				width = orig_scr.width;
-				height = int.min(targeted_size, orig_scr.height);
-			} else {
-				width = int.min(targeted_size, orig_scr.width);
-				height = orig_scr.height;
-			}
-		}
-
-		private void on_layout_allocated(Gtk.Allocation allocation) {
-			if (this.position == PanelPosition.NONE) {
-				return;
-			}
-
-			int allocated_size = is_horizontal() ? allocation.height : allocation.width;
-			if (allocated_size == this.reserved_size) {
-				return;
-			}
-
-			this.reserved_size = allocated_size;
-			this.update_exclusive_zone();
-		}
-
-		private bool applet_at_start_of_region(Budgie.AppletInfo? info) {
-			return (info.position == 0);
-		}
-
-		private bool applet_at_end_of_region(Budgie.AppletInfo? info) {
-			return (info.position >= info.applet.get_parent().get_children().length() - 1);
-		}
-
-		private string? get_box_left(Budgie.AppletInfo? info) {
-			unowned Gtk.Widget? parent = null;
-
-			if ((parent = info.applet.get_parent()) == end_box) {
-				return "center";
-			} else if (parent == center_box) {
-				return "start";
-			} else {
-				return null;
-			}
-		}
-
-		private string? get_box_right(Budgie.AppletInfo? info) {
-			unowned Gtk.Widget? parent = null;
-
-			if ((parent = info.applet.get_parent()) == start_box) {
-				return "center";
-			} else if (parent == center_box) {
-				return "end";
-			} else {
-				return null;
-			}
-		}
-
 		public override bool can_move_applet_left(Budgie.AppletInfo? info) {
-			if (!applet_at_start_of_region(info)) {
-				return true;
-			}
-			if (get_box_left(info) != null) {
-				return true;
-			}
-			return false;
+			return applets.can_move_applet_left(info);
 		}
 
+		/**
+		* Toplevel override, forwarded to PanelApplets
+		*/
 		public override bool can_move_applet_right(Budgie.AppletInfo? info) {
-			if (!applet_at_end_of_region(info)) {
-				return true;
-			}
-			if (get_box_right(info) != null) {
-				return true;
-			}
-			return false;
+			return applets.can_move_applet_right(info);
 		}
 
-		void conflict_swap(Budgie.AppletInfo? info, int old_position) {
-			unowned string key;
-			unowned Budgie.AppletInfo? val;
-			unowned Budgie.AppletInfo? conflict = null;
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-
-			while (iter.next(out key, out val)) {
-				if (val.alignment == info.alignment && val.position == info.position && info != val) {
-					conflict = val;
-					break;
-				}
-			}
-
-			if (conflict == null) {
-				return;
-			}
-
-			conflict.position = old_position;
-		}
-
-		void budge_em_right(string alignment, int after = -1) {
-			unowned string key;
-			unowned Budgie.AppletInfo? val;
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-
-			while (iter.next(out key, out val)) {
-				if (val.alignment == alignment) {
-					if (val.position > after) {
-						val.position++;
-					}
-				}
-			}
-			this.reinforce_positions();
-		}
-
-		void budge_em_left(string alignment, int after) {
-			unowned string key;
-			unowned Budgie.AppletInfo? val;
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-
-			while (iter.next(out key, out val)) {
-				if (val.alignment == alignment) {
-					if (val.position > after) {
-						val.position--;
-					}
-				}
-			}
-			this.reinforce_positions();
-		}
-
-		private void reinforce_positions() {
-			unowned string key;
-			unowned Budgie.AppletInfo? val;
-			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-
-			while (iter.next(out key, out val)) {
-				applet_reposition(val);
-			}
-
-			/* We may have ugly artifacts now */
-			this.queue_draw();
-		}
-
+		/**
+		* Toplevel override, forwarded to PanelApplets
+		*/
 		public override void move_applet_left(Budgie.AppletInfo? info) {
-			string? new_home = null;
-			int new_position = info.position;
-			int old_position = info.position;
-
-			if (!applet_at_start_of_region(info)) {
-				new_position--;
-				if (new_position < 0) {
-					new_position = 0;
-				}
-				info.position = new_position;
-				conflict_swap(info, old_position);
-				applets_changed();
-				update_sizes();
-				update_box_size_constraints();
-				return;
-			}
-			if ((new_home = get_box_left(info)) != null) {
-				unowned Gtk.Box? new_parent = null;
-				switch (info.alignment) {
-					case "end":
-						new_parent = center_box;
-						break;
-					case "center":
-						new_parent = start_box;
-						break;
-					default:
-						new_parent = end_box;
-						break;
-				}
-
-				string old_home = info.alignment;
-				uint len = new_parent.get_children().length();
-				info.alignment = new_home;
-				info.position = (int)len;
-				budge_em_left(old_home, 0);
-				applets_changed();
-				update_sizes();
-				update_box_size_constraints();
-			}
+			applets.move_applet_left(info);
 		}
 
+		/**
+		* Toplevel override, forwarded to PanelApplets
+		*/
 		public override void move_applet_right(Budgie.AppletInfo? info) {
-			string? new_home = null;
-			int new_position = info.position;
-			int old_position = info.position;
-			uint len;
-
-			if (!applet_at_end_of_region(info)) {
-				new_position++;
-				len = info.applet.get_parent().get_children().length() - 1;
-				if (new_position > len) {
-					new_position = (int) len;
-				}
-				info.position = new_position;
-				conflict_swap(info, old_position);
-				applets_changed();
-				update_sizes();
-				update_box_size_constraints();
-				return;
-			}
-			if ((new_home = get_box_right(info)) != null) {
-				info.alignment = new_home;
-				budge_em_right(new_home);
-				info.position = 0;
-				this.reinforce_positions();
-				applets_changed();
-				update_sizes();
-				update_box_size_constraints();
-			}
-		}
-
-		private bool initial_anim = false;
-		private Budgie.Animation? dock_animation = null;
-
-		private bool initial_animation() {
-			this.allow_animation = true;
-			this.initial_anim = true;
-
-			this.show_panel();
-			return false;
+			applets.move_applet_right(info);
 		}
 
 		/**
-		* In an autohidden mode, if we're not visible, and get peeked, say
-		* hello
+		* Manager, when no panel configuration exists yet
 		*/
-		private bool on_enter_notify(Gdk.EventCrossing cr) {
-			//  if (this.render_panel) {
-			//  	return Gdk.EVENT_PROPAGATE;
-			//  }
-			if (this.autohide == AutohidePolicy.NONE) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (cr.detail == Gdk.NotifyType.INFERIOR) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-
-			if (show_panel_id > 0) {
-				Source.remove(show_panel_id);
-			}
-			show_panel_id = Timeout.add(150, this.show_panel);
-			return Gdk.EVENT_STOP;
+		public void create_default_layout(string name, KeyFile config) {
+			applets.create_default_layout(name, config);
 		}
-
-		private bool on_leave_notify(Gdk.EventCrossing cr) {
-			if (this.autohide == AutohidePolicy.NONE) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			if (cr.detail == Gdk.NotifyType.INFERIOR) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-
-			if (show_panel_id > 0) {
-				Source.remove(show_panel_id);
-				show_panel_id = 0;
-			}
-
-			return Gdk.EVENT_STOP;
-		}
-
-		uint show_panel_id = 0;
 
 		/**
-		* Show the panel through a small animation
+		* Manager, when this panel is being deleted
 		*/
-		private bool show_panel() {
-			show_panel_id = 0;
-
-			if (!this.allow_animation) {
-				return false;
-			}
-			this.animation = PanelAnimation.SHOW;
-			//  render_panel = true;
-
-			this.queue_draw();
-			this.show();
-
-			if (!this.get_settings().gtk_enable_animations) {
-				this.nscale = 1.0;
-				this.animation = PanelAnimation.NONE;
-				this.queue_draw();
-				return false;
-			}
-
-			dock_animation = new Budgie.Animation();
-			dock_animation.widget = this;
-			dock_animation.length = 360 * Budgie.MSECOND;
-			dock_animation.tween = Budgie.expo_ease_out;
-			dock_animation.changes = new Budgie.PropChange[] {
-				Budgie.PropChange() {
-					property = "nscale",
-					old = this.nscale,
-					@new = 1.0
-				}
-			};
-
-			dock_animation.start((a) => {
-				this.animation = PanelAnimation.NONE;
-			});
-
-			set_above_other_surfaces();
-			return false;
-		}
-
-		public override bool draw(Cairo.Context cr) {
-			//  if (!render_panel) {
-			//  	/* Don't need to render */
-			//  	return Gdk.EVENT_STOP;
-			//  }
-
-			if (animation == PanelAnimation.NONE) {
-				return base.draw(cr);
-			}
-
-			var window = this.get_window();
-			if (window == null) {
-				return Gdk.EVENT_STOP;
-			}
-
-			Gtk.Allocation alloc;
-			get_allocation(out alloc);
-			/* Create a compatible buffer for the current scaling factor */
-			var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
-															alloc.width,
-															alloc.height,
-															1);
-			var cr2 = new Cairo.Context(buffer);
-
-			propagate_draw(get_child(), cr2);
-			var y = ((double)alloc.height) * render_scale;
-			var x = ((double)alloc.width) * render_scale;
-
-			switch (position) {
-				case Budgie.PanelPosition.TOP:
-					// Slide down into view
-					cr.set_source_surface(buffer, 0, y - alloc.height);
-					break;
-				case Budgie.PanelPosition.LEFT:
-					// Slide into view from left
-					cr.set_source_surface(buffer, x - alloc.width, 0);
-					break;
-				case Budgie.PanelPosition.RIGHT:
-					// Slide back into view from right
-					cr.set_source_surface(buffer, alloc.width - x, 0);
-					break;
-				case Budgie.PanelPosition.BOTTOM:
-				default:
-					// Slide up into view
-					cr.set_source_surface(buffer, 0, alloc.height - y);
-					break;
-			}
-
-			cr.paint();
-
-			return Gdk.EVENT_STOP;
+		public void destroy_children() {
+			applets.destroy_children();
 		}
 
 		/**
-		* Specialist operation, perform a migration after we changed applet configurations
-		* See: https://github.com/solus-project/budgie-desktop/issues/555
+		* Manager, after the stored migration level turned out to be behind
 		*/
 		public void perform_migration(int current_migration_level) {
-			if (current_migration_level != 0) {
-				warning("Unknown migration level: %d", current_migration_level);
-				return;
-			}
-			this.need_migratory = true;
-			if (this.is_fully_loaded) {
-				debug("Performing migration to level %d", BUDGIE_MIGRATION_LEVEL);
-				this.add_migratory();
-			}
-		}
-
-		/**
-		* Very simple right now. Just add the applets to the end of the panel
-		*/
-		private bool add_migratory() {
-			lock (need_migratory) {
-				if (!need_migratory) {
-					return false;
-				}
-				need_migratory = false;
-				foreach (var new_applet in MIGRATION_1_APPLETS) {
-					debug("Adding migratory applet: %s", new_applet);
-					add_new_applet_at(new_applet, end_box);
-				}
-			}
-			return false;
-		}
-
-		private void set_above_other_surfaces() {
-			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.TOP); // Ensure it is above other surfaces
-			GtkLayerShell.set_exclusive_zone(this, this.reserved_size);
-		}
-
-		private void set_below_other_surfaces() {
-			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.BOTTOM); // Ensure it is below other surfaces
+			applets.perform_migration(current_migration_level);
 		}
 	}
 }
