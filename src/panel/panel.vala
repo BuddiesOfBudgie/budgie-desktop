@@ -831,6 +831,11 @@ namespace Budgie {
 					end_applets.nth_data(i).position = i;
 					add_applet(end_applets.nth_data(i));
 				}
+
+				if (!this.is_fully_loaded && expected_uuids.is_empty()) { // no stored applet was loadable, so add_applet never emitted it
+					this.is_fully_loaded = true;
+					this.panel_loaded();
+				}
 			}
 		}
 
@@ -1212,6 +1217,7 @@ namespace Budgie {
 
 			if (!this.plugin_manager.is_plugin_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
+				stop_expecting(uuid);
 				return null;
 			}
 
@@ -1229,6 +1235,12 @@ namespace Budgie {
 				table = pending.lookup(plugin_name);
 				table.insert(uuid, uuid);
 				this.plugin_manager.modprobe(plugin_name);
+
+				if (!this.plugin_manager.is_plugin_loaded(plugin_name)) { // modprobe is synchronous, so the plugin failed to load
+					warning("Not adding applet whose plugin failed to load: %s %s", plugin_name, uuid);
+					pending.remove(plugin_name);
+					stop_expecting(uuid);
+				}
 				return null;
 			}
 
@@ -1242,6 +1254,19 @@ namespace Budgie {
 			}
 
 			return info;
+		}
+
+		/**
+		* Stop waiting on an applet that will never be added, so the
+		* panel can still finish loading
+		*/
+		void stop_expecting(string uuid) {
+			lock (expected_uuids) {
+				unowned List<string?> g = expected_uuids.find_custom(uuid, strcmp);
+				if (g != null) {
+					expected_uuids.remove_link(g);
+				}
+			}
 		}
 
 		public override void map() {
