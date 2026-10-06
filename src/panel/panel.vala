@@ -132,7 +132,6 @@ namespace Budgie {
 			center_box.hide();
 			end_box.hide();
 
-			applets.update_sizes();
 			applets.load();
 			update_dock_mode(); // first placement
 		}
