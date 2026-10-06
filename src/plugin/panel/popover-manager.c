@@ -165,8 +165,29 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 	gtk_layer_set_keyboard_mode(popover_win, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
 }
 
+static void find_open_menu(GtkWidget* widget, gpointer data) {
+	gboolean* open = data;
+
+	if (*open) return;
+
+	for (GList* l = gtk_menu_get_for_attach_widget(widget); l != NULL; l = l->next) {
+		if (gtk_widget_get_visible(GTK_WIDGET(l->data))) {
+			*open = TRUE;
+			return;
+		}
+	}
+
+	if (GTK_IS_CONTAINER(widget)) gtk_container_forall(GTK_CONTAINER(widget), find_open_menu, open);
+}
+
 static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover) {
 	g_return_val_if_fail(popover != NULL, GDK_EVENT_PROPAGATE);
+
+	gboolean menu_open = FALSE;
+	find_open_menu(GTK_WIDGET(popover), &menu_open);
+
+	// A menu opened from inside the popover, like a combo box list, takes keyboard focus from the panel
+	if (menu_open) return GDK_EVENT_PROPAGATE;
 
 	gtk_widget_hide(GTK_WIDGET(popover));
 	return GDK_EVENT_PROPAGATE;
