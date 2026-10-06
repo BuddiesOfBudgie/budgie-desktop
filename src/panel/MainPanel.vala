@@ -11,16 +11,13 @@
 
 namespace Budgie {
 	/**
-	* The main panel area - i.e. the bit that's rendered; holds the three
-	* applet regions
+	* The drawn panel box holding the start, center and end applet regions.
+	* It runs along the panel's edge: horizontal on top and bottom panels,
+	* vertical on left and right ones.
 	*/
 	public class MainPanel : Gtk.Box {
 		private bool updating_constraints = false; // guards update_box_constraints against re-entry from the allocations it triggers
 
-		/**
-		* Starts horizontal; PanelPlacement flips the orientation for left and
-		* right panels
-		*/
 		public MainPanel() {
 			Object(orientation: Gtk.Orientation.HORIZONTAL);
 			get_style_context().add_class("budgie-panel");
@@ -65,13 +62,13 @@ namespace Budgie {
 			Gtk.Widget? center_widget = null;
 			Gtk.Widget? end_widget = null;
 
-			foreach (var child in get_children()) { // a child's alignment along the panel's axis, set by PanelPlacement, says which region it is
-				var align = horizontal ? child.get_halign() : child.get_valign();
-				if (align == Gtk.Align.START) {
+			foreach (var child in get_children()) { // a child's alignment along the panel's axis says which region it is
+				var alignment = horizontal ? child.get_halign() : child.get_valign();
+				if (alignment == Gtk.Align.START) {
 					start_widget = child;
-				} else if (align == Gtk.Align.CENTER) {
+				} else if (alignment == Gtk.Align.CENTER) {
 					center_widget = child;
-				} else if (align == Gtk.Align.END) {
+				} else if (alignment == Gtk.Align.END) {
 					end_widget = child;
 				}
 			}
@@ -97,9 +94,9 @@ namespace Budgie {
 			if (region == null) {
 				return 0;
 			}
-			Gtk.Allocation alloc;
-			region.get_allocation(out alloc);
-			return get_orientation() == Gtk.Orientation.HORIZONTAL ? alloc.width : alloc.height;
+			Gtk.Allocation allocation;
+			region.get_allocation(out allocation);
+			return get_orientation() == Gtk.Orientation.HORIZONTAL ? allocation.width : allocation.height;
 		}
 
 		/**
@@ -114,20 +111,20 @@ namespace Budgie {
 				max_length = 0;
 			}
 
-			Gtk.Allocation alloc;
-			region.get_allocation(out alloc);
+			Gtk.Allocation allocation;
+			region.get_allocation(out allocation);
 			if (get_orientation() == Gtk.Orientation.HORIZONTAL) {
-				if (alloc.width <= max_length) {
+				if (allocation.width <= max_length) {
 					return;
 				}
-				alloc.width = max_length;
+				allocation.width = max_length;
 			} else {
-				if (alloc.height <= max_length) {
+				if (allocation.height <= max_length) {
 					return;
 				}
-				alloc.height = max_length;
+				allocation.height = max_length;
 			}
-			region.size_allocate(alloc);
+			region.size_allocate(allocation);
 		}
 	}
 }

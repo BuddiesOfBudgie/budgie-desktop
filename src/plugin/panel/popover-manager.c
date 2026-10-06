@@ -87,7 +87,7 @@ static void budgie_popover_manager_init(BudgiePopoverManager* self) {
 }
 
 void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidget* parent_widget, GtkPopover* popover) {
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL && popover != NULL);
 
 	if (g_hash_table_contains(self->priv->popovers, parent_widget)) {
@@ -115,7 +115,7 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidg
 void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
 	BudgiePopover* popover = NULL;
 
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL);
 
 	popover = g_hash_table_lookup(self->priv->popovers, parent_widget);
@@ -221,7 +221,7 @@ static void on_window_unmap(__budgie_unused__ GtkWidget* window, BudgiePopoverMa
  * shown while it is open and re-evaluates when it closes
  */
 void budgie_popover_manager_track_window(BudgiePopoverManager* self, GtkWindow* window) {
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(GTK_IS_WINDOW(window));
 
 	g_signal_connect_object(window, "map", G_CALLBACK(on_popover_map), self, 0);
@@ -253,7 +253,7 @@ static void on_popover_unmap(GtkWidget* popover, BudgiePopoverManager* self) {
  * and is free to manage itself.
  */
 void budgie_popover_manager_unregister_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL);
 	BudgiePopover* popover = NULL;
 

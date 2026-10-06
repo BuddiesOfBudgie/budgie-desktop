@@ -26,10 +26,6 @@ namespace Budgie {
 		private Gdk.Rectangle screen; // the monitor's logical geometry in monitor-local coordinates; layer-shell positions the window, this only sizes it
 		private int target_monitor = 0; // index into the display's monitor list
 
-		/**
-		* Takes the already-built widget tree; apply() is left to the caller
-		* once the window is ready
-		*/
 		public PanelPlacement(Panel panel, Gtk.Box main_layout, MainPanel layout, Budgie.ShadowBlock shadow,
 							  ConstrainedBox start_box, ConstrainedBox center_box, ConstrainedBox end_box) {
 			this.panel = panel;
@@ -44,12 +40,12 @@ namespace Budgie {
 		}
 
 		/**
-		* Records where the panel lives; the manager calls this on creation and
-		* whenever monitors change, then apply() takes it into account
+		* Records the monitor geometry the panel sizes itself to, for the next
+		* apply()
 		*/
 		public void set_screen(Gdk.Rectangle screen, int monitor_index) {
 			this.screen = screen;
-			if (monitor_index >= 0) { // callers that only re-place the panel on its edge leave the monitor alone
+			if (monitor_index >= 0) { // a negative index keeps the current monitor
 				target_monitor = monitor_index;
 			}
 		}
@@ -76,11 +72,10 @@ namespace Budgie {
 		}
 
 		/**
-		* Re-anchors the window and re-aligns its contents. Runs on every
-		* position, dock mode, size or scale change and on map.
+		* Re-anchors the window and re-aligns its contents
 		*/
 		public void apply() {
-			update_layer_shell_props();
+			update_layer_shell_properties();
 
 			bool horizontal = is_horizontal();
 			main_layout.child_set(shadow, "position", (panel.position == Budgie.PanelPosition.TOP || panel.position == Budgie.PanelPosition.LEFT) ? 1 : 0); // the shadow is packed on the side that faces the screen center
@@ -104,10 +99,10 @@ namespace Budgie {
 			end_box.set_orientation(panel_orientation);
 			layout.set_orientation(panel_orientation);
 
-			var dock_align = panel.dock_mode ? Gtk.Align.CENTER : Gtk.Align.FILL; // a dock is centered inside its full-length surface
+			var dock_alignment = panel.dock_mode ? Gtk.Align.CENTER : Gtk.Align.FILL; // a dock is centered inside its full-length surface
 			main_layout.set_orientation(stack_orientation);
-			main_layout.halign = horizontal ? dock_align : Gtk.Align.FILL;
-			main_layout.valign = horizontal ? Gtk.Align.FILL : dock_align;
+			main_layout.halign = horizontal ? dock_alignment : Gtk.Align.FILL;
+			main_layout.valign = horizontal ? Gtk.Align.FILL : dock_alignment;
 			main_layout.hexpand = !horizontal;
 		}
 
@@ -131,12 +126,12 @@ namespace Budgie {
 			if (panel.dock_mode) {
 				// A dock is only as long as its applets: cap it at the screen if they
 				// overflow, otherwise request a small size and let them set the length
-				Gtk.Allocation alloc;
-				main_layout.get_allocation(out alloc);
+				Gtk.Allocation allocation;
+				main_layout.get_allocation(out allocation);
 				if (horizontal) {
-					width = (alloc.width > screen.width) ? screen.width : 100;
+					width = (allocation.width > screen.width) ? screen.width : 100;
 				} else {
-					height = (alloc.height > screen.height) ? screen.height : 100;
+					height = (allocation.height > screen.height) ? screen.height : 100;
 				}
 			}
 
@@ -151,7 +146,7 @@ namespace Budgie {
 		* Moves the surface to its monitor and anchors it to the configured
 		* edge; margins and exclusive zone follow
 		*/
-		public void update_layer_shell_props() {
+		public void update_layer_shell_properties() {
 			var default_display = Gdk.Display.get_default();
 			if (default_display != null && default_display.get_n_monitors() > target_monitor) {
 				var monitor = default_display.get_monitor(target_monitor);
@@ -174,8 +169,7 @@ namespace Budgie {
 		}
 
 		/**
-		* Maps a Budgie edge to the layer-shell anchor; NONE counts as BOTTOM,
-		* the same fallback the manager uses for an unplaced panel
+		* Maps a Budgie edge to the layer-shell anchor; NONE counts as BOTTOM
 		*/
 		private static GtkLayerShell.Edge position_to_layer_shell_edge(Budgie.PanelPosition position) {
 			switch (position) {

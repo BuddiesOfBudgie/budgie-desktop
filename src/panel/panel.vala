@@ -302,7 +302,7 @@ namespace Budgie {
 			}
 			settings.set_enum(Budgie.PANEL_KEY_AUTOHIDE, policy);
 			autohide = policy;
-			placement.update_layer_shell_props();
+			placement.update_layer_shell_properties();
 			visibility.update();
 		}
 

@@ -43,10 +43,6 @@ namespace Budgie {
 
 		public signal void loaded(); // every applet from settings is placed, or there were none to load
 
-		/**
-		* Takes the already-built regions; nothing is loaded until load() is
-		* called
-		*/
 		public PanelApplets(Panel panel, Budgie.PanelManager manager, Budgie.PanelPluginManager plugin_manager,
 							Settings settings, PopoverManager popover_manager, MainPanel layout,
 							ConstrainedBox start_box, ConstrainedBox center_box, ConstrainedBox end_box) {
@@ -70,31 +66,30 @@ namespace Budgie {
 		}
 
 		/**
-		* A fresh list for the Toplevel API, in hash order
+		* A new list of every applet on the panel, in hash order
 		*/
 		public List<Budgie.AppletInfo?> get_applets() {
-			List<Budgie.AppletInfo?> ret = new List<Budgie.AppletInfo?>();
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? appl_info = null;
+			List<Budgie.AppletInfo?> result = new List<Budgie.AppletInfo?>();
+			unowned string? key;
+			unowned Budgie.AppletInfo? info;
 
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
-			while (iter.next(out key, out appl_info)) {
-				ret.append(appl_info);
+			while (iter.next(out key, out info)) {
+				result.append(info);
 			}
-			return ret;
+			return result;
 		}
 
 		/**
-		* First applet that advertises the action, or null; used for the panel
-		* keybindings
+		* First applet that advertises the action, or null
 		*/
 		public unowned Budgie.AppletInfo? find_supporting(Budgie.PanelAction action) {
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? info = null;
+			unowned string? uuid;
+			unowned Budgie.AppletInfo? info;
 
 			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
 			while (iter.next(out uuid, out info)) {
-				if ((info.applet.supported_actions & action) != 0) {
+				if (action in info.applet.supported_actions) {
 					return info;
 				}
 			}
@@ -110,8 +105,8 @@ namespace Budgie {
 			int size = icon_sizes[0];
 			int small_size = icon_sizes[0];
 
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? info = null;
+			unowned string? key;
+			unowned Budgie.AppletInfo? info;
 
 			for (int i = 1; i < icon_sizes.length; i++) { // walk up until the next size would no longer fit
 				if (icon_sizes[i] > panel.intended_size) {
@@ -135,8 +130,8 @@ namespace Budgie {
 		* own layout
 		*/
 		public void update_positions() {
-			unowned string? key = null;
-			unowned Budgie.AppletInfo? info = null;
+			unowned string? key;
+			unowned Budgie.AppletInfo? info;
 
 			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
 			while (iter.next(out key, out info)) {
@@ -168,16 +163,16 @@ namespace Budgie {
 
 				for (int i = 0; i < uuids.length; i++) {
 					string? name = null;
-					Budgie.AppletInfo? info = null;
+					Budgie.AppletInfo? info;
 
 					try {
 						info = plugin_manager.load_applet_instance(uuids[i], null, out name);
 					} catch (Error e) {
 						if (name == null) { // no plugin name means the stored uuid is garbage; with one the plugin just has not loaded yet
-							unowned List<string?> g = expected_uuids.find_custom(uuids[i], strcmp);
+							unowned List<string?> link = expected_uuids.find_custom(uuids[i], strcmp);
 
-							if (g != null) {
-								expected_uuids.remove_link(g); // nothing will ever arrive for it, so stop waiting
+							if (link != null) {
+								expected_uuids.remove_link(link); // nothing will ever arrive for it, so stop waiting
 							}
 
 							debug("Unable to load invalid applet '%s': %s", uuids[i], e.message);
@@ -223,10 +218,10 @@ namespace Budgie {
 		}
 
 		/**
-		* Entry point for the settings UI's add button; id is the plugin name
+		* Adds an applet of the plugin to the region with the fewest applets
 		*/
-		public void add_new_applet(string id) {
-			add_new_applet_at(id, null);
+		public void add_new_applet(string plugin_name) {
+			add_new_applet_at(plugin_name, null);
 		}
 
 		/**
@@ -234,10 +229,10 @@ namespace Budgie {
 		* configuration exists yet
 		*/
 		public void create_default_layout(string name, KeyFile config) {
-			int s_index = -1; // next position per region
-			int c_index = -1;
-			int e_index = -1;
-			int index = 0;
+			int start_index = -1; // next position per region
+			int center_index = -1;
+			int end_index = -1;
+			int index;
 
 			try {
 				if (!config.has_key(name, "Children")) {
@@ -245,44 +240,42 @@ namespace Budgie {
 					return;
 				}
 				string[] children = config.get_string_list(name, "Children"); // each entry names a group in the file describing one applet
-				foreach (string appl in children) {
-					AppletInfo? info = null;
-					string? uuid = null;
-					appl = appl.strip();
+				foreach (string group in children) {
+					group = group.strip();
 					string alignment = "start"; /* center, end */
 
-					if (!config.has_group(appl)) {
-						warning("Panel applet %s missing from config", appl);
+					if (!config.has_group(group)) {
+						warning("Panel applet %s missing from config", group);
 						continue;
 					}
 
-					if (!config.has_key(appl, "ID")) {
-						warning("Applet %s is missing ID", appl);
+					if (!config.has_key(group, "ID")) {
+						warning("Applet %s is missing ID", group);
 						continue;
 					}
 
-					uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+					string? uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
 
-					var id = config.get_string(appl, "ID").strip(); // the plugin name
+					var id = config.get_string(group, "ID").strip(); // the plugin name
 					if (uuid == null || uuid.strip() == "") {
 						warning("Could not add new applet %s from config %s", id, name);
 						continue;
 					}
 
-					info = new AppletInfo.from_uuid(uuid);
-					if (config.has_key(appl, "Alignment")) {
-						alignment = config.get_string(appl, "Alignment").strip();
+					AppletInfo? info = new AppletInfo.from_uuid(uuid);
+					if (config.has_key(group, "Alignment")) {
+						alignment = config.get_string(group, "Alignment").strip();
 					}
 
 					switch (alignment) { // positions count up per region in file order
 						case "center":
-							index = ++c_index;
+							index = ++center_index;
 							break;
 						case "end":
-							index = ++e_index;
+							index = ++end_index;
 							break;
 						default:
-							index = ++s_index;
+							index = ++start_index;
 							break;
 					}
 					info.alignment = alignment;
@@ -336,8 +329,7 @@ namespace Budgie {
 		}
 
 		/**
-		* Removes every applet and wipes its settings; used when the panel
-		* itself is deleted
+		* Removes every applet and wipes its settings
 		*/
 		public void destroy_children() {
 			unowned string key;
@@ -434,7 +426,7 @@ namespace Budgie {
 		* returns null when its plugin is not loaded yet
 		*/
 		private Budgie.AppletInfo? add_pending(string uuid, string plugin_name) {
-			string? rname = null;
+			string? loaded_name;
 
 			if (!plugin_manager.is_plugin_valid(plugin_name)) {
 				warning("Not adding invalid plugin: %s %s", plugin_name, uuid);
@@ -456,9 +448,9 @@ namespace Budgie {
 			Budgie.AppletInfo? info = null;
 
 			try {
-				info = plugin_manager.load_applet_instance(uuid, null, out rname);
+				info = plugin_manager.load_applet_instance(uuid, null, out loaded_name);
 			} catch (Error e) {
-				critical("Failed to load applet when we know it exists");
+				critical("Failed to load applet when we know it exists: %s %s: %s", plugin_name, uuid, e.message);
 			}
 
 			return info;
@@ -470,9 +462,9 @@ namespace Budgie {
 		*/
 		private void stop_expecting(string uuid) {
 			lock (expected_uuids) {
-				unowned List<string?> g = expected_uuids.find_custom(uuid, strcmp);
-				if (g != null) {
-					expected_uuids.remove_link(g);
+				unowned List<string?> link = expected_uuids.find_custom(uuid, strcmp);
+				if (link != null) {
+					expected_uuids.remove_link(link);
 				}
 			}
 		}
@@ -482,7 +474,7 @@ namespace Budgie {
 		* `creating` when the plugin is not loaded yet
 		*/
 		private void add_new(string plugin_name, string? initial_uuid = null) {
-			string? uuid = null;
+			string? uuid;
 
 			if (!plugin_manager.is_plugin_valid(plugin_name)) {
 				warning("Not loading invalid plugin: %s", plugin_name);
@@ -503,7 +495,7 @@ namespace Budgie {
 				Budgie.AppletInfo? info = plugin_manager.create_applet(plugin_name, uuid);
 				add_applet(info);
 			} catch (Error e) {
-				critical("Failed to load applet when we know it exists");
+				critical("Failed to load applet when we know it exists: %s %s: %s", plugin_name, uuid, e.message);
 				return;
 			}
 		}
@@ -530,40 +522,34 @@ namespace Budgie {
 		* it in pending and creating
 		*/
 		private void on_extension_loaded(string name) {
-			unowned HashTable<string,string>? todo = null;
-			todo = pending.lookup(name);
-			if (todo != null) {
-				var iter = HashTableIter<string,string>(todo);
-				string? uuid = null;
+			unowned HashTable<string,string>? queued = pending.lookup(name);
+			if (queued != null) {
+				var iter = HashTableIter<string,string>(queued);
+				string? uuid;
 
 				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = null;
-					string? uname = null;
+					string? loaded_name;
 					try {
-						info = plugin_manager.load_applet_instance(uuid, null, out uname);
+						Budgie.AppletInfo? info = plugin_manager.load_applet_instance(uuid, null, out loaded_name);
 						add_applet(info);
 					} catch (Error e) {
-						critical("Failed to load applet when we know it exists: %s", uname);
+						critical("Failed to load applet when we know it exists: %s %s: %s", name, uuid, e.message);
 					}
 				}
 				pending.remove(name);
 			}
 
-			todo = null;
-
-			todo = creating.lookup(name);
-			if (todo != null) {
-				var iter = HashTableIter<string,string>(todo);
-				string? uuid = null;
+			queued = creating.lookup(name);
+			if (queued != null) {
+				var iter = HashTableIter<string,string>(queued);
+				string? uuid;
 
 				while (iter.next(out uuid, null)) {
-					Budgie.AppletInfo? info = null;
-
 					try {
-						info = plugin_manager.create_applet(name, uuid);
+						Budgie.AppletInfo? info = plugin_manager.create_applet(name, uuid);
 						add_applet(info);
 					} catch (Error e) {
-						critical("Failed to load applet when we know it exists");
+						critical("Failed to load applet when we know it exists: %s %s: %s", name, uuid, e.message);
 					}
 				}
 				creating.remove(name);
@@ -575,9 +561,7 @@ namespace Budgie {
 		* from settings, created new, or queued for a plugin
 		*/
 		private void add_applet(Budgie.AppletInfo? info) {
-			Budgie.AppletInfo? initial_info = null;
-
-			initial_info = initial_config.lookup(info.uuid); // a UI-requested applet carries its slot here until the plugin produces the instance
+			Budgie.AppletInfo? initial_info = initial_config.lookup(info.uuid); // a UI-requested applet carries its slot here until the plugin produces the instance
 			if (initial_info != null) {
 				info.alignment = initial_info.alignment;
 				info.position = initial_info.position;
@@ -586,9 +570,9 @@ namespace Budgie {
 
 			if (!is_fully_loaded) { // one of the stored applets arrived; it is no longer expected
 				lock (expected_uuids) {
-					unowned List<string?> exp_fin = expected_uuids.find_custom(info.uuid, strcmp);
-					if (exp_fin != null) {
-						expected_uuids.remove_link(exp_fin);
+					unowned List<string?> link = expected_uuids.find_custom(info.uuid, strcmp);
+					if (link != null) {
+						expected_uuids.remove_link(link);
 					}
 				}
 			}
@@ -606,8 +590,8 @@ namespace Budgie {
 			pack_target.child_set(info.applet, "position", info.position);
 			toggle_container_visibilities();
 
-			ulong id = info.notify.connect(applet_updated); // alignment and position edits from the settings UI arrive as property changes
-			info.set_data("notify_id", id);
+			ulong notify_id = info.notify.connect(applet_updated); // alignment and position edits from the settings UI arrive as property changes
+			info.set_data("notify_id", notify_id);
 			panel.applet_added(info);
 
 			if (is_fully_loaded) {
@@ -647,23 +631,23 @@ namespace Budgie {
 		}
 
 		/**
-		* Re-homes (repar) or re-indexes (repos) every applet according to its
-		* stored alignment and position
+		* Re-homes (reparent) or re-indexes (reposition) every applet according
+		* to its stored alignment and position
 		*/
-		private void initial_applet_placement(bool repar = false, bool repos = false) {
-			if (!repar && !repos) {
+		private void initial_applet_placement(bool reparent = false, bool reposition = false) {
+			if (!reparent && !reposition) {
 				return;
 			}
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? info = null;
+			unowned string? uuid;
+			unowned Budgie.AppletInfo? info;
 
 			var iter = HashTableIter<string?,Budgie.AppletInfo?>(applets);
 
 			while (iter.next(out uuid, out info)) {
-				if (repar) {
+				if (reparent) {
 					applet_reparent(info);
 				}
-				if (repos) {
+				if (reposition) {
 					applet_reposition(info);
 				}
 			}
@@ -677,21 +661,13 @@ namespace Budgie {
 		}
 
 		/**
-		* Add a new applet to the panel (Raven UI)
-		*
-		* Explanation: Try to find the most underpopulated region first,
-		* and add the applet there. Determine a suitable position,
-		* set the alignment+position, stuff an initial config in,
-		* and hope for the best when we initiate add_new
-		*
-		* If the @target_region is set, we'll use that instead
+		* Adds an applet of the plugin to the end of @target_region, or to the
+		* region with the fewest applets when it is null
 		*/
-		private void add_new_applet_at(string id, Gtk.Box? target_region) {
+		private void add_new_applet_at(string plugin_name, Gtk.Box? target_region) {
 			int position = (int) applets.size() + 1; // larger than any region's count, so the first region always wins the comparison below
 			unowned Gtk.Box? target = null;
-			string? align = null;
-			AppletInfo? info = null;
-			string? uuid = null;
+			string? alignment;
 
 			Gtk.Box?[] regions = {
 				start_box,
@@ -700,37 +676,37 @@ namespace Budgie {
 			};
 
 			if (target_region != null) { // internal adds such as migration name their region and go to its end
-				var kids = target_region.get_children();
-				position = (int) (kids.length());
+				var children = target_region.get_children();
+				position = (int) (children.length());
 				target = target_region;
 			} else {
 				foreach (var region in regions) { // otherwise the first region with the fewest applets wins
-					var kids = region.get_children();
-					var len = kids.length();
-					if (len < position) {
-						position = (int)len;
+					var children = region.get_children();
+					var child_count = children.length();
+					if (child_count < position) {
+						position = (int) child_count;
 						target = region;
 					}
 				}
 			}
 
 			if (target == start_box) {
-				align = "start";
+				alignment = "start";
 			} else if (target == center_box) {
-				align = "center";
+				alignment = "center";
 			} else {
-				align = "end";
+				alignment = "end";
 			}
 
-			uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
-			info = new AppletInfo.from_uuid(uuid);
-			info.alignment = align;
+			string? uuid = LibUUID.new(UUIDFlags.LOWER_CASE|UUIDFlags.TIME_SAFE_TYPE);
+			AppletInfo? info = new AppletInfo.from_uuid(uuid);
+			info.alignment = alignment;
 
-			var kids = target.get_children();
-			uint nkids = kids.length();
+			var children = target.get_children();
+			uint child_count = children.length();
 
-			if (position >= nkids) { // safety clamp
-				position = (int) nkids;
+			if (position >= child_count) { // safety clamp
+				position = (int) child_count;
 			}
 
 			if (position < 0) {
@@ -740,7 +716,7 @@ namespace Budgie {
 			info.position = position;
 
 			initial_config.insert(uuid, info); // add_applet() applies this slot once the instance exists
-			add_new(id, uuid);
+			add_new(plugin_name, uuid);
 		}
 
 		/**
@@ -800,16 +776,16 @@ namespace Budgie {
 		* An AppletInfo property changed, which is how the settings UI edits
 		* alignment and position
 		*/
-		private void applet_updated(Object o, ParamSpec p) {
-			unowned AppletInfo? info = o as AppletInfo;
+		private void applet_updated(Object object, ParamSpec pspec) {
+			unowned AppletInfo? info = object as AppletInfo;
 
 			if (!is_fully_loaded) { // every applet arriving would otherwise resort the whole panel; on_fully_loaded() settles everything once
 				return;
 			}
 
-			if (p.name == "alignment") {
+			if (pspec.name == "alignment") {
 				applet_reparent(info);
-			} else if (p.name == "position") {
+			} else if (pspec.name == "position") {
 				applet_reposition(info);
 			}
 			panel.applets_changed();
@@ -880,12 +856,13 @@ namespace Budgie {
 		}
 
 		/**
-		* Timeout callback for update_box_size_constraints()
+		* Re-applies the regions' size constraints for the layout's current
+		* allocation
 		*/
 		private bool apply_box_constraints() {
-			Gtk.Allocation layout_alloc;
-			layout.get_allocation(out layout_alloc);
-			layout.update_box_constraints(layout_alloc);
+			Gtk.Allocation allocation;
+			layout.get_allocation(out allocation);
+			layout.update_box_constraints(allocation);
 			return false;
 		}
 
@@ -895,8 +872,8 @@ namespace Budgie {
 		*/
 		private void set_applets() {
 			string[]? uuids = null;
-			unowned string? uuid = null;
-			unowned Budgie.AppletInfo? plugin = null;
+			unowned string? uuid;
+			unowned Budgie.AppletInfo? plugin;
 
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 			while (iter.next(out uuid, out plugin)) {
@@ -925,9 +902,9 @@ namespace Budgie {
 		* null when already in start
 		*/
 		private string? get_box_left(Budgie.AppletInfo? info) {
-			unowned Gtk.Widget? parent = null;
+			unowned Gtk.Widget? parent = info.applet.get_parent();
 
-			if ((parent = info.applet.get_parent()) == end_box) {
+			if (parent == end_box) {
 				return "center";
 			} else if (parent == center_box) {
 				return "start";
@@ -941,9 +918,9 @@ namespace Budgie {
 		* null when already in end
 		*/
 		private string? get_box_right(Budgie.AppletInfo? info) {
-			unowned Gtk.Widget? parent = null;
+			unowned Gtk.Widget? parent = info.applet.get_parent();
 
-			if ((parent = info.applet.get_parent()) == start_box) {
+			if (parent == start_box) {
 				return "center";
 			} else if (parent == center_box) {
 				return "end";
@@ -968,13 +945,13 @@ namespace Budgie {
 		*/
 		private void conflict_swap(Budgie.AppletInfo? info, int old_position) {
 			unowned string key;
-			unowned Budgie.AppletInfo? val;
+			unowned Budgie.AppletInfo? other;
 			unowned Budgie.AppletInfo? conflict = null;
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
-			while (iter.next(out key, out val)) {
-				if (val.alignment == info.alignment && val.position == info.position && info != val) {
-					conflict = val;
+			while (iter.next(out key, out other)) {
+				if (other.alignment == info.alignment && other.position == info.position && info != other) {
+					conflict = other;
 					break;
 				}
 			}
@@ -992,13 +969,13 @@ namespace Budgie {
 		*/
 		private void open_gap(string alignment, int after = -1) {
 			unowned string key;
-			unowned Budgie.AppletInfo? val;
+			unowned Budgie.AppletInfo? info;
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
-			while (iter.next(out key, out val)) {
-				if (val.alignment == alignment) {
-					if (val.position > after) {
-						val.position++;
+			while (iter.next(out key, out info)) {
+				if (info.alignment == alignment) {
+					if (info.position > after) {
+						info.position++;
 					}
 				}
 			}
@@ -1011,13 +988,13 @@ namespace Budgie {
 		*/
 		private void close_gap(string alignment, int after) {
 			unowned string key;
-			unowned Budgie.AppletInfo? val;
+			unowned Budgie.AppletInfo? info;
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
-			while (iter.next(out key, out val)) {
-				if (val.alignment == alignment) {
-					if (val.position > after) {
-						val.position--;
+			while (iter.next(out key, out info)) {
+				if (info.alignment == alignment) {
+					if (info.position > after) {
+						info.position--;
 					}
 				}
 			}
@@ -1031,11 +1008,11 @@ namespace Budgie {
 		*/
 		private void reinforce_positions() {
 			unowned string key;
-			unowned Budgie.AppletInfo? val;
+			unowned Budgie.AppletInfo? info;
 			var iter = HashTableIter<string,Budgie.AppletInfo?>(applets);
 
-			while (iter.next(out key, out val)) {
-				applet_reposition(val);
+			while (iter.next(out key, out info)) {
+				applet_reposition(info);
 			}
 
 			panel.queue_draw(); // we may have ugly artifacts now

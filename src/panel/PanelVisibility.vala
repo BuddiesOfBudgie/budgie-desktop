@@ -44,7 +44,7 @@ namespace Budgie {
 		private uint show_panel_id = 0; // pending delayed show_panel() source, 0 when none
 		private Budgie.Animation? slide = null; // the slide currently running, if any
 		private PanelAnimation animation = PanelAnimation.SHOW; // SHOW so the first update runs show_panel(), which is what maps the window
-		private double render_scale = 1.0; // backing store for nscale
+		private double render_scale = 1.0; // backing store for slide_progress
 
 		public signal void usage_changed(); // in_use may have changed
 
@@ -68,10 +68,9 @@ namespace Budgie {
 		}
 
 		/**
-		* Slide progress, 0.0 fully off-screen to 1.0 fully on.
-		* Budgie.Animation drives it through this property and draw() reads it.
+		* 0.0 fully off-screen to 1.0 fully on
 		*/
-		public double nscale {
+		public double slide_progress {
 			public set {
 				render_scale = value;
 				panel.queue_draw();
@@ -81,10 +80,6 @@ namespace Budgie {
 			}
 		}
 
-		/**
-		* Hooks the pointer, allocation and popover events the state machine
-		* reacts to
-		*/
 		public PanelVisibility(Panel panel, PanelManager manager, PopoverManager popover_manager) {
 			this.panel = panel;
 			this.manager = manager;
@@ -96,8 +91,8 @@ namespace Budgie {
 		}
 
 		/**
-		* Called once the applets are in place; the first evaluation maps the
-		* window through show_panel()
+		* Starts the state machine on the next idle; its first evaluation maps
+		* the window through show_panel()
 		*/
 		public void start() {
 			if (started) {
@@ -108,7 +103,7 @@ namespace Budgie {
 		}
 
 		/**
-		* Idle callback queued by start(); from here on the state machine is live
+		* Lets the panel animate and runs the first visibility evaluation
 		*/
 		private bool on_start_idle() {
 			allow_animation = true;
@@ -117,8 +112,7 @@ namespace Budgie {
 		}
 
 		/**
-		* The manager reports whether a maximized window covers the panel's
-		* monitor
+		* Records whether a maximized window covers the panel's monitor
 		*/
 		public void set_occluded(bool occluded) {
 			screen_occluded = occluded;
@@ -138,8 +132,7 @@ namespace Budgie {
 		}
 
 		/**
-		* Re-evaluates without the debounce; used after the autohide policy
-		* changed so a switch to Never shows the panel at once
+		* Re-evaluates the layer and visibility without the debounce
 		*/
 		public void update() {
 			update_layer();
@@ -147,9 +140,8 @@ namespace Budgie {
 		}
 
 		/**
-		* Brings the panel up without the show delay for a keyboard-triggered
-		* applet action, above a fullscreen window like the menu and Raven, and
-		* keeps it shown until dismiss()
+		* Brings the panel up without the show delay, above a fullscreen
+		* window, and keeps it shown until dismiss()
 		*/
 		public void summon() {
 			cancel(ref visibility_update_id);
@@ -277,8 +269,8 @@ namespace Budgie {
 		* The pointer entered the surface, which while hidden means the edge
 		* strip: cancel a pending hide and reveal after SHOW_DELAY
 		*/
-		private bool on_enter_notify(Gdk.EventCrossing cr) {
-			if (cr.detail == Gdk.NotifyType.INFERIOR) { // a crossing between the panel's own child windows, not an entry from outside
+		private bool on_enter_notify(Gdk.EventCrossing event) {
+			if (event.detail == Gdk.NotifyType.INFERIOR) { // a crossing between the panel's own child windows, not an entry from outside
 				return Gdk.EVENT_PROPAGATE;
 			}
 			pointer_inside = true;
@@ -299,8 +291,8 @@ namespace Budgie {
 		* The pointer left the surface: drop a reveal that has not fired yet
 		* and schedule a hide evaluation
 		*/
-		private bool on_leave_notify(Gdk.EventCrossing cr) {
-			if (cr.detail == Gdk.NotifyType.INFERIOR) {
+		private bool on_leave_notify(Gdk.EventCrossing event) {
+			if (event.detail == Gdk.NotifyType.INFERIOR) {
 				return Gdk.EVENT_PROPAGATE;
 			}
 			pointer_inside = false;
@@ -349,7 +341,7 @@ namespace Budgie {
 		/**
 		* At rest and fully shown; draw() hands rendering back to the window
 		*/
-		private void on_show_animation_done(Budgie.Animation? a) {
+		private void on_show_animation_done(Budgie.Animation? finished) {
 			animation = PanelAnimation.NONE;
 		}
 
@@ -366,7 +358,7 @@ namespace Budgie {
 		/**
 		* The panel is now hidden: nothing is drawn and only the strip takes input
 		*/
-		private void on_hide_animation_done(Budgie.Animation? a) {
+		private void on_hide_animation_done(Budgie.Animation? finished) {
 			render_panel = false;
 			animation = PanelAnimation.NONE;
 			unset_input_region(); // the allocation may have changed during the slide
@@ -374,8 +366,8 @@ namespace Budgie {
 		}
 
 		/**
-		* Animates nscale to target and calls on_done at the end; jumps
-		* straight there when the user turned animations off
+		* Animates slide_progress to target and calls on_done at the end;
+		* jumps straight there when the user turned animations off
 		*/
 		private void slide_to(double target, Budgie.AnimCompletionFunc on_done) {
 			if (slide != null) { // a slide in the opposite direction may still be running; its completion callback would undo this one
@@ -384,7 +376,7 @@ namespace Budgie {
 			}
 
 			if (!panel.get_settings().gtk_enable_animations) {
-				nscale = target;
+				slide_progress = target;
 				on_done(null);
 				return;
 			}
@@ -396,8 +388,8 @@ namespace Budgie {
 			slide.tween = Budgie.expo_ease_out;
 			slide.changes = new Budgie.PropChange[] {
 				Budgie.PropChange() {
-					property = "nscale",
-					old = nscale, // continues from wherever a stopped slide left it
+					property = "slide-progress",
+					old = slide_progress, // continues from wherever a stopped slide left it
 					@new = target
 				}
 			};
@@ -466,22 +458,22 @@ namespace Budgie {
 		* GDK forwards the region to the compositor as the surface's
 		* wl_surface input region
 		*/
-		private void apply_input_region(Cairo.RectangleInt rect) {
+		private void apply_input_region(Cairo.RectangleInt rectangle) {
 			var window = panel.get_window();
 			if (window == null) { // not realized yet; show_panel() applies the full region again once it is
 				return;
 			}
-			window.input_shape_combine_region(new Cairo.Region.rectangle(rect), 0, 0);
+			window.input_shape_combine_region(new Cairo.Region.rectangle(rectangle), 0, 0);
 		}
 
 		/**
 		* Paints the hidden or sliding panel on the window's behalf. Returns
 		* false when fully shown so the window draws itself normally.
 		*/
-		public bool draw(Cairo.Context cr) {
+		public bool draw(Cairo.Context context) {
 			if (!render_panel) { // transparent, not unmapped: the surface has to stay alive for the strip to take input
-				cr.set_operator(Cairo.Operator.CLEAR);
-				cr.paint();
+				context.set_operator(Cairo.Operator.CLEAR);
+				context.paint();
 				return true;
 			}
 			if (animation == PanelAnimation.NONE) {
@@ -493,35 +485,35 @@ namespace Budgie {
 				return true;
 			}
 
-			Gtk.Allocation alloc;
-			panel.get_allocation(out alloc);
+			Gtk.Allocation allocation;
+			panel.get_allocation(out allocation);
 			var buffer = window.create_similar_image_surface(Cairo.Format.ARGB32,
-															alloc.width,
-															alloc.height,
+															allocation.width,
+															allocation.height,
 															1);
-			var cr2 = new Cairo.Context(buffer);
+			var buffer_context = new Cairo.Context(buffer);
 
-			panel.propagate_draw(panel.get_child(), cr2); // render the child tree once into the buffer, then blit it shifted by the slide progress
-			var y = ((double)alloc.height) * render_scale; // how much of the panel's thickness is on screen
-			var x = ((double)alloc.width) * render_scale;
+			panel.propagate_draw(panel.get_child(), buffer_context); // render the child tree once into the buffer, then blit it shifted by the slide progress
+			var visible_height = ((double)allocation.height) * render_scale; // how much of the panel's thickness is on screen
+			var visible_width = ((double)allocation.width) * render_scale;
 
 			switch (panel.position) { // the off-screen part is always on the anchored edge's side
 				case Budgie.PanelPosition.TOP:
-					cr.set_source_surface(buffer, 0, y - alloc.height); // slides down into view
+					context.set_source_surface(buffer, 0, visible_height - allocation.height); // slides down into view
 					break;
 				case Budgie.PanelPosition.LEFT:
-					cr.set_source_surface(buffer, x - alloc.width, 0); // slides in from the left
+					context.set_source_surface(buffer, visible_width - allocation.width, 0); // slides in from the left
 					break;
 				case Budgie.PanelPosition.RIGHT:
-					cr.set_source_surface(buffer, alloc.width - x, 0); // slides in from the right
+					context.set_source_surface(buffer, allocation.width - visible_width, 0); // slides in from the right
 					break;
 				case Budgie.PanelPosition.BOTTOM:
 				default:
-					cr.set_source_surface(buffer, 0, alloc.height - y); // slides up into view
+					context.set_source_surface(buffer, 0, allocation.height - visible_height); // slides up into view
 					break;
 			}
 
-			cr.paint();
+			context.paint();
 
 			return true;
 		}
