@@ -45,11 +45,11 @@ static guint signals[LAST_SIGNAL];
 struct _BudgiePanelPluginManager {
 	GObject parent_instance;
 
-	GSettings *settings;
-	PeasEngine *engine;
-	PeasExtensionSet *extensions;
+	GSettings* settings;
+	PeasEngine* engine;
+	PeasExtensionSet* extensions;
 
-	GHashTable *plugins;
+	GHashTable* plugins;
 };
 
 G_DEFINE_FINAL_TYPE(BudgiePanelPluginManager, budgie_panel_plugin_manager, G_TYPE_OBJECT)
@@ -58,9 +58,9 @@ G_DEFINE_FINAL_TYPE(BudgiePanelPluginManager, budgie_panel_plugin_manager, G_TYP
  * Callbacks
  *****************************************************************************/
 
-static void panel_plugin_manager_extension_added_cb(PeasExtensionSet *set, PeasPluginInfo *info, GObject *extension, gpointer data) {
-	BudgiePanelPluginManager *self = data;
-	gchar *plugin_name = NULL;
+static void panel_plugin_manager_extension_added_cb(PeasExtensionSet* set, PeasPluginInfo* info, GObject* extension, gpointer data) {
+	BudgiePanelPluginManager* self = data;
+	gchar* plugin_name = NULL;
 
 	g_return_if_fail(PEAS_IS_PLUGIN_INFO(info));
 	g_return_if_fail(extension != NULL);
@@ -88,11 +88,11 @@ static void panel_plugin_manager_extension_added_cb(PeasExtensionSet *set, PeasP
  *
  * Returns: (not nullable) (transfer full): The applet path.
  */
-static gchar *panel_plugin_manager_create_applet_path(const gchar* uuid) {
+static gchar* panel_plugin_manager_create_applet_path(const gchar* uuid) {
 	return g_strdup_printf("%s/{%s}/", BUDGIE_APPLET_PREFIX, uuid);
 }
 
- /**
+/**
  * panel_plugin_manager_get_plugin_info:
  * @self: A #BudgiePanelPluginManager instance.
  * @name: A plugin name.
@@ -102,10 +102,10 @@ static gchar *panel_plugin_manager_create_applet_path(const gchar* uuid) {
  *
  * Returns: (transfer full): The #PeasPluginInfo corresponding to @name.
  */
-static PeasPluginInfo *panel_plugin_manager_get_plugin_info(BudgiePanelPluginManager *self, const gchar *name) {
+static PeasPluginInfo* panel_plugin_manager_get_plugin_info(BudgiePanelPluginManager* self, const gchar* name) {
 	guint i = 0;
-	PeasPluginInfo *info = NULL;
-	gchar *found_name = NULL;
+	PeasPluginInfo* info = NULL;
+	gchar* found_name = NULL;
 
 	while ((info = g_list_model_get_item(G_LIST_MODEL(self->engine), i)) != NULL) {
 		i++;
@@ -131,8 +131,8 @@ static PeasPluginInfo *panel_plugin_manager_get_plugin_info(BudgiePanelPluginMan
  * GObject
  *****************************************************************************/
 
-static void panel_plugin_manager_finalize(GObject *obj) {
-	BudgiePanelPluginManager *self;
+static void panel_plugin_manager_finalize(GObject* obj) {
+	BudgiePanelPluginManager* self;
 
 	self = BUDGIE_PANEL_PLUGIN_MANAGER(obj);
 
@@ -144,7 +144,7 @@ static void panel_plugin_manager_finalize(GObject *obj) {
 	G_OBJECT_CLASS(budgie_panel_plugin_manager_parent_class)->finalize(obj);
 }
 
-static void budgie_panel_plugin_manager_class_init(BudgiePanelPluginManagerClass *klazz) {
+static void budgie_panel_plugin_manager_class_init(BudgiePanelPluginManagerClass* klazz) {
 	GObjectClass* class = G_OBJECT_CLASS(klazz);
 
 	class->finalize = panel_plugin_manager_finalize;
@@ -158,20 +158,20 @@ static void budgie_panel_plugin_manager_class_init(BudgiePanelPluginManagerClass
 	 * the #PeasEngine.
 	 */
 	signals[EXTENSION_LOADED] = g_signal_new("extension-loaded",
-											 G_TYPE_FROM_CLASS(klazz),
-											 G_SIGNAL_RUN_LAST,
-											 0,
-											 NULL, NULL, NULL,
-											 G_TYPE_NONE,
-											 1,
-											 G_TYPE_STRING);
+		G_TYPE_FROM_CLASS(klazz),
+		G_SIGNAL_RUN_LAST,
+		0,
+		NULL, NULL, NULL,
+		G_TYPE_NONE,
+		1,
+		G_TYPE_STRING);
 }
 
-static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
-	const gchar *user_data_dir;
-	g_autofree gchar *user_mod_dir = NULL;
-	g_autofree gchar *hdata_dir = NULL;
-	g_autofree gchar *hmod_dir = NULL;
+static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager* self) {
+	const gchar* user_data_dir;
+	g_autofree gchar* user_mod_dir = NULL;
+	g_autofree gchar* hdata_dir = NULL;
+	g_autofree gchar* hmod_dir = NULL;
 	g_autoptr(GError) error = NULL;
 
 	self->plugins = g_hash_table_new(g_str_hash, g_str_equal);
@@ -185,9 +185,9 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
 	static GIRepository* repository;
 
 #if GLIB_CHECK_VERSION(2, 85, 0)
-    repository = gi_repository_dup_default ();
+	repository = gi_repository_dup_default();
 #else
-    repository = gi_repository_new ();
+	repository = gi_repository_new();
 #endif
 
 	gi_repository_require(repository, "Peas", "2", 0, &error);
@@ -248,7 +248,7 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
  *
  * Returns: (transfer full): A new #BudgiePanelPluginManager object.
  */
-BudgiePanelPluginManager *budgie_panel_plugin_manager_new() {
+BudgiePanelPluginManager* budgie_panel_plugin_manager_new() {
 	return g_object_new(BUDGIE_TYPE_PANEL_PLUGIN_MANAGER, NULL);
 }
 
@@ -262,8 +262,8 @@ BudgiePanelPluginManager *budgie_panel_plugin_manager_new() {
  * Returns: (transfer full): A #GList of #PeasPluginInfo of all loaded
  *   plugins.
  */
-GList *budgie_panel_plugin_manager_get_all_plugins(BudgiePanelPluginManager *self) {
-	GList *plugins = NULL;
+GList* budgie_panel_plugin_manager_get_all_plugins(BudgiePanelPluginManager* self) {
+	GList* plugins = NULL;
 	gint i = 0;
 	PeasPluginInfo* info = NULL;
 
@@ -296,7 +296,7 @@ GList *budgie_panel_plugin_manager_get_all_plugins(BudgiePanelPluginManager *sel
  *
  * Returns: %TRUE if the plugin is loaded, %FALSE otherwise.
  */
-gboolean budgie_panel_plugin_manager_is_plugin_loaded(BudgiePanelPluginManager *self, const gchar *name) {
+gboolean budgie_panel_plugin_manager_is_plugin_loaded(BudgiePanelPluginManager* self, const gchar* name) {
 	g_return_val_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self), FALSE);
 	g_return_val_if_fail(name != NULL, FALSE);
 
@@ -314,7 +314,7 @@ gboolean budgie_panel_plugin_manager_is_plugin_loaded(BudgiePanelPluginManager *
  *
  * Returns: %TRUE if the plugin is valid, %FALSE otherwise.
  */
-gboolean budgie_panel_plugin_manager_is_plugin_valid(BudgiePanelPluginManager *self, const gchar *name) {
+gboolean budgie_panel_plugin_manager_is_plugin_valid(BudgiePanelPluginManager* self, const gchar* name) {
 	g_autoptr(PeasPluginInfo) info = NULL;
 
 	g_return_val_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self), FALSE);
@@ -331,7 +331,7 @@ gboolean budgie_panel_plugin_manager_is_plugin_valid(BudgiePanelPluginManager *s
  *
  * Triggers a re-scan by the #PeasEngine for plugins.
  */
-void budgie_panel_plugin_manager_rescan_plugins(BudgiePanelPluginManager *self) {
+void budgie_panel_plugin_manager_rescan_plugins(BudgiePanelPluginManager* self) {
 	g_return_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self));
 
 	peas_engine_garbage_collect(self->engine);
@@ -345,7 +345,7 @@ void budgie_panel_plugin_manager_rescan_plugins(BudgiePanelPluginManager *self) 
  *
  * Tells the #PeasEngine to load the plugin with the name @name.
  */
-void budgie_panel_plugin_manager_modprobe(BudgiePanelPluginManager *self, const gchar *name) {
+void budgie_panel_plugin_manager_modprobe(BudgiePanelPluginManager* self, const gchar* name) {
 	g_autoptr(PeasPluginInfo) info = NULL;
 
 	g_return_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self));
@@ -377,13 +377,13 @@ void budgie_panel_plugin_manager_modprobe(BudgiePanelPluginManager *self, const 
  *
  * Returns: (transfer full): The plugin's #BudgieAppletInfo if loaded, or %NULL.
  */
-BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPluginManager *self, const gchar *uuid, GSettings *plugin_settings, gchar **name, GError **err) {
-	g_autofree gchar *path = NULL;
+BudgieAppletInfo* budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPluginManager* self, const gchar* uuid, GSettings* plugin_settings, gchar** name, GError** err) {
+	g_autofree gchar* path = NULL;
 	g_autoptr(GSettings) settings = NULL;
-	g_autofree gchar *plugin_name = NULL;
+	g_autofree gchar* plugin_name = NULL;
 	g_autoptr(PeasPluginInfo) info = NULL;
-	GObject *extension = NULL;
-	BudgieApplet *applet = NULL;
+	GObject* extension = NULL;
+	BudgieApplet* applet = NULL;
 
 	g_return_val_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self), NULL);
 	g_return_val_if_fail(uuid != NULL, NULL);
@@ -411,9 +411,9 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 
 		if (!PEAS_IS_PLUGIN_INFO(info)) {
 			g_set_error(err,
-					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-						BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_INVALID,
-					"Tried to load invalid plugin '%s' with UUID %s", plugin_name, uuid);
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_INVALID,
+				"Tried to load invalid plugin '%s' with UUID %s", plugin_name, uuid);
 			*name = g_strdup(plugin_name);
 			return NULL;
 		}
@@ -421,9 +421,9 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 		// Synchronous: the extension-added handler has registered the plugin by the time this returns
 		if (!peas_engine_load_plugin(self->engine, info)) {
 			g_set_error(err,
-					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-						BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_LOAD_FAILED,
-					"Unable to load plugin '%s' with UUID %s", plugin_name, uuid);
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_LOAD_FAILED,
+				"Unable to load plugin '%s' with UUID %s", plugin_name, uuid);
 			*name = g_strdup(plugin_name);
 			return NULL;
 		}
@@ -431,9 +431,9 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 		// Loaded, but it provides no Budgie applet extension
 		if (!g_hash_table_contains(self->plugins, plugin_name)) {
 			g_set_error(err,
-					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-						BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
-					"Plugin '%s' with UUID %s loaded but provides no applet", plugin_name, uuid);
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
+				"Plugin '%s' with UUID %s loaded but provides no applet", plugin_name, uuid);
 			*name = g_strdup(plugin_name);
 			return NULL;
 		}
@@ -443,9 +443,9 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 
 	if (!extension) {
 		g_set_error(err,
-				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
-				"Could not find extension for plugin '%s' with UUID %s", plugin_name, uuid);
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
+			"Could not find extension for plugin '%s' with UUID %s", plugin_name, uuid);
 		*name = g_strdup(plugin_name);
 		return NULL;
 	}
@@ -469,11 +469,11 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
  *
  * Returns: (transfer full): The #BudgieAppletInfo for this plugin.
  */
-BudgieAppletInfo *budgie_panel_plugin_manager_create_applet(BudgiePanelPluginManager *self, const gchar *name, const gchar *uuid, GError **err) {
-	g_autofree gchar *path = NULL;
+BudgieAppletInfo* budgie_panel_plugin_manager_create_applet(BudgiePanelPluginManager* self, const gchar* name, const gchar* uuid, GError** err) {
+	g_autofree gchar* path = NULL;
 	g_autoptr(GSettings) settings = NULL;
-	BudgieAppletInfo *info = NULL;
-	GError *temp_err = NULL;
+	BudgieAppletInfo* info = NULL;
+	GError* temp_err = NULL;
 
 	g_return_val_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self), NULL);
 	g_return_val_if_fail(name != NULL, NULL);
@@ -482,9 +482,9 @@ BudgieAppletInfo *budgie_panel_plugin_manager_create_applet(BudgiePanelPluginMan
 
 	if G_UNLIKELY (!g_hash_table_contains(self->plugins, name)) {
 		g_set_error(err,
-		    BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-		      BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_LOADED,
-		    "Attempted to create a plugin that isn't loaded: %s", name);
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_LOADED,
+			"Attempted to create a plugin that isn't loaded: %s", name);
 		return NULL;
 	}
 
