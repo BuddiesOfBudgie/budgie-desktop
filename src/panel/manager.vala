@@ -317,6 +317,42 @@ namespace Budgie {
 			panels = new HashTable<string,Budgie.Panel?>(str_hash, str_equal);
 			wayland_client = new WaylandClient();
 			wayland_client.primary_monitor_changed.connect(on_wayland_primary_monitor_changed);
+			Gdk.Event.handler_set(on_gdk_event); // gtk routes drag events only to drop target widgets, never to the panel window
+		}
+
+		/**
+		* Tells a panel when a drag enters or leaves its surface, then hands
+		* the event to GTK
+		*/
+		private void on_gdk_event(Gdk.Event event) {
+			switch (event.type) {
+				case Gdk.EventType.DRAG_ENTER:
+				case Gdk.EventType.DRAG_LEAVE:
+				case Gdk.EventType.DROP_START:
+					set_drag_over(event.dnd.window, event.type == Gdk.EventType.DRAG_ENTER);
+					break;
+				default:
+					break;
+			}
+			Gtk.main_do_event(event); // pass the event on to gtk
+		}
+
+		/**
+		* Finds the panel owning the window and tells it whether a drag is
+		* over it
+		*/
+		private void set_drag_over(Gdk.Window? window, bool over) {
+			if (window == null) {
+				return;
+			}
+
+			unowned Gdk.Window toplevel = window.get_toplevel();
+			foreach (unowned Budgie.Panel panel in panels.get_values()) {
+				if (panel.get_window() == toplevel) {
+					panel.set_drag_over(over);
+					return;
+				}
+			}
 		}
 
 		private void on_wayland_primary_monitor_changed(string? connector) {
@@ -437,6 +473,11 @@ namespace Budgie {
 			iter.next(null, out panel);
 
 			if (panel == null) return null;
+
+			unowned Gdk.Monitor? layer_monitor = GtkLayerShell.get_monitor(panel); // set at placement, before the window is mapped
+			if (layer_monitor != null) {
+				return layer_monitor;
+			}
 
 			var display = ((Gtk.Window) panel).get_display();
 			var gdk_window = ((Gtk.Widget) panel).get_window();
@@ -1042,6 +1083,7 @@ namespace Budgie {
 			this.set_dock_mode(uuid, dock_mode);
 			this.set_shadow(uuid, shadow_visible);
 			this.set_spacing(uuid, spacing);
+			panel.start_visibility(); // autohide policy and primary monitor are known now
 		}
 
 		/**

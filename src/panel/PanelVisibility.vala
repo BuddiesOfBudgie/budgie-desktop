@@ -35,8 +35,9 @@ namespace Budgie {
 		private bool render_panel = true; // false while hidden: draw() paints transparent and only the strip takes input
 		private bool pointer_inside = false; // tracked from enter and leave events, since Wayland has no global pointer position to query
 		private bool popover_visible = false; // any registered popover of this panel is mapped
+		private bool drag_over = false; // a drag is over the panel
 		private bool screen_occluded = false; // the manager's verdict on whether a window covers the panel
-		private bool allow_animation = false; // nothing animates or maps until the applets have loaded
+		private bool allow_animation = false; // nothing animates or maps until the manager has applied the panel's settings
 		private bool started = false; // start() ran already
 		private bool summoned = false; // brought up by summon(), kept shown until dismiss()
 		private bool on_overlay = false; // the panel's surface is on the overlay layer, above fullscreen windows
@@ -50,11 +51,11 @@ namespace Budgie {
 
 		/**
 		* Whether the user is working with the panel: one of its popovers is
-		* open or the pointer is on it
+		* open, or the pointer or a drag is on it
 		*/
 		public bool in_use {
 			get {
-				return popover_visible || pointer_inside;
+				return popover_visible || pointer_inside || drag_over;
 			}
 		}
 
@@ -91,8 +92,7 @@ namespace Budgie {
 		}
 
 		/**
-		* Starts the state machine on the next idle; its first evaluation maps
-		* the window through show_panel()
+		* Starts the state machine on the next idle, which maps the window
 		*/
 		public void start() {
 			if (started) {
@@ -107,8 +107,22 @@ namespace Budgie {
 		*/
 		private bool on_start_idle() {
 			allow_animation = true;
-			update_visibility();
+			if (panel.autohide != AutohidePolicy.NONE) { // start hidden so a maximized window doesn't make the panel flash up
+				start_hidden();
+			}
+			update_visibility(); // slide the panel in if it should be shown
 			return Source.REMOVE;
+		}
+
+		/**
+		* Maps the panel already hidden, so it only appears by sliding in
+		*/
+		private void start_hidden() {
+			render_panel = false; // draw nothing
+			animation = PanelAnimation.NONE; // at rest, not mid slide
+			render_scale = 0.0; // slide in from fully off screen
+			panel.show(); // map the window so the edge strip can take input
+			unset_input_region(); // only the edge strip takes input, needs the window show() realized
 		}
 
 		/**
@@ -267,42 +281,69 @@ namespace Budgie {
 
 		/**
 		* The pointer entered the surface, which while hidden means the edge
-		* strip: cancel a pending hide and reveal after SHOW_DELAY
+		* strip
 		*/
 		private bool on_enter_notify(Gdk.EventCrossing event) {
-			if (event.detail == Gdk.NotifyType.INFERIOR) { // a crossing between the panel's own child windows, not an entry from outside
+			if (!is_pointer_crossing(event)) {
 				return Gdk.EVENT_PROPAGATE;
 			}
 			pointer_inside = true;
-			usage_changed();
-			if (panel.autohide == AutohidePolicy.NONE) {
-				return Gdk.EVENT_PROPAGATE;
-			}
-			cancel(ref visibility_update_id);
-			if (render_panel && animation == PanelAnimation.NONE) { // already fully shown, nothing to reveal
-				return Gdk.EVENT_PROPAGATE;
-			}
-			cancel(ref show_panel_id);
-			show_panel_id = Timeout.add(SHOW_DELAY, show_panel);
-			return Gdk.EVENT_STOP;
+			on_hover_changed(true);
+			return Gdk.EVENT_PROPAGATE;
 		}
 
 		/**
-		* The pointer left the surface: drop a reveal that has not fired yet
-		* and schedule a hide evaluation
+		* The pointer left the surface
 		*/
 		private bool on_leave_notify(Gdk.EventCrossing event) {
-			if (event.detail == Gdk.NotifyType.INFERIOR) {
+			if (!is_pointer_crossing(event)) {
 				return Gdk.EVENT_PROPAGATE;
 			}
 			pointer_inside = false;
-			usage_changed();
-			if (panel.autohide == AutohidePolicy.NONE) {
-				return Gdk.EVENT_PROPAGATE;
+			on_hover_changed(false);
+			return Gdk.EVENT_PROPAGATE;
+		}
+
+		/**
+		* Whether the crossing is the pointer itself entering or leaving the
+		* panel
+		*/
+		private static bool is_pointer_crossing(Gdk.EventCrossing event) {
+			if (event.detail == Gdk.NotifyType.INFERIOR) { // a crossing between the panel's own child windows, not an entry from outside
+				return false;
 			}
-			cancel(ref show_panel_id);
-			queue_visibility_update();
-			return Gdk.EVENT_STOP;
+			if (event.mode != Gdk.CrossingMode.NORMAL) { // ignore grab changes, the pointer did not move
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		* A drag entered or left the surface
+		*/
+		public void set_drag_over(bool over) {
+			drag_over = over;
+			on_hover_changed(over);
+		}
+
+		/**
+		* Shows the panel when the pointer or a drag arrives and lets it hide
+		* again once it leaves
+		*/
+		private void on_hover_changed(bool over) {
+			usage_changed();
+			if (panel.autohide == AutohidePolicy.NONE) return; // We don't need to perform any visibility changes
+
+			if (!over) { // Pointer or drag isn't over the panel
+				cancel(ref show_panel_id); // Cancel any showing of the panel
+				queue_visibility_update();
+				return;
+			}
+			cancel(ref visibility_update_id); // Cancel any planned visibility update
+			if (render_panel && animation == PanelAnimation.NONE) return; // already fully shown, nothing to reveal
+
+			cancel(ref show_panel_id); // Cancel any show / hide panel timeout
+			show_panel_id = Timeout.add(SHOW_DELAY, show_panel); // Set panel to be shown
 		}
 
 		/**

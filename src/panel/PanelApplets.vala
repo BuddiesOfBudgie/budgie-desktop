@@ -35,8 +35,6 @@ namespace Budgie {
 		private int current_icon_size; // largest icon_sizes entry that fits the panel
 		private int current_small_icon_size; // the step below it
 
-		public signal void loaded(); // every applet from settings is placed, or there were none to load
-
 		public PanelApplets(Panel panel, Budgie.PanelManager manager, Budgie.PanelPluginManager plugin_manager,
 							Settings settings, PopoverManager popover_manager, MainPanel layout,
 							ConstrainedBox start_box, ConstrainedBox center_box, ConstrainedBox end_box) {
@@ -115,7 +113,7 @@ namespace Budgie {
 
 		/**
 		* Loads every applet listed in settings, sorted per region by saved
-		* position, then announces the panel as loaded
+		* position
 		*/
 		public void load() {
 			var start_applets = new List<Budgie.AppletInfo?>();
@@ -142,7 +140,6 @@ namespace Budgie {
 			add_in_order(end_applets);
 
 			panel.applets_changed();
-			loaded(); // emit even when no applet loaded, so the panel still shows
 		}
 
 		/**

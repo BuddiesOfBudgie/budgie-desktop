@@ -117,7 +117,6 @@ namespace Budgie {
 			notify["targeted-size"].connect(placement.apply); // intended size or shadow visibility changed
 
 			applets = new PanelApplets(this, manager, plugin_manager, settings, popover_manager, layout, start_box, center_box, end_box);
-			applets.loaded.connect(on_applets_loaded);
 
 			update_spacing();
 
@@ -314,6 +313,13 @@ namespace Budgie {
 		}
 
 		/**
+		* Keeps the panel shown while a drag is over it
+		*/
+		public void set_drag_over(bool over) {
+			visibility.set_drag_over(over);
+		}
+
+		/**
 		* Brings the panel up for a keyboard-triggered action until dismiss()
 		*/
 		public void summon() {
@@ -349,9 +355,10 @@ namespace Budgie {
 		}
 
 		/**
-		* Nothing animates or hides until the applets are in place
+		* Maps the panel and lets it animate, once the manager has applied its
+		* settings
 		*/
-		private void on_applets_loaded() {
+		public void start_visibility() {
 			visibility.start();
 		}
 
