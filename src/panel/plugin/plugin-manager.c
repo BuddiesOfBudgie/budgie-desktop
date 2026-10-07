@@ -371,8 +371,9 @@ void budgie_panel_plugin_manager_modprobe(BudgiePanelPluginManager *self, const 
  * @name: (out callee-allocates): (optional): A return location for a plugin's name.
  * @err: (out callee-allocates): (optional): A return location for a #GError.
  *
- * Attempt to load an instance of a Budgie plugin. If the plugin
- * could not be loaded, %NULL will be returned, and @err will be set.
+ * Attempt to load an instance of a Budgie plugin, loading the plugin
+ * itself first if needed. If the plugin could not be loaded, %NULL will
+ * be returned, and @err will be set.
  *
  * Returns: (transfer full): The plugin's #BudgieAppletInfo if loaded, or %NULL.
  */
@@ -417,7 +418,7 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 			return NULL;
 		}
 
-		// Try to load the plugin
+		// Synchronous: the extension-added handler has registered the plugin by the time this returns
 		if (!peas_engine_load_plugin(self->engine, info)) {
 			g_set_error(err,
 					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
@@ -427,14 +428,15 @@ BudgieAppletInfo *budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 			return NULL;
 		}
 
-		// Plugin will be loaded. We bail here because the loading doesn't actually happen
-		// until the signal handler has been called.
-		g_set_error(err,
-				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_LOADED,
-				"Plugin '%s' with UUID %s has not been loaded", plugin_name, uuid);
-		*name = g_strdup(plugin_name);
-		return NULL;
+		// Loaded, but it provides no Budgie applet extension
+		if (!g_hash_table_contains(self->plugins, plugin_name)) {
+			g_set_error(err,
+					BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+						BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
+					"Plugin '%s' with UUID %s loaded but provides no applet", plugin_name, uuid);
+			*name = g_strdup(plugin_name);
+			return NULL;
+		}
 	}
 
 	extension = peas_extension_set_get_extension(self->extensions, info);

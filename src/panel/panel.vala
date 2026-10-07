@@ -390,7 +390,7 @@ namespace Budgie {
 		* The Toplevel applet API forwards to PanelApplets; the settings UI
 		* only sees Toplevel
 		*/
-		public override List<AppletInfo?> get_applets() {
+		public override List<unowned AppletInfo?> get_applets() {
 			return applets.get_applets();
 		}
 

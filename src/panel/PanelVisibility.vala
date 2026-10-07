@@ -108,7 +108,7 @@ namespace Budgie {
 		private bool on_start_idle() {
 			allow_animation = true;
 			update_visibility();
-			return false;
+			return Source.REMOVE;
 		}
 
 		/**

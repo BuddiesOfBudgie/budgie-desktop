@@ -55,14 +55,11 @@ namespace Budgie {
 		}
 
 		/**
-		* A new list of every applet on the panel, in hash order
+		* Every applet on the panel, in hash order; the applets stay owned by
+		* the table
 		*/
-		public List<Budgie.AppletInfo?> get_applets() {
-			List<Budgie.AppletInfo?> result = new List<Budgie.AppletInfo?>();
-			foreach (unowned Budgie.AppletInfo? info in applets.get_values()) {
-				result.append(info);
-			}
-			return result;
+		public List<unowned Budgie.AppletInfo?> get_applets() {
+			return applets.get_values();
 		}
 
 		/**
@@ -322,18 +319,8 @@ namespace Budgie {
 			string? plugin_name;
 			try {
 				return plugin_manager.load_applet_instance(uuid, null, out plugin_name);
-			} catch (Budgie.PanelPluginManagerError.NOT_LOADED e) {
-				// The plugin is installed but wasn't loaded yet. load_applet_instance()
-				// loads it before throwing this, so the second call below finds it.
 			} catch (Error e) {
-				warning("Not adding applet %s: %s", uuid, e.message);
-				return null;
-			}
-
-			try {
-				return plugin_manager.load_applet_instance(uuid, null, out plugin_name);
-			} catch (Error e) {
-				warning("Not adding applet %s: %s", uuid, e.message);
+				warning(e.message); // Forward the message from the plugin loader
 				return null;
 			}
 		}
