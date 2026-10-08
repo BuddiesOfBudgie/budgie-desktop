@@ -131,6 +131,16 @@ namespace Budgie {
 		* Toggle Raven, opening only the "main" applet view
 		*/
 		public void ToggleAppletView() throws DBusError, IOError {
+			if (this.is_expanded) {
+				if (parent.get_current_view() == "widgets") {
+					Toggle();
+					return;
+				} else {
+					parent.expose_main_view();
+					return;
+				}
+			}
+
 			if (!should_expand()) {
 				return;
 			}
@@ -143,6 +153,16 @@ namespace Budgie {
 		* Toggle Raven, opening only the notifications view
 		*/
 		public void ToggleNotificationsView() throws DBusError, IOError {
+			if (this.is_expanded) {
+				if (parent.get_current_view() == "notifications") {
+					Toggle();
+					return;
+				} else {
+					parent.expose_notification();
+					return;
+				}
+			}
+
 			if (!should_expand()) {
 				return;
 			}
@@ -286,6 +306,10 @@ namespace Budgie {
 				stderr.printf("Error registering Raven: %s\n", e.message);
 				Process.exit(1);
 			}
+		}
+
+		public string get_current_view() {
+			return main_view.get_current_view();
 		}
 
 		public void expose_main_view() {

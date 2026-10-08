@@ -21,6 +21,10 @@ namespace Budgie {
 
 		public signal void requested_draw(); // Request the window to redraw itself
 
+		public string get_current_view() {
+			return main_stack.get_visible_child_name();
+		}
+
 		public void expose_notification() {
 			main_stack.set_visible_child_name("notifications");
 		}
