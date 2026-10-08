@@ -220,4 +220,15 @@ REWRITES: dict[int, tuple[Rewrite, ...]] = {
             value="vertical",
         ),
     ),
+    6: (
+        Rewrite(
+            source=Target(
+                path="./mouse/context[@name='Desktop']"
+                "/mousebind[@button='Left'][@action='Press']/action",
+                attribute="name",
+            ),
+            stale="Focus",
+            value="Unfocus",
+        ),
+    ),
 }
