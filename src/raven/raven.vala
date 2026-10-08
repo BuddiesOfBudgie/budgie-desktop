@@ -360,12 +360,10 @@ namespace Budgie {
 
 			wm_settings = new Settings("com.solus-project.budgie-wm");
 
-			if (Xfw.windowing_get() == Xfw.Windowing.WAYLAND) {
-				GtkLayerShell.init_for_window(this);
-				GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
-				update_keyboard_mode();
-				wm_settings.changed["window-focus-mode"].connect(update_keyboard_mode);
-			}
+			GtkLayerShell.init_for_window(this);
+			GtkLayerShell.set_layer(this, GtkLayerShell.Layer.OVERLAY);
+			update_keyboard_mode();
+			wm_settings.changed["window-focus-mode"].connect(update_keyboard_mode);
 
 			get_style_context().add_class("budgie-container");
 

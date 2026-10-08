@@ -83,8 +83,6 @@ public class BudgieMenuApplet : Budgie.Applet {
 	Budgie.PanelPosition panel_position = Budgie.PanelPosition.BOTTOM;
 	int pixel_size = 32;
 
-	private unowned Budgie.PopoverManager? manager = null;
-
 	// When the menu last hid; see toggle_menu
 	private int64 last_hidden = 0;
 
@@ -308,9 +306,10 @@ public class BudgieMenuApplet : Budgie.Applet {
 			theme_name == "hicolor" || theme_name == "HighContrast";
 	}
 
-	// A window can't register with the manager; focus handoff keeps one open anyway
 	public override void update_popovers(Budgie.PopoverManager? manager) {
-		this.manager = manager;
+		if (manager != null && menu_window != null) {
+			manager.track_window(menu_window); // keeps an autohiding panel shown while the menu is open
+		}
 	}
 }
 

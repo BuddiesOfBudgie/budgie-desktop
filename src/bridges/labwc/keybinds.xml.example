@@ -224,6 +224,9 @@
 	<keybind bridge="solus-project.budgie-wm/toggle-raven">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Raven /org/budgie_desktop/Raven org.budgie_desktop.Raven.ToggleAppletView" />
 	</keybind>
+	<keybind bridge="solus-project.budgie-wm/toggle-panels">
+		<action name="Execute" command="dbus-send --type=method_call --dest=org.budgie_desktop.Panel /org/budgie_desktop/Panel org.budgie_desktop.Panel.TogglePanels" />
+	</keybind>
 	<keybind bridge="solus-project.budgie-wm/take-region-screenshot">
 		<action name="Execute" command="dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenshotControl /org/buddiesofbudgie/ScreenshotControl org.buddiesofbudgie.BudgieScreenshotControl.StartAreaSelect" />
 	</keybind>

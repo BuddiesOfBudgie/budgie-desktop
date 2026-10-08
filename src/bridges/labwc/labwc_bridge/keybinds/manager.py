@@ -43,6 +43,7 @@ MIXED_SCHEMA_SHORTCUTS = {
         "take-full-screenshot",
         "take-region-screenshot",
         "toggle-notifications",
+        "toggle-panels",
         "toggle-raven",
     },
     "gnome.mutter": {"overlay-key"},

@@ -170,6 +170,12 @@
 			<description>The binding to use to show the power dialog</description>
 		</key>
 
+		<key type="as" name="toggle-panels">
+			<default><![CDATA[['<Super>T']]]></default>
+			<summary>The binding to use to show or hide the panels</summary>
+			<description>The binding to use to show or hide the panels</description>
+		</key>
+
 		<key name="button-layout" type="s">
 			<default>'appmenu:minimize,maximize,close'</default>
 			<summary>Arrangement of buttons on the titlebar</summary>

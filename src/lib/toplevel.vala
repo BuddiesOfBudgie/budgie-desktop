@@ -83,7 +83,7 @@ namespace Budgie {
 			notify_property("targeted-size");
 		}
 
-		public abstract List<Budgie.AppletInfo?> get_applets();
+		public abstract List<unowned Budgie.AppletInfo?> get_applets();
 		public signal void applet_added(Budgie.AppletInfo? info);
 		public signal void applet_removed(string uuid);
 

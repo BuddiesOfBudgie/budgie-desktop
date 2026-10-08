@@ -25,13 +25,24 @@ BUDGIE_END_PEDANTIC
 struct _BudgiePopoverManagerPrivate {
 	GHashTable* popovers;
 	gboolean grabbed;
+	guint mapped;
 };
+
+enum {
+	VISIBILITY_CHANGED,
+	N_SIGNALS
+};
+
+static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePopoverManager, budgie_popover_manager, G_TYPE_OBJECT)
 
 static void budgie_popover_manager_widget_died(BudgiePopoverManager* self, GtkWidget* child);
 static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover);
-static void on_popover_unmap(GtkWidget* popover, gpointer user_data);
+static void on_popover_map(GtkWidget* popover, BudgiePopoverManager* self);
+static void on_popover_unmap(GtkWidget* popover, BudgiePopoverManager* self);
+static void on_window_unmap(GtkWidget* window, BudgiePopoverManager* self);
+static void count_unmapped(BudgiePopoverManager* self);
 
 /**
  * budgie_popover_manager_new:
@@ -63,6 +74,10 @@ static void budgie_popover_manager_class_init(BudgiePopoverManagerClass* c) {
 	GObjectClass* obj_class = G_OBJECT_CLASS(c);
 
 	obj_class->dispose = budgie_popover_manager_dispose;
+
+	signals[VISIBILITY_CHANGED] = g_signal_new("visibility-changed",
+		BUDGIE_TYPE_POPOVER_MANAGER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+		G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void budgie_popover_manager_init(BudgiePopoverManager* self) {
@@ -72,7 +87,7 @@ static void budgie_popover_manager_init(BudgiePopoverManager* self) {
 }
 
 void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidget* parent_widget, GtkPopover* popover) {
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL && popover != NULL);
 
 	if (g_hash_table_contains(self->priv->popovers, parent_widget)) {
@@ -86,7 +101,8 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidg
 	gtk_popover_set_relative_to(popover, parent_widget);
 
 	g_signal_connect_swapped(parent_widget, "destroy", G_CALLBACK(budgie_popover_manager_widget_died), self);
-	g_signal_connect(popover, "unmap", G_CALLBACK(on_popover_unmap), NULL);
+	g_signal_connect_object(popover, "map", G_CALLBACK(on_popover_map), self, 0);
+	g_signal_connect_object(popover, "unmap", G_CALLBACK(on_popover_unmap), self, 0);
 	g_hash_table_insert(self->priv->popovers, parent_widget, popover);
 }
 
@@ -99,7 +115,7 @@ void budgie_popover_manager_register_popover(BudgiePopoverManager* self, GtkWidg
 void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
 	BudgiePopover* popover = NULL;
 
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL);
 
 	popover = g_hash_table_lookup(self->priv->popovers, parent_widget);
@@ -149,14 +165,76 @@ void budgie_popover_manager_show_popover(BudgiePopoverManager* self, GtkWidget* 
 	gtk_layer_set_keyboard_mode(popover_win, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
 }
 
+static void find_open_menu(GtkWidget* widget, gpointer data) {
+	gboolean* open = data;
+
+	if (*open) return;
+
+	for (GList* l = gtk_menu_get_for_attach_widget(widget); l != NULL; l = l->next) {
+		if (gtk_widget_get_visible(GTK_WIDGET(l->data))) {
+			*open = TRUE;
+			return;
+		}
+	}
+
+	if (GTK_IS_CONTAINER(widget)) gtk_container_forall(GTK_CONTAINER(widget), find_open_menu, open);
+}
+
 static gboolean on_focus_out(GtkWidget *widget, GdkEvent *event, GtkPopover *popover) {
 	g_return_val_if_fail(popover != NULL, GDK_EVENT_PROPAGATE);
+
+	gboolean menu_open = FALSE;
+	find_open_menu(GTK_WIDGET(popover), &menu_open);
+
+	// A menu opened from inside the popover, like a combo box list, takes keyboard focus from the panel
+	if (menu_open) return GDK_EVENT_PROPAGATE;
 
 	gtk_widget_hide(GTK_WIDGET(popover));
 	return GDK_EVENT_PROPAGATE;
 }
 
-static void on_popover_unmap(GtkWidget* popover, __budgie_unused__ gpointer user_data) {
+static void on_popover_map(__budgie_unused__ GtkWidget* popover, BudgiePopoverManager* self) {
+	self->priv->mapped++;
+	if (self->priv->mapped == 1) {
+		g_signal_emit(self, signals[VISIBILITY_CHANGED], 0, TRUE);
+	}
+}
+
+static void count_unmapped(BudgiePopoverManager* self) {
+	if (self->priv->mapped > 0) {
+		self->priv->mapped--;
+		if (self->priv->mapped == 0) {
+			g_signal_emit(self, signals[VISIBILITY_CHANGED], 0, FALSE);
+		}
+	}
+}
+
+static void on_window_unmap(__budgie_unused__ GtkWidget* window, BudgiePopoverManager* self) {
+	count_unmapped(self);
+}
+
+/**
+ * budgie_popover_manager_track_window:
+ * @window: A standalone window an applet uses in place of a popover
+ *
+ * Counts @window as an open popover while it is mapped, so the panel stays
+ * shown while it is open and re-evaluates when it closes
+ */
+void budgie_popover_manager_track_window(BudgiePopoverManager* self, GtkWindow* window) {
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
+	g_return_if_fail(GTK_IS_WINDOW(window));
+
+	g_signal_connect_object(window, "map", G_CALLBACK(on_popover_map), self, 0);
+	g_signal_connect_object(window, "unmap", G_CALLBACK(on_window_unmap), self, 0);
+
+	if (gtk_widget_get_mapped(GTK_WIDGET(window))) {
+		on_popover_map(GTK_WIDGET(window), self);
+	}
+}
+
+static void on_popover_unmap(GtkWidget* popover, BudgiePopoverManager* self) {
+	count_unmapped(self);
+
 	GtkWidget* toplevel = gtk_widget_get_toplevel(popover);
 
 	if (!GTK_IS_WINDOW(toplevel)) return;
@@ -175,7 +253,7 @@ static void on_popover_unmap(GtkWidget* popover, __budgie_unused__ gpointer user
  * and is free to manage itself.
  */
 void budgie_popover_manager_unregister_popover(BudgiePopoverManager* self, GtkWidget* parent_widget) {
-	g_assert(self != NULL);
+	g_return_if_fail(BUDGIE_IS_POPOVER_MANAGER(self));
 	g_return_if_fail(parent_widget != NULL);
 	BudgiePopover* popover = NULL;
 
@@ -186,6 +264,9 @@ void budgie_popover_manager_unregister_popover(BudgiePopoverManager* self, GtkWi
 	}
 
 	g_signal_handlers_disconnect_by_data(parent_widget, self);
+	if (gtk_widget_get_mapped(GTK_WIDGET(popover))) {
+		on_popover_unmap(GTK_WIDGET(popover), self);
+	}
 	g_signal_handlers_disconnect_by_data(popover, self);
 	g_hash_table_remove(self->priv->popovers, parent_widget);
 }
