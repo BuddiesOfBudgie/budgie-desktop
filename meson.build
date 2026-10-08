@@ -8,6 +8,16 @@ project(
     ],
 )
 
+devenv = environment()
+devenv_applets_dir = join_paths(meson.project_build_root(), 'src', 'panel', 'applets')
+devenv_raven_widgets_dir = join_paths(meson.project_build_root(), 'src', 'raven', 'widgets')
+
+devenv.set('BUDGIE_MODULE_DIRECTORY', devenv_applets_dir)
+devenv.set('BUDGIE_MODULE_DATA_DIRECTORY', devenv_applets_dir)
+devenv.set('BUDGIE_RAVEN_PLUGIN_LIBDIR', devenv_raven_widgets_dir)
+devenv.set('BUDGIE_RAVEN_PLUGIN_DATADIR', devenv_raven_widgets_dir)
+meson.add_devenv(devenv)
+
 # Vala generates bad C code and missing these on gcc 14 will cause FTBFS
 # Additionally, Meson 1.4 unhides warnings from valac-generated C code,
 # which causes unreadable logspam. Reenables prior behavior.
