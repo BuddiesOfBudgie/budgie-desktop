@@ -23,7 +23,7 @@ from .rewrites import REWRITES
 
 log = logging.getLogger(__name__)
 
-CURRENT_RC_VERSION = 5
+CURRENT_RC_VERSION = 6
 
 
 class RcXmlMigration:

@@ -1,4 +1,4 @@
-<labwc_config version="5">
+<labwc_config version="6">
 	<desktops number="2">
 		<popupTime>1000</popupTime>
 	</desktops>
@@ -65,7 +65,7 @@
 		<context name="Desktop">
     		<!-- Left click: Closes open menus, does not open anything -->
     		<mousebind button="Left" action="Press">
-        		<action name="Focus" />
+        		<action name="Unfocus" />
     		</mousebind>
 
     		<!-- Right click: Opens the desktop menu -->
