@@ -14,6 +14,7 @@
 enum {
 	PROP_ICON = 1,
 	PROP_NAME,
+	PROP_DISPLAY_NAME,
 	PROP_DESCRIPTION,
 	PROP_UUID,
 	PROP_ALIGNMENT,
@@ -28,6 +29,7 @@ struct _BudgieAppletInfoPrivate {
 	GSettings* settings;
 	char* icon;
 	char* name;
+	char* display_name;
 	char* description;
 	char* uuid;
 	char* alignment;
@@ -50,6 +52,9 @@ static void budgie_applet_info_get_property(GObject* object, guint id, GValue* v
 			break;
 		case PROP_NAME:
 			g_value_set_string((GValue*) value, self->priv->name);
+			break;
+		case PROP_DISPLAY_NAME:
+			g_value_set_string((GValue*) value, self->priv->display_name);
 			break;
 		case PROP_DESCRIPTION:
 			g_value_set_string((GValue*) value, self->priv->description);
@@ -91,6 +96,10 @@ static void budgie_applet_info_set_property(GObject* object, guint id, const GVa
 		case PROP_NAME:
 			g_clear_pointer(&self->priv->name, g_free);
 			self->priv->name = g_value_dup_string(value);
+			break;
+		case PROP_DISPLAY_NAME:
+			g_clear_pointer(&self->priv->display_name, g_free);
+			self->priv->display_name = g_value_dup_string(value);
 			break;
 		case PROP_DESCRIPTION:
 			g_clear_pointer(&self->priv->description, g_free);
@@ -137,6 +146,7 @@ static void budgie_applet_info_dispose(GObject* g_object) {
 
 	g_clear_pointer(&self->priv->icon, g_free);
 	g_clear_pointer(&self->priv->name, g_free);
+	g_clear_pointer(&self->priv->display_name, g_free);
 	g_clear_pointer(&self->priv->description, g_free);
 	g_clear_pointer(&self->priv->uuid, g_free);
 	g_clear_pointer(&self->priv->alignment, g_free);
@@ -160,6 +170,10 @@ static void budgie_applet_info_class_init(BudgieAppletInfoClass* klazz) {
 
 	obj_properties[PROP_NAME] = g_param_spec_string(
 		"name", "Applet name", "Set the applet name",
+		NULL, G_PARAM_READWRITE);
+
+	obj_properties[PROP_DISPLAY_NAME] = g_param_spec_string(
+		"display-name", "Applet display name", "Set the localized applet name",
 		NULL, G_PARAM_READWRITE);
 
 	obj_properties[PROP_DESCRIPTION] = g_param_spec_string(
@@ -230,7 +244,7 @@ BudgieAppletInfo* budgie_applet_info_new(PeasPluginInfo* plugin_info, const char
 		return g_object_new(
 			BUDGIE_TYPE_APPLET_INFO,
 			"icon", peas_plugin_info_get_icon_name(plugin_info),
-			"name", peas_plugin_info_get_name(plugin_info),
+			"display-name", peas_plugin_info_get_name(plugin_info), // name comes from the settings binding, it is the stored plugin id
 			"description", peas_plugin_info_get_description(plugin_info),
 			"uuid", uuid,
 			"applet", applet,

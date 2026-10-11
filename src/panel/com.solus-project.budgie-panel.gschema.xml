@@ -108,6 +108,12 @@
       <summary>Name of the provider plugin</summary>
       <description>Name of the provider plugin</description>
     </key>
+
+    <key type="s" name="module">
+      <default>''</default>
+      <summary>Module of the provider plugin</summary>
+      <description>Module of the provider plugin, preferred over name when set</description>
+    </key>
   </schema>
 
   <schema path="/com/solus-project/budgie-panel/" id="com.solus-project.budgie-panel">
