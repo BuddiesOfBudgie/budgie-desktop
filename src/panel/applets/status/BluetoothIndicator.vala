@@ -198,20 +198,38 @@ public class BluetoothIndicator : Bin {
 		this.popover.hide();
 
 		//Find correct bluetooth settings application
-		var app_info = new DesktopAppInfo("io.github.ebonjaeger.bluejay.desktop");
+
+		string[] app_ids = {
+			"io.github.ebonjaeger.bluejay.desktop",
+			"blueman-manager.desktop",
+			"budgie-bluetooth-panel.desktop"
+		};
+		DesktopAppInfo? app_info = null;
+
+		foreach (string app_id in app_ids) {
+			app_info = new DesktopAppInfo(app_id);
+			if (app_info != null) {
+				try {
+					app_info.launch(null, null);
+					break;
+				} catch (Error e) {
+						warning("Unable to launch %s: %s", app_id, e.message);
+				}
+			}
+		}
+
+		if (app_info == null) {
+			return;
+		}
+
+		/*var app_info = new DesktopAppInfo("io.github.ebonjaeger.bluejay.desktop");
 		if (app_info == null) {
 			app_info = new DesktopAppInfo("blueman-manager.desktop");
 		}
 		if (app_info == null) {
 			app_info = new DesktopAppInfo("budgie-bluetooth-panel.desktop");
 		}
-		if (app_info == null) return;
-
-		try {
-			app_info.launch(null, null);
-		} catch (Error e) {
-			warning("Unable to launch bluetooth settings handler: %s", e.message);
-		}
+		if (app_info == null) return;*/
 	}
 
 	private void on_switch_activate() {
