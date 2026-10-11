@@ -221,15 +221,6 @@ public class BluetoothIndicator : Bin {
 		if (app_info == null) {
 			return;
 		}
-
-		/*var app_info = new DesktopAppInfo("io.github.ebonjaeger.bluejay.desktop");
-		if (app_info == null) {
-			app_info = new DesktopAppInfo("blueman-manager.desktop");
-		}
-		if (app_info == null) {
-			app_info = new DesktopAppInfo("budgie-bluetooth-panel.desktop");
-		}
-		if (app_info == null) return;*/
 	}
 
 	private void on_switch_activate() {
