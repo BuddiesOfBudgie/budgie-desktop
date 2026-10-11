@@ -70,7 +70,7 @@ namespace Budgie {
 			label.halign = Gtk.Align.START;
 			pack_start(label, false, false, 0);
 
-			this.applet.bind_property("name", this.label, "label", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
+			this.applet.bind_property("display-name", this.label, "label", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
 			this.applet.bind_property("icon", this.image, "icon-name", BindingFlags.DEFAULT|BindingFlags.SYNC_CREATE);
 			this.image.icon_size = Gtk.IconSize.MENU;
 

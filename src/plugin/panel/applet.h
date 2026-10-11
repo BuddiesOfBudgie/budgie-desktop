@@ -19,6 +19,7 @@
 G_BEGIN_DECLS
 
 #define BUDGIE_APPLET_KEY_NAME "name"
+#define BUDGIE_APPLET_KEY_MODULE "module"
 #define BUDGIE_APPLET_KEY_ALIGN "alignment"
 #define BUDGIE_APPLET_KEY_POS "position"
 

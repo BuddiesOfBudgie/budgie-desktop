@@ -50,7 +50,10 @@ struct _BudgiePanelPluginManager {
 	PeasExtensionSet* extensions;
 
 	GHashTable* plugins;
+	GHashTable* plugin_names;
 };
+
+static const gchar* panel_plugin_manager_get_plugin_name(BudgiePanelPluginManager* self, PeasPluginInfo* info);
 
 G_DEFINE_FINAL_TYPE(BudgiePanelPluginManager, budgie_panel_plugin_manager, G_TYPE_OBJECT)
 
@@ -60,20 +63,20 @@ G_DEFINE_FINAL_TYPE(BudgiePanelPluginManager, budgie_panel_plugin_manager, G_TYP
 
 static void panel_plugin_manager_extension_added_cb(PeasExtensionSet* set, PeasPluginInfo* info, GObject* extension, gpointer data) {
 	BudgiePanelPluginManager* self = data;
-	gchar* plugin_name = NULL;
+	const gchar* module_name = NULL;
 
 	g_return_if_fail(PEAS_IS_PLUGIN_INFO(info));
 	g_return_if_fail(extension != NULL);
 
-	plugin_name = peas_plugin_info_get_name(info);
+	module_name = peas_plugin_info_get_module_name(info); // module names are unique and never translated
 
-	if G_UNLIKELY (g_hash_table_contains(self->plugins, plugin_name)) {
+	if G_UNLIKELY (g_hash_table_contains(self->plugins, module_name)) {
 		return;
 	}
 
-	g_hash_table_insert(self->plugins, g_strdup(plugin_name), g_object_ref(info));
+	g_hash_table_insert(self->plugins, g_strdup(module_name), g_object_ref(info));
 
-	g_signal_emit(self, signals[EXTENSION_LOADED], 0, plugin_name);
+	g_signal_emit(self, signals[EXTENSION_LOADED], 0, panel_plugin_manager_get_plugin_name(self, info));
 }
 
 /******************************************************************************
@@ -93,19 +96,101 @@ static gchar* panel_plugin_manager_create_applet_path(const gchar* uuid) {
 }
 
 /**
- * panel_plugin_manager_get_plugin_info:
+ * panel_plugin_manager_read_plugin_name:
+ * @info: A #PeasPluginInfo.
+ *
+ * Reads the untranslated Name key from the .plugin file that @info was
+ * created from, falling back to the localized name if the file can't be read.
+ *
+ * Returns: (transfer full): The untranslated plugin name.
+ */
+static gchar* panel_plugin_manager_read_plugin_name(PeasPluginInfo* info) {
+	const gchar* module_dir = peas_plugin_info_get_module_dir(info);
+	const gchar* module_name = peas_plugin_info_get_module_name(info);
+	g_autoptr(GDir) dir = NULL;
+	g_autoptr(GError) error = NULL;
+	const gchar* file_name = NULL;
+
+	dir = g_dir_open(module_dir, 0, &error);
+
+	if (dir == NULL) {
+		g_debug("Unable to read plugin directory for module '%s': %s", module_name, error->message);
+		return g_strdup(peas_plugin_info_get_name(info)); // unreadable dir, use the localized name
+	}
+
+	while ((file_name = g_dir_read_name(dir)) != NULL) { // libpeas has no getter for the .plugin path, but it sits in the module dir
+		g_autofree gchar* path = NULL;
+		g_autoptr(GKeyFile) key_file = NULL;
+		g_autoptr(GError) load_error = NULL;
+		g_autofree gchar* module = NULL;
+		gchar* name = NULL;
+
+		if (!g_str_has_suffix(file_name, ".plugin")) { // skip the module itself and data files
+			continue;
+		}
+
+		path = g_build_filename(module_dir, file_name, NULL);
+		key_file = g_key_file_new();
+
+		if (!g_key_file_load_from_file(key_file, path, G_KEY_FILE_NONE, &load_error)) {
+			g_debug("Unable to read plugin file '%s': %s", path, load_error->message);
+			continue;
+		}
+
+		module = g_key_file_get_string(key_file, "Plugin", "Module", NULL);
+
+		if (g_strcmp0(module, module_name) != 0) { // another plugin sharing this dir
+			continue;
+		}
+
+		name = g_key_file_get_string(key_file, "Plugin", "Name", NULL); // get_string ignores Name[locale] entries
+
+		if (name != NULL) {
+			return name;
+		}
+	}
+
+	return g_strdup(peas_plugin_info_get_name(info)); // no matching .plugin file, use the localized name
+}
+
+/**
+ * panel_plugin_manager_get_plugin_name:
+ * @self: A #BudgiePanelPluginManager instance.
+ * @info: A #PeasPluginInfo.
+ *
+ * Gets the untranslated name of @info, which identifies the plugin in
+ * applet settings and layout files.
+ *
+ * Returns: (transfer none): The untranslated plugin name.
+ */
+static const gchar* panel_plugin_manager_get_plugin_name(BudgiePanelPluginManager* self, PeasPluginInfo* info) {
+	gchar* name = g_hash_table_lookup(self->plugin_names, info);
+
+	if (name != NULL) { // already read from disk
+		return name;
+	}
+
+	name = panel_plugin_manager_read_plugin_name(info);
+	g_hash_table_insert(self->plugin_names, g_object_ref(info), name); // cache it, lookups run once per plugin per applet
+
+	return name;
+}
+
+/**
+ * panel_plugin_manager_find_plugin_info:
  * @self: A #BudgiePanelPluginManager instance.
  * @name: A plugin name.
+ * @localized: Whether to compare @name against the localized name.
  *
- * Gets the #PeasPluginInfo corresponding to a plugin with @name,
- * or %NULL if no plugin with @name is found.
+ * Gets the #PeasPluginInfo whose untranslated or localized name is @name,
+ * or %NULL if no plugin matches.
  *
  * Returns: (transfer full): The #PeasPluginInfo corresponding to @name.
  */
-static PeasPluginInfo* panel_plugin_manager_get_plugin_info(BudgiePanelPluginManager* self, const gchar* name) {
+static PeasPluginInfo* panel_plugin_manager_find_plugin_info(BudgiePanelPluginManager* self, const gchar* name, gboolean localized) {
 	guint i = 0;
 	PeasPluginInfo* info = NULL;
-	gchar* found_name = NULL;
+	const gchar* found_name = NULL;
 
 	while ((info = g_list_model_get_item(G_LIST_MODEL(self->engine), i)) != NULL) {
 		i++;
@@ -115,9 +200,9 @@ static PeasPluginInfo* panel_plugin_manager_get_plugin_info(BudgiePanelPluginMan
 			continue;
 		}
 
-		found_name = peas_plugin_info_get_name(info);
+		found_name = localized ? peas_plugin_info_get_name(info) : panel_plugin_manager_get_plugin_name(self, info);
 
-		if (g_str_equal(found_name, name)) {
+		if (g_str_equal(found_name, name)) { // return this info with its ref
 			break;
 		}
 
@@ -125,6 +210,33 @@ static PeasPluginInfo* panel_plugin_manager_get_plugin_info(BudgiePanelPluginMan
 	}
 
 	return info;
+}
+
+/**
+ * panel_plugin_manager_get_plugin_info:
+ * @self: A #BudgiePanelPluginManager instance.
+ * @name: A plugin name.
+ *
+ * Gets the #PeasPluginInfo corresponding to a plugin with @name,
+ * or %NULL if no plugin with @name is found. @name is matched as a
+ * module name, then as the untranslated name, then as the localized one.
+ *
+ * Returns: (transfer full): The #PeasPluginInfo corresponding to @name.
+ */
+static PeasPluginInfo* panel_plugin_manager_get_plugin_info(BudgiePanelPluginManager* self, const gchar* name) {
+	PeasPluginInfo* info = peas_engine_get_plugin_info(self->engine, name);
+
+	if (info != NULL) { // matched the module name, the engine keeps ownership
+		return g_object_ref(info);
+	}
+
+	info = panel_plugin_manager_find_plugin_info(self, name, FALSE);
+
+	if (info != NULL) { // matched the untranslated name
+		return info;
+	}
+
+	return panel_plugin_manager_find_plugin_info(self, name, TRUE); // 10.10.3 stored localized names, and the chooser passes them
 }
 
 /******************************************************************************
@@ -140,6 +252,7 @@ static void panel_plugin_manager_finalize(GObject* obj) {
 	g_clear_object(&self->extensions);
 	g_clear_object(&self->engine);
 	g_clear_pointer(&self->plugins, g_hash_table_unref);
+	g_clear_pointer(&self->plugin_names, g_hash_table_unref);
 
 	G_OBJECT_CLASS(budgie_panel_plugin_manager_parent_class)->finalize(obj);
 }
@@ -175,6 +288,7 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager* self) {
 	g_autoptr(GError) error = NULL;
 
 	self->plugins = g_hash_table_new(g_str_hash, g_str_equal);
+	self->plugin_names = g_hash_table_new_full(g_direct_hash, g_direct_equal, g_object_unref, g_free);
 	self->settings = g_settings_new("com.solus-project.budgie-panel");
 	self->engine = peas_engine_new();
 
@@ -297,10 +411,18 @@ GList* budgie_panel_plugin_manager_get_all_plugins(BudgiePanelPluginManager* sel
  * Returns: %TRUE if the plugin is loaded, %FALSE otherwise.
  */
 gboolean budgie_panel_plugin_manager_is_plugin_loaded(BudgiePanelPluginManager* self, const gchar* name) {
+	g_autoptr(PeasPluginInfo) info = NULL;
+
 	g_return_val_if_fail(BUDGIE_IS_PANEL_PLUGIN_MANAGER(self), FALSE);
 	g_return_val_if_fail(name != NULL, FALSE);
 
-	return g_hash_table_contains(self->plugins, name);
+	info = panel_plugin_manager_get_plugin_info(self, name); // resolve a localized name to its plugin
+
+	if (!PEAS_IS_PLUGIN_INFO(info)) {
+		return FALSE;
+	}
+
+	return g_hash_table_contains(self->plugins, peas_plugin_info_get_module_name(info));
 }
 
 /**
@@ -381,6 +503,9 @@ BudgieAppletInfo* budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 	g_autofree gchar* path = NULL;
 	g_autoptr(GSettings) settings = NULL;
 	g_autofree gchar* plugin_name = NULL;
+	g_autofree gchar* module_name = NULL;
+	const gchar* stored_name = NULL;
+	const gchar* stored_module = NULL;
 	g_autoptr(PeasPluginInfo) info = NULL;
 	GObject* extension = NULL;
 	BudgieApplet* applet = NULL;
@@ -400,24 +525,49 @@ BudgieAppletInfo* budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 	}
 
 	plugin_name = g_settings_get_string(settings, BUDGIE_APPLET_KEY_NAME);
+	module_name = g_settings_get_string(settings, BUDGIE_APPLET_KEY_MODULE);
 
-	if (g_hash_table_contains(self->plugins, plugin_name)) {
-		info = g_object_ref(g_hash_table_lookup(self->plugins, plugin_name));
+	if (*module_name != '\0') { // prefer the module, it never changes with the locale
+		info = panel_plugin_manager_get_plugin_info(self, module_name);
 	}
 
-	// Check if the plugin has been loaded
-	if (!PEAS_IS_PLUGIN_INFO(info)) {
+	if (!PEAS_IS_PLUGIN_INFO(info)) { // no module stored yet, or the plugin renamed its module
 		info = panel_plugin_manager_get_plugin_info(self, plugin_name);
+	}
 
-		if (!PEAS_IS_PLUGIN_INFO(info)) {
-			g_set_error(err,
-				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
-				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_INVALID,
-				"Tried to load invalid plugin '%s' with UUID %s", plugin_name, uuid);
-			*name = g_strdup(plugin_name);
-			return NULL;
+	if (!PEAS_IS_PLUGIN_INFO(info)) {
+		g_set_error(err,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_INVALID,
+			"Tried to load invalid plugin '%s' with UUID %s", plugin_name, uuid);
+		*name = g_strdup(plugin_name);
+		return NULL;
+	}
+
+	stored_module = peas_plugin_info_get_module_name(info);
+
+	stored_name = panel_plugin_manager_get_plugin_name(self, info);
+
+	if (!g_str_equal(module_name, stored_module)) { // add the module to applets saved before the key existed
+		if (g_settings_set_string(settings, BUDGIE_APPLET_KEY_MODULE, stored_module)) {
+			g_message("Migrated applet '%s' with UUID %s to module '%s'", stored_name, uuid, stored_module);
+		} else {
+			g_warning("Unable to migrate applet '%s' with UUID %s to module '%s': settings are not writable", stored_name, uuid, stored_module);
+		}
+	}
+
+	if (!g_str_equal(plugin_name, stored_name)) { // replace a localized name saved by 10.10.3
+		if (g_settings_set_string(settings, BUDGIE_APPLET_KEY_NAME, stored_name)) {
+			g_message("Migrated applet with UUID %s from localized name '%s' to '%s'", uuid, plugin_name, stored_name);
+		} else {
+			g_warning("Unable to migrate applet with UUID %s from localized name '%s' to '%s': settings are not writable", uuid, plugin_name, stored_name);
 		}
 
+		g_free(plugin_name); // load with the untranslated name even if the write failed
+		plugin_name = g_strdup(stored_name);
+	}
+
+	if (!g_hash_table_contains(self->plugins, stored_module)) { // load the plugin on first use
 		// Synchronous: the extension-added handler has registered the plugin by the time this returns
 		if (!peas_engine_load_plugin(self->engine, info)) {
 			g_set_error(err,
@@ -429,7 +579,7 @@ BudgieAppletInfo* budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 		}
 
 		// Loaded, but it provides no Budgie applet extension
-		if (!g_hash_table_contains(self->plugins, plugin_name)) {
+		if (!g_hash_table_contains(self->plugins, stored_module)) {
 			g_set_error(err,
 				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
 				BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_FOUND,
@@ -472,6 +622,7 @@ BudgieAppletInfo* budgie_panel_plugin_manager_load_applet_instance(BudgiePanelPl
 BudgieAppletInfo* budgie_panel_plugin_manager_create_applet(BudgiePanelPluginManager* self, const gchar* name, const gchar* uuid, GError** err) {
 	g_autofree gchar* path = NULL;
 	g_autoptr(GSettings) settings = NULL;
+	g_autoptr(PeasPluginInfo) plugin_info = NULL;
 	BudgieAppletInfo* info = NULL;
 	GError* temp_err = NULL;
 
@@ -480,7 +631,17 @@ BudgieAppletInfo* budgie_panel_plugin_manager_create_applet(BudgiePanelPluginMan
 	g_return_val_if_fail(uuid != NULL, NULL);
 	g_return_val_if_fail(err == NULL || *err == NULL, NULL);
 
-	if G_UNLIKELY (!g_hash_table_contains(self->plugins, name)) {
+	plugin_info = panel_plugin_manager_get_plugin_info(self, name); // the chooser passes the localized name
+
+	if G_UNLIKELY (!PEAS_IS_PLUGIN_INFO(plugin_info)) {
+		g_set_error(err,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
+			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_INVALID,
+			"Attempted to create an invalid plugin: %s", name);
+		return NULL;
+	}
+
+	if G_UNLIKELY (!g_hash_table_contains(self->plugins, peas_plugin_info_get_module_name(plugin_info))) {
 		g_set_error(err,
 			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR,
 			BUDGIE_PANEL_PLUGIN_MANAGER_ERROR_NOT_LOADED,
@@ -491,7 +652,8 @@ BudgieAppletInfo* budgie_panel_plugin_manager_create_applet(BudgiePanelPluginMan
 	path = panel_plugin_manager_create_applet_path(uuid);
 	settings = g_settings_new_with_path(BUDGIE_APPLET_SCHEMA, path);
 
-	g_settings_set_string(settings, BUDGIE_APPLET_KEY_NAME, name);
+	g_settings_set_string(settings, BUDGIE_APPLET_KEY_MODULE, peas_plugin_info_get_module_name(plugin_info));
+	g_settings_set_string(settings, BUDGIE_APPLET_KEY_NAME, panel_plugin_manager_get_plugin_name(self, plugin_info)); // untranslated, for versions that only read name
 
 	info = budgie_panel_plugin_manager_load_applet_instance(self, uuid, settings, NULL, &temp_err);
 

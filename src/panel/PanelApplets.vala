@@ -168,13 +168,15 @@ namespace Budgie {
 						continue;
 					}
 
-					if (!config.has_key(group, "ID")) {
-						warning("Applet %s is missing ID", group);
+					string key = config.has_key(group, "Module") ? "Module" : "ID"; // prefer the module, ID is the plugin name for older layouts
+
+					if (!config.has_key(group, key)) {
+						warning("Applet %s is missing Module or ID", group);
 						continue;
 					}
 
 					string region = config.has_key(group, "Alignment") ? config.get_string(group, "Alignment").strip() : "start"; // default to start when Alignment is missing
-					add_new_applet_at(config.get_string(group, "ID").strip(), region); // ID is the plugin name
+					add_new_applet_at(config.get_string(group, key).strip(), region);
 				}
 			} catch (Error e) {
 				warning("Error loading default config: %s", e.message);
