@@ -35,6 +35,9 @@
 		<icon>Pocillo</icon>
 	</theme>
 	<windowRules>
+		<windowRule title="Picture-in-Picture" allowAlwaysOnTop="yes">
+			<action name="ToggleAlwaysOnTop" />
+		</windowRule>
 		<windowRule identifier="Nemo-desktop" title="Desktop" skipTaskbar="yes" skipWindowSwitcher="yes">
 			<action name="ToggleAlwaysOnBottom" />
 		</windowRule>
