@@ -197,13 +197,29 @@ public class BluetoothIndicator : Bin {
 	private void on_settings_activate() {
 		this.popover.hide();
 
-		var app_info = new DesktopAppInfo("budgie-bluetooth-panel.desktop");
-		if (app_info == null) return;
+		//Find correct bluetooth settings application
 
-		try {
-			app_info.launch(null, null);
-		} catch (Error e) {
-			warning("Unable to launch budgie-bluetooth-panel.desktop: %s", e.message);
+		string[] app_ids = {
+			"io.github.ebonjaeger.bluejay.desktop",
+			"blueman-manager.desktop",
+			"budgie-bluetooth-panel.desktop"
+		};
+		DesktopAppInfo? app_info = null;
+
+		foreach (string app_id in app_ids) {
+			app_info = new DesktopAppInfo(app_id);
+			if (app_info != null) {
+				try {
+					app_info.launch(null, null);
+					break;
+				} catch (Error e) {
+					warning("Unable to launch %s: %s", app_id, e.message);
+				}
+			}
+		}
+
+		if (app_info == null) {
+			return;
 		}
 	}
 
