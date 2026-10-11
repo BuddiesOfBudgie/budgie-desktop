@@ -213,7 +213,7 @@ public class BluetoothIndicator : Bin {
 					app_info.launch(null, null);
 					break;
 				} catch (Error e) {
-						warning("Unable to launch %s: %s", app_id, e.message);
+					warning("Unable to launch %s: %s", app_id, e.message);
 				}
 			}
 		}
