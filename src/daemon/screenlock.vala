@@ -20,6 +20,7 @@ namespace Budgie {
 		// Screen Dim capability
 		private BrightnessManager? brightness_manager = null;
 		private int saved_brightness = 0;
+		private uint dimming_delay = 0;
 		public static bool is_dimming { get; private set; default = false; }
 
 		// connections to various schemas used in screenlocking
@@ -27,6 +28,7 @@ namespace Budgie {
 		private GLib.Settings session;
 		private GLib.Settings screensaver;
 		private GLib.Settings lockdown;
+		private GLib.Settings wm;
 
 		// public functions should check this variable first and exit gracefully where needed
 		bool all_apps = true;
@@ -60,7 +62,16 @@ namespace Budgie {
 			}
 
 			debug("Brightness available, enabling idle-dim");
-			var dbus_call = "timeout 30 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Dim' ";
+
+			if (dimming_delay == 0 ) {
+				debug("no need to dim (dimming-delay = 0");
+				return "";
+			}
+
+			if (dimming_delay < 30) dimming_delay = 30; // set a minimum of 30 seconds
+
+			var dbus_call = "timeout " + dimming_delay.to_string() + " 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Dim' ";
+
 			dbus_call += "resume 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Undim' ";
 			return dbus_call;
 		}
@@ -186,6 +197,8 @@ namespace Budgie {
 			lock_delay = this.screensaver.get_uint("lock-delay");
 
 			disable_lock_screen = this.lockdown.get_boolean("disable-lock-screen");
+
+			dimming_delay = this.wm.get_uint("dimming-delay");
 
 			new_idle = "swayidle -w ";
 
@@ -419,6 +432,14 @@ namespace Budgie {
 					calculate_idle();
 				}
 			});
+
+			this.wm = new Settings("com.solus-project.budgie-wm");
+			this.wm.changed.connect((key) => {
+				if (key == "dimming-delay") {
+					calculate_idle();
+				}
+			});
+
 			this.lockdown = new Settings("org.gnome.desktop.lockdown");
 			this.lockdown.changed.connect((key) => {
 				if (key == "disable-lock-screen") {
