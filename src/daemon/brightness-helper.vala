@@ -44,6 +44,8 @@ namespace Budgie {
 			"Set brightness to PERCENT (0-100)", "PERCENT");
 			add_main_option("step", 't', OptionFlags.NONE, OptionArg.INT,
 			"Step size for up/down (default: 5)", "PERCENT");
+			add_main_option("query", 'q', OptionFlags.NONE, OptionArg.NONE,
+			"Print the current brightness percentage; exit 0 if brightness control is available", null);
 
 			util = new BrightnessUtil();
 		}
@@ -66,6 +68,7 @@ namespace Budgie {
 			bool opt_up = options.contains("up");
 			bool opt_down = options.contains("down");
 			bool has_set = options.contains("set");
+			bool opt_query = options.contains("query");
 			int opt_set = has_set ? options.lookup_value("set", VariantType.INT32).get_int32() : -1;
 			int opt_step = options.contains("step") ?
 			options.lookup_value("step", VariantType.INT32).get_int32() : 5;
@@ -81,15 +84,16 @@ namespace Budgie {
 			if (opt_up) commands_given++;
 			if (opt_down) commands_given++;
 			if (has_set) commands_given++;
+			if (opt_query) commands_given++;
 
 			if (commands_given == 0) {
-				cmd.printerr("Error: Must specify one of --up, --down, or --set\n");
+				cmd.printerr("Error: Must specify one of --up, --down, --set, or --query\n");
 				cmd.printerr("Run with --help for usage information\n");
 				return 1;
 			}
 
 			if (commands_given > 1) {
-				cmd.printerr("Error: Cannot specify multiple commands (--up, --down, --set) simultaneously\n");
+				cmd.printerr("Error: Cannot specify multiple commands (--up, --down, --set, --query) simultaneously\n");
 				return 1;
 			}
 
@@ -106,6 +110,8 @@ namespace Budgie {
 					return 1;
 				}
 				success = set_brightness_percent(opt_set);
+			} else if (opt_query) {
+				success = query_brightness(cmd);
 			}
 
 			return success ? 0 : 1;
@@ -162,6 +168,23 @@ namespace Budgie {
 			int clamped = percent.clamp(0, 100);
 			uint32 value = (uint32)((clamped * util.max_brightness) / 100);
 			return set_brightness(value);
+		}
+
+		// display the current brightness level (if its actually available)
+		private bool query_brightness(ApplicationCommandLine cmd) {
+			var proxy = logind_session as DBusProxy;
+			if (proxy == null || proxy.get_name_owner() == null) {
+				warning("logind is not available\n");
+				return false;
+			}
+
+			if (util.max_brightness <= 0) {
+				critical("Max brightness is 0\n");
+				return false;
+			}
+
+			cmd.print("%d\n", (util.current_brightness * 100) / util.max_brightness);
+			return true;
 		}
 
 		public bool increase_brightness(int step_percent) {
