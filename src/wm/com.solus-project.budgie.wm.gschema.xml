@@ -176,6 +176,13 @@
 			<description>The binding to use to show or hide the panels</description>
 		</key>
 
+		<key type="u" name="dimming-delay">
+			<default>30</default>
+			<summary>Amount of seconds before powersaving dimming occurs.</summary>
+			<description>0 seconds means never dim, with a minimum of 30 seconds and max of 30 minutes (1800 seconds).</description>
+			<range min="0" max="1800"/>
+		</key>
+
 		<key name="button-layout" type="s">
 			<default>'appmenu:minimize,maximize,close'</default>
 			<summary>Arrangement of buttons on the titlebar</summary>
