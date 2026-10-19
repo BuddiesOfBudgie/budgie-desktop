@@ -202,7 +202,6 @@ public class BluetoothIndicator : Bin {
 		string[] app_ids = {
 			"io.github.ebonjaeger.bluejay.desktop",
 			"blueman-manager.desktop",
-			"budgie-bluetooth-panel.desktop"
 		};
 		DesktopAppInfo? app_info = null;
 
