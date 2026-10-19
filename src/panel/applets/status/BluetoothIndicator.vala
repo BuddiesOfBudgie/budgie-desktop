@@ -197,7 +197,7 @@ public class BluetoothIndicator : Bin {
 	private void on_settings_activate() {
 		this.popover.hide();
 
-		//Find correct bluetooth settings application
+		// Find correct bluetooth settings application
 
 		string[] app_ids = {
 			"io.github.ebonjaeger.bluejay.desktop",
