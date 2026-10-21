@@ -194,8 +194,11 @@ namespace Budgie {
 			if (idle_delay !=0 ) {
 				new_idle += "timeout " + idle_delay.to_string() + " '";
 				new_idle += "dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.ScreenPowerSuspend && ";
-				new_idle += "wlopm --off \\*' ";
-				new_idle += "resume '";
+				new_idle += "wlopm --off \\*' "; // turn off displays so you don't see the contents immediately after a resume
+				new_idle += "resume '"; // fires when swayidle detects user activity (mouse/keyboard)
+				new_idle += "wlopm --on \\* && ";
+				new_idle += "dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.ScreenPowerResume' ";
+				new_idle += "after-resume '"; // fires after detecting systemd power events
 				new_idle += "wlopm --on \\* && ";
 				new_idle += "dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.ScreenPowerResume' ";
 			}
