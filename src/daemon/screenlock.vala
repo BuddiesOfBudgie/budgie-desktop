@@ -27,6 +27,7 @@ namespace Budgie {
 		private GLib.Settings session;
 		private GLib.Settings screensaver;
 		private GLib.Settings lockdown;
+		private GLib.Settings lockerchoice;
 
 		// public functions should check this variable first and exit gracefully where needed
 		bool all_apps = true;
@@ -364,10 +365,16 @@ namespace Budgie {
 
 			string supported_lockers[] = {"gtklock", "swaylock"};
 
+			this.lockerchoice = new Settings("org.buddiesofbudgie.budgie-locker");
+			var locker_choice = lockerchoice.get_string("locker-choice");
+
 			foreach(unowned var app in supported_lockers) {
 				if (Environment.find_program_in_path(app) != null) {
-					locker = app;
-					break;
+					if (locker == "") locker = app; // we use the first found unless overridden by key
+					if ( locker_choice == "default" || locker_choice == app) {
+						locker = app;
+						break;
+					}
 				}
 			}
 

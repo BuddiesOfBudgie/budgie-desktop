@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="budgie-desktop">
+
+	<enum id="org.buddiesofbudgie.budgie-locker.LockerChoice">
+		<value nick="default" value="0" />
+		<value nick="gtklock" value="1" />
+		<value nick="swaylock" value="2" />
+	</enum>
+
+	<schema path="/org/buddiesofbudgie/budgie-locker/" id="org.buddiesofbudgie.budgie-locker">
+		<key enum="org.buddiesofbudgie.budgie-locker.LockerChoice" name="locker-choice">
+			<default>'default'</default>
+			<summary>Choice of locker to invoke</summary>
+			<description>Which screenlock to use; by default the choice depends on what is installed chosen from a defined order (screenlock.vala)</description>
+		</key>
+	</schema>
+
+</schemalist>
