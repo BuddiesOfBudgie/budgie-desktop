@@ -94,7 +94,7 @@ if grep -q "VirtualBox" /sys/class/dmi/id/product_name 2>/dev/null; then
 fi
 
 if command -v eglinfo >/dev/null 2>&1; then
-    if eglinfo 2>/dev/null | grep -qi 'virgl'; then
+    if eglinfo 2>/dev/null | grep -Eqi 'virgl|vmwgfx|SVGA3D'; then
         export WLR_NO_HARDWARE_CURSORS=1
     fi
 fi
