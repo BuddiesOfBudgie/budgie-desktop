@@ -142,4 +142,9 @@ install_data(
     install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
 )
 
+install_data(
+    files('org.buddiesofbudgie.budgie-locker.gschema.xml'),
+    install_dir: join_paths(datadir, 'glib-2.0', 'schemas')
+)
+
 budgie_pot_targets += budgie_brightness_helper
