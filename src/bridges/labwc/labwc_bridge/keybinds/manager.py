@@ -267,6 +267,10 @@ class Keybinds:
                 keybind = Et.SubElement(keyboard, "keybind")
                 keybind.attrib["bridge"] = bridge_id
                 changed = True
+            if bridge_id == "plugins.media-keys/terminal":                                                      
+                terminal_command = self.settings.terminal.get_string("exec")                                    
+                if terminal_command != '':                                                                      
+                    attribs["command"] = terminal_command 
 
             changed |= _set_attrib(keybind, "key", calc_keybind(binding))
             changed |= _set_attribs(keybind, template.attribs)
