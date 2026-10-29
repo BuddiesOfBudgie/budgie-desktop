@@ -28,6 +28,7 @@ class Settings:
         self.input_sources = Gio.Settings.new("org.gnome.desktop.input-sources")
         self.mouse = Gio.Settings.new("org.gnome.desktop.peripherals.mouse")
         self.touchpad = Gio.Settings.new("org.gnome.desktop.peripherals.touchpad")
+        self.terminal = Gio.Settings.new("org.gnome.desktop.default-applications.terminal")
 
     def for_template(self, short_schema: str) -> Gio.Settings | None:
         """The schema a keybinds.xml bridge id names by its last two components."""
