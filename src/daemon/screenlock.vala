@@ -63,12 +63,12 @@ namespace Budgie {
 
 			debug("Brightness available, enabling idle-dim");
 
-			if (dimming_delay == 0 ) {
+			if (dimming_delay == 0) {
 				debug("no need to dim (dimming-delay = 0");
 				return "";
 			}
 
-			if (dimming_delay < 30) dimming_delay = 30; // set a minimum of 30 seconds
+			dimming_delay = dimming_delay.clamp(30, 1800); // Ensure a minimum of 30s
 
 			var dbus_call = "timeout " + dimming_delay.to_string() + " 'dbus-send --type=method_call --dest=org.buddiesofbudgie.BudgieScreenlock /org/buddiesofbudgie/Screenlock org.buddiesofbudgie.BudgieScreenlock.Dim' ";
 
@@ -358,8 +358,7 @@ namespace Budgie {
 			}
 
 			// Initialize brightness manager
-			debug("Creating BrightnessManager...");
-			brightness_manager = new BrightnessManager();
+			brightness_manager = BrightnessManager.get_default();
 
 			// Connect to ready signal to recalculate idle when brightness becomes available
 			brightness_manager.ready.connect(() => {

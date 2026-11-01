@@ -23,6 +23,8 @@ namespace Budgie {
 	* using kernel sysfs and logind DBus interface
 	*/
 	public class BrightnessManager : GLib.Object {
+		static BrightnessManager? instance;
+
 		private BrightnessUtil util;
 
 		private FileMonitor? brightness_monitor = null;
@@ -37,7 +39,7 @@ namespace Budgie {
 		public signal void brightness_changed(double level);
 		public signal void ready();
 
-		public BrightnessManager() {
+		private BrightnessManager() {
 			debug("Constructor called");
 			util = new BrightnessUtil();
 			util.find_backlight_device();
@@ -61,6 +63,16 @@ namespace Budgie {
 					logind_session != null ? "connected" : "null");
 				}
 			});
+		}
+
+		/**
+		* Return the shared instance, creating it on first call
+		*/
+		public static unowned BrightnessManager get_default() {
+			if (instance == null)
+				instance = new BrightnessManager();
+
+			return instance;
 		}
 
 		/**

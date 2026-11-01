@@ -174,12 +174,12 @@ namespace Budgie {
 		private bool query_brightness(ApplicationCommandLine cmd) {
 			var proxy = logind_session as DBusProxy;
 			if (proxy == null || proxy.get_name_owner() == null) {
-				warning("logind is not available\n");
+				warning("logind is not available");
 				return false;
 			}
 
 			if (util.max_brightness <= 0) {
-				critical("Max brightness is 0\n");
+				critical("Max brightness is 0");
 				return false;
 			}
 

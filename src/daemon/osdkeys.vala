@@ -98,8 +98,7 @@
 			setup_osd_proxy.begin();
 
 			// Initialize brightness manager
-			debug("Creating BrightnessManager...");
-			brightness_manager = new BrightnessManager();
+			brightness_manager = BrightnessManager.get_default();
 
 			// Connect to ready signal to know when it's actually available
 			brightness_manager.ready.connect(() => {
