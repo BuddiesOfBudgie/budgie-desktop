@@ -182,6 +182,11 @@ if with_bluetooth == true
     add_project_arguments('-D', 'WITH_BLUETOOTH', language: 'vala')
 endif
 
+graphics_lib = get_option('graphics-lib')
+if graphics_lib == 'graphicsmagick'
+    add_project_arguments('-D', 'USE_GRAPHICSMAGICK', language: 'vala')
+endif
+
 # oo7 provides the Secret Service and the xdg-desktop-portal Secret backend.
 oo7 = get_option('with-oo7')
 

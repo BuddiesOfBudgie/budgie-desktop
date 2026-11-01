@@ -30,6 +30,12 @@ namespace Budgie {
 		const int POLL_INTERVAL_MAX = 30000;       // 30 seconds - maximum
 		const int POLL_INTERVAL_INCREMENT = 5000;  // Add 5 seconds each time
 
+#if USE_GRAPHICSMAGICK
+		const string BORDER_TOOL = "GraphicsMagick";
+#else
+		const string BORDER_TOOL = "ImageMagick";
+#endif
+
 		public signal void dock_config_changed();
 
 		public CrystalDockHelper() {
@@ -340,56 +346,10 @@ namespace Budgie {
 
 			// Apply borders sequentially for each edge
 			foreach (string edge in edges) {
-				int width = 0;
-				int height = 0;
-
-				var info = Gdk.Pixbuf.get_file_info(current_input, out width, out height);
-				if (info == null || width <= 0 || height <= 0) {
-					warning("Could not read image dimensions for: %s", current_input);
+				string[]? cmdline = build_border_cmdline(edge, current_input, temp_output);
+				if (cmdline == null) {
 					return original_path;
 				}
-
-				string chop_geometry;
-				string chop_gravity;
-				string extent_gravity;
-
-				switch (edge) {
-					case "top":
-						chop_geometry = "0x2"; // 2 pixel border
-						chop_gravity = "North";
-						extent_gravity = "South";
-						break;
-					case "bottom":
-						chop_geometry = "0x2";
-						chop_gravity = "South";
-						extent_gravity = "North";
-						break;
-					case "left":
-						chop_geometry = "2x0";
-						chop_gravity = "West";
-						extent_gravity = "East";
-						break;
-					case "right":
-						chop_geometry = "2x0";
-						chop_gravity = "East";
-						extent_gravity = "West";
-						break;
-					default:
-						continue;
-				}
-
-				string extent_geometry = "%dx%d".printf(width+20, height+20);
-
-				string[] cmdline = {
-					"gm", "convert",
-					current_input,
-					"-gravity", chop_gravity,
-					"-chop", chop_geometry,
-					"-background", "black",
-					"-gravity", extent_gravity,
-					"-extent", extent_geometry,
-					temp_output
-				};
 
 				debug(string.joinv(" ", cmdline));
 
@@ -407,7 +367,7 @@ namespace Budgie {
 					);
 
 					if (exit_status != 0) {
-						warning("GraphicsMagick convert failed for %s edge with status %d", edge, exit_status);
+						warning("%s failed for %s edge with status %d", BORDER_TOOL, edge, exit_status);
 						return original_path;
 					}
 
@@ -415,7 +375,7 @@ namespace Budgie {
 					current_input = temp_output;
 
 				} catch (SpawnError e) {
-					warning("Failed to spawn GraphicsMagick convert for %s edge: %s", edge, e.message);
+					warning("Failed to spawn %s for %s edge: %s", BORDER_TOOL, edge, e.message);
 					return original_path;
 				}
 			}
@@ -428,5 +388,101 @@ namespace Budgie {
 
 			return original_path;
 		}
+
+#if USE_GRAPHICSMAGICK
+		/**
+		* Build the gm command that adds a 2px border on one edge
+		*/
+		private string[]? build_border_cmdline(string edge, string input, string output) {
+			int width = 0;
+			int height = 0;
+
+			var info = Gdk.Pixbuf.get_file_info(input, out width, out height);
+			if (info == null || width <= 0 || height <= 0) {
+				warning("Could not read image dimensions for: %s", input);
+				return null;
+			}
+
+			string chop_geometry;
+			string chop_gravity;
+			string extent_gravity;
+
+			switch (edge) {
+				case "top":
+					chop_geometry = "0x2";
+					chop_gravity = "North";
+					extent_gravity = "South";
+					break;
+				case "bottom":
+					chop_geometry = "0x2";
+					chop_gravity = "South";
+					extent_gravity = "North";
+					break;
+				case "left":
+					chop_geometry = "2x0";
+					chop_gravity = "West";
+					extent_gravity = "East";
+					break;
+				case "right":
+					chop_geometry = "2x0";
+					chop_gravity = "East";
+					extent_gravity = "West";
+					break;
+				default:
+					return null;
+			}
+
+			string extent_geometry = "%dx%d".printf(width + 20, height + 20);
+
+			return {
+				"gm", "convert",
+				input,
+				"-gravity", chop_gravity,
+				"-chop", chop_geometry,
+				"-background", "black",
+				"-gravity", extent_gravity,
+				"-extent", extent_geometry,
+				output
+			};
+		}
+#else
+		/**
+		* Build the magick command that adds a 2px border on one edge
+		*/
+		private string[]? build_border_cmdline(string edge, string input, string output) {
+			string gravity;
+			string splice;
+
+			switch (edge) {
+				case "top":
+					gravity = "North";
+					splice = "0x2";
+					break;
+				case "bottom":
+					gravity = "South";
+					splice = "0x2";
+					break;
+				case "left":
+					gravity = "West";
+					splice = "2x0";
+					break;
+				case "right":
+					gravity = "East";
+					splice = "2x0";
+					break;
+				default:
+					return null;
+			}
+
+			return {
+				"magick",
+				input,
+				"-gravity", gravity,
+				"-background", "black",
+				"-splice", splice,
+				output
+			};
+		}
+#endif
 	}
 }
