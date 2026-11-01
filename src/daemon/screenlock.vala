@@ -383,7 +383,7 @@ namespace Budgie {
 			foreach(unowned var app in supported_lockers) {
 				if (Environment.find_program_in_path(app) != null) {
 					if (locker == "") locker = app; // we use the first found unless overridden by key
-					if ( locker_choice == "default" || locker_choice == app) {
+					if (locker_choice == "default" || locker_choice == app) {
 						locker = app;
 						break;
 					}
