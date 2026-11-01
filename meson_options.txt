@@ -20,6 +20,7 @@ option('gsd-libexecdir', type: 'string', description: 'Directory containing the 
 option('xdp-libexecdir', type: 'string', description: 'Directory containing the xdg-desktop-portal-* executables')
 option('labwc-bindir', type: 'string', description: 'Directory containing the labwc executable')
 #option('magpie-bindir', type: 'string', description: 'Directory containing the magpie-wm executable')
+option('graphics-lib', type: 'combo', choices: ['imagemagick', 'graphicsmagick'], value: 'imagemagick', description: 'Graphics library used for image conversion')
 option('use-old-zenity', type: 'boolean', value: false, description: 'Use old zenity CLI API for out-of-process dialog handling')
 option('with-oo7', type: 'boolean', value: false, description: 'Enable support for oo7 Secret Service provider')
 option('with-bluetooth', type: 'boolean', value: true, description: 'Enable Bluetooth (Vala option)')

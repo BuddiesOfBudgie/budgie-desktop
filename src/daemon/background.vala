@@ -215,6 +215,8 @@ namespace Budgie {
 						// use a delay to allow process termination to complete
 						if (bg != null) {
 							bg.force_exit();
+						} else {
+							kill_other_swaybg(new_bg.get_identifier());
 						}
 						bg = new_bg;
 						return false;
@@ -223,6 +225,31 @@ namespace Budgie {
 					warning("Error starting swaybg: %s", e.message);
 				}
 				set_accountsservice_user_bg(bg_filename);
+			}
+		}
+
+		/**
+		* Terminate the user's swaybg processes other than keep_pid, left behind by a replaced daemon
+		*/
+		private void kill_other_swaybg(string? keep_pid) {
+			string[] cmdline = { "pgrep", "-x", "-u", "%u".printf((uint) Posix.getuid()), "swaybg" };
+			string output;
+
+			try {
+				Process.spawn_sync(null, cmdline, null, SpawnFlags.SEARCH_PATH, null, out output, null, null);
+			} catch (SpawnError e) {
+				warning("Failed to list swaybg processes: %s", e.message);
+				return;
+			}
+
+			foreach (string line in output.split("\n")) {
+				string pid = line.strip();
+				if (pid == "" || pid == keep_pid) {
+					continue;
+				}
+
+				debug("Terminating stale swaybg %s", pid);
+				Posix.kill((Posix.pid_t) int.parse(pid), Posix.Signal.TERM);
 			}
 		}
 	}
