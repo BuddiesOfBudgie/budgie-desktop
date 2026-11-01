@@ -340,38 +340,58 @@ namespace Budgie {
 
 			// Apply borders sequentially for each edge
 			foreach (string edge in edges) {
-				string gravity;
-				string splice;
+				int width = 0;
+				int height = 0;
+
+				var info = Gdk.Pixbuf.get_file_info(current_input, out width, out height);
+				if (info == null || width <= 0 || height <= 0) {
+					warning("Could not read image dimensions for: %s", current_input);
+					return original_path;
+				}
+
+				string chop_geometry;
+				string chop_gravity;
+				string extent_gravity;
 
 				switch (edge) {
 					case "top":
-						gravity = "North";
-						splice = "0x2";  // 2 pixel border
+						chop_geometry = "0x2"; // 2 pixel border
+						chop_gravity = "North";
+						extent_gravity = "South";
 						break;
 					case "bottom":
-						gravity = "South";
-						splice = "0x2";
+						chop_geometry = "0x2";
+						chop_gravity = "South";
+						extent_gravity = "North";
 						break;
 					case "left":
-						gravity = "West";
-						splice = "2x0";
+						chop_geometry = "2x0";
+						chop_gravity = "West";
+						extent_gravity = "East";
 						break;
 					case "right":
-						gravity = "East";
-						splice = "2x0";
+						chop_geometry = "2x0";
+						chop_gravity = "East";
+						extent_gravity = "West";
 						break;
 					default:
 						continue;
 				}
 
+				string extent_geometry = "%dx%d".printf(width+20, height+20);
+
 				string[] cmdline = {
-					"convert",
+					"gm", "convert",
 					current_input,
-					"-gravity", gravity,
+					"-gravity", chop_gravity,
+					"-chop", chop_geometry,
 					"-background", "black",
-					"-splice", splice,
+					"-gravity", extent_gravity,
+					"-extent", extent_geometry,
 					temp_output
 				};
+
+				debug(string.joinv(" ", cmdline));
 
 				try {
 					int exit_status;
@@ -387,7 +407,7 @@ namespace Budgie {
 					);
 
 					if (exit_status != 0) {
-						warning("ImageMagick convert failed for %s edge with status %d", edge, exit_status);
+						warning("GraphicsMagick convert failed for %s edge with status %d", edge, exit_status);
 						return original_path;
 					}
 
@@ -395,7 +415,7 @@ namespace Budgie {
 					current_input = temp_output;
 
 				} catch (SpawnError e) {
-					warning("Failed to spawn ImageMagick convert for %s edge: %s", edge, e.message);
+					warning("Failed to spawn GraphicsMagick convert for %s edge: %s", edge, e.message);
 					return original_path;
 				}
 			}
