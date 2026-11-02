@@ -119,6 +119,7 @@ pkgconfig.generate(
 
 
 link_libpanelplugin = declare_dependency(
+    sources: panel_plugin_enums[1],
     link_with: libpanelplugin,
     dependencies: panel_plugin_deps,
     include_directories: [
