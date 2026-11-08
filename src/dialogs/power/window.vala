@@ -210,8 +210,14 @@ namespace Budgie {
 		private void on_focus_out() {
 			string focus_mode = wm_settings.get_string("window-focus-mode");
 			if (focus_mode == "click") {
-				debug("hiding due to focus_out_event (click mode)");
-				hide();
+				cancel_focus_hide();
+
+				focus_hide_timeout = Idle.add(() => {
+					focus_hide_timeout = 0;
+					debug("hiding due to focus_out_event (click mode)");
+					hide();
+					return Source.REMOVE;
+				});
 			}
 		}
 
